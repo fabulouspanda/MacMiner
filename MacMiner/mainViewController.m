@@ -34,12 +34,6 @@
         outputView.delegate = self;
         statLabel.delegate = self;
 /*
-        poolView.stringValue = @"mining.bitcoin.cz:3333";
-        userView.stringValue = @"blappy.work";
-        passView.stringValue = @"desk";
-        optionsView.stringValue = @"2";
-
-        statLabel.stringValue = @"";
 
         
 
@@ -155,7 +149,7 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
 //        NSString *userpassplus = [userpass stringByAppendingString:@"@"];
 //        NSString *finalNecessities = [userpassplus stringByAppendingString:poolView.stringValue];
 
-        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:@"/usr/bin/python", @"/Users/admin/Desktop/1bit/poclbm-master/", @"poclbm.py", @"blappy.mobi:leet@stratum.bitcoin.cz:3333", nil]];
+        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:@"/usr/bin/python", @"/Users/admin/Desktop/1bit/poclbm-master/", @"poclbm.py", @"user.worker:pass@stratum.bitcoin.cz:3333", nil]];
         // kick off the process asynchronously
         //        [searchTask setLaunchPath: @"/sbin/ping"];
         [searchTask startProcess];    }
