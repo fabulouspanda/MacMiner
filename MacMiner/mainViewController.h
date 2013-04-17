@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "TaskWrapper.h"
 
-@interface mainViewController : NSViewController <TaskWrapperController, NSTextViewDelegate, NSTextFieldDelegate>{
+@interface mainViewController : NSViewController <TaskWrapperController, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
     NSView *mainView;
     NSTextField *poolView;
         NSTextField *userView;
@@ -22,6 +22,9 @@
     BOOL findRunning;
     TaskWrapper *searchTask;
     NSTextField *statLabel;
+    
+    NSButton *popoverTriggerButton;
+    NSPopover *popover;
 }
 
 @property (nonatomic, strong) IBOutlet NSView *mainView;
@@ -34,6 +37,9 @@
 @property (nonatomic, strong) IBOutlet NSTextView *outputView;
 @property (nonatomic, strong) IBOutlet NSButton *startButton;
 @property (nonatomic, strong) IBOutlet NSTextField *statLabel;
+
+@property (nonatomic, strong) IBOutlet NSButton *popoverTriggerButton;
+@property (nonatomic, strong) IBOutlet NSPopover *popover;
 
 - (void)launchstart:(id)sender;
 //- (void)alertDidEnd:(NSAlert *)pipAlert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;

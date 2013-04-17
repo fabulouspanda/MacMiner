@@ -16,7 +16,7 @@
 
 @implementation mainViewController
 
-@synthesize mainView, poolView, userView, passView, optionsView, vectorView, outputView, startButton, statLabel;
+@synthesize mainView, poolView, userView, passView, optionsView, vectorView, outputView, startButton, statLabel, popoverTriggerButton, popover;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -93,6 +93,23 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
 }
 */
 
+- (BOOL)buttonIsPressed
+{
+    return self.popoverTriggerButton.intValue == 1;
+}
+
+- (IBAction)togglePopover:(id)sender
+{
+    if (self.buttonIsPressed) {
+        [self.popover showRelativeToRect:[popoverTriggerButton bounds]
+                                  ofView:popoverTriggerButton
+                           preferredEdge:NSMaxYEdge];
+    } else {
+        [self.popover close];
+    }
+}
+
+
 - (void)launchCheck:(id)sender
 {
 
@@ -110,7 +127,7 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         //        NSString *userpassplus = [userpass stringByAppendingString:@"@"];
         //        NSString *finalNecessities = [userpassplus stringByAppendingString:poolView.stringValue];
         
-        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:@"/usr/local/bin/pik", @"/", @"--version", nil]];
+        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:@"/usr/local/bin/pip", @"/", @"--version", nil]];
         // kick off the process asynchronously
         //        [searchTask setLaunchPath: @"/sbin/ping"];
         [searchTask startProcess];    
@@ -190,13 +207,15 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *poclbmPath = [bundlePath stringByDeletingLastPathComponent];
+        NSString *optionsString = optionsView.stringValue;
         poclbmPath = [poclbmPath stringByAppendingString:@"/Resources/poclbm.app/Contents/MacOS/poclbm"];
 //        NSLog(poclbmPath);
             [self.outputView setString:@""];
-            self.statLabel.stringValue = [self.statLabel.stringValue stringByAppendingString:@"Starting…"];
+        NSString *startingText = @"Starting…";
+            self.statLabel.stringValue = startingText;
 //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
 //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:poclbmPath, poclbmPath, finalNecessities, nil]];
+        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:poclbmPath, poclbmPath, optionsString, finalNecessities, nil]];
         // kick off the process asynchronously
         //        [searchTask setLaunchPath: @"/sbin/ping"];
         [searchTask startProcess];
