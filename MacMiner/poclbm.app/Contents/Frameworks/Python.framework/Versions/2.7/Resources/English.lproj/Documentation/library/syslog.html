@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.15. syslog — Unix syslog library routines &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="next" title="35.16. commands — Utilities for running commands" href="commands.html" />
+    <link rel="prev" title="35.14. nis — Interface to Sun’s NIS (Yellow Pages)" href="nis.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="commands.html" title="35.16. commands — Utilities for running commands"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nis.html" title="35.14. nis — Interface to Sun’s NIS (Yellow Pages)"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" accesskey="U">35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-syslog">
+<span id="syslog-unix-syslog-library-routines"></span><h1>35.15. <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">syslog</span></tt></a> &#8212; Unix syslog library routines<a class="headerlink" href="#module-syslog" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Unix</p>
+<p>This module provides an interface to the Unix <tt class="docutils literal"><span class="pre">syslog</span></tt> library routines.
+Refer to the Unix manual pages for a detailed description of the <tt class="docutils literal"><span class="pre">syslog</span></tt>
+facility.</p>
+<p>This module wraps the system <tt class="docutils literal"><span class="pre">syslog</span></tt> family of routines.  A pure Python
+library that can speak to a syslog server is available in the
+<a class="reference internal" href="logging.handlers.html#module-logging.handlers" title="logging.handlers: Handlers for the logging module."><tt class="xref py py-mod docutils literal"><span class="pre">logging.handlers</span></tt></a> module as <tt class="xref py py-class docutils literal"><span class="pre">SysLogHandler</span></tt>.</p>
+<p>The module defines the following functions:</p>
+<dl class="function">
+<dt id="syslog.syslog">
+<tt class="descclassname">syslog.</tt><tt class="descname">syslog</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#syslog.syslog" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descclassname">syslog.</tt><tt class="descname">syslog</tt><big>(</big><em>priority</em>, <em>message</em><big>)</big></dt>
+<dd><p>Send the string <em>message</em> to the system logger.  A trailing newline is added
+if necessary.  Each message is tagged with a priority composed of a
+<em>facility</em> and a <em>level</em>.  The optional <em>priority</em> argument, which defaults
+to <tt class="xref py py-const docutils literal"><span class="pre">LOG_INFO</span></tt>, determines the message priority.  If the facility is
+not encoded in <em>priority</em> using logical-or (<tt class="docutils literal"><span class="pre">LOG_INFO</span> <span class="pre">|</span> <span class="pre">LOG_USER</span></tt>), the
+value given in the <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a> call is used.</p>
+<p>If <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a> has not been called prior to the call to <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><tt class="xref py py-func docutils literal"><span class="pre">syslog()</span></tt></a>,
+<tt class="docutils literal"><span class="pre">openlog()</span></tt> will be called with no arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="syslog.openlog">
+<tt class="descclassname">syslog.</tt><tt class="descname">openlog</tt><big>(</big><span class="optional">[</span><em>ident</em><span class="optional">[</span>, <em>logoption</em><span class="optional">[</span>, <em>facility</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#syslog.openlog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logging options of subsequent <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><tt class="xref py py-func docutils literal"><span class="pre">syslog()</span></tt></a> calls can be set by calling
+<a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a>.  <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><tt class="xref py py-func docutils literal"><span class="pre">syslog()</span></tt></a> will call <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a> with no arguments
+if the log is not currently open.</p>
+<p>The optional <em>ident</em> keyword argument is a string which is prepended to every
+message, and defaults to <tt class="docutils literal"><span class="pre">sys.argv[0]</span></tt> with leading path components
+stripped.  The optional <em>logoption</em> keyword argument (default is 0) is a bit
+field &#8211; see below for possible values to combine.  The optional <em>facility</em>
+keyword argument (default is <tt class="xref py py-const docutils literal"><span class="pre">LOG_USER</span></tt>) sets the default facility for
+messages which do not have a facility explicitly encoded.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="syslog.closelog">
+<tt class="descclassname">syslog.</tt><tt class="descname">closelog</tt><big>(</big><big>)</big><a class="headerlink" href="#syslog.closelog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the syslog module values and call the system library <tt class="docutils literal"><span class="pre">closelog()</span></tt>.</p>
+<p>This causes the module to behave as it does when initially imported.  For
+example, <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a> will be called on the first <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><tt class="xref py py-func docutils literal"><span class="pre">syslog()</span></tt></a> call (if
+<a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a> hasn&#8217;t already been called), and <em>ident</em> and other
+<a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><tt class="xref py py-func docutils literal"><span class="pre">openlog()</span></tt></a> parameters are reset to defaults.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="syslog.setlogmask">
+<tt class="descclassname">syslog.</tt><tt class="descname">setlogmask</tt><big>(</big><em>maskpri</em><big>)</big><a class="headerlink" href="#syslog.setlogmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the priority mask to <em>maskpri</em> and return the previous mask value.  Calls
+to <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><tt class="xref py py-func docutils literal"><span class="pre">syslog()</span></tt></a> with a priority level not set in <em>maskpri</em> are ignored.
+The default is to log all priorities.  The function <tt class="docutils literal"><span class="pre">LOG_MASK(pri)</span></tt>
+calculates the mask for the individual priority <em>pri</em>.  The function
+<tt class="docutils literal"><span class="pre">LOG_UPTO(pri)</span></tt> calculates the mask for all priorities up to and including
+<em>pri</em>.</p>
+</dd></dl>
+
+<p>The module defines the following constants:</p>
+<dl class="docutils">
+<dt>Priority levels (high to low):</dt>
+<dd><tt class="xref py py-const docutils literal"><span class="pre">LOG_EMERG</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_ALERT</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_CRIT</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_ERR</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">LOG_WARNING</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_NOTICE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_INFO</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">LOG_DEBUG</span></tt>.</dd>
+<dt>Facilities:</dt>
+<dd><tt class="xref py py-const docutils literal"><span class="pre">LOG_KERN</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_USER</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_MAIL</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_DAEMON</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">LOG_AUTH</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_LPR</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_NEWS</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_UUCP</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">LOG_CRON</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_SYSLOG</span></tt> and <tt class="xref py py-const docutils literal"><span class="pre">LOG_LOCAL0</span></tt> to
+<tt class="xref py py-const docutils literal"><span class="pre">LOG_LOCAL7</span></tt>.</dd>
+<dt>Log options:</dt>
+<dd><tt class="xref py py-const docutils literal"><span class="pre">LOG_PID</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_CONS</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_NDELAY</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">LOG_NOWAIT</span></tt>
+and <tt class="xref py py-const docutils literal"><span class="pre">LOG_PERROR</span></tt> if defined in <tt class="docutils literal"><span class="pre">&lt;syslog.h&gt;</span></tt>.</dd>
+</dl>
+<div class="section" id="examples">
+<h2>35.15.1. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="simple-example">
+<h3>35.15.1.1. Simple example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h3>
+<p>A simple set of examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">syslog</span>
+
+<span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="s">&#39;Processing started&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+    <span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_ERR</span><span class="p">,</span> <span class="s">&#39;Processing started&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An example of setting some log options, these would include the process ID in
+logged messages, and write the messages to the destination facility used for
+mail logging:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">syslog</span><span class="o">.</span><span class="n">openlog</span><span class="p">(</span><span class="n">logoption</span><span class="o">=</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_PID</span><span class="p">,</span> <span class="n">facility</span><span class="o">=</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_MAIL</span><span class="p">)</span>
+<span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="s">&#39;E-mail processing initiated...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">35.15. <tt class="docutils literal"><span class="pre">syslog</span></tt> &#8212; Unix syslog library routines</a><ul>
+<li><a class="reference internal" href="#examples">35.15.1. Examples</a><ul>
+<li><a class="reference internal" href="#simple-example">35.15.1.1. Simple example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nis.html"
+                        title="previous chapter">35.14. <tt class="docutils literal docutils literal docutils literal"><span class="pre">nis</span></tt> &#8212; Interface to Sun&#8217;s NIS (Yellow Pages)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="commands.html"
+                        title="next chapter">35.16. <tt class="docutils literal docutils literal docutils literal"><span class="pre">commands</span></tt> &#8212; Utilities for running commands</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/syslog.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="commands.html" title="35.16. commands — Utilities for running commands"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nis.html" title="35.14. nis — Interface to Sun’s NIS (Yellow Pages)"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" >35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

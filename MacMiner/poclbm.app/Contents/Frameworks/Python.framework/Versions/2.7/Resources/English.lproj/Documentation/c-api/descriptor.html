@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Descriptor Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Slice Objects" href="slice.html" />
+    <link rel="prev" title="Iterator Objects" href="iterator.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="slice.html" title="Slice Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="iterator.html" title="Iterator Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="descriptor-objects">
+<span id="id1"></span><h1>Descriptor Objects<a class="headerlink" href="#descriptor-objects" title="Permalink to this headline">¶</a></h1>
+<p>&#8220;Descriptors&#8221; are objects that describe some attribute of an object. They are
+found in the dictionary of type objects.</p>
+<dl class="var">
+<dt id="PyProperty_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyProperty_Type</tt><a class="headerlink" href="#PyProperty_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type object for the built-in descriptor types.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDescr_NewGetSet">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDescr_NewGetSet</tt><big>(</big><a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, struct PyGetSetDef<em>&nbsp;*getset</em><big>)</big><a class="headerlink" href="#PyDescr_NewGetSet" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDescr_NewMember">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDescr_NewMember</tt><big>(</big><a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, struct <a class="reference internal" href="structures.html#PyMemberDef" title="PyMemberDef">PyMemberDef</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyDescr_NewMember" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDescr_NewMethod">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDescr_NewMethod</tt><big>(</big><a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, struct <a class="reference internal" href="structures.html#PyMethodDef" title="PyMethodDef">PyMethodDef</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyDescr_NewMethod" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDescr_NewWrapper">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDescr_NewWrapper</tt><big>(</big><a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, struct wrapperbase<em>&nbsp;*wrapper</em>, void<em>&nbsp;*wrapped</em><big>)</big><a class="headerlink" href="#PyDescr_NewWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDescr_NewClassMethod">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDescr_NewClassMethod</tt><big>(</big><a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, <a class="reference internal" href="structures.html#PyMethodDef" title="PyMethodDef">PyMethodDef</a><em>&nbsp;*method</em><big>)</big><a class="headerlink" href="#PyDescr_NewClassMethod" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDescr_IsData">
+int <tt class="descname">PyDescr_IsData</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*descr</em><big>)</big><a class="headerlink" href="#PyDescr_IsData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the descriptor objects <em>descr</em> describes a data attribute, or
+false if it describes a method.  <em>descr</em> must be a descriptor object; there is
+no error checking.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWrapper_New">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyWrapper_New</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*</em><big>)</big><a class="headerlink" href="#PyWrapper_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="iterator.html"
+                        title="previous chapter">Iterator Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="slice.html"
+                        title="next chapter">Slice Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/descriptor.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="slice.html" title="Slice Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="iterator.html" title="Iterator Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

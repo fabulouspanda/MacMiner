@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>36.5. EasyDialogs — Basic Macintosh dialogs &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="36. Mac OS X specific services" href="mac.html" />
+    <link rel="next" title="36.6. FrameWork — Interactive application framework" href="framework.html" />
+    <link rel="prev" title="36.3. macostools — Convenience routines for file manipulation" href="macostools.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="framework.html" title="36.6. FrameWork — Interactive application framework"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="macostools.html" title="36.3. macostools — Convenience routines for file manipulation"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="mac.html" accesskey="U">36. Mac OS X specific services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-EasyDialogs">
+<span id="easydialogs-basic-macintosh-dialogs"></span><h1>36.5. <a class="reference internal" href="#module-EasyDialogs" title="EasyDialogs: Basic Macintosh dialogs. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">EasyDialogs</span></tt></a> &#8212; Basic Macintosh dialogs<a class="headerlink" href="#module-EasyDialogs" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Mac</p>
+<p>The <a class="reference internal" href="#module-EasyDialogs" title="EasyDialogs: Basic Macintosh dialogs. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">EasyDialogs</span></tt></a> module contains some simple dialogs for the Macintosh.
+The dialogs get launched in a separate application which appears in the dock and
+must be clicked on for the dialogs be displayed.  All routines take an optional
+resource ID parameter <em>id</em> with which one can override the <tt class="xref py py-const docutils literal"><span class="pre">DLOG</span></tt>
+resource used for the dialog, provided that the dialog items correspond (both
+type and item number) to those in the default <tt class="xref py py-const docutils literal"><span class="pre">DLOG</span></tt> resource. See source
+code for details.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module has been removed in Python 3.x.</p>
+</div>
+<p>The <a class="reference internal" href="#module-EasyDialogs" title="EasyDialogs: Basic Macintosh dialogs. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">EasyDialogs</span></tt></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="EasyDialogs.Message">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">Message</tt><big>(</big><em>str</em><span class="optional">[</span>, <em>id</em><span class="optional">[</span>, <em>ok</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a modal dialog with the message text <em>str</em>, which should be at most 255
+characters long. The button text defaults to &#8220;OK&#8221;, but is set to the string
+argument <em>ok</em> if the latter is supplied. Control is returned when the user
+clicks the &#8220;OK&#8221; button.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.AskString">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">AskString</tt><big>(</big><em>prompt</em><span class="optional">[</span>, <em>default</em><span class="optional">[</span>, <em>id</em><span class="optional">[</span>, <em>ok</em><span class="optional">[</span>, <em>cancel</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.AskString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asks the user to input a string value via a modal dialog. <em>prompt</em> is the prompt
+message, and the optional <em>default</em> supplies the initial value for the string
+(otherwise <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt> is used). The text of the &#8220;OK&#8221; and &#8220;Cancel&#8221; buttons can be
+changed with the <em>ok</em> and <em>cancel</em> arguments. All strings can be at most 255
+bytes long. <a class="reference internal" href="#EasyDialogs.AskString" title="EasyDialogs.AskString"><tt class="xref py py-func docutils literal"><span class="pre">AskString()</span></tt></a> returns the string entered or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a> in
+case the user cancelled.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.AskPassword">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">AskPassword</tt><big>(</big><em>prompt</em><span class="optional">[</span>, <em>default</em><span class="optional">[</span>, <em>id</em><span class="optional">[</span>, <em>ok</em><span class="optional">[</span>, <em>cancel</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.AskPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asks the user to input a string value via a modal dialog. Like
+<a class="reference internal" href="#EasyDialogs.AskString" title="EasyDialogs.AskString"><tt class="xref py py-func docutils literal"><span class="pre">AskString()</span></tt></a>, but with the text shown as bullets. The arguments have the
+same meaning as for <a class="reference internal" href="#EasyDialogs.AskString" title="EasyDialogs.AskString"><tt class="xref py py-func docutils literal"><span class="pre">AskString()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.AskYesNoCancel">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">AskYesNoCancel</tt><big>(</big><em>question</em><span class="optional">[</span>, <em>default</em><span class="optional">[</span>, <em>yes</em><span class="optional">[</span>, <em>no</em><span class="optional">[</span>, <em>cancel</em><span class="optional">[</span>, <em>id</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.AskYesNoCancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Presents a dialog with prompt <em>question</em> and three buttons labelled &#8220;Yes&#8221;, &#8220;No&#8221;,
+and &#8220;Cancel&#8221;. Returns <tt class="docutils literal"><span class="pre">1</span></tt> for &#8220;Yes&#8221;, <tt class="docutils literal"><span class="pre">0</span></tt> for &#8220;No&#8221; and <tt class="docutils literal"><span class="pre">-1</span></tt> for &#8220;Cancel&#8221;.
+The value of <em>default</em> (or <tt class="docutils literal"><span class="pre">0</span></tt> if <em>default</em> is not supplied) is returned when
+the <tt class="kbd docutils literal"><span class="pre">RETURN</span></tt> key is pressed. The text of the buttons can be changed with
+the <em>yes</em>, <em>no</em>, and <em>cancel</em> arguments; to prevent a button from appearing,
+supply <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt> for the corresponding argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.ProgressBar">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">ProgressBar</tt><big>(</big><span class="optional">[</span><em>title</em><span class="optional">[</span>, <em>maxval</em><span class="optional">[</span>, <em>label</em><span class="optional">[</span>, <em>id</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.ProgressBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a modeless progress-bar dialog. This is the constructor for the
+<a class="reference internal" href="#EasyDialogs.ProgressBar" title="EasyDialogs.ProgressBar"><tt class="xref py py-class docutils literal"><span class="pre">ProgressBar</span></tt></a> class described below. <em>title</em> is the text string displayed
+(default &#8220;Working...&#8221;), <em>maxval</em> is the value at which progress is complete
+(default <tt class="docutils literal"><span class="pre">0</span></tt>, indicating that an indeterminate amount of work remains to be
+done), and <em>label</em> is the text that is displayed above the progress bar itself.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.GetArgv">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">GetArgv</tt><big>(</big><em>[optionlist[ commandlist[, addoldfile[, addnewfile[, addfolder[, id]]]]]]</em><big>)</big><a class="headerlink" href="#EasyDialogs.GetArgv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays a dialog which aids the user in constructing a command-line argument
+list.  Returns the list in <tt class="docutils literal"><span class="pre">sys.argv</span></tt> format, suitable for passing as an
+argument to <a class="reference internal" href="getopt.html#getopt.getopt" title="getopt.getopt"><tt class="xref py py-func docutils literal"><span class="pre">getopt.getopt()</span></tt></a>.  <em>addoldfile</em>, <em>addnewfile</em>, and <em>addfolder</em>
+are boolean arguments.  When nonzero, they enable the user to insert into the
+command line paths to an existing file, a (possibly) not-yet-existent file, and
+a folder, respectively.  (Note: Option arguments must appear in the command line
+before file and folder arguments in order to be recognized by
+<a class="reference internal" href="getopt.html#getopt.getopt" title="getopt.getopt"><tt class="xref py py-func docutils literal"><span class="pre">getopt.getopt()</span></tt></a>.)  Arguments containing spaces can be specified by
+enclosing them within single or double quotes.  A <a class="reference internal" href="exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a> exception is
+raised if the user presses the &#8220;Cancel&#8221; button.</p>
+<p><em>optionlist</em> is a list that determines a popup menu from which the allowed
+options are selected.  Its items can take one of two forms: <em>optstr</em> or
+<tt class="docutils literal"><span class="pre">(optstr,</span> <span class="pre">descr)</span></tt>.  When present, <em>descr</em> is a short descriptive string that
+is displayed in the dialog while this option is selected in the popup menu.  The
+correspondence between <em>optstr</em>s and command-line arguments is:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head"><em>optstr</em> format</th>
+<th class="head">Command-line format</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">x</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-x"><em class="xref std std-option">-x</em></a> (short option)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">x:</span></tt> or <tt class="docutils literal"><span class="pre">x=</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-x"><em class="xref std std-option">-x</em></a> (short option with value)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">xyz</span></tt></td>
+<td><em class="xref std std-option">--xyz</em> (long option)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">xyz:</span></tt> or <tt class="docutils literal"><span class="pre">xyz=</span></tt></td>
+<td><em class="xref std std-option">--xyz</em> (long option with value)</td>
+</tr>
+</tbody>
+</table>
+<p><em>commandlist</em> is a list of items of the form <em>cmdstr</em> or <tt class="docutils literal"><span class="pre">(cmdstr,</span> <span class="pre">descr)</span></tt>,
+where <em>descr</em> is as above.  The <em>cmdstr</em>s will appear in a popup menu.  When
+chosen, the text of <em>cmdstr</em> will be appended to the command line as is, except
+that a trailing <tt class="docutils literal"><span class="pre">':'</span></tt> or <tt class="docutils literal"><span class="pre">'='</span></tt> (if present) will be trimmed off.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.AskFileForOpen">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">AskFileForOpen</tt><big>(</big><em> [message] [, typeList] [, defaultLocation] [, defaultOptionFlags] [, location] [, clientName] [, windowTitle] [, actionButtonLabel] [, cancelButtonLabel] [, preferenceKey] [, popupExtension] [, eventProc] [, previewProc] [, filterProc] [, wanted] </em><big>)</big><a class="headerlink" href="#EasyDialogs.AskFileForOpen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a dialog asking the user for a file to open, and return the file selected
+or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a> if the user cancelled. <em>message</em> is a text message to display,
+<em>typeList</em> is a list of 4-char filetypes allowable, <em>defaultLocation</em> is the
+pathname, <tt class="xref py py-class docutils literal"><span class="pre">FSSpec</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">FSRef</span></tt> of the folder to show initially,
+<em>location</em> is the <tt class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></tt> position on the screen where the dialog is shown,
+<em>actionButtonLabel</em> is a string to show instead of &#8220;Open&#8221; in the OK button,
+<em>cancelButtonLabel</em> is a string to show instead of &#8220;Cancel&#8221; in the cancel
+button, <em>wanted</em> is the type of value wanted as a return: <a class="reference internal" href="functions.html#str" title="str"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>,
+<a class="reference internal" href="functions.html#unicode" title="unicode"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt></a>, <tt class="xref py py-class docutils literal"><span class="pre">FSSpec</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">FSRef</span></tt> and subtypes thereof are
+acceptable.</p>
+<p id="index-0">For a description of the other arguments please see the Apple Navigation
+Services documentation and the <a class="reference internal" href="#module-EasyDialogs" title="EasyDialogs: Basic Macintosh dialogs. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">EasyDialogs</span></tt></a> source code.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.AskFileForSave">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">AskFileForSave</tt><big>(</big><em> [message] [, savedFileName] [, defaultLocation] [, defaultOptionFlags] [, location] [, clientName] [, windowTitle] [, actionButtonLabel] [, cancelButtonLabel] [, preferenceKey] [, popupExtension] [, fileType] [, fileCreator] [, eventProc] [, wanted] </em><big>)</big><a class="headerlink" href="#EasyDialogs.AskFileForSave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a dialog asking the user for a file to save to, and return the file
+selected or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a> if the user cancelled. <em>savedFileName</em> is the default
+for the file name to save to (the return value). See <a class="reference internal" href="#EasyDialogs.AskFileForOpen" title="EasyDialogs.AskFileForOpen"><tt class="xref py py-func docutils literal"><span class="pre">AskFileForOpen()</span></tt></a> for
+a description of the other arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="EasyDialogs.AskFolder">
+<tt class="descclassname">EasyDialogs.</tt><tt class="descname">AskFolder</tt><big>(</big><em> [message] [, defaultLocation] [, defaultOptionFlags] [, location] [, clientName] [, windowTitle] [, actionButtonLabel] [, cancelButtonLabel] [, preferenceKey] [, popupExtension] [, eventProc] [, filterProc] [, wanted] </em><big>)</big><a class="headerlink" href="#EasyDialogs.AskFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a dialog asking the user to select a folder, and return the folder selected
+or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a> if the user cancelled. See <a class="reference internal" href="#EasyDialogs.AskFileForOpen" title="EasyDialogs.AskFileForOpen"><tt class="xref py py-func docutils literal"><span class="pre">AskFileForOpen()</span></tt></a> for a
+description of the arguments.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://developer.apple.com/legacy/mac/library/#documentation/Carbon/Conceptual/NavServicesIntro/ns_intro_carb/ns_into_carb.html">Navigation Services Reference</a></dt>
+<dd>Programmer&#8217;s reference documentation for the Navigation Services, a part of the
+Carbon framework.</dd>
+</dl>
+</div>
+<div class="section" id="progressbar-objects">
+<span id="id1"></span><h2>36.5.1. ProgressBar Objects<a class="headerlink" href="#progressbar-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#EasyDialogs.ProgressBar" title="EasyDialogs.ProgressBar"><tt class="xref py py-class docutils literal"><span class="pre">ProgressBar</span></tt></a> objects provide support for modeless progress-bar dialogs.
+Both determinate (thermometer style) and indeterminate (barber-pole style)
+progress bars are supported.  The bar will be determinate if its maximum value
+is greater than zero; otherwise it will be indeterminate.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2: </span>Support for indeterminate-style progress bars was added.</p>
+<p>The dialog is displayed immediately after creation. If the dialog&#8217;s &#8220;Cancel&#8221;
+button is pressed, or if <tt class="kbd docutils literal"><span class="pre">Cmd-.</span></tt> or <tt class="kbd docutils literal"><span class="pre">ESC</span></tt> is typed, the dialog window
+is hidden and <a class="reference internal" href="exceptions.html#exceptions.KeyboardInterrupt" title="exceptions.KeyboardInterrupt"><tt class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></tt></a> is raised (but note that this response
+does not occur until the progress bar is next updated, typically via a call to
+<tt class="xref py py-meth docutils literal"><span class="pre">inc()</span></tt> or <a class="reference internal" href="stdtypes.html#set" title="set"><tt class="xref py py-meth docutils literal"><span class="pre">set()</span></tt></a>).  Otherwise, the bar remains visible until the
+<a class="reference internal" href="#EasyDialogs.ProgressBar" title="EasyDialogs.ProgressBar"><tt class="xref py py-class docutils literal"><span class="pre">ProgressBar</span></tt></a> object is discarded.</p>
+<p><a class="reference internal" href="#EasyDialogs.ProgressBar" title="EasyDialogs.ProgressBar"><tt class="xref py py-class docutils literal"><span class="pre">ProgressBar</span></tt></a> objects possess the following attributes and methods:</p>
+<dl class="attribute">
+<dt id="EasyDialogs.ProgressBar.curval">
+<tt class="descclassname">ProgressBar.</tt><tt class="descname">curval</tt><a class="headerlink" href="#EasyDialogs.ProgressBar.curval" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current value (of type integer or long integer) of the progress bar.  The
+normal access methods coerce <a class="reference internal" href="#EasyDialogs.ProgressBar.curval" title="EasyDialogs.ProgressBar.curval"><tt class="xref py py-attr docutils literal"><span class="pre">curval</span></tt></a> between <tt class="docutils literal"><span class="pre">0</span></tt> and <a class="reference internal" href="#EasyDialogs.ProgressBar.maxval" title="EasyDialogs.ProgressBar.maxval"><tt class="xref py py-attr docutils literal"><span class="pre">maxval</span></tt></a>.
+This attribute should not be altered directly.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="EasyDialogs.ProgressBar.maxval">
+<tt class="descclassname">ProgressBar.</tt><tt class="descname">maxval</tt><a class="headerlink" href="#EasyDialogs.ProgressBar.maxval" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum value (of type integer or long integer) of the progress bar; the
+progress bar (thermometer style) is full when <a class="reference internal" href="#EasyDialogs.ProgressBar.curval" title="EasyDialogs.ProgressBar.curval"><tt class="xref py py-attr docutils literal"><span class="pre">curval</span></tt></a> equals
+<a class="reference internal" href="#EasyDialogs.ProgressBar.maxval" title="EasyDialogs.ProgressBar.maxval"><tt class="xref py py-attr docutils literal"><span class="pre">maxval</span></tt></a>.  If <a class="reference internal" href="#EasyDialogs.ProgressBar.maxval" title="EasyDialogs.ProgressBar.maxval"><tt class="xref py py-attr docutils literal"><span class="pre">maxval</span></tt></a> is <tt class="docutils literal"><span class="pre">0</span></tt>, the bar will be indeterminate
+(barber-pole).  This attribute should not be altered directly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="EasyDialogs.ProgressBar.title">
+<tt class="descclassname">ProgressBar.</tt><tt class="descname">title</tt><big>(</big><span class="optional">[</span><em>newstr</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.ProgressBar.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the text in the title bar of the progress dialog to <em>newstr</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="EasyDialogs.ProgressBar.label">
+<tt class="descclassname">ProgressBar.</tt><tt class="descname">label</tt><big>(</big><span class="optional">[</span><em>newstr</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.ProgressBar.label" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the text in the progress box of the progress dialog to <em>newstr</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="EasyDialogs.ProgressBar.set">
+<tt class="descclassname">ProgressBar.</tt><tt class="descname">set</tt><big>(</big><em>value</em><span class="optional">[</span>, <em>max</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.ProgressBar.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the progress bar&#8217;s <a class="reference internal" href="#EasyDialogs.ProgressBar.curval" title="EasyDialogs.ProgressBar.curval"><tt class="xref py py-attr docutils literal"><span class="pre">curval</span></tt></a> to <em>value</em>, and also <a class="reference internal" href="#EasyDialogs.ProgressBar.maxval" title="EasyDialogs.ProgressBar.maxval"><tt class="xref py py-attr docutils literal"><span class="pre">maxval</span></tt></a> to
+<em>max</em> if the latter is provided.  <em>value</em> is first coerced between 0 and
+<a class="reference internal" href="#EasyDialogs.ProgressBar.maxval" title="EasyDialogs.ProgressBar.maxval"><tt class="xref py py-attr docutils literal"><span class="pre">maxval</span></tt></a>.  The thermometer bar is updated to reflect the changes,
+including a change from indeterminate to determinate or vice versa.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="EasyDialogs.ProgressBar.inc">
+<tt class="descclassname">ProgressBar.</tt><tt class="descname">inc</tt><big>(</big><span class="optional">[</span><em>n</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#EasyDialogs.ProgressBar.inc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increments the progress bar&#8217;s <a class="reference internal" href="#EasyDialogs.ProgressBar.curval" title="EasyDialogs.ProgressBar.curval"><tt class="xref py py-attr docutils literal"><span class="pre">curval</span></tt></a> by <em>n</em>, or by <tt class="docutils literal"><span class="pre">1</span></tt> if <em>n</em> is not
+provided.  (Note that <em>n</em> may be negative, in which case the effect is a
+decrement.)  The progress bar is updated to reflect the change.  If the bar is
+indeterminate, this causes one &#8220;spin&#8221; of the barber pole.  The resulting
+<a class="reference internal" href="#EasyDialogs.ProgressBar.curval" title="EasyDialogs.ProgressBar.curval"><tt class="xref py py-attr docutils literal"><span class="pre">curval</span></tt></a> is coerced between 0 and <a class="reference internal" href="#EasyDialogs.ProgressBar.maxval" title="EasyDialogs.ProgressBar.maxval"><tt class="xref py py-attr docutils literal"><span class="pre">maxval</span></tt></a> if incrementing causes it
+to fall outside this range.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">36.5. <tt class="docutils literal"><span class="pre">EasyDialogs</span></tt> &#8212; Basic Macintosh dialogs</a><ul>
+<li><a class="reference internal" href="#progressbar-objects">36.5.1. ProgressBar Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="macostools.html"
+                        title="previous chapter">36.3. <tt class="docutils literal"><span class="pre">macostools</span></tt> &#8212; Convenience routines for file manipulation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="framework.html"
+                        title="next chapter">36.6. <tt class="docutils literal docutils literal"><span class="pre">FrameWork</span></tt> &#8212; Interactive application framework</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/easydialogs.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="framework.html" title="36.6. FrameWork — Interactive application framework"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="macostools.html" title="36.3. macostools — Convenience routines for file manipulation"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="mac.html" >36. Mac OS X specific services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

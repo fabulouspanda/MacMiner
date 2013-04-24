@@ -1,0 +1,585 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9.2. math — Mathematical functions &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="9. Numeric and Mathematical Modules" href="numeric.html" />
+    <link rel="next" title="9.3. cmath — Mathematical functions for complex numbers" href="cmath.html" />
+    <link rel="prev" title="9.1. numbers — Numeric abstract base classes" href="numbers.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmath.html" title="9.3. cmath — Mathematical functions for complex numbers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="numbers.html" title="9.1. numbers — Numeric abstract base classes"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" accesskey="U">9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-math">
+<span id="math-mathematical-functions"></span><h1>9.2. <a class="reference internal" href="#module-math" title="math: Mathematical functions (sin() etc.)."><tt class="xref py py-mod docutils literal"><span class="pre">math</span></tt></a> &#8212; Mathematical functions<a class="headerlink" href="#module-math" title="Permalink to this headline">¶</a></h1>
+<p>This module is always available.  It provides access to the mathematical
+functions defined by the C standard.</p>
+<p>These functions cannot be used with complex numbers; use the functions of the
+same name from the <a class="reference internal" href="cmath.html#module-cmath" title="cmath: Mathematical functions for complex numbers."><tt class="xref py py-mod docutils literal"><span class="pre">cmath</span></tt></a> module if you require support for complex
+numbers.  The distinction between functions which support complex numbers and
+those which don&#8217;t is made since most users do not want to learn quite as much
+mathematics as required to understand complex numbers.  Receiving an exception
+instead of a complex result allows earlier detection of the unexpected complex
+number used as a parameter, so that the programmer can determine how and why it
+was generated in the first place.</p>
+<p>The following functions are provided by this module.  Except when explicitly
+noted otherwise, all return values are floats.</p>
+<div class="section" id="number-theoretic-and-representation-functions">
+<h2>9.2.1. Number-theoretic and representation functions<a class="headerlink" href="#number-theoretic-and-representation-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="math.ceil">
+<tt class="descclassname">math.</tt><tt class="descname">ceil</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.ceil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ceiling of <em>x</em> as a float, the smallest integer value greater than or
+equal to <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.copysign">
+<tt class="descclassname">math.</tt><tt class="descname">copysign</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#math.copysign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>x</em> with the sign of <em>y</em>.  On a platform that supports
+signed zeros, <tt class="docutils literal"><span class="pre">copysign(1.0,</span> <span class="pre">-0.0)</span></tt> returns <em>-1.0</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.fabs">
+<tt class="descclassname">math.</tt><tt class="descname">fabs</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.fabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the absolute value of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.factorial">
+<tt class="descclassname">math.</tt><tt class="descname">factorial</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.factorial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>x</em> factorial.  Raises <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> if <em>x</em> is not integral or
+is negative.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.floor">
+<tt class="descclassname">math.</tt><tt class="descname">floor</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.floor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the floor of <em>x</em> as a float, the largest integer value less than or equal
+to <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.fmod">
+<tt class="descclassname">math.</tt><tt class="descname">fmod</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#math.fmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">fmod(x,</span> <span class="pre">y)</span></tt>, as defined by the platform C library. Note that the
+Python expression <tt class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">y</span></tt> may not return the same result.  The intent of the C
+standard is that <tt class="docutils literal"><span class="pre">fmod(x,</span> <span class="pre">y)</span></tt> be exactly (mathematically; to infinite
+precision) equal to <tt class="docutils literal"><span class="pre">x</span> <span class="pre">-</span> <span class="pre">n*y</span></tt> for some integer <em>n</em> such that the result has
+the same sign as <em>x</em> and magnitude less than <tt class="docutils literal"><span class="pre">abs(y)</span></tt>.  Python&#8217;s <tt class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">y</span></tt>
+returns a result with the sign of <em>y</em> instead, and may not be exactly computable
+for float arguments. For example, <tt class="docutils literal"><span class="pre">fmod(-1e-100,</span> <span class="pre">1e100)</span></tt> is <tt class="docutils literal"><span class="pre">-1e-100</span></tt>, but
+the result of Python&#8217;s <tt class="docutils literal"><span class="pre">-1e-100</span> <span class="pre">%</span> <span class="pre">1e100</span></tt> is <tt class="docutils literal"><span class="pre">1e100-1e-100</span></tt>, which cannot be
+represented exactly as a float, and rounds to the surprising <tt class="docutils literal"><span class="pre">1e100</span></tt>.  For
+this reason, function <a class="reference internal" href="#math.fmod" title="math.fmod"><tt class="xref py py-func docutils literal"><span class="pre">fmod()</span></tt></a> is generally preferred when working with
+floats, while Python&#8217;s <tt class="docutils literal"><span class="pre">x</span> <span class="pre">%</span> <span class="pre">y</span></tt> is preferred when working with integers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.frexp">
+<tt class="descclassname">math.</tt><tt class="descname">frexp</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.frexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mantissa and exponent of <em>x</em> as the pair <tt class="docutils literal"><span class="pre">(m,</span> <span class="pre">e)</span></tt>.  <em>m</em> is a float
+and <em>e</em> is an integer such that <tt class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">m</span> <span class="pre">*</span> <span class="pre">2**e</span></tt> exactly. If <em>x</em> is zero,
+returns <tt class="docutils literal"><span class="pre">(0.0,</span> <span class="pre">0)</span></tt>, otherwise <tt class="docutils literal"><span class="pre">0.5</span> <span class="pre">&lt;=</span> <span class="pre">abs(m)</span> <span class="pre">&lt;</span> <span class="pre">1</span></tt>.  This is used to &#8220;pick
+apart&#8221; the internal representation of a float in a portable way.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.fsum">
+<tt class="descclassname">math.</tt><tt class="descname">fsum</tt><big>(</big><em>iterable</em><big>)</big><a class="headerlink" href="#math.fsum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an accurate floating point sum of values in the iterable.  Avoids
+loss of precision by tracking multiple intermediate partial sums:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">0.9999999999999999</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fsum</span><span class="p">([</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+<p>The algorithm&#8217;s accuracy depends on IEEE-754 arithmetic guarantees and the
+typical case where the rounding mode is half-even.  On some non-Windows
+builds, the underlying C library uses extended precision addition and may
+occasionally double-round an intermediate sum causing it to be off in its
+least significant bit.</p>
+<p>For further discussion and two alternative approaches, see the <a class="reference external" href="http://code.activestate.com/recipes/393090/">ASPN cookbook
+recipes for accurate floating point summation</a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.isinf">
+<tt class="descclassname">math.</tt><tt class="descname">isinf</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.isinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the float <em>x</em> is positive or negative infinity.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.isnan">
+<tt class="descclassname">math.</tt><tt class="descname">isnan</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.isnan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the float <em>x</em> is a NaN (not a number).  For more information
+on NaNs, see the IEEE 754 standards.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.ldexp">
+<tt class="descclassname">math.</tt><tt class="descname">ldexp</tt><big>(</big><em>x</em>, <em>i</em><big>)</big><a class="headerlink" href="#math.ldexp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">x</span> <span class="pre">*</span> <span class="pre">(2**i)</span></tt>.  This is essentially the inverse of function
+<a class="reference internal" href="#math.frexp" title="math.frexp"><tt class="xref py py-func docutils literal"><span class="pre">frexp()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.modf">
+<tt class="descclassname">math.</tt><tt class="descname">modf</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.modf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the fractional and integer parts of <em>x</em>.  Both results carry the sign
+of <em>x</em> and are floats.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.trunc">
+<tt class="descclassname">math.</tt><tt class="descname">trunc</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.trunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <tt class="xref py py-class docutils literal"><span class="pre">Real</span></tt> value <em>x</em> truncated to an <tt class="xref py py-class docutils literal"><span class="pre">Integral</span></tt> (usually
+a long integer).  Uses the <tt class="docutils literal"><span class="pre">__trunc__</span></tt> method.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<p>Note that <a class="reference internal" href="#math.frexp" title="math.frexp"><tt class="xref py py-func docutils literal"><span class="pre">frexp()</span></tt></a> and <a class="reference internal" href="#math.modf" title="math.modf"><tt class="xref py py-func docutils literal"><span class="pre">modf()</span></tt></a> have a different call/return pattern
+than their C equivalents: they take a single argument and return a pair of
+values, rather than returning their second return value through an &#8216;output
+parameter&#8217; (there is no such thing in Python).</p>
+<p>For the <a class="reference internal" href="#math.ceil" title="math.ceil"><tt class="xref py py-func docutils literal"><span class="pre">ceil()</span></tt></a>, <a class="reference internal" href="#math.floor" title="math.floor"><tt class="xref py py-func docutils literal"><span class="pre">floor()</span></tt></a>, and <a class="reference internal" href="#math.modf" title="math.modf"><tt class="xref py py-func docutils literal"><span class="pre">modf()</span></tt></a> functions, note that <em>all</em>
+floating-point numbers of sufficiently large magnitude are exact integers.
+Python floats typically carry no more than 53 bits of precision (the same as the
+platform C double type), in which case any float <em>x</em> with <tt class="docutils literal"><span class="pre">abs(x)</span> <span class="pre">&gt;=</span> <span class="pre">2**52</span></tt>
+necessarily has no fractional bits.</p>
+</div>
+<div class="section" id="power-and-logarithmic-functions">
+<h2>9.2.2. Power and logarithmic functions<a class="headerlink" href="#power-and-logarithmic-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="math.exp">
+<tt class="descclassname">math.</tt><tt class="descname">exp</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">e**x</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.expm1">
+<tt class="descclassname">math.</tt><tt class="descname">expm1</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.expm1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">e**x</span> <span class="pre">-</span> <span class="pre">1</span></tt>.  For small floats <em>x</em>, the subtraction in
+<tt class="docutils literal"><span class="pre">exp(x)</span> <span class="pre">-</span> <span class="pre">1</span></tt> can result in a significant loss of precision; the
+<a class="reference internal" href="#math.expm1" title="math.expm1"><tt class="xref py py-func docutils literal"><span class="pre">expm1()</span></tt></a> function provides a way to compute this quantity to
+full precision:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">expm1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c"># gives result accurate to 11 places</span>
+<span class="go">1.0000050000069649e-05</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expm1</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">)</span>    <span class="c"># result accurate to full precision</span>
+<span class="go">1.0000050000166668e-05</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.log">
+<tt class="descclassname">math.</tt><tt class="descname">log</tt><big>(</big><em>x</em><span class="optional">[</span>, <em>base</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#math.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>With one argument, return the natural logarithm of <em>x</em> (to base <em>e</em>).</p>
+<p>With two arguments, return the logarithm of <em>x</em> to the given <em>base</em>,
+calculated as <tt class="docutils literal"><span class="pre">log(x)/log(base)</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3: </span><em>base</em> argument added.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.log1p">
+<tt class="descclassname">math.</tt><tt class="descname">log1p</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.log1p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the natural logarithm of <em>1+x</em> (base <em>e</em>). The
+result is calculated in a way which is accurate for <em>x</em> near zero.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.log10">
+<tt class="descclassname">math.</tt><tt class="descname">log10</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.log10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the base-10 logarithm of <em>x</em>.  This is usually more accurate
+than <tt class="docutils literal"><span class="pre">log(x,</span> <span class="pre">10)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.pow">
+<tt class="descclassname">math.</tt><tt class="descname">pow</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#math.pow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">x</span></tt> raised to the power <tt class="docutils literal"><span class="pre">y</span></tt>.  Exceptional cases follow
+Annex &#8216;F&#8217; of the C99 standard as far as possible.  In particular,
+<tt class="docutils literal"><span class="pre">pow(1.0,</span> <span class="pre">x)</span></tt> and <tt class="docutils literal"><span class="pre">pow(x,</span> <span class="pre">0.0)</span></tt> always return <tt class="docutils literal"><span class="pre">1.0</span></tt>, even
+when <tt class="docutils literal"><span class="pre">x</span></tt> is a zero or a NaN.  If both <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt> are finite,
+<tt class="docutils literal"><span class="pre">x</span></tt> is negative, and <tt class="docutils literal"><span class="pre">y</span></tt> is not an integer then <tt class="docutils literal"><span class="pre">pow(x,</span> <span class="pre">y)</span></tt>
+is undefined, and raises <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a>.</p>
+<p>Unlike the built-in <tt class="docutils literal"><span class="pre">**</span></tt> operator, <a class="reference internal" href="#math.pow" title="math.pow"><tt class="xref py py-func docutils literal"><span class="pre">math.pow()</span></tt></a> converts both
+its arguments to type <a class="reference internal" href="functions.html#float" title="float"><tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></a>.  Use <tt class="docutils literal"><span class="pre">**</span></tt> or the built-in
+<a class="reference internal" href="functions.html#pow" title="pow"><tt class="xref py py-func docutils literal"><span class="pre">pow()</span></tt></a> function for computing exact integer powers.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>The outcome of <tt class="docutils literal"><span class="pre">1**nan</span></tt> and <tt class="docutils literal"><span class="pre">nan**0</span></tt> was undefined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.sqrt">
+<tt class="descclassname">math.</tt><tt class="descname">sqrt</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.sqrt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the square root of <em>x</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="trigonometric-functions">
+<h2>9.2.3. Trigonometric functions<a class="headerlink" href="#trigonometric-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="math.acos">
+<tt class="descclassname">math.</tt><tt class="descname">acos</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.acos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the arc cosine of <em>x</em>, in radians.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.asin">
+<tt class="descclassname">math.</tt><tt class="descname">asin</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.asin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the arc sine of <em>x</em>, in radians.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.atan">
+<tt class="descclassname">math.</tt><tt class="descname">atan</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.atan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the arc tangent of <em>x</em>, in radians.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.atan2">
+<tt class="descclassname">math.</tt><tt class="descname">atan2</tt><big>(</big><em>y</em>, <em>x</em><big>)</big><a class="headerlink" href="#math.atan2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">atan(y</span> <span class="pre">/</span> <span class="pre">x)</span></tt>, in radians. The result is between <tt class="docutils literal"><span class="pre">-pi</span></tt> and <tt class="docutils literal"><span class="pre">pi</span></tt>.
+The vector in the plane from the origin to point <tt class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></tt> makes this angle
+with the positive X axis. The point of <a class="reference internal" href="#math.atan2" title="math.atan2"><tt class="xref py py-func docutils literal"><span class="pre">atan2()</span></tt></a> is that the signs of both
+inputs are known to it, so it can compute the correct quadrant for the angle.
+For example, <tt class="docutils literal"><span class="pre">atan(1)</span></tt> and <tt class="docutils literal"><span class="pre">atan2(1,</span> <span class="pre">1)</span></tt> are both <tt class="docutils literal"><span class="pre">pi/4</span></tt>, but <tt class="docutils literal"><span class="pre">atan2(-1,</span>
+<span class="pre">-1)</span></tt> is <tt class="docutils literal"><span class="pre">-3*pi/4</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.cos">
+<tt class="descclassname">math.</tt><tt class="descname">cos</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the cosine of <em>x</em> radians.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.hypot">
+<tt class="descclassname">math.</tt><tt class="descname">hypot</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#math.hypot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Euclidean norm, <tt class="docutils literal"><span class="pre">sqrt(x*x</span> <span class="pre">+</span> <span class="pre">y*y)</span></tt>. This is the length of the vector
+from the origin to point <tt class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.sin">
+<tt class="descclassname">math.</tt><tt class="descname">sin</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sine of <em>x</em> radians.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.tan">
+<tt class="descclassname">math.</tt><tt class="descname">tan</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.tan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tangent of <em>x</em> radians.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="angular-conversion">
+<h2>9.2.4. Angular conversion<a class="headerlink" href="#angular-conversion" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="math.degrees">
+<tt class="descclassname">math.</tt><tt class="descname">degrees</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.degrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts angle <em>x</em> from radians to degrees.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.radians">
+<tt class="descclassname">math.</tt><tt class="descname">radians</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.radians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts angle <em>x</em> from degrees to radians.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hyperbolic-functions">
+<h2>9.2.5. Hyperbolic functions<a class="headerlink" href="#hyperbolic-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="math.acosh">
+<tt class="descclassname">math.</tt><tt class="descname">acosh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.acosh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inverse hyperbolic cosine of <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.asinh">
+<tt class="descclassname">math.</tt><tt class="descname">asinh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.asinh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inverse hyperbolic sine of <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.atanh">
+<tt class="descclassname">math.</tt><tt class="descname">atanh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.atanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the inverse hyperbolic tangent of <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.cosh">
+<tt class="descclassname">math.</tt><tt class="descname">cosh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.cosh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic cosine of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.sinh">
+<tt class="descclassname">math.</tt><tt class="descname">sinh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.sinh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic sine of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.tanh">
+<tt class="descclassname">math.</tt><tt class="descname">tanh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.tanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic tangent of <em>x</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="special-functions">
+<h2>9.2.6. Special functions<a class="headerlink" href="#special-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="math.erf">
+<tt class="descclassname">math.</tt><tt class="descname">erf</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.erf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the error function at <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.erfc">
+<tt class="descclassname">math.</tt><tt class="descname">erfc</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.erfc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the complementary error function at <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.gamma">
+<tt class="descclassname">math.</tt><tt class="descname">gamma</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Gamma function at <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="math.lgamma">
+<tt class="descclassname">math.</tt><tt class="descname">lgamma</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#math.lgamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the natural logarithm of the absolute value of the Gamma
+function at <em>x</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h2>9.2.7. Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="math.pi">
+<tt class="descclassname">math.</tt><tt class="descname">pi</tt><a class="headerlink" href="#math.pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mathematical constant π = 3.141592..., to available precision.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="math.e">
+<tt class="descclassname">math.</tt><tt class="descname">e</tt><a class="headerlink" href="#math.e" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mathematical constant e = 2.718281..., to available precision.</p>
+</dd></dl>
+
+<div class="impl-detail compound">
+<p class="compound-first"><strong>CPython implementation detail:</strong> The <a class="reference internal" href="#module-math" title="math: Mathematical functions (sin() etc.)."><tt class="xref py py-mod docutils literal"><span class="pre">math</span></tt></a> module consists mostly of thin wrappers around the platform C
+math library functions.  Behavior in exceptional cases follows Annex F of
+the C99 standard where appropriate.  The current implementation will raise
+<a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> for invalid operations like <tt class="docutils literal"><span class="pre">sqrt(-1.0)</span></tt> or <tt class="docutils literal"><span class="pre">log(0.0)</span></tt>
+(where C99 Annex F recommends signaling invalid operation or divide-by-zero),
+and <a class="reference internal" href="exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> for results that overflow (for example,
+<tt class="docutils literal"><span class="pre">exp(1000.0)</span></tt>).  A NaN will not be returned from any of the functions
+above unless one or more of the input arguments was a NaN; in that case,
+most functions will return a NaN, but (again following C99 Annex F) there
+are some exceptions to this rule, for example <tt class="docutils literal"><span class="pre">pow(float('nan'),</span> <span class="pre">0.0)</span></tt> or
+<tt class="docutils literal"><span class="pre">hypot(float('nan'),</span> <span class="pre">float('inf'))</span></tt>.</p>
+<p class="compound-middle">Note that Python makes no effort to distinguish signaling NaNs from
+quiet NaNs, and behavior for signaling NaNs remains unspecified.
+Typical behavior is to treat all NaNs as though they were quiet.</p>
+<p class="compound-last versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>Behavior in special cases now aims to follow C99 Annex F.  In earlier
+versions of Python the behavior in special cases was loosely specified.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="cmath.html#module-cmath" title="cmath: Mathematical functions for complex numbers."><tt class="xref py py-mod docutils literal"><span class="pre">cmath</span></tt></a></dt>
+<dd>Complex number versions of many of these functions.</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9.2. <tt class="docutils literal"><span class="pre">math</span></tt> &#8212; Mathematical functions</a><ul>
+<li><a class="reference internal" href="#number-theoretic-and-representation-functions">9.2.1. Number-theoretic and representation functions</a></li>
+<li><a class="reference internal" href="#power-and-logarithmic-functions">9.2.2. Power and logarithmic functions</a></li>
+<li><a class="reference internal" href="#trigonometric-functions">9.2.3. Trigonometric functions</a></li>
+<li><a class="reference internal" href="#angular-conversion">9.2.4. Angular conversion</a></li>
+<li><a class="reference internal" href="#hyperbolic-functions">9.2.5. Hyperbolic functions</a></li>
+<li><a class="reference internal" href="#special-functions">9.2.6. Special functions</a></li>
+<li><a class="reference internal" href="#constants">9.2.7. Constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="numbers.html"
+                        title="previous chapter">9.1. <tt class="docutils literal"><span class="pre">numbers</span></tt> &#8212; Numeric abstract base classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cmath.html"
+                        title="next chapter">9.3. <tt class="docutils literal docutils literal docutils literal"><span class="pre">cmath</span></tt> &#8212; Mathematical functions for complex numbers</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/math.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmath.html" title="9.3. cmath — Mathematical functions for complex numbers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="numbers.html" title="9.1. numbers — Numeric abstract base classes"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" >9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>38.7. fm — Font Manager interface &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="38. SGI IRIX Specific Services" href="sgi.html" />
+    <link rel="next" title="38.8. gl — Graphics Library interface" href="gl.html" />
+    <link rel="prev" title="38.4. fl — FORMS library for graphical user interfaces" href="fl.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gl.html" title="38.8. gl — Graphics Library interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fl.html" title="38.4. fl — FORMS library for graphical user interfaces"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="sgi.html" accesskey="U">38. SGI IRIX Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-fm">
+<span id="fm-font-manager-interface"></span><h1>38.7. <a class="reference internal" href="#module-fm" title="fm: Font Manager interface for SGI workstations. (deprecated) (IRIX)"><tt class="xref py py-mod docutils literal"><span class="pre">fm</span></tt></a> &#8212; <em>Font Manager</em> interface<a class="headerlink" href="#module-fm" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>IRIX</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-fm" title="fm: Font Manager interface for SGI workstations. (deprecated) (IRIX)"><tt class="xref py py-mod docutils literal"><span class="pre">fm</span></tt></a> module has been removed in Python 3.</p>
+<p id="index-0">This module provides access to the IRIS <em>Font Manager</em> library.   It is
+available only on Silicon Graphics machines. See also: <em>4Sight User&#8217;s Guide</em>,
+section 1, chapter 5: &#8220;Using the IRIS Font Manager.&#8221;</p>
+<p>This is not yet a full interface to the IRIS Font Manager. Among the unsupported
+features are: matrix operations; cache operations; character operations (use
+string operations instead); some details of font info; individual glyph metrics;
+and printer matching.</p>
+<p>It supports the following operations:</p>
+<dl class="function">
+<dt id="fm.init">
+<tt class="descclassname">fm.</tt><tt class="descname">init</tt><big>(</big><big>)</big><a class="headerlink" href="#fm.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialization function. Calls <tt class="xref c c-func docutils literal"><span class="pre">fminit()</span></tt>. It is normally not necessary to
+call this function, since it is called automatically the first time the
+<a class="reference internal" href="#module-fm" title="fm: Font Manager interface for SGI workstations. (deprecated) (IRIX)"><tt class="xref py py-mod docutils literal"><span class="pre">fm</span></tt></a> module is imported.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fm.findfont">
+<tt class="descclassname">fm.</tt><tt class="descname">findfont</tt><big>(</big><em>fontname</em><big>)</big><a class="headerlink" href="#fm.findfont" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a font handle object. Calls <tt class="docutils literal"><span class="pre">fmfindfont(fontname)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fm.enumerate">
+<tt class="descclassname">fm.</tt><tt class="descname">enumerate</tt><big>(</big><big>)</big><a class="headerlink" href="#fm.enumerate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of available font names. This is an interface to
+<tt class="xref c c-func docutils literal"><span class="pre">fmenumerate()</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fm.prstr">
+<tt class="descclassname">fm.</tt><tt class="descname">prstr</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#fm.prstr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render a string using the current font (see the <tt class="xref py py-func docutils literal"><span class="pre">setfont()</span></tt> font handle
+method below). Calls <tt class="docutils literal"><span class="pre">fmprstr(string)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fm.setpath">
+<tt class="descclassname">fm.</tt><tt class="descname">setpath</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#fm.setpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the font search path. Calls <tt class="docutils literal"><span class="pre">fmsetpath(string)</span></tt>. (XXX Does not work!?!)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fm.fontpath">
+<tt class="descclassname">fm.</tt><tt class="descname">fontpath</tt><big>(</big><big>)</big><a class="headerlink" href="#fm.fontpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current font search path.</p>
+</dd></dl>
+
+<p>Font handle objects support the following operations:</p>
+<dl class="method">
+<dt>
+<tt class="descname">font handle.scalefont(factor)</tt></dt>
+<dd><p>Returns a handle for a scaled version of this font. Calls <tt class="docutils literal"><span class="pre">fmscalefont(fh,</span>
+<span class="pre">factor)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">font handle.setfont()</tt></dt>
+<dd><p>Makes this font the current font. Note: the effect is undone silently when the
+font handle object is deleted. Calls <tt class="docutils literal"><span class="pre">fmsetfont(fh)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">font handle.getfontname()</tt></dt>
+<dd><p>Returns this font&#8217;s name. Calls <tt class="docutils literal"><span class="pre">fmgetfontname(fh)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">font handle.getcomment()</tt></dt>
+<dd><p>Returns the comment string associated with this font. Raises an exception if
+there is none. Calls <tt class="docutils literal"><span class="pre">fmgetcomment(fh)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">font handle.getfontinfo()</tt></dt>
+<dd><p>Returns a tuple giving some pertinent data about this font. This is an interface
+to <tt class="docutils literal"><span class="pre">fmgetfontinfo()</span></tt>. The returned tuple contains the following numbers:
+<tt class="docutils literal"><span class="pre">(printermatched,</span> <span class="pre">fixed_width,</span> <span class="pre">xorig,</span> <span class="pre">yorig,</span> <span class="pre">xsize,</span> <span class="pre">ysize,</span> <span class="pre">height,</span> <span class="pre">nglyphs)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">font handle.getstrwidth(string)</tt></dt>
+<dd><p>Returns the width, in pixels, of <em>string</em> when drawn in this font. Calls
+<tt class="docutils literal"><span class="pre">fmgetstrwidth(fh,</span> <span class="pre">string)</span></tt>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fl.html"
+                        title="previous chapter">38.4. <tt class="docutils literal docutils literal docutils literal"><span class="pre">fl</span></tt> &#8212; FORMS library for graphical user interfaces</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gl.html"
+                        title="next chapter">38.8. <tt class="docutils literal"><span class="pre">gl</span></tt> &#8212; <em>Graphics Library</em> interface</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/fm.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gl.html" title="38.8. gl — Graphics Library interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fl.html" title="38.4. fl — FORMS library for graphical user interfaces"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="sgi.html" >38. SGI IRIX Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

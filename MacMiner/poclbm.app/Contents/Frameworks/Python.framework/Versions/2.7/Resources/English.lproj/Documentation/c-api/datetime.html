@@ -1,0 +1,406 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DateTime Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Set Objects" href="set.html" />
+    <link rel="prev" title="Generator Objects" href="gen.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="set.html" title="Set Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gen.html" title="Generator Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="datetime-objects">
+<span id="datetimeobjects"></span><h1>DateTime Objects<a class="headerlink" href="#datetime-objects" title="Permalink to this headline">¶</a></h1>
+<p>Various date and time objects are supplied by the <a class="reference internal" href="../library/datetime.html#module-datetime" title="datetime: Basic date and time types."><tt class="xref py py-mod docutils literal"><span class="pre">datetime</span></tt></a> module.
+Before using any of these functions, the header file <tt class="file docutils literal"><span class="pre">datetime.h</span></tt> must be
+included in your source (note that this is not included by <tt class="file docutils literal"><span class="pre">Python.h</span></tt>),
+and the macro <tt class="xref c c-macro docutils literal"><span class="pre">PyDateTime_IMPORT</span></tt> must be invoked, usually as part of
+the module initialisation function.  The macro puts a pointer to a C structure
+into a static variable, <tt class="xref c c-data docutils literal"><span class="pre">PyDateTimeAPI</span></tt>, that is used by the following
+macros.</p>
+<p>Type-check macros:</p>
+<dl class="function">
+<dt id="PyDate_Check">
+int <tt class="descname">PyDate_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyDate_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateType</span></tt> or a subtype of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateType</span></tt>.  <em>ob</em> must not be <em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDate_CheckExact">
+int <tt class="descname">PyDate_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyDate_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateType</span></tt>. <em>ob</em> must not be
+<em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_Check">
+int <tt class="descname">PyDateTime_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyDateTime_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateTimeType</span></tt> or a subtype of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateTimeType</span></tt>.  <em>ob</em> must not be <em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_CheckExact">
+int <tt class="descname">PyDateTime_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyDateTime_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateTimeType</span></tt>. <em>ob</em> must not
+be <em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTime_Check">
+int <tt class="descname">PyTime_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyTime_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_TimeType</span></tt> or a subtype of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_TimeType</span></tt>.  <em>ob</em> must not be <em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTime_CheckExact">
+int <tt class="descname">PyTime_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyTime_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_TimeType</span></tt>. <em>ob</em> must not be
+<em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDelta_Check">
+int <tt class="descname">PyDelta_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyDelta_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DeltaType</span></tt> or a subtype of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DeltaType</span></tt>.  <em>ob</em> must not be <em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDelta_CheckExact">
+int <tt class="descname">PyDelta_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyDelta_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DeltaType</span></tt>. <em>ob</em> must not be
+<em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTZInfo_Check">
+int <tt class="descname">PyTZInfo_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyTZInfo_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_TZInfoType</span></tt> or a subtype of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_TZInfoType</span></tt>.  <em>ob</em> must not be <em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTZInfo_CheckExact">
+int <tt class="descname">PyTZInfo_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em><big>)</big><a class="headerlink" href="#PyTZInfo_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is of type <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_TZInfoType</span></tt>. <em>ob</em> must not be
+<em>NULL</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<p>Macros to create objects:</p>
+<dl class="function">
+<dt id="PyDate_FromDate">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDate_FromDate</tt><big>(</big>int<em>&nbsp;year</em>, int<em>&nbsp;month</em>, int<em>&nbsp;day</em><big>)</big><a class="headerlink" href="#PyDate_FromDate" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <tt class="docutils literal"><span class="pre">datetime.date</span></tt> object with the specified year, month and day.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_FromDateAndTime">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDateTime_FromDateAndTime</tt><big>(</big>int<em>&nbsp;year</em>, int<em>&nbsp;month</em>, int<em>&nbsp;day</em>, int<em>&nbsp;hour</em>, int<em>&nbsp;minute</em>, int<em>&nbsp;second</em>, int<em>&nbsp;usecond</em><big>)</big><a class="headerlink" href="#PyDateTime_FromDateAndTime" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <tt class="docutils literal"><span class="pre">datetime.datetime</span></tt> object with the specified year, month, day, hour,
+minute, second and microsecond.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTime_FromTime">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyTime_FromTime</tt><big>(</big>int<em>&nbsp;hour</em>, int<em>&nbsp;minute</em>, int<em>&nbsp;second</em>, int<em>&nbsp;usecond</em><big>)</big><a class="headerlink" href="#PyTime_FromTime" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <tt class="docutils literal"><span class="pre">datetime.time</span></tt> object with the specified hour, minute, second and
+microsecond.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDelta_FromDSU">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDelta_FromDSU</tt><big>(</big>int<em>&nbsp;days</em>, int<em>&nbsp;seconds</em>, int<em>&nbsp;useconds</em><big>)</big><a class="headerlink" href="#PyDelta_FromDSU" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a <tt class="docutils literal"><span class="pre">datetime.timedelta</span></tt> object representing the given number of days,
+seconds and microseconds.  Normalization is performed so that the resulting
+number of microseconds and seconds lie in the ranges documented for
+<tt class="docutils literal"><span class="pre">datetime.timedelta</span></tt> objects.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<p>Macros to extract fields from date objects.  The argument must be an instance of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_Date</span></tt>, including subclasses (such as
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateTime</span></tt>).  The argument must not be <em>NULL</em>, and the type is
+not checked:</p>
+<dl class="function">
+<dt id="PyDateTime_GET_YEAR">
+int <tt class="descname">PyDateTime_GET_YEAR</tt><big>(</big>PyDateTime_Date<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_GET_YEAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the year, as a positive int.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_GET_MONTH">
+int <tt class="descname">PyDateTime_GET_MONTH</tt><big>(</big>PyDateTime_Date<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_GET_MONTH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the month, as an int from 1 through 12.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_GET_DAY">
+int <tt class="descname">PyDateTime_GET_DAY</tt><big>(</big>PyDateTime_Date<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_GET_DAY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the day, as an int from 1 through 31.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<p>Macros to extract fields from datetime objects.  The argument must be an
+instance of <tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_DateTime</span></tt>, including subclasses. The argument
+must not be <em>NULL</em>, and the type is not checked:</p>
+<dl class="function">
+<dt id="PyDateTime_DATE_GET_HOUR">
+int <tt class="descname">PyDateTime_DATE_GET_HOUR</tt><big>(</big>PyDateTime_DateTime<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_DATE_GET_HOUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hour, as an int from 0 through 23.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_DATE_GET_MINUTE">
+int <tt class="descname">PyDateTime_DATE_GET_MINUTE</tt><big>(</big>PyDateTime_DateTime<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_DATE_GET_MINUTE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the minute, as an int from 0 through 59.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_DATE_GET_SECOND">
+int <tt class="descname">PyDateTime_DATE_GET_SECOND</tt><big>(</big>PyDateTime_DateTime<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_DATE_GET_SECOND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the second, as an int from 0 through 59.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_DATE_GET_MICROSECOND">
+int <tt class="descname">PyDateTime_DATE_GET_MICROSECOND</tt><big>(</big>PyDateTime_DateTime<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_DATE_GET_MICROSECOND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the microsecond, as an int from 0 through 999999.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<p>Macros to extract fields from time objects.  The argument must be an instance of
+<tt class="xref c c-data docutils literal"><span class="pre">PyDateTime_Time</span></tt>, including subclasses. The argument must not be <em>NULL</em>,
+and the type is not checked:</p>
+<dl class="function">
+<dt id="PyDateTime_TIME_GET_HOUR">
+int <tt class="descname">PyDateTime_TIME_GET_HOUR</tt><big>(</big>PyDateTime_Time<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_TIME_GET_HOUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hour, as an int from 0 through 23.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_TIME_GET_MINUTE">
+int <tt class="descname">PyDateTime_TIME_GET_MINUTE</tt><big>(</big>PyDateTime_Time<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_TIME_GET_MINUTE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the minute, as an int from 0 through 59.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_TIME_GET_SECOND">
+int <tt class="descname">PyDateTime_TIME_GET_SECOND</tt><big>(</big>PyDateTime_Time<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_TIME_GET_SECOND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the second, as an int from 0 through 59.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDateTime_TIME_GET_MICROSECOND">
+int <tt class="descname">PyDateTime_TIME_GET_MICROSECOND</tt><big>(</big>PyDateTime_Time<em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyDateTime_TIME_GET_MICROSECOND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the microsecond, as an int from 0 through 999999.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<p>Macros for the convenience of modules implementing the DB API:</p>
+<dl class="function">
+<dt id="PyDateTime_FromTimestamp">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDateTime_FromTimestamp</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em><big>)</big><a class="headerlink" href="#PyDateTime_FromTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create and return a new <tt class="docutils literal"><span class="pre">datetime.datetime</span></tt> object given an argument tuple
+suitable for passing to <tt class="docutils literal"><span class="pre">datetime.datetime.fromtimestamp()</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyDate_FromTimestamp">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyDate_FromTimestamp</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em><big>)</big><a class="headerlink" href="#PyDate_FromTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create and return a new <tt class="docutils literal"><span class="pre">datetime.date</span></tt> object given an argument tuple
+suitable for passing to <tt class="docutils literal"><span class="pre">datetime.date.fromtimestamp()</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gen.html"
+                        title="previous chapter">Generator Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="set.html"
+                        title="next chapter">Set Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/datetime.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="set.html" title="Set Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gen.html" title="Generator Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

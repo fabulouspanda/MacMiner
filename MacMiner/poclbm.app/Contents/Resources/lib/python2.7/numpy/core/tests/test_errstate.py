@@ -8,11 +8,15 @@ import sys
 if sys.version_info[:2] >= (2, 5):
     exec """
 from __future__ import with_statement
+import platform
+
 from numpy.core import *
 from numpy.random import rand, randint
 from numpy.testing import *
 
+
 class TestErrstate(TestCase):
+    @dec.skipif(platform.machine() == "armv5tel", "See gh-413.")
     def test_invalid(self):
         with errstate(all='raise', under='ignore'):
             a = -arange(3)
@@ -46,10 +50,10 @@ class TestErrstate(TestCase):
             print(args)
         olderrcall = geterrcall()
         with errstate(call=foo):
-            assert(geterrcall() is foo), 'call is not foo'
+            assert_(geterrcall() is foo, 'call is not foo')
             with errstate(call=None):
-                assert(geterrcall() is None), 'call is not None'
-        assert(geterrcall() is olderrcall), 'call is not olderrcall'
+                assert_(geterrcall() is None, 'call is not None')
+        assert_(geterrcall() is olderrcall, 'call is not olderrcall')
 
 """
 

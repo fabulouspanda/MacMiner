@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>19.1. HTMLParser — Simple HTML and XHTML parser &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="19. Structured Markup Processing Tools" href="markup.html" />
+    <link rel="next" title="19.2. sgmllib — Simple SGML parser" href="sgmllib.html" />
+    <link rel="prev" title="19. Structured Markup Processing Tools" href="markup.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sgmllib.html" title="19.2. sgmllib — Simple SGML parser"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="markup.html" title="19. Structured Markup Processing Tools"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" accesskey="U">19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-HTMLParser">
+<span id="htmlparser-simple-html-and-xhtml-parser"></span><h1>19.1. <a class="reference internal" href="#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-mod docutils literal"><span class="pre">HTMLParser</span></tt></a> &#8212; Simple HTML and XHTML parser<a class="headerlink" href="#module-HTMLParser" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-mod docutils literal"><span class="pre">HTMLParser</span></tt></a> module has been renamed to <tt class="xref py py-mod docutils literal"><span class="pre">html.parser</span></tt> in Python
+3.  The <a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt imports when converting
+your sources to Python 3.</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/HTMLParser.py">Lib/HTMLParser.py</a></p>
+<hr class="docutils" />
+<p>This module defines a class <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> which serves as the basis for
+parsing text files formatted in HTML (HyperText Mark-up Language) and XHTML.
+Unlike the parser in <a class="reference internal" href="htmllib.html#module-htmllib" title="htmllib: A parser for HTML documents. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">htmllib</span></tt></a>, this parser is not based on the SGML parser
+in <a class="reference internal" href="sgmllib.html#module-sgmllib" title="sgmllib: Only as much of an SGML parser as needed to parse HTML. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">sgmllib</span></tt></a>.</p>
+<dl class="class">
+<dt id="HTMLParser.HTMLParser">
+<em class="property">class </em><tt class="descclassname">HTMLParser.</tt><tt class="descname">HTMLParser</tt><a class="headerlink" href="#HTMLParser.HTMLParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> instance is fed HTML data and calls handler methods
+when start tags, end tags, text, comments, and other markup elements are
+encountered.  The user should subclass <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> and override its
+methods to implement the desired behavior.</p>
+<p>The <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class is instantiated without arguments.</p>
+<p>Unlike the parser in <a class="reference internal" href="htmllib.html#module-htmllib" title="htmllib: A parser for HTML documents. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">htmllib</span></tt></a>, this parser does not check that end tags
+match start tags or call the end-tag handler for elements which are closed
+implicitly by closing an outer element.</p>
+</dd></dl>
+
+<p>An exception is defined as well:</p>
+<dl class="exception">
+<dt id="HTMLParser.HTMLParseError">
+<em class="property">exception </em><tt class="descclassname">HTMLParser.</tt><tt class="descname">HTMLParseError</tt><a class="headerlink" href="#HTMLParser.HTMLParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> is able to handle broken markup, but in some cases it
+might raise this exception when it encounters an error while parsing.
+This exception provides three attributes: <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> is a brief
+message explaining the error, <tt class="xref py py-attr docutils literal"><span class="pre">lineno</span></tt> is the number of the line on
+which the broken construct was detected, and <tt class="xref py py-attr docutils literal"><span class="pre">offset</span></tt> is the number of
+characters into the line at which the construct starts.</p>
+</dd></dl>
+
+<div class="section" id="example-html-parser-application">
+<h2>19.1.1. Example HTML Parser Application<a class="headerlink" href="#example-html-parser-application" title="Permalink to this headline">¶</a></h2>
+<p>As a basic example, below is a simple HTML parser that uses the
+<a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class to print out start tags, end tags and data
+as they are encountered:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">HTMLParser</span> <span class="kn">import</span> <span class="n">HTMLParser</span>
+
+<span class="c"># create a subclass and override the handler methods</span>
+<span class="k">class</span> <span class="nc">MyHTMLParser</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle_starttag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Encountered a start tag:&quot;</span><span class="p">,</span> <span class="n">tag</span>
+    <span class="k">def</span> <span class="nf">handle_endtag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Encountered an end tag :&quot;</span><span class="p">,</span> <span class="n">tag</span>
+    <span class="k">def</span> <span class="nf">handle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Encountered some data  :&quot;</span><span class="p">,</span> <span class="n">data</span>
+
+<span class="c"># instantiate the parser and fed it some HTML</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">MyHTMLParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;/head&gt;&#39;</span>
+            <span class="s">&#39;&lt;body&gt;&lt;h1&gt;Parse me!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will then be:</p>
+<div class="highlight-python"><pre>Encountered a start tag: html
+Encountered a start tag: head
+Encountered a start tag: title
+Encountered some data  : Test
+Encountered an end tag : title
+Encountered an end tag : head
+Encountered a start tag: body
+Encountered a start tag: h1
+Encountered some data  : Parse me!
+Encountered an end tag : h1
+Encountered an end tag : body
+Encountered an end tag : html</pre>
+</div>
+</div>
+<div class="section" id="htmlparser-methods">
+<h2>19.1.2. <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> Methods<a class="headerlink" href="#htmlparser-methods" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.feed">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">feed</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.feed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feed some text to the parser.  It is processed insofar as it consists of
+complete elements; incomplete data is buffered until more data is fed or
+<a class="reference internal" href="#HTMLParser.HTMLParser.close" title="HTMLParser.HTMLParser.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a> is called.  <em>data</em> can be either <a class="reference internal" href="functions.html#unicode" title="unicode"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt></a> or
+<a class="reference internal" href="functions.html#str" title="str"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a>, but passing <a class="reference internal" href="functions.html#unicode" title="unicode"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt></a> is advised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.close">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force processing of all buffered data as if it were followed by an end-of-file
+mark.  This method may be redefined by a derived class to define additional
+processing at the end of the input, but the redefined version should always call
+the <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> base class method <a class="reference internal" href="#HTMLParser.HTMLParser.close" title="HTMLParser.HTMLParser.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.reset">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the instance.  Loses all unprocessed data.  This is called implicitly at
+instantiation time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.getpos">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">getpos</tt><big>(</big><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.getpos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current line number and offset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.get_starttag_text">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">get_starttag_text</tt><big>(</big><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.get_starttag_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the text of the most recently opened start tag.  This should not normally
+be needed for structured processing, but may be useful in dealing with HTML &#8220;as
+deployed&#8221; or for re-generating input with minimal changes (whitespace between
+attributes can be preserved, etc.).</p>
+</dd></dl>
+
+<p>The following methods are called when data or markup elements are encountered
+and they are meant to be overridden in a subclass.  The base class
+implementations do nothing (except for <a class="reference internal" href="#HTMLParser.HTMLParser.handle_startendtag" title="HTMLParser.HTMLParser.handle_startendtag"><tt class="xref py py-meth docutils literal"><span class="pre">handle_startendtag()</span></tt></a>):</p>
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_starttag">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_starttag</tt><big>(</big><em>tag</em>, <em>attrs</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_starttag" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to handle the start of a tag (e.g. <tt class="docutils literal"><span class="pre">&lt;div</span> <span class="pre">id=&quot;main&quot;&gt;</span></tt>).</p>
+<p>The <em>tag</em> argument is the name of the tag converted to lower case. The <em>attrs</em>
+argument is a list of <tt class="docutils literal"><span class="pre">(name,</span> <span class="pre">value)</span></tt> pairs containing the attributes found
+inside the tag&#8217;s <tt class="docutils literal"><span class="pre">&lt;&gt;</span></tt> brackets.  The <em>name</em> will be translated to lower case,
+and quotes in the <em>value</em> have been removed, and character and entity references
+have been replaced.</p>
+<p>For instance, for the tag <tt class="docutils literal"><span class="pre">&lt;A</span> <span class="pre">HREF=&quot;http://www.cwi.nl/&quot;&gt;</span></tt>, this method
+would be called as <tt class="docutils literal"><span class="pre">handle_starttag('a',</span> <span class="pre">[('href',</span> <span class="pre">'http://www.cwi.nl/')])</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>All entity references from <a class="reference internal" href="htmllib.html#module-htmlentitydefs" title="htmlentitydefs: Definitions of HTML general entities."><tt class="xref py py-mod docutils literal"><span class="pre">htmlentitydefs</span></tt></a> are now replaced in the
+attribute values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_endtag">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_endtag</tt><big>(</big><em>tag</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_endtag" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to handle the end tag of an element (e.g. <tt class="docutils literal"><span class="pre">&lt;/div&gt;</span></tt>).</p>
+<p>The <em>tag</em> argument is the name of the tag converted to lower case.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_startendtag">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_startendtag</tt><big>(</big><em>tag</em>, <em>attrs</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_startendtag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference internal" href="#HTMLParser.HTMLParser.handle_starttag" title="HTMLParser.HTMLParser.handle_starttag"><tt class="xref py py-meth docutils literal"><span class="pre">handle_starttag()</span></tt></a>, but called when the parser encounters an
+XHTML-style empty tag (<tt class="docutils literal"><span class="pre">&lt;img</span> <span class="pre">...</span> <span class="pre">/&gt;</span></tt>).  This method may be overridden by
+subclasses which require this particular lexical information; the default
+implementation simply calls <a class="reference internal" href="#HTMLParser.HTMLParser.handle_starttag" title="HTMLParser.HTMLParser.handle_starttag"><tt class="xref py py-meth docutils literal"><span class="pre">handle_starttag()</span></tt></a> and <a class="reference internal" href="#HTMLParser.HTMLParser.handle_endtag" title="HTMLParser.HTMLParser.handle_endtag"><tt class="xref py py-meth docutils literal"><span class="pre">handle_endtag()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_data">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to process arbitrary data (e.g. text nodes and the
+content of <tt class="docutils literal"><span class="pre">&lt;script&gt;...&lt;/script&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;style&gt;...&lt;/style&gt;</span></tt>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_entityref">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_entityref</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_entityref" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to process a named character reference of the form
+<tt class="docutils literal"><span class="pre">&amp;name;</span></tt> (e.g. <tt class="docutils literal"><span class="pre">&amp;gt;</span></tt>), where <em>name</em> is a general entity reference
+(e.g. <tt class="docutils literal"><span class="pre">'gt'</span></tt>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_charref">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_charref</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_charref" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to process decimal and hexadecimal numeric character
+references of the form <tt class="docutils literal"><span class="pre">&amp;#NNN;</span></tt> and <tt class="docutils literal"><span class="pre">&amp;#xNNN;</span></tt>.  For example, the decimal
+equivalent for <tt class="docutils literal"><span class="pre">&amp;gt;</span></tt> is <tt class="docutils literal"><span class="pre">&amp;#62;</span></tt>, whereas the hexadecimal is <tt class="docutils literal"><span class="pre">&amp;#x3E;</span></tt>;
+in this case the method will receive <tt class="docutils literal"><span class="pre">'62'</span></tt> or <tt class="docutils literal"><span class="pre">'x3E'</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_comment">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_comment</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called when a comment is encountered (e.g. <tt class="docutils literal"><span class="pre">&lt;!--comment--&gt;</span></tt>).</p>
+<p>For example, the comment <tt class="docutils literal"><span class="pre">&lt;!--</span> <span class="pre">comment</span> <span class="pre">--&gt;</span></tt> will cause this method to be
+called with the argument <tt class="docutils literal"><span class="pre">'</span> <span class="pre">comment</span> <span class="pre">'</span></tt>.</p>
+<p>The content of Internet Explorer conditional comments (condcoms) will also be
+sent to this method, so, for <tt class="docutils literal"><span class="pre">&lt;!--[if</span> <span class="pre">IE</span> <span class="pre">9]&gt;IE9-specific</span> <span class="pre">content&lt;![endif]--&gt;</span></tt>,
+this method will receive <tt class="docutils literal"><span class="pre">'[if</span> <span class="pre">IE</span> <span class="pre">9]&gt;IE-specific</span> <span class="pre">content&lt;![endif]'</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_decl">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_decl</tt><big>(</big><em>decl</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_decl" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to handle an HTML doctype declaration (e.g.
+<tt class="docutils literal"><span class="pre">&lt;!DOCTYPE</span> <span class="pre">html&gt;</span></tt>).</p>
+<p>The <em>decl</em> parameter will be the entire contents of the declaration inside
+the <tt class="docutils literal"><span class="pre">&lt;!...&gt;</span></tt> markup (e.g. <tt class="docutils literal"><span class="pre">'DOCTYPE</span> <span class="pre">html'</span></tt>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.handle_pi">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_pi</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.handle_pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called when a processing instruction is encountered.  The <em>data</em>
+parameter will contain the entire processing instruction.  For example, for the
+processing instruction <tt class="docutils literal"><span class="pre">&lt;?proc</span> <span class="pre">color='red'&gt;</span></tt>, this method would be called as
+<tt class="docutils literal"><span class="pre">handle_pi(&quot;proc</span> <span class="pre">color='red'&quot;)</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#HTMLParser.HTMLParser" title="HTMLParser.HTMLParser"><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class uses the SGML syntactic rules for processing
+instructions.  An XHTML processing instruction using the trailing <tt class="docutils literal"><span class="pre">'?'</span></tt> will
+cause the <tt class="docutils literal"><span class="pre">'?'</span></tt> to be included in <em>data</em>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="HTMLParser.HTMLParser.unknown_decl">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">unknown_decl</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#HTMLParser.HTMLParser.unknown_decl" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called when an unrecognized declaration is read by the parser.</p>
+<p>The <em>data</em> parameter will be the entire contents of the declaration inside
+the <tt class="docutils literal"><span class="pre">&lt;![...]&gt;</span></tt> markup.  It is sometimes useful to be overridden by a
+derived class.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<span id="htmlparser-examples"></span><h2>19.1.3. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following class implements a parser that will be used to illustrate more
+examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">HTMLParser</span> <span class="kn">import</span> <span class="n">HTMLParser</span>
+<span class="kn">from</span> <span class="nn">htmlentitydefs</span> <span class="kn">import</span> <span class="n">name2codepoint</span>
+
+<span class="k">class</span> <span class="nc">MyHTMLParser</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle_starttag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Start tag:&quot;</span><span class="p">,</span> <span class="n">tag</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;     attr:&quot;</span><span class="p">,</span> <span class="n">attr</span>
+    <span class="k">def</span> <span class="nf">handle_endtag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;End tag  :&quot;</span><span class="p">,</span> <span class="n">tag</span>
+    <span class="k">def</span> <span class="nf">handle_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Data     :&quot;</span><span class="p">,</span> <span class="n">data</span>
+    <span class="k">def</span> <span class="nf">handle_comment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Comment  :&quot;</span><span class="p">,</span> <span class="n">data</span>
+    <span class="k">def</span> <span class="nf">handle_entityref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="n">name2codepoint</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+        <span class="k">print</span> <span class="s">&quot;Named ent:&quot;</span><span class="p">,</span> <span class="n">c</span>
+    <span class="k">def</span> <span class="nf">handle_charref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="nb">unichr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">print</span> <span class="s">&quot;Num ent  :&quot;</span><span class="p">,</span> <span class="n">c</span>
+    <span class="k">def</span> <span class="nf">handle_decl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Decl     :&quot;</span><span class="p">,</span> <span class="n">data</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">MyHTMLParser</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Parsing a doctype:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &#39;</span>
+<span class="gp">... </span>            <span class="s">&#39;&quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;&#39;</span><span class="p">)</span>
+<span class="go">Decl     : DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;</span>
+</pre></div>
+</div>
+<p>Parsing an element with a few attributes and a title:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;img src=&quot;python-logo.png&quot; alt=&quot;The Python logo&quot;&gt;&#39;</span><span class="p">)</span>
+<span class="go">Start tag: img</span>
+<span class="go">     attr: (&#39;src&#39;, &#39;python-logo.png&#39;)</span>
+<span class="go">     attr: (&#39;alt&#39;, &#39;The Python logo&#39;)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;h1&gt;Python&lt;/h1&gt;&#39;</span><span class="p">)</span>
+<span class="go">Start tag: h1</span>
+<span class="go">Data     : Python</span>
+<span class="go">End tag  : h1</span>
+</pre></div>
+</div>
+<p>The content of <tt class="docutils literal"><span class="pre">script</span></tt> and <tt class="docutils literal"><span class="pre">style</span></tt> elements is returned as is, without
+further parsing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;style type=&quot;text/css&quot;&gt;#python { color: green }&lt;/style&gt;&#39;</span><span class="p">)</span>
+<span class="go">Start tag: style</span>
+<span class="go">     attr: (&#39;type&#39;, &#39;text/css&#39;)</span>
+<span class="go">Data     : #python { color: green }</span>
+<span class="go">End tag  : style</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;script type=&quot;text/javascript&quot;&gt;&#39;</span>
+<span class="gp">... </span>            <span class="s">&#39;alert(&quot;&lt;strong&gt;hello!&lt;/strong&gt;&quot;);&lt;/script&gt;&#39;</span><span class="p">)</span>
+<span class="go">Start tag: script</span>
+<span class="go">     attr: (&#39;type&#39;, &#39;text/javascript&#39;)</span>
+<span class="go">Data     : alert(&quot;&lt;strong&gt;hello!&lt;/strong&gt;&quot;);</span>
+<span class="go">End tag  : script</span>
+</pre></div>
+</div>
+<p>Parsing comments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;!-- a comment --&gt;&#39;</span>
+<span class="gp">... </span>            <span class="s">&#39;&lt;!--[if IE 9]&gt;IE-specific content&lt;![endif]--&gt;&#39;</span><span class="p">)</span>
+<span class="go">Comment  :  a comment</span>
+<span class="go">Comment  : [if IE 9]&gt;IE-specific content&lt;![endif]</span>
+</pre></div>
+</div>
+<p>Parsing named and numeric character references and converting them to the
+correct char (note: these 3 references are all equivalent to <tt class="docutils literal"><span class="pre">'&gt;'</span></tt>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&amp;gt;&amp;#62;&amp;#x3E;&#39;</span><span class="p">)</span>
+<span class="go">Named ent: &gt;</span>
+<span class="go">Num ent  : &gt;</span>
+<span class="go">Num ent  : &gt;</span>
+</pre></div>
+</div>
+<p>Feeding incomplete chunks to <a class="reference internal" href="#HTMLParser.HTMLParser.feed" title="HTMLParser.HTMLParser.feed"><tt class="xref py py-meth docutils literal"><span class="pre">feed()</span></tt></a> works, but
+<a class="reference internal" href="#HTMLParser.HTMLParser.handle_data" title="HTMLParser.HTMLParser.handle_data"><tt class="xref py py-meth docutils literal"><span class="pre">handle_data()</span></tt></a> might be called more than once:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;&lt;sp&#39;</span><span class="p">,</span> <span class="s">&#39;an&gt;buff&#39;</span><span class="p">,</span> <span class="s">&#39;ered &#39;</span><span class="p">,</span> <span class="s">&#39;text&lt;/s&#39;</span><span class="p">,</span> <span class="s">&#39;pan&gt;&#39;</span><span class="p">]:</span>
+<span class="gp">... </span>    <span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Start tag: span</span>
+<span class="go">Data     : buff</span>
+<span class="go">Data     : ered</span>
+<span class="go">Data     : text</span>
+<span class="go">End tag  : span</span>
+</pre></div>
+</div>
+<p>Parsing invalid HTML (e.g. unquoted attributes) also works:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s">&#39;&lt;p&gt;&lt;a class=link href=#main&gt;tag soup&lt;/p &gt;&lt;/a&gt;&#39;</span><span class="p">)</span>
+<span class="go">Start tag: p</span>
+<span class="go">Start tag: a</span>
+<span class="go">     attr: (&#39;class&#39;, &#39;link&#39;)</span>
+<span class="go">     attr: (&#39;href&#39;, &#39;#main&#39;)</span>
+<span class="go">Data     : tag soup</span>
+<span class="go">End tag  : p</span>
+<span class="go">End tag  : a</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19.1. <tt class="docutils literal"><span class="pre">HTMLParser</span></tt> &#8212; Simple HTML and XHTML parser</a><ul>
+<li><a class="reference internal" href="#example-html-parser-application">19.1.1. Example HTML Parser Application</a></li>
+<li><a class="reference internal" href="#htmlparser-methods">19.1.2. <tt class="docutils literal"><span class="pre">HTMLParser</span></tt> Methods</a></li>
+<li><a class="reference internal" href="#examples">19.1.3. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="markup.html"
+                        title="previous chapter">19. Structured Markup Processing Tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sgmllib.html"
+                        title="next chapter">19.2. <tt class="docutils literal docutils literal"><span class="pre">sgmllib</span></tt> &#8212; Simple SGML parser</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/htmlparser.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sgmllib.html" title="19.2. sgmllib — Simple SGML parser"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="markup.html" title="19. Structured Markup Processing Tools"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" >19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

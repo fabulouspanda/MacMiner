@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>13.6. plistlib — Generate and parse Mac OS X .plist files &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="13. File Formats" href="fileformats.html" />
+    <link rel="next" title="14. Cryptographic Services" href="crypto.html" />
+    <link rel="prev" title="13.5. xdrlib — Encode and decode XDR data" href="xdrlib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="14. Cryptographic Services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xdrlib.html" title="13.5. xdrlib — Encode and decode XDR data"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="fileformats.html" accesskey="U">13. File Formats</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-plistlib">
+<span id="plistlib-generate-and-parse-mac-os-x-plist-files"></span><h1>13.6. <a class="reference internal" href="#module-plistlib" title="plistlib: Generate and parse Mac OS X plist files."><tt class="xref py py-mod docutils literal"><span class="pre">plistlib</span></tt></a> &#8212; Generate and parse Mac OS X <tt class="docutils literal"><span class="pre">.plist</span></tt> files<a class="headerlink" href="#module-plistlib" title="Permalink to this headline">¶</a></h1>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>This module was previously only available in the Mac-specific library, it is
+now available for all platforms.</p>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/plistlib.py">Lib/plistlib.py</a></p>
+<hr class="docutils" />
+<p>This module provides an interface for reading and writing the &#8220;property list&#8221;
+XML files used mainly by Mac OS X.</p>
+<p>The property list (<tt class="docutils literal"><span class="pre">.plist</span></tt>) file format is a simple XML pickle supporting
+basic object types, like dictionaries, lists, numbers and strings.  Usually the
+top level object is a dictionary.</p>
+<p>Values can be strings, integers, floats, booleans, tuples, lists, dictionaries
+(but only with string keys), <a class="reference internal" href="#plistlib.Data" title="plistlib.Data"><tt class="xref py py-class docutils literal"><span class="pre">Data</span></tt></a> or <a class="reference internal" href="datetime.html#datetime.datetime" title="datetime.datetime"><tt class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></tt></a>
+objects.  String values (including dictionary keys) may be unicode strings &#8211;
+they will be written out as UTF-8.</p>
+<p>The <tt class="docutils literal"><span class="pre">&lt;data&gt;</span></tt> plist type is supported through the <a class="reference internal" href="#plistlib.Data" title="plistlib.Data"><tt class="xref py py-class docutils literal"><span class="pre">Data</span></tt></a> class.  This is
+a thin wrapper around a Python string.  Use <a class="reference internal" href="#plistlib.Data" title="plistlib.Data"><tt class="xref py py-class docutils literal"><span class="pre">Data</span></tt></a> if your strings
+contain control characters.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://developer.apple.com/documentation/Darwin/Reference/ManPages/man5/plist.5.html">PList manual page</a></dt>
+<dd>Apple&#8217;s documentation of the file format.</dd>
+</dl>
+</div>
+<p>This module defines the following functions:</p>
+<dl class="function">
+<dt id="plistlib.readPlist">
+<tt class="descclassname">plistlib.</tt><tt class="descname">readPlist</tt><big>(</big><em>pathOrFile</em><big>)</big><a class="headerlink" href="#plistlib.readPlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a plist file. <em>pathOrFile</em> may either be a file name or a (readable)
+file object.  Return the unpacked root object (which usually is a
+dictionary).</p>
+<p>The XML data is parsed using the Expat parser from <a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a>
+&#8211; see its documentation for possible exceptions on ill-formed XML.
+Unknown elements will simply be ignored by the plist parser.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.writePlist">
+<tt class="descclassname">plistlib.</tt><tt class="descname">writePlist</tt><big>(</big><em>rootObject</em>, <em>pathOrFile</em><big>)</big><a class="headerlink" href="#plistlib.writePlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <em>rootObject</em> to a plist file. <em>pathOrFile</em> may either be a file name
+or a (writable) file object.</p>
+<p>A <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> will be raised if the object is of an unsupported type or
+a container that contains objects of unsupported types.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.readPlistFromString">
+<tt class="descclassname">plistlib.</tt><tt class="descname">readPlistFromString</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#plistlib.readPlistFromString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a plist from a string.  Return the root object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.writePlistToString">
+<tt class="descclassname">plistlib.</tt><tt class="descname">writePlistToString</tt><big>(</big><em>rootObject</em><big>)</big><a class="headerlink" href="#plistlib.writePlistToString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>rootObject</em> as a plist-formatted string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.readPlistFromResource">
+<tt class="descclassname">plistlib.</tt><tt class="descname">readPlistFromResource</tt><big>(</big><em>path</em>, <em>restype='plst'</em>, <em>resid=0</em><big>)</big><a class="headerlink" href="#plistlib.readPlistFromResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a plist from the resource with type <em>restype</em> from the resource fork of
+<em>path</em>.  Availability: Mac OS X.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In Python 3.x, this function has been removed.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.writePlistToResource">
+<tt class="descclassname">plistlib.</tt><tt class="descname">writePlistToResource</tt><big>(</big><em>rootObject</em>, <em>path</em>, <em>restype='plst'</em>, <em>resid=0</em><big>)</big><a class="headerlink" href="#plistlib.writePlistToResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write <em>rootObject</em> as a resource with type <em>restype</em> to the resource fork of
+<em>path</em>.  Availability: Mac OS X.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In Python 3.x, this function has been removed.</p>
+</div>
+</dd></dl>
+
+<p>The following class is available:</p>
+<dl class="class">
+<dt id="plistlib.Data">
+<em class="property">class </em><tt class="descclassname">plistlib.</tt><tt class="descname">Data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#plistlib.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a &#8220;data&#8221; wrapper object around the string <em>data</em>.  This is used in
+functions converting from/to plists to represent the <tt class="docutils literal"><span class="pre">&lt;data&gt;</span></tt> type
+available in plists.</p>
+<p>It has one attribute, <tt class="xref py py-attr docutils literal"><span class="pre">data</span></tt>, that can be used to retrieve the Python
+string stored in it.</p>
+</dd></dl>
+
+<div class="section" id="examples">
+<h2>13.6.1. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Generating a plist:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pl</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">aString</span><span class="o">=</span><span class="s">&quot;Doodah&quot;</span><span class="p">,</span>
+    <span class="n">aList</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="s">&quot;B&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mf">32.1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span>
+    <span class="n">aFloat</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">anInt</span> <span class="o">=</span> <span class="mi">728</span><span class="p">,</span>
+    <span class="n">aDict</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">anotherString</span><span class="o">=</span><span class="s">&quot;&lt;hello &amp; hi there!&gt;&quot;</span><span class="p">,</span>
+        <span class="n">aUnicodeValue</span><span class="o">=</span><span class="s">u&#39;M</span><span class="se">\xe4</span><span class="s">ssig, Ma</span><span class="se">\xdf</span><span class="s">&#39;</span><span class="p">,</span>
+        <span class="n">aTrueValue</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">aFalseValue</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">someData</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="s">&quot;&lt;binary gunk&gt;&quot;</span><span class="p">),</span>
+    <span class="n">someMoreData</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="s">&quot;&lt;lots of binary gunk&gt;&quot;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="n">aDate</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">())),</span>
+<span class="p">)</span>
+<span class="c"># unicode keys are possible, but a little awkward to use:</span>
+<span class="n">pl</span><span class="p">[</span><span class="s">u&#39;</span><span class="se">\xc5</span><span class="s">benraa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;That was a unicode key.&quot;</span>
+<span class="n">writePlist</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="n">fileName</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parsing a plist:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pl</span> <span class="o">=</span> <span class="n">readPlist</span><span class="p">(</span><span class="n">pathOrFile</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">pl</span><span class="p">[</span><span class="s">&quot;aKey&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">13.6. <tt class="docutils literal"><span class="pre">plistlib</span></tt> &#8212; Generate and parse Mac OS X <tt class="docutils literal"><span class="pre">.plist</span></tt> files</a><ul>
+<li><a class="reference internal" href="#examples">13.6.1. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xdrlib.html"
+                        title="previous chapter">13.5. <tt class="docutils literal docutils literal"><span class="pre">xdrlib</span></tt> &#8212; Encode and decode XDR data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="crypto.html"
+                        title="next chapter">14. Cryptographic Services</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/plistlib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="14. Cryptographic Services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xdrlib.html" title="13.5. xdrlib — Encode and decode XDR data"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="fileformats.html" >13. File Formats</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

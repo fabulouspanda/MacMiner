@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9.5. fractions — Rational numbers &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="9. Numeric and Mathematical Modules" href="numeric.html" />
+    <link rel="next" title="9.6. random — Generate pseudo-random numbers" href="random.html" />
+    <link rel="prev" title="9.4. decimal — Decimal fixed point and floating point arithmetic" href="decimal.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="random.html" title="9.6. random — Generate pseudo-random numbers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="decimal.html" title="9.4. decimal — Decimal fixed point and floating point arithmetic"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" accesskey="U">9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-fractions">
+<span id="fractions-rational-numbers"></span><h1>9.5. <a class="reference internal" href="#module-fractions" title="fractions: Rational numbers."><tt class="xref py py-mod docutils literal"><span class="pre">fractions</span></tt></a> &#8212; Rational numbers<a class="headerlink" href="#module-fractions" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/fractions.py">Lib/fractions.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-fractions" title="fractions: Rational numbers."><tt class="xref py py-mod docutils literal"><span class="pre">fractions</span></tt></a> module provides support for rational number arithmetic.</p>
+<p>A Fraction instance can be constructed from a pair of integers, from
+another rational number, or from a string.</p>
+<dl class="class">
+<dt id="fractions.Fraction">
+<em class="property">class </em><tt class="descclassname">fractions.</tt><tt class="descname">Fraction</tt><big>(</big><em>numerator=0</em>, <em>denominator=1</em><big>)</big><a class="headerlink" href="#fractions.Fraction" title="Permalink to this definition">¶</a></dt>
+<dt>
+<em class="property">class </em><tt class="descclassname">fractions.</tt><tt class="descname">Fraction</tt><big>(</big><em>other_fraction</em><big>)</big></dt>
+<dt>
+<em class="property">class </em><tt class="descclassname">fractions.</tt><tt class="descname">Fraction</tt><big>(</big><em>float</em><big>)</big></dt>
+<dt>
+<em class="property">class </em><tt class="descclassname">fractions.</tt><tt class="descname">Fraction</tt><big>(</big><em>decimal</em><big>)</big></dt>
+<dt>
+<em class="property">class </em><tt class="descclassname">fractions.</tt><tt class="descname">Fraction</tt><big>(</big><em>string</em><big>)</big></dt>
+<dd><p>The first version requires that <em>numerator</em> and <em>denominator</em> are instances
+of <a class="reference internal" href="numbers.html#numbers.Rational" title="numbers.Rational"><tt class="xref py py-class docutils literal"><span class="pre">numbers.Rational</span></tt></a> and returns a new <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> instance
+with value <tt class="docutils literal"><span class="pre">numerator/denominator</span></tt>. If <em>denominator</em> is <tt class="xref py py-const docutils literal"><span class="pre">0</span></tt>, it
+raises a <a class="reference internal" href="exceptions.html#exceptions.ZeroDivisionError" title="exceptions.ZeroDivisionError"><tt class="xref py py-exc docutils literal"><span class="pre">ZeroDivisionError</span></tt></a>. The second version requires that
+<em>other_fraction</em> is an instance of <a class="reference internal" href="numbers.html#numbers.Rational" title="numbers.Rational"><tt class="xref py py-class docutils literal"><span class="pre">numbers.Rational</span></tt></a> and returns a
+<a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> instance with the same value.  The next two versions accept
+either a <a class="reference internal" href="functions.html#float" title="float"><tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></a> or a <a class="reference internal" href="decimal.html#decimal.Decimal" title="decimal.Decimal"><tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt></a> instance, and return a
+<a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> instance with exactly the same value.  Note that due to the
+usual issues with binary floating-point (see <a class="reference internal" href="../tutorial/floatingpoint.html#tut-fp-issues"><em>Floating Point Arithmetic:  Issues and Limitations</em></a>), the
+argument to <tt class="docutils literal"><span class="pre">Fraction(1.1)</span></tt> is not exactly equal to 11/10, and so
+<tt class="docutils literal"><span class="pre">Fraction(1.1)</span></tt> does <em>not</em> return <tt class="docutils literal"><span class="pre">Fraction(11,</span> <span class="pre">10)</span></tt> as one might expect.
+(But see the documentation for the <a class="reference internal" href="#fractions.Fraction.limit_denominator" title="fractions.Fraction.limit_denominator"><tt class="xref py py-meth docutils literal"><span class="pre">limit_denominator()</span></tt></a> method below.)
+The last version of the constructor expects a string or unicode instance.
+The usual form for this instance is:</p>
+<div class="highlight-python"><pre>[sign] numerator ['/' denominator]</pre>
+</div>
+<p>where the optional <tt class="docutils literal"><span class="pre">sign</span></tt> may be either &#8216;+&#8217; or &#8216;-&#8216; and
+<tt class="docutils literal"><span class="pre">numerator</span></tt> and <tt class="docutils literal"><span class="pre">denominator</span></tt> (if present) are strings of
+decimal digits.  In addition, any string that represents a finite
+value and is accepted by the <a class="reference internal" href="functions.html#float" title="float"><tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></a> constructor is also
+accepted by the <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> constructor.  In either form the
+input string may also have leading and/or trailing whitespace.
+Here are some examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">Fraction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">)</span>
+<span class="go">Fraction(-8, 5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="go">Fraction(123, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">()</span>
+<span class="go">Fraction(0, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="s">&#39;3/7&#39;</span><span class="p">)</span>
+<span class="go">Fraction(3, 7)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="s">&#39; -3/7 &#39;</span><span class="p">)</span>
+<span class="go">Fraction(-3, 7)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="s">&#39;1.414213 </span><span class="se">\t\n</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="go">Fraction(1414213, 1000000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="s">&#39;-.125&#39;</span><span class="p">)</span>
+<span class="go">Fraction(-1, 8)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="s">&#39;7e-6&#39;</span><span class="p">)</span>
+<span class="go">Fraction(7, 1000000)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="mf">2.25</span><span class="p">)</span>
+<span class="go">Fraction(9, 4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="go">Fraction(2476979795053773, 2251799813685248)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="s">&#39;1.1&#39;</span><span class="p">))</span>
+<span class="go">Fraction(11, 10)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> class inherits from the abstract base class
+<a class="reference internal" href="numbers.html#numbers.Rational" title="numbers.Rational"><tt class="xref py py-class docutils literal"><span class="pre">numbers.Rational</span></tt></a>, and implements all of the methods and
+operations from that class.  <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> instances are hashable,
+and should be treated as immutable.  In addition,
+<a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> has the following methods:</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>The <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> constructor now accepts <a class="reference internal" href="functions.html#float" title="float"><tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></a> and
+<a class="reference internal" href="decimal.html#decimal.Decimal" title="decimal.Decimal"><tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt></a> instances.</p>
+<dl class="method">
+<dt id="fractions.Fraction.from_float">
+<tt class="descname">from_float</tt><big>(</big><em>flt</em><big>)</big><a class="headerlink" href="#fractions.Fraction.from_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class method constructs a <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> representing the exact
+value of <em>flt</em>, which must be a <a class="reference internal" href="functions.html#float" title="float"><tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></a>. Beware that
+<tt class="docutils literal"><span class="pre">Fraction.from_float(0.3)</span></tt> is not the same value as <tt class="docutils literal"><span class="pre">Fraction(3,</span> <span class="pre">10)</span></tt></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">From Python 2.7 onwards, you can also construct a
+<a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> instance directly from a <a class="reference internal" href="functions.html#float" title="float"><tt class="xref py py-class docutils literal"><span class="pre">float</span></tt></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fractions.Fraction.from_decimal">
+<tt class="descname">from_decimal</tt><big>(</big><em>dec</em><big>)</big><a class="headerlink" href="#fractions.Fraction.from_decimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class method constructs a <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> representing the exact
+value of <em>dec</em>, which must be a <a class="reference internal" href="decimal.html#decimal.Decimal" title="decimal.Decimal"><tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">From Python 2.7 onwards, you can also construct a
+<a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> instance directly from a <a class="reference internal" href="decimal.html#decimal.Decimal" title="decimal.Decimal"><tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt></a>
+instance.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="fractions.Fraction.limit_denominator">
+<tt class="descname">limit_denominator</tt><big>(</big><em>max_denominator=1000000</em><big>)</big><a class="headerlink" href="#fractions.Fraction.limit_denominator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds and returns the closest <a class="reference internal" href="#fractions.Fraction" title="fractions.Fraction"><tt class="xref py py-class docutils literal"><span class="pre">Fraction</span></tt></a> to <tt class="docutils literal"><span class="pre">self</span></tt> that has
+denominator at most max_denominator.  This method is useful for finding
+rational approximations to a given floating-point number:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">Fraction</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="s">&#39;3.1415926535897932&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">Fraction(355, 113)</span>
+</pre></div>
+</div>
+<p>or for recovering a rational number that&#8217;s represented as a float:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">cos</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span>
+<span class="go">Fraction(4503599627370497, 9007199254740992)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">()</span>
+<span class="go">Fraction(1, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Fraction</span><span class="p">(</span><span class="mf">1.1</span><span class="p">)</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">()</span>
+<span class="go">Fraction(11, 10)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fractions.gcd">
+<tt class="descclassname">fractions.</tt><tt class="descname">gcd</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#fractions.gcd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the greatest common divisor of the integers <em>a</em> and <em>b</em>.  If either
+<em>a</em> or <em>b</em> is nonzero, then the absolute value of <tt class="docutils literal"><span class="pre">gcd(a,</span> <span class="pre">b)</span></tt> is the
+largest integer that divides both <em>a</em> and <em>b</em>.  <tt class="docutils literal"><span class="pre">gcd(a,b)</span></tt> has the same
+sign as <em>b</em> if <em>b</em> is nonzero; otherwise it takes the sign of <em>a</em>.  <tt class="docutils literal"><span class="pre">gcd(0,</span>
+<span class="pre">0)</span></tt> returns <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="numbers.html#module-numbers" title="numbers: Numeric abstract base classes (Complex, Real, Integral, etc.)."><tt class="xref py py-mod docutils literal"><span class="pre">numbers</span></tt></a></dt>
+<dd>The abstract base classes making up the numeric tower.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="decimal.html"
+                        title="previous chapter">9.4. <tt class="docutils literal docutils literal docutils literal"><span class="pre">decimal</span></tt> &#8212; Decimal fixed point and floating point arithmetic</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="random.html"
+                        title="next chapter">9.6. <tt class="docutils literal"><span class="pre">random</span></tt> &#8212; Generate pseudo-random numbers</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/fractions.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="random.html" title="9.6. random — Generate pseudo-random numbers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="decimal.html" title="9.4. decimal — Decimal fixed point and floating point arithmetic"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" >9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

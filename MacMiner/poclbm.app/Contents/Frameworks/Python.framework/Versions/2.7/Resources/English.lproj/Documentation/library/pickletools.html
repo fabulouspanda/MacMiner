@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>31.13. pickletools — Tools for pickle developers &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="31. Python Language Services" href="language.html" />
+    <link rel="next" title="32. Python compiler package" href="compiler.html" />
+    <link rel="prev" title="31.12. dis — Disassembler for Python bytecode" href="dis.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compiler.html" title="32. Python compiler package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dis.html" title="31.12. dis — Disassembler for Python bytecode"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="language.html" accesskey="U">31. Python Language Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pickletools">
+<span id="pickletools-tools-for-pickle-developers"></span><h1>31.13. <a class="reference internal" href="#module-pickletools" title="pickletools: Contains extensive comments about the pickle protocols and pickle-machine opcodes, as well as some useful functions."><tt class="xref py py-mod docutils literal"><span class="pre">pickletools</span></tt></a> &#8212; Tools for pickle developers<a class="headerlink" href="#module-pickletools" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/pickletools.py">Lib/pickletools.py</a></p>
+<hr class="docutils" />
+<p>This module contains various constants relating to the intimate details of the
+<a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt></a> module, some lengthy comments about the implementation, and a few
+useful functions for analyzing pickled data.  The contents of this module are
+useful for Python core developers who are working on the <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt></a> and
+<a class="reference internal" href="pickle.html#module-cPickle" title="cPickle: Faster version of pickle, but not subclassable."><tt class="xref py py-mod docutils literal"><span class="pre">cPickle</span></tt></a> implementations; ordinary users of the <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt></a> module
+probably won&#8217;t find the <a class="reference internal" href="#module-pickletools" title="pickletools: Contains extensive comments about the pickle protocols and pickle-machine opcodes, as well as some useful functions."><tt class="xref py py-mod docutils literal"><span class="pre">pickletools</span></tt></a> module relevant.</p>
+<dl class="function">
+<dt id="pickletools.dis">
+<tt class="descclassname">pickletools.</tt><tt class="descname">dis</tt><big>(</big><em>pickle</em>, <em>out=None</em>, <em>memo=None</em>, <em>indentlevel=4</em><big>)</big><a class="headerlink" href="#pickletools.dis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs a symbolic disassembly of the pickle to the file-like object <em>out</em>,
+defaulting to <tt class="docutils literal"><span class="pre">sys.stdout</span></tt>.  <em>pickle</em> can be a string or a file-like object.
+<em>memo</em> can be a Python dictionary that will be used as the pickle&#8217;s memo; it can
+be used to perform disassemblies across multiple pickles created by the same
+pickler. Successive levels, indicated by <tt class="docutils literal"><span class="pre">MARK</span></tt> opcodes in the stream, are
+indented by <em>indentlevel</em> spaces.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pickletools.genops">
+<tt class="descclassname">pickletools.</tt><tt class="descname">genops</tt><big>(</big><em>pickle</em><big>)</big><a class="headerlink" href="#pickletools.genops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides an <a class="reference internal" href="../glossary.html#term-iterator"><em class="xref std std-term">iterator</em></a> over all of the opcodes in a pickle, returning a
+sequence of <tt class="docutils literal"><span class="pre">(opcode,</span> <span class="pre">arg,</span> <span class="pre">pos)</span></tt> triples.  <em>opcode</em> is an instance of an
+<tt class="xref py py-class docutils literal"><span class="pre">OpcodeInfo</span></tt> class; <em>arg</em> is the decoded value, as a Python object, of
+the opcode&#8217;s argument; <em>pos</em> is the position at which this opcode is located.
+<em>pickle</em> can be a string or a file-like object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pickletools.optimize">
+<tt class="descclassname">pickletools.</tt><tt class="descname">optimize</tt><big>(</big><em>picklestring</em><big>)</big><a class="headerlink" href="#pickletools.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new equivalent pickle string after eliminating unused <tt class="docutils literal"><span class="pre">PUT</span></tt>
+opcodes. The optimized pickle is shorter, takes less transmission time,
+requires less storage space, and unpickles more efficiently.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dis.html"
+                        title="previous chapter">31.12. <tt class="docutils literal docutils literal docutils literal"><span class="pre">dis</span></tt> &#8212; Disassembler for Python bytecode</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compiler.html"
+                        title="next chapter">32. Python compiler package</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/pickletools.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compiler.html" title="32. Python compiler package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dis.html" title="31.12. dis — Disassembler for Python bytecode"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="language.html" >31. Python Language Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

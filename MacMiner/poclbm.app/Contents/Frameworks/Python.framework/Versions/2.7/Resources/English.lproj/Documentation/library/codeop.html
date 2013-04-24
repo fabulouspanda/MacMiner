@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>28.2. codeop — Compile Python code &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="28. Custom Python Interpreters" href="custominterp.html" />
+    <link rel="next" title="29. Restricted Execution" href="restricted.html" />
+    <link rel="prev" title="28.1. code — Interpreter base classes" href="code.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="restricted.html" title="29. Restricted Execution"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="28.1. code — Interpreter base classes"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="custominterp.html" accesskey="U">28. Custom Python Interpreters</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-codeop">
+<span id="codeop-compile-python-code"></span><h1>28.2. <a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><tt class="xref py py-mod docutils literal"><span class="pre">codeop</span></tt></a> &#8212; Compile Python code<a class="headerlink" href="#module-codeop" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><tt class="xref py py-mod docutils literal"><span class="pre">codeop</span></tt></a> module provides utilities upon which the Python
+read-eval-print loop can be emulated, as is done in the <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><tt class="xref py py-mod docutils literal"><span class="pre">code</span></tt></a> module.  As
+a result, you probably don&#8217;t want to use the module directly; if you want to
+include such a loop in your program you probably want to use the <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><tt class="xref py py-mod docutils literal"><span class="pre">code</span></tt></a>
+module instead.</p>
+<p>There are two parts to this job:</p>
+<ol class="arabic simple">
+<li>Being able to tell if a line of input completes a Python  statement: in
+short, telling whether to print &#8216;<tt class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></tt>&#8216; or &#8216;<tt class="docutils literal"><span class="pre">...</span></tt>&#8216; next.</li>
+<li>Remembering which future statements the user has entered, so  subsequent
+input can be compiled with these in effect.</li>
+</ol>
+<p>The <a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><tt class="xref py py-mod docutils literal"><span class="pre">codeop</span></tt></a> module provides a way of doing each of these things, and a way
+of doing them both.</p>
+<p>To do just the former:</p>
+<dl class="function">
+<dt id="codeop.compile_command">
+<tt class="descclassname">codeop.</tt><tt class="descname">compile_command</tt><big>(</big><em>source</em><span class="optional">[</span>, <em>filename</em><span class="optional">[</span>, <em>symbol</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#codeop.compile_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to compile <em>source</em>, which should be a string of Python code and return a
+code object if <em>source</em> is valid Python code. In that case, the filename
+attribute of the code object will be <em>filename</em>, which defaults to
+<tt class="docutils literal"><span class="pre">'&lt;input&gt;'</span></tt>. Returns <tt class="xref docutils literal"><span class="pre">None</span></tt> if <em>source</em> is <em>not</em> valid Python code, but is a
+prefix of valid Python code.</p>
+<p>If there is a problem with <em>source</em>, an exception will be raised.
+<a class="reference internal" href="exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a> is raised if there is invalid Python syntax, and
+<a class="reference internal" href="exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> or <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> if there is an invalid literal.</p>
+<p>The <em>symbol</em> argument determines whether <em>source</em> is compiled as a statement
+(<tt class="docutils literal"><span class="pre">'single'</span></tt>, the default) or as an <a class="reference internal" href="../glossary.html#term-expression"><em class="xref std std-term">expression</em></a> (<tt class="docutils literal"><span class="pre">'eval'</span></tt>).  Any
+other value will cause <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> to  be raised.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is possible (but not likely) that the parser stops parsing with a
+successful outcome before reaching the end of the source; in this case,
+trailing symbols may be ignored instead of causing an error.  For example,
+a backslash followed by two newlines may be followed by arbitrary garbage.
+This will be fixed once the API for the parser is better.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="codeop.Compile">
+<em class="property">class </em><tt class="descclassname">codeop.</tt><tt class="descname">Compile</tt><a class="headerlink" href="#codeop.Compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances of this class have <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><tt class="xref py py-meth docutils literal"><span class="pre">__call__()</span></tt></a> methods identical in signature to
+the built-in function <a class="reference internal" href="functions.html#compile" title="compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a>, but with the difference that if the
+instance compiles program text containing a <a class="reference internal" href="__future__.html#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a> statement, the
+instance &#8216;remembers&#8217; and compiles all subsequent program texts with the
+statement in force.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="codeop.CommandCompiler">
+<em class="property">class </em><tt class="descclassname">codeop.</tt><tt class="descname">CommandCompiler</tt><a class="headerlink" href="#codeop.CommandCompiler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances of this class have <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><tt class="xref py py-meth docutils literal"><span class="pre">__call__()</span></tt></a> methods identical in signature to
+<a class="reference internal" href="#codeop.compile_command" title="codeop.compile_command"><tt class="xref py py-func docutils literal"><span class="pre">compile_command()</span></tt></a>; the difference is that if the instance compiles program
+text containing a <tt class="docutils literal"><span class="pre">__future__</span></tt> statement, the instance &#8216;remembers&#8217; and
+compiles all subsequent program texts with the statement in force.</p>
+</dd></dl>
+
+<p>A note on version compatibility: the <a class="reference internal" href="#codeop.Compile" title="codeop.Compile"><tt class="xref py py-class docutils literal"><span class="pre">Compile</span></tt></a> and
+<a class="reference internal" href="#codeop.CommandCompiler" title="codeop.CommandCompiler"><tt class="xref py py-class docutils literal"><span class="pre">CommandCompiler</span></tt></a> are new in Python 2.2.  If you want to enable the
+future-tracking features of 2.2 but also retain compatibility with 2.1 and
+earlier versions of Python you can either write</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">codeop</span> <span class="kn">import</span> <span class="n">CommandCompiler</span>
+    <span class="n">compile_command</span> <span class="o">=</span> <span class="n">CommandCompiler</span><span class="p">()</span>
+    <span class="k">del</span> <span class="n">CommandCompiler</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">codeop</span> <span class="kn">import</span> <span class="n">compile_command</span>
+</pre></div>
+</div>
+<p>which is a low-impact change, but introduces possibly unwanted global state into
+your program, or you can write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">codeop</span> <span class="kn">import</span> <span class="n">CommandCompiler</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">CommandCompiler</span><span class="p">():</span>
+        <span class="kn">from</span> <span class="nn">codeop</span> <span class="kn">import</span> <span class="n">compile_command</span>
+        <span class="k">return</span> <span class="n">compile_command</span>
+</pre></div>
+</div>
+<p>and then call <tt class="docutils literal"><span class="pre">CommandCompiler</span></tt> every time you need a fresh compiler object.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="code.html"
+                        title="previous chapter">28.1. <tt class="docutils literal docutils literal"><span class="pre">code</span></tt> &#8212; Interpreter base classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="restricted.html"
+                        title="next chapter">29. Restricted Execution</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/codeop.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="restricted.html" title="29. Restricted Execution"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="28.1. code — Interpreter base classes"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="custominterp.html" >28. Custom Python Interpreters</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

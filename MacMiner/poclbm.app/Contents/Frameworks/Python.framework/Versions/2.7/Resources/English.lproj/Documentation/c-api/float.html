@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Floating Point Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Complex Number Objects" href="complex.html" />
+    <link rel="prev" title="Long Integer Objects" href="long.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="complex.html" title="Complex Number Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="long.html" title="Long Integer Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="floating-point-objects">
+<span id="floatobjects"></span><h1>Floating Point Objects<a class="headerlink" href="#floating-point-objects" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="PyFloatObject">
+<tt class="descname">PyFloatObject</tt><a class="headerlink" href="#PyFloatObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> represents a Python floating point object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyFloat_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyFloat_Type</tt><a class="headerlink" href="#PyFloat_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject"><tt class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></tt></a> represents the Python floating point
+type.  This is the same object as <tt class="docutils literal"><span class="pre">float</span></tt> and <tt class="docutils literal"><span class="pre">types.FloatType</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_Check">
+int <tt class="descname">PyFloat_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFloat_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyFloatObject" title="PyFloatObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFloatObject</span></tt></a> or a subtype of
+<a class="reference internal" href="#PyFloatObject" title="PyFloatObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFloatObject</span></tt></a>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_CheckExact">
+int <tt class="descname">PyFloat_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFloat_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyFloatObject" title="PyFloatObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFloatObject</span></tt></a>, but not a subtype of
+<a class="reference internal" href="#PyFloatObject" title="PyFloatObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFloatObject</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_FromString">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFloat_FromString</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*str</em>, char<em>&nbsp;**pend</em><big>)</big><a class="headerlink" href="#PyFloat_FromString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a <a class="reference internal" href="#PyFloatObject" title="PyFloatObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFloatObject</span></tt></a> object based on the string value in <em>str</em>, or
+<em>NULL</em> on failure.  The <em>pend</em> argument is ignored.  It remains only for
+backward compatibility.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_FromDouble">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFloat_FromDouble</tt><big>(</big>double<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyFloat_FromDouble" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a <a class="reference internal" href="#PyFloatObject" title="PyFloatObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFloatObject</span></tt></a> object from <em>v</em>, or <em>NULL</em> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_AsDouble">
+double <tt class="descname">PyFloat_AsDouble</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pyfloat</em><big>)</big><a class="headerlink" href="#PyFloat_AsDouble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> representation of the contents of <em>pyfloat</em>.  If
+<em>pyfloat</em> is not a Python floating point object but has a <a class="reference internal" href="../reference/datamodel.html#object.__float__" title="object.__float__"><tt class="xref py py-meth docutils literal"><span class="pre">__float__()</span></tt></a>
+method, this method will first be called to convert <em>pyfloat</em> into a float.
+This method returns <tt class="docutils literal"><span class="pre">-1.0</span></tt> upon failure, so one should call
+<a class="reference internal" href="exceptions.html#PyErr_Occurred" title="PyErr_Occurred"><tt class="xref c c-func docutils literal"><span class="pre">PyErr_Occurred()</span></tt></a> to check for errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_AS_DOUBLE">
+double <tt class="descname">PyFloat_AS_DOUBLE</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pyfloat</em><big>)</big><a class="headerlink" href="#PyFloat_AS_DOUBLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> representation of the contents of <em>pyfloat</em>, but
+without error checking.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_GetInfo">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFloat_GetInfo</tt><big>(</big>void<big>)</big><a class="headerlink" href="#PyFloat_GetInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a structseq instance which contains information about the
+precision, minimum and maximum values of a float. It&#8217;s a thin wrapper
+around the header file <tt class="file docutils literal"><span class="pre">float.h</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_GetMax">
+double <tt class="descname">PyFloat_GetMax</tt><big>(</big><big>)</big><a class="headerlink" href="#PyFloat_GetMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum representable finite float <em>DBL_MAX</em> as C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_GetMin">
+double <tt class="descname">PyFloat_GetMin</tt><big>(</big><big>)</big><a class="headerlink" href="#PyFloat_GetMin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the minimum normalized positive float <em>DBL_MIN</em> as C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_ClearFreeList">
+int <tt class="descname">PyFloat_ClearFreeList</tt><big>(</big><big>)</big><a class="headerlink" href="#PyFloat_ClearFreeList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the float free list. Return the number of items that could not
+be freed.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_AsString">
+void <tt class="descname">PyFloat_AsString</tt><big>(</big>char<em>&nbsp;*buf</em>, <a class="reference internal" href="#PyFloatObject" title="PyFloatObject">PyFloatObject</a><em>&nbsp;*v</em><big>)</big><a class="headerlink" href="#PyFloat_AsString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the argument <em>v</em> to a string, using the same rules as
+<a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a>. The length of <em>buf</em> should be at least 100.</p>
+<p>This function is unsafe to call because it writes to a buffer whose
+length it does not know.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <tt class="xref py py-func docutils literal"><span class="pre">PyObject_Str()</span></tt> or <tt class="xref py py-func docutils literal"><span class="pre">PyOS_double_to_string()</span></tt> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFloat_AsReprString">
+void <tt class="descname">PyFloat_AsReprString</tt><big>(</big>char<em>&nbsp;*buf</em>, <a class="reference internal" href="#PyFloatObject" title="PyFloatObject">PyFloatObject</a><em>&nbsp;*v</em><big>)</big><a class="headerlink" href="#PyFloat_AsReprString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as PyFloat_AsString, except uses the same rules as
+<a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a>.  The length of <em>buf</em> should be at least 100.</p>
+<p>This function is unsafe to call because it writes to a buffer whose
+length it does not know.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <tt class="xref py py-func docutils literal"><span class="pre">PyObject_Repr()</span></tt> or <tt class="xref py py-func docutils literal"><span class="pre">PyOS_double_to_string()</span></tt> instead.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="long.html"
+                        title="previous chapter">Long Integer Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="complex.html"
+                        title="next chapter">Complex Number Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/float.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="complex.html" title="Complex Number Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="long.html" title="Long Integer Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

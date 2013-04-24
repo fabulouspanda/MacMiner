@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>String conversion and formatting &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Utilities" href="utilities.html" />
+    <link rel="next" title="Reflection" href="reflection.html" />
+    <link rel="prev" title="Parsing arguments and building values" href="arg.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reflection.html" title="Reflection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="arg.html" title="Parsing arguments and building values"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="utilities.html" accesskey="U">Utilities</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="string-conversion-and-formatting">
+<span id="string-conversion"></span><h1>String conversion and formatting<a class="headerlink" href="#string-conversion-and-formatting" title="Permalink to this headline">¶</a></h1>
+<p>Functions for number conversion and formatted string output.</p>
+<dl class="function">
+<dt id="PyOS_snprintf">
+int <tt class="descname">PyOS_snprintf</tt><big>(</big>char<em>&nbsp;*str</em>, size_t<em>&nbsp;size</em>, const char<em>&nbsp;*format</em>, ...<big>)</big><a class="headerlink" href="#PyOS_snprintf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output not more than <em>size</em> bytes to <em>str</em> according to the format string
+<em>format</em> and the extra arguments. See the Unix man page <em class="manpage">snprintf(2)</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_vsnprintf">
+int <tt class="descname">PyOS_vsnprintf</tt><big>(</big>char<em>&nbsp;*str</em>, size_t<em>&nbsp;size</em>, const char<em>&nbsp;*format</em>, va_list<em>&nbsp;va</em><big>)</big><a class="headerlink" href="#PyOS_vsnprintf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Output not more than <em>size</em> bytes to <em>str</em> according to the format string
+<em>format</em> and the variable argument list <em>va</em>. Unix man page
+<em class="manpage">vsnprintf(2)</em>.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#PyOS_snprintf" title="PyOS_snprintf"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_snprintf()</span></tt></a> and <a class="reference internal" href="#PyOS_vsnprintf" title="PyOS_vsnprintf"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_vsnprintf()</span></tt></a> wrap the Standard C library
+functions <tt class="xref c c-func docutils literal"><span class="pre">snprintf()</span></tt> and <tt class="xref c c-func docutils literal"><span class="pre">vsnprintf()</span></tt>. Their purpose is to
+guarantee consistent behavior in corner cases, which the Standard C functions do
+not.</p>
+<p>The wrappers ensure that <em>str*[*size</em>-1] is always <tt class="docutils literal"><span class="pre">'\0'</span></tt> upon return. They
+never write more than <em>size</em> bytes (including the trailing <tt class="docutils literal"><span class="pre">'\0'</span></tt> into str.
+Both functions require that <tt class="docutils literal"><span class="pre">str</span> <span class="pre">!=</span> <span class="pre">NULL</span></tt>, <tt class="docutils literal"><span class="pre">size</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt> and <tt class="docutils literal"><span class="pre">format</span> <span class="pre">!=</span>
+<span class="pre">NULL</span></tt>.</p>
+<p>If the platform doesn&#8217;t have <tt class="xref c c-func docutils literal"><span class="pre">vsnprintf()</span></tt> and the buffer size needed to
+avoid truncation exceeds <em>size</em> by more than 512 bytes, Python aborts with a
+<em>Py_FatalError</em>.</p>
+<p>The return value (<em>rv</em>) for these functions should be interpreted as follows:</p>
+<ul class="simple">
+<li>When <tt class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">rv</span> <span class="pre">&lt;</span> <span class="pre">size</span></tt>, the output conversion was successful and <em>rv</em>
+characters were written to <em>str</em> (excluding the trailing <tt class="docutils literal"><span class="pre">'\0'</span></tt> byte at
+<em>str*[*rv</em>]).</li>
+<li>When <tt class="docutils literal"><span class="pre">rv</span> <span class="pre">&gt;=</span> <span class="pre">size</span></tt>, the output conversion was truncated and a buffer with
+<tt class="docutils literal"><span class="pre">rv</span> <span class="pre">+</span> <span class="pre">1</span></tt> bytes would have been needed to succeed. <em>str*[*size</em>-1] is <tt class="docutils literal"><span class="pre">'\0'</span></tt>
+in this case.</li>
+<li>When <tt class="docutils literal"><span class="pre">rv</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>, &#8220;something bad happened.&#8221; <em>str*[*size</em>-1] is <tt class="docutils literal"><span class="pre">'\0'</span></tt> in
+this case too, but the rest of <em>str</em> is undefined. The exact cause of the error
+depends on the underlying platform.</li>
+</ul>
+<p>The following functions provide locale-independent string to number conversions.</p>
+<dl class="function">
+<dt id="PyOS_string_to_double">
+double <tt class="descname">PyOS_string_to_double</tt><big>(</big>const char<em>&nbsp;*s</em>, char<em>&nbsp;**endptr</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*overflow_exception</em><big>)</big><a class="headerlink" href="#PyOS_string_to_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string <tt class="docutils literal"><span class="pre">s</span></tt> to a <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt>, raising a Python
+exception on failure.  The set of accepted strings corresponds to
+the set of strings accepted by Python&#8217;s <a class="reference internal" href="../library/functions.html#float" title="float"><tt class="xref py py-func docutils literal"><span class="pre">float()</span></tt></a> constructor,
+except that <tt class="docutils literal"><span class="pre">s</span></tt> must not have leading or trailing whitespace.
+The conversion is independent of the current locale.</p>
+<p>If <tt class="docutils literal"><span class="pre">endptr</span></tt> is <tt class="docutils literal"><span class="pre">NULL</span></tt>, convert the whole string.  Raise
+ValueError and return <tt class="docutils literal"><span class="pre">-1.0</span></tt> if the string is not a valid
+representation of a floating-point number.</p>
+<p>If endptr is not <tt class="docutils literal"><span class="pre">NULL</span></tt>, convert as much of the string as
+possible and set <tt class="docutils literal"><span class="pre">*endptr</span></tt> to point to the first unconverted
+character.  If no initial segment of the string is the valid
+representation of a floating-point number, set <tt class="docutils literal"><span class="pre">*endptr</span></tt> to point
+to the beginning of the string, raise ValueError, and return
+<tt class="docutils literal"><span class="pre">-1.0</span></tt>.</p>
+<p>If <tt class="docutils literal"><span class="pre">s</span></tt> represents a value that is too large to store in a float
+(for example, <tt class="docutils literal"><span class="pre">&quot;1e500&quot;</span></tt> is such a string on many platforms) then
+if <tt class="docutils literal"><span class="pre">overflow_exception</span></tt> is <tt class="docutils literal"><span class="pre">NULL</span></tt> return <tt class="docutils literal"><span class="pre">Py_HUGE_VAL</span></tt> (with
+an appropriate sign) and don&#8217;t set any exception.  Otherwise,
+<tt class="docutils literal"><span class="pre">overflow_exception</span></tt> must point to a Python exception object;
+raise that exception and return <tt class="docutils literal"><span class="pre">-1.0</span></tt>.  In both cases, set
+<tt class="docutils literal"><span class="pre">*endptr</span></tt> to point to the first character after the converted value.</p>
+<p>If any other error occurs during the conversion (for example an
+out-of-memory error), set the appropriate Python exception and
+return <tt class="docutils literal"><span class="pre">-1.0</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_ascii_strtod">
+double <tt class="descname">PyOS_ascii_strtod</tt><big>(</big>const char<em>&nbsp;*nptr</em>, char<em>&nbsp;**endptr</em><big>)</big><a class="headerlink" href="#PyOS_ascii_strtod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string to a <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt>. This function behaves like the Standard C
+function <tt class="xref c c-func docutils literal"><span class="pre">strtod()</span></tt> does in the C locale. It does this without changing the
+current locale, since that would not be thread-safe.</p>
+<p><a class="reference internal" href="#PyOS_ascii_strtod" title="PyOS_ascii_strtod"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_ascii_strtod()</span></tt></a> should typically be used for reading configuration
+files or other non-user input that should be locale independent.</p>
+<p>See the Unix man page <em class="manpage">strtod(2)</em> for details.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <a class="reference internal" href="#PyOS_string_to_double" title="PyOS_string_to_double"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_string_to_double()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_ascii_formatd">
+char* <tt class="descname">PyOS_ascii_formatd</tt><big>(</big>char<em>&nbsp;*buffer</em>, size_t<em>&nbsp;buf_len</em>, const char<em>&nbsp;*format</em>, double<em>&nbsp;d</em><big>)</big><a class="headerlink" href="#PyOS_ascii_formatd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> to a string using the <tt class="docutils literal"><span class="pre">'.'</span></tt> as the decimal
+separator. <em>format</em> is a <tt class="xref c c-func docutils literal"><span class="pre">printf()</span></tt>-style format string specifying the
+number format. Allowed conversion characters are <tt class="docutils literal"><span class="pre">'e'</span></tt>, <tt class="docutils literal"><span class="pre">'E'</span></tt>, <tt class="docutils literal"><span class="pre">'f'</span></tt>,
+<tt class="docutils literal"><span class="pre">'F'</span></tt>, <tt class="docutils literal"><span class="pre">'g'</span></tt> and <tt class="docutils literal"><span class="pre">'G'</span></tt>.</p>
+<p>The return value is a pointer to <em>buffer</em> with the converted string or NULL if
+the conversion failed.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>This function is removed in Python 2.7 and 3.1.  Use <tt class="xref py py-func docutils literal"><span class="pre">PyOS_double_to_string()</span></tt>
+instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_double_to_string">
+char* <tt class="descname">PyOS_double_to_string</tt><big>(</big>double<em>&nbsp;val</em>, char<em>&nbsp;format_code</em>, int<em>&nbsp;precision</em>, int<em>&nbsp;flags</em>, int<em>&nbsp;*ptype</em><big>)</big><a class="headerlink" href="#PyOS_double_to_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> <em>val</em> to a string using supplied
+<em>format_code</em>, <em>precision</em>, and <em>flags</em>.</p>
+<p><em>format_code</em> must be one of <tt class="docutils literal"><span class="pre">'e'</span></tt>, <tt class="docutils literal"><span class="pre">'E'</span></tt>, <tt class="docutils literal"><span class="pre">'f'</span></tt>, <tt class="docutils literal"><span class="pre">'F'</span></tt>,
+<tt class="docutils literal"><span class="pre">'g'</span></tt>, <tt class="docutils literal"><span class="pre">'G'</span></tt> or <tt class="docutils literal"><span class="pre">'r'</span></tt>.  For <tt class="docutils literal"><span class="pre">'r'</span></tt>, the supplied <em>precision</em>
+must be 0 and is ignored.  The <tt class="docutils literal"><span class="pre">'r'</span></tt> format code specifies the
+standard <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> format.</p>
+<p><em>flags</em> can be zero or more of the values <em>Py_DTSF_SIGN</em>,
+<em>Py_DTSF_ADD_DOT_0</em>, or <em>Py_DTSF_ALT</em>, or-ed together:</p>
+<ul class="simple">
+<li><em>Py_DTSF_SIGN</em> means to always precede the returned string with a sign
+character, even if <em>val</em> is non-negative.</li>
+<li><em>Py_DTSF_ADD_DOT_0</em> means to ensure that the returned string will not look
+like an integer.</li>
+<li><em>Py_DTSF_ALT</em> means to apply &#8220;alternate&#8221; formatting rules.  See the
+documentation for the <a class="reference internal" href="#PyOS_snprintf" title="PyOS_snprintf"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_snprintf()</span></tt></a> <tt class="docutils literal"><span class="pre">'#'</span></tt> specifier for
+details.</li>
+</ul>
+<p>If <em>ptype</em> is non-NULL, then the value it points to will be set to one of
+<em>Py_DTST_FINITE</em>, <em>Py_DTST_INFINITE</em>, or <em>Py_DTST_NAN</em>, signifying that
+<em>val</em> is a finite number, an infinite number, or not a number, respectively.</p>
+<p>The return value is a pointer to <em>buffer</em> with the converted string or
+<em>NULL</em> if the conversion failed. The caller is responsible for freeing the
+returned string by calling <a class="reference internal" href="memory.html#PyMem_Free" title="PyMem_Free"><tt class="xref c c-func docutils literal"><span class="pre">PyMem_Free()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_ascii_atof">
+double <tt class="descname">PyOS_ascii_atof</tt><big>(</big>const char<em>&nbsp;*nptr</em><big>)</big><a class="headerlink" href="#PyOS_ascii_atof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string to a <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> in a locale-independent way.</p>
+<p>See the Unix man page <em class="manpage">atof(2)</em> for details.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 3.1: </span>Use <a class="reference internal" href="#PyOS_string_to_double" title="PyOS_string_to_double"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_string_to_double()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_stricmp">
+char* <tt class="descname">PyOS_stricmp</tt><big>(</big>char<em>&nbsp;*s1</em>, char<em>&nbsp;*s2</em><big>)</big><a class="headerlink" href="#PyOS_stricmp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Case insensitive comparison of strings. The function works almost
+identically to <tt class="xref c c-func docutils literal"><span class="pre">strcmp()</span></tt> except that it ignores the case.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyOS_strnicmp">
+char* <tt class="descname">PyOS_strnicmp</tt><big>(</big>char<em>&nbsp;*s1</em>, char<em>&nbsp;*s2</em>, Py_ssize_t <em>&nbsp;size</em><big>)</big><a class="headerlink" href="#PyOS_strnicmp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Case insensitive comparison of strings. The function works almost
+identically to <tt class="xref c c-func docutils literal"><span class="pre">strncmp()</span></tt> except that it ignores the case.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="arg.html"
+                        title="previous chapter">Parsing arguments and building values</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="reflection.html"
+                        title="next chapter">Reflection</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/conversion.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="reflection.html" title="Reflection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="arg.html" title="Parsing arguments and building values"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="utilities.html" >Utilities</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

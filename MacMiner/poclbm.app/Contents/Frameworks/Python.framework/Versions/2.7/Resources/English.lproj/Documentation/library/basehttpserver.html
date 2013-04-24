@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>20.18. BaseHTTPServer — Basic HTTP server &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="next" title="20.19. SimpleHTTPServer — Simple HTTP request handler" href="simplehttpserver.html" />
+    <link rel="prev" title="20.17. SocketServer — A framework for network servers" href="socketserver.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="simplehttpserver.html" title="20.19. SimpleHTTPServer — Simple HTTP request handler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="socketserver.html" title="20.17. SocketServer — A framework for network servers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-BaseHTTPServer">
+<span id="basehttpserver-basic-http-server"></span><h1>20.18. <a class="reference internal" href="#module-BaseHTTPServer" title="BaseHTTPServer: Basic HTTP server (base class for SimpleHTTPServer and CGIHTTPServer)."><tt class="xref py py-mod docutils literal"><span class="pre">BaseHTTPServer</span></tt></a> &#8212; Basic HTTP server<a class="headerlink" href="#module-BaseHTTPServer" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-BaseHTTPServer" title="BaseHTTPServer: Basic HTTP server (base class for SimpleHTTPServer and CGIHTTPServer)."><tt class="xref py py-mod docutils literal"><span class="pre">BaseHTTPServer</span></tt></a> module has been merged into <tt class="xref py py-mod docutils literal"><span class="pre">http.server</span></tt> in
+Python 3.  The <a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt imports when
+converting your sources to Python 3.</p>
+</div>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/BaseHTTPServer.py">Lib/BaseHTTPServer.py</a></p>
+<hr class="docutils" />
+<p>This module defines two classes for implementing HTTP servers (Web servers).
+Usually, this module isn&#8217;t used directly, but is used as a basis for building
+functioning Web servers. See the <a class="reference internal" href="simplehttpserver.html#module-SimpleHTTPServer" title="SimpleHTTPServer: This module provides a basic request handler for HTTP servers."><tt class="xref py py-mod docutils literal"><span class="pre">SimpleHTTPServer</span></tt></a> and
+<a class="reference internal" href="cgihttpserver.html#module-CGIHTTPServer" title="CGIHTTPServer: This module provides a request handler for HTTP servers which can run CGI scripts."><tt class="xref py py-mod docutils literal"><span class="pre">CGIHTTPServer</span></tt></a> modules.</p>
+<p>The first class, <a class="reference internal" href="#BaseHTTPServer.HTTPServer" title="BaseHTTPServer.HTTPServer"><tt class="xref py py-class docutils literal"><span class="pre">HTTPServer</span></tt></a>, is a <tt class="xref py py-class docutils literal"><span class="pre">SocketServer.TCPServer</span></tt>
+subclass, and therefore implements the <a class="reference internal" href="socketserver.html#SocketServer.BaseServer" title="SocketServer.BaseServer"><tt class="xref py py-class docutils literal"><span class="pre">SocketServer.BaseServer</span></tt></a>
+interface.  It creates and listens at the HTTP socket, dispatching the requests
+to a handler.  Code to create and run the server looks like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">server_class</span><span class="o">=</span><span class="n">BaseHTTPServer</span><span class="o">.</span><span class="n">HTTPServer</span><span class="p">,</span>
+        <span class="n">handler_class</span><span class="o">=</span><span class="n">BaseHTTPServer</span><span class="o">.</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+    <span class="n">server_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">)</span>
+    <span class="n">httpd</span> <span class="o">=</span> <span class="n">server_class</span><span class="p">(</span><span class="n">server_address</span><span class="p">,</span> <span class="n">handler_class</span><span class="p">)</span>
+    <span class="n">httpd</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="BaseHTTPServer.HTTPServer">
+<em class="property">class </em><tt class="descclassname">BaseHTTPServer.</tt><tt class="descname">HTTPServer</tt><big>(</big><em>server_address</em>, <em>RequestHandlerClass</em><big>)</big><a class="headerlink" href="#BaseHTTPServer.HTTPServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class builds on the <tt class="xref py py-class docutils literal"><span class="pre">TCPServer</span></tt> class by storing the server
+address as instance variables named <tt class="xref py py-attr docutils literal"><span class="pre">server_name</span></tt> and
+<tt class="xref py py-attr docutils literal"><span class="pre">server_port</span></tt>. The server is accessible by the handler, typically
+through the handler&#8217;s <tt class="xref py py-attr docutils literal"><span class="pre">server</span></tt> instance variable.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler">
+<em class="property">class </em><tt class="descclassname">BaseHTTPServer.</tt><tt class="descname">BaseHTTPRequestHandler</tt><big>(</big><em>request</em>, <em>client_address</em>, <em>server</em><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is used to handle the HTTP requests that arrive at the server. By
+itself, it cannot respond to any actual HTTP requests; it must be subclassed
+to handle each request method (e.g. GET or
+POST). <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler" title="BaseHTTPServer.BaseHTTPRequestHandler"><tt class="xref py py-class docutils literal"><span class="pre">BaseHTTPRequestHandler</span></tt></a> provides a number of class and
+instance variables, and methods for use by subclasses.</p>
+<p>The handler will parse the request and the headers, then call a method
+specific to the request type. The method name is constructed from the
+request. For example, for the request method <tt class="docutils literal"><span class="pre">SPAM</span></tt>, the <tt class="xref py py-meth docutils literal"><span class="pre">do_SPAM()</span></tt>
+method will be called with no arguments. All of the relevant information is
+stored in instance variables of the handler.  Subclasses should not need to
+override or extend the <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt></a> method.</p>
+<p><a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler" title="BaseHTTPServer.BaseHTTPRequestHandler"><tt class="xref py py-class docutils literal"><span class="pre">BaseHTTPRequestHandler</span></tt></a> has the following instance variables:</p>
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.client_address">
+<tt class="descname">client_address</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.client_address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains a tuple of the form <tt class="docutils literal"><span class="pre">(host,</span> <span class="pre">port)</span></tt> referring to the client&#8217;s
+address.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.server">
+<tt class="descname">server</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the server instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.command">
+<tt class="descname">command</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the command (request type). For example, <tt class="docutils literal"><span class="pre">'GET'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.path">
+<tt class="descname">path</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the request path.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.request_version">
+<tt class="descname">request_version</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.request_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the version string from the request. For example, <tt class="docutils literal"><span class="pre">'HTTP/1.0'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.headers">
+<tt class="descname">headers</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds an instance of the class specified by the <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.MessageClass" title="BaseHTTPServer.BaseHTTPRequestHandler.MessageClass"><tt class="xref py py-attr docutils literal"><span class="pre">MessageClass</span></tt></a> class
+variable. This instance parses and manages the headers in the HTTP
+request.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.rfile">
+<tt class="descname">rfile</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.rfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains an input stream, positioned at the start of the optional input
+data.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.wfile">
+<tt class="descname">wfile</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.wfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the output stream for writing a response back to the
+client. Proper adherence to the HTTP protocol must be used when writing to
+this stream.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler" title="BaseHTTPServer.BaseHTTPRequestHandler"><tt class="xref py py-class docutils literal"><span class="pre">BaseHTTPRequestHandler</span></tt></a> has the following class variables:</p>
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.server_version">
+<tt class="descname">server_version</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.server_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the server software version.  You may want to override this. The
+format is multiple whitespace-separated strings, where each string is of
+the form name[/version]. For example, <tt class="docutils literal"><span class="pre">'BaseHTTP/0.2'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.sys_version">
+<tt class="descname">sys_version</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.sys_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the Python system version, in a form usable by the
+<a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.version_string" title="BaseHTTPServer.BaseHTTPRequestHandler.version_string"><tt class="xref py py-attr docutils literal"><span class="pre">version_string</span></tt></a> method and the <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.server_version" title="BaseHTTPServer.BaseHTTPRequestHandler.server_version"><tt class="xref py py-attr docutils literal"><span class="pre">server_version</span></tt></a> class
+variable. For example, <tt class="docutils literal"><span class="pre">'Python/1.4'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.error_message_format">
+<tt class="descname">error_message_format</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.error_message_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a format string for building an error response to the client. It
+uses parenthesized, keyed format specifiers, so the format operand must be
+a dictionary. The <em>code</em> key should be an integer, specifying the numeric
+HTTP error code value. <em>message</em> should be a string containing a
+(detailed) error message of what occurred, and <em>explain</em> should be an
+explanation of the error code number. Default <em>message</em> and <em>explain</em>
+values can found in the <em>responses</em> class variable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.error_content_type">
+<tt class="descname">error_content_type</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.error_content_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the Content-Type HTTP header of error responses sent to the
+client.  The default value is <tt class="docutils literal"><span class="pre">'text/html'</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6: </span>Previously, the content type was always <tt class="docutils literal"><span class="pre">'text/html'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.protocol_version">
+<tt class="descname">protocol_version</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.protocol_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies the HTTP protocol version used in responses.  If set to
+<tt class="docutils literal"><span class="pre">'HTTP/1.1'</span></tt>, the server will permit HTTP persistent connections;
+however, your server <em>must</em> then include an accurate <tt class="docutils literal"><span class="pre">Content-Length</span></tt>
+header (using <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.send_header" title="BaseHTTPServer.BaseHTTPRequestHandler.send_header"><tt class="xref py py-meth docutils literal"><span class="pre">send_header()</span></tt></a>) in all of its responses to clients.
+For backwards compatibility, the setting defaults to <tt class="docutils literal"><span class="pre">'HTTP/1.0'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.MessageClass">
+<tt class="descname">MessageClass</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.MessageClass" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">Specifies a <a class="reference internal" href="rfc822.html#rfc822.Message" title="rfc822.Message"><tt class="xref py py-class docutils literal"><span class="pre">rfc822.Message</span></tt></a>-like class to parse HTTP headers.
+Typically, this is not overridden, and it defaults to
+<a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><tt class="xref py py-class docutils literal"><span class="pre">mimetools.Message</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.responses">
+<tt class="descname">responses</tt><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.responses" title="Permalink to this definition">¶</a></dt>
+<dd><p>This variable contains a mapping of error code integers to two-element tuples
+containing a short and long message. For example, <tt class="docutils literal"><span class="pre">{code:</span> <span class="pre">(shortmessage,</span>
+<span class="pre">longmessage)}</span></tt>. The <em>shortmessage</em> is usually used as the <em>message</em> key in an
+error response, and <em>longmessage</em> as the <em>explain</em> key (see the
+<a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.error_message_format" title="BaseHTTPServer.BaseHTTPRequestHandler.error_message_format"><tt class="xref py py-attr docutils literal"><span class="pre">error_message_format</span></tt></a> class variable).</p>
+</dd></dl>
+
+<p>A <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler" title="BaseHTTPServer.BaseHTTPRequestHandler"><tt class="xref py py-class docutils literal"><span class="pre">BaseHTTPRequestHandler</span></tt></a> instance has the following methods:</p>
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.handle">
+<tt class="descname">handle</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.handle_one_request" title="BaseHTTPServer.BaseHTTPRequestHandler.handle_one_request"><tt class="xref py py-meth docutils literal"><span class="pre">handle_one_request()</span></tt></a> once (or, if persistent connections are
+enabled, multiple times) to handle incoming HTTP requests. You should
+never need to override it; instead, implement appropriate <tt class="xref py py-meth docutils literal"><span class="pre">do_*()</span></tt>
+methods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.handle_one_request">
+<tt class="descname">handle_one_request</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.handle_one_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method will parse and dispatch the request to the appropriate
+<tt class="xref py py-meth docutils literal"><span class="pre">do_*()</span></tt> method.  You should never need to override it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.send_error">
+<tt class="descname">send_error</tt><big>(</big><em>code</em><span class="optional">[</span>, <em>message</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.send_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends and logs a complete error reply to the client. The numeric <em>code</em>
+specifies the HTTP error code, with <em>message</em> as optional, more specific text. A
+complete set of headers is sent, followed by text composed using the
+<a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.error_message_format" title="BaseHTTPServer.BaseHTTPRequestHandler.error_message_format"><tt class="xref py py-attr docutils literal"><span class="pre">error_message_format</span></tt></a> class variable.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.send_response">
+<tt class="descname">send_response</tt><big>(</big><em>code</em><span class="optional">[</span>, <em>message</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.send_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a response header and logs the accepted request. The HTTP response
+line is sent, followed by <em>Server</em> and <em>Date</em> headers. The values for
+these two headers are picked up from the <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.version_string" title="BaseHTTPServer.BaseHTTPRequestHandler.version_string"><tt class="xref py py-meth docutils literal"><span class="pre">version_string()</span></tt></a> and
+<a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.date_time_string" title="BaseHTTPServer.BaseHTTPRequestHandler.date_time_string"><tt class="xref py py-meth docutils literal"><span class="pre">date_time_string()</span></tt></a> methods, respectively.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.send_header">
+<tt class="descname">send_header</tt><big>(</big><em>keyword</em>, <em>value</em><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.send_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a specific HTTP header to the output stream. <em>keyword</em> should
+specify the header keyword, with <em>value</em> specifying its value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.end_headers">
+<tt class="descname">end_headers</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.end_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a blank line, indicating the end of the HTTP headers in the
+response.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.log_request">
+<tt class="descname">log_request</tt><big>(</big><span class="optional">[</span><em>code</em><span class="optional">[</span>, <em>size</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.log_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs an accepted (successful) request. <em>code</em> should specify the numeric
+HTTP code associated with the response. If a size of the response is
+available, then it should be passed as the <em>size</em> parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.log_error">
+<tt class="descname">log_error</tt><big>(</big><em>...</em><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.log_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs an error when a request cannot be fulfilled. By default, it passes
+the message to <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.log_message" title="BaseHTTPServer.BaseHTTPRequestHandler.log_message"><tt class="xref py py-meth docutils literal"><span class="pre">log_message()</span></tt></a>, so it takes the same arguments
+(<em>format</em> and additional values).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.log_message">
+<tt class="descname">log_message</tt><big>(</big><em>format</em>, <em>...</em><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.log_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs an arbitrary message to <tt class="docutils literal"><span class="pre">sys.stderr</span></tt>. This is typically overridden
+to create custom error logging mechanisms. The <em>format</em> argument is a
+standard printf-style format string, where the additional arguments to
+<a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.log_message" title="BaseHTTPServer.BaseHTTPRequestHandler.log_message"><tt class="xref py py-meth docutils literal"><span class="pre">log_message()</span></tt></a> are applied as inputs to the formatting. The client
+ip address and current date and time are prefixed to every message logged.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.version_string">
+<tt class="descname">version_string</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.version_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the server software&#8217;s version string. This is a combination of the
+<a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.server_version" title="BaseHTTPServer.BaseHTTPRequestHandler.server_version"><tt class="xref py py-attr docutils literal"><span class="pre">server_version</span></tt></a> and <a class="reference internal" href="#BaseHTTPServer.BaseHTTPRequestHandler.sys_version" title="BaseHTTPServer.BaseHTTPRequestHandler.sys_version"><tt class="xref py py-attr docutils literal"><span class="pre">sys_version</span></tt></a> class variables.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.date_time_string">
+<tt class="descname">date_time_string</tt><big>(</big><span class="optional">[</span><em>timestamp</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.date_time_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the date and time given by <em>timestamp</em> (which must be in the
+format returned by <a class="reference internal" href="time.html#time.time" title="time.time"><tt class="xref py py-func docutils literal"><span class="pre">time.time()</span></tt></a>), formatted for a message header. If
+<em>timestamp</em> is omitted, it uses the current date and time.</p>
+<p>The result looks like <tt class="docutils literal"><span class="pre">'Sun,</span> <span class="pre">06</span> <span class="pre">Nov</span> <span class="pre">1994</span> <span class="pre">08:49:37</span> <span class="pre">GMT'</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5: </span>The <em>timestamp</em> parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.log_date_time_string">
+<tt class="descname">log_date_time_string</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.log_date_time_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current date and time, formatted for logging.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="BaseHTTPServer.BaseHTTPRequestHandler.address_string">
+<tt class="descname">address_string</tt><big>(</big><big>)</big><a class="headerlink" href="#BaseHTTPServer.BaseHTTPRequestHandler.address_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the client address, formatted for logging. A name lookup is
+performed on the client&#8217;s IP address.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="more-examples">
+<h2>20.18.1. More examples<a class="headerlink" href="#more-examples" title="Permalink to this headline">¶</a></h2>
+<p>To create a server that doesn&#8217;t run forever, but until some condition is
+fulfilled:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run_while_true</span><span class="p">(</span><span class="n">server_class</span><span class="o">=</span><span class="n">BaseHTTPServer</span><span class="o">.</span><span class="n">HTTPServer</span><span class="p">,</span>
+                   <span class="n">handler_class</span><span class="o">=</span><span class="n">BaseHTTPServer</span><span class="o">.</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This assumes that keep_running() is a function of no arguments which</span>
+<span class="sd">    is tested initially and after each request.  If its return value</span>
+<span class="sd">    is true, the server continues.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">server_address</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">)</span>
+    <span class="n">httpd</span> <span class="o">=</span> <span class="n">server_class</span><span class="p">(</span><span class="n">server_address</span><span class="p">,</span> <span class="n">handler_class</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">keep_running</span><span class="p">():</span>
+        <span class="n">httpd</span><span class="o">.</span><span class="n">handle_request</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="cgihttpserver.html#module-CGIHTTPServer" title="CGIHTTPServer: This module provides a request handler for HTTP servers which can run CGI scripts."><tt class="xref py py-mod docutils literal"><span class="pre">CGIHTTPServer</span></tt></a></dt>
+<dd>Extended request handler that supports CGI scripts.</dd>
+<dt>Module <a class="reference internal" href="simplehttpserver.html#module-SimpleHTTPServer" title="SimpleHTTPServer: This module provides a basic request handler for HTTP servers."><tt class="xref py py-mod docutils literal"><span class="pre">SimpleHTTPServer</span></tt></a></dt>
+<dd>Basic request handler that limits response to files actually under the
+document root.</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.18. <tt class="docutils literal"><span class="pre">BaseHTTPServer</span></tt> &#8212; Basic HTTP server</a><ul>
+<li><a class="reference internal" href="#more-examples">20.18.1. More examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="socketserver.html"
+                        title="previous chapter">20.17. <tt class="docutils literal"><span class="pre">SocketServer</span></tt> &#8212; A framework for network servers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simplehttpserver.html"
+                        title="next chapter">20.19. <tt class="docutils literal"><span class="pre">SimpleHTTPServer</span></tt> &#8212; Simple HTTP request handler</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/basehttpserver.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="simplehttpserver.html" title="20.19. SimpleHTTPServer — Simple HTTP request handler"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="socketserver.html" title="20.17. SocketServer — A framework for network servers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" >20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

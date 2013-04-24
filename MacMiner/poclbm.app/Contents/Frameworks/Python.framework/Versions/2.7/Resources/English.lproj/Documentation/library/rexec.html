@@ -1,0 +1,443 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>29.1. rexec — Restricted execution framework &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="29. Restricted Execution" href="restricted.html" />
+    <link rel="next" title="29.2. Bastion — Restricting access to objects" href="bastion.html" />
+    <link rel="prev" title="29. Restricted Execution" href="restricted.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bastion.html" title="29.2. Bastion — Restricting access to objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="restricted.html" title="29. Restricted Execution"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="restricted.html" accesskey="U">29. Restricted Execution</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-rexec">
+<span id="rexec-restricted-execution-framework"></span><h1>29.1. <a class="reference internal" href="#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a> &#8212; Restricted execution framework<a class="headerlink" href="#module-rexec" title="Permalink to this headline">¶</a></h1>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a> module has been removed in Python 3.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3: </span>Disabled module.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The documentation has been left in place to help in reading old code that uses
+the module.</p>
+</div>
+<p>This module contains the <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> class, which supports <tt class="xref py py-meth docutils literal"><span class="pre">r_eval()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">r_execfile()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">r_exec()</span></tt>, and <tt class="xref py py-meth docutils literal"><span class="pre">r_import()</span></tt> methods, which are
+restricted versions of the standard Python functions <a class="reference internal" href="functions.html#eval" title="eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a>,
+<a class="reference internal" href="functions.html#execfile" title="execfile"><tt class="xref py py-meth docutils literal"><span class="pre">execfile()</span></tt></a> and the <a class="reference internal" href="../reference/simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> and <a class="reference internal" href="../reference/simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statements. Code
+executed in this restricted environment will only have access to modules and
+functions that are deemed safe; you can subclass <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> to add or remove
+capabilities as desired.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">While the <a class="reference internal" href="#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a> module is designed to perform as described below, it does
+have a few known vulnerabilities which could be exploited by carefully written
+code.  Thus it should not be relied upon in situations requiring &#8220;production
+ready&#8221; security.  In such situations, execution via sub-processes or very
+careful &#8220;cleansing&#8221; of both code and data to be processed may be necessary.
+Alternatively, help in patching known <a class="reference internal" href="#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a> vulnerabilities would be
+welcomed.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> class can prevent code from performing unsafe operations like
+reading or writing disk files, or using TCP/IP sockets.  However, it does not
+protect against code using extremely large amounts of memory or processor time.</p>
+</div>
+<dl class="class">
+<dt id="rexec.RExec">
+<em class="property">class </em><tt class="descclassname">rexec.</tt><tt class="descname">RExec</tt><big>(</big><span class="optional">[</span><em>hooks</em><span class="optional">[</span>, <em>verbose</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#rexec.RExec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an instance of the <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> class.</p>
+<p><em>hooks</em> is an instance of the <tt class="xref py py-class docutils literal"><span class="pre">RHooks</span></tt> class or a subclass of it. If it
+is omitted or <tt class="xref docutils literal"><span class="pre">None</span></tt>, the default <tt class="xref py py-class docutils literal"><span class="pre">RHooks</span></tt> class is instantiated.
+Whenever the <a class="reference internal" href="#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a> module searches for a module (even a built-in one) or
+reads a module&#8217;s code, it doesn&#8217;t actually go out to the file system itself.
+Rather, it calls methods of an <tt class="xref py py-class docutils literal"><span class="pre">RHooks</span></tt> instance that was passed to or
+created by its constructor.  (Actually, the <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> object doesn&#8217;t make
+these calls &#8212; they are made by a module loader object that&#8217;s part of the
+<a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> object.  This allows another level of flexibility, which can be
+useful when changing the mechanics of <a class="reference internal" href="../reference/simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> within the restricted
+environment.)</p>
+<p>By providing an alternate <tt class="xref py py-class docutils literal"><span class="pre">RHooks</span></tt> object, we can control the file system
+accesses made to import a module, without changing the actual algorithm that
+controls the order in which those accesses are made.  For instance, we could
+substitute an <tt class="xref py py-class docutils literal"><span class="pre">RHooks</span></tt> object that passes all filesystem requests to a
+file server elsewhere, via some RPC mechanism such as ILU.  Grail&#8217;s applet
+loader uses this to support importing applets from a URL for a directory.</p>
+<p>If <em>verbose</em> is true, additional debugging output may be sent to standard
+output.</p>
+</dd></dl>
+
+<p>It is important to be aware that code running in a restricted environment can
+still call the <a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><tt class="xref py py-func docutils literal"><span class="pre">sys.exit()</span></tt></a> function.  To disallow restricted code from
+exiting the interpreter, always protect calls that cause restricted code to run
+with a <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a>/<a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> statement that catches the
+<a class="reference internal" href="exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a> exception.  Removing the <a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><tt class="xref py py-func docutils literal"><span class="pre">sys.exit()</span></tt></a> function from the
+restricted environment is not sufficient &#8212; the restricted code could still use
+<tt class="docutils literal"><span class="pre">raise</span> <span class="pre">SystemExit</span></tt>.  Removing <a class="reference internal" href="exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a> is not a reasonable option;
+some library code makes use of this and would break were it not available.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://grail.sourceforge.net/">Grail Home Page</a></dt>
+<dd>Grail is a Web browser written entirely in Python.  It uses the <a class="reference internal" href="#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a>
+module as a foundation for supporting Python applets, and can be used as an
+example usage of this module.</dd>
+</dl>
+</div>
+<div class="section" id="rexec-objects">
+<span id="id1"></span><h2>29.1.1. RExec Objects<a class="headerlink" href="#rexec-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> instances support the following methods:</p>
+<dl class="method">
+<dt id="rexec.RExec.r_eval">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_eval</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#rexec.RExec.r_eval" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>code</em> must either be a string containing a Python expression, or a compiled
+code object, which will be evaluated in the restricted environment&#8217;s
+<a class="reference internal" href="__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module.  The value of the expression or code object will be
+returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.r_exec">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_exec</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#rexec.RExec.r_exec" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>code</em> must either be a string containing one or more lines of Python code, or a
+compiled code object, which will be executed in the restricted environment&#8217;s
+<a class="reference internal" href="__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.r_execfile">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_execfile</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#rexec.RExec.r_execfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the Python code contained in the file <em>filename</em> in the restricted
+environment&#8217;s <a class="reference internal" href="__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module.</p>
+</dd></dl>
+
+<p>Methods whose names begin with <tt class="docutils literal"><span class="pre">s_</span></tt> are similar to the functions beginning
+with <tt class="docutils literal"><span class="pre">r_</span></tt>, but the code will be granted access to restricted versions of the
+standard I/O streams <tt class="docutils literal"><span class="pre">sys.stdin</span></tt>, <tt class="docutils literal"><span class="pre">sys.stderr</span></tt>, and <tt class="docutils literal"><span class="pre">sys.stdout</span></tt>.</p>
+<dl class="method">
+<dt id="rexec.RExec.s_eval">
+<tt class="descclassname">RExec.</tt><tt class="descname">s_eval</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#rexec.RExec.s_eval" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>code</em> must be a string containing a Python expression, which will be evaluated
+in the restricted environment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.s_exec">
+<tt class="descclassname">RExec.</tt><tt class="descname">s_exec</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#rexec.RExec.s_exec" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>code</em> must be a string containing one or more lines of Python code, which will
+be executed in the restricted environment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.s_execfile">
+<tt class="descclassname">RExec.</tt><tt class="descname">s_execfile</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#rexec.RExec.s_execfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the Python code contained in the file <em>filename</em> in the restricted
+environment.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> objects must also support various methods which will be
+implicitly called by code executing in the restricted environment. Overriding
+these methods in a subclass is used to change the policies enforced by a
+restricted environment.</p>
+<dl class="method">
+<dt id="rexec.RExec.r_import">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_import</tt><big>(</big><em>modulename</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">[</span>, <em>fromlist</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#rexec.RExec.r_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import the module <em>modulename</em>, raising an <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a> exception if the
+module is considered unsafe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.r_open">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_open</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>bufsize</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#rexec.RExec.r_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called when <a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> is called in the restricted environment.  The
+arguments are identical to those of <a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a>, and a file object (or a class
+instance compatible with file objects) should be returned.  <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a>&#8216;s
+default behaviour is allow opening any file for reading, but forbidding any
+attempt to write a file.  See the example below for an implementation of a less
+restrictive <a class="reference internal" href="#rexec.RExec.r_open" title="rexec.RExec.r_open"><tt class="xref py py-meth docutils literal"><span class="pre">r_open()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.r_reload">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_reload</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#rexec.RExec.r_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload the module object <em>module</em>, re-parsing and re-initializing it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.r_unload">
+<tt class="descclassname">RExec.</tt><tt class="descname">r_unload</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#rexec.RExec.r_unload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unload the module object <em>module</em> (remove it from the restricted environment&#8217;s
+<tt class="docutils literal"><span class="pre">sys.modules</span></tt> dictionary).</p>
+</dd></dl>
+
+<p>And their equivalents with access to restricted standard I/O streams:</p>
+<dl class="method">
+<dt id="rexec.RExec.s_import">
+<tt class="descclassname">RExec.</tt><tt class="descname">s_import</tt><big>(</big><em>modulename</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">[</span>, <em>fromlist</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#rexec.RExec.s_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import the module <em>modulename</em>, raising an <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a> exception if the
+module is considered unsafe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.s_reload">
+<tt class="descclassname">RExec.</tt><tt class="descname">s_reload</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#rexec.RExec.s_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload the module object <em>module</em>, re-parsing and re-initializing it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rexec.RExec.s_unload">
+<tt class="descclassname">RExec.</tt><tt class="descname">s_unload</tt><big>(</big><em>module</em><big>)</big><a class="headerlink" href="#rexec.RExec.s_unload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unload the module object <em>module</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="defining-restricted-environments">
+<span id="rexec-extension"></span><h2>29.1.2. Defining restricted environments<a class="headerlink" href="#defining-restricted-environments" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> class has the following class attributes, which are used by
+the <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt></a> method.  Changing them on an existing instance won&#8217;t have
+any effect; instead, create a subclass of <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> and assign them new
+values in the class definition. Instances of the new class will then use those
+new values.  All these attributes are tuples of strings.</p>
+<dl class="attribute">
+<dt id="rexec.RExec.nok_builtin_names">
+<tt class="descclassname">RExec.</tt><tt class="descname">nok_builtin_names</tt><a class="headerlink" href="#rexec.RExec.nok_builtin_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the names of built-in functions which will <em>not</em> be available to
+programs running in the restricted environment.  The value for <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> is
+<tt class="docutils literal"><span class="pre">('open',</span> <span class="pre">'reload',</span> <span class="pre">'__import__')</span></tt>. (This gives the exceptions, because by far
+the majority of built-in functions are harmless.  A subclass that wants to
+override this variable should probably start with the value from the base class
+and concatenate additional forbidden functions &#8212; when new dangerous built-in
+functions are added to Python, they will also be added to this module.)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rexec.RExec.ok_builtin_modules">
+<tt class="descclassname">RExec.</tt><tt class="descname">ok_builtin_modules</tt><a class="headerlink" href="#rexec.RExec.ok_builtin_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the names of built-in modules which can be safely imported. The value
+for <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> is <tt class="docutils literal"><span class="pre">('audioop',</span> <span class="pre">'array',</span> <span class="pre">'binascii',</span> <span class="pre">'cmath',</span> <span class="pre">'errno',</span>
+<span class="pre">'imageop',</span> <span class="pre">'marshal',</span> <span class="pre">'math',</span> <span class="pre">'md5',</span> <span class="pre">'operator',</span> <span class="pre">'parser',</span> <span class="pre">'regex',</span> <span class="pre">'select',</span>
+<span class="pre">'sha',</span> <span class="pre">'_sre',</span> <span class="pre">'strop',</span> <span class="pre">'struct',</span> <span class="pre">'time')</span></tt>.  A similar remark about overriding
+this variable applies &#8212; use the value from the base class as a starting point.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rexec.RExec.ok_path">
+<tt class="descclassname">RExec.</tt><tt class="descname">ok_path</tt><a class="headerlink" href="#rexec.RExec.ok_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the directories which will be searched when an <a class="reference internal" href="../reference/simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> is
+performed in the restricted environment.   The value for <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> is the
+same as <tt class="docutils literal"><span class="pre">sys.path</span></tt> (at the time the module is loaded) for unrestricted code.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rexec.RExec.ok_posix_names">
+<tt class="descclassname">RExec.</tt><tt class="descname">ok_posix_names</tt><a class="headerlink" href="#rexec.RExec.ok_posix_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the names of the functions in the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module which will be
+available to programs running in the restricted environment.  The value for
+<a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> is <tt class="docutils literal"><span class="pre">('error',</span> <span class="pre">'fstat',</span> <span class="pre">'listdir',</span> <span class="pre">'lstat',</span> <span class="pre">'readlink',</span> <span class="pre">'stat',</span>
+<span class="pre">'times',</span> <span class="pre">'uname',</span> <span class="pre">'getpid',</span> <span class="pre">'getppid',</span> <span class="pre">'getcwd',</span> <span class="pre">'getuid',</span> <span class="pre">'getgid',</span> <span class="pre">'geteuid',</span>
+<span class="pre">'getegid')</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rexec.RExec.ok_sys_names">
+<tt class="descclassname">RExec.</tt><tt class="descname">ok_sys_names</tt><a class="headerlink" href="#rexec.RExec.ok_sys_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the names of the functions and variables in the <a class="reference internal" href="sys.html#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a> module which
+will be available to programs running in the restricted environment.  The value
+for <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> is <tt class="docutils literal"><span class="pre">('ps1',</span> <span class="pre">'ps2',</span> <span class="pre">'copyright',</span> <span class="pre">'version',</span> <span class="pre">'platform',</span>
+<span class="pre">'exit',</span> <span class="pre">'maxint')</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="rexec.RExec.ok_file_types">
+<tt class="descclassname">RExec.</tt><tt class="descname">ok_file_types</tt><a class="headerlink" href="#rexec.RExec.ok_file_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the file types from which modules are allowed to be loaded. Each file
+type is an integer constant defined in the <a class="reference internal" href="imp.html#module-imp" title="imp: Access the implementation of the import statement."><tt class="xref py py-mod docutils literal"><span class="pre">imp</span></tt></a> module. The meaningful
+values are <tt class="xref py py-const docutils literal"><span class="pre">PY_SOURCE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">PY_COMPILED</span></tt>, and <tt class="xref py py-const docutils literal"><span class="pre">C_EXTENSION</span></tt>.
+The value for <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> is <tt class="docutils literal"><span class="pre">(C_EXTENSION,</span> <span class="pre">PY_SOURCE)</span></tt>.  Adding
+<tt class="xref py py-const docutils literal"><span class="pre">PY_COMPILED</span></tt> in subclasses is not recommended; an attacker could exit
+the restricted execution mode by putting a forged byte-compiled file
+(<tt class="file docutils literal"><span class="pre">.pyc</span></tt>) anywhere in your file system, for example by writing it to
+<tt class="file docutils literal"><span class="pre">/tmp</span></tt> or uploading it to the <tt class="file docutils literal"><span class="pre">/incoming</span></tt> directory of your public
+FTP server.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="an-example">
+<h2>29.1.3. An example<a class="headerlink" href="#an-example" title="Permalink to this headline">¶</a></h2>
+<p>Let us say that we want a slightly more relaxed policy than the standard
+<a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> class.  For example, if we&#8217;re willing to allow files in
+<tt class="file docutils literal"><span class="pre">/tmp</span></tt> to be written, we can subclass the <a class="reference internal" href="#rexec.RExec" title="rexec.RExec"><tt class="xref py py-class docutils literal"><span class="pre">RExec</span></tt></a> class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">TmpWriterRExec</span><span class="p">(</span><span class="n">rexec</span><span class="o">.</span><span class="n">RExec</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">r_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">buf</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;ab&#39;</span><span class="p">):</span>
+            <span class="c"># check filename : must begin with /tmp/</span>
+            <span class="k">if</span> <span class="nb">file</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="o">!=</span><span class="s">&#39;/tmp/&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;can&#39;t write outside /tmp&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;/../&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span>
+                 <span class="nb">file</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;../&#39;</span> <span class="ow">or</span> <span class="nb">file</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">==</span> <span class="s">&#39;/..&#39;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;&#39;..&#39; in filename forbidden&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&quot;Illegal open() mode&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">buf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that the above code will occasionally forbid a perfectly valid filename;
+for example, code in the restricted environment won&#8217;t be able to open a file
+called <tt class="file docutils literal"><span class="pre">/tmp/foo/../bar</span></tt>.  To fix this, the <tt class="xref py py-meth docutils literal"><span class="pre">r_open()</span></tt> method would
+have to simplify the filename to <tt class="file docutils literal"><span class="pre">/tmp/bar</span></tt>, which would require splitting
+apart the filename and performing various operations on it.  In cases where
+security is at stake, it may be preferable to write simple code which is
+sometimes overly restrictive, instead of more general code that is also more
+complex and may harbor a subtle security hole.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">29.1. <tt class="docutils literal"><span class="pre">rexec</span></tt> &#8212; Restricted execution framework</a><ul>
+<li><a class="reference internal" href="#rexec-objects">29.1.1. RExec Objects</a></li>
+<li><a class="reference internal" href="#defining-restricted-environments">29.1.2. Defining restricted environments</a></li>
+<li><a class="reference internal" href="#an-example">29.1.3. An example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="restricted.html"
+                        title="previous chapter">29. Restricted Execution</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bastion.html"
+                        title="next chapter">29.2. <tt class="docutils literal docutils literal docutils literal"><span class="pre">Bastion</span></tt> &#8212; Restricting access to objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/rexec.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bastion.html" title="29.2. Bastion — Restricting access to objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="restricted.html" title="29. Restricted Execution"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="restricted.html" >29. Restricted Execution</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

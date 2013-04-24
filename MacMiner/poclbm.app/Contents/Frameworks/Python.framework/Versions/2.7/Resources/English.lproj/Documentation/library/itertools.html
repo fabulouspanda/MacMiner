@@ -1,0 +1,1109 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9.7. itertools — Functions creating iterators for efficient looping &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="9. Numeric and Mathematical Modules" href="numeric.html" />
+    <link rel="next" title="9.8. functools — Higher-order functions and operations on callable objects" href="functools.html" />
+    <link rel="prev" title="9.6. random — Generate pseudo-random numbers" href="random.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functools.html" title="9.8. functools — Higher-order functions and operations on callable objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="random.html" title="9.6. random — Generate pseudo-random numbers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" accesskey="U">9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-itertools">
+<span id="itertools-functions-creating-iterators-for-efficient-looping"></span><h1>9.7. <a class="reference internal" href="#module-itertools" title="itertools: Functions creating iterators for efficient looping."><tt class="xref py py-mod docutils literal"><span class="pre">itertools</span></tt></a> &#8212; Functions creating iterators for efficient looping<a class="headerlink" href="#module-itertools" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p>This module implements a number of <a class="reference internal" href="../glossary.html#term-iterator"><em class="xref std std-term">iterator</em></a> building blocks inspired
+by constructs from APL, Haskell, and SML.  Each has been recast in a form
+suitable for Python.</p>
+<p>The module standardizes a core set of fast, memory efficient tools that are
+useful by themselves or in combination.  Together, they form an &#8220;iterator
+algebra&#8221; making it possible to construct specialized tools succinctly and
+efficiently in pure Python.</p>
+<p>For instance, SML provides a tabulation tool: <tt class="docutils literal"><span class="pre">tabulate(f)</span></tt> which produces a
+sequence <tt class="docutils literal"><span class="pre">f(0),</span> <span class="pre">f(1),</span> <span class="pre">...</span></tt>.  The same effect can be achieved in Python
+by combining <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a> and <a class="reference internal" href="#itertools.count" title="itertools.count"><tt class="xref py py-func docutils literal"><span class="pre">count()</span></tt></a> to form <tt class="docutils literal"><span class="pre">imap(f,</span> <span class="pre">count())</span></tt>.</p>
+<p>These tools and their built-in counterparts also work well with the high-speed
+functions in the <a class="reference internal" href="operator.html#module-operator" title="operator: Functions corresponding to the standard operators."><tt class="xref py py-mod docutils literal"><span class="pre">operator</span></tt></a> module.  For example, the multiplication
+operator can be mapped across two vectors to form an efficient dot-product:
+<tt class="docutils literal"><span class="pre">sum(imap(operator.mul,</span> <span class="pre">vector1,</span> <span class="pre">vector2))</span></tt>.</p>
+<p><strong>Infinite Iterators:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="39%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Iterator</th>
+<th class="head">Arguments</th>
+<th class="head">Results</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="#itertools.count" title="itertools.count"><tt class="xref py py-func docutils literal"><span class="pre">count()</span></tt></a></td>
+<td>start, [step]</td>
+<td>start, start+step, start+2*step, ...</td>
+<td><tt class="docutils literal"><span class="pre">count(10)</span> <span class="pre">--&gt;</span> <span class="pre">10</span> <span class="pre">11</span> <span class="pre">12</span> <span class="pre">13</span> <span class="pre">14</span> <span class="pre">...</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.cycle" title="itertools.cycle"><tt class="xref py py-func docutils literal"><span class="pre">cycle()</span></tt></a></td>
+<td>p</td>
+<td>p0, p1, ... plast, p0, p1, ...</td>
+<td><tt class="docutils literal"><span class="pre">cycle('ABCD')</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">...</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.repeat" title="itertools.repeat"><tt class="xref py py-func docutils literal"><span class="pre">repeat()</span></tt></a></td>
+<td>elem [,n]</td>
+<td>elem, elem, elem, ... endlessly or up to n times</td>
+<td><tt class="docutils literal"><span class="pre">repeat(10,</span> <span class="pre">3)</span> <span class="pre">--&gt;</span> <span class="pre">10</span> <span class="pre">10</span> <span class="pre">10</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Iterators terminating on the shortest input sequence:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="18%" />
+<col width="31%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Iterator</th>
+<th class="head">Arguments</th>
+<th class="head">Results</th>
+<th class="head">Example</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="#itertools.chain" title="itertools.chain"><tt class="xref py py-func docutils literal"><span class="pre">chain()</span></tt></a></td>
+<td>p, q, ...</td>
+<td>p0, p1, ... plast, q0, q1, ...</td>
+<td><tt class="docutils literal"><span class="pre">chain('ABC',</span> <span class="pre">'DEF')</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">E</span> <span class="pre">F</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.compress" title="itertools.compress"><tt class="xref py py-func docutils literal"><span class="pre">compress()</span></tt></a></td>
+<td>data, selectors</td>
+<td>(d[0] if s[0]), (d[1] if s[1]), ...</td>
+<td><tt class="docutils literal"><span class="pre">compress('ABCDEF',</span> <span class="pre">[1,0,1,0,1,1])</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">C</span> <span class="pre">E</span> <span class="pre">F</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.dropwhile" title="itertools.dropwhile"><tt class="xref py py-func docutils literal"><span class="pre">dropwhile()</span></tt></a></td>
+<td>pred, seq</td>
+<td>seq[n], seq[n+1], starting when pred fails</td>
+<td><tt class="docutils literal"><span class="pre">dropwhile(lambda</span> <span class="pre">x:</span> <span class="pre">x&lt;5,</span> <span class="pre">[1,4,6,4,1])</span> <span class="pre">--&gt;</span> <span class="pre">6</span> <span class="pre">4</span> <span class="pre">1</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.groupby" title="itertools.groupby"><tt class="xref py py-func docutils literal"><span class="pre">groupby()</span></tt></a></td>
+<td>iterable[, keyfunc]</td>
+<td>sub-iterators grouped by value of keyfunc(v)</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.ifilter" title="itertools.ifilter"><tt class="xref py py-func docutils literal"><span class="pre">ifilter()</span></tt></a></td>
+<td>pred, seq</td>
+<td>elements of seq where pred(elem) is True</td>
+<td><tt class="docutils literal"><span class="pre">ifilter(lambda</span> <span class="pre">x:</span> <span class="pre">x%2,</span> <span class="pre">range(10))</span> <span class="pre">--&gt;</span> <span class="pre">1</span> <span class="pre">3</span> <span class="pre">5</span> <span class="pre">7</span> <span class="pre">9</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.ifilterfalse" title="itertools.ifilterfalse"><tt class="xref py py-func docutils literal"><span class="pre">ifilterfalse()</span></tt></a></td>
+<td>pred, seq</td>
+<td>elements of seq where pred(elem) is False</td>
+<td><tt class="docutils literal"><span class="pre">ifilterfalse(lambda</span> <span class="pre">x:</span> <span class="pre">x%2,</span> <span class="pre">range(10))</span> <span class="pre">--&gt;</span> <span class="pre">0</span> <span class="pre">2</span> <span class="pre">4</span> <span class="pre">6</span> <span class="pre">8</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.islice" title="itertools.islice"><tt class="xref py py-func docutils literal"><span class="pre">islice()</span></tt></a></td>
+<td>seq, [start,] stop [, step]</td>
+<td>elements from seq[start:stop:step]</td>
+<td><tt class="docutils literal"><span class="pre">islice('ABCDEFG',</span> <span class="pre">2,</span> <span class="pre">None)</span> <span class="pre">--&gt;</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">E</span> <span class="pre">F</span> <span class="pre">G</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a></td>
+<td>func, p, q, ...</td>
+<td>func(p0, q0), func(p1, q1), ...</td>
+<td><tt class="docutils literal"><span class="pre">imap(pow,</span> <span class="pre">(2,3,10),</span> <span class="pre">(5,2,3))</span> <span class="pre">--&gt;</span> <span class="pre">32</span> <span class="pre">9</span> <span class="pre">1000</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.starmap" title="itertools.starmap"><tt class="xref py py-func docutils literal"><span class="pre">starmap()</span></tt></a></td>
+<td>func, seq</td>
+<td>func(*seq[0]), func(*seq[1]), ...</td>
+<td><tt class="docutils literal"><span class="pre">starmap(pow,</span> <span class="pre">[(2,5),</span> <span class="pre">(3,2),</span> <span class="pre">(10,3)])</span> <span class="pre">--&gt;</span> <span class="pre">32</span> <span class="pre">9</span> <span class="pre">1000</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.tee" title="itertools.tee"><tt class="xref py py-func docutils literal"><span class="pre">tee()</span></tt></a></td>
+<td>it, n</td>
+<td>it1, it2 , ... itn  splits one iterator into n</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.takewhile" title="itertools.takewhile"><tt class="xref py py-func docutils literal"><span class="pre">takewhile()</span></tt></a></td>
+<td>pred, seq</td>
+<td>seq[0], seq[1], until pred fails</td>
+<td><tt class="docutils literal"><span class="pre">takewhile(lambda</span> <span class="pre">x:</span> <span class="pre">x&lt;5,</span> <span class="pre">[1,4,6,4,1])</span> <span class="pre">--&gt;</span> <span class="pre">1</span> <span class="pre">4</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.izip" title="itertools.izip"><tt class="xref py py-func docutils literal"><span class="pre">izip()</span></tt></a></td>
+<td>p, q, ...</td>
+<td>(p[0], q[0]), (p[1], q[1]), ...</td>
+<td><tt class="docutils literal"><span class="pre">izip('ABCD',</span> <span class="pre">'xy')</span> <span class="pre">--&gt;</span> <span class="pre">Ax</span> <span class="pre">By</span></tt></td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.izip_longest" title="itertools.izip_longest"><tt class="xref py py-func docutils literal"><span class="pre">izip_longest()</span></tt></a></td>
+<td>p, q, ...</td>
+<td>(p[0], q[0]), (p[1], q[1]), ...</td>
+<td><tt class="docutils literal"><span class="pre">izip_longest('ABCD',</span> <span class="pre">'xy',</span> <span class="pre">fillvalue='-')</span> <span class="pre">--&gt;</span> <span class="pre">Ax</span> <span class="pre">By</span> <span class="pre">C-</span> <span class="pre">D-</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Combinatoric generators:</strong></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="16%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Iterator</th>
+<th class="head">Arguments</th>
+<th class="head">Results</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="#itertools.product" title="itertools.product"><tt class="xref py py-func docutils literal"><span class="pre">product()</span></tt></a></td>
+<td>p, q, ... [repeat=1]</td>
+<td>cartesian product, equivalent to a nested for-loop</td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.permutations" title="itertools.permutations"><tt class="xref py py-func docutils literal"><span class="pre">permutations()</span></tt></a></td>
+<td>p[, r]</td>
+<td>r-length tuples, all possible orderings, no repeated elements</td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.combinations" title="itertools.combinations"><tt class="xref py py-func docutils literal"><span class="pre">combinations()</span></tt></a></td>
+<td>p, r</td>
+<td>r-length tuples, in sorted order, no repeated elements</td>
+</tr>
+<tr><td><a class="reference internal" href="#itertools.combinations_with_replacement" title="itertools.combinations_with_replacement"><tt class="xref py py-func docutils literal"><span class="pre">combinations_with_replacement()</span></tt></a></td>
+<td>p, r</td>
+<td>r-length tuples, in sorted order, with repeated elements</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">product('ABCD',</span> <span class="pre">repeat=2)</span></tt></td>
+<td>&nbsp;</td>
+<td><tt class="docutils literal"><span class="pre">AA</span> <span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BA</span> <span class="pre">BB</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CA</span> <span class="pre">CB</span> <span class="pre">CC</span> <span class="pre">CD</span> <span class="pre">DA</span> <span class="pre">DB</span> <span class="pre">DC</span> <span class="pre">DD</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">permutations('ABCD',</span> <span class="pre">2)</span></tt></td>
+<td>&nbsp;</td>
+<td><tt class="docutils literal"><span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BA</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CA</span> <span class="pre">CB</span> <span class="pre">CD</span> <span class="pre">DA</span> <span class="pre">DB</span> <span class="pre">DC</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">combinations('ABCD',</span> <span class="pre">2)</span></tt></td>
+<td>&nbsp;</td>
+<td><tt class="docutils literal"><span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CD</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">combinations_with_replacement('ABCD',</span> <span class="pre">2)</span></tt></td>
+<td>&nbsp;</td>
+<td><tt class="docutils literal"><span class="pre">AA</span> <span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BB</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CC</span> <span class="pre">CD</span> <span class="pre">DD</span></tt></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="itertool-functions">
+<span id="itertools-functions"></span><h2>9.7.1. Itertool functions<a class="headerlink" href="#itertool-functions" title="Permalink to this headline">¶</a></h2>
+<p>The following module functions all construct and return iterators. Some provide
+streams of infinite length, so they should only be accessed by functions or
+loops that truncate the stream.</p>
+<dl class="function">
+<dt id="itertools.chain">
+<tt class="descclassname">itertools.</tt><tt class="descname">chain</tt><big>(</big><em>*iterables</em><big>)</big><a class="headerlink" href="#itertools.chain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that returns elements from the first iterable until it is
+exhausted, then proceeds to the next iterable, until all of the iterables are
+exhausted.  Used for treating consecutive sequences as a single sequence.
+Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">chain</span><span class="p">(</span><span class="o">*</span><span class="n">iterables</span><span class="p">):</span>
+    <span class="c"># chain(&#39;ABC&#39;, &#39;DEF&#39;) --&gt; A B C D E F</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">iterables</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">element</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="itertools.chain.from_iterable">
+<em class="property">classmethod </em><tt class="descclassname">chain.</tt><tt class="descname">from_iterable</tt><big>(</big><em>iterable</em><big>)</big><a class="headerlink" href="#itertools.chain.from_iterable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternate constructor for <a class="reference internal" href="#itertools.chain" title="itertools.chain"><tt class="xref py py-func docutils literal"><span class="pre">chain()</span></tt></a>.  Gets chained inputs from a
+single iterable argument that is evaluated lazily.  Roughly equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">from_iterable</span><span class="p">(</span><span class="n">iterables</span><span class="p">):</span>
+    <span class="c"># chain.from_iterable([&#39;ABC&#39;, &#39;DEF&#39;]) --&gt; A B C D E F</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">iterables</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">element</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.combinations">
+<tt class="descclassname">itertools.</tt><tt class="descname">combinations</tt><big>(</big><em>iterable</em>, <em>r</em><big>)</big><a class="headerlink" href="#itertools.combinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>r</em> length subsequences of elements from the input <em>iterable</em>.</p>
+<p>Combinations are emitted in lexicographic sort order.  So, if the
+input <em>iterable</em> is sorted, the combination tuples will be produced
+in sorted order.</p>
+<p>Elements are treated as unique based on their position, not on their
+value.  So if the input elements are unique, there will be no repeat
+values in each combination.</p>
+<p>Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">combinations</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="c"># combinations(&#39;ABCD&#39;, 2) --&gt; AB AC AD BC BD CD</span>
+    <span class="c"># combinations(range(4), 3) --&gt; 012 013 023 123</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span> <span class="o">-</span> <span class="n">r</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+            <span class="n">indices</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The code for <a class="reference internal" href="#itertools.combinations" title="itertools.combinations"><tt class="xref py py-func docutils literal"><span class="pre">combinations()</span></tt></a> can be also expressed as a subsequence
+of <a class="reference internal" href="#itertools.permutations" title="itertools.permutations"><tt class="xref py py-func docutils literal"><span class="pre">permutations()</span></tt></a> after filtering entries where the elements are not
+in sorted order (according to their position in the input pool):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">combinations</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">r</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The number of items returned is <tt class="docutils literal"><span class="pre">n!</span> <span class="pre">/</span> <span class="pre">r!</span> <span class="pre">/</span> <span class="pre">(n-r)!</span></tt> when <tt class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">r</span> <span class="pre">&lt;=</span> <span class="pre">n</span></tt>
+or zero when <tt class="docutils literal"><span class="pre">r</span> <span class="pre">&gt;</span> <span class="pre">n</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.combinations_with_replacement">
+<tt class="descclassname">itertools.</tt><tt class="descname">combinations_with_replacement</tt><big>(</big><em>iterable</em>, <em>r</em><big>)</big><a class="headerlink" href="#itertools.combinations_with_replacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>r</em> length subsequences of elements from the input <em>iterable</em>
+allowing individual elements to be repeated more than once.</p>
+<p>Combinations are emitted in lexicographic sort order.  So, if the
+input <em>iterable</em> is sorted, the combination tuples will be produced
+in sorted order.</p>
+<p>Elements are treated as unique based on their position, not on their
+value.  So if the input elements are unique, the generated combinations
+will also be unique.</p>
+<p>Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">combinations_with_replacement</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="c"># combinations_with_replacement(&#39;ABC&#39;, 2) --&gt; AA AB AC BB BC CC</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">r</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">r</span>
+    <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The code for <a class="reference internal" href="#itertools.combinations_with_replacement" title="itertools.combinations_with_replacement"><tt class="xref py py-func docutils literal"><span class="pre">combinations_with_replacement()</span></tt></a> can be also expressed as
+a subsequence of <a class="reference internal" href="#itertools.product" title="itertools.product"><tt class="xref py py-func docutils literal"><span class="pre">product()</span></tt></a> after filtering entries where the elements
+are not in sorted order (according to their position in the input pool):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">combinations_with_replacement</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="n">r</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">indices</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The number of items returned is <tt class="docutils literal"><span class="pre">(n+r-1)!</span> <span class="pre">/</span> <span class="pre">r!</span> <span class="pre">/</span> <span class="pre">(n-1)!</span></tt> when <tt class="docutils literal"><span class="pre">n</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.compress">
+<tt class="descclassname">itertools.</tt><tt class="descname">compress</tt><big>(</big><em>data</em>, <em>selectors</em><big>)</big><a class="headerlink" href="#itertools.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that filters elements from <em>data</em> returning only those that
+have a corresponding element in <em>selectors</em> that evaluates to <tt class="xref docutils literal"><span class="pre">True</span></tt>.
+Stops when either the <em>data</em> or <em>selectors</em> iterables has been exhausted.
+Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">compress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">selectors</span><span class="p">):</span>
+    <span class="c"># compress(&#39;ABCDEF&#39;, [1,0,1,0,1,1]) --&gt; A C E F</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">izip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">selectors</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.count">
+<tt class="descclassname">itertools.</tt><tt class="descname">count</tt><big>(</big><em>start=0</em>, <em>step=1</em><big>)</big><a class="headerlink" href="#itertools.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that returns evenly spaced values starting with <em>n</em>. Often
+used as an argument to <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a> to generate consecutive data points.
+Also, used with <a class="reference internal" href="#itertools.izip" title="itertools.izip"><tt class="xref py py-func docutils literal"><span class="pre">izip()</span></tt></a> to add sequence numbers.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="c"># count(10) --&gt; 10 11 12 13 14 ...</span>
+    <span class="c"># count(2.5, 0.5) -&gt; 2.5 3.0 3.5 ...</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">start</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">step</span>
+</pre></div>
+</div>
+<p>When counting with floating point numbers, better accuracy can sometimes be
+achieved by substituting multiplicative code such as: <tt class="docutils literal"><span class="pre">(start</span> <span class="pre">+</span> <span class="pre">step</span> <span class="pre">*</span> <span class="pre">i</span>
+<span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">count())</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>added <em>step</em> argument and allowed non-integer arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.cycle">
+<tt class="descclassname">itertools.</tt><tt class="descname">cycle</tt><big>(</big><em>iterable</em><big>)</big><a class="headerlink" href="#itertools.cycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator returning elements from the iterable and saving a copy of each.
+When the iterable is exhausted, return elements from the saved copy.  Repeats
+indefinitely.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">cycle</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="c"># cycle(&#39;ABCD&#39;) --&gt; A B C D A B C D A B C D ...</span>
+    <span class="n">saved</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">element</span>
+        <span class="n">saved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">saved</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">saved</span><span class="p">:</span>
+              <span class="k">yield</span> <span class="n">element</span>
+</pre></div>
+</div>
+<p>Note, this member of the toolkit may require significant auxiliary storage
+(depending on the length of the iterable).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.dropwhile">
+<tt class="descclassname">itertools.</tt><tt class="descname">dropwhile</tt><big>(</big><em>predicate</em>, <em>iterable</em><big>)</big><a class="headerlink" href="#itertools.dropwhile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that drops elements from the iterable as long as the predicate
+is true; afterwards, returns every element.  Note, the iterator does not produce
+<em>any</em> output until the predicate first becomes false, so it may have a lengthy
+start-up time.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">dropwhile</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+    <span class="c"># dropwhile(lambda x: x&lt;5, [1,4,6,4,1]) --&gt; 6 4 1</span>
+    <span class="n">iterable</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">x</span>
+            <span class="k">break</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">x</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.groupby">
+<tt class="descclassname">itertools.</tt><tt class="descname">groupby</tt><big>(</big><em>iterable</em><span class="optional">[</span>, <em>key</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#itertools.groupby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that returns consecutive keys and groups from the <em>iterable</em>.
+The <em>key</em> is a function computing a key value for each element.  If not
+specified or is <tt class="xref docutils literal"><span class="pre">None</span></tt>, <em>key</em> defaults to an identity function and returns
+the element unchanged.  Generally, the iterable needs to already be sorted on
+the same key function.</p>
+<p>The operation of <a class="reference internal" href="#itertools.groupby" title="itertools.groupby"><tt class="xref py py-func docutils literal"><span class="pre">groupby()</span></tt></a> is similar to the <tt class="docutils literal"><span class="pre">uniq</span></tt> filter in Unix.  It
+generates a break or new group every time the value of the key function changes
+(which is why it is usually necessary to have sorted the data using the same key
+function).  That behavior differs from SQL&#8217;s GROUP BY which aggregates common
+elements regardless of their input order.</p>
+<p>The returned group is itself an iterator that shares the underlying iterable
+with <a class="reference internal" href="#itertools.groupby" title="itertools.groupby"><tt class="xref py py-func docutils literal"><span class="pre">groupby()</span></tt></a>.  Because the source is shared, when the <a class="reference internal" href="#itertools.groupby" title="itertools.groupby"><tt class="xref py py-func docutils literal"><span class="pre">groupby()</span></tt></a>
+object is advanced, the previous group is no longer visible.  So, if that data
+is needed later, it should be stored as a list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">uniquekeys</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">keyfunc</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">keyfunc</span><span class="p">):</span>
+    <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>      <span class="c"># Store group iterator as a list</span>
+    <span class="n">uniquekeys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#itertools.groupby" title="itertools.groupby"><tt class="xref py py-func docutils literal"><span class="pre">groupby()</span></tt></a> is equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">groupby</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c"># [k for k, g in groupby(&#39;AAAABBBCCDAABBB&#39;)] --&gt; A B C D A B</span>
+    <span class="c"># [list(g) for k, g in groupby(&#39;AAAABBBCCD&#39;)] --&gt; AAAA BBB CC D</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">it</span><span class="p">)</span>    <span class="c"># Exit on StopIteration</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grouper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">_grouper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tgtkey</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">==</span> <span class="n">tgtkey</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">it</span><span class="p">)</span>    <span class="c"># Exit on StopIteration</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.ifilter">
+<tt class="descclassname">itertools.</tt><tt class="descname">ifilter</tt><big>(</big><em>predicate</em>, <em>iterable</em><big>)</big><a class="headerlink" href="#itertools.ifilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that filters elements from iterable returning only those for
+which the predicate is <tt class="xref docutils literal"><span class="pre">True</span></tt>. If <em>predicate</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>, return the items
+that are true. Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">ifilter</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+    <span class="c"># ifilter(lambda x: x%2, range(10)) --&gt; 1 3 5 7 9</span>
+    <span class="k">if</span> <span class="n">predicate</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">predicate</span> <span class="o">=</span> <span class="nb">bool</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">x</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.ifilterfalse">
+<tt class="descclassname">itertools.</tt><tt class="descname">ifilterfalse</tt><big>(</big><em>predicate</em>, <em>iterable</em><big>)</big><a class="headerlink" href="#itertools.ifilterfalse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that filters elements from iterable returning only those for
+which the predicate is <tt class="xref docutils literal"><span class="pre">False</span></tt>. If <em>predicate</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>, return the items
+that are false. Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">ifilterfalse</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+    <span class="c"># ifilterfalse(lambda x: x%2, range(10)) --&gt; 0 2 4 6 8</span>
+    <span class="k">if</span> <span class="n">predicate</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">predicate</span> <span class="o">=</span> <span class="nb">bool</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">x</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.imap">
+<tt class="descclassname">itertools.</tt><tt class="descname">imap</tt><big>(</big><em>function</em>, <em>*iterables</em><big>)</big><a class="headerlink" href="#itertools.imap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that computes the function using arguments from each of the
+iterables.  If <em>function</em> is set to <tt class="xref docutils literal"><span class="pre">None</span></tt>, then <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a> returns the
+arguments as a tuple.  Like <a class="reference internal" href="functions.html#map" title="map"><tt class="xref py py-func docutils literal"><span class="pre">map()</span></tt></a> but stops when the shortest iterable is
+exhausted instead of filling in <tt class="xref docutils literal"><span class="pre">None</span></tt> for shorter iterables.  The reason for
+the difference is that infinite iterator arguments are typically an error for
+<a class="reference internal" href="functions.html#map" title="map"><tt class="xref py py-func docutils literal"><span class="pre">map()</span></tt></a> (because the output is fully evaluated) but represent a common and
+useful way of supplying arguments to <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a>. Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">imap</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">iterables</span><span class="p">):</span>
+    <span class="c"># imap(pow, (2,3,10), (5,2,3)) --&gt; 32 9 1000</span>
+    <span class="n">iterables</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">iterables</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">iterables</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.islice">
+<tt class="descclassname">itertools.</tt><tt class="descname">islice</tt><big>(</big><em>iterable</em>, <em>stop</em><big>)</big><a class="headerlink" href="#itertools.islice" title="Permalink to this definition">¶</a></dt>
+<dt>
+<tt class="descclassname">itertools.</tt><tt class="descname">islice</tt><big>(</big><em>iterable</em>, <em>start</em>, <em>stop</em><span class="optional">[</span>, <em>step</em><span class="optional">]</span><big>)</big></dt>
+<dd><p>Make an iterator that returns selected elements from the iterable. If <em>start</em> is
+non-zero, then elements from the iterable are skipped until start is reached.
+Afterward, elements are returned consecutively unless <em>step</em> is set higher than
+one which results in items being skipped.  If <em>stop</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>, then iteration
+continues until the iterator is exhausted, if at all; otherwise, it stops at the
+specified position.  Unlike regular slicing, <a class="reference internal" href="#itertools.islice" title="itertools.islice"><tt class="xref py py-func docutils literal"><span class="pre">islice()</span></tt></a> does not support
+negative values for <em>start</em>, <em>stop</em>, or <em>step</em>.  Can be used to extract related
+fields from data where the internal structure has been flattened (for example, a
+multi-line report may list a name field on every third line).  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c"># islice(&#39;ABCDEFG&#39;, 2) --&gt; A B</span>
+    <span class="c"># islice(&#39;ABCDEFG&#39;, 2, 4) --&gt; C D</span>
+    <span class="c"># islice(&#39;ABCDEFG&#39;, 2, None) --&gt; C D E F G</span>
+    <span class="c"># islice(&#39;ABCDEFG&#39;, 0, None, 2) --&gt; A C E G</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxint</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">nexti</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nexti</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">element</span>
+            <span class="n">nexti</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If <em>start</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>, then iteration starts at zero. If <em>step</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>,
+then the step defaults to one.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>accept <tt class="xref docutils literal"><span class="pre">None</span></tt> values for default <em>start</em> and <em>step</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.izip">
+<tt class="descclassname">itertools.</tt><tt class="descname">izip</tt><big>(</big><em>*iterables</em><big>)</big><a class="headerlink" href="#itertools.izip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that aggregates elements from each of the iterables. Like
+<a class="reference internal" href="functions.html#zip" title="zip"><tt class="xref py py-func docutils literal"><span class="pre">zip()</span></tt></a> except that it returns an iterator instead of a list.  Used for
+lock-step iteration over several iterables at a time.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">izip</span><span class="p">(</span><span class="o">*</span><span class="n">iterables</span><span class="p">):</span>
+    <span class="c"># izip(&#39;ABCD&#39;, &#39;xy&#39;) --&gt; Ax By</span>
+    <span class="n">iterators</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="n">iterables</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">iterators</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">next</span><span class="p">,</span> <span class="n">iterators</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4: </span>When no iterables are specified, returns a zero length iterator instead of
+raising a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception.</p>
+<p>The left-to-right evaluation order of the iterables is guaranteed. This
+makes possible an idiom for clustering a data series into n-length groups
+using <tt class="docutils literal"><span class="pre">izip(*[iter(s)]*n)</span></tt>.</p>
+<p><a class="reference internal" href="#itertools.izip" title="itertools.izip"><tt class="xref py py-func docutils literal"><span class="pre">izip()</span></tt></a> should only be used with unequal length inputs when you don&#8217;t
+care about trailing, unmatched values from the longer iterables.  If those
+values are important, use <a class="reference internal" href="#itertools.izip_longest" title="itertools.izip_longest"><tt class="xref py py-func docutils literal"><span class="pre">izip_longest()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.izip_longest">
+<tt class="descclassname">itertools.</tt><tt class="descname">izip_longest</tt><big>(</big><em>*iterables</em><span class="optional">[</span>, <em>fillvalue</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#itertools.izip_longest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that aggregates elements from each of the iterables. If the
+iterables are of uneven length, missing values are filled-in with <em>fillvalue</em>.
+Iteration continues until the longest iterable is exhausted.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ZipExhausted</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">izip_longest</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="c"># izip_longest(&#39;ABCD&#39;, &#39;xy&#39;, fillvalue=&#39;-&#39;) --&gt; Ax By C- D-</span>
+    <span class="n">fillvalue</span> <span class="o">=</span> <span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;fillvalue&#39;</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">def</span> <span class="nf">sentinel</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">counter</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">ZipExhausted</span>
+        <span class="n">counter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">yield</span> <span class="n">fillvalue</span>
+    <span class="n">fillers</span> <span class="o">=</span> <span class="n">repeat</span><span class="p">(</span><span class="n">fillvalue</span><span class="p">)</span>
+    <span class="n">iterators</span> <span class="o">=</span> <span class="p">[</span><span class="n">chain</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">sentinel</span><span class="p">(),</span> <span class="n">fillers</span><span class="p">)</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">iterators</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">next</span><span class="p">,</span> <span class="n">iterators</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">ZipExhausted</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>If one of the iterables is potentially infinite, then the
+<a class="reference internal" href="#itertools.izip_longest" title="itertools.izip_longest"><tt class="xref py py-func docutils literal"><span class="pre">izip_longest()</span></tt></a> function should be wrapped with something that limits
+the number of calls (for example <a class="reference internal" href="#itertools.islice" title="itertools.islice"><tt class="xref py py-func docutils literal"><span class="pre">islice()</span></tt></a> or <a class="reference internal" href="#itertools.takewhile" title="itertools.takewhile"><tt class="xref py py-func docutils literal"><span class="pre">takewhile()</span></tt></a>).  If
+not specified, <em>fillvalue</em> defaults to <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.permutations">
+<tt class="descclassname">itertools.</tt><tt class="descname">permutations</tt><big>(</big><em>iterable</em><span class="optional">[</span>, <em>r</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#itertools.permutations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return successive <em>r</em> length permutations of elements in the <em>iterable</em>.</p>
+<p>If <em>r</em> is not specified or is <tt class="xref docutils literal"><span class="pre">None</span></tt>, then <em>r</em> defaults to the length
+of the <em>iterable</em> and all possible full-length permutations
+are generated.</p>
+<p>Permutations are emitted in lexicographic sort order.  So, if the
+input <em>iterable</em> is sorted, the permutation tuples will be produced
+in sorted order.</p>
+<p>Elements are treated as unique based on their position, not on their
+value.  So if the input elements are unique, there will be no repeat
+values in each permutation.</p>
+<p>Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">permutations</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="c"># permutations(&#39;ABCD&#39;, 2) --&gt; AB AC AD BA BC BD CA CB CD DA DB DC</span>
+    <span class="c"># permutations(range(3)) --&gt; 012 021 102 120 201 210</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">n</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">r</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">cycles</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[:</span><span class="n">r</span><span class="p">])</span>
+    <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">)):</span>
+            <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">i</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">cycles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="n">j</span><span class="p">],</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[:</span><span class="n">r</span><span class="p">])</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+</pre></div>
+</div>
+<p>The code for <a class="reference internal" href="#itertools.permutations" title="itertools.permutations"><tt class="xref py py-func docutils literal"><span class="pre">permutations()</span></tt></a> can be also expressed as a subsequence of
+<a class="reference internal" href="#itertools.product" title="itertools.product"><tt class="xref py py-func docutils literal"><span class="pre">product()</span></tt></a>, filtered to exclude entries with repeated elements (those
+from the same position in the input pool):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">permutations</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">n</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">r</span>
+    <span class="k">for</span> <span class="n">indices</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">repeat</span><span class="o">=</span><span class="n">r</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">indices</span><span class="p">))</span> <span class="o">==</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The number of items returned is <tt class="docutils literal"><span class="pre">n!</span> <span class="pre">/</span> <span class="pre">(n-r)!</span></tt> when <tt class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">r</span> <span class="pre">&lt;=</span> <span class="pre">n</span></tt>
+or zero when <tt class="docutils literal"><span class="pre">r</span> <span class="pre">&gt;</span> <span class="pre">n</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.product">
+<tt class="descclassname">itertools.</tt><tt class="descname">product</tt><big>(</big><em>*iterables</em><span class="optional">[</span>, <em>repeat</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#itertools.product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cartesian product of input iterables.</p>
+<p>Equivalent to nested for-loops in a generator expression. For example,
+<tt class="docutils literal"><span class="pre">product(A,</span> <span class="pre">B)</span></tt> returns the same as <tt class="docutils literal"><span class="pre">((x,y)</span> <span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">A</span> <span class="pre">for</span> <span class="pre">y</span> <span class="pre">in</span> <span class="pre">B)</span></tt>.</p>
+<p>The nested loops cycle like an odometer with the rightmost element advancing
+on every iteration.  This pattern creates a lexicographic ordering so that if
+the input&#8217;s iterables are sorted, the product tuples are emitted in sorted
+order.</p>
+<p>To compute the product of an iterable with itself, specify the number of
+repetitions with the optional <em>repeat</em> keyword argument.  For example,
+<tt class="docutils literal"><span class="pre">product(A,</span> <span class="pre">repeat=4)</span></tt> means the same as <tt class="docutils literal"><span class="pre">product(A,</span> <span class="pre">A,</span> <span class="pre">A,</span> <span class="pre">A)</span></tt>.</p>
+<p>This function is equivalent to the following code, except that the
+actual implementation does not build up intermediate results in memory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="c"># product(&#39;ABCD&#39;, &#39;xy&#39;) --&gt; Ax Ay Bx By Cx Cy Dx Dy</span>
+    <span class="c"># product(range(2), repeat=3) --&gt; 000 001 010 011 100 101 110 111</span>
+    <span class="n">pools</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[[]]</span>
+    <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">pool</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">prod</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">prod</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.repeat">
+<tt class="descclassname">itertools.</tt><tt class="descname">repeat</tt><big>(</big><em>object</em><span class="optional">[</span>, <em>times</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#itertools.repeat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that returns <em>object</em> over and over again. Runs indefinitely
+unless the <em>times</em> argument is specified. Used as argument to <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a> for
+invariant function parameters.  Also used with <a class="reference internal" href="#itertools.izip" title="itertools.izip"><tt class="xref py py-func docutils literal"><span class="pre">izip()</span></tt></a> to create constant
+fields in a tuple record.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">repeat</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="c"># repeat(10, 3) --&gt; 10 10 10</span>
+    <span class="k">if</span> <span class="n">times</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="nb">object</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="nb">object</span>
+</pre></div>
+</div>
+<p>A common use for <em>repeat</em> is to supply a stream of constant values to <em>imap</em>
+or <em>zip</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">imap</span><span class="p">(</span><span class="nb">pow</span><span class="p">,</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">repeat</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.starmap">
+<tt class="descclassname">itertools.</tt><tt class="descname">starmap</tt><big>(</big><em>function</em>, <em>iterable</em><big>)</big><a class="headerlink" href="#itertools.starmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that computes the function using arguments obtained from
+the iterable.  Used instead of <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a> when argument parameters are already
+grouped in tuples from a single iterable (the data has been &#8220;pre-zipped&#8221;).  The
+difference between <a class="reference internal" href="#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">imap()</span></tt></a> and <a class="reference internal" href="#itertools.starmap" title="itertools.starmap"><tt class="xref py py-func docutils literal"><span class="pre">starmap()</span></tt></a> parallels the distinction
+between <tt class="docutils literal"><span class="pre">function(a,b)</span></tt> and <tt class="docutils literal"><span class="pre">function(*c)</span></tt>. Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">starmap</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+    <span class="c"># starmap(pow, [(2,5), (3,2), (10,3)]) --&gt; 32 9 1000</span>
+    <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>Previously, <a class="reference internal" href="#itertools.starmap" title="itertools.starmap"><tt class="xref py py-func docutils literal"><span class="pre">starmap()</span></tt></a> required the function arguments to be tuples.
+Now, any iterable is allowed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.takewhile">
+<tt class="descclassname">itertools.</tt><tt class="descname">takewhile</tt><big>(</big><em>predicate</em>, <em>iterable</em><big>)</big><a class="headerlink" href="#itertools.takewhile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make an iterator that returns elements from the iterable as long as the
+predicate is true.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">takewhile</span><span class="p">(</span><span class="n">predicate</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+    <span class="c"># takewhile(lambda x: x&lt;5, [1,4,6,4,1]) --&gt; 1 4</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">x</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="itertools.tee">
+<tt class="descclassname">itertools.</tt><tt class="descname">tee</tt><big>(</big><em>iterable</em><span class="optional">[</span>, <em>n=2</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#itertools.tee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>n</em> independent iterators from a single iterable.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">tee</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">deques</span> <span class="o">=</span> <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="k">def</span> <span class="nf">gen</span><span class="p">(</span><span class="n">mydeque</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">mydeque</span><span class="p">:</span>             <span class="c"># when the local deque is empty</span>
+                <span class="n">newval</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>       <span class="c"># fetch a new value and</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deques</span><span class="p">:</span>        <span class="c"># load it to all the deques</span>
+                    <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newval</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">mydeque</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">gen</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deques</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once <a class="reference internal" href="#itertools.tee" title="itertools.tee"><tt class="xref py py-func docutils literal"><span class="pre">tee()</span></tt></a> has made a split, the original <em>iterable</em> should not be
+used anywhere else; otherwise, the <em>iterable</em> could get advanced without
+the tee objects being informed.</p>
+<p>This itertool may require significant auxiliary storage (depending on how
+much temporary data needs to be stored). In general, if one iterator uses
+most or all of the data before another iterator starts, it is faster to use
+<a class="reference internal" href="functions.html#list" title="list"><tt class="xref py py-func docutils literal"><span class="pre">list()</span></tt></a> instead of <a class="reference internal" href="#itertools.tee" title="itertools.tee"><tt class="xref py py-func docutils literal"><span class="pre">tee()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="recipes">
+<span id="itertools-recipes"></span><h2>9.7.2. Recipes<a class="headerlink" href="#recipes" title="Permalink to this headline">¶</a></h2>
+<p>This section shows recipes for creating an extended toolset using the existing
+itertools as building blocks.</p>
+<p>The extended tools offer the same high performance as the underlying toolset.
+The superior memory performance is kept by processing elements one at a time
+rather than bringing the whole iterable into memory all at once. Code volume is
+kept small by linking the tools together in a functional style which helps
+eliminate temporary variables.  High speed is retained by preferring
+&#8220;vectorized&#8221; building blocks over the use of for-loops and <a class="reference internal" href="../glossary.html#term-generator"><em class="xref std std-term">generator</em></a>s
+which incur interpreter overhead.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+    <span class="s">&quot;Return first n items of the iterable as a list&quot;</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">tabulate</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="s">&quot;Return function(0), function(1), ...&quot;</span>
+    <span class="k">return</span> <span class="n">imap</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">count</span><span class="p">(</span><span class="n">start</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">consume</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="s">&quot;Advance the iterator n-steps ahead. If n is none, consume entirely.&quot;</span>
+    <span class="c"># Use functions that consume iterators at C speed.</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c"># feed the entire iterator into a zero-length deque</span>
+        <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># advance to the empty slice starting at position n</span>
+        <span class="nb">next</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">iterator</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">nth</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">&quot;Returns the nth item or a default value&quot;</span>
+    <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="n">default</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">quantify</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">pred</span><span class="o">=</span><span class="nb">bool</span><span class="p">):</span>
+    <span class="s">&quot;Count how many times the predicate is true&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">imap</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">iterable</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">padnone</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the sequence elements and then returns None indefinitely.</span>
+
+<span class="sd">    Useful for emulating the behavior of the built-in map() function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">chain</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="bp">None</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">ncycles</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="s">&quot;Returns the sequence elements n times&quot;</span>
+    <span class="k">return</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">repeat</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">),</span> <span class="n">n</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">dotproduct</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">imap</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">listOfLists</span><span class="p">):</span>
+    <span class="s">&quot;Flatten one level of nesting&quot;</span>
+    <span class="k">return</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">listOfLists</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">repeatfunc</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Repeat calls to func with specified arguments.</span>
+
+<span class="sd">    Example:  repeatfunc(random.random)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">times</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">starmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">starmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">repeat</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">times</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">pairwise</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="s">&quot;s -&gt; (s0,s1), (s1,s2), (s2, s3), ...&quot;</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">tee</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="nb">next</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">izip</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">grouper</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">iterable</span><span class="p">,</span> <span class="n">fillvalue</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">&quot;Collect data into fixed-length chunks or blocks&quot;</span>
+    <span class="c"># grouper(3, &#39;ABCDEFG&#39;, &#39;x&#39;) --&gt; ABC DEF Gxx</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)]</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">izip_longest</span><span class="p">(</span><span class="n">fillvalue</span><span class="o">=</span><span class="n">fillvalue</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">roundrobin</span><span class="p">(</span><span class="o">*</span><span class="n">iterables</span><span class="p">):</span>
+    <span class="s">&quot;roundrobin(&#39;ABC&#39;, &#39;D&#39;, &#39;EF&#39;) --&gt; A D E B F C&quot;</span>
+    <span class="c"># Recipe credited to George Sakkis</span>
+    <span class="n">pending</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterables</span><span class="p">)</span>
+    <span class="n">nexts</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">it</span><span class="p">)</span><span class="o">.</span><span class="n">next</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">iterables</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">pending</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="nb">next</span> <span class="ow">in</span> <span class="n">nexts</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="nb">next</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="n">pending</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">nexts</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">nexts</span><span class="p">,</span> <span class="n">pending</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">powerset</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="s">&quot;powerset([1,2,3]) --&gt; () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">unique_everseen</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">&quot;List unique elements, preserving order. Remember all elements ever seen.&quot;</span>
+    <span class="c"># unique_everseen(&#39;AAAABBBCCDAABBB&#39;) --&gt; A B C D</span>
+    <span class="c"># unique_everseen(&#39;ABBCcAD&#39;, str.lower) --&gt; A B C D</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">seen_add</span> <span class="o">=</span> <span class="n">seen</span><span class="o">.</span><span class="n">add</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">ifilterfalse</span><span class="p">(</span><span class="n">seen</span><span class="o">.</span><span class="n">__contains__</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+            <span class="n">seen_add</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">element</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">key</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                <span class="n">seen_add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="n">element</span>
+
+<span class="k">def</span> <span class="nf">unique_justseen</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">&quot;List unique elements, preserving order. Remember only the element just seen.&quot;</span>
+    <span class="c"># unique_justseen(&#39;AAAABBBCCDAABBB&#39;) --&gt; A B C D A B</span>
+    <span class="c"># unique_justseen(&#39;ABBCcAD&#39;, str.lower) --&gt; A B C A D</span>
+    <span class="k">return</span> <span class="n">imap</span><span class="p">(</span><span class="nb">next</span><span class="p">,</span> <span class="n">imap</span><span class="p">(</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">groupby</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">iter_except</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Call a function repeatedly until an exception is raised.</span>
+
+<span class="sd">    Converts a call-until-exception interface to an iterator interface.</span>
+<span class="sd">    Like __builtin__.iter(func, sentinel) but uses an exception instead</span>
+<span class="sd">    of a sentinel to end the loop.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        bsddbiter = iter_except(db.next, bsddb.error, db.first)</span>
+<span class="sd">        heapiter = iter_except(functools.partial(heappop, h), IndexError)</span>
+<span class="sd">        dictiter = iter_except(d.popitem, KeyError)</span>
+<span class="sd">        dequeiter = iter_except(d.popleft, IndexError)</span>
+<span class="sd">        queueiter = iter_except(q.get_nowait, Queue.Empty)</span>
+<span class="sd">        setiter = iter_except(s.pop, KeyError)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">first</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">first</span><span class="p">()</span>
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">func</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">random_product</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+    <span class="s">&quot;Random selection from itertools.product(*args, **kwds)&quot;</span>
+    <span class="n">pools</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">*</span> <span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;repeat&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">pools</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">random_permutation</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="s">&quot;Random selection from itertools.permutations(iterable, r)&quot;</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">r</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">random_combination</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="s">&quot;Random selection from itertools.combinations(iterable, r)&quot;</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">r</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">random_combination_with_replacement</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="s">&quot;Random selection from itertools.combinations_with_replacement(iterable, r)&quot;</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note, many of the above recipes can be optimized by replacing global lookups
+with local variables defined as default values.  For example, the
+<em>dotproduct</em> recipe can be written as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">dotproduct</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="nb">sum</span><span class="o">=</span><span class="nb">sum</span><span class="p">,</span> <span class="n">imap</span><span class="o">=</span><span class="n">imap</span><span class="p">,</span> <span class="n">mul</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">imap</span><span class="p">(</span><span class="n">mul</span><span class="p">,</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9.7. <tt class="docutils literal"><span class="pre">itertools</span></tt> &#8212; Functions creating iterators for efficient looping</a><ul>
+<li><a class="reference internal" href="#itertool-functions">9.7.1. Itertool functions</a></li>
+<li><a class="reference internal" href="#recipes">9.7.2. Recipes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="random.html"
+                        title="previous chapter">9.6. <tt class="docutils literal docutils literal"><span class="pre">random</span></tt> &#8212; Generate pseudo-random numbers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="functools.html"
+                        title="next chapter">9.8. <tt class="docutils literal docutils literal"><span class="pre">functools</span></tt> &#8212; Higher-order functions and operations on callable objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/itertools.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="functools.html" title="9.8. functools — Higher-order functions and operations on callable objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="random.html" title="9.6. random — Generate pseudo-random numbers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" >9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

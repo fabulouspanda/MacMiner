@@ -1,0 +1,624 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>25.5. test — Regression tests package for Python &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="25. Development Tools" href="development.html" />
+    <link rel="next" title="26. Debugging and Profiling" href="debug.html" />
+    <link rel="prev" title="25.4. 2to3 - Automated Python 2 to 3 code translation" href="2to3.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="26. Debugging and Profiling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="2to3.html" title="25.4. 2to3 - Automated Python 2 to 3 code translation"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="development.html" accesskey="U">25. Development Tools</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-test">
+<span id="test-regression-tests-package-for-python"></span><h1>25.5. <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><tt class="xref py py-mod docutils literal"><span class="pre">test</span></tt></a> &#8212; Regression tests package for Python<a class="headerlink" href="#module-test" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><tt class="xref py py-mod docutils literal"><span class="pre">test</span></tt></a> package is meant for internal use by Python only. It is
+documented for the benefit of the core developers of Python. Any use of
+this package outside of Python&#8217;s standard library is discouraged as code
+mentioned here can change or be removed without notice between releases of
+Python.</p>
+</div>
+<p>The <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><tt class="xref py py-mod docutils literal"><span class="pre">test</span></tt></a> package contains all regression tests for Python as well as the
+modules <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> and <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt>.
+<a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> is used to enhance your tests while
+<tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt> drives the testing suite.</p>
+<p>Each module in the <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><tt class="xref py py-mod docutils literal"><span class="pre">test</span></tt></a> package whose name starts with <tt class="docutils literal"><span class="pre">test_</span></tt> is a
+testing suite for a specific module or feature. All new tests should be written
+using the <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><tt class="xref py py-mod docutils literal"><span class="pre">unittest</span></tt></a> or <a class="reference internal" href="doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><tt class="xref py py-mod docutils literal"><span class="pre">doctest</span></tt></a> module.  Some older tests are
+written using a &#8220;traditional&#8221; testing style that compares output printed to
+<tt class="docutils literal"><span class="pre">sys.stdout</span></tt>; this style of test is considered deprecated.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><tt class="xref py py-mod docutils literal"><span class="pre">unittest</span></tt></a></dt>
+<dd>Writing PyUnit regression tests.</dd>
+<dt>Module <a class="reference internal" href="doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><tt class="xref py py-mod docutils literal"><span class="pre">doctest</span></tt></a></dt>
+<dd>Tests embedded in documentation strings.</dd>
+</dl>
+</div>
+<div class="section" id="writing-unit-tests-for-the-test-package">
+<span id="writing-tests"></span><h2>25.5.1. Writing Unit Tests for the <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><tt class="xref py py-mod docutils literal"><span class="pre">test</span></tt></a> package<a class="headerlink" href="#writing-unit-tests-for-the-test-package" title="Permalink to this headline">¶</a></h2>
+<p>It is preferred that tests that use the <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><tt class="xref py py-mod docutils literal"><span class="pre">unittest</span></tt></a> module follow a few
+guidelines. One is to name the test module by starting it with <tt class="docutils literal"><span class="pre">test_</span></tt> and end
+it with the name of the module being tested. The test methods in the test module
+should start with <tt class="docutils literal"><span class="pre">test_</span></tt> and end with a description of what the method is
+testing. This is needed so that the methods are recognized by the test driver as
+test methods. Also, no documentation string for the method should be included. A
+comment (such as <tt class="docutils literal"><span class="pre">#</span> <span class="pre">Tests</span> <span class="pre">function</span> <span class="pre">returns</span> <span class="pre">only</span> <span class="pre">True</span> <span class="pre">or</span> <span class="pre">False</span></tt>) should be used
+to provide documentation for test methods. This is done because documentation
+strings get printed out if they exist and thus what test is being run is not
+stated.</p>
+<p>A basic boilerplate is often used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">test</span> <span class="kn">import</span> <span class="n">test_support</span>
+
+<span class="k">class</span> <span class="nc">MyTestCase1</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="c"># Only use setUp() and tearDown() if necessary</span>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span> <span class="n">code</span> <span class="n">to</span> <span class="n">execute</span> <span class="ow">in</span> <span class="n">preparation</span> <span class="k">for</span> <span class="n">tests</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span> <span class="n">code</span> <span class="n">to</span> <span class="n">execute</span> <span class="n">to</span> <span class="n">clean</span> <span class="n">up</span> <span class="n">after</span> <span class="n">tests</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_feature_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Test feature one.</span>
+        <span class="o">...</span> <span class="n">testing</span> <span class="n">code</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_feature_two</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Test feature two.</span>
+        <span class="o">...</span> <span class="n">testing</span> <span class="n">code</span> <span class="o">...</span>
+
+    <span class="o">...</span> <span class="n">more</span> <span class="n">test</span> <span class="n">methods</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">MyTestCase2</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="o">...</span> <span class="n">same</span> <span class="n">structure</span> <span class="k">as</span> <span class="n">MyTestCase1</span> <span class="o">...</span>
+
+<span class="o">...</span> <span class="n">more</span> <span class="n">test</span> <span class="n">classes</span> <span class="o">...</span>
+
+<span class="k">def</span> <span class="nf">test_main</span><span class="p">():</span>
+    <span class="n">test_support</span><span class="o">.</span><span class="n">run_unittest</span><span class="p">(</span><span class="n">MyTestCase1</span><span class="p">,</span>
+                              <span class="n">MyTestCase2</span><span class="p">,</span>
+                              <span class="o">...</span> <span class="nb">list</span> <span class="n">other</span> <span class="n">tests</span> <span class="o">...</span>
+                             <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test_main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This boilerplate code allows the testing suite to be run by <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt>
+as well as on its own as a script.</p>
+<p>The goal for regression testing is to try to break code. This leads to a few
+guidelines to be followed:</p>
+<ul>
+<li><p class="first">The testing suite should exercise all classes, functions, and constants. This
+includes not just the external API that is to be presented to the outside
+world but also &#8220;private&#8221; code.</p>
+</li>
+<li><p class="first">Whitebox testing (examining the code being tested when the tests are being
+written) is preferred. Blackbox testing (testing only the published user
+interface) is not complete enough to make sure all boundary and edge cases
+are tested.</p>
+</li>
+<li><p class="first">Make sure all possible values are tested including invalid ones. This makes
+sure that not only all valid values are acceptable but also that improper
+values are handled correctly.</p>
+</li>
+<li><p class="first">Exhaust as many code paths as possible. Test where branching occurs and thus
+tailor input to make sure as many different paths through the code are taken.</p>
+</li>
+<li><p class="first">Add an explicit test for any bugs discovered for the tested code. This will
+make sure that the error does not crop up again if the code is changed in the
+future.</p>
+</li>
+<li><p class="first">Make sure to clean up after your tests (such as close and remove all temporary
+files).</p>
+</li>
+<li><p class="first">If a test is dependent on a specific condition of the operating system then
+verify the condition already exists before attempting the test.</p>
+</li>
+<li><p class="first">Import as few modules as possible and do it as soon as possible. This
+minimizes external dependencies of tests and also minimizes possible anomalous
+behavior from side-effects of importing a module.</p>
+</li>
+<li><p class="first">Try to maximize code reuse. On occasion, tests will vary by something as small
+as what type of input is used. Minimize code duplication by subclassing a
+basic test class with a class that specifies the input:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">TestFuncAcceptsSequences</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="n">func</span> <span class="o">=</span> <span class="n">mySuperWhammyFunction</span>
+
+    <span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">AcceptLists</span><span class="p">(</span><span class="n">TestFuncAcceptsSequences</span><span class="p">):</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">AcceptStrings</span><span class="p">(</span><span class="n">TestFuncAcceptsSequences</span><span class="p">):</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="s">&#39;abc&#39;</span>
+
+<span class="k">class</span> <span class="nc">AcceptTuples</span><span class="p">(</span><span class="n">TestFuncAcceptsSequences</span><span class="p">):</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Test Driven Development</dt>
+<dd>A book by Kent Beck on writing tests before code.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="running-tests-using-the-command-line-interface">
+<span id="regrtest"></span><h2>25.5.2. Running tests using the command-line interface<a class="headerlink" href="#running-tests-using-the-command-line-interface" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt> module can be run as a script to drive Python&#8217;s regression
+test suite, thanks to the <a class="reference internal" href="../using/cmdline.html#cmdoption-m"><em class="xref std std-option">-m</em></a> option: <strong class="program">python -m test.regrtest</strong>.
+Running the script by itself automatically starts running all regression
+tests in the <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><tt class="xref py py-mod docutils literal"><span class="pre">test</span></tt></a> package. It does this by finding all modules in the
+package whose name starts with <tt class="docutils literal"><span class="pre">test_</span></tt>, importing them, and executing the
+function <tt class="xref py py-func docutils literal"><span class="pre">test_main()</span></tt> if present. The names of tests to execute may also
+be passed to the script. Specifying a single regression test (<strong class="program">python
+-m test.regrtest test_spam</strong>) will minimize output and only print whether
+the test passed or failed and thus minimize output.</p>
+<p>Running <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt> directly allows what resources are available for
+tests to use to be set. You do this by using the <tt class="docutils literal"><span class="pre">-u</span></tt> command-line
+option. Specifying <tt class="docutils literal"><span class="pre">all</span></tt> as the value for the <tt class="docutils literal"><span class="pre">-u</span></tt> option enables all
+possible resources: <strong class="program">python -m test -uall</strong>.
+If all but one resource is desired (a more common case), a
+comma-separated list of resources that are not desired may be listed after
+<tt class="docutils literal"><span class="pre">all</span></tt>. The command <strong class="program">python -m test.regrtest -uall,-audio,-largefile</strong>
+will run <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt> with all resources except the <tt class="docutils literal"><span class="pre">audio</span></tt> and
+<tt class="docutils literal"><span class="pre">largefile</span></tt> resources. For a list of all resources and more command-line
+options, run <strong class="program">python -m test.regrtest -h</strong>.</p>
+<p>Some other ways to execute the regression tests depend on what platform the
+tests are being executed on. On Unix, you can run <strong class="program">make test</strong> at the
+top-level directory where Python was built. On Windows, executing
+<strong class="program">rt.bat</strong> from your <tt class="file docutils literal"><span class="pre">PCBuild</span></tt> directory will run all regression
+tests.</p>
+</div>
+</div>
+<div class="section" id="module-test.test_support">
+<span id="test-test-support-utility-functions-for-tests"></span><h1>25.6. <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> &#8212; Utility functions for tests<a class="headerlink" href="#module-test.test_support" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> module has been renamed to <tt class="xref py py-mod docutils literal"><span class="pre">test.support</span></tt>
+in Python 3.x.</p>
+</div>
+<p>The <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> module provides support for Python&#8217;s regression
+tests.</p>
+<p>This module defines the following exceptions:</p>
+<dl class="exception">
+<dt id="test.test_support.TestFailed">
+<em class="property">exception </em><tt class="descclassname">test.test_support.</tt><tt class="descname">TestFailed</tt><a class="headerlink" href="#test.test_support.TestFailed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception to be raised when a test fails. This is deprecated in favor of
+<a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><tt class="xref py py-mod docutils literal"><span class="pre">unittest</span></tt></a>-based tests and <a class="reference internal" href="unittest.html#unittest.TestCase" title="unittest.TestCase"><tt class="xref py py-class docutils literal"><span class="pre">unittest.TestCase</span></tt></a>&#8216;s assertion
+methods.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="test.test_support.ResourceDenied">
+<em class="property">exception </em><tt class="descclassname">test.test_support.</tt><tt class="descname">ResourceDenied</tt><a class="headerlink" href="#test.test_support.ResourceDenied" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of <tt class="xref py py-exc docutils literal"><span class="pre">unittest.SkipTest</span></tt>. Raised when a resource (such as a
+network connection) is not available. Raised by the <a class="reference internal" href="#test.test_support.requires" title="test.test_support.requires"><tt class="xref py py-func docutils literal"><span class="pre">requires()</span></tt></a>
+function.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> module defines the following constants:</p>
+<dl class="data">
+<dt id="test.test_support.verbose">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">verbose</tt><a class="headerlink" href="#test.test_support.verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> when verbose output is enabled. Should be checked when more
+detailed information is desired about a running test. <em>verbose</em> is set by
+<tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="test.test_support.have_unicode">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">have_unicode</tt><a class="headerlink" href="#test.test_support.have_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> when Unicode support is available.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="test.test_support.is_jython">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">is_jython</tt><a class="headerlink" href="#test.test_support.is_jython" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> if the running interpreter is Jython.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="test.test_support.TESTFN">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">TESTFN</tt><a class="headerlink" href="#test.test_support.TESTFN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to a name that is safe to use as the name of a temporary file.  Any
+temporary file that is created should be closed and unlinked (removed).</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="test.test_support.forget">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">forget</tt><big>(</big><em>module_name</em><big>)</big><a class="headerlink" href="#test.test_support.forget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the module named <em>module_name</em> from <tt class="docutils literal"><span class="pre">sys.modules</span></tt> and delete any
+byte-compiled files of the module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.is_resource_enabled">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">is_resource_enabled</tt><big>(</big><em>resource</em><big>)</big><a class="headerlink" href="#test.test_support.is_resource_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> if <em>resource</em> is enabled and available. The list of
+available resources is only set when <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt> is executing the
+tests.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.requires">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">requires</tt><big>(</big><em>resource</em><span class="optional">[</span>, <em>msg</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#test.test_support.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise <a class="reference internal" href="#test.test_support.ResourceDenied" title="test.test_support.ResourceDenied"><tt class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></tt></a> if <em>resource</em> is not available. <em>msg</em> is the
+argument to <a class="reference internal" href="#test.test_support.ResourceDenied" title="test.test_support.ResourceDenied"><tt class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></tt></a> if it is raised. Always returns
+<a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> if called by a function whose <tt class="docutils literal"><span class="pre">__name__</span></tt> is <tt class="docutils literal"><span class="pre">'__main__'</span></tt>.
+Used when tests are executed by <tt class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.findfile">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">findfile</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#test.test_support.findfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the path to the file named <em>filename</em>. If no match is found
+<em>filename</em> is returned. This does not equal a failure since it could be the
+path to the file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.run_unittest">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">run_unittest</tt><big>(</big><em>*classes</em><big>)</big><a class="headerlink" href="#test.test_support.run_unittest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute <a class="reference internal" href="unittest.html#unittest.TestCase" title="unittest.TestCase"><tt class="xref py py-class docutils literal"><span class="pre">unittest.TestCase</span></tt></a> subclasses passed to the function. The
+function scans the classes for methods starting with the prefix <tt class="docutils literal"><span class="pre">test_</span></tt>
+and executes the tests individually.</p>
+<p>It is also legal to pass strings as parameters; these should be keys in
+<tt class="docutils literal"><span class="pre">sys.modules</span></tt>. Each associated module will be scanned by
+<tt class="docutils literal"><span class="pre">unittest.TestLoader.loadTestsFromModule()</span></tt>. This is usually seen in the
+following <tt class="xref py py-func docutils literal"><span class="pre">test_main()</span></tt> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_main</span><span class="p">():</span>
+    <span class="n">test_support</span><span class="o">.</span><span class="n">run_unittest</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will run all tests defined in the named module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.check_warnings">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">check_warnings</tt><big>(</big><em>*filters</em>, <em>quiet=True</em><big>)</big><a class="headerlink" href="#test.test_support.check_warnings" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience wrapper for <a class="reference internal" href="warnings.html#warnings.catch_warnings" title="warnings.catch_warnings"><tt class="xref py py-func docutils literal"><span class="pre">warnings.catch_warnings()</span></tt></a> that makes it
+easier to test that a warning was correctly raised.  It is approximately
+equivalent to calling <tt class="docutils literal"><span class="pre">warnings.catch_warnings(record=True)</span></tt> with
+<a class="reference internal" href="warnings.html#warnings.simplefilter" title="warnings.simplefilter"><tt class="xref py py-meth docutils literal"><span class="pre">warnings.simplefilter()</span></tt></a> set to <tt class="docutils literal"><span class="pre">always</span></tt> and with the option to
+automatically validate the results that are recorded.</p>
+<p><tt class="docutils literal"><span class="pre">check_warnings</span></tt> accepts 2-tuples of the form <tt class="docutils literal"><span class="pre">(&quot;message</span> <span class="pre">regexp&quot;,</span>
+<span class="pre">WarningCategory)</span></tt> as positional arguments. If one or more <em>filters</em> are
+provided, or if the optional keyword argument <em>quiet</em> is <a class="reference internal" href="constants.html#False" title="False"><tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt></a>,
+it checks to make sure the warnings are as expected:  each specified filter
+must match at least one of the warnings raised by the enclosed code or the
+test fails, and if any warnings are raised that do not match any of the
+specified filters the test fails.  To disable the first of these checks,
+set <em>quiet</em> to <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a>.</p>
+<p>If no arguments are specified, it defaults to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">check_warnings</span><span class="p">((</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="ne">Warning</span><span class="p">),</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case all warnings are caught and no errors are raised.</p>
+<p>On entry to the context manager, a <tt class="xref py py-class docutils literal"><span class="pre">WarningRecorder</span></tt> instance is
+returned. The underlying warnings list from
+<a class="reference internal" href="warnings.html#warnings.catch_warnings" title="warnings.catch_warnings"><tt class="xref py py-func docutils literal"><span class="pre">catch_warnings()</span></tt></a> is available via the recorder object&#8217;s
+<a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><tt class="xref py py-attr docutils literal"><span class="pre">warnings</span></tt></a> attribute.  As a convenience, the attributes of the object
+representing the most recent warning can also be accessed directly through
+the recorder object (see example below).  If no warning has been raised,
+then any of the attributes that would otherwise be expected on an object
+representing a warning will return <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+<p>The recorder object also has a <tt class="xref py py-meth docutils literal"><span class="pre">reset()</span></tt> method, which clears the
+warnings list.</p>
+<p>The context manager is designed to be used like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">check_warnings</span><span class="p">((</span><span class="s">&quot;assertion is always true&quot;</span><span class="p">,</span> <span class="ne">SyntaxWarning</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)):</span>
+    <span class="k">exec</span><span class="p">(</span><span class="s">&#39;assert(False, &quot;Hey!&quot;)&#39;</span><span class="p">)</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">(</span><span class="s">&quot;Hide me!&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In this case if either warning was not raised, or some other warning was
+raised, <a class="reference internal" href="#test.test_support.check_warnings" title="test.test_support.check_warnings"><tt class="xref py py-func docutils literal"><span class="pre">check_warnings()</span></tt></a> would raise an error.</p>
+<p>When a test needs to look more deeply into the warnings, rather than
+just checking whether or not they occurred, code like this can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">check_warnings</span><span class="p">(</span><span class="n">quiet</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;foo&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s">&quot;foo&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;bar&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s">&quot;bar&quot;</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">warnings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s">&quot;foo&quot;</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">warnings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s">&quot;bar&quot;</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">warnings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Here all warnings will be caught, and the test code tests the captured
+warnings directly.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>New optional arguments <em>filters</em> and <em>quiet</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.check_py3k_warnings">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">check_py3k_warnings</tt><big>(</big><em>*filters</em>, <em>quiet=False</em><big>)</big><a class="headerlink" href="#test.test_support.check_py3k_warnings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference internal" href="#test.test_support.check_warnings" title="test.test_support.check_warnings"><tt class="xref py py-func docutils literal"><span class="pre">check_warnings()</span></tt></a>, but for Python 3 compatibility warnings.
+If <tt class="docutils literal"><span class="pre">sys.py3kwarning</span> <span class="pre">==</span> <span class="pre">1</span></tt>, it checks if the warning is effectively raised.
+If <tt class="docutils literal"><span class="pre">sys.py3kwarning</span> <span class="pre">==</span> <span class="pre">0</span></tt>, it checks that no warning is raised.  It
+accepts 2-tuples of the form <tt class="docutils literal"><span class="pre">(&quot;message</span> <span class="pre">regexp&quot;,</span> <span class="pre">WarningCategory)</span></tt> as
+positional arguments.  When the optional keyword argument <em>quiet</em> is
+<a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a>, it does not fail if a filter catches nothing.  Without
+arguments, it defaults to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">check_py3k_warnings</span><span class="p">((</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">),</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.captured_stdout">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">captured_stdout</tt><big>(</big><big>)</big><a class="headerlink" href="#test.test_support.captured_stdout" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a context manager that runs the <a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement body using
+a <a class="reference internal" href="stringio.html#StringIO.StringIO" title="StringIO.StringIO"><tt class="xref py py-class docutils literal"><span class="pre">StringIO.StringIO</span></tt></a> object as sys.stdout.  That object can be
+retrieved using the <tt class="docutils literal"><span class="pre">as</span></tt> clause of the <a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement.</p>
+<p>Example use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">captured_stdout</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;hello&quot;</span>
+<span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;hello</span><span class="se">\n</span><span class="s">&quot;</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.import_module">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">import_module</tt><big>(</big><em>name</em>, <em>deprecated=False</em><big>)</big><a class="headerlink" href="#test.test_support.import_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function imports and returns the named module. Unlike a normal
+import, this function raises <tt class="xref py py-exc docutils literal"><span class="pre">unittest.SkipTest</span></tt> if the module
+cannot be imported.</p>
+<p>Module and package deprecation messages are suppressed during this import
+if <em>deprecated</em> is <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.test_support.import_fresh_module">
+<tt class="descclassname">test.test_support.</tt><tt class="descname">import_fresh_module</tt><big>(</big><em>name</em>, <em>fresh=()</em>, <em>blocked=()</em>, <em>deprecated=False</em><big>)</big><a class="headerlink" href="#test.test_support.import_fresh_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function imports and returns a fresh copy of the named Python module
+by removing the named module from <tt class="docutils literal"><span class="pre">sys.modules</span></tt> before doing the import.
+Note that unlike <a class="reference internal" href="functions.html#reload" title="reload"><tt class="xref py py-func docutils literal"><span class="pre">reload()</span></tt></a>, the original module is not affected by
+this operation.</p>
+<p><em>fresh</em> is an iterable of additional module names that are also removed
+from the <tt class="docutils literal"><span class="pre">sys.modules</span></tt> cache before doing the import.</p>
+<p><em>blocked</em> is an iterable of module names that are replaced with <tt class="xref py py-const docutils literal"><span class="pre">0</span></tt>
+in the module cache during the import to ensure that attempts to import
+them raise <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a>.</p>
+<p>The named module and any modules named in the <em>fresh</em> and <em>blocked</em>
+parameters are saved before starting the import and then reinserted into
+<tt class="docutils literal"><span class="pre">sys.modules</span></tt> when the fresh import is complete.</p>
+<p>Module and package deprecation messages are suppressed during this import
+if <em>deprecated</em> is <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a>.</p>
+<p>This function will raise <tt class="xref py py-exc docutils literal"><span class="pre">unittest.SkipTest</span></tt> is the named module
+cannot be imported.</p>
+<p>Example use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get copies of the warnings module for testing without</span>
+<span class="c"># affecting the version being used by the rest of the test suite</span>
+<span class="c"># One copy uses the C implementation, the other is forced to use</span>
+<span class="c"># the pure Python fallback implementation</span>
+<span class="n">py_warnings</span> <span class="o">=</span> <span class="n">import_fresh_module</span><span class="p">(</span><span class="s">&#39;warnings&#39;</span><span class="p">,</span> <span class="n">blocked</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;_warnings&#39;</span><span class="p">])</span>
+<span class="n">c_warnings</span> <span class="o">=</span> <span class="n">import_fresh_module</span><span class="p">(</span><span class="s">&#39;warnings&#39;</span><span class="p">,</span> <span class="n">fresh</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;_warnings&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-test.test_support" title="test.test_support: Support for Python regression tests."><tt class="xref py py-mod docutils literal"><span class="pre">test.test_support</span></tt></a> module defines the following classes:</p>
+<dl class="class">
+<dt id="test.test_support.TransientResource">
+<em class="property">class </em><tt class="descclassname">test.test_support.</tt><tt class="descname">TransientResource</tt><big>(</big><em>exc</em><span class="optional">[</span>, <em>**kwargs</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#test.test_support.TransientResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances are a context manager that raises <a class="reference internal" href="#test.test_support.ResourceDenied" title="test.test_support.ResourceDenied"><tt class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></tt></a> if the
+specified exception type is raised.  Any keyword arguments are treated as
+attribute/value pairs to be compared against any exception raised within the
+<a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement.  Only if all pairs match properly against
+attributes on the exception is <a class="reference internal" href="#test.test_support.ResourceDenied" title="test.test_support.ResourceDenied"><tt class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></tt></a> raised.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test.test_support.EnvironmentVarGuard">
+<em class="property">class </em><tt class="descclassname">test.test_support.</tt><tt class="descname">EnvironmentVarGuard</tt><a class="headerlink" href="#test.test_support.EnvironmentVarGuard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used to temporarily set or unset environment variables.  Instances can
+be used as a context manager and have a complete dictionary interface for
+querying/modifying the underlying <tt class="docutils literal"><span class="pre">os.environ</span></tt>. After exit from the
+context manager all changes to environment variables done through this
+instance will be rolled back.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>Added dictionary interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.test_support.EnvironmentVarGuard.set">
+<tt class="descclassname">EnvironmentVarGuard.</tt><tt class="descname">set</tt><big>(</big><em>envvar</em>, <em>value</em><big>)</big><a class="headerlink" href="#test.test_support.EnvironmentVarGuard.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temporarily set the environment variable <tt class="docutils literal"><span class="pre">envvar</span></tt> to the value of
+<tt class="docutils literal"><span class="pre">value</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.test_support.EnvironmentVarGuard.unset">
+<tt class="descclassname">EnvironmentVarGuard.</tt><tt class="descname">unset</tt><big>(</big><em>envvar</em><big>)</big><a class="headerlink" href="#test.test_support.EnvironmentVarGuard.unset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temporarily unset the environment variable <tt class="docutils literal"><span class="pre">envvar</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test.test_support.WarningsRecorder">
+<em class="property">class </em><tt class="descclassname">test.test_support.</tt><tt class="descname">WarningsRecorder</tt><a class="headerlink" href="#test.test_support.WarningsRecorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used to record warnings for unit tests. See documentation of
+<a class="reference internal" href="#test.test_support.check_warnings" title="test.test_support.check_warnings"><tt class="xref py py-func docutils literal"><span class="pre">check_warnings()</span></tt></a> above for more details.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">25.5. <tt class="docutils literal"><span class="pre">test</span></tt> &#8212; Regression tests package for Python</a><ul>
+<li><a class="reference internal" href="#writing-unit-tests-for-the-test-package">25.5.1. Writing Unit Tests for the <tt class="docutils literal"><span class="pre">test</span></tt> package</a></li>
+<li><a class="reference internal" href="#running-tests-using-the-command-line-interface">25.5.2. Running tests using the command-line interface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-test.test_support">25.6. <tt class="docutils literal"><span class="pre">test.test_support</span></tt> &#8212; Utility functions for tests</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="2to3.html"
+                        title="previous chapter">25.4. 2to3 - Automated Python 2 to 3 code translation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="debug.html"
+                        title="next chapter">26. Debugging and Profiling</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/test.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="26. Debugging and Profiling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="2to3.html" title="25.4. 2to3 - Automated Python 2 to 3 code translation"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="development.html" >25. Development Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

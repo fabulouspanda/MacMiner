@@ -1,0 +1,815 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Command line and environment &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python Setup and Usage" href="index.html" />
+    <link rel="next" title="2. Using Python on Unix platforms" href="unix.html" />
+    <link rel="prev" title="Python Setup and Usage" href="index.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="2. Using Python on Unix platforms"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python Setup and Usage"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python Setup and Usage</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="command-line-and-environment">
+<span id="using-on-general"></span><h1>1. Command line and environment<a class="headerlink" href="#command-line-and-environment" title="Permalink to this headline">¶</a></h1>
+<p>The CPython interpreter scans the command line and the environment for various
+settings.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> Other implementations&#8217; command line schemes may differ.  See
+<a class="reference internal" href="../reference/introduction.html#implementations"><em>Alternate Implementations</em></a> for further resources.</p>
+</div>
+<div class="section" id="command-line">
+<span id="using-on-cmdline"></span><h2>1.1. Command line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h2>
+<p>When invoking Python, you may specify any of these options:</p>
+<div class="highlight-none"><div class="highlight"><pre>python [-BdEiOQsRStuUvVWxX3?] [-c command | -m module-name | script | - ] [args]
+</pre></div>
+</div>
+<p>The most common use case is, of course, a simple invocation of a script:</p>
+<div class="highlight-none"><div class="highlight"><pre>python myscript.py
+</pre></div>
+</div>
+<div class="section" id="interface-options">
+<span id="using-on-interface-options"></span><h3>1.1.1. Interface options<a class="headerlink" href="#interface-options" title="Permalink to this headline">¶</a></h3>
+<p>The interpreter interface resembles that of the UNIX shell, but provides some
+additional methods of invocation:</p>
+<ul class="simple">
+<li>When called with standard input connected to a tty device, it prompts for
+commands and executes them until an EOF (an end-of-file character, you can
+produce that with <em>Ctrl-D</em> on UNIX or <em>Ctrl-Z, Enter</em> on Windows) is read.</li>
+<li>When called with a file name argument or with a file as standard input, it
+reads and executes a script from that file.</li>
+<li>When called with a directory name argument, it reads and executes an
+appropriately named script from that directory.</li>
+<li>When called with <tt class="docutils literal"><span class="pre">-c</span> <span class="pre">command</span></tt>, it executes the Python statement(s) given as
+<em>command</em>.  Here <em>command</em> may contain multiple statements separated by
+newlines. Leading whitespace is significant in Python statements!</li>
+<li>When called with <tt class="docutils literal"><span class="pre">-m</span> <span class="pre">module-name</span></tt>, the given module is located on the
+Python module path and executed as a script.</li>
+</ul>
+<p>In non-interactive mode, the entire input is parsed before it is executed.</p>
+<p>An interface option terminates the list of options consumed by the interpreter,
+all consecutive arguments will end up in <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a> &#8211; note that the first
+element, subscript zero (<tt class="docutils literal"><span class="pre">sys.argv[0]</span></tt>), is a string reflecting the program&#8217;s
+source.</p>
+<dl class="cmdoption">
+<dt id="cmdoption-c">
+<tt class="descname">-c</tt><tt class="descclassname"> &lt;command&gt;</tt><a class="headerlink" href="#cmdoption-c" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the Python code in <em>command</em>.  <em>command</em> can be one or more
+statements separated by newlines, with significant leading whitespace as in
+normal module code.</p>
+<p>If this option is given, the first element of <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a> will be
+<tt class="docutils literal"><span class="pre">&quot;-c&quot;</span></tt> and the current directory will be added to the start of
+<a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> (allowing modules in that directory to be imported as top
+level modules).</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-m">
+<tt class="descname">-m</tt><tt class="descclassname"> &lt;module-name&gt;</tt><a class="headerlink" href="#cmdoption-m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> for the named module and execute its contents as
+the <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module.</p>
+<p>Since the argument is a <em>module</em> name, you must not give a file extension
+(<tt class="docutils literal"><span class="pre">.py</span></tt>).  The <tt class="docutils literal"><span class="pre">module-name</span></tt> should be a valid Python module name, but
+the implementation may not always enforce this (e.g. it may allow you to
+use a name that includes a hyphen).</p>
+<p>Package names are also permitted. When a package name is supplied instead
+of a normal module, the interpreter will execute <tt class="docutils literal"><span class="pre">&lt;pkg&gt;.__main__</span></tt> as
+the main module. This behaviour is deliberately similar to the handling
+of directories and zipfiles that are passed to the interpreter as the
+script argument.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This option cannot be used with built-in modules and extension modules
+written in C, since they do not have Python module files. However, it
+can still be used for precompiled modules, even if the original source
+file is not available.</p>
+</div>
+<p>If this option is given, the first element of <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a> will be the
+full path to the module file. As with the <a class="reference internal" href="#cmdoption-c"><em class="xref std std-option">-c</em></a> option, the current
+directory will be added to the start of <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+<p>Many standard library modules contain code that is invoked on their execution
+as a script.  An example is the <a class="reference internal" href="../library/timeit.html#module-timeit" title="timeit: Measure the execution time of small code snippets."><tt class="xref py py-mod docutils literal"><span class="pre">timeit</span></tt></a> module:</p>
+<div class="highlight-none"><div class="highlight"><pre>python -mtimeit -s &#39;setup here&#39; &#39;benchmarked code here&#39;
+python -mtimeit -h # for details
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><a class="reference internal" href="../library/runpy.html#runpy.run_module" title="runpy.run_module"><tt class="xref py py-func docutils literal"><span class="pre">runpy.run_module()</span></tt></a>
+   Equivalent functionality directly available to Python code</p>
+<p class="last"><span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0338"><strong>PEP 338</strong></a> &#8211; Executing modules as scripts</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>The named module can now be located inside a package.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>Supply the package name to run a <tt class="docutils literal"><span class="pre">__main__</span></tt> submodule.
+sys.argv[0] is now set to <tt class="docutils literal"><span class="pre">&quot;-m&quot;</span></tt> while searching for the module
+(it was previously incorrectly set to <tt class="docutils literal"><span class="pre">&quot;-c&quot;</span></tt>)</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">-</tt></dt>
+<dd><p>Read commands from standard input (<a class="reference internal" href="../library/sys.html#sys.stdin" title="sys.stdin"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdin</span></tt></a>).  If standard input is
+a terminal, <a class="reference internal" href="#cmdoption-i"><em class="xref std std-option">-i</em></a> is implied.</p>
+<p>If this option is given, the first element of <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a> will be
+<tt class="docutils literal"><span class="pre">&quot;-&quot;</span></tt> and the current directory will be added to the start of
+<a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<tt class="descname">&lt;script&gt;</tt></dt>
+<dd><p>Execute the Python code contained in <em>script</em>, which must be a filesystem
+path (absolute or relative) referring to either a Python file, a directory
+containing a <tt class="docutils literal"><span class="pre">__main__.py</span></tt> file, or a zipfile containing a
+<tt class="docutils literal"><span class="pre">__main__.py</span></tt> file.</p>
+<p>If this option is given, the first element of <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a> will be the
+script name as given on the command line.</p>
+<p>If the script name refers directly to a Python file, the directory
+containing that file is added to the start of <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>, and the
+file is executed as the <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module.</p>
+<p>If the script name refers to a directory or zipfile, the script name is
+added to the start of <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> and the <tt class="docutils literal"><span class="pre">__main__.py</span></tt> file in
+that location is executed as the <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>Directories and zipfiles containing a <tt class="docutils literal"><span class="pre">__main__.py</span></tt> file at the top
+level are now considered valid Python scripts.</p>
+</dd></dl>
+
+<p>If no interface option is given, <a class="reference internal" href="#cmdoption-i"><em class="xref std std-option">-i</em></a> is implied, <tt class="docutils literal"><span class="pre">sys.argv[0]</span></tt> is
+an empty string (<tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt>) and the current directory will be added to the
+start of <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../tutorial/interpreter.html#tut-invoking"><em>Invoking the Interpreter</em></a></p>
+</div>
+</div>
+<div class="section" id="generic-options">
+<h3>1.1.2. Generic options<a class="headerlink" href="#generic-options" title="Permalink to this headline">¶</a></h3>
+<dl class="cmdoption">
+<dt>
+<tt class="descname">-?</tt></dt>
+<dt id="cmdoption-h">
+<tt class="descname">-h</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-h" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption--help">
+<tt class="descname">--help</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a short description of all command line options.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>The <tt class="docutils literal"><span class="pre">--help</span></tt> variant.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-V">
+<tt class="descname">-V</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-V" title="Permalink to this definition">¶</a></dt>
+<dt id="cmdoption--version">
+<tt class="descname">--version</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption--version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the Python version number and exit.  Example output could be:</p>
+<div class="highlight-none"><div class="highlight"><pre>Python 2.5.1
+</pre></div>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>The <tt class="docutils literal"><span class="pre">--version</span></tt> variant.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="miscellaneous-options">
+<h3>1.1.3. Miscellaneous options<a class="headerlink" href="#miscellaneous-options" title="Permalink to this headline">¶</a></h3>
+<dl class="cmdoption">
+<dt id="cmdoption-B">
+<tt class="descname">-B</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-B" title="Permalink to this definition">¶</a></dt>
+<dd><p>If given, Python won&#8217;t try to write <tt class="docutils literal"><span class="pre">.pyc</span></tt> or <tt class="docutils literal"><span class="pre">.pyo</span></tt> files on the
+import of source modules.  See also <span class="target" id="index-1"></span><a class="reference internal" href="#envvar-PYTHONDONTWRITEBYTECODE"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONDONTWRITEBYTECODE</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-d">
+<tt class="descname">-d</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on parser debugging output (for wizards only, depending on compilation
+options).  See also <span class="target" id="index-2"></span><a class="reference internal" href="#envvar-PYTHONDEBUG"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONDEBUG</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-E">
+<tt class="descname">-E</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-E" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ignore all <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHON*</span></tt> environment variables, e.g.
+<span class="target" id="index-4"></span><a class="reference internal" href="#envvar-PYTHONPATH"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt></a> and <span class="target" id="index-5"></span><a class="reference internal" href="#envvar-PYTHONHOME"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></tt></a>, that might be set.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-i">
+<tt class="descname">-i</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-i" title="Permalink to this definition">¶</a></dt>
+<dd><p>When a script is passed as first argument or the <a class="reference internal" href="#cmdoption-c"><em class="xref std std-option">-c</em></a> option is used,
+enter interactive mode after executing the script or the command, even when
+<a class="reference internal" href="../library/sys.html#sys.stdin" title="sys.stdin"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdin</span></tt></a> does not appear to be a terminal.  The
+<span class="target" id="index-6"></span><a class="reference internal" href="#envvar-PYTHONSTARTUP"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONSTARTUP</span></tt></a> file is not read.</p>
+<p>This can be useful to inspect global variables or a stack trace when a script
+raises an exception.  See also <span class="target" id="index-7"></span><a class="reference internal" href="#envvar-PYTHONINSPECT"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONINSPECT</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<tt class="descname">-O</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on basic optimizations.  This changes the filename extension for
+compiled (<a class="reference internal" href="../glossary.html#term-bytecode"><em class="xref std std-term">bytecode</em></a>) files from <tt class="docutils literal"><span class="pre">.pyc</span></tt> to <tt class="docutils literal"><span class="pre">.pyo</span></tt>.  See also
+<span class="target" id="index-8"></span><a class="reference internal" href="#envvar-PYTHONOPTIMIZE"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONOPTIMIZE</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-OO">
+<tt class="descname">-OO</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-OO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard docstrings in addition to the <a class="reference internal" href="#cmdoption-O"><em class="xref std std-option">-O</em></a> optimizations.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-Q">
+<tt class="descname">-Q</tt><tt class="descclassname"> &lt;arg&gt;</tt><a class="headerlink" href="#cmdoption-Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Division control. The argument must be one of the following:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">old</span></tt></dt>
+<dd>division of int/int and long/long return an int or long (<em>default</em>)</dd>
+<dt><tt class="docutils literal"><span class="pre">new</span></tt></dt>
+<dd>new division semantics, i.e. division of int/int and long/long returns a
+float</dd>
+<dt><tt class="docutils literal"><span class="pre">warn</span></tt></dt>
+<dd>old division semantics with a warning for int/int and long/long</dd>
+<dt><tt class="docutils literal"><span class="pre">warnall</span></tt></dt>
+<dd>old division semantics with a warning for all uses of the division operator</dd>
+</dl>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><tt class="file docutils literal"><span class="pre">Tools/scripts/fixdiv.py</span></tt>
+   for a use of <tt class="docutils literal"><span class="pre">warnall</span></tt></p>
+<p class="last"><span class="target" id="index-9"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0238"><strong>PEP 238</strong></a> &#8211; Changing the division operator</p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-R">
+<tt class="descname">-R</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-R" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn on hash randomization, so that the <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><tt class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></tt></a> values of str,
+bytes and datetime objects are &#8220;salted&#8221; with an unpredictable random value.
+Although they remain constant within an individual Python process, they are
+not predictable between repeated invocations of Python.</p>
+<p>This is intended to provide protection against a denial-of-service caused by
+carefully-chosen inputs that exploit the worst case performance of a dict
+construction, O(n^2) complexity.  See
+<a class="reference external" href="http://www.ocert.org/advisories/ocert-2011-003.html">http://www.ocert.org/advisories/ocert-2011-003.html</a> for details.</p>
+<p>Changing hash values affects the order in which keys are retrieved from a
+dict.  Although Python has never made guarantees about this ordering (and it
+typically varies between 32-bit and 64-bit builds), enough real-world code
+implicitly relies on this non-guaranteed behavior that the randomization is
+disabled by default.</p>
+<p>See also <span class="target" id="index-10"></span><a class="reference internal" href="#envvar-PYTHONHASHSEED"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHASHSEED</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.8.</span></p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-s">
+<tt class="descname">-s</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t add the <a class="reference internal" href="../library/site.html#site.USER_SITE" title="site.USER_SITE"><tt class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">site-packages</span> <span class="pre">directory</span></tt></a> to
+<a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><span class="target" id="index-11"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> &#8211; Per user site-packages directory</p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-S">
+<tt class="descname">-S</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-S" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable the import of the module <a class="reference internal" href="../library/site.html#module-site" title="site: Module responsible for site-specific configuration."><tt class="xref py py-mod docutils literal"><span class="pre">site</span></tt></a> and the site-dependent
+manipulations of <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> that it entails.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-t">
+<tt class="descname">-t</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Issue a warning when a source file mixes tabs and spaces for indentation in a
+way that makes it depend on the worth of a tab expressed in spaces.  Issue an
+error when the option is given twice (<em class="xref std std-option">-tt</em>).</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-u">
+<tt class="descname">-u</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-u" title="Permalink to this definition">¶</a></dt>
+<dd><p>Force stdin, stdout and stderr to be totally unbuffered.  On systems where it
+matters, also put stdin, stdout and stderr in binary mode.</p>
+<p>Note that there is internal buffering in <a class="reference internal" href="../library/stdtypes.html#file.readlines" title="file.readlines"><tt class="xref py py-meth docutils literal"><span class="pre">file.readlines()</span></tt></a> and
+<a class="reference internal" href="../library/stdtypes.html#bltin-file-objects"><em>File Objects</em></a> (<tt class="docutils literal"><span class="pre">for</span> <span class="pre">line</span> <span class="pre">in</span> <span class="pre">sys.stdin</span></tt>) which is not influenced
+by this option.  To work around this, you will want to use
+<a class="reference internal" href="../library/stdtypes.html#file.readline" title="file.readline"><tt class="xref py py-meth docutils literal"><span class="pre">file.readline()</span></tt></a> inside a <tt class="docutils literal"><span class="pre">while</span> <span class="pre">1:</span></tt> loop.</p>
+<p>See also <span class="target" id="index-12"></span><a class="reference internal" href="#envvar-PYTHONUNBUFFERED"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONUNBUFFERED</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-v">
+<tt class="descname">-v</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a message each time a module is initialized, showing the place
+(filename or built-in module) from which it is loaded.  When given twice
+(<em class="xref std std-option">-vv</em>), print a message for each file that is checked for when
+searching for a module.  Also provides information on module cleanup at exit.
+See also <span class="target" id="index-13"></span><a class="reference internal" href="#envvar-PYTHONVERBOSE"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONVERBOSE</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-W">
+<tt class="descname">-W</tt><tt class="descclassname"> arg</tt><a class="headerlink" href="#cmdoption-W" title="Permalink to this definition">¶</a></dt>
+<dd><p>Warning control.  Python&#8217;s warning machinery by default prints warning
+messages to <a class="reference internal" href="../library/sys.html#sys.stderr" title="sys.stderr"><tt class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></tt></a>.  A typical warning message has the following
+form:</p>
+<div class="highlight-none"><div class="highlight"><pre>file:line: category: message
+</pre></div>
+</div>
+<p>By default, each warning is printed once for each source line where it
+occurs.  This option controls how often warnings are printed.</p>
+<p>Multiple <a class="reference internal" href="#cmdoption-W"><em class="xref std std-option">-W</em></a> options may be given; when a warning matches more than
+one option, the action for the last matching option is performed.  Invalid
+<a class="reference internal" href="#cmdoption-W"><em class="xref std std-option">-W</em></a> options are ignored (though, a warning message is printed about
+invalid options when the first warning is issued).</p>
+<p>Starting from Python 2.7, <a class="reference internal" href="../library/exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><tt class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></tt></a> and its descendants
+are ignored by default.  The <em class="xref std std-option">-Wd</em> option can be used to re-enable
+them.</p>
+<p>Warnings can also be controlled from within a Python program using the
+<a class="reference internal" href="../library/warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><tt class="xref py py-mod docutils literal"><span class="pre">warnings</span></tt></a> module.</p>
+<p>The simplest form of argument is one of the following action strings (or a
+unique abbreviation) by themselves:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">ignore</span></tt></dt>
+<dd>Ignore all warnings.</dd>
+<dt><tt class="docutils literal"><span class="pre">default</span></tt></dt>
+<dd>Explicitly request the default behavior (printing each warning once per
+source line).</dd>
+<dt><tt class="docutils literal"><span class="pre">all</span></tt></dt>
+<dd>Print a warning each time it occurs (this may generate many messages if a
+warning is triggered repeatedly for the same source line, such as inside a
+loop).</dd>
+<dt><tt class="docutils literal"><span class="pre">module</span></tt></dt>
+<dd>Print each warning only the first time it occurs in each module.</dd>
+<dt><tt class="docutils literal"><span class="pre">once</span></tt></dt>
+<dd>Print each warning only the first time it occurs in the program.</dd>
+<dt><tt class="docutils literal"><span class="pre">error</span></tt></dt>
+<dd>Raise an exception instead of printing a warning message.</dd>
+</dl>
+<p>The full form of argument is:</p>
+<div class="highlight-none"><div class="highlight"><pre>action:message:category:module:line
+</pre></div>
+</div>
+<p>Here, <em>action</em> is as explained above but only applies to messages that match
+the remaining fields.  Empty fields match all values; trailing empty fields
+may be omitted.  The <em>message</em> field matches the start of the warning message
+printed; this match is case-insensitive.  The <em>category</em> field matches the
+warning category.  This must be a class name; the match tests whether the
+actual warning category of the message is a subclass of the specified warning
+category.  The full class name must be given.  The <em>module</em> field matches the
+(fully-qualified) module name; this match is case-sensitive.  The <em>line</em>
+field matches the line number, where zero matches all line numbers and is
+thus equivalent to an omitted line number.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><a class="reference internal" href="../library/warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><tt class="xref py py-mod docutils literal"><span class="pre">warnings</span></tt></a> &#8211; the warnings module</p>
+<p><span class="target" id="index-14"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0230"><strong>PEP 230</strong></a> &#8211; Warning framework</p>
+<p class="last"><span class="target" id="index-15"></span><a class="reference internal" href="#envvar-PYTHONWARNINGS"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONWARNINGS</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-x">
+<tt class="descname">-x</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip the first line of the source, allowing use of non-Unix forms of
+<tt class="docutils literal"><span class="pre">#!cmd</span></tt>.  This is intended for a DOS specific hack only.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The line numbers in error messages will be off by one.</p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-3">
+<tt class="descname">-3</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Warn about Python 3.x incompatibilities which cannot be fixed trivially by
+<a class="reference internal" href="../library/2to3.html#to3-reference"><em>2to3</em></a>. Among these are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../library/stdtypes.html#dict.has_key" title="dict.has_key"><tt class="xref py py-meth docutils literal"><span class="pre">dict.has_key()</span></tt></a></li>
+<li><a class="reference internal" href="../library/functions.html#apply" title="apply"><tt class="xref py py-func docutils literal"><span class="pre">apply()</span></tt></a></li>
+<li><a class="reference internal" href="../library/functions.html#callable" title="callable"><tt class="xref py py-func docutils literal"><span class="pre">callable()</span></tt></a></li>
+<li><a class="reference internal" href="../library/functions.html#coerce" title="coerce"><tt class="xref py py-func docutils literal"><span class="pre">coerce()</span></tt></a></li>
+<li><a class="reference internal" href="../library/functions.html#execfile" title="execfile"><tt class="xref py py-func docutils literal"><span class="pre">execfile()</span></tt></a></li>
+<li><a class="reference internal" href="../library/functions.html#reduce" title="reduce"><tt class="xref py py-func docutils literal"><span class="pre">reduce()</span></tt></a></li>
+<li><a class="reference internal" href="../library/functions.html#reload" title="reload"><tt class="xref py py-func docutils literal"><span class="pre">reload()</span></tt></a></li>
+</ul>
+<p>Using these will emit a <a class="reference internal" href="../library/exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><tt class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="options-you-shouldn-t-use">
+<h3>1.1.4. Options you shouldn&#8217;t use<a class="headerlink" href="#options-you-shouldn-t-use" title="Permalink to this headline">¶</a></h3>
+<dl class="cmdoption">
+<dt id="cmdoption-J">
+<tt class="descname">-J</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-J" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reserved for use by <a class="reference external" href="http://jython.org">Jython</a>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-U">
+<tt class="descname">-U</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-U" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns all string literals into unicodes globally.  Do not be tempted to use
+this option as it will probably break your world.  It also produces
+<tt class="docutils literal"><span class="pre">.pyc</span></tt> files with a different magic number than normal.  Instead, you can
+enable unicode literals on a per-module basis by using:</p>
+<div class="highlight-none"><div class="highlight"><pre>from __future__ import unicode_literals
+</pre></div>
+</div>
+<p>at the top of the file.  See <a class="reference internal" href="../library/__future__.html#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a> for details.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-X">
+<tt class="descname">-X</tt><tt class="descclassname"></tt><a class="headerlink" href="#cmdoption-X" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reserved for alternative implementations of Python to use for their own
+purposes.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="environment-variables">
+<span id="using-on-envvars"></span><h2>1.2. Environment variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>These environment variables influence Python&#8217;s behavior, they are processed
+before the command-line switches other than -E.  It is customary that
+command-line switches override environmental variables where there is a
+conflict.</p>
+<dl class="envvar">
+<dt id="envvar-PYTHONHOME">
+<tt class="descname">PYTHONHOME</tt><a class="headerlink" href="#envvar-PYTHONHOME" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the location of the standard Python libraries.  By default, the
+libraries are searched in <tt class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">version</span></em></tt> and
+<tt class="file docutils literal"><em><span class="pre">exec_prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">version</span></em></tt>, where <tt class="file docutils literal"><em><span class="pre">prefix</span></em></tt> and
+<tt class="file docutils literal"><em><span class="pre">exec_prefix</span></em></tt> are installation-dependent directories, both defaulting
+to <tt class="file docutils literal"><span class="pre">/usr/local</span></tt>.</p>
+<p>When <span class="target" id="index-16"></span><a class="reference internal" href="#envvar-PYTHONHOME"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></tt></a> is set to a single directory, its value replaces
+both <tt class="file docutils literal"><em><span class="pre">prefix</span></em></tt> and <tt class="file docutils literal"><em><span class="pre">exec_prefix</span></em></tt>.  To specify different values
+for these, set <span class="target" id="index-17"></span><a class="reference internal" href="#envvar-PYTHONHOME"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></tt></a> to <tt class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">:</span><em><span class="pre">exec_prefix</span></em></tt>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONPATH">
+<tt class="descname">PYTHONPATH</tt><a class="headerlink" href="#envvar-PYTHONPATH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augment the default search path for module files.  The format is the same as
+the shell&#8217;s <span class="target" id="index-18"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PATH</span></tt>: one or more directory pathnames separated by
+<a class="reference internal" href="../library/os.html#os.pathsep" title="os.pathsep"><tt class="xref py py-data docutils literal"><span class="pre">os.pathsep</span></tt></a> (e.g. colons on Unix or semicolons on Windows).
+Non-existent directories are silently ignored.</p>
+<p>In addition to normal directories, individual <span class="target" id="index-19"></span><a class="reference internal" href="#envvar-PYTHONPATH"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt></a> entries
+may refer to zipfiles containing pure Python modules (in either source or
+compiled form). Extension modules cannot be imported from zipfiles.</p>
+<p>The default search path is installation dependent, but generally begins with
+<tt class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">version</span></em></tt> (see <span class="target" id="index-20"></span><a class="reference internal" href="#envvar-PYTHONHOME"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></tt></a> above).  It
+is <em>always</em> appended to <span class="target" id="index-21"></span><a class="reference internal" href="#envvar-PYTHONPATH"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt></a>.</p>
+<p>An additional directory will be inserted in the search path in front of
+<span class="target" id="index-22"></span><a class="reference internal" href="#envvar-PYTHONPATH"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt></a> as described above under
+<a class="reference internal" href="#using-on-interface-options"><em>Interface options</em></a>. The search path can be manipulated from
+within a Python program as the variable <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONSTARTUP">
+<tt class="descname">PYTHONSTARTUP</tt><a class="headerlink" href="#envvar-PYTHONSTARTUP" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is the name of a readable file, the Python commands in that file are
+executed before the first prompt is displayed in interactive mode.  The file
+is executed in the same namespace where interactive commands are executed so
+that objects defined or imported in it can be used without qualification in
+the interactive session.  You can also change the prompts <a class="reference internal" href="../library/sys.html#sys.ps1" title="sys.ps1"><tt class="xref py py-data docutils literal"><span class="pre">sys.ps1</span></tt></a> and
+<a class="reference internal" href="../library/sys.html#sys.ps2" title="sys.ps2"><tt class="xref py py-data docutils literal"><span class="pre">sys.ps2</span></tt></a> in this file.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONY2K">
+<tt class="descname">PYTHONY2K</tt><a class="headerlink" href="#envvar-PYTHONY2K" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set this to a non-empty string to cause the <a class="reference internal" href="../library/time.html#module-time" title="time: Time access and conversions."><tt class="xref py py-mod docutils literal"><span class="pre">time</span></tt></a> module to require
+dates specified as strings to include 4-digit years, otherwise 2-digit years
+are converted based on rules described in the <a class="reference internal" href="../library/time.html#module-time" title="time: Time access and conversions."><tt class="xref py py-mod docutils literal"><span class="pre">time</span></tt></a> module
+documentation.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONOPTIMIZE">
+<tt class="descname">PYTHONOPTIMIZE</tt><a class="headerlink" href="#envvar-PYTHONOPTIMIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set to a non-empty string it is equivalent to specifying the
+<a class="reference internal" href="#cmdoption-O"><em class="xref std std-option">-O</em></a> option.  If set to an integer, it is equivalent to specifying
+<a class="reference internal" href="#cmdoption-O"><em class="xref std std-option">-O</em></a> multiple times.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONDEBUG">
+<tt class="descname">PYTHONDEBUG</tt><a class="headerlink" href="#envvar-PYTHONDEBUG" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set to a non-empty string it is equivalent to specifying the
+<a class="reference internal" href="#cmdoption-d"><em class="xref std std-option">-d</em></a> option.  If set to an integer, it is equivalent to specifying
+<a class="reference internal" href="#cmdoption-d"><em class="xref std std-option">-d</em></a> multiple times.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONINSPECT">
+<tt class="descname">PYTHONINSPECT</tt><a class="headerlink" href="#envvar-PYTHONINSPECT" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set to a non-empty string it is equivalent to specifying the
+<a class="reference internal" href="#cmdoption-i"><em class="xref std std-option">-i</em></a> option.</p>
+<p>This variable can also be modified by Python code using <a class="reference internal" href="../library/os.html#os.environ" title="os.environ"><tt class="xref py py-data docutils literal"><span class="pre">os.environ</span></tt></a>
+to force inspect mode on program termination.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONUNBUFFERED">
+<tt class="descname">PYTHONUNBUFFERED</tt><a class="headerlink" href="#envvar-PYTHONUNBUFFERED" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set to a non-empty string it is equivalent to specifying the
+<a class="reference internal" href="#cmdoption-u"><em class="xref std std-option">-u</em></a> option.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONVERBOSE">
+<tt class="descname">PYTHONVERBOSE</tt><a class="headerlink" href="#envvar-PYTHONVERBOSE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set to a non-empty string it is equivalent to specifying the
+<a class="reference internal" href="#cmdoption-v"><em class="xref std std-option">-v</em></a> option.  If set to an integer, it is equivalent to specifying
+<a class="reference internal" href="#cmdoption-v"><em class="xref std std-option">-v</em></a> multiple times.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONCASEOK">
+<tt class="descname">PYTHONCASEOK</tt><a class="headerlink" href="#envvar-PYTHONCASEOK" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set, Python ignores case in <a class="reference internal" href="../reference/simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statements.  This
+only works on Windows, OS X, OS/2, and RiscOS.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONDONTWRITEBYTECODE">
+<tt class="descname">PYTHONDONTWRITEBYTECODE</tt><a class="headerlink" href="#envvar-PYTHONDONTWRITEBYTECODE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set, Python won&#8217;t try to write <tt class="docutils literal"><span class="pre">.pyc</span></tt> or <tt class="docutils literal"><span class="pre">.pyo</span></tt> files on the
+import of source modules.  This is equivalent to specifying the <a class="reference internal" href="#cmdoption-B"><em class="xref std std-option">-B</em></a>
+option.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONHASHSEED">
+<tt class="descname">PYTHONHASHSEED</tt><a class="headerlink" href="#envvar-PYTHONHASHSEED" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this variable is set to <tt class="docutils literal"><span class="pre">random</span></tt>, the effect is the same as specifying
+the <a class="reference internal" href="#cmdoption-R"><em class="xref std std-option">-R</em></a> option: a random value is used to seed the hashes of str,
+bytes and datetime objects.</p>
+<p>If <span class="target" id="index-23"></span><a class="reference internal" href="#envvar-PYTHONHASHSEED"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHASHSEED</span></tt></a> is set to an integer value, it is used as a
+fixed seed for generating the hash() of the types covered by the hash
+randomization.</p>
+<p>Its purpose is to allow repeatable hashing, such as for selftests for the
+interpreter itself, or to allow a cluster of python processes to share hash
+values.</p>
+<p>The integer must be a decimal number in the range [0,4294967295].
+Specifying the value 0 will lead to the same hash values as when hash
+randomization is disabled.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.8.</span></p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONIOENCODING">
+<tt class="descname">PYTHONIOENCODING</tt><a class="headerlink" href="#envvar-PYTHONIOENCODING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overrides the encoding used for stdin/stdout/stderr, in the syntax
+<tt class="docutils literal"><span class="pre">encodingname:errorhandler</span></tt>.  The <tt class="docutils literal"><span class="pre">:errorhandler</span></tt> part is optional and
+has the same meaning as in <a class="reference internal" href="../library/stdtypes.html#str.encode" title="str.encode"><tt class="xref py py-func docutils literal"><span class="pre">str.encode()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONNOUSERSITE">
+<tt class="descname">PYTHONNOUSERSITE</tt><a class="headerlink" href="#envvar-PYTHONNOUSERSITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is set, Python won&#8217;t add the <a class="reference internal" href="../library/site.html#site.USER_SITE" title="site.USER_SITE"><tt class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">site-packages</span> <span class="pre">directory</span></tt></a> to <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><span class="target" id="index-24"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> &#8211; Per user site-packages directory</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONUSERBASE">
+<tt class="descname">PYTHONUSERBASE</tt><a class="headerlink" href="#envvar-PYTHONUSERBASE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the <a class="reference internal" href="../library/site.html#site.USER_BASE" title="site.USER_BASE"><tt class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">base</span> <span class="pre">directory</span></tt></a>, which is used to
+compute the path of the <a class="reference internal" href="../library/site.html#site.USER_SITE" title="site.USER_SITE"><tt class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">site-packages</span> <span class="pre">directory</span></tt></a>
+and <a class="reference internal" href="../install/index.html#inst-alt-install-user"><em>Distutils installation paths</em></a> for <tt class="docutils literal"><span class="pre">python</span>
+<span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--user</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><span class="target" id="index-25"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> &#8211; Per user site-packages directory</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONEXECUTABLE">
+<tt class="descname">PYTHONEXECUTABLE</tt><a class="headerlink" href="#envvar-PYTHONEXECUTABLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this environment variable is set, <tt class="docutils literal"><span class="pre">sys.argv[0]</span></tt> will be set to its
+value instead of the value got through the C runtime.  Only works on
+Mac OS X.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONWARNINGS">
+<tt class="descname">PYTHONWARNINGS</tt><a class="headerlink" href="#envvar-PYTHONWARNINGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is equivalent to the <a class="reference internal" href="#cmdoption-W"><em class="xref std std-option">-W</em></a> option. If set to a comma
+separated string, it is equivalent to specifying <a class="reference internal" href="#cmdoption-W"><em class="xref std std-option">-W</em></a> multiple
+times.</p>
+</dd></dl>
+
+<div class="section" id="debug-mode-variables">
+<h3>1.2.1. Debug-mode variables<a class="headerlink" href="#debug-mode-variables" title="Permalink to this headline">¶</a></h3>
+<p>Setting these variables only has an effect in a debug build of Python, that is,
+if Python was configured with the <tt class="docutils literal"><span class="pre">--with-pydebug</span></tt> build option.</p>
+<dl class="envvar">
+<dt id="envvar-PYTHONTHREADDEBUG">
+<tt class="descname">PYTHONTHREADDEBUG</tt><a class="headerlink" href="#envvar-PYTHONTHREADDEBUG" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set, Python will print threading debug info.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>Previously, this variable was called <tt class="docutils literal"><span class="pre">THREADDEBUG</span></tt>.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONDUMPREFS">
+<tt class="descname">PYTHONDUMPREFS</tt><a class="headerlink" href="#envvar-PYTHONDUMPREFS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set, Python will dump objects and reference counts still alive after
+shutting down the interpreter.</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONMALLOCSTATS">
+<tt class="descname">PYTHONMALLOCSTATS</tt><a class="headerlink" href="#envvar-PYTHONMALLOCSTATS" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set, Python will print memory allocation statistics every time a new
+object arena is created, and on shutdown.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Command line and environment</a><ul>
+<li><a class="reference internal" href="#command-line">1.1. Command line</a><ul>
+<li><a class="reference internal" href="#interface-options">1.1.1. Interface options</a></li>
+<li><a class="reference internal" href="#generic-options">1.1.2. Generic options</a></li>
+<li><a class="reference internal" href="#miscellaneous-options">1.1.3. Miscellaneous options</a></li>
+<li><a class="reference internal" href="#options-you-shouldn-t-use">1.1.4. Options you shouldn&#8217;t use</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-variables">1.2. Environment variables</a><ul>
+<li><a class="reference internal" href="#debug-mode-variables">1.2.1. Debug-mode variables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Python Setup and Usage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unix.html"
+                        title="next chapter">2. Using Python on Unix platforms</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/using/cmdline.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="2. Using Python on Unix platforms"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python Setup and Usage"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python Setup and Usage</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

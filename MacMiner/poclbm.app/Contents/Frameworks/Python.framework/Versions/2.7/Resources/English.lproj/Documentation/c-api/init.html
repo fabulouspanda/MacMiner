@@ -1,0 +1,1250 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Initialization, Finalization, and Threads &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python/C API Reference Manual" href="index.html" />
+    <link rel="next" title="Memory Management" href="memory.html" />
+    <link rel="prev" title="Code Objects" href="code.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="memory.html" title="Memory Management"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Code Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python/C API Reference Manual</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="initialization-finalization-and-threads">
+<span id="initialization"></span><h1>Initialization, Finalization, and Threads<a class="headerlink" href="#initialization-finalization-and-threads" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="initializing-and-finalizing-the-interpreter">
+<h2>Initializing and finalizing the interpreter<a class="headerlink" href="#initializing-and-finalizing-the-interpreter" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Py_Initialize">
+void <tt class="descname">Py_Initialize</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_Initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">Initialize the Python interpreter.  In an application embedding  Python, this
+should be called before using any other Python/C API functions; with the
+exception of <a class="reference internal" href="#Py_SetProgramName" title="Py_SetProgramName"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></tt></a>, <a class="reference internal" href="#Py_SetPythonHome" title="Py_SetPythonHome"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetPythonHome()</span></tt></a>, <a class="reference internal" href="#PyEval_InitThreads" title="PyEval_InitThreads"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_InitThreads()</span></tt></a>,
+<a class="reference internal" href="#PyEval_ReleaseLock" title="PyEval_ReleaseLock"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_ReleaseLock()</span></tt></a>, and <a class="reference internal" href="#PyEval_AcquireLock" title="PyEval_AcquireLock"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_AcquireLock()</span></tt></a>. This initializes
+the table of loaded modules (<tt class="docutils literal"><span class="pre">sys.modules</span></tt>), and creates the fundamental
+modules <a class="reference internal" href="../library/__builtin__.html#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a>, <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> and <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a>.  It also initializes
+the module search path (<tt class="docutils literal"><span class="pre">sys.path</span></tt>). It does not set <tt class="docutils literal"><span class="pre">sys.argv</span></tt>; use
+<a class="reference internal" href="#PySys_SetArgvEx" title="PySys_SetArgvEx"><tt class="xref c c-func docutils literal"><span class="pre">PySys_SetArgvEx()</span></tt></a> for that.  This is a no-op when called for a second time
+(without calling <a class="reference internal" href="#Py_Finalize" title="Py_Finalize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Finalize()</span></tt></a> first).  There is no return value; it is a
+fatal error if the initialization fails.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_InitializeEx">
+void <tt class="descname">Py_InitializeEx</tt><big>(</big>int<em>&nbsp;initsigs</em><big>)</big><a class="headerlink" href="#Py_InitializeEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function works like <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a> if <em>initsigs</em> is 1. If
+<em>initsigs</em> is 0, it skips initialization registration of signal handlers, which
+might be useful when Python is embedded.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_IsInitialized">
+int <tt class="descname">Py_IsInitialized</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_IsInitialized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true (nonzero) when the Python interpreter has been initialized, false
+(zero) if not.  After <a class="reference internal" href="#Py_Finalize" title="Py_Finalize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Finalize()</span></tt></a> is called, this returns false until
+<a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a> is called again.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_Finalize">
+void <tt class="descname">Py_Finalize</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_Finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undo all initializations made by <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a> and subsequent use of
+Python/C API functions, and destroy all sub-interpreters (see
+<a class="reference internal" href="#Py_NewInterpreter" title="Py_NewInterpreter"><tt class="xref c c-func docutils literal"><span class="pre">Py_NewInterpreter()</span></tt></a> below) that were created and not yet destroyed since
+the last call to <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a>.  Ideally, this frees all memory
+allocated by the Python interpreter.  This is a no-op when called for a second
+time (without calling <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a> again first).  There is no return
+value; errors during finalization are ignored.</p>
+<p>This function is provided for a number of reasons.  An embedding application
+might want to restart Python without having to restart the application itself.
+An application that has loaded the Python interpreter from a dynamically
+loadable library (or DLL) might want to free all memory allocated by Python
+before unloading the DLL. During a hunt for memory leaks in an application a
+developer might want to free all memory allocated by Python before exiting from
+the application.</p>
+<p><strong>Bugs and caveats:</strong> The destruction of modules and objects in modules is done
+in random order; this may cause destructors (<a class="reference internal" href="../reference/datamodel.html#object.__del__" title="object.__del__"><tt class="xref py py-meth docutils literal"><span class="pre">__del__()</span></tt></a> methods) to fail
+when they depend on other objects (even functions) or modules.  Dynamically
+loaded extension modules loaded by Python are not unloaded.  Small amounts of
+memory allocated by the Python interpreter may not be freed (if you find a leak,
+please report it).  Memory tied up in circular references between objects is not
+freed.  Some memory allocated by extension modules may not be freed.  Some
+extensions may not work properly if their initialization routine is called more
+than once; this can happen if an application calls <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a> and
+<a class="reference internal" href="#Py_Finalize" title="Py_Finalize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Finalize()</span></tt></a> more than once.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="process-wide-parameters">
+<h2>Process-wide parameters<a class="headerlink" href="#process-wide-parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Py_SetProgramName">
+void <tt class="descname">Py_SetProgramName</tt><big>(</big>char<em>&nbsp;*name</em><big>)</big><a class="headerlink" href="#Py_SetProgramName" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This function should be called before <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a> is called for
+the first time, if it is called at all.  It tells the interpreter the value
+of the <tt class="docutils literal"><span class="pre">argv[0]</span></tt> argument to the <tt class="xref c c-func docutils literal"><span class="pre">main()</span></tt> function of the program.
+This is used by <a class="reference internal" href="#Py_GetPath" title="Py_GetPath"><tt class="xref c c-func docutils literal"><span class="pre">Py_GetPath()</span></tt></a> and some other functions below to find
+the Python run-time libraries relative to the interpreter executable.  The
+default value is <tt class="docutils literal"><span class="pre">'python'</span></tt>.  The argument should point to a
+zero-terminated character string in static storage whose contents will not
+change for the duration of the program&#8217;s execution.  No code in the Python
+interpreter will change the contents of this storage.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetProgramName">
+char* <tt class="descname">Py_GetProgramName</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetProgramName" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Return the program name set with <a class="reference internal" href="#Py_SetProgramName" title="Py_SetProgramName"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></tt></a>, or the default.
+The returned string points into static storage; the caller should not modify its
+value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetPrefix">
+char* <tt class="descname">Py_GetPrefix</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <em>prefix</em> for installed platform-independent files. This is derived
+through a number of complicated rules from the program name set with
+<a class="reference internal" href="#Py_SetProgramName" title="Py_SetProgramName"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></tt></a> and some environment variables; for example, if the
+program name is <tt class="docutils literal"><span class="pre">'/usr/local/bin/python'</span></tt>, the prefix is <tt class="docutils literal"><span class="pre">'/usr/local'</span></tt>. The
+returned string points into static storage; the caller should not modify its
+value.  This corresponds to the <strong class="makevar">prefix</strong> variable in the top-level
+<tt class="file docutils literal"><span class="pre">Makefile</span></tt> and the <tt class="docutils literal"><span class="pre">--prefix</span></tt> argument to the <strong class="program">configure</strong>
+script at build time.  The value is available to Python code as <tt class="docutils literal"><span class="pre">sys.prefix</span></tt>.
+It is only useful on Unix.  See also the next function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetExecPrefix">
+char* <tt class="descname">Py_GetExecPrefix</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetExecPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <em>exec-prefix</em> for installed platform-<em>dependent</em> files.  This is
+derived through a number of complicated rules from the program name set with
+<a class="reference internal" href="#Py_SetProgramName" title="Py_SetProgramName"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></tt></a> and some environment variables; for example, if the
+program name is <tt class="docutils literal"><span class="pre">'/usr/local/bin/python'</span></tt>, the exec-prefix is
+<tt class="docutils literal"><span class="pre">'/usr/local'</span></tt>.  The returned string points into static storage; the caller
+should not modify its value.  This corresponds to the <strong class="makevar">exec_prefix</strong>
+variable in the top-level <tt class="file docutils literal"><span class="pre">Makefile</span></tt> and the <tt class="docutils literal"><span class="pre">--exec-prefix</span></tt>
+argument to the <strong class="program">configure</strong> script at build  time.  The value is
+available to Python code as <tt class="docutils literal"><span class="pre">sys.exec_prefix</span></tt>.  It is only useful on Unix.</p>
+<p>Background: The exec-prefix differs from the prefix when platform dependent
+files (such as executables and shared libraries) are installed in a different
+directory tree.  In a typical installation, platform dependent files may be
+installed in the <tt class="file docutils literal"><span class="pre">/usr/local/plat</span></tt> subtree while platform independent may
+be installed in <tt class="file docutils literal"><span class="pre">/usr/local</span></tt>.</p>
+<p>Generally speaking, a platform is a combination of hardware and software
+families, e.g.  Sparc machines running the Solaris 2.x operating system are
+considered the same platform, but Intel machines running Solaris 2.x are another
+platform, and Intel machines running Linux are yet another platform.  Different
+major revisions of the same operating system generally also form different
+platforms.  Non-Unix operating systems are a different story; the installation
+strategies on those systems are so different that the prefix and exec-prefix are
+meaningless, and set to the empty string. Note that compiled Python bytecode
+files are platform independent (but not independent from the Python version by
+which they were compiled!).</p>
+<p>System administrators will know how to configure the <strong class="program">mount</strong> or
+<strong class="program">automount</strong> programs to share <tt class="file docutils literal"><span class="pre">/usr/local</span></tt> between platforms
+while having <tt class="file docutils literal"><span class="pre">/usr/local/plat</span></tt> be a different filesystem for each
+platform.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetProgramFullPath">
+char* <tt class="descname">Py_GetProgramFullPath</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetProgramFullPath" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-3">Return the full program name of the Python executable; this is  computed as a
+side-effect of deriving the default module search path  from the program name
+(set by <a class="reference internal" href="#Py_SetProgramName" title="Py_SetProgramName"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></tt></a> above). The returned string points into
+static storage; the caller should not modify its value.  The value is available
+to Python code as <tt class="docutils literal"><span class="pre">sys.executable</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetPath">
+char* <tt class="descname">Py_GetPath</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetPath" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-4">Return the default module search path; this is computed from the program name
+(set by <a class="reference internal" href="#Py_SetProgramName" title="Py_SetProgramName"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></tt></a> above) and some environment variables.
+The returned string consists of a series of directory names separated by a
+platform dependent delimiter character.  The delimiter character is <tt class="docutils literal"><span class="pre">':'</span></tt>
+on Unix and Mac OS X, <tt class="docutils literal"><span class="pre">';'</span></tt> on Windows.  The returned string points into
+static storage; the caller should not modify its value.  The list
+<a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> is initialized with this value on interpreter startup; it
+can be (and usually is) modified later to change the search path for loading
+modules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetVersion">
+const char* <tt class="descname">Py_GetVersion</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the version of this Python interpreter.  This is a string that looks
+something like</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="s">&quot;1.5 (#67, Dec 31 1997, 22:34:28) [GCC 2.7.2.2]&quot;</span>
+</pre></div>
+</div>
+<p id="index-5">The first word (up to the first space character) is the current Python version;
+the first three characters are the major and minor version separated by a
+period.  The returned string points into static storage; the caller should not
+modify its value.  The value is available to Python code as <tt class="docutils literal"><span class="pre">sys.version</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetPlatform">
+const char* <tt class="descname">Py_GetPlatform</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetPlatform" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-6">Return the platform identifier for the current platform.  On Unix, this is
+formed from the &#8220;official&#8221; name of the operating system, converted to lower
+case, followed by the major revision number; e.g., for Solaris 2.x, which is
+also known as SunOS 5.x, the value is <tt class="docutils literal"><span class="pre">'sunos5'</span></tt>.  On Mac OS X, it is
+<tt class="docutils literal"><span class="pre">'darwin'</span></tt>.  On Windows, it is <tt class="docutils literal"><span class="pre">'win'</span></tt>.  The returned string points into
+static storage; the caller should not modify its value.  The value is available
+to Python code as <tt class="docutils literal"><span class="pre">sys.platform</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetCopyright">
+const char* <tt class="descname">Py_GetCopyright</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetCopyright" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the official copyright string for the current Python version, for example</p>
+<p><tt class="docutils literal"><span class="pre">'Copyright</span> <span class="pre">1991-1995</span> <span class="pre">Stichting</span> <span class="pre">Mathematisch</span> <span class="pre">Centrum,</span> <span class="pre">Amsterdam'</span></tt></p>
+<p id="index-7">The returned string points into static storage; the caller should not modify its
+value.  The value is available to Python code as <tt class="docutils literal"><span class="pre">sys.copyright</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetCompiler">
+const char* <tt class="descname">Py_GetCompiler</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetCompiler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an indication of the compiler used to build the current Python version,
+in square brackets, for example:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="s">&quot;[GCC 2.7.2.2]&quot;</span>
+</pre></div>
+</div>
+<p id="index-8">The returned string points into static storage; the caller should not modify its
+value.  The value is available to Python code as part of the variable
+<tt class="docutils literal"><span class="pre">sys.version</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetBuildInfo">
+const char* <tt class="descname">Py_GetBuildInfo</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetBuildInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information about the sequence number and build date and time  of the
+current Python interpreter instance, for example</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="s">&quot;#67, Aug  1 1997, 22:34:28&quot;</span>
+</pre></div>
+</div>
+<p id="index-9">The returned string points into static storage; the caller should not modify its
+value.  The value is available to Python code as part of the variable
+<tt class="docutils literal"><span class="pre">sys.version</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySys_SetArgvEx">
+void <tt class="descname">PySys_SetArgvEx</tt><big>(</big>int<em>&nbsp;argc</em>, char<em>&nbsp;**argv</em>, int<em>&nbsp;updatepath</em><big>)</big><a class="headerlink" href="#PySys_SetArgvEx" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-10">Set <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a> based on <em>argc</em> and <em>argv</em>.  These parameters are
+similar to those passed to the program&#8217;s <tt class="xref c c-func docutils literal"><span class="pre">main()</span></tt> function with the
+difference that the first entry should refer to the script file to be
+executed rather than the executable hosting the Python interpreter.  If there
+isn&#8217;t a script that will be run, the first entry in <em>argv</em> can be an empty
+string.  If this function fails to initialize <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><tt class="xref py py-data docutils literal"><span class="pre">sys.argv</span></tt></a>, a fatal
+condition is signalled using <a class="reference internal" href="sys.html#Py_FatalError" title="Py_FatalError"><tt class="xref c c-func docutils literal"><span class="pre">Py_FatalError()</span></tt></a>.</p>
+<p>If <em>updatepath</em> is zero, this is all the function does.  If <em>updatepath</em>
+is non-zero, the function also modifies <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> according to the
+following algorithm:</p>
+<ul class="simple">
+<li>If the name of an existing script is passed in <tt class="docutils literal"><span class="pre">argv[0]</span></tt>, the absolute
+path of the directory where the script is located is prepended to
+<a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</li>
+<li>Otherwise (that is, if <em>argc</em> is 0 or <tt class="docutils literal"><span class="pre">argv[0]</span></tt> doesn&#8217;t point
+to an existing file name), an empty string is prepended to
+<a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>, which is the same as prepending the current working
+directory (<tt class="docutils literal"><span class="pre">&quot;.&quot;</span></tt>).</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>It is recommended that applications embedding the Python interpreter
+for purposes other than executing a single script pass 0 as <em>updatepath</em>,
+and update <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> themselves if desired.
+See <a class="reference external" href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-5983">CVE-2008-5983</a>.</p>
+<p>On versions before 2.6.6, you can achieve the same effect by manually
+popping the first <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> element after having called
+<a class="reference internal" href="#PySys_SetArgv" title="PySys_SetArgv"><tt class="xref c c-func docutils literal"><span class="pre">PySys_SetArgv()</span></tt></a>, for example using:</p>
+<div class="last highlight-c"><div class="highlight"><pre><span class="n">PyRun_SimpleString</span><span class="p">(</span><span class="s">&quot;import sys; sys.path.pop(0)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySys_SetArgv">
+void <tt class="descname">PySys_SetArgv</tt><big>(</big>int<em>&nbsp;argc</em>, char<em>&nbsp;**argv</em><big>)</big><a class="headerlink" href="#PySys_SetArgv" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function works like <a class="reference internal" href="#PySys_SetArgvEx" title="PySys_SetArgvEx"><tt class="xref c c-func docutils literal"><span class="pre">PySys_SetArgvEx()</span></tt></a> with <em>updatepath</em> set to 1.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_SetPythonHome">
+void <tt class="descname">Py_SetPythonHome</tt><big>(</big>char<em>&nbsp;*home</em><big>)</big><a class="headerlink" href="#Py_SetPythonHome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the default &#8220;home&#8221; directory, that is, the location of the standard
+Python libraries.  See <span class="target" id="index-11"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONHOME"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></tt></a> for the meaning of the
+argument string.</p>
+<p>The argument should point to a zero-terminated character string in static
+storage whose contents will not change for the duration of the program&#8217;s
+execution.  No code in the Python interpreter will change the contents of
+this storage.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_GetPythonHome">
+char* <tt class="descname">Py_GetPythonHome</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_GetPythonHome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the default &#8220;home&#8221;, that is, the value set by a previous call to
+<a class="reference internal" href="#Py_SetPythonHome" title="Py_SetPythonHome"><tt class="xref c c-func docutils literal"><span class="pre">Py_SetPythonHome()</span></tt></a>, or the value of the <span class="target" id="index-12"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONHOME"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></tt></a>
+environment variable if it is set.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="thread-state-and-the-global-interpreter-lock">
+<span id="threads"></span><h2>Thread State and the Global Interpreter Lock<a class="headerlink" href="#thread-state-and-the-global-interpreter-lock" title="Permalink to this headline">¶</a></h2>
+<p id="index-13">The Python interpreter is not fully thread-safe.  In order to support
+multi-threaded Python programs, there&#8217;s a global lock, called the <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><em class="xref std std-term">global
+interpreter lock</em></a> or <a class="reference internal" href="../glossary.html#term-gil"><em class="xref std std-term">GIL</em></a>, that must be held by the current thread before
+it can safely access Python objects. Without the lock, even the simplest
+operations could cause problems in a multi-threaded program: for example, when
+two threads simultaneously increment the reference count of the same object, the
+reference count could end up being incremented only once instead of twice.</p>
+<p id="index-14">Therefore, the rule exists that only the thread that has acquired the
+<a class="reference internal" href="../glossary.html#term-gil"><em class="xref std std-term">GIL</em></a> may operate on Python objects or call Python/C API functions.
+In order to emulate concurrency of execution, the interpreter regularly
+tries to switch threads (see <a class="reference internal" href="../library/sys.html#sys.setcheckinterval" title="sys.setcheckinterval"><tt class="xref py py-func docutils literal"><span class="pre">sys.setcheckinterval()</span></tt></a>).  The lock is also
+released around potentially blocking I/O operations like reading or writing
+a file, so that other Python threads can run in the meantime.</p>
+<p id="index-15">The Python interpreter keeps some thread-specific bookkeeping information
+inside a data structure called <a class="reference internal" href="#PyThreadState" title="PyThreadState"><tt class="xref c c-type docutils literal"><span class="pre">PyThreadState</span></tt></a>.  There&#8217;s also one
+global variable pointing to the current <a class="reference internal" href="#PyThreadState" title="PyThreadState"><tt class="xref c c-type docutils literal"><span class="pre">PyThreadState</span></tt></a>: it can
+be retrieved using <a class="reference internal" href="#PyThreadState_Get" title="PyThreadState_Get"><tt class="xref c c-func docutils literal"><span class="pre">PyThreadState_Get()</span></tt></a>.</p>
+<div class="section" id="releasing-the-gil-from-extension-code">
+<h3>Releasing the GIL from extension code<a class="headerlink" href="#releasing-the-gil-from-extension-code" title="Permalink to this headline">¶</a></h3>
+<p>Most extension code manipulating the <a class="reference internal" href="../glossary.html#term-gil"><em class="xref std std-term">GIL</em></a> has the following simple
+structure:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">Save</span> <span class="n">the</span> <span class="kr">thread</span> <span class="n">state</span> <span class="n">in</span> <span class="n">a</span> <span class="n">local</span> <span class="n">variable</span><span class="p">.</span>
+<span class="n">Release</span> <span class="n">the</span> <span class="n">global</span> <span class="n">interpreter</span> <span class="n">lock</span><span class="p">.</span>
+<span class="p">...</span> <span class="n">Do</span> <span class="n">some</span> <span class="n">blocking</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span> <span class="p">...</span>
+<span class="n">Reacquire</span> <span class="n">the</span> <span class="n">global</span> <span class="n">interpreter</span> <span class="n">lock</span><span class="p">.</span>
+<span class="n">Restore</span> <span class="n">the</span> <span class="kr">thread</span> <span class="n">state</span> <span class="n">from</span> <span class="n">the</span> <span class="n">local</span> <span class="n">variable</span><span class="p">.</span>
+</pre></div>
+</div>
+<p>This is so common that a pair of macros exists to simplify it:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">Py_BEGIN_ALLOW_THREADS</span>
+<span class="p">...</span> <span class="n">Do</span> <span class="n">some</span> <span class="n">blocking</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span> <span class="p">...</span>
+<span class="n">Py_END_ALLOW_THREADS</span>
+</pre></div>
+</div>
+<p id="index-16">The <a class="reference internal" href="#Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></tt></a> macro opens a new block and declares a
+hidden local variable; the <a class="reference internal" href="#Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></tt></a> macro closes the
+block.  These two macros are still available when Python is compiled without
+thread support (they simply have an empty expansion).</p>
+<p>When thread support is enabled, the block above expands to the following code:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">PyThreadState</span> <span class="o">*</span><span class="n">_save</span><span class="p">;</span>
+
+<span class="n">_save</span> <span class="o">=</span> <span class="n">PyEval_SaveThread</span><span class="p">();</span>
+<span class="p">...</span><span class="n">Do</span> <span class="n">some</span> <span class="n">blocking</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span><span class="p">...</span>
+<span class="n">PyEval_RestoreThread</span><span class="p">(</span><span class="n">_save</span><span class="p">);</span>
+</pre></div>
+</div>
+<p id="index-17">Here is how these functions work: the global interpreter lock is used to protect the pointer to the
+current thread state.  When releasing the lock and saving the thread state,
+the current thread state pointer must be retrieved before the lock is released
+(since another thread could immediately acquire the lock and store its own thread
+state in the global variable). Conversely, when acquiring the lock and restoring
+the thread state, the lock must be acquired before storing the thread state
+pointer.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Calling system I/O functions is the most common use case for releasing
+the GIL, but it can also be useful before calling long-running computations
+which don&#8217;t need access to Python objects, such as compression or
+cryptographic functions operating over memory buffers.  For example, the
+standard <a class="reference internal" href="../library/zlib.html#module-zlib" title="zlib: Low-level interface to compression and decompression routines compatible with gzip."><tt class="xref py py-mod docutils literal"><span class="pre">zlib</span></tt></a> and <a class="reference internal" href="../library/hashlib.html#module-hashlib" title="hashlib: Secure hash and message digest algorithms."><tt class="xref py py-mod docutils literal"><span class="pre">hashlib</span></tt></a> modules release the GIL when
+compressing or hashing data.</p>
+</div>
+</div>
+<div class="section" id="non-python-created-threads">
+<h3>Non-Python created threads<a class="headerlink" href="#non-python-created-threads" title="Permalink to this headline">¶</a></h3>
+<p>When threads are created using the dedicated Python APIs (such as the
+<a class="reference internal" href="../library/threading.html#module-threading" title="threading: Higher-level threading interface."><tt class="xref py py-mod docutils literal"><span class="pre">threading</span></tt></a> module), a thread state is automatically associated to them
+and the code showed above is therefore correct.  However, when threads are
+created from C (for example by a third-party library with its own thread
+management), they don&#8217;t hold the GIL, nor is there a thread state structure
+for them.</p>
+<p>If you need to call Python code from these threads (often this will be part
+of a callback API provided by the aforementioned third-party library),
+you must first register these threads with the interpreter by
+creating a thread state data structure, then acquiring the GIL, and finally
+storing their thread state pointer, before you can start using the Python/C
+API.  When you are done, you should reset the thread state pointer, release
+the GIL, and finally free the thread state data structure.</p>
+<p>The <a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> and <a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a> functions do
+all of the above automatically.  The typical idiom for calling into Python
+from a C thread is:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">PyGILState_STATE</span> <span class="n">gstate</span><span class="p">;</span>
+<span class="n">gstate</span> <span class="o">=</span> <span class="n">PyGILState_Ensure</span><span class="p">();</span>
+
+<span class="cm">/* Perform Python actions here. */</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">CallSomeFunction</span><span class="p">();</span>
+<span class="cm">/* evaluate result or handle exception */</span>
+
+<span class="cm">/* Release the thread. No Python API allowed beyond this point. */</span>
+<span class="n">PyGILState_Release</span><span class="p">(</span><span class="n">gstate</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Note that the <tt class="xref c c-func docutils literal"><span class="pre">PyGILState_*()</span></tt> functions assume there is only one global
+interpreter (created automatically by <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a>).  Python
+supports the creation of additional interpreters (using
+<a class="reference internal" href="#Py_NewInterpreter" title="Py_NewInterpreter"><tt class="xref c c-func docutils literal"><span class="pre">Py_NewInterpreter()</span></tt></a>), but mixing multiple interpreters and the
+<tt class="xref c c-func docutils literal"><span class="pre">PyGILState_*()</span></tt> API is unsupported.</p>
+<p>Another important thing to note about threads is their behaviour in the face
+of the C <tt class="xref c c-func docutils literal"><span class="pre">fork()</span></tt> call. On most systems with <tt class="xref c c-func docutils literal"><span class="pre">fork()</span></tt>, after a
+process forks only the thread that issued the fork will exist. That also
+means any locks held by other threads will never be released. Python solves
+this for <a class="reference internal" href="../library/os.html#os.fork" title="os.fork"><tt class="xref py py-func docutils literal"><span class="pre">os.fork()</span></tt></a> by acquiring the locks it uses internally before
+the fork, and releasing them afterwards. In addition, it resets any
+<a class="reference internal" href="../library/threading.html#lock-objects"><em>Lock Objects</em></a> in the child. When extending or embedding Python, there
+is no way to inform Python of additional (non-Python) locks that need to be
+acquired before or reset after a fork. OS facilities such as
+<tt class="xref c c-func docutils literal"><span class="pre">pthread_atfork()</span></tt> would need to be used to accomplish the same thing.
+Additionally, when extending or embedding Python, calling <tt class="xref c c-func docutils literal"><span class="pre">fork()</span></tt>
+directly rather than through <a class="reference internal" href="../library/os.html#os.fork" title="os.fork"><tt class="xref py py-func docutils literal"><span class="pre">os.fork()</span></tt></a> (and returning to or calling
+into Python) may result in a deadlock by one of Python&#8217;s internal locks
+being held by a thread that is defunct after the fork.
+<a class="reference internal" href="sys.html#PyOS_AfterFork" title="PyOS_AfterFork"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_AfterFork()</span></tt></a> tries to reset the necessary locks, but is not
+always able to.</p>
+</div>
+<div class="section" id="high-level-api">
+<h3>High-level API<a class="headerlink" href="#high-level-api" title="Permalink to this headline">¶</a></h3>
+<p>These are the most commonly used types and functions when writing C extension
+code, or when embedding the Python interpreter:</p>
+<dl class="type">
+<dt id="PyInterpreterState">
+<tt class="descname">PyInterpreterState</tt><a class="headerlink" href="#PyInterpreterState" title="Permalink to this definition">¶</a></dt>
+<dd><p>This data structure represents the state shared by a number of cooperating
+threads.  Threads belonging to the same interpreter share their module
+administration and a few other internal items. There are no public members in
+this structure.</p>
+<p>Threads belonging to different interpreters initially share nothing, except
+process state like available memory, open file descriptors and such.  The global
+interpreter lock is also shared by all threads, regardless of to which
+interpreter they belong.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="PyThreadState">
+<tt class="descname">PyThreadState</tt><a class="headerlink" href="#PyThreadState" title="Permalink to this definition">¶</a></dt>
+<dd><p>This data structure represents the state of a single thread.  The only public
+data member is <a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState"><tt class="xref c c-type docutils literal"><span class="pre">PyInterpreterState</span> <span class="pre">*</span></tt></a><tt class="xref py py-attr docutils literal"><span class="pre">interp</span></tt>, which points to
+this thread&#8217;s interpreter state.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_InitThreads">
+void <tt class="descname">PyEval_InitThreads</tt><big>(</big><big>)</big><a class="headerlink" href="#PyEval_InitThreads" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-18">Initialize and acquire the global interpreter lock.  It should be called in the
+main thread before creating a second thread or engaging in any other thread
+operations such as <a class="reference internal" href="#PyEval_ReleaseLock" title="PyEval_ReleaseLock"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_ReleaseLock()</span></tt></a> or
+<tt class="docutils literal"><span class="pre">PyEval_ReleaseThread(tstate)</span></tt>. It is not needed before calling
+<a class="reference internal" href="#PyEval_SaveThread" title="PyEval_SaveThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_SaveThread()</span></tt></a> or <a class="reference internal" href="#PyEval_RestoreThread" title="PyEval_RestoreThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></tt></a>.</p>
+<p id="index-19">This is a no-op when called for a second time.  It is safe to call this function
+before calling <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a>.</p>
+<div class="admonition note" id="index-20">
+<p class="first admonition-title">Note</p>
+<p>When only the main thread exists, no GIL operations are needed. This is a
+common situation (most Python programs do not use threads), and the lock
+operations slow the interpreter down a bit. Therefore, the lock is not
+created initially.  This situation is equivalent to having acquired the lock:
+when there is only a single thread, all object accesses are safe.  Therefore,
+when this function initializes the global interpreter lock, it also acquires
+it.  Before the Python <tt class="xref py py-mod docutils literal"><span class="pre">_thread</span></tt> module creates a new thread, knowing
+that either it has the lock or the lock hasn&#8217;t been created yet, it calls
+<a class="reference internal" href="#PyEval_InitThreads" title="PyEval_InitThreads"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_InitThreads()</span></tt></a>.  When this call returns, it is guaranteed that
+the lock has been created and that the calling thread has acquired it.</p>
+<p>It is <strong>not</strong> safe to call this function when it is unknown which thread (if
+any) currently has the global interpreter lock.</p>
+<p class="last">This function is not available when thread support is disabled at compile time.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_ThreadsInitialized">
+int <tt class="descname">PyEval_ThreadsInitialized</tt><big>(</big><big>)</big><a class="headerlink" href="#PyEval_ThreadsInitialized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a non-zero value if <a class="reference internal" href="#PyEval_InitThreads" title="PyEval_InitThreads"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_InitThreads()</span></tt></a> has been called.  This
+function can be called without holding the GIL, and therefore can be used to
+avoid calls to the locking API when running single-threaded.  This function is
+not available when thread support is disabled at compile time.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_SaveThread">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a>* <tt class="descname">PyEval_SaveThread</tt><big>(</big><big>)</big><a class="headerlink" href="#PyEval_SaveThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release the global interpreter lock (if it has been created and thread
+support is enabled) and reset the thread state to <em>NULL</em>, returning the
+previous thread state (which is not <em>NULL</em>).  If the lock has been created,
+the current thread must have acquired it.  (This function is available even
+when thread support is disabled at compile time.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_RestoreThread">
+void <tt class="descname">PyEval_RestoreThread</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyEval_RestoreThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the global interpreter lock (if it has been created and thread
+support is enabled) and set the thread state to <em>tstate</em>, which must not be
+<em>NULL</em>.  If the lock has been created, the current thread must not have
+acquired it, otherwise deadlock ensues.  (This function is available even
+when thread support is disabled at compile time.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_Get">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a>* <tt class="descname">PyThreadState_Get</tt><big>(</big><big>)</big><a class="headerlink" href="#PyThreadState_Get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current thread state.  The global interpreter lock must be held.
+When the current thread state is <em>NULL</em>, this issues a fatal error (so that
+the caller needn&#8217;t check for <em>NULL</em>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_Swap">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a>* <tt class="descname">PyThreadState_Swap</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyThreadState_Swap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swap the current thread state with the thread state given by the argument
+<em>tstate</em>, which may be <em>NULL</em>.  The global interpreter lock must be held
+and is not released.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_ReInitThreads">
+void <tt class="descname">PyEval_ReInitThreads</tt><big>(</big><big>)</big><a class="headerlink" href="#PyEval_ReInitThreads" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called from <a class="reference internal" href="sys.html#PyOS_AfterFork" title="PyOS_AfterFork"><tt class="xref c c-func docutils literal"><span class="pre">PyOS_AfterFork()</span></tt></a> to ensure that newly
+created child processes don&#8217;t hold locks referring to threads which
+are not running in the child process.</p>
+</dd></dl>
+
+<p>The following functions use thread-local storage, and are not compatible
+with sub-interpreters:</p>
+<dl class="function">
+<dt id="PyGILState_Ensure">
+PyGILState_STATE <tt class="descname">PyGILState_Ensure</tt><big>(</big><big>)</big><a class="headerlink" href="#PyGILState_Ensure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the current thread is ready to call the Python C API regardless
+of the current state of Python, or of the global interpreter lock. This may
+be called as many times as desired by a thread as long as each call is
+matched with a call to <a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a>. In general, other
+thread-related APIs may be used between <a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> and
+<a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a> calls as long as the thread state is restored to
+its previous state before the Release().  For example, normal usage of the
+<a class="reference internal" href="#Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></tt></a> and <a class="reference internal" href="#Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></tt></a> macros is
+acceptable.</p>
+<p>The return value is an opaque &#8220;handle&#8221; to the thread state when
+<a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> was called, and must be passed to
+<a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a> to ensure Python is left in the same state. Even
+though recursive calls are allowed, these handles <em>cannot</em> be shared - each
+unique call to <a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> must save the handle for its call
+to <a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a>.</p>
+<p>When the function returns, the current thread will hold the GIL and be able
+to call arbitrary Python code.  Failure is a fatal error.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyGILState_Release">
+void <tt class="descname">PyGILState_Release</tt><big>(</big>PyGILState_STATE<big>)</big><a class="headerlink" href="#PyGILState_Release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release any resources previously acquired.  After this call, Python&#8217;s state will
+be the same as it was prior to the corresponding <a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> call
+(but generally this state will be unknown to the caller, hence the use of the
+GILState API).</p>
+<p>Every call to <a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> must be matched by a call to
+<a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a> on the same thread.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyGILState_GetThisThreadState">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a> <tt class="descname">PyGILState_GetThisThreadState</tt><big>(</big><big>)</big><a class="headerlink" href="#PyGILState_GetThisThreadState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the current thread state for this thread.  May return <tt class="docutils literal"><span class="pre">NULL</span></tt> if no
+GILState API has been used on the current thread.  Note that the main thread
+always has such a thread-state, even if no auto-thread-state call has been
+made on the main thread.  This is mainly a helper/diagnostic function.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<p>The following macros are normally used without a trailing semicolon; look for
+example usage in the Python source distribution.</p>
+<dl class="macro">
+<dt id="Py_BEGIN_ALLOW_THREADS">
+<tt class="descname">Py_BEGIN_ALLOW_THREADS</tt><a class="headerlink" href="#Py_BEGIN_ALLOW_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro expands to <tt class="docutils literal"><span class="pre">{</span> <span class="pre">PyThreadState</span> <span class="pre">*_save;</span> <span class="pre">_save</span> <span class="pre">=</span> <span class="pre">PyEval_SaveThread();</span></tt>.
+Note that it contains an opening brace; it must be matched with a following
+<a class="reference internal" href="#Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></tt></a> macro.  See above for further discussion of this
+macro.  It is a no-op when thread support is disabled at compile time.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="Py_END_ALLOW_THREADS">
+<tt class="descname">Py_END_ALLOW_THREADS</tt><a class="headerlink" href="#Py_END_ALLOW_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro expands to <tt class="docutils literal"><span class="pre">PyEval_RestoreThread(_save);</span> <span class="pre">}</span></tt>. Note that it contains
+a closing brace; it must be matched with an earlier
+<a class="reference internal" href="#Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></tt></a> macro.  See above for further discussion of
+this macro.  It is a no-op when thread support is disabled at compile time.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="Py_BLOCK_THREADS">
+<tt class="descname">Py_BLOCK_THREADS</tt><a class="headerlink" href="#Py_BLOCK_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro expands to <tt class="docutils literal"><span class="pre">PyEval_RestoreThread(_save);</span></tt>: it is equivalent to
+<a class="reference internal" href="#Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></tt></a> without the closing brace.  It is a no-op when
+thread support is disabled at compile time.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="Py_UNBLOCK_THREADS">
+<tt class="descname">Py_UNBLOCK_THREADS</tt><a class="headerlink" href="#Py_UNBLOCK_THREADS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This macro expands to <tt class="docutils literal"><span class="pre">_save</span> <span class="pre">=</span> <span class="pre">PyEval_SaveThread();</span></tt>: it is equivalent to
+<a class="reference internal" href="#Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><tt class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></tt></a> without the opening brace and variable
+declaration.  It is a no-op when thread support is disabled at compile time.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="low-level-api">
+<h3>Low-level API<a class="headerlink" href="#low-level-api" title="Permalink to this headline">¶</a></h3>
+<p>All of the following functions are only available when thread support is enabled
+at compile time, and must be called only when the global interpreter lock has
+been created.</p>
+<dl class="function">
+<dt id="PyInterpreterState_New">
+<a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a>* <tt class="descname">PyInterpreterState_New</tt><big>(</big><big>)</big><a class="headerlink" href="#PyInterpreterState_New" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new interpreter state object.  The global interpreter lock need not
+be held, but may be held if it is necessary to serialize calls to this
+function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInterpreterState_Clear">
+void <tt class="descname">PyInterpreterState_Clear</tt><big>(</big><a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><big>)</big><a class="headerlink" href="#PyInterpreterState_Clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all information in an interpreter state object.  The global interpreter
+lock must be held.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInterpreterState_Delete">
+void <tt class="descname">PyInterpreterState_Delete</tt><big>(</big><a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><big>)</big><a class="headerlink" href="#PyInterpreterState_Delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy an interpreter state object.  The global interpreter lock need not be
+held.  The interpreter state must have been reset with a previous call to
+<a class="reference internal" href="#PyInterpreterState_Clear" title="PyInterpreterState_Clear"><tt class="xref c c-func docutils literal"><span class="pre">PyInterpreterState_Clear()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_New">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a>* <tt class="descname">PyThreadState_New</tt><big>(</big><a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><big>)</big><a class="headerlink" href="#PyThreadState_New" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new thread state object belonging to the given interpreter object.
+The global interpreter lock need not be held, but may be held if it is
+necessary to serialize calls to this function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_Clear">
+void <tt class="descname">PyThreadState_Clear</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyThreadState_Clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset all information in a thread state object.  The global interpreter lock
+must be held.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_Delete">
+void <tt class="descname">PyThreadState_Delete</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyThreadState_Delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy a thread state object.  The global interpreter lock need not be held.
+The thread state must have been reset with a previous call to
+<a class="reference internal" href="#PyThreadState_Clear" title="PyThreadState_Clear"><tt class="xref c c-func docutils literal"><span class="pre">PyThreadState_Clear()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_GetDict">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyThreadState_GetDict</tt><big>(</big><big>)</big><a class="headerlink" href="#PyThreadState_GetDict" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return a dictionary in which extensions can store thread-specific state
+information.  Each extension should use a unique key to use to store state in
+the dictionary.  It is okay to call this function when no current thread state
+is available. If this function returns <em>NULL</em>, no exception has been raised and
+the caller should assume no current thread state is available.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3: </span>Previously this could only be called when a current thread is active, and <em>NULL</em>
+meant that an exception was raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_SetAsyncExc">
+int <tt class="descname">PyThreadState_SetAsyncExc</tt><big>(</big>long<em>&nbsp;id</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*exc</em><big>)</big><a class="headerlink" href="#PyThreadState_SetAsyncExc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronously raise an exception in a thread. The <em>id</em> argument is the thread
+id of the target thread; <em>exc</em> is the exception object to be raised. This
+function does not steal any references to <em>exc</em>. To prevent naive misuse, you
+must write your own C extension to call this.  Must be called with the GIL held.
+Returns the number of thread states modified; this is normally one, but will be
+zero if the thread id isn&#8217;t found.  If <em>exc</em> is <tt class="xref py py-const docutils literal"><span class="pre">NULL</span></tt>, the pending
+exception (if any) for the thread is cleared. This raises no exceptions.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_AcquireThread">
+void <tt class="descname">PyEval_AcquireThread</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyEval_AcquireThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the global interpreter lock and set the current thread state to
+<em>tstate</em>, which should not be <em>NULL</em>.  The lock must have been created earlier.
+If this thread already has the lock, deadlock ensues.</p>
+<p><a class="reference internal" href="#PyEval_RestoreThread" title="PyEval_RestoreThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></tt></a> is a higher-level function which is always
+available (even when thread support isn&#8217;t enabled or when threads have
+not been initialized).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_ReleaseThread">
+void <tt class="descname">PyEval_ReleaseThread</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyEval_ReleaseThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the current thread state to <em>NULL</em> and release the global interpreter
+lock.  The lock must have been created earlier and must be held by the current
+thread.  The <em>tstate</em> argument, which must not be <em>NULL</em>, is only used to check
+that it represents the current thread state &#8212; if it isn&#8217;t, a fatal error is
+reported.</p>
+<p><a class="reference internal" href="#PyEval_SaveThread" title="PyEval_SaveThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_SaveThread()</span></tt></a> is a higher-level function which is always
+available (even when thread support isn&#8217;t enabled or when threads have
+not been initialized).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_AcquireLock">
+void <tt class="descname">PyEval_AcquireLock</tt><big>(</big><big>)</big><a class="headerlink" href="#PyEval_AcquireLock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the global interpreter lock.  The lock must have been created earlier.
+If this thread already has the lock, a deadlock ensues.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function does not change the current thread state.  Please use
+<a class="reference internal" href="#PyEval_RestoreThread" title="PyEval_RestoreThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></tt></a> or <a class="reference internal" href="#PyEval_AcquireThread" title="PyEval_AcquireThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_AcquireThread()</span></tt></a>
+instead.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_ReleaseLock">
+void <tt class="descname">PyEval_ReleaseLock</tt><big>(</big><big>)</big><a class="headerlink" href="#PyEval_ReleaseLock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Release the global interpreter lock.  The lock must have been created earlier.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function does not change the current thread state.  Please use
+<a class="reference internal" href="#PyEval_SaveThread" title="PyEval_SaveThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_SaveThread()</span></tt></a> or <a class="reference internal" href="#PyEval_ReleaseThread" title="PyEval_ReleaseThread"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_ReleaseThread()</span></tt></a>
+instead.</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="sub-interpreter-support">
+<h2>Sub-interpreter support<a class="headerlink" href="#sub-interpreter-support" title="Permalink to this headline">¶</a></h2>
+<p>While in most uses, you will only embed a single Python interpreter, there
+are cases where you need to create several independent interpreters in the
+same process and perhaps even in the same thread.  Sub-interpreters allow
+you to do that.  You can switch between sub-interpreters using the
+<a class="reference internal" href="#PyThreadState_Swap" title="PyThreadState_Swap"><tt class="xref c c-func docutils literal"><span class="pre">PyThreadState_Swap()</span></tt></a> function.  You can create and destroy them
+using the following functions:</p>
+<dl class="function">
+<dt id="Py_NewInterpreter">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a>* <tt class="descname">Py_NewInterpreter</tt><big>(</big><big>)</big><a class="headerlink" href="#Py_NewInterpreter" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-21">Create a new sub-interpreter.  This is an (almost) totally separate environment
+for the execution of Python code.  In particular, the new interpreter has
+separate, independent versions of all imported modules, including the
+fundamental modules <tt class="xref py py-mod docutils literal"><span class="pre">builtins</span></tt>, <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> and <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a>.  The
+table of loaded modules (<tt class="docutils literal"><span class="pre">sys.modules</span></tt>) and the module search path
+(<tt class="docutils literal"><span class="pre">sys.path</span></tt>) are also separate.  The new environment has no <tt class="docutils literal"><span class="pre">sys.argv</span></tt>
+variable.  It has new standard I/O stream file objects <tt class="docutils literal"><span class="pre">sys.stdin</span></tt>,
+<tt class="docutils literal"><span class="pre">sys.stdout</span></tt> and <tt class="docutils literal"><span class="pre">sys.stderr</span></tt> (however these refer to the same underlying
+file descriptors).</p>
+<p>The return value points to the first thread state created in the new
+sub-interpreter.  This thread state is made in the current thread state.
+Note that no actual thread is created; see the discussion of thread states
+below.  If creation of the new interpreter is unsuccessful, <em>NULL</em> is
+returned; no exception is set since the exception state is stored in the
+current thread state and there may not be a current thread state.  (Like all
+other Python/C API functions, the global interpreter lock must be held before
+calling this function and is still held when it returns; however, unlike most
+other Python/C API functions, there needn&#8217;t be a current thread state on
+entry.)</p>
+<p id="index-22">Extension modules are shared between (sub-)interpreters as follows: the first
+time a particular extension is imported, it is initialized normally, and a
+(shallow) copy of its module&#8217;s dictionary is squirreled away.  When the same
+extension is imported by another (sub-)interpreter, a new module is initialized
+and filled with the contents of this copy; the extension&#8217;s <tt class="docutils literal"><span class="pre">init</span></tt> function is
+not called.  Note that this is different from what happens when an extension is
+imported after the interpreter has been completely re-initialized by calling
+<a class="reference internal" href="#Py_Finalize" title="Py_Finalize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Finalize()</span></tt></a> and <a class="reference internal" href="#Py_Initialize" title="Py_Initialize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></tt></a>; in that case, the extension&#8217;s
+<tt class="docutils literal"><span class="pre">initmodule</span></tt> function <em>is</em> called again.</p>
+<span class="target" id="index-23"></span></dd></dl>
+
+<dl class="function">
+<dt id="Py_EndInterpreter">
+void <tt class="descname">Py_EndInterpreter</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#Py_EndInterpreter" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-24">Destroy the (sub-)interpreter represented by the given thread state. The given
+thread state must be the current thread state.  See the discussion of thread
+states below.  When the call returns, the current thread state is <em>NULL</em>.  All
+thread states associated with this interpreter are destroyed.  (The global
+interpreter lock must be held before calling this function and is still held
+when it returns.)  <a class="reference internal" href="#Py_Finalize" title="Py_Finalize"><tt class="xref c c-func docutils literal"><span class="pre">Py_Finalize()</span></tt></a> will destroy all sub-interpreters that
+haven&#8217;t been explicitly destroyed at that point.</p>
+</dd></dl>
+
+<div class="section" id="bugs-and-caveats">
+<h3>Bugs and caveats<a class="headerlink" href="#bugs-and-caveats" title="Permalink to this headline">¶</a></h3>
+<p>Because sub-interpreters (and the main interpreter) are part of the same
+process, the insulation between them isn&#8217;t perfect &#8212; for example, using
+low-level file operations like  <a class="reference internal" href="../library/os.html#os.close" title="os.close"><tt class="xref py py-func docutils literal"><span class="pre">os.close()</span></tt></a> they can
+(accidentally or maliciously) affect each other&#8217;s open files.  Because of the
+way extensions are shared between (sub-)interpreters, some extensions may not
+work properly; this is especially likely when the extension makes use of
+(static) global variables, or when the extension manipulates its module&#8217;s
+dictionary after its initialization.  It is possible to insert objects created
+in one sub-interpreter into a namespace of another sub-interpreter; this should
+be done with great care to avoid sharing user-defined functions, methods,
+instances or classes between sub-interpreters, since import operations executed
+by such objects may affect the wrong (sub-)interpreter&#8217;s dictionary of loaded
+modules.</p>
+<p>Also note that combining this functionality with <tt class="xref c c-func docutils literal"><span class="pre">PyGILState_*()</span></tt> APIs
+is delicate, because these APIs assume a bijection between Python thread states
+and OS-level threads, an assumption broken by the presence of sub-interpreters.
+It is highly recommended that you don&#8217;t switch sub-interpreters between a pair
+of matching <a class="reference internal" href="#PyGILState_Ensure" title="PyGILState_Ensure"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></tt></a> and <a class="reference internal" href="#PyGILState_Release" title="PyGILState_Release"><tt class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></tt></a> calls.
+Furthermore, extensions (such as <a class="reference internal" href="../library/ctypes.html#module-ctypes" title="ctypes: A foreign function library for Python."><tt class="xref py py-mod docutils literal"><span class="pre">ctypes</span></tt></a>) using these APIs to allow calling
+of Python code from non-Python created threads will probably be broken when using
+sub-interpreters.</p>
+</div>
+</div>
+<div class="section" id="asynchronous-notifications">
+<h2>Asynchronous Notifications<a class="headerlink" href="#asynchronous-notifications" title="Permalink to this headline">¶</a></h2>
+<p>A mechanism is provided to make asynchronous notifications to the main
+interpreter thread.  These notifications take the form of a function
+pointer and a void argument.</p>
+<p id="index-25">Every check interval, when the global interpreter lock is released and
+reacquired, Python will also call any such provided functions.  This can be used
+for example by asynchronous IO handlers.  The notification can be scheduled from
+a worker thread and the actual call than made at the earliest convenience by the
+main thread where it has possession of the global interpreter lock and can
+perform any Python API calls.</p>
+<dl class="function">
+<dt id="Py_AddPendingCall">
+int <tt class="descname">Py_AddPendingCall</tt><big>(</big>int (*func)(void<em>&nbsp;*)</em>, void<em>&nbsp;*arg</em><big>)</big><a class="headerlink" href="#Py_AddPendingCall" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-26">Post a notification to the Python main thread.  If successful, <em>func</em> will be
+called with the argument <em>arg</em> at the earliest convenience.  <em>func</em> will be
+called having the global interpreter lock held and can thus use the full
+Python API and can take any action such as setting object attributes to
+signal IO completion.  It must return 0 on success, or -1 signalling an
+exception.  The notification function won&#8217;t be interrupted to perform another
+asynchronous notification recursively, but it can still be interrupted to
+switch threads if the global interpreter lock is released, for example, if it
+calls back into Python code.</p>
+<p>This function returns 0 on success in which case the notification has been
+scheduled.  Otherwise, for example if the notification buffer is full, it
+returns -1 without setting any exception.</p>
+<p>This function can be called on any thread, be it a Python thread or some
+other system thread.  If it is a Python thread, it doesn&#8217;t matter if it holds
+the global interpreter lock or not.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="profiling-and-tracing">
+<span id="profiling"></span><h2>Profiling and Tracing<a class="headerlink" href="#profiling-and-tracing" title="Permalink to this headline">¶</a></h2>
+<p>The Python interpreter provides some low-level support for attaching profiling
+and execution tracing facilities.  These are used for profiling, debugging, and
+coverage analysis tools.</p>
+<p>Starting with Python 2.2, the implementation of this facility was substantially
+revised, and an interface from C was added.  This C interface allows the
+profiling or tracing code to avoid the overhead of calling through Python-level
+callable objects, making a direct C function call instead.  The essential
+attributes of the facility have not changed; the interface allows trace
+functions to be installed per-thread, and the basic events reported to the trace
+function are the same as had been reported to the Python-level trace functions
+in previous versions.</p>
+<dl class="type">
+<dt id="Py_tracefunc">
+int <tt class="descname">(*Py_tracefunc)</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, PyFrameObject<em>&nbsp;*frame</em>, int<em>&nbsp;what</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*arg</em><big>)</big><a class="headerlink" href="#Py_tracefunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the trace function registered using <a class="reference internal" href="#PyEval_SetProfile" title="PyEval_SetProfile"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_SetProfile()</span></tt></a> and
+<a class="reference internal" href="#PyEval_SetTrace" title="PyEval_SetTrace"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_SetTrace()</span></tt></a>. The first parameter is the object passed to the
+registration function as <em>obj</em>, <em>frame</em> is the frame object to which the event
+pertains, <em>what</em> is one of the constants <tt class="xref py py-const docutils literal"><span class="pre">PyTrace_CALL</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">PyTrace_EXCEPTION</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">PyTrace_LINE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">PyTrace_RETURN</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">PyTrace_C_CALL</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">PyTrace_C_EXCEPTION</span></tt>, or
+<tt class="xref py py-const docutils literal"><span class="pre">PyTrace_C_RETURN</span></tt>, and <em>arg</em> depends on the value of <em>what</em>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Value of <em>what</em></th>
+<th class="head">Meaning of <em>arg</em></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_CALL</span></tt></td>
+<td>Always <em>NULL</em>.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_EXCEPTION</span></tt></td>
+<td>Exception information as returned by
+<a class="reference internal" href="../library/sys.html#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></tt></a>.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_LINE</span></tt></td>
+<td>Always <em>NULL</em>.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_RETURN</span></tt></td>
+<td>Value being returned to the caller,
+or <em>NULL</em> if caused by an exception.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_C_CALL</span></tt></td>
+<td>Function object being called.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_C_EXCEPTION</span></tt></td>
+<td>Function object being called.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PyTrace_C_RETURN</span></tt></td>
+<td>Function object being called.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_CALL">
+int <tt class="descname">PyTrace_CALL</tt><a class="headerlink" href="#PyTrace_CALL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the <em>what</em> parameter to a <a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc"><tt class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></tt></a> function when a new
+call to a function or method is being reported, or a new entry into a generator.
+Note that the creation of the iterator for a generator function is not reported
+as there is no control transfer to the Python bytecode in the corresponding
+frame.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_EXCEPTION">
+int <tt class="descname">PyTrace_EXCEPTION</tt><a class="headerlink" href="#PyTrace_EXCEPTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the <em>what</em> parameter to a <a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc"><tt class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></tt></a> function when an
+exception has been raised.  The callback function is called with this value for
+<em>what</em> when after any bytecode is processed after which the exception becomes
+set within the frame being executed.  The effect of this is that as exception
+propagation causes the Python stack to unwind, the callback is called upon
+return to each frame as the exception propagates.  Only trace functions receives
+these events; they are not needed by the profiler.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_LINE">
+int <tt class="descname">PyTrace_LINE</tt><a class="headerlink" href="#PyTrace_LINE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value passed as the <em>what</em> parameter to a trace function (but not a
+profiling function) when a line-number event is being reported.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_RETURN">
+int <tt class="descname">PyTrace_RETURN</tt><a class="headerlink" href="#PyTrace_RETURN" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value for the <em>what</em> parameter to <a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc"><tt class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></tt></a> functions when a
+call is returning without propagating an exception.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_C_CALL">
+int <tt class="descname">PyTrace_C_CALL</tt><a class="headerlink" href="#PyTrace_C_CALL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value for the <em>what</em> parameter to <a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc"><tt class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></tt></a> functions when a C
+function is about to be called.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_C_EXCEPTION">
+int <tt class="descname">PyTrace_C_EXCEPTION</tt><a class="headerlink" href="#PyTrace_C_EXCEPTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value for the <em>what</em> parameter to <a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc"><tt class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></tt></a> functions when a C
+function has raised an exception.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTrace_C_RETURN">
+int <tt class="descname">PyTrace_C_RETURN</tt><a class="headerlink" href="#PyTrace_C_RETURN" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value for the <em>what</em> parameter to <a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc"><tt class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></tt></a> functions when a C
+function has returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_SetProfile">
+void <tt class="descname">PyEval_SetProfile</tt><big>(</big><a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc">Py_tracefunc</a><em>&nbsp;func</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em><big>)</big><a class="headerlink" href="#PyEval_SetProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the profiler function to <em>func</em>.  The <em>obj</em> parameter is passed to the
+function as its first parameter, and may be any Python object, or <em>NULL</em>.  If
+the profile function needs to maintain state, using a different value for <em>obj</em>
+for each thread provides a convenient and thread-safe place to store it.  The
+profile function is called for all monitored events except the line-number
+events.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_SetTrace">
+void <tt class="descname">PyEval_SetTrace</tt><big>(</big><a class="reference internal" href="#Py_tracefunc" title="Py_tracefunc">Py_tracefunc</a><em>&nbsp;func</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em><big>)</big><a class="headerlink" href="#PyEval_SetTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the tracing function to <em>func</em>.  This is similar to
+<a class="reference internal" href="#PyEval_SetProfile" title="PyEval_SetProfile"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_SetProfile()</span></tt></a>, except the tracing function does receive line-number
+events.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_GetCallStats">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyEval_GetCallStats</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*self</em><big>)</big><a class="headerlink" href="#PyEval_GetCallStats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple of function call counts.  There are constants defined for the
+positions within the tuple:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="82%" />
+<col width="18%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Name</th>
+<th class="head">Value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_ALL</span></tt></td>
+<td>0</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_FUNCTION</span></tt></td>
+<td>1</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_FAST_FUNCTION</span></tt></td>
+<td>2</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_FASTER_FUNCTION</span></tt></td>
+<td>3</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_METHOD</span></tt></td>
+<td>4</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_BOUND_METHOD</span></tt></td>
+<td>5</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_CFUNCTION</span></tt></td>
+<td>6</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_TYPE</span></tt></td>
+<td>7</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_GENERATOR</span></tt></td>
+<td>8</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_OTHER</span></tt></td>
+<td>9</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">PCALL_POP</span></tt></td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="xref py py-const docutils literal"><span class="pre">PCALL_FAST_FUNCTION</span></tt> means no argument tuple needs to be created.
+<tt class="xref py py-const docutils literal"><span class="pre">PCALL_FASTER_FUNCTION</span></tt> means that the fast-path frame setup code is used.</p>
+<p>If there is a method call where the call can be optimized by changing
+the argument tuple and calling the function directly, it gets recorded
+twice.</p>
+<p>This function is only present if Python is compiled with <tt class="xref py py-const docutils literal"><span class="pre">CALL_PROFILE</span></tt>
+defined.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="advanced-debugger-support">
+<span id="advanced-debugging"></span><h2>Advanced Debugger Support<a class="headerlink" href="#advanced-debugger-support" title="Permalink to this headline">¶</a></h2>
+<p>These functions are only intended to be used by advanced debugging tools.</p>
+<dl class="function">
+<dt id="PyInterpreterState_Head">
+<a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a>* <tt class="descname">PyInterpreterState_Head</tt><big>(</big><big>)</big><a class="headerlink" href="#PyInterpreterState_Head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the interpreter state object at the head of the list of all such objects.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInterpreterState_Next">
+<a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a>* <tt class="descname">PyInterpreterState_Next</tt><big>(</big><a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><big>)</big><a class="headerlink" href="#PyInterpreterState_Next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next interpreter state object after <em>interp</em> from the list of all
+such objects.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInterpreterState_ThreadHead">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a> * <tt class="descname">PyInterpreterState_ThreadHead</tt><big>(</big><a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><big>)</big><a class="headerlink" href="#PyInterpreterState_ThreadHead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the a pointer to the first <a class="reference internal" href="#PyThreadState" title="PyThreadState"><tt class="xref c c-type docutils literal"><span class="pre">PyThreadState</span></tt></a> object in the list of
+threads associated with the interpreter <em>interp</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyThreadState_Next">
+<a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a>* <tt class="descname">PyThreadState_Next</tt><big>(</big><a class="reference internal" href="#PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><big>)</big><a class="headerlink" href="#PyThreadState_Next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next thread state object after <em>tstate</em> from the list of all such
+objects belonging to the same <a class="reference internal" href="#PyInterpreterState" title="PyInterpreterState"><tt class="xref c c-type docutils literal"><span class="pre">PyInterpreterState</span></tt></a> object.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Initialization, Finalization, and Threads</a><ul>
+<li><a class="reference internal" href="#initializing-and-finalizing-the-interpreter">Initializing and finalizing the interpreter</a></li>
+<li><a class="reference internal" href="#process-wide-parameters">Process-wide parameters</a></li>
+<li><a class="reference internal" href="#thread-state-and-the-global-interpreter-lock">Thread State and the Global Interpreter Lock</a><ul>
+<li><a class="reference internal" href="#releasing-the-gil-from-extension-code">Releasing the GIL from extension code</a></li>
+<li><a class="reference internal" href="#non-python-created-threads">Non-Python created threads</a></li>
+<li><a class="reference internal" href="#high-level-api">High-level API</a></li>
+<li><a class="reference internal" href="#low-level-api">Low-level API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sub-interpreter-support">Sub-interpreter support</a><ul>
+<li><a class="reference internal" href="#bugs-and-caveats">Bugs and caveats</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#asynchronous-notifications">Asynchronous Notifications</a></li>
+<li><a class="reference internal" href="#profiling-and-tracing">Profiling and Tracing</a></li>
+<li><a class="reference internal" href="#advanced-debugger-support">Advanced Debugger Support</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="code.html"
+                        title="previous chapter">Code Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="memory.html"
+                        title="next chapter">Memory Management</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/init.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="memory.html" title="Memory Management"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Code Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

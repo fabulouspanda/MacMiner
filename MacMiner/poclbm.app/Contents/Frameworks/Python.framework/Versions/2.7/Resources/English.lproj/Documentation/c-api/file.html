@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>File Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Module Objects" href="module.html" />
+    <link rel="prev" title="Method Objects" href="method.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="module.html" title="Module Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="method.html" title="Method Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="file-objects">
+<span id="fileobjects"></span><h1>File Objects<a class="headerlink" href="#file-objects" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Python&#8217;s built-in file objects are implemented entirely on the <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt>
+support from the C standard library.  This is an implementation detail and may
+change in future releases of Python.</p>
+<dl class="type">
+<dt id="PyFileObject">
+<tt class="descname">PyFileObject</tt><a class="headerlink" href="#PyFileObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> represents a Python file object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyFile_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyFile_Type</tt><a class="headerlink" href="#PyFile_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject"><tt class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></tt></a> represents the Python file type.  This is
+exposed to Python programs as <tt class="docutils literal"><span class="pre">file</span></tt> and <tt class="docutils literal"><span class="pre">types.FileType</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_Check">
+int <tt class="descname">PyFile_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyFileObject" title="PyFileObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFileObject</span></tt></a> or a subtype of
+<a class="reference internal" href="#PyFileObject" title="PyFileObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFileObject</span></tt></a>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_CheckExact">
+int <tt class="descname">PyFile_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyFileObject" title="PyFileObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFileObject</span></tt></a>, but not a subtype of
+<a class="reference internal" href="#PyFileObject" title="PyFileObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFileObject</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_FromString">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFile_FromString</tt><big>(</big>char<em>&nbsp;*filename</em>, char<em>&nbsp;*mode</em><big>)</big><a class="headerlink" href="#PyFile_FromString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p id="index-2">On success, return a new file object that is opened on the file given by
+<em>filename</em>, with a file mode given by <em>mode</em>, where <em>mode</em> has the same
+semantics as the standard C routine <tt class="xref c c-func docutils literal"><span class="pre">fopen()</span></tt>.  On failure, return <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_FromFile">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFile_FromFile</tt><big>(</big>FILE<em>&nbsp;*fp</em>, char<em>&nbsp;*name</em>, char<em>&nbsp;*mode</em>, int<em>&nbsp;(*close)(FILE*)</em><big>)</big><a class="headerlink" href="#PyFile_FromFile" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a new <a class="reference internal" href="#PyFileObject" title="PyFileObject"><tt class="xref c c-type docutils literal"><span class="pre">PyFileObject</span></tt></a> from the already-open standard C file
+pointer, <em>fp</em>.  The function <em>close</em> will be called when the file should be
+closed.  Return <em>NULL</em> and close the file using <em>close</em> on failure.
+<em>close</em> is optional and can be set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_AsFile">
+FILE* <tt class="descname">PyFile_AsFile</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_AsFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the file object associated with <em>p</em> as a <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt>.</p>
+<p>If the caller will ever use the returned <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt> object while
+the <a class="reference internal" href="../glossary.html#term-gil"><em class="xref std std-term">GIL</em></a> is released it must also call the <a class="reference internal" href="#PyFile_IncUseCount" title="PyFile_IncUseCount"><tt class="xref c c-func docutils literal"><span class="pre">PyFile_IncUseCount()</span></tt></a> and
+<a class="reference internal" href="#PyFile_DecUseCount" title="PyFile_DecUseCount"><tt class="xref c c-func docutils literal"><span class="pre">PyFile_DecUseCount()</span></tt></a> functions described below as appropriate.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_IncUseCount">
+void <tt class="descname">PyFile_IncUseCount</tt><big>(</big><a class="reference internal" href="#PyFileObject" title="PyFileObject">PyFileObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_IncUseCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increments the PyFileObject&#8217;s internal use count to indicate
+that the underlying <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt> is being used.
+This prevents Python from calling f_close() on it from another thread.
+Callers of this must call <a class="reference internal" href="#PyFile_DecUseCount" title="PyFile_DecUseCount"><tt class="xref c c-func docutils literal"><span class="pre">PyFile_DecUseCount()</span></tt></a> when they are
+finished with the <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt>.  Otherwise the file object will
+never be closed by Python.</p>
+<p>The <a class="reference internal" href="../glossary.html#term-gil"><em class="xref std std-term">GIL</em></a> must be held while calling this function.</p>
+<p>The suggested use is to call this after <a class="reference internal" href="#PyFile_AsFile" title="PyFile_AsFile"><tt class="xref c c-func docutils literal"><span class="pre">PyFile_AsFile()</span></tt></a> and before
+you release the GIL:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span> <span class="o">=</span> <span class="n">PyFile_AsFile</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+<span class="n">PyFile_IncUseCount</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+<span class="cm">/* ... */</span>
+<span class="n">Py_BEGIN_ALLOW_THREADS</span>
+<span class="n">do_something</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+<span class="n">Py_END_ALLOW_THREADS</span>
+<span class="cm">/* ... */</span>
+<span class="n">PyFile_DecUseCount</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_DecUseCount">
+void <tt class="descname">PyFile_DecUseCount</tt><big>(</big><a class="reference internal" href="#PyFileObject" title="PyFileObject">PyFileObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_DecUseCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decrements the PyFileObject&#8217;s internal unlocked_count member to
+indicate that the caller is done with its own use of the <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt>.
+This may only be called to undo a prior call to <a class="reference internal" href="#PyFile_IncUseCount" title="PyFile_IncUseCount"><tt class="xref c c-func docutils literal"><span class="pre">PyFile_IncUseCount()</span></tt></a>.</p>
+<p>The <a class="reference internal" href="../glossary.html#term-gil"><em class="xref std std-term">GIL</em></a> must be held while calling this function (see the example
+above).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_GetLine">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFile_GetLine</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, int<em>&nbsp;n</em><big>)</big><a class="headerlink" href="#PyFile_GetLine" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p id="index-3">Equivalent to <tt class="docutils literal"><span class="pre">p.readline([n])</span></tt>, this function reads one line from the
+object <em>p</em>.  <em>p</em> may be a file object or any object with a <a class="reference internal" href="../library/readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-meth docutils literal"><span class="pre">readline()</span></tt></a>
+method.  If <em>n</em> is <tt class="docutils literal"><span class="pre">0</span></tt>, exactly one line is read, regardless of the length of
+the line.  If <em>n</em> is greater than <tt class="docutils literal"><span class="pre">0</span></tt>, no more than <em>n</em> bytes will be read
+from the file; a partial line can be returned.  In both cases, an empty string
+is returned if the end of the file is reached immediately.  If <em>n</em> is less than
+<tt class="docutils literal"><span class="pre">0</span></tt>, however, one line is read regardless of length, but <a class="reference internal" href="../library/exceptions.html#exceptions.EOFError" title="exceptions.EOFError"><tt class="xref py py-exc docutils literal"><span class="pre">EOFError</span></tt></a> is
+raised if the end of the file is reached immediately.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_Name">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyFile_Name</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_Name" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the name of the file specified by <em>p</em> as a string object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_SetBufSize">
+void <tt class="descname">PyFile_SetBufSize</tt><big>(</big><a class="reference internal" href="#PyFileObject" title="PyFileObject">PyFileObject</a><em>&nbsp;*p</em>, int<em>&nbsp;n</em><big>)</big><a class="headerlink" href="#PyFile_SetBufSize" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-4">Available on systems with <tt class="xref c c-func docutils literal"><span class="pre">setvbuf()</span></tt> only.  This should only be called
+immediately after file object creation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_SetEncoding">
+int <tt class="descname">PyFile_SetEncoding</tt><big>(</big><a class="reference internal" href="#PyFileObject" title="PyFileObject">PyFileObject</a><em>&nbsp;*p</em>, const char<em>&nbsp;*enc</em><big>)</big><a class="headerlink" href="#PyFile_SetEncoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the file&#8217;s encoding for Unicode output to <em>enc</em>. Return 1 on success and 0
+on failure.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_SetEncodingAndErrors">
+int <tt class="descname">PyFile_SetEncodingAndErrors</tt><big>(</big><a class="reference internal" href="#PyFileObject" title="PyFileObject">PyFileObject</a><em>&nbsp;*p</em>, const char<em>&nbsp;*enc</em>, *errors<big>)</big><a class="headerlink" href="#PyFile_SetEncodingAndErrors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the file&#8217;s encoding for Unicode output to <em>enc</em>, and its error
+mode to <em>err</em>. Return 1 on success and 0 on failure.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_SoftSpace">
+int <tt class="descname">PyFile_SoftSpace</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, int<em>&nbsp;newflag</em><big>)</big><a class="headerlink" href="#PyFile_SoftSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-5">This function exists for internal use by the interpreter.  Set the
+<tt class="xref py py-attr docutils literal"><span class="pre">softspace</span></tt> attribute of <em>p</em> to <em>newflag</em> and return the previous value.
+<em>p</em> does not have to be a file object for this function to work properly; any
+object is supported (thought its only interesting if the <tt class="xref py py-attr docutils literal"><span class="pre">softspace</span></tt>
+attribute can be set).  This function clears any errors, and will return <tt class="docutils literal"><span class="pre">0</span></tt>
+as the previous value if the attribute either does not exist or if there were
+errors in retrieving it.  There is no way to detect errors from this function,
+but doing so should not be needed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_WriteObject">
+int <tt class="descname">PyFile_WriteObject</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, int<em>&nbsp;flags</em><big>)</big><a class="headerlink" href="#PyFile_WriteObject" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-6">Write object <em>obj</em> to file object <em>p</em>.  The only supported flag for <em>flags</em> is
+<tt class="xref py py-const docutils literal"><span class="pre">Py_PRINT_RAW</span></tt>; if given, the <a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a> of the object is written
+instead of the <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a>.  Return <tt class="docutils literal"><span class="pre">0</span></tt> on success or <tt class="docutils literal"><span class="pre">-1</span></tt> on failure; the
+appropriate exception will be set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyFile_WriteString">
+int <tt class="descname">PyFile_WriteString</tt><big>(</big>const char<em>&nbsp;*s</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyFile_WriteString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write string <em>s</em> to file object <em>p</em>.  Return <tt class="docutils literal"><span class="pre">0</span></tt> on success or <tt class="docutils literal"><span class="pre">-1</span></tt> on
+failure; the appropriate exception will be set.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="method.html"
+                        title="previous chapter">Method Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="module.html"
+                        title="next chapter">Module Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/file.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="module.html" title="Module Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="method.html" title="Method Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

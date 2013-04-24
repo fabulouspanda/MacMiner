@@ -6,11 +6,10 @@ import numpy as np
 from numpy.core import *
 from numpy.random import rand, randint, randn
 from numpy.testing import *
-from numpy.testing.utils import WarningManager
 from numpy.core.multiarray import dot as dot_
-import warnings
 
-class Vec:
+
+class Vec(object):
     def __init__(self,sequence=None):
         if sequence is None:
             sequence=[]
@@ -247,6 +246,7 @@ class TestSeterr(TestCase):
         finally:
             seterr(**err)
 
+    @dec.skipif(platform.machine() == "armv5tel", "See gh-413.")
     def test_divide_err(self):
         err = seterr(divide='raise')
         try:
@@ -286,9 +286,7 @@ class TestFloatExceptions(TestCase):
         self.assert_raises_fpe(fpeerr, flop, sc1, sc2[()]);
         self.assert_raises_fpe(fpeerr, flop, sc1[()], sc2[()]);
 
-    @dec.knownfailureif((sys.platform == "darwin") and
-                        ("powerpc" in platform.processor()),
-                        "See ticket 1755")
+    @dec.knownfailureif(True, "See ticket 1755")
     def test_floating_exceptions(self):
         """Test basic arithmetic function errors"""
         oldsettings = np.seterr(all='raise')
@@ -329,6 +327,8 @@ class TestFloatExceptions(TestCase):
                         lambda a,b:a+b, ft_max, ft_max*ft_eps)
                 self.assert_raises_fpe(overflow,
                         lambda a,b:a-b, -ft_max, ft_max*ft_eps)
+                self.assert_raises_fpe(overflow,
+                        np.power, ftype(2), ftype(2**fi.nexp))
                 self.assert_raises_fpe(divbyzero,
                         lambda a,b:a/b, ftype(1), ftype(0))
                 self.assert_raises_fpe(invalid,
@@ -344,33 +344,9 @@ class TestFloatExceptions(TestCase):
         finally:
             np.seterr(**oldsettings)
 
-    @dec.knownfailureif(sys.platform.startswith('win') or
-                        (sys.platform == "darwin" and "powerpc" in platform.processor()),
-                        "See ticket 1755")
-    def test_floating_exceptions_power(self):
-        """Test basic arithmetic function errors"""
-        oldsettings = np.seterr(all='raise')
-        try:
-            # Test for all real and complex float types
-            for typecode in np.typecodes['AllFloat']:
-                ftype = np.obj2sctype(typecode)
-                if np.dtype(ftype).kind == 'f':
-                    # Get some extreme values for the type
-                    fi = np.finfo(ftype)
-                else:
-                    # 'c', complex, corresponding real dtype
-                    rtype = type(ftype(0).real)
-                    fi = np.finfo(rtype)
-                overflow = 'overflow'
-
-                self.assert_raises_fpe(overflow,
-                        np.power, ftype(2), ftype(2**fi.nexp))
-        finally:
-            np.seterr(**oldsettings)
-
 class TestTypes(TestCase):
     def check_promotion_cases(self, promote_func):
-        """Tests that the scalars get coerced correctly."""
+        #Tests that the scalars get coerced correctly.
         b = np.bool_(0)
         i8, i16, i32, i64 = int8(0), int16(0), int32(0), int64(0)
         u8, u16, u32, u64 = uint8(0), uint16(0), uint32(0), uint64(0)
@@ -490,6 +466,29 @@ class TestTypes(TestCase):
     def test_result_type(self):
         self.check_promotion_cases(np.result_type)
 
+    def test_promote_types_endian(self):
+        # promote_types should always return native-endian types
+        assert_equal(np.promote_types('<i8', '<i8'), np.dtype('i8'))
+        assert_equal(np.promote_types('>i8', '>i8'), np.dtype('i8'))
+
+        assert_equal(np.promote_types('>i8', '>U16'), np.dtype('U16'))
+        assert_equal(np.promote_types('<i8', '<U16'), np.dtype('U16'))
+        assert_equal(np.promote_types('>U16', '>i8'), np.dtype('U16'))
+        assert_equal(np.promote_types('<U16', '<i8'), np.dtype('U16'))
+
+        assert_equal(np.promote_types('<S5', '<U8'), np.dtype('U8'))
+        assert_equal(np.promote_types('>S5', '>U8'), np.dtype('U8'))
+        assert_equal(np.promote_types('<U8', '<S5'), np.dtype('U8'))
+        assert_equal(np.promote_types('>U8', '>S5'), np.dtype('U8'))
+        assert_equal(np.promote_types('<U5', '<U8'), np.dtype('U8'))
+        assert_equal(np.promote_types('>U8', '>U5'), np.dtype('U8'))
+
+        assert_equal(np.promote_types('<M8', '<M8'), np.dtype('M8'))
+        assert_equal(np.promote_types('>M8', '>M8'), np.dtype('M8'))
+        assert_equal(np.promote_types('<m8', '<m8'), np.dtype('m8'))
+        assert_equal(np.promote_types('>m8', '>m8'), np.dtype('m8'))
+
+
     def test_can_cast(self):
         assert_(np.can_cast(np.int32, np.int64))
         assert_(np.can_cast(np.float64, np.complex))
@@ -552,15 +551,19 @@ class TestFromiter(TestCase):
 class TestNonzero(TestCase):
     def test_nonzero_trivial(self):
         assert_equal(np.count_nonzero(array([])), 0)
+        assert_equal(np.count_nonzero(array([], dtype='?')), 0)
         assert_equal(np.nonzero(array([])), ([],))
 
         assert_equal(np.count_nonzero(array(0)), 0)
+        assert_equal(np.count_nonzero(array(0, dtype='?')), 0)
         assert_equal(np.nonzero(array(0)), ([],))
         assert_equal(np.count_nonzero(array(1)), 1)
+        assert_equal(np.count_nonzero(array(1, dtype='?')), 1)
         assert_equal(np.nonzero(array(1)), ([0],))
 
     def test_nonzero_onedim(self):
         x = array([1,0,2,-1,0,0,8])
+        assert_equal(np.count_nonzero(x), 4)
         assert_equal(np.count_nonzero(x), 4)
         assert_equal(np.nonzero(x), ([0, 2, 3, 6],))
 
@@ -601,6 +604,13 @@ class TestIndex(TestCase):
         g2 = randint(0,8,size=15)
         V[g1,g2] = -V[g1,g2]
         assert_((array([a[0][V>0],a[1][V>0],a[2][V>0]]) == a[:,V>0]).all())
+
+    def test_boolean_edgecase(self):
+        a = np.array([], dtype='int32')
+        b = np.array([], dtype='bool')
+        c = a[b]
+        assert_equal(c, [])
+        assert_equal(c.dtype, np.dtype('int32'))
 
 
 class TestBinaryRepr(TestCase):
@@ -731,7 +741,7 @@ class TestClip(TestCase):
 
     # Now the real test cases
     def test_simple_double(self):
-        """Test native double input with scalar min/max."""
+        #Test native double input with scalar min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = 0.1
         M   = 0.6
@@ -740,7 +750,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_int(self):
-        """Test native int input with scalar min/max."""
+        #Test native int input with scalar min/max.
         a   = self._generate_int_data(self.nr, self.nc)
         a   = a.astype(int)
         m   = -2
@@ -750,7 +760,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_array_double(self):
-        """Test native double input with array min/max."""
+        #Test native double input with array min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = zeros(a.shape)
         M   = m + 0.5
@@ -759,8 +769,8 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_nonnative(self):
-        """Test non native double input with scalar min/max.
-        Test native double input with non native double scalar min/max."""
+        #Test non native double input with scalar min/max.
+        #Test native double input with non native double scalar min/max.
         a   = self._generate_non_native_data(self.nr, self.nc)
         m   = -0.5
         M   = 0.6
@@ -768,7 +778,7 @@ class TestClip(TestCase):
         act = self.clip(a, m, M)
         assert_array_equal(ac, act)
 
-        "Test native double input with non native double scalar min/max."
+        #Test native double input with non native double scalar min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5
         M   = self._neg_byteorder(0.6)
@@ -778,9 +788,8 @@ class TestClip(TestCase):
         assert_array_equal(ac, act)
 
     def test_simple_complex(self):
-        """Test native complex input with native double scalar min/max.
-        Test native input with complex double scalar min/max.
-        """
+        #Test native complex input with native double scalar min/max.
+        #Test native input with complex double scalar min/max.
         a   = 3 * self._generate_data_complex(self.nr, self.nc)
         m   = -0.5
         M   = 1.
@@ -788,7 +797,7 @@ class TestClip(TestCase):
         act = self.clip(a, m, M)
         assert_array_strict_equal(ac, act)
 
-        "Test native input with complex double scalar min/max."
+        #Test native input with complex double scalar min/max.
         a   = 3 * self._generate_data(self.nr, self.nc)
         m   = -0.5 + 1.j
         M   = 1. + 2.j
@@ -797,7 +806,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_non_contig(self):
-        """Test clip for non contiguous native input and native scalar min/max."""
+        #Test clip for non contiguous native input and native scalar min/max.
         a   = self._generate_data(self.nr * 2, self.nc * 3)
         a   = a[::2, ::3]
         assert_(not a.flags['F_CONTIGUOUS'])
@@ -807,7 +816,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_out(self):
-        """Test native double input with scalar min/max."""
+        #Test native double input with scalar min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5
         M   = 0.6
@@ -818,7 +827,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_int32_inout(self):
-        """Test native int32 input with double min/max and int32 out."""
+        #Test native int32 input with double min/max and int32 out.
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = float64(0)
         M   = float64(2)
@@ -829,7 +838,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_int64_out(self):
-        """Test native int32 input with int32 scalar min/max and int64 out."""
+        #Test native int32 input with int32 scalar min/max and int64 out.
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = int32(-1)
         M   = int32(1)
@@ -840,7 +849,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_int64_inout(self):
-        """Test native int32 input with double array min/max and int32 out."""
+        #Test native int32 input with double array min/max and int32 out.
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = zeros(a.shape, float64)
         M   = float64(1)
@@ -851,7 +860,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_int32_out(self):
-        """Test native double input with scalar min/max and int out."""
+        #Test native double input with scalar min/max and int out.
         a   = self._generate_data(self.nr, self.nc)
         m   = -1.0
         M   = 2.0
@@ -862,7 +871,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_simple_inplace_01(self):
-        """Test native double input with array min/max in-place."""
+        #Test native double input with array min/max in-place.
         a   = self._generate_data(self.nr, self.nc)
         ac  = a.copy()
         m   = zeros(a.shape)
@@ -872,7 +881,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(a, ac)
 
     def test_simple_inplace_02(self):
-        """Test native double input with scalar min/max in-place."""
+        #Test native double input with scalar min/max in-place.
         a   = self._generate_data(self.nr, self.nc)
         ac  = a.copy()
         m   = -0.5
@@ -882,7 +891,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(a, ac)
 
     def test_noncontig_inplace(self):
-        """Test non contiguous double input with double scalar min/max in-place."""
+        #Test non contiguous double input with double scalar min/max in-place.
         a   = self._generate_data(self.nr * 2, self.nc * 3)
         a   = a[::2, ::3]
         assert_(not a.flags['F_CONTIGUOUS'])
@@ -895,7 +904,7 @@ class TestClip(TestCase):
         assert_array_equal(a, ac)
 
     def test_type_cast_01(self):
-        "Test native double input with scalar min/max."
+        #Test native double input with scalar min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5
         M   = 0.6
@@ -904,7 +913,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_02(self):
-        "Test native int32 input with int32 scalar min/max."
+        #Test native int32 input with int32 scalar min/max.
         a   = self._generate_int_data(self.nr, self.nc)
         a   = a.astype(int32)
         m   = -2
@@ -914,7 +923,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_03(self):
-        "Test native int32 input with float64 scalar min/max."
+        #Test native int32 input with float64 scalar min/max.
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = -2
         M   = 4
@@ -923,7 +932,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_04(self):
-        "Test native int32 input with float32 scalar min/max."
+        #Test native int32 input with float32 scalar min/max.
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = float32(-2)
         M   = float32(4)
@@ -932,7 +941,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_05(self):
-        "Test native int32 with double arrays min/max."
+        #Test native int32 with double arrays min/max.
         a   = self._generate_int_data(self.nr, self.nc)
         m   = -0.5
         M   = 1.
@@ -941,7 +950,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_06(self):
-        "Test native with NON native scalar min/max."
+        #Test native with NON native scalar min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = 0.5
         m_s = self._neg_byteorder(m)
@@ -951,7 +960,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_07(self):
-        "Test NON native with native array min/max."
+        #Test NON native with native array min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5 * ones(a.shape)
         M   = 1.
@@ -962,7 +971,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_08(self):
-        "Test NON native with native scalar min/max."
+        #Test NON native with native scalar min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5
         M   = 1.
@@ -973,7 +982,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_09(self):
-        "Test native with NON native array min/max."
+        #Test native with NON native array min/max.
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5 * ones(a.shape)
         M   = 1.
@@ -984,7 +993,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_10(self):
-        """Test native int32 with float min/max and float out for output argument."""
+        #Test native int32 with float min/max and float out for output argument.
         a   = self._generate_int_data(self.nr, self.nc)
         b   = zeros(a.shape, dtype = float32)
         m   = float32(-0.5)
@@ -994,7 +1003,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_type_cast_11(self):
-        "Test non native with native scalar, min/max, out non native"
+        #Test non native with native scalar, min/max, out non native
         a   = self._generate_non_native_data(self.nr, self.nc)
         b   = a.copy()
         b   = b.astype(b.dtype.newbyteorder('>'))
@@ -1006,7 +1015,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(b, bt)
 
     def test_type_cast_12(self):
-        "Test native int32 input and min/max and float out"
+        #Test native int32 input and min/max and float out
         a   = self._generate_int_data(self.nr, self.nc)
         b   = zeros(a.shape, dtype = float32)
         m   = int32(0)
@@ -1016,7 +1025,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_with_out_simple(self):
-        "Test native double input with scalar min/max"
+        #Test native double input with scalar min/max
         a   = self._generate_data(self.nr, self.nc)
         m   = -0.5
         M   = 0.6
@@ -1027,7 +1036,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_with_out_simple2(self):
-        "Test native int32 input with double min/max and int32 out"
+        #Test native int32 input with double min/max and int32 out
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = float64(0)
         M   = float64(2)
@@ -1038,7 +1047,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_with_out_simple_int32(self):
-        "Test native int32 input with int32 scalar min/max and int64 out"
+        #Test native int32 input with int32 scalar min/max and int64 out
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = int32(-1)
         M   = int32(1)
@@ -1049,7 +1058,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_with_out_array_int32(self):
-        "Test native int32 input with double array min/max and int32 out"
+        #Test native int32 input with double array min/max and int32 out
         a   = self._generate_int32_data(self.nr, self.nc)
         m   = zeros(a.shape, float64)
         M   = float64(1)
@@ -1060,7 +1069,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_with_out_array_outint32(self):
-        "Test native double input with scalar min/max and int out"
+        #Test native double input with scalar min/max and int out
         a   = self._generate_data(self.nr, self.nc)
         m   = -1.0
         M   = 2.0
@@ -1071,7 +1080,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(ac, act)
 
     def test_clip_inplace_array(self):
-        "Test native double input with array min/max"
+        #Test native double input with array min/max
         a   = self._generate_data(self.nr, self.nc)
         ac  = a.copy()
         m   = zeros(a.shape)
@@ -1081,7 +1090,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(a, ac)
 
     def test_clip_inplace_simple(self):
-        "Test native double input with scalar min/max"
+        #Test native double input with scalar min/max
         a   = self._generate_data(self.nr, self.nc)
         ac  = a.copy()
         m   = -0.5
@@ -1091,8 +1100,7 @@ class TestClip(TestCase):
         assert_array_strict_equal(a, ac)
 
     def test_clip_func_takes_out(self):
-        """ Ensure that the clip() function takes an out= argument.
-        """
+        # Ensure that the clip() function takes an out= argument.
         a = self._generate_data(self.nr, self.nc)
         ac = a.copy()
         m = -0.5
@@ -1103,9 +1111,15 @@ class TestClip(TestCase):
         self.assertTrue(a2 is a)
 
 
-class TestAllclose:
+class TestAllclose(object):
     rtol = 1e-5
     atol = 1e-8
+
+    def setUp(self):
+        self.olderr = np.seterr(invalid='ignore')
+
+    def tearDown(self):
+        np.seterr(**self.olderr)
 
     def tst_allclose(self,x,y):
         assert_(allclose(x,y), "%s and %s not close" % (x,y))
@@ -1114,7 +1128,7 @@ class TestAllclose:
         assert_(not allclose(x,y), "%s and %s shouldn't be close" % (x,y))
 
     def test_ip_allclose(self):
-        """Parametric test factory."""
+        #Parametric test factory.
         arr = array([100,1000])
         aran = arange(125).reshape((5,5,5))
 
@@ -1134,7 +1148,7 @@ class TestAllclose:
             yield (self.tst_allclose,x,y)
 
     def test_ip_not_allclose(self):
-        """Parametric test factory."""
+        #Parametric test factory.
         aran = arange(125).reshape((5,5,5))
 
         atol = self.atol
@@ -1160,6 +1174,119 @@ class TestAllclose:
         allclose(x,y)
         assert_array_equal(x,array([inf,1]))
         assert_array_equal(y,array([0,inf]))
+
+
+class TestIsclose(object):
+    rtol = 1e-5
+    atol = 1e-8
+
+    def setup(self):
+        atol = self.atol
+        rtol = self.rtol
+        arr = array([100,1000])
+        aran = arange(125).reshape((5,5,5))
+
+        self.all_close_tests = [
+                ([1, 0], [1, 0]),
+                ([atol], [0]),
+                ([1], [1 + rtol + atol]),
+                (arr, arr + arr*rtol),
+                (arr, arr + arr*rtol + atol),
+                (aran, aran + aran*rtol),
+                (inf, inf),
+                (inf, [inf]),
+                ([inf, -inf], [inf, -inf]),
+                ]
+        self.none_close_tests = [
+                ([inf, 0], [1, inf]),
+                ([inf, -inf], [1, 0]),
+                ([inf, inf], [1, -inf]),
+                ([inf, inf], [1, 0]),
+                ([nan, 0], [nan, -inf]),
+                ([atol*2], [0]),
+                ([1], [1 + rtol + atol*2]),
+                (aran, aran + rtol*1.1*aran + atol*1.1),
+                (array([inf, 1]), array([0, inf])),
+                ]
+        self.some_close_tests = [
+                ([inf, 0], [inf, atol*2]),
+                ([atol, 1, 1e6*(1 + 2*rtol) + atol], [0, nan, 1e6]),
+                (arange(3), [0, 1, 2.1]),
+                (nan, [nan, nan, nan]),
+                ([0], [atol, inf, -inf, nan]),
+                (0, [atol, inf, -inf, nan]),
+                ]
+        self.some_close_results = [
+                [True, False],
+                [True, False, False],
+                [True, True, False],
+                [False, False, False],
+                [True, False, False, False],
+                [True, False, False, False],
+                ]
+
+    def test_ip_isclose(self):
+        self.setup()
+        tests = self.some_close_tests
+        results = self.some_close_results
+        for (x, y), result in zip(tests, results):
+            yield (assert_array_equal, isclose(x, y), result)
+
+    def tst_all_isclose(self, x, y):
+        assert_(all(isclose(x, y)), "%s and %s not close" % (x, y))
+
+    def tst_none_isclose(self, x, y):
+        msg = "%s and %s shouldn't be close"
+        assert_(not any(isclose(x, y)), msg % (x, y))
+
+    def tst_isclose_allclose(self, x, y):
+        msg = "isclose.all() and allclose aren't same for %s and %s"
+        assert_array_equal(isclose(x, y).all(), allclose(x, y), msg % (x, y))
+
+    def test_ip_all_isclose(self):
+        self.setup()
+        for (x,y) in self.all_close_tests:
+            yield (self.tst_all_isclose, x, y)
+
+    def test_ip_none_isclose(self):
+        self.setup()
+        for (x,y) in self.none_close_tests:
+            yield (self.tst_none_isclose, x, y)
+
+    def test_ip_isclose_allclose(self):
+        self.setup()
+        tests = (self.all_close_tests + self.none_close_tests +
+                 self.some_close_tests)
+        for (x, y) in tests:
+            yield (self.tst_isclose_allclose, x, y)
+
+    def test_equal_nan(self):
+        assert_array_equal(isclose(nan, nan, equal_nan=True), [True])
+        arr = array([1.0, nan])
+        assert_array_equal(isclose(arr, arr, equal_nan=True), [True, True])
+
+    def test_masked_arrays(self):
+        x = np.ma.masked_where([True, True, False], np.arange(3))
+        assert_(type(x) == type(isclose(2, x)))
+
+        x = np.ma.masked_where([True, True, False], [nan, inf, nan])
+        assert_(type(x) == type(isclose(inf, x)))
+
+        x = np.ma.masked_where([True, True, False], [nan, nan, nan])
+        y = isclose(nan, x, equal_nan=True)
+        assert_(type(x) == type(y))
+        # Ensure that the mask isn't modified...
+        assert_array_equal([True, True, False], y.mask)
+
+    def test_scalar_return(self):
+        assert_(isscalar(isclose(1, 1)))
+
+    def test_no_parameter_modification(self):
+        x = array([inf, 1])
+        y = array([0, inf])
+        isclose(x, y)
+        assert_array_equal(x, array([inf, 1]))
+        assert_array_equal(y, array([0, inf]))
 
 
 class TestStdVar(TestCase):
@@ -1272,7 +1399,7 @@ class TestLikeFuncs(TestCase):
             if not value is None:
                 assert_(all(dz == value))
 
-        # Test the 'subok' parameter'
+        # Test the 'subok' parameter
         a = np.matrix([[1,2],[3,4]])
 
         b = like_function(a)
@@ -1349,7 +1476,7 @@ class TestCorrelateNew(_TestCorrelate):
         z = np.correlate(y, x, 'full', old_behavior=self.old_behavior)
         assert_array_almost_equal(z, r_z)
 
-class TestArgwhere:
+class TestArgwhere(object):
     def test_2D(self):
         x = np.arange(6).reshape((2, 3))
         assert_array_equal(np.argwhere(x > 1),
@@ -1361,7 +1488,7 @@ class TestArgwhere:
     def test_list(self):
         assert_equal(np.argwhere([4, 0, 2, 1, 3]), [[0], [2], [3], [4]])
 
-class TestStringFunction:
+class TestStringFunction(object):
     def test_set_string_function(self):
         a = np.array([1])
         np.set_string_function(lambda x: "FOO", repr=True)

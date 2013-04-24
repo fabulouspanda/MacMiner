@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>15.14. curses.panel — A panel stack extension for curses &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="15. Generic Operating System Services" href="allos.html" />
+    <link rel="next" title="15.15. platform — Access to underlying platform’s identifying data" href="platform.html" />
+    <link rel="prev" title="15.13. curses.ascii — Utilities for ASCII characters" href="curses.ascii.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="platform.html" title="15.15. platform — Access to underlying platform’s identifying data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="curses.ascii.html" title="15.13. curses.ascii — Utilities for ASCII characters"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="allos.html" accesskey="U">15. Generic Operating System Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-curses.panel">
+<span id="curses-panel-a-panel-stack-extension-for-curses"></span><h1>15.14. <a class="reference internal" href="#module-curses.panel" title="curses.panel: A panel stack extension that adds depth to  curses windows."><tt class="xref py py-mod docutils literal"><span class="pre">curses.panel</span></tt></a> &#8212; A panel stack extension for curses<a class="headerlink" href="#module-curses.panel" title="Permalink to this headline">¶</a></h1>
+<p>Panels are windows with the added feature of depth, so they can be stacked on
+top of each other, and only the visible portions of each window will be
+displayed.  Panels can be added, moved up or down in the stack, and removed.</p>
+<div class="section" id="functions">
+<span id="cursespanel-functions"></span><h2>15.14.1. Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>The module <a class="reference internal" href="#module-curses.panel" title="curses.panel: A panel stack extension that adds depth to  curses windows."><tt class="xref py py-mod docutils literal"><span class="pre">curses.panel</span></tt></a> defines the following functions:</p>
+<dl class="function">
+<dt id="curses.panel.bottom_panel">
+<tt class="descclassname">curses.panel.</tt><tt class="descname">bottom_panel</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.bottom_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the bottom panel in the panel stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="curses.panel.new_panel">
+<tt class="descclassname">curses.panel.</tt><tt class="descname">new_panel</tt><big>(</big><em>win</em><big>)</big><a class="headerlink" href="#curses.panel.new_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a panel object, associating it with the given window <em>win</em>. Be aware
+that you need to keep the returned panel object referenced explicitly.  If you
+don&#8217;t, the panel object is garbage collected and removed from the panel stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="curses.panel.top_panel">
+<tt class="descclassname">curses.panel.</tt><tt class="descname">top_panel</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.top_panel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the top panel in the panel stack.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="curses.panel.update_panels">
+<tt class="descclassname">curses.panel.</tt><tt class="descname">update_panels</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.update_panels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the virtual screen after changes in the panel stack. This does not call
+<a class="reference internal" href="curses.html#curses.doupdate" title="curses.doupdate"><tt class="xref py py-func docutils literal"><span class="pre">curses.doupdate()</span></tt></a>, so you&#8217;ll have to do this yourself.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="panel-objects">
+<span id="curses-panel-objects"></span><h2>15.14.2. Panel Objects<a class="headerlink" href="#panel-objects" title="Permalink to this headline">¶</a></h2>
+<p>Panel objects, as returned by <a class="reference internal" href="#curses.panel.new_panel" title="curses.panel.new_panel"><tt class="xref py py-func docutils literal"><span class="pre">new_panel()</span></tt></a> above, are windows with a
+stacking order. There&#8217;s always a window associated with a panel which determines
+the content, while the panel methods are responsible for the window&#8217;s depth in
+the panel stack.</p>
+<p>Panel objects have the following methods:</p>
+<dl class="method">
+<dt id="curses.panel.Panel.above">
+<tt class="descclassname">Panel.</tt><tt class="descname">above</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.above" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the panel above the current panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.below">
+<tt class="descclassname">Panel.</tt><tt class="descname">below</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.below" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the panel below the current panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.bottom">
+<tt class="descclassname">Panel.</tt><tt class="descname">bottom</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.bottom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push the panel to the bottom of the stack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.hidden">
+<tt class="descclassname">Panel.</tt><tt class="descname">hidden</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.hidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the panel is hidden (not visible), false otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.hide">
+<tt class="descclassname">Panel.</tt><tt class="descname">hide</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the panel. This does not delete the object, it just makes the window on
+screen invisible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.move">
+<tt class="descclassname">Panel.</tt><tt class="descname">move</tt><big>(</big><em>y</em>, <em>x</em><big>)</big><a class="headerlink" href="#curses.panel.Panel.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the panel to the screen coordinates <tt class="docutils literal"><span class="pre">(y,</span> <span class="pre">x)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.replace">
+<tt class="descclassname">Panel.</tt><tt class="descname">replace</tt><big>(</big><em>win</em><big>)</big><a class="headerlink" href="#curses.panel.Panel.replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the window associated with the panel to the window <em>win</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.set_userptr">
+<tt class="descclassname">Panel.</tt><tt class="descname">set_userptr</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#curses.panel.Panel.set_userptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the panel&#8217;s user pointer to <em>obj</em>. This is used to associate an arbitrary
+piece of data with the panel, and can be any Python object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.show">
+<tt class="descclassname">Panel.</tt><tt class="descname">show</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the panel (which might have been hidden).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.top">
+<tt class="descclassname">Panel.</tt><tt class="descname">top</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push panel to the top of the stack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.userptr">
+<tt class="descclassname">Panel.</tt><tt class="descname">userptr</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.userptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the user pointer for the panel.  This might be any Python object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="curses.panel.Panel.window">
+<tt class="descclassname">Panel.</tt><tt class="descname">window</tt><big>(</big><big>)</big><a class="headerlink" href="#curses.panel.Panel.window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the window object associated with the panel.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">15.14. <tt class="docutils literal"><span class="pre">curses.panel</span></tt> &#8212; A panel stack extension for curses</a><ul>
+<li><a class="reference internal" href="#functions">15.14.1. Functions</a></li>
+<li><a class="reference internal" href="#panel-objects">15.14.2. Panel Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="curses.ascii.html"
+                        title="previous chapter">15.13. <tt class="docutils literal docutils literal docutils literal"><span class="pre">curses.ascii</span></tt> &#8212; Utilities for ASCII characters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="platform.html"
+                        title="next chapter">15.15. <tt class="docutils literal"><span class="pre">platform</span></tt> &#8212;  Access to underlying platform&#8217;s identifying data</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/curses.panel.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="platform.html" title="15.15. platform — Access to underlying platform’s identifying data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="curses.ascii.html" title="15.13. curses.ascii — Utilities for ASCII characters"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="allos.html" >15. Generic Operating System Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python Advocacy HOWTO &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python HOWTOs" href="index.html" />
+    <link rel="next" title="Porting Python 2 Code to Python 3" href="pyporting.html" />
+    <link rel="prev" title="Python HOWTOs" href="index.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyporting.html" title="Porting Python 2 Code to Python 3"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python HOWTOs"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python-advocacy-howto">
+<h1>Python Advocacy HOWTO<a class="headerlink" href="#python-advocacy-howto" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">A.M. Kuchling</td>
+</tr>
+<tr class="field"><th class="field-name">Release:</th><td class="field-body">0.03</td>
+</tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">Abstract</p>
+<p>It&#8217;s usually difficult to get your management to accept open source software,
+and Python is no exception to this rule.  This document discusses reasons to use
+Python, strategies for winning acceptance, facts and arguments you can use, and
+cases where you <em>shouldn&#8217;t</em> try to use Python.</p>
+</div>
+<div class="section" id="reasons-to-use-python">
+<h2>Reasons to Use Python<a class="headerlink" href="#reasons-to-use-python" title="Permalink to this headline">¶</a></h2>
+<p>There are several reasons to incorporate a scripting language into your
+development process, and this section will discuss them, and why Python has some
+properties that make it a particularly good choice.</p>
+<div class="section" id="programmability">
+<h3>Programmability<a class="headerlink" href="#programmability" title="Permalink to this headline">¶</a></h3>
+<p>Programs are often organized in a modular fashion.  Lower-level operations are
+grouped together, and called by higher-level functions, which may in turn be
+used as basic operations by still further upper levels.</p>
+<p>For example, the lowest level might define a very low-level set of functions for
+accessing a hash table.  The next level might use hash tables to store the
+headers of a mail message, mapping a header name like <tt class="docutils literal"><span class="pre">Date</span></tt> to a value such
+as <tt class="docutils literal"><span class="pre">Tue,</span> <span class="pre">13</span> <span class="pre">May</span> <span class="pre">1997</span> <span class="pre">20:00:54</span> <span class="pre">-0400</span></tt>.  A yet higher level may operate on
+message objects, without knowing or caring that message headers are stored in a
+hash table, and so forth.</p>
+<p>Often, the lowest levels do very simple things; they implement a data structure
+such as a binary tree or hash table, or they perform some simple computation,
+such as converting a date string to a number.  The higher levels then contain
+logic connecting these primitive operations.  Using the approach, the primitives
+can be seen as basic building blocks which are then glued together to produce
+the complete product.</p>
+<p>Why is this design approach relevant to Python?  Because Python is well suited
+to functioning as such a glue language.  A common approach is to write a Python
+module that implements the lower level operations; for the sake of speed, the
+implementation might be in C, Java, or even Fortran.  Once the primitives are
+available to Python programs, the logic underlying higher level operations is
+written in the form of Python code.  The high-level logic is then more
+understandable, and easier to modify.</p>
+<p>John Ousterhout wrote a paper that explains this idea at greater length,
+entitled &#8220;Scripting: Higher Level Programming for the 21st Century&#8221;.  I
+recommend that you read this paper; see the references for the URL.  Ousterhout
+is the inventor of the Tcl language, and therefore argues that Tcl should be
+used for this purpose; he only briefly refers to other languages such as Python,
+Perl, and Lisp/Scheme, but in reality, Ousterhout&#8217;s argument applies to
+scripting languages in general, since you could equally write extensions for any
+of the languages mentioned above.</p>
+</div>
+<div class="section" id="prototyping">
+<h3>Prototyping<a class="headerlink" href="#prototyping" title="Permalink to this headline">¶</a></h3>
+<p>In <em>The Mythical Man-Month</em>, Fredrick Brooks suggests the following rule when
+planning software projects: &#8220;Plan to throw one away; you will anyway.&#8221;  Brooks
+is saying that the first attempt at a software design often turns out to be
+wrong; unless the problem is very simple or you&#8217;re an extremely good designer,
+you&#8217;ll find that new requirements and features become apparent once development
+has actually started.  If these new requirements can&#8217;t be cleanly incorporated
+into the program&#8217;s structure, you&#8217;re presented with two unpleasant choices:
+hammer the new features into the program somehow, or scrap everything and write
+a new version of the program, taking the new features into account from the
+beginning.</p>
+<p>Python provides you with a good environment for quickly developing an initial
+prototype.  That lets you get the overall program structure and logic right, and
+you can fine-tune small details in the fast development cycle that Python
+provides.  Once you&#8217;re satisfied with the GUI interface or program output, you
+can translate the Python code into C++, Fortran, Java, or some other compiled
+language.</p>
+<p>Prototyping means you have to be careful not to use too many Python features
+that are hard to implement in your other language.  Using <tt class="docutils literal"><span class="pre">eval()</span></tt>, or regular
+expressions, or the <a class="reference internal" href="../library/pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt></a> module, means that you&#8217;re going to need C or
+Java libraries for formula evaluation, regular expressions, and serialization,
+for example.  But it&#8217;s not hard to avoid such tricky code, and in the end the
+translation usually isn&#8217;t very difficult.  The resulting code can be rapidly
+debugged, because any serious logical errors will have been removed from the
+prototype, leaving only more minor slip-ups in the translation to track down.</p>
+<p>This strategy builds on the earlier discussion of programmability. Using Python
+as glue to connect lower-level components has obvious relevance for constructing
+prototype systems.  In this way Python can help you with development, even if
+end users never come in contact with Python code at all.  If the performance of
+the Python version is adequate and corporate politics allow it, you may not need
+to do a translation into C or Java, but it can still be faster to develop a
+prototype and then translate it, instead of attempting to produce the final
+version immediately.</p>
+<p>One example of this development strategy is Microsoft Merchant Server. Version
+1.0 was written in pure Python, by a company that subsequently was purchased by
+Microsoft.  Version 2.0 began to translate the code into C++, shipping with some
+C++code and some Python code.  Version 3.0 didn&#8217;t contain any Python at all; all
+the code had been translated into C++.  Even though the product doesn&#8217;t contain
+a Python interpreter, the Python language has still served a useful purpose by
+speeding up development.</p>
+<p>This is a very common use for Python.  Past conference papers have also
+described this approach for developing high-level numerical algorithms; see
+David M. Beazley and Peter S. Lomdahl&#8217;s paper &#8220;Feeding a Large-scale Physics
+Application to Python&#8221; in the references for a good example.  If an algorithm&#8217;s
+basic operations are things like &#8220;Take the inverse of this 4000x4000 matrix&#8221;,
+and are implemented in some lower-level language, then Python has almost no
+additional performance cost; the extra time required for Python to evaluate an
+expression like <tt class="docutils literal"><span class="pre">m.invert()</span></tt> is dwarfed by the cost of the actual computation.
+It&#8217;s particularly good for applications where seemingly endless tweaking is
+required to get things right. GUI interfaces and Web sites are prime examples.</p>
+<p>The Python code is also shorter and faster to write (once you&#8217;re familiar with
+Python), so it&#8217;s easier to throw it away if you decide your approach was wrong;
+if you&#8217;d spent two weeks working on it instead of just two hours, you might
+waste time trying to patch up what you&#8217;ve got out of a natural reluctance to
+admit that those two weeks were wasted.  Truthfully, those two weeks haven&#8217;t
+been wasted, since you&#8217;ve learnt something about the problem and the technology
+you&#8217;re using to solve it, but it&#8217;s human nature to view this as a failure of
+some sort.</p>
+</div>
+<div class="section" id="simplicity-and-ease-of-understanding">
+<h3>Simplicity and Ease of Understanding<a class="headerlink" href="#simplicity-and-ease-of-understanding" title="Permalink to this headline">¶</a></h3>
+<p>Python is definitely <em>not</em> a toy language that&#8217;s only usable for small tasks.
+The language features are general and powerful enough to enable it to be used
+for many different purposes.  It&#8217;s useful at the small end, for 10- or 20-line
+scripts, but it also scales up to larger systems that contain thousands of lines
+of code.</p>
+<p>However, this expressiveness doesn&#8217;t come at the cost of an obscure or tricky
+syntax.  While Python has some dark corners that can lead to obscure code, there
+are relatively few such corners, and proper design can isolate their use to only
+a few classes or modules.  It&#8217;s certainly possible to write confusing code by
+using too many features with too little concern for clarity, but most Python
+code can look a lot like a slightly-formalized version of human-understandable
+pseudocode.</p>
+<p>In <em>The New Hacker&#8217;s Dictionary</em>, Eric S. Raymond gives the following definition
+for &#8220;compact&#8221;:</p>
+<blockquote class="epigraph">
+<div><p>Compact <em>adj.</em>  Of a design, describes the valuable property that it can all be
+apprehended at once in one&#8217;s head. This generally means the thing created from
+the design can be used with greater facility and fewer errors than an equivalent
+tool that is not compact. Compactness does not imply triviality or lack of
+power; for example, C is compact and FORTRAN is not, but C is more powerful than
+FORTRAN. Designs become non-compact through accreting features and cruft that
+don&#8217;t merge cleanly into the overall design scheme (thus, some fans of Classic C
+maintain that ANSI C is no longer compact).</p>
+<p>(From <a class="reference external" href="http://www.catb.org/~esr/jargon/html/C/compact.html">http://www.catb.org/~esr/jargon/html/C/compact.html</a>)</p>
+</div></blockquote>
+<p>In this sense of the word, Python is quite compact, because the language has
+just a few ideas, which are used in lots of places.  Take namespaces, for
+example.  Import a module with <tt class="docutils literal"><span class="pre">import</span> <span class="pre">math</span></tt>, and you create a new namespace
+called <tt class="docutils literal"><span class="pre">math</span></tt>.  Classes are also namespaces that share many of the properties
+of modules, and have a few of their own; for example, you can create instances
+of a class. Instances?  They&#8217;re yet another namespace.  Namespaces are currently
+implemented as Python dictionaries, so they have the same methods as the
+standard dictionary data type: .keys() returns all the keys, and so forth.</p>
+<p>This simplicity arises from Python&#8217;s development history.  The language syntax
+derives from different sources; ABC, a relatively obscure teaching language, is
+one primary influence, and Modula-3 is another.  (For more information about ABC
+and Modula-3, consult their respective Web sites at <a class="reference external" href="http://www.cwi.nl/~steven/abc/">http://www.cwi.nl/~steven/abc/</a>
+and <a class="reference external" href="http://www.m3.org">http://www.m3.org</a>.)  Other features have come from C, Icon,
+Algol-68, and even Perl.  Python hasn&#8217;t really innovated very much, but instead
+has tried to keep the language small and easy to learn, building on ideas that
+have been tried in other languages and found useful.</p>
+<p>Simplicity is a virtue that should not be underestimated.  It lets you learn the
+language more quickly, and then rapidly write code &#8211; code that often works the
+first time you run it.</p>
+</div>
+<div class="section" id="java-integration">
+<h3>Java Integration<a class="headerlink" href="#java-integration" title="Permalink to this headline">¶</a></h3>
+<p>If you&#8217;re working with Java, Jython (<a class="reference external" href="http://www.jython.org/">http://www.jython.org/</a>) is definitely worth
+your attention.  Jython is a re-implementation of Python in Java that compiles
+Python code into Java bytecodes.  The resulting environment has very tight,
+almost seamless, integration with Java.  It&#8217;s trivial to access Java classes
+from Python, and you can write Python classes that subclass Java classes.
+Jython can be used for prototyping Java applications in much the same way
+CPython is used, and it can also be used for test suites for Java code, or
+embedded in a Java application to add scripting capabilities.</p>
+</div>
+</div>
+<div class="section" id="arguments-and-rebuttals">
+<h2>Arguments and Rebuttals<a class="headerlink" href="#arguments-and-rebuttals" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s say that you&#8217;ve decided upon Python as the best choice for your
+application.  How can you convince your management, or your fellow developers,
+to use Python?  This section lists some common arguments against using Python,
+and provides some possible rebuttals.</p>
+<p><strong>Python is freely available software that doesn&#8217;t cost anything. How good can
+it be?</strong></p>
+<p>Very good, indeed.  These days Linux and Apache, two other pieces of open source
+software, are becoming more respected as alternatives to commercial software,
+but Python hasn&#8217;t had all the publicity.</p>
+<p>Python has been around for several years, with many users and developers.
+Accordingly, the interpreter has been used by many people, and has gotten most
+of the bugs shaken out of it.  While bugs are still discovered at intervals,
+they&#8217;re usually either quite obscure (they&#8217;d have to be, for no one to have run
+into them before) or they involve interfaces to external libraries.  The
+internals of the language itself are quite stable.</p>
+<p>Having the source code should be viewed as making the software available for
+peer review; people can examine the code, suggest (and implement) improvements,
+and track down bugs.  To find out more about the idea of open source code, along
+with arguments and case studies supporting it, go to <a class="reference external" href="http://www.opensource.org">http://www.opensource.org</a>.</p>
+<p><strong>Who&#8217;s going to support it?</strong></p>
+<p>Python has a sizable community of developers, and the number is still growing.
+The Internet community surrounding the language is an active one, and is worth
+being considered another one of Python&#8217;s advantages. Most questions posted to
+the comp.lang.python newsgroup are quickly answered by someone.</p>
+<p>Should you need to dig into the source code, you&#8217;ll find it&#8217;s clear and
+well-organized, so it&#8217;s not very difficult to write extensions and track down
+bugs yourself.  If you&#8217;d prefer to pay for support, there are companies and
+individuals who offer commercial support for Python.</p>
+<p><strong>Who uses Python for serious work?</strong></p>
+<p>Lots of people; one interesting thing about Python is the surprising diversity
+of applications that it&#8217;s been used for.  People are using Python to:</p>
+<ul class="simple">
+<li>Run Web sites</li>
+<li>Write GUI interfaces</li>
+<li>Control number-crunching code on supercomputers</li>
+<li>Make a commercial application scriptable by embedding the Python interpreter
+inside it</li>
+<li>Process large XML data sets</li>
+<li>Build test suites for C or Java code</li>
+</ul>
+<p>Whatever your application domain is, there&#8217;s probably someone who&#8217;s used Python
+for something similar.  Yet, despite being useable for such high-end
+applications, Python&#8217;s still simple enough to use for little jobs.</p>
+<p>See <a class="reference external" href="http://wiki.python.org/moin/OrganizationsUsingPython">http://wiki.python.org/moin/OrganizationsUsingPython</a> for a list of some of
+the  organizations that use Python.</p>
+<p><strong>What are the restrictions on Python&#8217;s use?</strong></p>
+<p>They&#8217;re practically nonexistent.  Consult <a class="reference internal" href="../license.html#history-and-license"><em>History and License</em></a> for the full
+language, but it boils down to three conditions:</p>
+<ul class="simple">
+<li>You have to leave the copyright notice on the software; if you don&#8217;t include
+the source code in a product, you have to put the copyright notice in the
+supporting documentation.</li>
+<li>Don&#8217;t claim that the institutions that have developed Python endorse your
+product in any way.</li>
+<li>If something goes wrong, you can&#8217;t sue for damages.  Practically all software
+licenses contain this condition.</li>
+</ul>
+<p>Notice that you don&#8217;t have to provide source code for anything that contains
+Python or is built with it.  Also, the Python interpreter and accompanying
+documentation can be modified and redistributed in any way you like, and you
+don&#8217;t have to pay anyone any licensing fees at all.</p>
+<p><strong>Why should we use an obscure language like Python instead of well-known
+language X?</strong></p>
+<p>I hope this HOWTO, and the documents listed in the final section, will help
+convince you that Python isn&#8217;t obscure, and has a healthily growing user base.
+One word of advice: always present Python&#8217;s positive advantages, instead of
+concentrating on language X&#8217;s failings.  People want to know why a solution is
+good, rather than why all the other solutions are bad.  So instead of attacking
+a competing solution on various grounds, simply show how Python&#8217;s virtues can
+help.</p>
+</div>
+<div class="section" id="useful-resources">
+<h2>Useful Resources<a class="headerlink" href="#useful-resources" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><a class="reference external" href="http://www.pythonology.com/success">http://www.pythonology.com/success</a></dt>
+<dd>The Python Success Stories are a collection of stories from successful users of
+Python, with the emphasis on business and corporate users.</dd>
+</dl>
+<dl class="docutils">
+<dt><a class="reference external" href="http://www.tcl.tk/doc/scripting.html">http://www.tcl.tk/doc/scripting.html</a></dt>
+<dd>John Ousterhout&#8217;s white paper on scripting is a good argument for the utility of
+scripting languages, though naturally enough, he emphasizes Tcl, the language he
+developed.  Most of the arguments would apply to any scripting language.</dd>
+<dt><a class="reference external" href="http://www.python.org/workshops/1997-10/proceedings/beazley.html">http://www.python.org/workshops/1997-10/proceedings/beazley.html</a></dt>
+<dd><p class="first">The authors, David M. Beazley and Peter S. Lomdahl,  describe their use of
+Python at Los Alamos National Laboratory. It&#8217;s another good example of how
+Python can help get real work done. This quotation from the paper has been
+echoed by many people:</p>
+<blockquote class="epigraph last">
+<div>Originally developed as a large monolithic application for massively parallel
+processing systems, we have used Python to transform our application into a
+flexible, highly modular, and extremely powerful system for performing
+simulation, data analysis, and visualization. In addition, we describe how
+Python has solved a number of important problems related to the development,
+debugging, deployment, and maintenance of scientific software.</div></blockquote>
+</dd>
+<dt><a class="reference external" href="http://pythonjournal.cognizor.com/pyj1/Everitt-Feit_interview98-V1.html">http://pythonjournal.cognizor.com/pyj1/Everitt-Feit_interview98-V1.html</a></dt>
+<dd>This interview with Andy Feit, discussing Infoseek&#8217;s use of Python, can be used
+to show that choosing Python didn&#8217;t introduce any difficulties into a company&#8217;s
+development process, and provided some substantial benefits.</dd>
+</dl>
+<dl class="docutils">
+<dt><a class="reference external" href="http://www.python.org/workshops/1997-10/proceedings/stein.ps">http://www.python.org/workshops/1997-10/proceedings/stein.ps</a></dt>
+<dd>For the 6th Python conference, Greg Stein presented a paper that traced Python&#8217;s
+adoption and usage at a startup called eShop, and later at Microsoft.</dd>
+<dt><a class="reference external" href="http://www.opensource.org">http://www.opensource.org</a></dt>
+<dd>Management may be doubtful of the reliability and usefulness of software that
+wasn&#8217;t written commercially.  This site presents arguments that show how open
+source software can have considerable advantages over closed-source software.</dd>
+<dt><a class="reference external" href="http://www.faqs.org/docs/Linux-mini/Advocacy.html">http://www.faqs.org/docs/Linux-mini/Advocacy.html</a></dt>
+<dd>The Linux Advocacy mini-HOWTO was the inspiration for this document, and is also
+well worth reading for general suggestions on winning acceptance for a new
+technology, such as Linux or Python.  In general, you won&#8217;t make much progress
+by simply attacking existing systems and complaining about their inadequacies;
+this often ends up looking like unfocused whining.  It&#8217;s much better to point
+out some of the many areas where Python is an improvement over other systems.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python Advocacy HOWTO</a><ul>
+<li><a class="reference internal" href="#reasons-to-use-python">Reasons to Use Python</a><ul>
+<li><a class="reference internal" href="#programmability">Programmability</a></li>
+<li><a class="reference internal" href="#prototyping">Prototyping</a></li>
+<li><a class="reference internal" href="#simplicity-and-ease-of-understanding">Simplicity and Ease of Understanding</a></li>
+<li><a class="reference internal" href="#java-integration">Java Integration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#arguments-and-rebuttals">Arguments and Rebuttals</a></li>
+<li><a class="reference internal" href="#useful-resources">Useful Resources</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Python HOWTOs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pyporting.html"
+                        title="next chapter">Porting Python 2 Code to Python 3</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/howto/advocacy.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyporting.html" title="Porting Python 2 Code to Python 3"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python HOWTOs"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -29,7 +29,7 @@ def apply_along_axis(func1d,axis,arr,*args):
 
     Returns
     -------
-    outarr : ndarray
+    apply_along_axis : ndarray
         The output array. The shape of `outarr` is identical to the shape of
         `arr`, except along the `axis` dimension, where the length of `outarr`
         is equal to the size of the return value of `func1d`.  If `func1d`
@@ -142,7 +142,7 @@ def apply_over_axes(func, a, axes):
 
     Returns
     -------
-    val : ndarray
+    apply_over_axis : ndarray
         The output array.  The number of dimensions is the same as `a`,
         but the shape can be different.  This depends on whether `func`
         changes the shape of its output with respect to its input.
@@ -187,8 +187,8 @@ def apply_over_axes(func, a, axes):
             if res.ndim == val.ndim:
                 val = res
             else:
-                raise ValueError, "function is not returning"\
-                      " an array of correct shape"
+                raise ValueError("function is not returning "
+                        "an array of the correct shape")
     return val
 
 def expand_dims(a, axis):
@@ -355,7 +355,7 @@ def _replace_zero_by_x_arrays(sub_arys):
 
 def array_split(ary,indices_or_sections,axis = 0):
     """
-    Split an array into multiple sub-arrays of equal or near-equal size.
+    Split an array into multiple sub-arrays.
 
     Please refer to the ``split`` documentation.  The only difference
     between these functions is that ``array_split`` allows
@@ -383,7 +383,7 @@ def array_split(ary,indices_or_sections,axis = 0):
     except TypeError: #indices_or_sections is a scalar, not an array.
         Nsections = int(indices_or_sections)
         if Nsections <= 0:
-            raise ValueError, 'number sections must be larger than 0.'
+            raise ValueError('number sections must be larger than 0.')
         Neach_section,extras = divmod(Ntotal,Nsections)
         section_sizes = [0] + \
                         extras * [Neach_section+1] + \
@@ -396,17 +396,17 @@ def array_split(ary,indices_or_sections,axis = 0):
         st = div_points[i]; end = div_points[i+1]
         sub_arys.append(_nx.swapaxes(sary[st:end],axis,0))
 
-    # there is a wierd issue with array slicing that allows
-    # 0x10 arrays and other such things.  The following cluge is needed
+    # there is a weird issue with array slicing that allows
+    # 0x10 arrays and other such things. The following kludge is needed
     # to get around this issue.
     sub_arys = _replace_zero_by_x_arrays(sub_arys)
-    # end cluge.
+    # end kludge.
 
     return sub_arys
 
 def split(ary,indices_or_sections,axis=0):
     """
-    Split an array into multiple sub-arrays of equal size.
+    Split an array into multiple sub-arrays.
 
     Parameters
     ----------
@@ -474,7 +474,7 @@ def split(ary,indices_or_sections,axis=0):
         sections = indices_or_sections
         N = ary.shape[axis]
         if N % sections:
-            raise ValueError, 'array split does not result in an equal division'
+            raise ValueError('array split does not result in an equal division')
     res = array_split(ary,indices_or_sections,axis)
     return res
 
@@ -534,7 +534,7 @@ def hsplit(ary,indices_or_sections):
 
     """
     if len(_nx.shape(ary)) == 0:
-        raise ValueError, 'hsplit only works on arrays of 1 or more dimensions'
+        raise ValueError('hsplit only works on arrays of 1 or more dimensions')
     if len(ary.shape) > 1:
         return split(ary,indices_or_sections,1)
     else:
@@ -588,7 +588,7 @@ def vsplit(ary,indices_or_sections):
 
     """
     if len(_nx.shape(ary)) < 2:
-        raise ValueError, 'vsplit only works on arrays of 2 or more dimensions'
+        raise ValueError('vsplit only works on arrays of 2 or more dimensions')
     return split(ary,indices_or_sections,0)
 
 def dsplit(ary,indices_or_sections):
@@ -633,7 +633,7 @@ def dsplit(ary,indices_or_sections):
 
     """
     if len(_nx.shape(ary)) < 3:
-        raise ValueError, 'vsplit only works on arrays of 3 or more dimensions'
+        raise ValueError('vsplit only works on arrays of 3 or more dimensions')
     return split(ary,indices_or_sections,2)
 
 def get_array_prepare(*args):

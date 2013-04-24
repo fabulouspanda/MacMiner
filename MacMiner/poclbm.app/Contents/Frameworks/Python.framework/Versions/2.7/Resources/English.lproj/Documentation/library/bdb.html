@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>26.1. bdb — Debugger framework &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="26. Debugging and Profiling" href="debug.html" />
+    <link rel="next" title="26.2. pdb — The Python Debugger" href="pdb.html" />
+    <link rel="prev" title="26. Debugging and Profiling" href="debug.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdb.html" title="26.2. pdb — The Python Debugger"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="26. Debugging and Profiling"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="debug.html" accesskey="U">26. Debugging and Profiling</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-bdb">
+<span id="bdb-debugger-framework"></span><h1>26.1. <a class="reference internal" href="#module-bdb" title="bdb: Debugger framework."><tt class="xref py py-mod docutils literal"><span class="pre">bdb</span></tt></a> &#8212; Debugger framework<a class="headerlink" href="#module-bdb" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/bdb.py">Lib/bdb.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-bdb" title="bdb: Debugger framework."><tt class="xref py py-mod docutils literal"><span class="pre">bdb</span></tt></a> module handles basic debugger functions, like setting breakpoints
+or managing execution via the debugger.</p>
+<p>The following exception is defined:</p>
+<dl class="exception">
+<dt id="bdb.BdbQuit">
+<em class="property">exception </em><tt class="descclassname">bdb.</tt><tt class="descname">BdbQuit</tt><a class="headerlink" href="#bdb.BdbQuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised by the <a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><tt class="xref py py-class docutils literal"><span class="pre">Bdb</span></tt></a> class for quitting the debugger.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-bdb" title="bdb: Debugger framework."><tt class="xref py py-mod docutils literal"><span class="pre">bdb</span></tt></a> module also defines two classes:</p>
+<dl class="class">
+<dt id="bdb.Breakpoint">
+<em class="property">class </em><tt class="descclassname">bdb.</tt><tt class="descname">Breakpoint</tt><big>(</big><em>self</em>, <em>file</em>, <em>line</em>, <em>temporary=0</em>, <em>cond=None</em>, <em>funcname=None</em><big>)</big><a class="headerlink" href="#bdb.Breakpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class implements temporary breakpoints, ignore counts, disabling and
+(re-)enabling, and conditionals.</p>
+<p>Breakpoints are indexed by number through a list called <tt class="xref py py-attr docutils literal"><span class="pre">bpbynumber</span></tt>
+and by <tt class="docutils literal"><span class="pre">(file,</span> <span class="pre">line)</span></tt> pairs through <tt class="xref py py-attr docutils literal"><span class="pre">bplist</span></tt>.  The former points to a
+single instance of class <a class="reference internal" href="#bdb.Breakpoint" title="bdb.Breakpoint"><tt class="xref py py-class docutils literal"><span class="pre">Breakpoint</span></tt></a>.  The latter points to a list of
+such instances since there may be more than one breakpoint per line.</p>
+<p>When creating a breakpoint, its associated filename should be in canonical
+form.  If a <em>funcname</em> is defined, a breakpoint hit will be counted when the
+first line of that function is executed.  A conditional breakpoint always
+counts a hit.</p>
+<p><a class="reference internal" href="#bdb.Breakpoint" title="bdb.Breakpoint"><tt class="xref py py-class docutils literal"><span class="pre">Breakpoint</span></tt></a> instances have the following methods:</p>
+<dl class="method">
+<dt id="bdb.Breakpoint.deleteMe">
+<tt class="descname">deleteMe</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Breakpoint.deleteMe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the breakpoint from the list associated to a file/line.  If it is
+the last breakpoint in that position, it also deletes the entry for the
+file/line.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Breakpoint.enable">
+<tt class="descname">enable</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Breakpoint.enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark the breakpoint as enabled.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Breakpoint.disable">
+<tt class="descname">disable</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Breakpoint.disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark the breakpoint as disabled.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Breakpoint.pprint">
+<tt class="descname">pprint</tt><big>(</big><span class="optional">[</span><em>out</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bdb.Breakpoint.pprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print all the information about the breakpoint:</p>
+<ul class="simple">
+<li>The breakpoint number.</li>
+<li>If it is temporary or not.</li>
+<li>Its file,line position.</li>
+<li>The condition that causes a break.</li>
+<li>If it must be ignored the next N times.</li>
+<li>The breakpoint hit count.</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bdb.Bdb">
+<em class="property">class </em><tt class="descclassname">bdb.</tt><tt class="descname">Bdb</tt><big>(</big><em>skip=None</em><big>)</big><a class="headerlink" href="#bdb.Bdb" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><tt class="xref py py-class docutils literal"><span class="pre">Bdb</span></tt></a> class acts as a generic Python debugger base class.</p>
+<p>This class takes care of the details of the trace facility; a derived class
+should implement user interaction.  The standard debugger class
+(<a class="reference internal" href="pdb.html#pdb.Pdb" title="pdb.Pdb"><tt class="xref py py-class docutils literal"><span class="pre">pdb.Pdb</span></tt></a>) is an example.</p>
+<p>The <em>skip</em> argument, if given, must be an iterable of glob-style
+module name patterns.  The debugger will not step into frames that
+originate in a module that matches one of these patterns. Whether a
+frame is considered to originate in a certain module is determined
+by the <tt class="docutils literal"><span class="pre">__name__</span></tt> in the frame globals.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7: </span>The <em>skip</em> argument.</p>
+<p>The following methods of <a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><tt class="xref py py-class docutils literal"><span class="pre">Bdb</span></tt></a> normally don&#8217;t need to be overridden.</p>
+<dl class="method">
+<dt id="bdb.Bdb.canonic">
+<tt class="descname">canonic</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#bdb.Bdb.canonic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary method for getting a filename in a canonical form, that is, as a
+case-normalized (on case-insensitive filesystems) absolute path, stripped
+of surrounding angle brackets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Bdb.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <tt class="xref py py-attr docutils literal"><span class="pre">botframe</span></tt>, <tt class="xref py py-attr docutils literal"><span class="pre">stopframe</span></tt>, <tt class="xref py py-attr docutils literal"><span class="pre">returnframe</span></tt> and
+<tt class="xref py py-attr docutils literal"><span class="pre">quitting</span></tt> attributes with values ready to start debugging.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.trace_dispatch">
+<tt class="descname">trace_dispatch</tt><big>(</big><em>frame</em>, <em>event</em>, <em>arg</em><big>)</big><a class="headerlink" href="#bdb.Bdb.trace_dispatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is installed as the trace function of debugged frames.  Its
+return value is the new trace function (in most cases, that is, itself).</p>
+<p>The default implementation decides how to dispatch a frame, depending on
+the type of event (passed as a string) that is about to be executed.
+<em>event</em> can be one of the following:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">&quot;line&quot;</span></tt>: A new line of code is going to be executed.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;call&quot;</span></tt>: A function is about to be called, or another code block
+entered.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;return&quot;</span></tt>: A function or other code block is about to return.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;exception&quot;</span></tt>: An exception has occurred.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;c_call&quot;</span></tt>: A C function is about to be called.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;c_return&quot;</span></tt>: A C function has returned.</li>
+<li><tt class="docutils literal"><span class="pre">&quot;c_exception&quot;</span></tt>: A C function has raised an exception.</li>
+</ul>
+<p>For the Python events, specialized functions (see below) are called.  For
+the C events, no action is taken.</p>
+<p>The <em>arg</em> parameter depends on the previous event.</p>
+<p>See the documentation for <a class="reference internal" href="sys.html#sys.settrace" title="sys.settrace"><tt class="xref py py-func docutils literal"><span class="pre">sys.settrace()</span></tt></a> for more information on the
+trace function.  For more information on code and frame objects, refer to
+<a class="reference internal" href="../reference/datamodel.html#types"><em>The standard type hierarchy</em></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.dispatch_line">
+<tt class="descname">dispatch_line</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.dispatch_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the debugger should stop on the current line, invoke the
+<a class="reference internal" href="#bdb.Bdb.user_line" title="bdb.Bdb.user_line"><tt class="xref py py-meth docutils literal"><span class="pre">user_line()</span></tt></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><tt class="xref py py-exc docutils literal"><span class="pre">BdbQuit</span></tt></a> exception if the <tt class="xref py py-attr docutils literal"><span class="pre">Bdb.quitting</span></tt> flag is set
+(which can be set from <a class="reference internal" href="#bdb.Bdb.user_line" title="bdb.Bdb.user_line"><tt class="xref py py-meth docutils literal"><span class="pre">user_line()</span></tt></a>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><tt class="xref py py-meth docutils literal"><span class="pre">trace_dispatch()</span></tt></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.dispatch_call">
+<tt class="descname">dispatch_call</tt><big>(</big><em>frame</em>, <em>arg</em><big>)</big><a class="headerlink" href="#bdb.Bdb.dispatch_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the debugger should stop on this function call, invoke the
+<a class="reference internal" href="#bdb.Bdb.user_call" title="bdb.Bdb.user_call"><tt class="xref py py-meth docutils literal"><span class="pre">user_call()</span></tt></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><tt class="xref py py-exc docutils literal"><span class="pre">BdbQuit</span></tt></a> exception if the <tt class="xref py py-attr docutils literal"><span class="pre">Bdb.quitting</span></tt> flag is set
+(which can be set from <a class="reference internal" href="#bdb.Bdb.user_call" title="bdb.Bdb.user_call"><tt class="xref py py-meth docutils literal"><span class="pre">user_call()</span></tt></a>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><tt class="xref py py-meth docutils literal"><span class="pre">trace_dispatch()</span></tt></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.dispatch_return">
+<tt class="descname">dispatch_return</tt><big>(</big><em>frame</em>, <em>arg</em><big>)</big><a class="headerlink" href="#bdb.Bdb.dispatch_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the debugger should stop on this function return, invoke the
+<a class="reference internal" href="#bdb.Bdb.user_return" title="bdb.Bdb.user_return"><tt class="xref py py-meth docutils literal"><span class="pre">user_return()</span></tt></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><tt class="xref py py-exc docutils literal"><span class="pre">BdbQuit</span></tt></a> exception if the <tt class="xref py py-attr docutils literal"><span class="pre">Bdb.quitting</span></tt> flag is set
+(which can be set from <a class="reference internal" href="#bdb.Bdb.user_return" title="bdb.Bdb.user_return"><tt class="xref py py-meth docutils literal"><span class="pre">user_return()</span></tt></a>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><tt class="xref py py-meth docutils literal"><span class="pre">trace_dispatch()</span></tt></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.dispatch_exception">
+<tt class="descname">dispatch_exception</tt><big>(</big><em>frame</em>, <em>arg</em><big>)</big><a class="headerlink" href="#bdb.Bdb.dispatch_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the debugger should stop at this exception, invokes the
+<a class="reference internal" href="#bdb.Bdb.user_exception" title="bdb.Bdb.user_exception"><tt class="xref py py-meth docutils literal"><span class="pre">user_exception()</span></tt></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><tt class="xref py py-exc docutils literal"><span class="pre">BdbQuit</span></tt></a> exception if the <tt class="xref py py-attr docutils literal"><span class="pre">Bdb.quitting</span></tt> flag is set
+(which can be set from <a class="reference internal" href="#bdb.Bdb.user_exception" title="bdb.Bdb.user_exception"><tt class="xref py py-meth docutils literal"><span class="pre">user_exception()</span></tt></a>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><tt class="xref py py-meth docutils literal"><span class="pre">trace_dispatch()</span></tt></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<p>Normally derived classes don&#8217;t override the following methods, but they may
+if they want to redefine the definition of stopping and breakpoints.</p>
+<dl class="method">
+<dt id="bdb.Bdb.stop_here">
+<tt class="descname">stop_here</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.stop_here" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method checks if the <em>frame</em> is somewhere below <tt class="xref py py-attr docutils literal"><span class="pre">botframe</span></tt> in
+the call stack.  <tt class="xref py py-attr docutils literal"><span class="pre">botframe</span></tt> is the frame in which debugging started.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.break_here">
+<tt class="descname">break_here</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.break_here" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method checks if there is a breakpoint in the filename and line
+belonging to <em>frame</em> or, at least, in the current function.  If the
+breakpoint is a temporary one, this method deletes it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.break_anywhere">
+<tt class="descname">break_anywhere</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.break_anywhere" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method checks if there is a breakpoint in the filename of the current
+frame.</p>
+</dd></dl>
+
+<p>Derived classes should override these methods to gain control over debugger
+operation.</p>
+<dl class="method">
+<dt id="bdb.Bdb.user_call">
+<tt class="descname">user_call</tt><big>(</big><em>frame</em>, <em>argument_list</em><big>)</big><a class="headerlink" href="#bdb.Bdb.user_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called from <a class="reference internal" href="#bdb.Bdb.dispatch_call" title="bdb.Bdb.dispatch_call"><tt class="xref py py-meth docutils literal"><span class="pre">dispatch_call()</span></tt></a> when there is the
+possibility that a break might be necessary anywhere inside the called
+function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.user_line">
+<tt class="descname">user_line</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.user_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called from <a class="reference internal" href="#bdb.Bdb.dispatch_line" title="bdb.Bdb.dispatch_line"><tt class="xref py py-meth docutils literal"><span class="pre">dispatch_line()</span></tt></a> when either
+<a class="reference internal" href="#bdb.Bdb.stop_here" title="bdb.Bdb.stop_here"><tt class="xref py py-meth docutils literal"><span class="pre">stop_here()</span></tt></a> or <a class="reference internal" href="#bdb.Bdb.break_here" title="bdb.Bdb.break_here"><tt class="xref py py-meth docutils literal"><span class="pre">break_here()</span></tt></a> yields True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.user_return">
+<tt class="descname">user_return</tt><big>(</big><em>frame</em>, <em>return_value</em><big>)</big><a class="headerlink" href="#bdb.Bdb.user_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called from <a class="reference internal" href="#bdb.Bdb.dispatch_return" title="bdb.Bdb.dispatch_return"><tt class="xref py py-meth docutils literal"><span class="pre">dispatch_return()</span></tt></a> when <a class="reference internal" href="#bdb.Bdb.stop_here" title="bdb.Bdb.stop_here"><tt class="xref py py-meth docutils literal"><span class="pre">stop_here()</span></tt></a>
+yields True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.user_exception">
+<tt class="descname">user_exception</tt><big>(</big><em>frame</em>, <em>exc_info</em><big>)</big><a class="headerlink" href="#bdb.Bdb.user_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called from <a class="reference internal" href="#bdb.Bdb.dispatch_exception" title="bdb.Bdb.dispatch_exception"><tt class="xref py py-meth docutils literal"><span class="pre">dispatch_exception()</span></tt></a> when
+<a class="reference internal" href="#bdb.Bdb.stop_here" title="bdb.Bdb.stop_here"><tt class="xref py py-meth docutils literal"><span class="pre">stop_here()</span></tt></a> yields True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.do_clear">
+<tt class="descname">do_clear</tt><big>(</big><em>arg</em><big>)</big><a class="headerlink" href="#bdb.Bdb.do_clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle how a breakpoint must be removed when it is a temporary one.</p>
+<p>This method must be implemented by derived classes.</p>
+</dd></dl>
+
+<p>Derived classes and clients can call the following methods to affect the
+stepping state.</p>
+<dl class="method">
+<dt id="bdb.Bdb.set_step">
+<tt class="descname">set_step</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Bdb.set_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop after one line of code.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.set_next">
+<tt class="descname">set_next</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.set_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop on the next line in or below the given frame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.set_return">
+<tt class="descname">set_return</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.set_return" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop when returning from the given frame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.set_until">
+<tt class="descname">set_until</tt><big>(</big><em>frame</em><big>)</big><a class="headerlink" href="#bdb.Bdb.set_until" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop when the line with the line no greater than the current one is
+reached or when returning from current frame</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.set_trace">
+<tt class="descname">set_trace</tt><big>(</big><span class="optional">[</span><em>frame</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bdb.Bdb.set_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start debugging from <em>frame</em>.  If <em>frame</em> is not specified, debugging
+starts from caller&#8217;s frame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.set_continue">
+<tt class="descname">set_continue</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Bdb.set_continue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop only at breakpoints or when finished.  If there are no breakpoints,
+set the system trace function to None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.set_quit">
+<tt class="descname">set_quit</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Bdb.set_quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <tt class="xref py py-attr docutils literal"><span class="pre">quitting</span></tt> attribute to True.  This raises <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><tt class="xref py py-exc docutils literal"><span class="pre">BdbQuit</span></tt></a> in
+the next call to one of the <tt class="xref py py-meth docutils literal"><span class="pre">dispatch_*()</span></tt> methods.</p>
+</dd></dl>
+
+<p>Derived classes and clients can call the following methods to manipulate
+breakpoints.  These methods return a string containing an error message if
+something went wrong, or <tt class="xref docutils literal"><span class="pre">None</span></tt> if all is well.</p>
+<dl class="method">
+<dt id="bdb.Bdb.set_break">
+<tt class="descname">set_break</tt><big>(</big><em>filename</em>, <em>lineno</em>, <em>temporary=0</em>, <em>cond=None</em>, <em>funcname=None</em><big>)</big><a class="headerlink" href="#bdb.Bdb.set_break" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a new breakpoint.  If the <em>lineno</em> line doesn&#8217;t exist for the
+<em>filename</em> passed as argument, return an error message.  The <em>filename</em>
+should be in canonical form, as described in the <a class="reference internal" href="#bdb.Bdb.canonic" title="bdb.Bdb.canonic"><tt class="xref py py-meth docutils literal"><span class="pre">canonic()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.clear_break">
+<tt class="descname">clear_break</tt><big>(</big><em>filename</em>, <em>lineno</em><big>)</big><a class="headerlink" href="#bdb.Bdb.clear_break" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the breakpoints in <em>filename</em> and <em>lineno</em>.  If none were set, an
+error message is returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.clear_bpbynumber">
+<tt class="descname">clear_bpbynumber</tt><big>(</big><em>arg</em><big>)</big><a class="headerlink" href="#bdb.Bdb.clear_bpbynumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the breakpoint which has the index <em>arg</em> in the
+<tt class="xref py py-attr docutils literal"><span class="pre">Breakpoint.bpbynumber</span></tt>.  If <em>arg</em> is not numeric or out of range,
+return an error message.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.clear_all_file_breaks">
+<tt class="descname">clear_all_file_breaks</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#bdb.Bdb.clear_all_file_breaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all breakpoints in <em>filename</em>.  If none were set, an error message
+is returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.clear_all_breaks">
+<tt class="descname">clear_all_breaks</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Bdb.clear_all_breaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all existing breakpoints.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.get_break">
+<tt class="descname">get_break</tt><big>(</big><em>filename</em>, <em>lineno</em><big>)</big><a class="headerlink" href="#bdb.Bdb.get_break" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if there is a breakpoint for <em>lineno</em> of <em>filename</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.get_breaks">
+<tt class="descname">get_breaks</tt><big>(</big><em>filename</em>, <em>lineno</em><big>)</big><a class="headerlink" href="#bdb.Bdb.get_breaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all breakpoints for <em>lineno</em> in <em>filename</em>, or an empty list if
+none are set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.get_file_breaks">
+<tt class="descname">get_file_breaks</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#bdb.Bdb.get_file_breaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all breakpoints in <em>filename</em>, or an empty list if none are set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.get_all_breaks">
+<tt class="descname">get_all_breaks</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.Bdb.get_all_breaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all breakpoints that are set.</p>
+</dd></dl>
+
+<p>Derived classes and clients can call the following methods to get a data
+structure representing a stack trace.</p>
+<dl class="method">
+<dt id="bdb.Bdb.get_stack">
+<tt class="descname">get_stack</tt><big>(</big><em>f</em>, <em>t</em><big>)</big><a class="headerlink" href="#bdb.Bdb.get_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of records for a frame and all higher (calling) and lower
+frames, and the size of the higher part.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.format_stack_entry">
+<tt class="descname">format_stack_entry</tt><big>(</big><em>frame_lineno</em><span class="optional">[</span>, <em>lprefix=': '</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bdb.Bdb.format_stack_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a string with information about a stack entry, identified by a
+<tt class="docutils literal"><span class="pre">(frame,</span> <span class="pre">lineno)</span></tt> tuple:</p>
+<ul class="simple">
+<li>The canonical form of the filename which contains the frame.</li>
+<li>The function name, or <tt class="docutils literal"><span class="pre">&quot;&lt;lambda&gt;&quot;</span></tt>.</li>
+<li>The input arguments.</li>
+<li>The return value.</li>
+<li>The line of code (if it exists).</li>
+</ul>
+</dd></dl>
+
+<p>The following two methods can be called by clients to use a debugger to debug
+a <a class="reference internal" href="../glossary.html#term-statement"><em class="xref std std-term">statement</em></a>, given as a string.</p>
+<dl class="method">
+<dt id="bdb.Bdb.run">
+<tt class="descname">run</tt><big>(</big><em>cmd</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#bdb.Bdb.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Debug a statement executed via the <a class="reference internal" href="../reference/simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement.  <em>globals</em>
+defaults to <tt class="xref py py-attr docutils literal"><span class="pre">__main__.__dict__</span></tt>, <em>locals</em> defaults to <em>globals</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.runeval">
+<tt class="descname">runeval</tt><big>(</big><em>expr</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#bdb.Bdb.runeval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Debug an expression executed via the <a class="reference internal" href="functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a> function.  <em>globals</em> and
+<em>locals</em> have the same meaning as in <a class="reference internal" href="#bdb.Bdb.run" title="bdb.Bdb.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.runctx">
+<tt class="descname">runctx</tt><big>(</big><em>cmd</em>, <em>globals</em>, <em>locals</em><big>)</big><a class="headerlink" href="#bdb.Bdb.runctx" title="Permalink to this definition">¶</a></dt>
+<dd><p>For backwards compatibility.  Calls the <a class="reference internal" href="#bdb.Bdb.run" title="bdb.Bdb.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bdb.Bdb.runcall">
+<tt class="descname">runcall</tt><big>(</big><em>func</em>, <em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#bdb.Bdb.runcall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Debug a single function call, and return its result.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>Finally, the module defines the following functions:</p>
+<dl class="function">
+<dt id="bdb.checkfuncname">
+<tt class="descclassname">bdb.</tt><tt class="descname">checkfuncname</tt><big>(</big><em>b</em>, <em>frame</em><big>)</big><a class="headerlink" href="#bdb.checkfuncname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether we should break here, depending on the way the breakpoint <em>b</em>
+was set.</p>
+<p>If it was set via line number, it checks if <tt class="docutils literal"><span class="pre">b.line</span></tt> is the same as the one
+in the frame also passed as argument.  If the breakpoint was set via function
+name, we have to check we are in the right frame (the right function) and if
+we are in its first executable line.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bdb.effective">
+<tt class="descclassname">bdb.</tt><tt class="descname">effective</tt><big>(</big><em>file</em>, <em>line</em>, <em>frame</em><big>)</big><a class="headerlink" href="#bdb.effective" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if there is an effective (active) breakpoint at this line of code.
+Return a tuple of the breakpoint and a boolean that indicates if it is ok
+to delete a temporary breakpoint.  Return <tt class="docutils literal"><span class="pre">(None,</span> <span class="pre">None)</span></tt> if there is no
+matching breakpoint.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bdb.set_trace">
+<tt class="descclassname">bdb.</tt><tt class="descname">set_trace</tt><big>(</big><big>)</big><a class="headerlink" href="#bdb.set_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start debugging with a <a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><tt class="xref py py-class docutils literal"><span class="pre">Bdb</span></tt></a> instance from caller&#8217;s frame.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="debug.html"
+                        title="previous chapter">26. Debugging and Profiling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pdb.html"
+                        title="next chapter">26.2. <tt class="docutils literal"><span class="pre">pdb</span></tt> &#8212; The Python Debugger</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/bdb.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdb.html" title="26.2. pdb — The Python Debugger"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="26. Debugging and Profiling"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="debug.html" >26. Debugging and Profiling</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

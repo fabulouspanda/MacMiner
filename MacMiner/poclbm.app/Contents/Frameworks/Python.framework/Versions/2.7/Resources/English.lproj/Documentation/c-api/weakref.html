@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Weak Reference Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Capsules" href="capsule.html" />
+    <link rel="prev" title="Slice Objects" href="slice.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="capsule.html" title="Capsules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="slice.html" title="Slice Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="weak-reference-objects">
+<span id="weakrefobjects"></span><h1>Weak Reference Objects<a class="headerlink" href="#weak-reference-objects" title="Permalink to this headline">¶</a></h1>
+<p>Python supports <em>weak references</em> as first-class objects.  There are two
+specific object types which directly implement weak references.  The first is a
+simple reference object, and the second acts as a proxy for the original object
+as much as it can.</p>
+<dl class="function">
+<dt id="PyWeakref_Check">
+int <tt class="descname">PyWeakref_Check</tt><big>(</big>ob<big>)</big><a class="headerlink" href="#PyWeakref_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is either a reference or proxy object.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWeakref_CheckRef">
+int <tt class="descname">PyWeakref_CheckRef</tt><big>(</big>ob<big>)</big><a class="headerlink" href="#PyWeakref_CheckRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is a reference object.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWeakref_CheckProxy">
+int <tt class="descname">PyWeakref_CheckProxy</tt><big>(</big>ob<big>)</big><a class="headerlink" href="#PyWeakref_CheckProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>ob</em> is a proxy object.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWeakref_NewRef">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyWeakref_NewRef</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*callback</em><big>)</big><a class="headerlink" href="#PyWeakref_NewRef" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a weak reference object for the object <em>ob</em>.  This will always return
+a new reference, but is not guaranteed to create a new object; an existing
+reference object may be returned.  The second parameter, <em>callback</em>, can be a
+callable object that receives notification when <em>ob</em> is garbage collected; it
+should accept a single parameter, which will be the weak reference object
+itself. <em>callback</em> may also be <tt class="xref docutils literal"><span class="pre">None</span></tt> or <em>NULL</em>.  If <em>ob</em> is not a
+weakly-referencable object, or if <em>callback</em> is not callable, <tt class="xref docutils literal"><span class="pre">None</span></tt>, or
+<em>NULL</em>, this will return <em>NULL</em> and raise <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWeakref_NewProxy">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyWeakref_NewProxy</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*callback</em><big>)</big><a class="headerlink" href="#PyWeakref_NewProxy" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a weak reference proxy object for the object <em>ob</em>.  This will always
+return a new reference, but is not guaranteed to create a new object; an
+existing proxy object may be returned.  The second parameter, <em>callback</em>, can
+be a callable object that receives notification when <em>ob</em> is garbage
+collected; it should accept a single parameter, which will be the weak
+reference object itself. <em>callback</em> may also be <tt class="xref docutils literal"><span class="pre">None</span></tt> or <em>NULL</em>.  If <em>ob</em>
+is not a weakly-referencable object, or if <em>callback</em> is not callable,
+<tt class="xref docutils literal"><span class="pre">None</span></tt>, or <em>NULL</em>, this will return <em>NULL</em> and raise <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWeakref_GetObject">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyWeakref_GetObject</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ref</em><big>)</big><a class="headerlink" href="#PyWeakref_GetObject" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the referenced object from a weak reference, <em>ref</em>.  If the referent is
+no longer live, returns <tt class="xref py py-const docutils literal"><span class="pre">Py_None</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function returns a <strong>borrowed reference</strong> to the referenced object.
+This means that you should always call <a class="reference internal" href="refcounting.html#Py_INCREF" title="Py_INCREF"><tt class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></tt></a> on the object
+except if you know that it cannot be destroyed while you are still
+using it.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyWeakref_GET_OBJECT">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyWeakref_GET_OBJECT</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ref</em><big>)</big><a class="headerlink" href="#PyWeakref_GET_OBJECT" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Similar to <a class="reference internal" href="#PyWeakref_GetObject" title="PyWeakref_GetObject"><tt class="xref c c-func docutils literal"><span class="pre">PyWeakref_GetObject()</span></tt></a>, but implemented as a macro that does no
+error checking.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="slice.html"
+                        title="previous chapter">Slice Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="capsule.html"
+                        title="next chapter">Capsules</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/weakref.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="capsule.html" title="Capsules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="slice.html" title="Slice Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

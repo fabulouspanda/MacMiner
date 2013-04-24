@@ -1,0 +1,954 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Library and Extension FAQ &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python Frequently Asked Questions" href="index.html" />
+    <link rel="next" title="Extending/Embedding FAQ" href="extending.html" />
+    <link rel="prev" title="Design and History FAQ" href="design.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="Extending/Embedding FAQ"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="design.html" title="Design and History FAQ"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python Frequently Asked Questions</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="library-and-extension-faq">
+<h1><a class="toc-backref" href="#id1">Library and Extension FAQ</a><a class="headerlink" href="#library-and-extension-faq" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#library-and-extension-faq" id="id1">Library and Extension FAQ</a><ul>
+<li><a class="reference internal" href="#general-library-questions" id="id2">General Library Questions</a><ul>
+<li><a class="reference internal" href="#how-do-i-find-a-module-or-application-to-perform-task-x" id="id3">How do I find a module or application to perform task X?</a></li>
+<li><a class="reference internal" href="#where-is-the-math-py-socket-py-regex-py-etc-source-file" id="id4">Where is the math.py (socket.py, regex.py, etc.) source file?</a></li>
+<li><a class="reference internal" href="#how-do-i-make-a-python-script-executable-on-unix" id="id5">How do I make a Python script executable on Unix?</a></li>
+<li><a class="reference internal" href="#is-there-a-curses-termcap-package-for-python" id="id6">Is there a curses/termcap package for Python?</a></li>
+<li><a class="reference internal" href="#is-there-an-equivalent-to-c-s-onexit-in-python" id="id7">Is there an equivalent to C&#8217;s onexit() in Python?</a></li>
+<li><a class="reference internal" href="#why-don-t-my-signal-handlers-work" id="id8">Why don&#8217;t my signal handlers work?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-tasks" id="id9">Common tasks</a><ul>
+<li><a class="reference internal" href="#how-do-i-test-a-python-program-or-component" id="id10">How do I test a Python program or component?</a></li>
+<li><a class="reference internal" href="#how-do-i-create-documentation-from-doc-strings" id="id11">How do I create documentation from doc strings?</a></li>
+<li><a class="reference internal" href="#how-do-i-get-a-single-keypress-at-a-time" id="id12">How do I get a single keypress at a time?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#threads" id="id13">Threads</a><ul>
+<li><a class="reference internal" href="#how-do-i-program-using-threads" id="id14">How do I program using threads?</a></li>
+<li><a class="reference internal" href="#none-of-my-threads-seem-to-run-why" id="id15">None of my threads seem to run: why?</a></li>
+<li><a class="reference internal" href="#how-do-i-parcel-out-work-among-a-bunch-of-worker-threads" id="id16">How do I parcel out work among a bunch of worker threads?</a></li>
+<li><a class="reference internal" href="#what-kinds-of-global-value-mutation-are-thread-safe" id="id17">What kinds of global value mutation are thread-safe?</a></li>
+<li><a class="reference internal" href="#can-t-we-get-rid-of-the-global-interpreter-lock" id="id18">Can&#8217;t we get rid of the Global Interpreter Lock?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input-and-output" id="id19">Input and Output</a><ul>
+<li><a class="reference internal" href="#how-do-i-delete-a-file-and-other-file-questions" id="id20">How do I delete a file? (And other file questions...)</a></li>
+<li><a class="reference internal" href="#how-do-i-copy-a-file" id="id21">How do I copy a file?</a></li>
+<li><a class="reference internal" href="#how-do-i-read-or-write-binary-data" id="id22">How do I read (or write) binary data?</a></li>
+<li><a class="reference internal" href="#i-can-t-seem-to-use-os-read-on-a-pipe-created-with-os-popen-why" id="id23">I can&#8217;t seem to use os.read() on a pipe created with os.popen(); why?</a></li>
+<li><a class="reference internal" href="#how-do-i-run-a-subprocess-with-pipes-connected-to-both-input-and-output" id="id24">How do I run a subprocess with pipes connected to both input and output?</a></li>
+<li><a class="reference internal" href="#how-do-i-access-the-serial-rs232-port" id="id25">How do I access the serial (RS232) port?</a></li>
+<li><a class="reference internal" href="#why-doesn-t-closing-sys-stdout-stdin-stderr-really-close-it" id="id26">Why doesn&#8217;t closing sys.stdout (stdin, stderr) really close it?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#network-internet-programming" id="id27">Network/Internet Programming</a><ul>
+<li><a class="reference internal" href="#what-www-tools-are-there-for-python" id="id28">What WWW tools are there for Python?</a></li>
+<li><a class="reference internal" href="#how-can-i-mimic-cgi-form-submission-method-post" id="id29">How can I mimic CGI form submission (METHOD=POST)?</a></li>
+<li><a class="reference internal" href="#what-module-should-i-use-to-help-with-generating-html" id="id30">What module should I use to help with generating HTML?</a></li>
+<li><a class="reference internal" href="#how-do-i-send-mail-from-a-python-script" id="id31">How do I send mail from a Python script?</a></li>
+<li><a class="reference internal" href="#how-do-i-avoid-blocking-in-the-connect-method-of-a-socket" id="id32">How do I avoid blocking in the connect() method of a socket?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#databases" id="id33">Databases</a><ul>
+<li><a class="reference internal" href="#are-there-any-interfaces-to-database-packages-in-python" id="id34">Are there any interfaces to database packages in Python?</a></li>
+<li><a class="reference internal" href="#how-do-you-implement-persistent-objects-in-python" id="id35">How do you implement persistent objects in Python?</a></li>
+<li><a class="reference internal" href="#why-is-cpickle-so-slow" id="id36">Why is cPickle so slow?</a></li>
+<li><a class="reference internal" href="#if-my-program-crashes-with-a-bsddb-or-anydbm-database-open-it-gets-corrupted-how-come" id="id37">If my program crashes with a bsddb (or anydbm) database open, it gets corrupted. How come?</a></li>
+<li><a class="reference internal" href="#i-tried-to-open-berkeley-db-file-but-bsddb-produces-bsddb-error-22-invalid-argument-help-how-can-i-restore-my-data" id="id38">I tried to open Berkeley DB file, but bsddb produces bsddb.error: (22, &#8216;Invalid argument&#8217;). Help! How can I restore my data?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mathematics-and-numerics" id="id39">Mathematics and Numerics</a><ul>
+<li><a class="reference internal" href="#how-do-i-generate-random-numbers-in-python" id="id40">How do I generate random numbers in Python?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="general-library-questions">
+<h2><a class="toc-backref" href="#id2">General Library Questions</a><a class="headerlink" href="#general-library-questions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-find-a-module-or-application-to-perform-task-x">
+<h3><a class="toc-backref" href="#id3">How do I find a module or application to perform task X?</a><a class="headerlink" href="#how-do-i-find-a-module-or-application-to-perform-task-x" title="Permalink to this headline">¶</a></h3>
+<p>Check <a class="reference internal" href="../library/index.html#library-index"><em>the Library Reference</em></a> to see if there&#8217;s a relevant
+standard library module.  (Eventually you&#8217;ll learn what&#8217;s in the standard
+library and will be able to skip this step.)</p>
+<p>For third-party packages, search the <a class="reference external" href="http://pypi.python.org/pypi">Python Package Index</a> or try <a class="reference external" href="http://www.google.com">Google</a> or
+another Web search engine.  Searching for &#8220;Python&#8221; plus a keyword or two for
+your topic of interest will usually find something helpful.</p>
+</div>
+<div class="section" id="where-is-the-math-py-socket-py-regex-py-etc-source-file">
+<h3><a class="toc-backref" href="#id4">Where is the math.py (socket.py, regex.py, etc.) source file?</a><a class="headerlink" href="#where-is-the-math-py-socket-py-regex-py-etc-source-file" title="Permalink to this headline">¶</a></h3>
+<p>If you can&#8217;t find a source file for a module it may be a built-in or
+dynamically loaded module implemented in C, C++ or other compiled language.
+In this case you may not have the source file or it may be something like
+<tt class="file docutils literal"><span class="pre">mathmodule.c</span></tt>, somewhere in a C source directory (not on the Python Path).</p>
+<p>There are (at least) three kinds of modules in Python:</p>
+<ol class="arabic">
+<li><p class="first">modules written in Python (.py);</p>
+</li>
+<li><p class="first">modules written in C and dynamically loaded (.dll, .pyd, .so, .sl, etc);</p>
+</li>
+<li><p class="first">modules written in C and linked with the interpreter; to get a list of these,
+type:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">print</span> <span class="n">sys</span><span class="o">.</span><span class="n">builtin_module_names</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="how-do-i-make-a-python-script-executable-on-unix">
+<h3><a class="toc-backref" href="#id5">How do I make a Python script executable on Unix?</a><a class="headerlink" href="#how-do-i-make-a-python-script-executable-on-unix" title="Permalink to this headline">¶</a></h3>
+<p>You need to do two things: the script file&#8217;s mode must be executable and the
+first line must begin with <tt class="docutils literal"><span class="pre">#!</span></tt> followed by the path of the Python
+interpreter.</p>
+<p>The first is done by executing <tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">+x</span> <span class="pre">scriptfile</span></tt> or perhaps <tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">755</span>
+<span class="pre">scriptfile</span></tt>.</p>
+<p>The second can be done in a number of ways.  The most straightforward way is to
+write</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/local/bin/python</span>
+</pre></div>
+</div>
+<p>as the very first line of your file, using the pathname for where the Python
+interpreter is installed on your platform.</p>
+<p>If you would like the script to be independent of where the Python interpreter
+lives, you can use the <strong class="program">env</strong> program.  Almost all Unix variants support
+the following, assuming the Python interpreter is in a directory on the user&#8217;s
+<span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PATH</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+</pre></div>
+</div>
+<p><em>Don&#8217;t</em> do this for CGI scripts.  The <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PATH</span></tt> variable for CGI scripts is
+often very minimal, so you need to use the actual absolute pathname of the
+interpreter.</p>
+<p>Occasionally, a user&#8217;s environment is so full that the <strong class="program">/usr/bin/env</strong>
+program fails; or there&#8217;s no env program at all.  In that case, you can try the
+following hack (due to Alex Rezinsky):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /bin/sh</span>
+<span class="sd">&quot;&quot;&quot;:&quot;</span>
+<span class="sd">exec python $0 ${1+&quot;$@&quot;}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The minor disadvantage is that this defines the script&#8217;s __doc__ string.
+However, you can fix that by adding</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;...Whatever...&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="is-there-a-curses-termcap-package-for-python">
+<h3><a class="toc-backref" href="#id6">Is there a curses/termcap package for Python?</a><a class="headerlink" href="#is-there-a-curses-termcap-package-for-python" title="Permalink to this headline">¶</a></h3>
+<p>For Unix variants the standard Python source distribution comes with a curses
+module in the <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Modules">Modules</a> subdirectory, though it&#8217;s not compiled by default.
+(Note that this is not available in the Windows distribution &#8211; there is no
+curses module for Windows.)</p>
+<p>The <a class="reference internal" href="../library/curses.html#module-curses" title="curses: An interface to the curses library, providing portable terminal handling. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">curses</span></tt></a> module supports basic curses features as well as many additional
+functions from ncurses and SYSV curses such as colour, alternative character set
+support, pads, and mouse support. This means the module isn&#8217;t compatible with
+operating systems that only have BSD curses, but there don&#8217;t seem to be any
+currently maintained OSes that fall into this category.</p>
+<p>For Windows: use <a class="reference external" href="http://effbot.org/zone/console-index.htm">the consolelib module</a>.</p>
+</div>
+<div class="section" id="is-there-an-equivalent-to-c-s-onexit-in-python">
+<h3><a class="toc-backref" href="#id7">Is there an equivalent to C&#8217;s onexit() in Python?</a><a class="headerlink" href="#is-there-an-equivalent-to-c-s-onexit-in-python" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../library/atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> module provides a register function that is similar to C&#8217;s
+<tt class="xref c c-func docutils literal"><span class="pre">onexit()</span></tt>.</p>
+</div>
+<div class="section" id="why-don-t-my-signal-handlers-work">
+<h3><a class="toc-backref" href="#id8">Why don&#8217;t my signal handlers work?</a><a class="headerlink" href="#why-don-t-my-signal-handlers-work" title="Permalink to this headline">¶</a></h3>
+<p>The most common problem is that the signal handler is declared with the wrong
+argument list.  It is called as</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">handler</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>so it should be declared with two arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="common-tasks">
+<h2><a class="toc-backref" href="#id9">Common tasks</a><a class="headerlink" href="#common-tasks" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-test-a-python-program-or-component">
+<h3><a class="toc-backref" href="#id10">How do I test a Python program or component?</a><a class="headerlink" href="#how-do-i-test-a-python-program-or-component" title="Permalink to this headline">¶</a></h3>
+<p>Python comes with two testing frameworks.  The <a class="reference internal" href="../library/doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><tt class="xref py py-mod docutils literal"><span class="pre">doctest</span></tt></a> module finds
+examples in the docstrings for a module and runs them, comparing the output with
+the expected output given in the docstring.</p>
+<p>The <a class="reference internal" href="../library/unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><tt class="xref py py-mod docutils literal"><span class="pre">unittest</span></tt></a> module is a fancier testing framework modelled on Java and
+Smalltalk testing frameworks.</p>
+<p>To make testing easier, you should use good modular design in your program.
+Your program should have almost all functionality
+encapsulated in either functions or class methods &#8211; and this sometimes has the
+surprising and delightful effect of making the program run faster (because local
+variable accesses are faster than global accesses).  Furthermore the program
+should avoid depending on mutating global variables, since this makes testing
+much more difficult to do.</p>
+<p>The &#8220;global main logic&#8221; of your program may be as simple as</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main_logic</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>at the bottom of the main module of your program.</p>
+<p>Once your program is organized as a tractable collection of functions and class
+behaviours you should write test functions that exercise the behaviours.  A test
+suite that automates a sequence of tests can be associated with each module.
+This sounds like a lot of work, but since Python is so terse and flexible it&#8217;s
+surprisingly easy.  You can make coding much more pleasant and fun by writing
+your test functions in parallel with the &#8220;production code&#8221;, since this makes it
+easy to find bugs and even design flaws earlier.</p>
+<p>&#8220;Support modules&#8221; that are not intended to be the main module of a program may
+include a self-test of the module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">self_test</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Even programs that interact with complex external interfaces may be tested when
+the external interfaces are unavailable by using &#8220;fake&#8221; interfaces implemented
+in Python.</p>
+</div>
+<div class="section" id="how-do-i-create-documentation-from-doc-strings">
+<h3><a class="toc-backref" href="#id11">How do I create documentation from doc strings?</a><a class="headerlink" href="#how-do-i-create-documentation-from-doc-strings" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../library/pydoc.html#module-pydoc" title="pydoc: Documentation generator and online help system."><tt class="xref py py-mod docutils literal"><span class="pre">pydoc</span></tt></a> module can create HTML from the doc strings in your Python
+source code.  An alternative for creating API documentation purely from
+docstrings is <a class="reference external" href="http://epydoc.sf.net/">epydoc</a>.  <a class="reference external" href="http://sphinx.pocoo.org">Sphinx</a> can also include docstring content.</p>
+</div>
+<div class="section" id="how-do-i-get-a-single-keypress-at-a-time">
+<h3><a class="toc-backref" href="#id12">How do I get a single keypress at a time?</a><a class="headerlink" href="#how-do-i-get-a-single-keypress-at-a-time" title="Permalink to this headline">¶</a></h3>
+<p>For Unix variants there are several solutions.  It&#8217;s straightforward to do this
+using curses, but curses is a fairly large module to learn.  Here&#8217;s a solution
+without curses:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">termios</span><span class="o">,</span> <span class="nn">fcntl</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
+
+<span class="n">oldterm</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+<span class="n">newattr</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+<span class="n">newattr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">newattr</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">termios</span><span class="o">.</span><span class="n">ICANON</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">termios</span><span class="o">.</span><span class="n">ECHO</span>
+<span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSANOW</span><span class="p">,</span> <span class="n">newattr</span><span class="p">)</span>
+
+<span class="n">oldflags</span> <span class="o">=</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">F_GETFL</span><span class="p">)</span>
+<span class="n">fcntl</span><span class="o">.</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">F_SETFL</span><span class="p">,</span> <span class="n">oldflags</span> <span class="o">|</span> <span class="n">os</span><span class="o">.</span><span class="n">O_NONBLOCK</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;Got character&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span> <span class="k">pass</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSAFLUSH</span><span class="p">,</span> <span class="n">oldterm</span><span class="p">)</span>
+    <span class="n">fcntl</span><span class="o">.</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">F_SETFL</span><span class="p">,</span> <span class="n">oldflags</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You need the <a class="reference internal" href="../library/termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">termios</span></tt></a> and the <a class="reference internal" href="../library/fcntl.html#module-fcntl" title="fcntl: The fcntl() and ioctl() system calls. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">fcntl</span></tt></a> module for any of this to work,
+and I&#8217;ve only tried it on Linux, though it should work elsewhere.  In this code,
+characters are read and printed one at a time.</p>
+<p><a class="reference internal" href="../library/termios.html#termios.tcsetattr" title="termios.tcsetattr"><tt class="xref py py-func docutils literal"><span class="pre">termios.tcsetattr()</span></tt></a> turns off stdin&#8217;s echoing and disables canonical mode.
+<tt class="xref py py-func docutils literal"><span class="pre">fcntl.fnctl()</span></tt> is used to obtain stdin&#8217;s file descriptor flags and modify
+them for non-blocking mode.  Since reading stdin when it is empty results in an
+<a class="reference internal" href="../library/exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a>, this error is caught and ignored.</p>
+</div>
+</div>
+<div class="section" id="threads">
+<h2><a class="toc-backref" href="#id13">Threads</a><a class="headerlink" href="#threads" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-program-using-threads">
+<h3><a class="toc-backref" href="#id14">How do I program using threads?</a><a class="headerlink" href="#how-do-i-program-using-threads" title="Permalink to this headline">¶</a></h3>
+<p>Be sure to use the <a class="reference internal" href="../library/threading.html#module-threading" title="threading: Higher-level threading interface."><tt class="xref py py-mod docutils literal"><span class="pre">threading</span></tt></a> module and not the <a class="reference internal" href="../library/thread.html#module-thread" title="thread: Create multiple threads of control within one interpreter."><tt class="xref py py-mod docutils literal"><span class="pre">thread</span></tt></a> module.
+The <a class="reference internal" href="../library/threading.html#module-threading" title="threading: Higher-level threading interface."><tt class="xref py py-mod docutils literal"><span class="pre">threading</span></tt></a> module builds convenient abstractions on top of the
+low-level primitives provided by the <a class="reference internal" href="../library/thread.html#module-thread" title="thread: Create multiple threads of control within one interpreter."><tt class="xref py py-mod docutils literal"><span class="pre">thread</span></tt></a> module.</p>
+<p>Aahz has a set of slides from his threading tutorial that are helpful; see
+<a class="reference external" href="http://www.pythoncraft.com/OSCON2001/">http://www.pythoncraft.com/OSCON2001/</a>.</p>
+</div>
+<div class="section" id="none-of-my-threads-seem-to-run-why">
+<h3><a class="toc-backref" href="#id15">None of my threads seem to run: why?</a><a class="headerlink" href="#none-of-my-threads-seem-to-run-why" title="Permalink to this headline">¶</a></h3>
+<p>As soon as the main thread exits, all threads are killed.  Your main thread is
+running too quickly, giving the threads no time to do any work.</p>
+<p>A simple fix is to add a sleep to the end of the program that&#8217;s long enough for
+all the threads to finish:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">thread_task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="k">print</span> <span class="n">name</span><span class="p">,</span> <span class="n">i</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">thread_task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">))</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c"># &lt;----------------------------!</span>
+</pre></div>
+</div>
+<p>But now (on many platforms) the threads don&#8217;t run in parallel, but appear to run
+sequentially, one at a time!  The reason is that the OS thread scheduler doesn&#8217;t
+start a new thread until the previous thread is blocked.</p>
+<p>A simple fix is to add a tiny sleep to the start of the run function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">thread_task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span> <span class="c"># &lt;---------------------!</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span> <span class="k">print</span> <span class="n">name</span><span class="p">,</span> <span class="n">i</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">thread_task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">))</span>
+    <span class="n">T</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Instead of trying to guess a good delay value for <a class="reference internal" href="../library/time.html#time.sleep" title="time.sleep"><tt class="xref py py-func docutils literal"><span class="pre">time.sleep()</span></tt></a>,
+it&#8217;s better to use some kind of semaphore mechanism.  One idea is to use the
+<a class="reference internal" href="../library/queue.html#module-Queue" title="Queue: A synchronized queue class."><tt class="xref py py-mod docutils literal"><span class="pre">Queue</span></tt></a> module to create a queue object, let each thread append a token to
+the queue when it finishes, and let the main thread read as many tokens from the
+queue as there are threads.</p>
+</div>
+<div class="section" id="how-do-i-parcel-out-work-among-a-bunch-of-worker-threads">
+<h3><a class="toc-backref" href="#id16">How do I parcel out work among a bunch of worker threads?</a><a class="headerlink" href="#how-do-i-parcel-out-work-among-a-bunch-of-worker-threads" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="../library/queue.html#module-Queue" title="Queue: A synchronized queue class."><tt class="xref py py-mod docutils literal"><span class="pre">Queue</span></tt></a> module to create a queue containing a list of jobs.  The
+<a class="reference internal" href="../library/queue.html#Queue.Queue" title="Queue.Queue"><tt class="xref py py-class docutils literal"><span class="pre">Queue</span></tt></a> class maintains a list of objects and has a <tt class="docutils literal"><span class="pre">.put(obj)</span></tt>
+method that adds items to the queue and a <tt class="docutils literal"><span class="pre">.get()</span></tt> method to return them.
+The class will take care of the locking necessary to ensure that each job is
+handed out exactly once.</p>
+<p>Here&#8217;s a trivial example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">Queue</span><span class="o">,</span> <span class="nn">time</span>
+
+<span class="c"># The worker thread gets jobs off the queue.  When the queue is empty, it</span>
+<span class="c"># assumes there will be no more work and exits.</span>
+<span class="c"># (Realistically workers will run until terminated.)</span>
+<span class="k">def</span> <span class="nf">worker</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&#39;Running worker&#39;</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Worker&#39;</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">currentThread</span><span class="p">(),</span>
+            <span class="k">print</span> <span class="s">&#39;queue empty&#39;</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Worker&#39;</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">currentThread</span><span class="p">(),</span>
+            <span class="k">print</span> <span class="s">&#39;running with argument&#39;</span><span class="p">,</span> <span class="n">arg</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c"># Create queue</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+<span class="c"># Start a pool of 5 workers</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;worker </span><span class="si">%i</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c"># Begin adding work to the queue</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c"># Give threads time to run</span>
+<span class="k">print</span> <span class="s">&#39;Main thread sleeping&#39;</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When run, this will produce the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Running worker
+Running worker
+Running worker
+Running worker
+Running worker
+Main thread sleeping
+Worker &lt;Thread(worker 1, started)&gt; running with argument 0
+Worker &lt;Thread(worker 2, started)&gt; running with argument 1
+Worker &lt;Thread(worker 3, started)&gt; running with argument 2
+Worker &lt;Thread(worker 4, started)&gt; running with argument 3
+Worker &lt;Thread(worker 5, started)&gt; running with argument 4
+Worker &lt;Thread(worker 1, started)&gt; running with argument 5
+...
+</pre></div>
+</div>
+<p>Consult the module&#8217;s documentation for more details; the <a class="reference internal" href="../library/queue.html#Queue.Queue" title="Queue.Queue"><tt class="xref py py-class docutils literal"><span class="pre">Queue</span></tt></a>
+class provides a featureful interface.</p>
+</div>
+<div class="section" id="what-kinds-of-global-value-mutation-are-thread-safe">
+<h3><a class="toc-backref" href="#id17">What kinds of global value mutation are thread-safe?</a><a class="headerlink" href="#what-kinds-of-global-value-mutation-are-thread-safe" title="Permalink to this headline">¶</a></h3>
+<p>A <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><em class="xref std std-term">global interpreter lock</em></a> (GIL) is used internally to ensure that only
+one thread runs in the Python VM at a time.  In general, Python offers to switch
+among threads only between bytecode instructions; how frequently it switches can
+be set via <a class="reference internal" href="../library/sys.html#sys.setcheckinterval" title="sys.setcheckinterval"><tt class="xref py py-func docutils literal"><span class="pre">sys.setcheckinterval()</span></tt></a>.  Each bytecode instruction and
+therefore all the C implementation code reached from each instruction is
+therefore atomic from the point of view of a Python program.</p>
+<p>In theory, this means an exact accounting requires an exact understanding of the
+PVM bytecode implementation.  In practice, it means that operations on shared
+variables of built-in data types (ints, lists, dicts, etc) that &#8220;look atomic&#8221;
+really are.</p>
+<p>For example, the following operations are all atomic (L, L1, L2 are lists, D,
+D1, D2 are dicts, x, y are objects, i, j are ints):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">L1</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">L2</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="n">L1</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">L2</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span>
+<span class="n">x</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="n">y</span>
+<span class="n">D</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+<span class="n">D1</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">D2</span><span class="p">)</span>
+<span class="n">D</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>These aren&#8217;t:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+<span class="n">L</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+<span class="n">D</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Operations that replace other objects may invoke those other objects&#8217;
+<a class="reference internal" href="../reference/datamodel.html#object.__del__" title="object.__del__"><tt class="xref py py-meth docutils literal"><span class="pre">__del__()</span></tt></a> method when their reference count reaches zero, and that can
+affect things.  This is especially true for the mass updates to dictionaries and
+lists.  When in doubt, use a mutex!</p>
+</div>
+<div class="section" id="can-t-we-get-rid-of-the-global-interpreter-lock">
+<h3><a class="toc-backref" href="#id18">Can&#8217;t we get rid of the Global Interpreter Lock?</a><a class="headerlink" href="#can-t-we-get-rid-of-the-global-interpreter-lock" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><em class="xref std std-term">global interpreter lock</em></a> (GIL) is often seen as a hindrance to Python&#8217;s
+deployment on high-end multiprocessor server machines, because a multi-threaded
+Python program effectively only uses one CPU, due to the insistence that
+(almost) all Python code can only run while the GIL is held.</p>
+<p>Back in the days of Python 1.5, Greg Stein actually implemented a comprehensive
+patch set (the &#8220;free threading&#8221; patches) that removed the GIL and replaced it
+with fine-grained locking.  Unfortunately, even on Windows (where locks are very
+efficient) this ran ordinary Python code about twice as slow as the interpreter
+using the GIL.  On Linux the performance loss was even worse because pthread
+locks aren&#8217;t as efficient.</p>
+<p>Since then, the idea of getting rid of the GIL has occasionally come up but
+nobody has found a way to deal with the expected slowdown, and users who don&#8217;t
+use threads would not be happy if their code ran at half the speed.  Greg&#8217;s
+free threading patch set has not been kept up-to-date for later Python versions.</p>
+<p>This doesn&#8217;t mean that you can&#8217;t make good use of Python on multi-CPU machines!
+You just have to be creative with dividing the work up between multiple
+<em>processes</em> rather than multiple <em>threads</em>.  Judicious use of C extensions will
+also help; if you use a C extension to perform a time-consuming task, the
+extension can release the GIL while the thread of execution is in the C code and
+allow other threads to get some work done.</p>
+<p>It has been suggested that the GIL should be a per-interpreter-state lock rather
+than truly global; interpreters then wouldn&#8217;t be able to share objects.
+Unfortunately, this isn&#8217;t likely to happen either.  It would be a tremendous
+amount of work, because many object implementations currently have global state.
+For example, small integers and short strings are cached; these caches would
+have to be moved to the interpreter state.  Other object types have their own
+free list; these free lists would have to be moved to the interpreter state.
+And so on.</p>
+<p>And I doubt that it can even be done in finite time, because the same problem
+exists for 3rd party extensions.  It is likely that 3rd party extensions are
+being written at a faster rate than you can convert them to store all their
+global state in the interpreter state.</p>
+<p>And finally, once you have multiple interpreters not sharing any state, what
+have you gained over running each interpreter in a separate process?</p>
+</div>
+</div>
+<div class="section" id="input-and-output">
+<h2><a class="toc-backref" href="#id19">Input and Output</a><a class="headerlink" href="#input-and-output" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-delete-a-file-and-other-file-questions">
+<h3><a class="toc-backref" href="#id20">How do I delete a file? (And other file questions...)</a><a class="headerlink" href="#how-do-i-delete-a-file-and-other-file-questions" title="Permalink to this headline">¶</a></h3>
+<p>Use <tt class="docutils literal"><span class="pre">os.remove(filename)</span></tt> or <tt class="docutils literal"><span class="pre">os.unlink(filename)</span></tt>; for documentation, see
+the <a class="reference internal" href="../library/os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module.  The two functions are identical; <tt class="xref py py-func docutils literal"><span class="pre">unlink()</span></tt> is simply
+the name of the Unix system call for this function.</p>
+<p>To remove a directory, use <a class="reference internal" href="../library/os.html#os.rmdir" title="os.rmdir"><tt class="xref py py-func docutils literal"><span class="pre">os.rmdir()</span></tt></a>; use <a class="reference internal" href="../library/os.html#os.mkdir" title="os.mkdir"><tt class="xref py py-func docutils literal"><span class="pre">os.mkdir()</span></tt></a> to create one.
+<tt class="docutils literal"><span class="pre">os.makedirs(path)</span></tt> will create any intermediate directories in <tt class="docutils literal"><span class="pre">path</span></tt> that
+don&#8217;t exist. <tt class="docutils literal"><span class="pre">os.removedirs(path)</span></tt> will remove intermediate directories as
+long as they&#8217;re empty; if you want to delete an entire directory tree and its
+contents, use <a class="reference internal" href="../library/shutil.html#shutil.rmtree" title="shutil.rmtree"><tt class="xref py py-func docutils literal"><span class="pre">shutil.rmtree()</span></tt></a>.</p>
+<p>To rename a file, use <tt class="docutils literal"><span class="pre">os.rename(old_path,</span> <span class="pre">new_path)</span></tt>.</p>
+<p>To truncate a file, open it using <tt class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">open(filename,</span> <span class="pre">&quot;r+&quot;)</span></tt>, and use
+<tt class="docutils literal"><span class="pre">f.truncate(offset)</span></tt>; offset defaults to the current seek position.  There&#8217;s
+also <tt class="docutils literal"><span class="pre">os.ftruncate(fd,</span> <span class="pre">offset)</span></tt> for files opened with <a class="reference internal" href="../library/os.html#os.open" title="os.open"><tt class="xref py py-func docutils literal"><span class="pre">os.open()</span></tt></a>, where
+<em>fd</em> is the file descriptor (a small integer).</p>
+<p>The <a class="reference internal" href="../library/shutil.html#module-shutil" title="shutil: High-level file operations, including copying."><tt class="xref py py-mod docutils literal"><span class="pre">shutil</span></tt></a> module also contains a number of functions to work on files
+including <a class="reference internal" href="../library/shutil.html#shutil.copyfile" title="shutil.copyfile"><tt class="xref py py-func docutils literal"><span class="pre">copyfile()</span></tt></a>, <a class="reference internal" href="../library/shutil.html#shutil.copytree" title="shutil.copytree"><tt class="xref py py-func docutils literal"><span class="pre">copytree()</span></tt></a>, and
+<a class="reference internal" href="../library/shutil.html#shutil.rmtree" title="shutil.rmtree"><tt class="xref py py-func docutils literal"><span class="pre">rmtree()</span></tt></a>.</p>
+</div>
+<div class="section" id="how-do-i-copy-a-file">
+<h3><a class="toc-backref" href="#id21">How do I copy a file?</a><a class="headerlink" href="#how-do-i-copy-a-file" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../library/shutil.html#module-shutil" title="shutil: High-level file operations, including copying."><tt class="xref py py-mod docutils literal"><span class="pre">shutil</span></tt></a> module contains a <a class="reference internal" href="../library/shutil.html#shutil.copyfile" title="shutil.copyfile"><tt class="xref py py-func docutils literal"><span class="pre">copyfile()</span></tt></a> function.  Note
+that on MacOS 9 it doesn&#8217;t copy the resource fork and Finder info.</p>
+</div>
+<div class="section" id="how-do-i-read-or-write-binary-data">
+<h3><a class="toc-backref" href="#id22">How do I read (or write) binary data?</a><a class="headerlink" href="#how-do-i-read-or-write-binary-data" title="Permalink to this headline">¶</a></h3>
+<p>To read or write complex binary data formats, it&#8217;s best to use the <a class="reference internal" href="../library/struct.html#module-struct" title="struct: Interpret strings as packed binary data."><tt class="xref py py-mod docutils literal"><span class="pre">struct</span></tt></a>
+module.  It allows you to take a string containing binary data (usually numbers)
+and convert it to Python objects; and vice versa.</p>
+<p>For example, the following code reads two 2-byte integers and one 4-byte integer
+in big-endian format from a file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">struct</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span>  <span class="c"># Open in binary mode for portability</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&quot;&gt;hhl&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The &#8216;&gt;&#8217; in the format string forces big-endian data; the letter &#8216;h&#8217; reads one
+&#8220;short integer&#8221; (2 bytes), and &#8216;l&#8217; reads one &#8220;long integer&#8221; (4 bytes) from the
+string.</p>
+<p>For data that is more regular (e.g. a homogeneous list of ints or floats),
+you can also use the <a class="reference internal" href="../library/array.html#module-array" title="array: Space efficient arrays of uniformly typed numeric values."><tt class="xref py py-mod docutils literal"><span class="pre">array</span></tt></a> module.</p>
+</div>
+<div class="section" id="i-can-t-seem-to-use-os-read-on-a-pipe-created-with-os-popen-why">
+<h3><a class="toc-backref" href="#id23">I can&#8217;t seem to use os.read() on a pipe created with os.popen(); why?</a><a class="headerlink" href="#i-can-t-seem-to-use-os-read-on-a-pipe-created-with-os-popen-why" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../library/os.html#os.read" title="os.read"><tt class="xref py py-func docutils literal"><span class="pre">os.read()</span></tt></a> is a low-level function which takes a file descriptor, a small
+integer representing the opened file.  <a class="reference internal" href="../library/os.html#os.popen" title="os.popen"><tt class="xref py py-func docutils literal"><span class="pre">os.popen()</span></tt></a> creates a high-level
+file object, the same type returned by the built-in <a class="reference internal" href="../library/functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> function.
+Thus, to read <em>n</em> bytes from a pipe <em>p</em> created with <a class="reference internal" href="../library/os.html#os.popen" title="os.popen"><tt class="xref py py-func docutils literal"><span class="pre">os.popen()</span></tt></a>, you need to
+use <tt class="docutils literal"><span class="pre">p.read(n)</span></tt>.</p>
+</div>
+<div class="section" id="how-do-i-run-a-subprocess-with-pipes-connected-to-both-input-and-output">
+<h3><a class="toc-backref" href="#id24">How do I run a subprocess with pipes connected to both input and output?</a><a class="headerlink" href="#how-do-i-run-a-subprocess-with-pipes-connected-to-both-input-and-output" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="../library/popen2.html#module-popen2" title="popen2: Subprocesses with accessible standard I/O streams. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">popen2</span></tt></a> module.  For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">popen2</span>
+<span class="n">fromchild</span><span class="p">,</span> <span class="n">tochild</span> <span class="o">=</span> <span class="n">popen2</span><span class="o">.</span><span class="n">popen2</span><span class="p">(</span><span class="s">&quot;command&quot;</span><span class="p">)</span>
+<span class="n">tochild</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;input</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">tochild</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">fromchild</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Warning: in general it is unwise to do this because you can easily cause a
+deadlock where your process is blocked waiting for output from the child while
+the child is blocked waiting for input from you.  This can be caused by the
+parent expecting the child to output more text than it does or by data being
+stuck in stdio buffers due to lack of flushing.  The Python parent
+can of course explicitly flush the data it sends to the child before it reads
+any output, but if the child is a naive C program it may have been written to
+never explicitly flush its output, even if it is interactive, since flushing is
+normally automatic.</p>
+<p>Note that a deadlock is also possible if you use <tt class="xref py py-func docutils literal"><span class="pre">popen3()</span></tt> to read stdout
+and stderr. If one of the two is too large for the internal buffer (increasing
+the buffer size does not help) and you <tt class="docutils literal"><span class="pre">read()</span></tt> the other one first, there is
+a deadlock, too.</p>
+<p>Note on a bug in popen2: unless your program calls <tt class="docutils literal"><span class="pre">wait()</span></tt> or <tt class="docutils literal"><span class="pre">waitpid()</span></tt>,
+finished child processes are never removed, and eventually calls to popen2 will
+fail because of a limit on the number of child processes.  Calling
+<a class="reference internal" href="../library/os.html#os.waitpid" title="os.waitpid"><tt class="xref py py-func docutils literal"><span class="pre">os.waitpid()</span></tt></a> with the <a class="reference internal" href="../library/os.html#os.WNOHANG" title="os.WNOHANG"><tt class="xref py py-data docutils literal"><span class="pre">os.WNOHANG</span></tt></a> option can prevent this; a good
+place to insert such a call would be before calling <tt class="docutils literal"><span class="pre">popen2</span></tt> again.</p>
+<p>In many cases, all you really need is to run some data through a command and get
+the result back.  Unless the amount of data is very large, the easiest way to do
+this is to write it to a temporary file and run the command with that temporary
+file as input.  The standard module <a class="reference internal" href="../library/tempfile.html#module-tempfile" title="tempfile: Generate temporary files and directories."><tt class="xref py py-mod docutils literal"><span class="pre">tempfile</span></tt></a> exports a
+<a class="reference internal" href="../library/tempfile.html#tempfile.mktemp" title="tempfile.mktemp"><tt class="xref py py-func docutils literal"><span class="pre">mktemp()</span></tt></a> function to generate unique temporary file names.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">class</span> <span class="nc">Popen3</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a deadlock-safe version of popen that returns</span>
+<span class="sd">    an object with errorlevel, out (a string) and err (a string).</span>
+<span class="sd">    (capturestderr may not work under windows.)</span>
+<span class="sd">    Example: print Popen3(&#39;grep spam&#39;,&#39;\n\nhere spam\n\n&#39;).out</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">command</span><span class="p">,</span><span class="nb">input</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">capturestderr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">outfile</span><span class="o">=</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">()</span>
+        <span class="n">command</span><span class="o">=</span><span class="s">&quot;( </span><span class="si">%s</span><span class="s"> ) &gt; </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">command</span><span class="p">,</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="p">:</span>
+            <span class="n">infile</span><span class="o">=</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">()</span>
+            <span class="nb">open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+            <span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="o">+</span><span class="s">&quot; &lt;&quot;</span><span class="o">+</span><span class="n">infile</span>
+        <span class="k">if</span> <span class="n">capturestderr</span><span class="p">:</span>
+            <span class="n">errfile</span><span class="o">=</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">()</span>
+            <span class="n">command</span><span class="o">=</span><span class="n">command</span><span class="o">+</span><span class="s">&quot; 2&gt;&quot;</span><span class="o">+</span><span class="n">errfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errorlevel</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">capturestderr</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">err</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">errfile</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">errfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that many interactive programs (e.g. vi) don&#8217;t work well with pipes
+substituted for standard input and output.  You will have to use pseudo ttys
+(&#8220;ptys&#8221;) instead of pipes. Or you can use a Python interface to Don Libes&#8217;
+&#8220;expect&#8221; library.  A Python extension that interfaces to expect is called &#8220;expy&#8221;
+and available from <a class="reference external" href="http://expectpy.sourceforge.net">http://expectpy.sourceforge.net</a>.  A pure Python solution that
+works like expect is <a class="reference external" href="http://pypi.python.org/pypi/pexpect/">pexpect</a>.</p>
+</div>
+<div class="section" id="how-do-i-access-the-serial-rs232-port">
+<h3><a class="toc-backref" href="#id25">How do I access the serial (RS232) port?</a><a class="headerlink" href="#how-do-i-access-the-serial-rs232-port" title="Permalink to this headline">¶</a></h3>
+<p>For Win32, POSIX (Linux, BSD, etc.), Jython:</p>
+<blockquote>
+<div><a class="reference external" href="http://pyserial.sourceforge.net">http://pyserial.sourceforge.net</a></div></blockquote>
+<p>For Unix, see a Usenet post by Mitch Chapman:</p>
+<blockquote>
+<div><a class="reference external" href="http://groups.google.com/groups?selm=34A04430.CF9&#64;ohioee.com">http://groups.google.com/groups?selm=34A04430.CF9&#64;ohioee.com</a></div></blockquote>
+</div>
+<div class="section" id="why-doesn-t-closing-sys-stdout-stdin-stderr-really-close-it">
+<h3><a class="toc-backref" href="#id26">Why doesn&#8217;t closing sys.stdout (stdin, stderr) really close it?</a><a class="headerlink" href="#why-doesn-t-closing-sys-stdout-stdin-stderr-really-close-it" title="Permalink to this headline">¶</a></h3>
+<p>Python file objects are a high-level layer of abstraction on top of C streams,
+which in turn are a medium-level layer of abstraction on top of (among other
+things) low-level C file descriptors.</p>
+<p>For most file objects you create in Python via the built-in <tt class="docutils literal"><span class="pre">file</span></tt>
+constructor, <tt class="docutils literal"><span class="pre">f.close()</span></tt> marks the Python file object as being closed from
+Python&#8217;s point of view, and also arranges to close the underlying C stream.
+This also happens automatically in <tt class="docutils literal"><span class="pre">f</span></tt>&#8216;s destructor, when <tt class="docutils literal"><span class="pre">f</span></tt> becomes
+garbage.</p>
+<p>But stdin, stdout and stderr are treated specially by Python, because of the
+special status also given to them by C.  Running <tt class="docutils literal"><span class="pre">sys.stdout.close()</span></tt> marks
+the Python-level file object as being closed, but does <em>not</em> close the
+associated C stream.</p>
+<p>To close the underlying C stream for one of these three, you should first be
+sure that&#8217;s what you really want to do (e.g., you may confuse extension modules
+trying to do I/O).  If it is, use os.close:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c"># close C&#39;s stdin stream</span>
+<span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c"># close C&#39;s stdout stream</span>
+<span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   <span class="c"># close C&#39;s stderr stream</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="network-internet-programming">
+<h2><a class="toc-backref" href="#id27">Network/Internet Programming</a><a class="headerlink" href="#network-internet-programming" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-www-tools-are-there-for-python">
+<h3><a class="toc-backref" href="#id28">What WWW tools are there for Python?</a><a class="headerlink" href="#what-www-tools-are-there-for-python" title="Permalink to this headline">¶</a></h3>
+<p>See the chapters titled <a class="reference internal" href="../library/internet.html#internet"><em>Internet Protocols and Support</em></a> and <a class="reference internal" href="../library/netdata.html#netdata"><em>Internet Data Handling</em></a> in the Library
+Reference Manual.  Python has many modules that will help you build server-side
+and client-side web systems.</p>
+<p>A summary of available frameworks is maintained by Paul Boddie at
+<a class="reference external" href="http://wiki.python.org/moin/WebProgramming">http://wiki.python.org/moin/WebProgramming</a> .</p>
+<p>Cameron Laird maintains a useful set of pages about Python web technologies at
+<a class="reference external" href="http://phaseit.net/claird/comp.lang.python/web_python">http://phaseit.net/claird/comp.lang.python/web_python</a>.</p>
+</div>
+<div class="section" id="how-can-i-mimic-cgi-form-submission-method-post">
+<h3><a class="toc-backref" href="#id29">How can I mimic CGI form submission (METHOD=POST)?</a><a class="headerlink" href="#how-can-i-mimic-cgi-form-submission-method-post" title="Permalink to this headline">¶</a></h3>
+<p>I would like to retrieve web pages that are the result of POSTing a form. Is
+there existing code that would let me do this easily?</p>
+<p>Yes. Here&#8217;s a simple example that uses httplib:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/local/bin/python</span>
+
+<span class="kn">import</span> <span class="nn">httplib</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span>
+
+<span class="c">### build the query string</span>
+<span class="n">qs</span> <span class="o">=</span> <span class="s">&quot;First=Josephine&amp;MI=Q&amp;Last=Public&quot;</span>
+
+<span class="c">### connect and send the server a path</span>
+<span class="n">httpobj</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTP</span><span class="p">(</span><span class="s">&#39;www.some-server.out-there&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">putrequest</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;/cgi-bin/some-cgi-script&#39;</span><span class="p">)</span>
+<span class="c">### now generate the rest of the HTTP headers...</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">putheader</span><span class="p">(</span><span class="s">&#39;Accept&#39;</span><span class="p">,</span> <span class="s">&#39;*/*&#39;</span><span class="p">)</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">putheader</span><span class="p">(</span><span class="s">&#39;Connection&#39;</span><span class="p">,</span> <span class="s">&#39;Keep-Alive&#39;</span><span class="p">)</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">putheader</span><span class="p">(</span><span class="s">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s">&#39;application/x-www-form-urlencoded&#39;</span><span class="p">)</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">putheader</span><span class="p">(</span><span class="s">&#39;Content-length&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">qs</span><span class="p">))</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">endheaders</span><span class="p">()</span>
+<span class="n">httpobj</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span>
+<span class="c">### find out what the server said in response...</span>
+<span class="n">reply</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">hdrs</span> <span class="o">=</span> <span class="n">httpobj</span><span class="o">.</span><span class="n">getreply</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">reply</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">httpobj</span><span class="o">.</span><span class="n">getfile</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Note that in general for percent-encoded POST operations, query strings must be
+quoted using <a class="reference internal" href="../library/urllib.html#urllib.urlencode" title="urllib.urlencode"><tt class="xref py py-func docutils literal"><span class="pre">urllib.urlencode()</span></tt></a>.  For example, to send
+<tt class="docutils literal"><span class="pre">name=Guy</span> <span class="pre">Steele,</span> <span class="pre">Jr.</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;Guy Steele, Jr.&#39;</span><span class="p">})</span>
+<span class="go">&#39;name=Guy+Steele%2C+Jr.&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="what-module-should-i-use-to-help-with-generating-html">
+<h3><a class="toc-backref" href="#id30">What module should I use to help with generating HTML?</a><a class="headerlink" href="#what-module-should-i-use-to-help-with-generating-html" title="Permalink to this headline">¶</a></h3>
+<p>You can find a collection of useful links on the <a class="reference external" href="http://wiki.python.org/moin/WebProgramming">Web Programming wiki page</a>.</p>
+</div>
+<div class="section" id="how-do-i-send-mail-from-a-python-script">
+<h3><a class="toc-backref" href="#id31">How do I send mail from a Python script?</a><a class="headerlink" href="#how-do-i-send-mail-from-a-python-script" title="Permalink to this headline">¶</a></h3>
+<p>Use the standard library module <a class="reference internal" href="../library/smtplib.html#module-smtplib" title="smtplib: SMTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">smtplib</span></tt></a>.</p>
+<p>Here&#8217;s a very simple interactive mail sender that uses it.  This method will
+work on any host that supports an SMTP listener.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">smtplib</span>
+
+<span class="n">fromaddr</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;From: &quot;</span><span class="p">)</span>
+<span class="n">toaddrs</span>  <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;To: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Enter message, end with ^D:&quot;</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="n">line</span>
+
+<span class="c"># The actual mail send</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="n">toaddrs</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>A Unix-only alternative uses sendmail.  The location of the sendmail program
+varies between systems; sometimes it is <tt class="docutils literal"><span class="pre">/usr/lib/sendmail</span></tt>, sometimes
+<tt class="docutils literal"><span class="pre">/usr/sbin/sendmail</span></tt>.  The sendmail manual page will help you out.  Here&#8217;s
+some sample code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SENDMAIL</span> <span class="o">=</span> <span class="s">&quot;/usr/sbin/sendmail&quot;</span> <span class="c"># sendmail location</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> -t -i&quot;</span> <span class="o">%</span> <span class="n">SENDMAIL</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;To: receiver@example.com</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Subject: test</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span> <span class="c"># blank line separating headers from body</span>
+<span class="n">p</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Some text</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;some more text</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">sts</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">sts</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Sendmail exit status&quot;</span><span class="p">,</span> <span class="n">sts</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-do-i-avoid-blocking-in-the-connect-method-of-a-socket">
+<h3><a class="toc-backref" href="#id32">How do I avoid blocking in the connect() method of a socket?</a><a class="headerlink" href="#how-do-i-avoid-blocking-in-the-connect-method-of-a-socket" title="Permalink to this headline">¶</a></h3>
+<p>The select module is commonly used to help with asynchronous I/O on sockets.</p>
+<p>To prevent the TCP connect from blocking, you can set the socket to non-blocking
+mode.  Then when you do the <tt class="docutils literal"><span class="pre">connect()</span></tt>, you will either connect immediately
+(unlikely) or get an exception that contains the error number as <tt class="docutils literal"><span class="pre">.errno</span></tt>.
+<tt class="docutils literal"><span class="pre">errno.EINPROGRESS</span></tt> indicates that the connection is in progress, but hasn&#8217;t
+finished yet.  Different OSes will return different values, so you&#8217;re going to
+have to check what&#8217;s returned on your system.</p>
+<p>You can use the <tt class="docutils literal"><span class="pre">connect_ex()</span></tt> method to avoid creating an exception.  It will
+just return the errno value.  To poll, you can call <tt class="docutils literal"><span class="pre">connect_ex()</span></tt> again later
+&#8211; 0 or <tt class="docutils literal"><span class="pre">errno.EISCONN</span></tt> indicate that you&#8217;re connected &#8211; or you can pass this
+socket to select to check if it&#8217;s writable.</p>
+</div>
+</div>
+<div class="section" id="databases">
+<h2><a class="toc-backref" href="#id33">Databases</a><a class="headerlink" href="#databases" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="are-there-any-interfaces-to-database-packages-in-python">
+<h3><a class="toc-backref" href="#id34">Are there any interfaces to database packages in Python?</a><a class="headerlink" href="#are-there-any-interfaces-to-database-packages-in-python" title="Permalink to this headline">¶</a></h3>
+<p>Yes.</p>
+<p>Python 2.3 includes the <a class="reference internal" href="../library/bsddb.html#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> package which provides an interface to the
+BerkeleyDB library.  Interfaces to disk-based hashes such as <a class="reference internal" href="../library/dbm.html#module-dbm" title="dbm: The standard &quot;database&quot; interface, based on ndbm. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">DBM</span></tt></a>
+and <a class="reference internal" href="../library/gdbm.html#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">GDBM</span></tt></a> are also included with standard Python.</p>
+<p>Support for most relational databases is available.  See the
+<a class="reference external" href="http://wiki.python.org/moin/DatabaseProgramming">DatabaseProgramming wiki page</a> for details.</p>
+</div>
+<div class="section" id="how-do-you-implement-persistent-objects-in-python">
+<h3><a class="toc-backref" href="#id35">How do you implement persistent objects in Python?</a><a class="headerlink" href="#how-do-you-implement-persistent-objects-in-python" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../library/pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt></a> library module solves this in a very general way (though you
+still can&#8217;t store things like open files, sockets or windows), and the
+<a class="reference internal" href="../library/shelve.html#module-shelve" title="shelve: Python object persistence."><tt class="xref py py-mod docutils literal"><span class="pre">shelve</span></tt></a> library module uses pickle and (g)dbm to create persistent
+mappings containing arbitrary Python objects.  For better performance, you can
+use the <a class="reference internal" href="../library/pickle.html#module-cPickle" title="cPickle: Faster version of pickle, but not subclassable."><tt class="xref py py-mod docutils literal"><span class="pre">cPickle</span></tt></a> module.</p>
+<p>A more awkward way of doing things is to use pickle&#8217;s little sister, marshal.
+The <a class="reference internal" href="../library/marshal.html#module-marshal" title="marshal: Convert Python objects to streams of bytes and back (with different constraints)."><tt class="xref py py-mod docutils literal"><span class="pre">marshal</span></tt></a> module provides very fast ways to store noncircular basic
+Python types to files and strings, and back again.  Although marshal does not do
+fancy things like store instances or handle shared references properly, it does
+run extremely fast.  For example, loading a half megabyte of data may take less
+than a third of a second.  This often beats doing something more complex and
+general such as using gdbm with pickle/shelve.</p>
+</div>
+<div class="section" id="why-is-cpickle-so-slow">
+<h3><a class="toc-backref" href="#id36">Why is cPickle so slow?</a><a class="headerlink" href="#why-is-cpickle-so-slow" title="Permalink to this headline">¶</a></h3>
+<p>By default <a class="reference internal" href="../library/pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt></a> uses a relatively old and slow format for backward
+compatibility.  You can however specify other protocol versions that are
+faster:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">largeString</span> <span class="o">=</span> <span class="s">&#39;z&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+<span class="n">myPickle</span> <span class="o">=</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">largeString</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="if-my-program-crashes-with-a-bsddb-or-anydbm-database-open-it-gets-corrupted-how-come">
+<h3><a class="toc-backref" href="#id37">If my program crashes with a bsddb (or anydbm) database open, it gets corrupted. How come?</a><a class="headerlink" href="#if-my-program-crashes-with-a-bsddb-or-anydbm-database-open-it-gets-corrupted-how-come" title="Permalink to this headline">¶</a></h3>
+<p>Databases opened for write access with the bsddb module (and often by the anydbm
+module, since it will preferentially use bsddb) must explicitly be closed using
+the <tt class="docutils literal"><span class="pre">.close()</span></tt> method of the database.  The underlying library caches database
+contents which need to be converted to on-disk form and written.</p>
+<p>If you have initialized a new bsddb database but not written anything to it
+before the program crashes, you will often wind up with a zero-length file and
+encounter an exception the next time the file is opened.</p>
+</div>
+<div class="section" id="i-tried-to-open-berkeley-db-file-but-bsddb-produces-bsddb-error-22-invalid-argument-help-how-can-i-restore-my-data">
+<h3><a class="toc-backref" href="#id38">I tried to open Berkeley DB file, but bsddb produces bsddb.error: (22, &#8216;Invalid argument&#8217;). Help! How can I restore my data?</a><a class="headerlink" href="#i-tried-to-open-berkeley-db-file-but-bsddb-produces-bsddb-error-22-invalid-argument-help-how-can-i-restore-my-data" title="Permalink to this headline">¶</a></h3>
+<p>Don&#8217;t panic! Your data is probably intact. The most frequent cause for the error
+is that you tried to open an earlier Berkeley DB file with a later version of
+the Berkeley DB library.</p>
+<p>Many Linux systems now have all three versions of Berkeley DB available.  If you
+are migrating from version 1 to a newer version use db_dump185 to dump a plain
+text version of the database.  If you are migrating from version 2 to version 3
+use db2_dump to create a plain text version of the database.  In either case,
+use db_load to create a new native database for the latest version installed on
+your computer.  If you have version 3 of Berkeley DB installed, you should be
+able to use db2_load to create a native version 2 database.</p>
+<p>You should move away from Berkeley DB version 1 files because the hash file code
+contains known bugs that can corrupt your data.</p>
+</div>
+</div>
+<div class="section" id="mathematics-and-numerics">
+<h2><a class="toc-backref" href="#id39">Mathematics and Numerics</a><a class="headerlink" href="#mathematics-and-numerics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-do-i-generate-random-numbers-in-python">
+<h3><a class="toc-backref" href="#id40">How do I generate random numbers in Python?</a><a class="headerlink" href="#how-do-i-generate-random-numbers-in-python" title="Permalink to this headline">¶</a></h3>
+<p>The standard module <a class="reference internal" href="../library/random.html#module-random" title="random: Generate pseudo-random numbers with various common distributions."><tt class="xref py py-mod docutils literal"><span class="pre">random</span></tt></a> implements a random number generator.  Usage
+is simple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This returns a random floating point number in the range [0, 1).</p>
+<p>There are also many other specialized generators in this module, such as:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">randrange(a,</span> <span class="pre">b)</span></tt> chooses an integer in the range [a, b).</li>
+<li><tt class="docutils literal"><span class="pre">uniform(a,</span> <span class="pre">b)</span></tt> chooses a floating point number in the range [a, b).</li>
+<li><tt class="docutils literal"><span class="pre">normalvariate(mean,</span> <span class="pre">sdev)</span></tt> samples the normal (Gaussian) distribution.</li>
+</ul>
+<p>Some higher-level functions operate on sequences directly, such as:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">choice(S)</span></tt> chooses random element from a given sequence</li>
+<li><tt class="docutils literal"><span class="pre">shuffle(L)</span></tt> shuffles a list in-place, i.e. permutes it randomly</li>
+</ul>
+<p>There&#8217;s also a <tt class="docutils literal"><span class="pre">Random</span></tt> class you can instantiate to create independent
+multiple random number generators.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Library and Extension FAQ</a><ul>
+<li><a class="reference internal" href="#general-library-questions">General Library Questions</a></li>
+<li><a class="reference internal" href="#common-tasks">Common tasks</a></li>
+<li><a class="reference internal" href="#threads">Threads</a></li>
+<li><a class="reference internal" href="#input-and-output">Input and Output</a></li>
+<li><a class="reference internal" href="#network-internet-programming">Network/Internet Programming</a></li>
+<li><a class="reference internal" href="#databases">Databases</a></li>
+<li><a class="reference internal" href="#mathematics-and-numerics">Mathematics and Numerics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="design.html"
+                        title="previous chapter">Design and History FAQ</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="extending.html"
+                        title="next chapter">Extending/Embedding FAQ</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/faq/library.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="Extending/Embedding FAQ"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="design.html" title="Design and History FAQ"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python Frequently Asked Questions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

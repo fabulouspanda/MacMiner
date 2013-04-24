@@ -1,0 +1,1269 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>19.8. xml.dom — The Document Object Model API &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="19. Structured Markup Processing Tools" href="markup.html" />
+    <link rel="next" title="19.9. xml.dom.minidom — Minimal DOM implementation" href="xml.dom.minidom.html" />
+    <link rel="prev" title="19.7. xml.etree.ElementTree — The ElementTree XML API" href="xml.etree.elementtree.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.dom.minidom.html" title="19.9. xml.dom.minidom — Minimal DOM implementation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xml.etree.elementtree.html" title="19.7. xml.etree.ElementTree — The ElementTree XML API"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" accesskey="U">19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xml.dom">
+<span id="xml-dom-the-document-object-model-api"></span><h1>19.8. <a class="reference internal" href="#module-xml.dom" title="xml.dom: Document Object Model API for Python."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom</span></tt></a> &#8212; The Document Object Model API<a class="headerlink" href="#module-xml.dom" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+<p>The Document Object Model, or &#8220;DOM,&#8221; is a cross-language API from the World Wide
+Web Consortium (W3C) for accessing and modifying XML documents.  A DOM
+implementation presents an XML document as a tree structure, or allows client
+code to build such a structure from scratch.  It then gives access to the
+structure through a set of objects which provided well-known interfaces.</p>
+<p>The DOM is extremely useful for random-access applications.  SAX only allows you
+a view of one bit of the document at a time.  If you are looking at one SAX
+element, you have no access to another.  If you are looking at a text node, you
+have no access to a containing element. When you write a SAX application, you
+need to keep track of your program&#8217;s position in the document somewhere in your
+own code.  SAX does not do it for you.  Also, if you need to look ahead in the
+XML document, you are just out of luck.</p>
+<p>Some applications are simply impossible in an event driven model with no access
+to a tree.  Of course you could build some sort of tree yourself in SAX events,
+but the DOM allows you to avoid writing that code.  The DOM is a standard tree
+representation for XML data.</p>
+<p>The Document Object Model is being defined by the W3C in stages, or &#8220;levels&#8221; in
+their terminology.  The Python mapping of the API is substantially based on the
+DOM Level 2 recommendation.</p>
+<p>DOM applications typically start by parsing some XML into a DOM.  How this is
+accomplished is not covered at all by DOM Level 1, and Level 2 provides only
+limited improvements: There is a <tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt> object class which
+provides access to <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> creation methods, but no way to access an
+XML reader/parser/Document builder in an implementation-independent way. There
+is also no well-defined way to access these methods without an existing
+<tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> object.  In Python, each DOM implementation will provide a
+function <a class="reference internal" href="#xml.dom.getDOMImplementation" title="xml.dom.getDOMImplementation"><tt class="xref py py-func docutils literal"><span class="pre">getDOMImplementation()</span></tt></a>. DOM Level 3 adds a Load/Store
+specification, which defines an interface to the reader, but this is not yet
+available in the Python standard library.</p>
+<p>Once you have a DOM document object, you can access the parts of your XML
+document through its properties and methods.  These properties are defined in
+the DOM specification; this portion of the reference manual describes the
+interpretation of the specification in Python.</p>
+<p>The specification provided by the W3C defines the DOM API for Java, ECMAScript,
+and OMG IDL.  The Python mapping defined here is based in large part on the IDL
+version of the specification, but strict compliance is not required (though
+implementations are free to support the strict mapping from IDL).  See section
+<a class="reference internal" href="#dom-conformance"><em>Conformance</em></a> for a detailed discussion of mapping requirements.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://www.w3.org/TR/DOM-Level-2-Core/">Document Object Model (DOM) Level 2 Specification</a></dt>
+<dd>The W3C recommendation upon which the Python DOM API is based.</dd>
+<dt><a class="reference external" href="http://www.w3.org/TR/REC-DOM-Level-1/">Document Object Model (DOM) Level 1 Specification</a></dt>
+<dd>The W3C recommendation for the DOM supported by <a class="reference internal" href="xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom.minidom</span></tt></a>.</dd>
+<dt><a class="reference external" href="http://www.omg.org/spec/PYTH/1.2/PDF">Python Language Mapping Specification</a></dt>
+<dd>This specifies the mapping from OMG IDL to Python.</dd>
+</dl>
+</div>
+<div class="section" id="module-contents">
+<h2>19.8.1. Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-xml.dom" title="xml.dom: Document Object Model API for Python."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom</span></tt></a> contains the following functions:</p>
+<dl class="function">
+<dt id="xml.dom.registerDOMImplementation">
+<tt class="descclassname">xml.dom.</tt><tt class="descname">registerDOMImplementation</tt><big>(</big><em>name</em>, <em>factory</em><big>)</big><a class="headerlink" href="#xml.dom.registerDOMImplementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register the <em>factory</em> function with the name <em>name</em>.  The factory function
+should return an object which implements the <tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt>
+interface.  The factory function can return the same object every time, or a new
+one for each call, as appropriate for the specific implementation (e.g. if that
+implementation supports some customization).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xml.dom.getDOMImplementation">
+<tt class="descclassname">xml.dom.</tt><tt class="descname">getDOMImplementation</tt><big>(</big><span class="optional">[</span><em>name</em><span class="optional">[</span>, <em>features</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.dom.getDOMImplementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a suitable DOM implementation. The <em>name</em> is either well-known, the
+module name of a DOM implementation, or <tt class="xref docutils literal"><span class="pre">None</span></tt>. If it is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, imports
+the corresponding module and returns a <tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt> object if the
+import succeeds.  If no name is given, and if the environment variable
+<span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHON_DOM</span></tt> is set, this variable is used to find the implementation.</p>
+<p>If name is not given, this examines the available implementations to find one
+with the required feature set.  If no implementation can be found, raise an
+<a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a>.  The features list must be a sequence of <tt class="docutils literal"><span class="pre">(feature,</span>
+<span class="pre">version)</span></tt> pairs which are passed to the <tt class="xref py py-meth docutils literal"><span class="pre">hasFeature()</span></tt> method on available
+<tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt> objects.</p>
+</dd></dl>
+
+<p>Some convenience constants are also provided:</p>
+<dl class="data">
+<dt id="xml.dom.EMPTY_NAMESPACE">
+<tt class="descclassname">xml.dom.</tt><tt class="descname">EMPTY_NAMESPACE</tt><a class="headerlink" href="#xml.dom.EMPTY_NAMESPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value used to indicate that no namespace is associated with a node in the
+DOM.  This is typically found as the <tt class="xref py py-attr docutils literal"><span class="pre">namespaceURI</span></tt> of a node, or used as
+the <em>namespaceURI</em> parameter to a namespaces-specific method.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xml.dom.XML_NAMESPACE">
+<tt class="descclassname">xml.dom.</tt><tt class="descname">XML_NAMESPACE</tt><a class="headerlink" href="#xml.dom.XML_NAMESPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The namespace URI associated with the reserved prefix <tt class="docutils literal"><span class="pre">xml</span></tt>, as defined by
+<a class="reference external" href="http://www.w3.org/TR/REC-xml-names/">Namespaces in XML</a> (section 4).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xml.dom.XMLNS_NAMESPACE">
+<tt class="descclassname">xml.dom.</tt><tt class="descname">XMLNS_NAMESPACE</tt><a class="headerlink" href="#xml.dom.XMLNS_NAMESPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The namespace URI for namespace declarations, as defined by <a class="reference external" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html">Document Object
+Model (DOM) Level 2 Core Specification</a> (section 1.1.8).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xml.dom.XHTML_NAMESPACE">
+<tt class="descclassname">xml.dom.</tt><tt class="descname">XHTML_NAMESPACE</tt><a class="headerlink" href="#xml.dom.XHTML_NAMESPACE" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URI of the XHTML namespace as defined by <a class="reference external" href="http://www.w3.org/TR/xhtml1/">XHTML 1.0: The Extensible
+HyperText Markup Language</a> (section 3.1.1).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<p>In addition, <a class="reference internal" href="#module-xml.dom" title="xml.dom: Document Object Model API for Python."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom</span></tt></a> contains a base <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> class and the DOM
+exception classes.  The <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> class provided by this module does not
+implement any of the methods or attributes defined by the DOM specification;
+concrete DOM implementations must provide those.  The <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> class
+provided as part of this module does provide the constants used for the
+<tt class="xref py py-attr docutils literal"><span class="pre">nodeType</span></tt> attribute on concrete <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> objects; they are located
+within the class rather than at the module level to conform with the DOM
+specifications.</p>
+</div>
+<div class="section" id="objects-in-the-dom">
+<span id="dom-objects"></span><h2>19.8.2. Objects in the DOM<a class="headerlink" href="#objects-in-the-dom" title="Permalink to this headline">¶</a></h2>
+<p>The definitive documentation for the DOM is the DOM specification from the W3C.</p>
+<p>Note that DOM attributes may also be manipulated as nodes instead of as simple
+strings.  It is fairly rare that you must do this, however, so this usage is not
+yet documented.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="35%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Interface</th>
+<th class="head">Section</th>
+<th class="head">Purpose</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt></td>
+<td><a class="reference internal" href="#dom-implementation-objects"><em>DOMImplementation Objects</em></a></td>
+<td>Interface to the underlying
+implementation.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt></td>
+<td><a class="reference internal" href="#dom-node-objects"><em>Node Objects</em></a></td>
+<td>Base interface for most objects
+in a document.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">NodeList</span></tt></td>
+<td><a class="reference internal" href="#dom-nodelist-objects"><em>NodeList Objects</em></a></td>
+<td>Interface for a sequence of
+nodes.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt></td>
+<td><a class="reference internal" href="#dom-documenttype-objects"><em>DocumentType Objects</em></a></td>
+<td>Information about the
+declarations needed to process
+a document.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt></td>
+<td><a class="reference internal" href="#dom-document-objects"><em>Document Objects</em></a></td>
+<td>Object which represents an
+entire document.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt></td>
+<td><a class="reference internal" href="#dom-element-objects"><em>Element Objects</em></a></td>
+<td>Element nodes in the document
+hierarchy.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Attr</span></tt></td>
+<td><a class="reference internal" href="#dom-attr-objects"><em>Attr Objects</em></a></td>
+<td>Attribute value nodes on
+element nodes.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Comment</span></tt></td>
+<td><a class="reference internal" href="#dom-comment-objects"><em>Comment Objects</em></a></td>
+<td>Representation of comments in
+the source document.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Text</span></tt></td>
+<td><a class="reference internal" href="#dom-text-objects"><em>Text and CDATASection Objects</em></a></td>
+<td>Nodes containing textual
+content from the document.</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">ProcessingInstruction</span></tt></td>
+<td><a class="reference internal" href="#dom-pi-objects"><em>ProcessingInstruction Objects</em></a></td>
+<td>Processing instruction
+representation.</td>
+</tr>
+</tbody>
+</table>
+<p>An additional section describes the exceptions defined for working with the DOM
+in Python.</p>
+<div class="section" id="domimplementation-objects">
+<span id="dom-implementation-objects"></span><h3>19.8.2.1. DOMImplementation Objects<a class="headerlink" href="#domimplementation-objects" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt> interface provides a way for applications to
+determine the availability of particular features in the DOM they are using.
+DOM Level 2 added the ability to create new <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> and
+<tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt> objects using the <tt class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></tt> as well.</p>
+<dl class="method">
+<dt id="xml.dom.DOMImplementation.hasFeature">
+<tt class="descclassname">DOMImplementation.</tt><tt class="descname">hasFeature</tt><big>(</big><em>feature</em>, <em>version</em><big>)</big><a class="headerlink" href="#xml.dom.DOMImplementation.hasFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the feature identified by the pair of strings <em>feature</em> and
+<em>version</em> is implemented.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.DOMImplementation.createDocument">
+<tt class="descclassname">DOMImplementation.</tt><tt class="descname">createDocument</tt><big>(</big><em>namespaceUri</em>, <em>qualifiedName</em>, <em>doctype</em><big>)</big><a class="headerlink" href="#xml.dom.DOMImplementation.createDocument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> object (the root of the DOM), with a child
+<tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> object having the given <em>namespaceUri</em> and <em>qualifiedName</em>. The
+<em>doctype</em> must be a <tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt> object created by
+<a class="reference internal" href="#xml.dom.DOMImplementation.createDocumentType" title="xml.dom.DOMImplementation.createDocumentType"><tt class="xref py py-meth docutils literal"><span class="pre">createDocumentType()</span></tt></a>, or <tt class="xref docutils literal"><span class="pre">None</span></tt>. In the Python DOM API, the first two
+arguments can also be <tt class="xref docutils literal"><span class="pre">None</span></tt> in order to indicate that no <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt>
+child is to be created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.DOMImplementation.createDocumentType">
+<tt class="descclassname">DOMImplementation.</tt><tt class="descname">createDocumentType</tt><big>(</big><em>qualifiedName</em>, <em>publicId</em>, <em>systemId</em><big>)</big><a class="headerlink" href="#xml.dom.DOMImplementation.createDocumentType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new <tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt> object that encapsulates the given
+<em>qualifiedName</em>, <em>publicId</em>, and <em>systemId</em> strings, representing the
+information contained in an XML document type declaration.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="node-objects">
+<span id="dom-node-objects"></span><h3>19.8.2.2. Node Objects<a class="headerlink" href="#node-objects" title="Permalink to this headline">¶</a></h3>
+<p>All of the components of an XML document are subclasses of <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>.</p>
+<dl class="attribute">
+<dt id="xml.dom.Node.nodeType">
+<tt class="descclassname">Node.</tt><tt class="descname">nodeType</tt><a class="headerlink" href="#xml.dom.Node.nodeType" title="Permalink to this definition">¶</a></dt>
+<dd><p>An integer representing the node type.  Symbolic constants for the types are on
+the <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> object: <tt class="xref py py-const docutils literal"><span class="pre">ELEMENT_NODE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">ATTRIBUTE_NODE</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">TEXT_NODE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">CDATA_SECTION_NODE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">ENTITY_NODE</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">PROCESSING_INSTRUCTION_NODE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">COMMENT_NODE</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">DOCUMENT_NODE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">DOCUMENT_TYPE_NODE</span></tt>, <tt class="xref py py-const docutils literal"><span class="pre">NOTATION_NODE</span></tt>.
+This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.parentNode">
+<tt class="descclassname">Node.</tt><tt class="descname">parentNode</tt><a class="headerlink" href="#xml.dom.Node.parentNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent of the current node, or <tt class="xref docutils literal"><span class="pre">None</span></tt> for the document node. The value is
+always a <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> object or <tt class="xref docutils literal"><span class="pre">None</span></tt>.  For <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> nodes, this
+will be the parent element, except for the root element, in which case it will
+be the <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> object. For <tt class="xref py py-class docutils literal"><span class="pre">Attr</span></tt> nodes, this is always
+<tt class="xref docutils literal"><span class="pre">None</span></tt>. This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.attributes">
+<tt class="descclassname">Node.</tt><tt class="descname">attributes</tt><a class="headerlink" href="#xml.dom.Node.attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <tt class="xref py py-class docutils literal"><span class="pre">NamedNodeMap</span></tt> of attribute objects.  Only elements have actual values
+for this; others provide <tt class="xref docutils literal"><span class="pre">None</span></tt> for this attribute. This is a read-only
+attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.previousSibling">
+<tt class="descclassname">Node.</tt><tt class="descname">previousSibling</tt><a class="headerlink" href="#xml.dom.Node.previousSibling" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node that immediately precedes this one with the same parent.  For
+instance the element with an end-tag that comes just before the <em>self</em>
+element&#8217;s start-tag.  Of course, XML documents are made up of more than just
+elements so the previous sibling could be text, a comment, or something else.
+If this node is the first child of the parent, this attribute will be
+<tt class="xref docutils literal"><span class="pre">None</span></tt>. This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.nextSibling">
+<tt class="descclassname">Node.</tt><tt class="descname">nextSibling</tt><a class="headerlink" href="#xml.dom.Node.nextSibling" title="Permalink to this definition">¶</a></dt>
+<dd><p>The node that immediately follows this one with the same parent.  See also
+<a class="reference internal" href="#xml.dom.Node.previousSibling" title="xml.dom.Node.previousSibling"><tt class="xref py py-attr docutils literal"><span class="pre">previousSibling</span></tt></a>.  If this is the last child of the parent, this
+attribute will be <tt class="xref docutils literal"><span class="pre">None</span></tt>. This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.childNodes">
+<tt class="descclassname">Node.</tt><tt class="descname">childNodes</tt><a class="headerlink" href="#xml.dom.Node.childNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of nodes contained within this node. This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.firstChild">
+<tt class="descclassname">Node.</tt><tt class="descname">firstChild</tt><a class="headerlink" href="#xml.dom.Node.firstChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>The first child of the node, if there are any, or <tt class="xref docutils literal"><span class="pre">None</span></tt>. This is a read-only
+attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.lastChild">
+<tt class="descclassname">Node.</tt><tt class="descname">lastChild</tt><a class="headerlink" href="#xml.dom.Node.lastChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>The last child of the node, if there are any, or <tt class="xref docutils literal"><span class="pre">None</span></tt>. This is a read-only
+attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.localName">
+<tt class="descclassname">Node.</tt><tt class="descname">localName</tt><a class="headerlink" href="#xml.dom.Node.localName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The part of the <tt class="xref py py-attr docutils literal"><span class="pre">tagName</span></tt> following the colon if there is one, else the
+entire <tt class="xref py py-attr docutils literal"><span class="pre">tagName</span></tt>.  The value is a string.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.prefix">
+<tt class="descclassname">Node.</tt><tt class="descname">prefix</tt><a class="headerlink" href="#xml.dom.Node.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The part of the <tt class="xref py py-attr docutils literal"><span class="pre">tagName</span></tt> preceding the colon if there is one, else the
+empty string.  The value is a string, or <tt class="xref docutils literal"><span class="pre">None</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.namespaceURI">
+<tt class="descclassname">Node.</tt><tt class="descname">namespaceURI</tt><a class="headerlink" href="#xml.dom.Node.namespaceURI" title="Permalink to this definition">¶</a></dt>
+<dd><p>The namespace associated with the element name.  This will be a string or
+<tt class="xref docutils literal"><span class="pre">None</span></tt>.  This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.nodeName">
+<tt class="descclassname">Node.</tt><tt class="descname">nodeName</tt><a class="headerlink" href="#xml.dom.Node.nodeName" title="Permalink to this definition">¶</a></dt>
+<dd><p>This has a different meaning for each node type; see the DOM specification for
+details.  You can always get the information you would get here from another
+property such as the <tt class="xref py py-attr docutils literal"><span class="pre">tagName</span></tt> property for elements or the <tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt>
+property for attributes. For all node types, the value of this attribute will be
+either a string or <tt class="xref docutils literal"><span class="pre">None</span></tt>.  This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Node.nodeValue">
+<tt class="descclassname">Node.</tt><tt class="descname">nodeValue</tt><a class="headerlink" href="#xml.dom.Node.nodeValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>This has a different meaning for each node type; see the DOM specification for
+details.  The situation is similar to that with <a class="reference internal" href="#xml.dom.Node.nodeName" title="xml.dom.Node.nodeName"><tt class="xref py py-attr docutils literal"><span class="pre">nodeName</span></tt></a>.  The value is
+a string or <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.hasAttributes">
+<tt class="descclassname">Node.</tt><tt class="descname">hasAttributes</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.dom.Node.hasAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the node has any attributes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.hasChildNodes">
+<tt class="descclassname">Node.</tt><tt class="descname">hasChildNodes</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.dom.Node.hasChildNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the node has any child nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.isSameNode">
+<tt class="descclassname">Node.</tt><tt class="descname">isSameNode</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#xml.dom.Node.isSameNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if <em>other</em> refers to the same node as this node. This is especially
+useful for DOM implementations which use any sort of proxy architecture (because
+more than one object can refer to the same node).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is based on a proposed DOM Level 3 API which is still in the &#8220;working
+draft&#8221; stage, but this particular interface appears uncontroversial.  Changes
+from the W3C will not necessarily affect this method in the Python DOM interface
+(though any new W3C API for this would also be supported).</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.appendChild">
+<tt class="descclassname">Node.</tt><tt class="descname">appendChild</tt><big>(</big><em>newChild</em><big>)</big><a class="headerlink" href="#xml.dom.Node.appendChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new child node to this node at the end of the list of
+children, returning <em>newChild</em>. If the node was already in
+the tree, it is removed first.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.insertBefore">
+<tt class="descclassname">Node.</tt><tt class="descname">insertBefore</tt><big>(</big><em>newChild</em>, <em>refChild</em><big>)</big><a class="headerlink" href="#xml.dom.Node.insertBefore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a new child node before an existing child.  It must be the case that
+<em>refChild</em> is a child of this node; if not, <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> is raised.
+<em>newChild</em> is returned. If <em>refChild</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>, it inserts <em>newChild</em> at the
+end of the children&#8217;s list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.removeChild">
+<tt class="descclassname">Node.</tt><tt class="descname">removeChild</tt><big>(</big><em>oldChild</em><big>)</big><a class="headerlink" href="#xml.dom.Node.removeChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a child node.  <em>oldChild</em> must be a child of this node; if not,
+<a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> is raised.  <em>oldChild</em> is returned on success.  If <em>oldChild</em>
+will not be used further, its <tt class="xref py py-meth docutils literal"><span class="pre">unlink()</span></tt> method should be called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.replaceChild">
+<tt class="descclassname">Node.</tt><tt class="descname">replaceChild</tt><big>(</big><em>newChild</em>, <em>oldChild</em><big>)</big><a class="headerlink" href="#xml.dom.Node.replaceChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace an existing node with a new node. It must be the case that  <em>oldChild</em>
+is a child of this node; if not, <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> is raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.normalize">
+<tt class="descclassname">Node.</tt><tt class="descname">normalize</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.dom.Node.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join adjacent text nodes so that all stretches of text are stored as single
+<tt class="xref py py-class docutils literal"><span class="pre">Text</span></tt> instances.  This simplifies processing text from a DOM tree for
+many applications.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Node.cloneNode">
+<tt class="descclassname">Node.</tt><tt class="descname">cloneNode</tt><big>(</big><em>deep</em><big>)</big><a class="headerlink" href="#xml.dom.Node.cloneNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clone this node.  Setting <em>deep</em> means to clone all child nodes as well.  This
+returns the clone.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="nodelist-objects">
+<span id="dom-nodelist-objects"></span><h3>19.8.2.3. NodeList Objects<a class="headerlink" href="#nodelist-objects" title="Permalink to this headline">¶</a></h3>
+<p>A <tt class="xref py py-class docutils literal"><span class="pre">NodeList</span></tt> represents a sequence of nodes.  These objects are used in
+two ways in the DOM Core recommendation:  the <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> objects provides
+one as its list of child nodes, and the <tt class="xref py py-meth docutils literal"><span class="pre">getElementsByTagName()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">getElementsByTagNameNS()</span></tt> methods of <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> return objects with this
+interface to represent query results.</p>
+<p>The DOM Level 2 recommendation defines one method and one attribute for these
+objects:</p>
+<dl class="method">
+<dt id="xml.dom.NodeList.item">
+<tt class="descclassname">NodeList.</tt><tt class="descname">item</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#xml.dom.NodeList.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <em>i</em>&#8216;th item from the sequence, if there is one, or <tt class="xref docutils literal"><span class="pre">None</span></tt>.  The
+index <em>i</em> is not allowed to be less then zero or greater than or equal to the
+length of the sequence.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.NodeList.length">
+<tt class="descclassname">NodeList.</tt><tt class="descname">length</tt><a class="headerlink" href="#xml.dom.NodeList.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of nodes in the sequence.</p>
+</dd></dl>
+
+<p>In addition, the Python DOM interface requires that some additional support is
+provided to allow <tt class="xref py py-class docutils literal"><span class="pre">NodeList</span></tt> objects to be used as Python sequences.  All
+<tt class="xref py py-class docutils literal"><span class="pre">NodeList</span></tt> implementations must include support for <a class="reference internal" href="../reference/datamodel.html#object.__len__" title="object.__len__"><tt class="xref py py-meth docutils literal"><span class="pre">__len__()</span></tt></a> and
+<a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></tt></a>; this allows iteration over the <tt class="xref py py-class docutils literal"><span class="pre">NodeList</span></tt> in
+<a class="reference internal" href="../reference/compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> statements and proper support for the <a class="reference internal" href="functions.html#len" title="len"><tt class="xref py py-func docutils literal"><span class="pre">len()</span></tt></a> built-in
+function.</p>
+<p>If a DOM implementation supports modification of the document, the
+<tt class="xref py py-class docutils literal"><span class="pre">NodeList</span></tt> implementation must also support the <a class="reference internal" href="../reference/datamodel.html#object.__setitem__" title="object.__setitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__setitem__()</span></tt></a> and
+<a class="reference internal" href="../reference/datamodel.html#object.__delitem__" title="object.__delitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__delitem__()</span></tt></a> methods.</p>
+</div>
+<div class="section" id="documenttype-objects">
+<span id="dom-documenttype-objects"></span><h3>19.8.2.4. DocumentType Objects<a class="headerlink" href="#documenttype-objects" title="Permalink to this headline">¶</a></h3>
+<p>Information about the notations and entities declared by a document (including
+the external subset if the parser uses it and can provide the information) is
+available from a <tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt> object.  The <tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt> for a
+document is available from the <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> object&#8217;s <tt class="xref py py-attr docutils literal"><span class="pre">doctype</span></tt>
+attribute; if there is no <tt class="docutils literal"><span class="pre">DOCTYPE</span></tt> declaration for the document, the
+document&#8217;s <tt class="xref py py-attr docutils literal"><span class="pre">doctype</span></tt> attribute will be set to <tt class="xref docutils literal"><span class="pre">None</span></tt> instead of an
+instance of this interface.</p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">DocumentType</span></tt> is a specialization of <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>, and adds the
+following attributes:</p>
+<dl class="attribute">
+<dt id="xml.dom.DocumentType.publicId">
+<tt class="descclassname">DocumentType.</tt><tt class="descname">publicId</tt><a class="headerlink" href="#xml.dom.DocumentType.publicId" title="Permalink to this definition">¶</a></dt>
+<dd><p>The public identifier for the external subset of the document type definition.
+This will be a string or <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.DocumentType.systemId">
+<tt class="descclassname">DocumentType.</tt><tt class="descname">systemId</tt><a class="headerlink" href="#xml.dom.DocumentType.systemId" title="Permalink to this definition">¶</a></dt>
+<dd><p>The system identifier for the external subset of the document type definition.
+This will be a URI as a string, or <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.DocumentType.internalSubset">
+<tt class="descclassname">DocumentType.</tt><tt class="descname">internalSubset</tt><a class="headerlink" href="#xml.dom.DocumentType.internalSubset" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string giving the complete internal subset from the document. This does not
+include the brackets which enclose the subset.  If the document has no internal
+subset, this should be <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.DocumentType.name">
+<tt class="descclassname">DocumentType.</tt><tt class="descname">name</tt><a class="headerlink" href="#xml.dom.DocumentType.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the root element as given in the <tt class="docutils literal"><span class="pre">DOCTYPE</span></tt> declaration, if
+present.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.DocumentType.entities">
+<tt class="descclassname">DocumentType.</tt><tt class="descname">entities</tt><a class="headerlink" href="#xml.dom.DocumentType.entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a <tt class="xref py py-class docutils literal"><span class="pre">NamedNodeMap</span></tt> giving the definitions of external entities.
+For entity names defined more than once, only the first definition is provided
+(others are ignored as required by the XML recommendation).  This may be
+<tt class="xref docutils literal"><span class="pre">None</span></tt> if the information is not provided by the parser, or if no entities are
+defined.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.DocumentType.notations">
+<tt class="descclassname">DocumentType.</tt><tt class="descname">notations</tt><a class="headerlink" href="#xml.dom.DocumentType.notations" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a <tt class="xref py py-class docutils literal"><span class="pre">NamedNodeMap</span></tt> giving the definitions of notations. For
+notation names defined more than once, only the first definition is provided
+(others are ignored as required by the XML recommendation).  This may be
+<tt class="xref docutils literal"><span class="pre">None</span></tt> if the information is not provided by the parser, or if no notations
+are defined.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="document-objects">
+<span id="dom-document-objects"></span><h3>19.8.2.5. Document Objects<a class="headerlink" href="#document-objects" title="Permalink to this headline">¶</a></h3>
+<p>A <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> represents an entire XML document, including its constituent
+elements, attributes, processing instructions, comments etc.  Remember that it
+inherits properties from <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>.</p>
+<dl class="attribute">
+<dt id="xml.dom.Document.documentElement">
+<tt class="descclassname">Document.</tt><tt class="descname">documentElement</tt><a class="headerlink" href="#xml.dom.Document.documentElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>The one and only root element of the document.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createElement">
+<tt class="descclassname">Document.</tt><tt class="descname">createElement</tt><big>(</big><em>tagName</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a new element node.  The element is not inserted into the
+document when it is created.  You need to explicitly insert it with one of the
+other methods such as <tt class="xref py py-meth docutils literal"><span class="pre">insertBefore()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">appendChild()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createElementNS">
+<tt class="descclassname">Document.</tt><tt class="descname">createElementNS</tt><big>(</big><em>namespaceURI</em>, <em>tagName</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createElementNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a new element with a namespace.  The <em>tagName</em> may have a
+prefix.  The element is not inserted into the document when it is created.  You
+need to explicitly insert it with one of the other methods such as
+<tt class="xref py py-meth docutils literal"><span class="pre">insertBefore()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">appendChild()</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createTextNode">
+<tt class="descclassname">Document.</tt><tt class="descname">createTextNode</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createTextNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a text node containing the data passed as a parameter.  As
+with the other creation methods, this one does not insert the node into the
+tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createComment">
+<tt class="descclassname">Document.</tt><tt class="descname">createComment</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createComment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a comment node containing the data passed as a parameter.  As
+with the other creation methods, this one does not insert the node into the
+tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createProcessingInstruction">
+<tt class="descclassname">Document.</tt><tt class="descname">createProcessingInstruction</tt><big>(</big><em>target</em>, <em>data</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createProcessingInstruction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a processing instruction node containing the <em>target</em> and
+<em>data</em> passed as parameters.  As with the other creation methods, this one does
+not insert the node into the tree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createAttribute">
+<tt class="descclassname">Document.</tt><tt class="descname">createAttribute</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return an attribute node.  This method does not associate the
+attribute node with any particular element.  You must use
+<tt class="xref py py-meth docutils literal"><span class="pre">setAttributeNode()</span></tt> on the appropriate <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> object to use the
+newly created attribute instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.createAttributeNS">
+<tt class="descclassname">Document.</tt><tt class="descname">createAttributeNS</tt><big>(</big><em>namespaceURI</em>, <em>qualifiedName</em><big>)</big><a class="headerlink" href="#xml.dom.Document.createAttributeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return an attribute node with a namespace.  The <em>tagName</em> may have a
+prefix.  This method does not associate the attribute node with any particular
+element.  You must use <tt class="xref py py-meth docutils literal"><span class="pre">setAttributeNode()</span></tt> on the appropriate
+<tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> object to use the newly created attribute instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.getElementsByTagName">
+<tt class="descclassname">Document.</tt><tt class="descname">getElementsByTagName</tt><big>(</big><em>tagName</em><big>)</big><a class="headerlink" href="#xml.dom.Document.getElementsByTagName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for all descendants (direct children, children&#8217;s children, etc.) with a
+particular element type name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Document.getElementsByTagNameNS">
+<tt class="descclassname">Document.</tt><tt class="descname">getElementsByTagNameNS</tt><big>(</big><em>namespaceURI</em>, <em>localName</em><big>)</big><a class="headerlink" href="#xml.dom.Document.getElementsByTagNameNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for all descendants (direct children, children&#8217;s children, etc.) with a
+particular namespace URI and localname.  The localname is the part of the
+namespace after the prefix.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="element-objects">
+<span id="dom-element-objects"></span><h3>19.8.2.6. Element Objects<a class="headerlink" href="#element-objects" title="Permalink to this headline">¶</a></h3>
+<p><tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> is a subclass of <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>, so inherits all the attributes
+of that class.</p>
+<dl class="attribute">
+<dt id="xml.dom.Element.tagName">
+<tt class="descclassname">Element.</tt><tt class="descname">tagName</tt><a class="headerlink" href="#xml.dom.Element.tagName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The element type name.  In a namespace-using document it may have colons in it.
+The value is a string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.getElementsByTagName">
+<tt class="descclassname">Element.</tt><tt class="descname">getElementsByTagName</tt><big>(</big><em>tagName</em><big>)</big><a class="headerlink" href="#xml.dom.Element.getElementsByTagName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as equivalent method in the <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.getElementsByTagNameNS">
+<tt class="descclassname">Element.</tt><tt class="descname">getElementsByTagNameNS</tt><big>(</big><em>namespaceURI</em>, <em>localName</em><big>)</big><a class="headerlink" href="#xml.dom.Element.getElementsByTagNameNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as equivalent method in the <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.hasAttribute">
+<tt class="descclassname">Element.</tt><tt class="descname">hasAttribute</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xml.dom.Element.hasAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the element has an attribute named by <em>name</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.hasAttributeNS">
+<tt class="descclassname">Element.</tt><tt class="descname">hasAttributeNS</tt><big>(</big><em>namespaceURI</em>, <em>localName</em><big>)</big><a class="headerlink" href="#xml.dom.Element.hasAttributeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the element has an attribute named by <em>namespaceURI</em> and
+<em>localName</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.getAttribute">
+<tt class="descclassname">Element.</tt><tt class="descname">getAttribute</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xml.dom.Element.getAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the attribute named by <em>name</em> as a string. If no such
+attribute exists, an empty string is returned, as if the attribute had no value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.getAttributeNode">
+<tt class="descclassname">Element.</tt><tt class="descname">getAttributeNode</tt><big>(</big><em>attrname</em><big>)</big><a class="headerlink" href="#xml.dom.Element.getAttributeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <tt class="xref py py-class docutils literal"><span class="pre">Attr</span></tt> node for the attribute named by <em>attrname</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.getAttributeNS">
+<tt class="descclassname">Element.</tt><tt class="descname">getAttributeNS</tt><big>(</big><em>namespaceURI</em>, <em>localName</em><big>)</big><a class="headerlink" href="#xml.dom.Element.getAttributeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of the attribute named by <em>namespaceURI</em> and <em>localName</em> as a
+string. If no such attribute exists, an empty string is returned, as if the
+attribute had no value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.getAttributeNodeNS">
+<tt class="descclassname">Element.</tt><tt class="descname">getAttributeNodeNS</tt><big>(</big><em>namespaceURI</em>, <em>localName</em><big>)</big><a class="headerlink" href="#xml.dom.Element.getAttributeNodeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an attribute value as a node, given a <em>namespaceURI</em> and <em>localName</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.removeAttribute">
+<tt class="descclassname">Element.</tt><tt class="descname">removeAttribute</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xml.dom.Element.removeAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an attribute by name.  If there is no matching attribute, a
+<a class="reference internal" href="#xml.dom.NotFoundErr" title="xml.dom.NotFoundErr"><tt class="xref py py-exc docutils literal"><span class="pre">NotFoundErr</span></tt></a> is raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.removeAttributeNode">
+<tt class="descclassname">Element.</tt><tt class="descname">removeAttributeNode</tt><big>(</big><em>oldAttr</em><big>)</big><a class="headerlink" href="#xml.dom.Element.removeAttributeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove and return <em>oldAttr</em> from the attribute list, if present. If <em>oldAttr</em> is
+not present, <a class="reference internal" href="#xml.dom.NotFoundErr" title="xml.dom.NotFoundErr"><tt class="xref py py-exc docutils literal"><span class="pre">NotFoundErr</span></tt></a> is raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.removeAttributeNS">
+<tt class="descclassname">Element.</tt><tt class="descname">removeAttributeNS</tt><big>(</big><em>namespaceURI</em>, <em>localName</em><big>)</big><a class="headerlink" href="#xml.dom.Element.removeAttributeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an attribute by name.  Note that it uses a localName, not a qname.  No
+exception is raised if there is no matching attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.setAttribute">
+<tt class="descclassname">Element.</tt><tt class="descname">setAttribute</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#xml.dom.Element.setAttribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an attribute value from a string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.setAttributeNode">
+<tt class="descclassname">Element.</tt><tt class="descname">setAttributeNode</tt><big>(</big><em>newAttr</em><big>)</big><a class="headerlink" href="#xml.dom.Element.setAttributeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new attribute node to the element, replacing an existing attribute if
+necessary if the <tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt> attribute matches.  If a replacement occurs, the
+old attribute node will be returned.  If <em>newAttr</em> is already in use,
+<a class="reference internal" href="#xml.dom.InuseAttributeErr" title="xml.dom.InuseAttributeErr"><tt class="xref py py-exc docutils literal"><span class="pre">InuseAttributeErr</span></tt></a> will be raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.setAttributeNodeNS">
+<tt class="descclassname">Element.</tt><tt class="descname">setAttributeNodeNS</tt><big>(</big><em>newAttr</em><big>)</big><a class="headerlink" href="#xml.dom.Element.setAttributeNodeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new attribute node to the element, replacing an existing attribute if
+necessary if the <tt class="xref py py-attr docutils literal"><span class="pre">namespaceURI</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">localName</span></tt> attributes match.
+If a replacement occurs, the old attribute node will be returned.  If <em>newAttr</em>
+is already in use, <a class="reference internal" href="#xml.dom.InuseAttributeErr" title="xml.dom.InuseAttributeErr"><tt class="xref py py-exc docutils literal"><span class="pre">InuseAttributeErr</span></tt></a> will be raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.Element.setAttributeNS">
+<tt class="descclassname">Element.</tt><tt class="descname">setAttributeNS</tt><big>(</big><em>namespaceURI</em>, <em>qname</em>, <em>value</em><big>)</big><a class="headerlink" href="#xml.dom.Element.setAttributeNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an attribute value from a string, given a <em>namespaceURI</em> and a <em>qname</em>.
+Note that a qname is the whole attribute name.  This is different than above.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="attr-objects">
+<span id="dom-attr-objects"></span><h3>19.8.2.7. Attr Objects<a class="headerlink" href="#attr-objects" title="Permalink to this headline">¶</a></h3>
+<p><tt class="xref py py-class docutils literal"><span class="pre">Attr</span></tt> inherits from <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>, so inherits all its attributes.</p>
+<dl class="attribute">
+<dt id="xml.dom.Attr.name">
+<tt class="descclassname">Attr.</tt><tt class="descname">name</tt><a class="headerlink" href="#xml.dom.Attr.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The attribute name.
+In a namespace-using document it may include a colon.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Attr.localName">
+<tt class="descclassname">Attr.</tt><tt class="descname">localName</tt><a class="headerlink" href="#xml.dom.Attr.localName" title="Permalink to this definition">¶</a></dt>
+<dd><p>The part of the name following the colon if there is one, else the
+entire name.
+This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Attr.prefix">
+<tt class="descclassname">Attr.</tt><tt class="descname">prefix</tt><a class="headerlink" href="#xml.dom.Attr.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The part of the name preceding the colon if there is one, else the
+empty string.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.Attr.value">
+<tt class="descclassname">Attr.</tt><tt class="descname">value</tt><a class="headerlink" href="#xml.dom.Attr.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text value of the attribute.  This is a synonym for the
+<tt class="xref py py-attr docutils literal"><span class="pre">nodeValue</span></tt> attribute.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="namednodemap-objects">
+<span id="dom-attributelist-objects"></span><h3>19.8.2.8. NamedNodeMap Objects<a class="headerlink" href="#namednodemap-objects" title="Permalink to this headline">¶</a></h3>
+<p><tt class="xref py py-class docutils literal"><span class="pre">NamedNodeMap</span></tt> does <em>not</em> inherit from <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>.</p>
+<dl class="attribute">
+<dt id="xml.dom.NamedNodeMap.length">
+<tt class="descclassname">NamedNodeMap.</tt><tt class="descname">length</tt><a class="headerlink" href="#xml.dom.NamedNodeMap.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>The length of the attribute list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.NamedNodeMap.item">
+<tt class="descclassname">NamedNodeMap.</tt><tt class="descname">item</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#xml.dom.NamedNodeMap.item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an attribute with a particular index.  The order you get the attributes
+in is arbitrary but will be consistent for the life of a DOM.  Each item is an
+attribute node.  Get its value with the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> attribute.</p>
+</dd></dl>
+
+<p>There are also experimental methods that give this class more mapping behavior.
+You can use them or you can use the standardized <tt class="xref py py-meth docutils literal"><span class="pre">getAttribute*()</span></tt> family
+of methods on the <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> objects.</p>
+</div>
+<div class="section" id="comment-objects">
+<span id="dom-comment-objects"></span><h3>19.8.2.9. Comment Objects<a class="headerlink" href="#comment-objects" title="Permalink to this headline">¶</a></h3>
+<p><tt class="xref py py-class docutils literal"><span class="pre">Comment</span></tt> represents a comment in the XML document.  It is a subclass of
+<tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt>, but cannot have child nodes.</p>
+<dl class="attribute">
+<dt id="xml.dom.Comment.data">
+<tt class="descclassname">Comment.</tt><tt class="descname">data</tt><a class="headerlink" href="#xml.dom.Comment.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The content of the comment as a string.  The attribute contains all characters
+between the leading <tt class="docutils literal"><span class="pre">&lt;!-</span></tt><tt class="docutils literal"><span class="pre">-</span></tt> and trailing <tt class="docutils literal"><span class="pre">-</span></tt><tt class="docutils literal"><span class="pre">-&gt;</span></tt>, but does not
+include them.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="text-and-cdatasection-objects">
+<span id="dom-text-objects"></span><h3>19.8.2.10. Text and CDATASection Objects<a class="headerlink" href="#text-and-cdatasection-objects" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Text</span></tt> interface represents text in the XML document.  If the parser
+and DOM implementation support the DOM&#8217;s XML extension, portions of the text
+enclosed in CDATA marked sections are stored in <tt class="xref py py-class docutils literal"><span class="pre">CDATASection</span></tt> objects.
+These two interfaces are identical, but provide different values for the
+<tt class="xref py py-attr docutils literal"><span class="pre">nodeType</span></tt> attribute.</p>
+<p>These interfaces extend the <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> interface.  They cannot have child
+nodes.</p>
+<dl class="attribute">
+<dt id="xml.dom.Text.data">
+<tt class="descclassname">Text.</tt><tt class="descname">data</tt><a class="headerlink" href="#xml.dom.Text.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The content of the text node as a string.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The use of a <tt class="xref py py-class docutils literal"><span class="pre">CDATASection</span></tt> node does not indicate that the node
+represents a complete CDATA marked section, only that the content of the node
+was part of a CDATA section.  A single CDATA section may be represented by more
+than one node in the document tree.  There is no way to determine whether two
+adjacent <tt class="xref py py-class docutils literal"><span class="pre">CDATASection</span></tt> nodes represent different CDATA marked sections.</p>
+</div>
+</div>
+<div class="section" id="processinginstruction-objects">
+<span id="dom-pi-objects"></span><h3>19.8.2.11. ProcessingInstruction Objects<a class="headerlink" href="#processinginstruction-objects" title="Permalink to this headline">¶</a></h3>
+<p>Represents a processing instruction in the XML document; this inherits from the
+<tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> interface and cannot have child nodes.</p>
+<dl class="attribute">
+<dt id="xml.dom.ProcessingInstruction.target">
+<tt class="descclassname">ProcessingInstruction.</tt><tt class="descname">target</tt><a class="headerlink" href="#xml.dom.ProcessingInstruction.target" title="Permalink to this definition">¶</a></dt>
+<dd><p>The content of the processing instruction up to the first whitespace character.
+This is a read-only attribute.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.dom.ProcessingInstruction.data">
+<tt class="descclassname">ProcessingInstruction.</tt><tt class="descname">data</tt><a class="headerlink" href="#xml.dom.ProcessingInstruction.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The content of the processing instruction following the first whitespace
+character.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<span id="dom-exceptions"></span><h3>19.8.2.12. Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+<p>The DOM Level 2 recommendation defines a single exception, <a class="reference internal" href="#xml.dom.DOMException" title="xml.dom.DOMException"><tt class="xref py py-exc docutils literal"><span class="pre">DOMException</span></tt></a>,
+and a number of constants that allow applications to determine what sort of
+error occurred. <a class="reference internal" href="#xml.dom.DOMException" title="xml.dom.DOMException"><tt class="xref py py-exc docutils literal"><span class="pre">DOMException</span></tt></a> instances carry a <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><tt class="xref py py-attr docutils literal"><span class="pre">code</span></tt></a> attribute
+that provides the appropriate value for the specific exception.</p>
+<p>The Python DOM interface provides the constants, but also expands the set of
+exceptions so that a specific exception exists for each of the exception codes
+defined by the DOM.  The implementations must raise the appropriate specific
+exception, each of which carries the appropriate value for the <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><tt class="xref py py-attr docutils literal"><span class="pre">code</span></tt></a>
+attribute.</p>
+<dl class="exception">
+<dt id="xml.dom.DOMException">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">DOMException</tt><a class="headerlink" href="#xml.dom.DOMException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base exception class used for all specific DOM exceptions.  This exception class
+cannot be directly instantiated.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.DomstringSizeErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">DomstringSizeErr</tt><a class="headerlink" href="#xml.dom.DomstringSizeErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when a specified range of text does not fit into a string. This is not
+known to be used in the Python DOM implementations, but may be received from DOM
+implementations not written in Python.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.HierarchyRequestErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">HierarchyRequestErr</tt><a class="headerlink" href="#xml.dom.HierarchyRequestErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when an attempt is made to insert a node where the node type is not
+allowed.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.IndexSizeErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">IndexSizeErr</tt><a class="headerlink" href="#xml.dom.IndexSizeErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when an index or size parameter to a method is negative or exceeds the
+allowed values.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.InuseAttributeErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">InuseAttributeErr</tt><a class="headerlink" href="#xml.dom.InuseAttributeErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when an attempt is made to insert an <tt class="xref py py-class docutils literal"><span class="pre">Attr</span></tt> node that is already
+present elsewhere in the document.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.InvalidAccessErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">InvalidAccessErr</tt><a class="headerlink" href="#xml.dom.InvalidAccessErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised if a parameter or an operation is not supported on the underlying object.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.InvalidCharacterErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">InvalidCharacterErr</tt><a class="headerlink" href="#xml.dom.InvalidCharacterErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception is raised when a string parameter contains a character that is
+not permitted in the context it&#8217;s being used in by the XML 1.0 recommendation.
+For example, attempting to create an <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> node with a space in the
+element type name will cause this error to be raised.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.InvalidModificationErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">InvalidModificationErr</tt><a class="headerlink" href="#xml.dom.InvalidModificationErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when an attempt is made to modify the type of a node.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.InvalidStateErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">InvalidStateErr</tt><a class="headerlink" href="#xml.dom.InvalidStateErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when an attempt is made to use an object that is not defined or is no
+longer usable.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.NamespaceErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">NamespaceErr</tt><a class="headerlink" href="#xml.dom.NamespaceErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>If an attempt is made to change any object in a way that is not permitted with
+regard to the <a class="reference external" href="http://www.w3.org/TR/REC-xml-names/">Namespaces in XML</a>
+recommendation, this exception is raised.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.NotFoundErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">NotFoundErr</tt><a class="headerlink" href="#xml.dom.NotFoundErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception when a node does not exist in the referenced context.  For example,
+<tt class="xref py py-meth docutils literal"><span class="pre">NamedNodeMap.removeNamedItem()</span></tt> will raise this if the node passed in does
+not exist in the map.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.NotSupportedErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">NotSupportedErr</tt><a class="headerlink" href="#xml.dom.NotSupportedErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when the implementation does not support the requested type of object or
+operation.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.NoDataAllowedErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">NoDataAllowedErr</tt><a class="headerlink" href="#xml.dom.NoDataAllowedErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is raised if data is specified for a node which does not support data.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.NoModificationAllowedErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">NoModificationAllowedErr</tt><a class="headerlink" href="#xml.dom.NoModificationAllowedErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised on attempts to modify an object where modifications are not allowed (such
+as for read-only nodes).</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.SyntaxErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">SyntaxErr</tt><a class="headerlink" href="#xml.dom.SyntaxErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when an invalid or illegal string is specified.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.dom.WrongDocumentErr">
+<em class="property">exception </em><tt class="descclassname">xml.dom.</tt><tt class="descname">WrongDocumentErr</tt><a class="headerlink" href="#xml.dom.WrongDocumentErr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when a node is inserted in a different document than it currently belongs
+to, and the implementation does not support migrating the node from one document
+to the other.</p>
+</dd></dl>
+
+<p>The exception codes defined in the DOM recommendation map to the exceptions
+described above according to this table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Constant</th>
+<th class="head">Exception</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">DOMSTRING_SIZE_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.DomstringSizeErr" title="xml.dom.DomstringSizeErr"><tt class="xref py py-exc docutils literal"><span class="pre">DomstringSizeErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">HIERARCHY_REQUEST_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.HierarchyRequestErr" title="xml.dom.HierarchyRequestErr"><tt class="xref py py-exc docutils literal"><span class="pre">HierarchyRequestErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">INDEX_SIZE_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.IndexSizeErr" title="xml.dom.IndexSizeErr"><tt class="xref py py-exc docutils literal"><span class="pre">IndexSizeErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">INUSE_ATTRIBUTE_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.InuseAttributeErr" title="xml.dom.InuseAttributeErr"><tt class="xref py py-exc docutils literal"><span class="pre">InuseAttributeErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">INVALID_ACCESS_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.InvalidAccessErr" title="xml.dom.InvalidAccessErr"><tt class="xref py py-exc docutils literal"><span class="pre">InvalidAccessErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">INVALID_CHARACTER_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.InvalidCharacterErr" title="xml.dom.InvalidCharacterErr"><tt class="xref py py-exc docutils literal"><span class="pre">InvalidCharacterErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">INVALID_MODIFICATION_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.InvalidModificationErr" title="xml.dom.InvalidModificationErr"><tt class="xref py py-exc docutils literal"><span class="pre">InvalidModificationErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">INVALID_STATE_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.InvalidStateErr" title="xml.dom.InvalidStateErr"><tt class="xref py py-exc docutils literal"><span class="pre">InvalidStateErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">NAMESPACE_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.NamespaceErr" title="xml.dom.NamespaceErr"><tt class="xref py py-exc docutils literal"><span class="pre">NamespaceErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">NOT_FOUND_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.NotFoundErr" title="xml.dom.NotFoundErr"><tt class="xref py py-exc docutils literal"><span class="pre">NotFoundErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">NOT_SUPPORTED_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.NotSupportedErr" title="xml.dom.NotSupportedErr"><tt class="xref py py-exc docutils literal"><span class="pre">NotSupportedErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">NO_DATA_ALLOWED_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.NoDataAllowedErr" title="xml.dom.NoDataAllowedErr"><tt class="xref py py-exc docutils literal"><span class="pre">NoDataAllowedErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">NO_MODIFICATION_ALLOWED_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.NoModificationAllowedErr" title="xml.dom.NoModificationAllowedErr"><tt class="xref py py-exc docutils literal"><span class="pre">NoModificationAllowedErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">SYNTAX_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.SyntaxErr" title="xml.dom.SyntaxErr"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxErr</span></tt></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">WRONG_DOCUMENT_ERR</span></tt></td>
+<td><a class="reference internal" href="#xml.dom.WrongDocumentErr" title="xml.dom.WrongDocumentErr"><tt class="xref py py-exc docutils literal"><span class="pre">WrongDocumentErr</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="conformance">
+<span id="dom-conformance"></span><h2>19.8.3. Conformance<a class="headerlink" href="#conformance" title="Permalink to this headline">¶</a></h2>
+<p>This section describes the conformance requirements and relationships between
+the Python DOM API, the W3C DOM recommendations, and the OMG IDL mapping for
+Python.</p>
+<div class="section" id="type-mapping">
+<span id="dom-type-mapping"></span><h3>19.8.3.1. Type Mapping<a class="headerlink" href="#type-mapping" title="Permalink to this headline">¶</a></h3>
+<p>The primitive IDL types used in the DOM specification are mapped to Python types
+according to the following table.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">IDL Type</th>
+<th class="head">Python Type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">boolean</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">IntegerType</span></tt> (with a value of <tt class="docutils literal"><span class="pre">0</span></tt> or
+<tt class="docutils literal"><span class="pre">1</span></tt>)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">IntegerType</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">long</span> <span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">IntegerType</span></tt></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">unsigned</span> <span class="pre">int</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">IntegerType</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, the <tt class="xref py py-class docutils literal"><span class="pre">DOMString</span></tt> defined in the recommendation is mapped to
+a Python string or Unicode string.  Applications should be able to handle
+Unicode whenever a string is returned from the DOM.</p>
+<p>The IDL <tt class="docutils literal"><span class="pre">null</span></tt> value is mapped to <tt class="xref docutils literal"><span class="pre">None</span></tt>, which may be accepted or
+provided by the implementation whenever <tt class="docutils literal"><span class="pre">null</span></tt> is allowed by the API.</p>
+</div>
+<div class="section" id="accessor-methods">
+<span id="dom-accessor-methods"></span><h3>19.8.3.2. Accessor Methods<a class="headerlink" href="#accessor-methods" title="Permalink to this headline">¶</a></h3>
+<p>The mapping from OMG IDL to Python defines accessor functions for IDL
+<tt class="docutils literal"><span class="pre">attribute</span></tt> declarations in much the way the Java mapping does.
+Mapping the IDL declarations</p>
+<div class="highlight-python"><pre>readonly attribute string someValue;
+         attribute string anotherValue;</pre>
+</div>
+<p>yields three accessor functions:  a &#8220;get&#8221; method for <tt class="xref py py-attr docutils literal"><span class="pre">someValue</span></tt>
+(<tt class="xref py py-meth docutils literal"><span class="pre">_get_someValue()</span></tt>), and &#8220;get&#8221; and &#8220;set&#8221; methods for <tt class="xref py py-attr docutils literal"><span class="pre">anotherValue</span></tt>
+(<tt class="xref py py-meth docutils literal"><span class="pre">_get_anotherValue()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">_set_anotherValue()</span></tt>).  The mapping, in
+particular, does not require that the IDL attributes are accessible as normal
+Python attributes:  <tt class="docutils literal"><span class="pre">object.someValue</span></tt> is <em>not</em> required to work, and may
+raise an <a class="reference internal" href="exceptions.html#exceptions.AttributeError" title="exceptions.AttributeError"><tt class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></tt></a>.</p>
+<p>The Python DOM API, however, <em>does</em> require that normal attribute access work.
+This means that the typical surrogates generated by Python IDL compilers are not
+likely to work, and wrapper objects may be needed on the client if the DOM
+objects are accessed via CORBA. While this does require some additional
+consideration for CORBA DOM clients, the implementers with experience using DOM
+over CORBA from Python do not consider this a problem.  Attributes that are
+declared <tt class="docutils literal"><span class="pre">readonly</span></tt> may not restrict write access in all DOM
+implementations.</p>
+<p>In the Python DOM API, accessor functions are not required.  If provided, they
+should take the form defined by the Python IDL mapping, but these methods are
+considered unnecessary since the attributes are accessible directly from Python.
+&#8220;Set&#8221; accessors should never be provided for <tt class="docutils literal"><span class="pre">readonly</span></tt> attributes.</p>
+<p>The IDL definitions do not fully embody the requirements of the W3C DOM API,
+such as the notion of certain objects, such as the return value of
+<tt class="xref py py-meth docutils literal"><span class="pre">getElementsByTagName()</span></tt>, being &#8220;live&#8221;.  The Python DOM API does not require
+implementations to enforce such requirements.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19.8. <tt class="docutils literal"><span class="pre">xml.dom</span></tt> &#8212; The Document Object Model API</a><ul>
+<li><a class="reference internal" href="#module-contents">19.8.1. Module Contents</a></li>
+<li><a class="reference internal" href="#objects-in-the-dom">19.8.2. Objects in the DOM</a><ul>
+<li><a class="reference internal" href="#domimplementation-objects">19.8.2.1. DOMImplementation Objects</a></li>
+<li><a class="reference internal" href="#node-objects">19.8.2.2. Node Objects</a></li>
+<li><a class="reference internal" href="#nodelist-objects">19.8.2.3. NodeList Objects</a></li>
+<li><a class="reference internal" href="#documenttype-objects">19.8.2.4. DocumentType Objects</a></li>
+<li><a class="reference internal" href="#document-objects">19.8.2.5. Document Objects</a></li>
+<li><a class="reference internal" href="#element-objects">19.8.2.6. Element Objects</a></li>
+<li><a class="reference internal" href="#attr-objects">19.8.2.7. Attr Objects</a></li>
+<li><a class="reference internal" href="#namednodemap-objects">19.8.2.8. NamedNodeMap Objects</a></li>
+<li><a class="reference internal" href="#comment-objects">19.8.2.9. Comment Objects</a></li>
+<li><a class="reference internal" href="#text-and-cdatasection-objects">19.8.2.10. Text and CDATASection Objects</a></li>
+<li><a class="reference internal" href="#processinginstruction-objects">19.8.2.11. ProcessingInstruction Objects</a></li>
+<li><a class="reference internal" href="#exceptions">19.8.2.12. Exceptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conformance">19.8.3. Conformance</a><ul>
+<li><a class="reference internal" href="#type-mapping">19.8.3.1. Type Mapping</a></li>
+<li><a class="reference internal" href="#accessor-methods">19.8.3.2. Accessor Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xml.etree.elementtree.html"
+                        title="previous chapter">19.7. <tt class="docutils literal docutils literal"><span class="pre">xml.etree.ElementTree</span></tt> &#8212; The ElementTree XML API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xml.dom.minidom.html"
+                        title="next chapter">19.9. <tt class="docutils literal"><span class="pre">xml.dom.minidom</span></tt> &#8212; Minimal DOM implementation</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/xml.dom.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.dom.minidom.html" title="19.9. xml.dom.minidom — Minimal DOM implementation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xml.etree.elementtree.html" title="19.7. xml.etree.ElementTree — The ElementTree XML API"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" >19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

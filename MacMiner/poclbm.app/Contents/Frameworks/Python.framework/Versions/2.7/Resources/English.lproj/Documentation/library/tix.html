@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>24.3. Tix — Extension widgets for Tk &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="24. Graphical User Interfaces with Tk" href="tk.html" />
+    <link rel="next" title="24.4. ScrolledText — Scrolled Text Widget" href="scrolledtext.html" />
+    <link rel="prev" title="24.2. ttk — Tk themed widgets" href="ttk.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scrolledtext.html" title="24.4. ScrolledText — Scrolled Text Widget"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ttk.html" title="24.2. ttk — Tk themed widgets"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="tk.html" accesskey="U">24. Graphical User Interfaces with Tk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-Tix">
+<span id="tix-extension-widgets-for-tk"></span><h1>24.3. <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> &#8212; Extension widgets for Tk<a class="headerlink" href="#module-Tix" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">The <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> (Tk Interface Extension) module provides an additional rich set
+of widgets. Although the standard Tk library has many useful widgets, they are
+far from complete. The <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> library provides most of the commonly needed
+widgets that are missing from standard Tk: <a class="reference internal" href="#Tix.HList" title="Tix.HList"><tt class="xref py py-class docutils literal"><span class="pre">HList</span></tt></a>, <a class="reference internal" href="#Tix.ComboBox" title="Tix.ComboBox"><tt class="xref py py-class docutils literal"><span class="pre">ComboBox</span></tt></a>,
+<a class="reference internal" href="#Tix.Control" title="Tix.Control"><tt class="xref py py-class docutils literal"><span class="pre">Control</span></tt></a> (a.k.a. SpinBox) and an assortment of scrollable widgets.
+<a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> also includes many more widgets that are generally useful in a wide
+range of applications: <a class="reference internal" href="#Tix.NoteBook" title="Tix.NoteBook"><tt class="xref py py-class docutils literal"><span class="pre">NoteBook</span></tt></a>, <a class="reference internal" href="#Tix.FileEntry" title="Tix.FileEntry"><tt class="xref py py-class docutils literal"><span class="pre">FileEntry</span></tt></a>,
+<a class="reference internal" href="#Tix.PanedWindow" title="Tix.PanedWindow"><tt class="xref py py-class docutils literal"><span class="pre">PanedWindow</span></tt></a>, etc; there are more than 40 of them.</p>
+<p>With all these new widgets, you can introduce new interaction techniques into
+applications, creating more useful and more intuitive user interfaces. You can
+design your application by choosing the most appropriate widgets to match the
+special needs of your application and users.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> has been renamed to <tt class="xref py py-mod docutils literal"><span class="pre">tkinter.tix</span></tt> in Python 3.  The
+<a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt imports when converting your
+sources to Python 3.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://tix.sourceforge.net/">Tix Homepage</a></dt>
+<dd>The home page for <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a>.  This includes links to additional documentation
+and downloads.</dd>
+<dt><a class="reference external" href="http://tix.sourceforge.net/dist/current/man/">Tix Man Pages</a></dt>
+<dd>On-line version of the man pages and reference material.</dd>
+<dt><a class="reference external" href="http://tix.sourceforge.net/dist/current/docs/tix-book/tix.book.html">Tix Programming Guide</a></dt>
+<dd>On-line version of the programmer&#8217;s reference material.</dd>
+<dt><a class="reference external" href="http://tix.sourceforge.net/Tixapps/src/Tide.html">Tix Development Applications</a></dt>
+<dd>Tix applications for development of Tix and Tkinter programs. Tide applications
+work under Tk or Tkinter, and include <strong class="program">TixInspect</strong>, an inspector to
+remotely modify and debug Tix/Tk/Tkinter applications.</dd>
+</dl>
+</div>
+<div class="section" id="using-tix">
+<h2>24.3.1. Using Tix<a class="headerlink" href="#using-tix" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Tix.Tix">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Tix</tt><big>(</big><em>screenName</em><span class="optional">[</span>, <em>baseName</em><span class="optional">[</span>, <em>className</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Tix.Tix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toplevel widget of Tix which represents mostly the main window of an
+application. It has an associated Tcl interpreter.</p>
+<p>Classes in the <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> module subclasses the classes in the <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a>
+module. The former imports the latter, so to use <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> with Tkinter, all
+you need to do is to import one module. In general, you can just import
+<a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a>, and replace the toplevel call to <a class="reference internal" href="tkinter.html#Tkinter.Tk" title="Tkinter.Tk"><tt class="xref py py-class docutils literal"><span class="pre">Tkinter.Tk</span></tt></a> with
+<tt class="xref py py-class docutils literal"><span class="pre">Tix.Tk</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Tix</span>
+<span class="kn">from</span> <span class="nn">Tkconstants</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">Tix</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>To use <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a>, you must have the <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> widgets installed, usually
+alongside your installation of the Tk widgets. To test your installation, try
+the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Tix</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">Tix</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="n">root</span><span class="o">.</span><span class="n">tk</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="s">&#39;package require Tix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If this fails, you have a Tk installation problem which must be resolved before
+proceeding. Use the environment variable <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">TIX_LIBRARY</span></tt> to point to the
+installed <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> library directory, and make sure you have the dynamic
+object library (<tt class="file docutils literal"><span class="pre">tix8183.dll</span></tt> or <tt class="file docutils literal"><span class="pre">libtix8183.so</span></tt>) in  the same
+directory that contains your Tk dynamic object library (<tt class="file docutils literal"><span class="pre">tk8183.dll</span></tt> or
+<tt class="file docutils literal"><span class="pre">libtk8183.so</span></tt>). The directory with the dynamic object library should also
+have a file called <tt class="file docutils literal"><span class="pre">pkgIndex.tcl</span></tt> (case sensitive), which contains the
+line:</p>
+<div class="highlight-python"><pre>package ifneeded Tix 8.1 [list load "[file join $dir tix8183.dll]" Tix]</pre>
+</div>
+</div>
+<div class="section" id="tix-widgets">
+<h2>24.3.2. Tix Widgets<a class="headerlink" href="#tix-widgets" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/TixIntro.htm">Tix</a>
+introduces over 40 widget classes to the <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a>  repertoire.  There is a
+demo of all the <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> widgets in the <tt class="file docutils literal"><span class="pre">Demo/tix</span></tt> directory of the
+standard distribution.</p>
+<div class="section" id="basic-widgets">
+<h3>24.3.2.1. Basic Widgets<a class="headerlink" href="#basic-widgets" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Tix.Balloon">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Balloon</tt><a class="headerlink" href="#Tix.Balloon" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixBalloon.htm">Balloon</a> that
+pops up over a widget to provide help.  When the user moves the cursor inside a
+widget to which a Balloon widget has been bound, a small pop-up window with a
+descriptive message will be shown on the screen.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.ButtonBox">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">ButtonBox</tt><a class="headerlink" href="#Tix.ButtonBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixButtonBox.htm">ButtonBox</a>
+widget creates a box of buttons, such as is commonly used for <tt class="docutils literal"><span class="pre">Ok</span> <span class="pre">Cancel</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.ComboBox">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">ComboBox</tt><a class="headerlink" href="#Tix.ComboBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixComboBox.htm">ComboBox</a>
+widget is similar to the combo box control in MS Windows. The user can select a
+choice by either typing in the entry subwdget or selecting from the listbox
+subwidget.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.Control">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Control</tt><a class="headerlink" href="#Tix.Control" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixControl.htm">Control</a>
+widget is also known as the <tt class="xref py py-class docutils literal"><span class="pre">SpinBox</span></tt> widget. The user can adjust the
+value by pressing the two arrow buttons or by entering the value directly into
+the entry. The new value will be checked against the user-defined upper and
+lower limits.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.LabelEntry">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">LabelEntry</tt><a class="headerlink" href="#Tix.LabelEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixLabelEntry.htm">LabelEntry</a>
+widget packages an entry widget and a label into one mega widget. It can be used
+be used to simplify the creation of &#8220;entry-form&#8221; type of interface.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.LabelFrame">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">LabelFrame</tt><a class="headerlink" href="#Tix.LabelFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixLabelFrame.htm">LabelFrame</a>
+widget packages a frame widget and a label into one mega widget.  To create
+widgets inside a LabelFrame widget, one creates the new widgets relative to the
+<tt class="xref py py-attr docutils literal"><span class="pre">frame</span></tt> subwidget and manage them inside the <tt class="xref py py-attr docutils literal"><span class="pre">frame</span></tt> subwidget.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.Meter">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Meter</tt><a class="headerlink" href="#Tix.Meter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixMeter.htm">Meter</a> widget
+can be used to show the progress of a background job which may take a long time
+to execute.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.OptionMenu">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">OptionMenu</tt><a class="headerlink" href="#Tix.OptionMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixOptionMenu.htm">OptionMenu</a>
+creates a menu button of options.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.PopupMenu">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">PopupMenu</tt><a class="headerlink" href="#Tix.PopupMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixPopupMenu.htm">PopupMenu</a>
+widget can be used as a replacement of the <tt class="docutils literal"><span class="pre">tk_popup</span></tt> command. The advantage
+of the <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> <a class="reference internal" href="#Tix.PopupMenu" title="Tix.PopupMenu"><tt class="xref py py-class docutils literal"><span class="pre">PopupMenu</span></tt></a> widget is it requires less application code
+to manipulate.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.Select">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Select</tt><a class="headerlink" href="#Tix.Select" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixSelect.htm">Select</a> widget
+is a container of button subwidgets. It can be used to provide radio-box or
+check-box style of selection options for the user.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.StdButtonBox">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">StdButtonBox</tt><a class="headerlink" href="#Tix.StdButtonBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixStdButtonBox.htm">StdButtonBox</a>
+widget is a group of standard buttons for Motif-like dialog boxes.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="file-selectors">
+<h3>24.3.2.2. File Selectors<a class="headerlink" href="#file-selectors" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Tix.DirList">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">DirList</tt><a class="headerlink" href="#Tix.DirList" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixDirList.htm">DirList</a>
+widget displays a list view of a directory, its previous directories and its
+sub-directories. The user can choose one of the directories displayed in the
+list or change to another directory.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.DirTree">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">DirTree</tt><a class="headerlink" href="#Tix.DirTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixDirTree.htm">DirTree</a>
+widget displays a tree view of a directory, its previous directories and its
+sub-directories. The user can choose one of the directories displayed in the
+list or change to another directory.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.DirSelectDialog">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">DirSelectDialog</tt><a class="headerlink" href="#Tix.DirSelectDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixDirSelectDialog.htm">DirSelectDialog</a>
+widget presents the directories in the file system in a dialog window.  The user
+can use this dialog window to navigate through the file system to select the
+desired directory.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.DirSelectBox">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">DirSelectBox</tt><a class="headerlink" href="#Tix.DirSelectBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#Tix.DirSelectBox" title="Tix.DirSelectBox"><tt class="xref py py-class docutils literal"><span class="pre">DirSelectBox</span></tt></a> is similar to the standard Motif(TM)
+directory-selection box. It is generally used for the user to choose a
+directory.  DirSelectBox stores the directories mostly recently selected into
+a ComboBox widget so that they can be quickly selected again.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.ExFileSelectBox">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">ExFileSelectBox</tt><a class="headerlink" href="#Tix.ExFileSelectBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixExFileSelectBox.htm">ExFileSelectBox</a>
+widget is usually embedded in a tixExFileSelectDialog widget. It provides an
+convenient method for the user to select files. The style of the
+<a class="reference internal" href="#Tix.ExFileSelectBox" title="Tix.ExFileSelectBox"><tt class="xref py py-class docutils literal"><span class="pre">ExFileSelectBox</span></tt></a> widget is very similar to the standard file dialog on
+MS Windows 3.1.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.FileSelectBox">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">FileSelectBox</tt><a class="headerlink" href="#Tix.FileSelectBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixFileSelectBox.htm">FileSelectBox</a>
+is similar to the standard Motif(TM) file-selection box. It is generally used
+for the user to choose a file. FileSelectBox stores the files mostly recently
+selected into a <a class="reference internal" href="#Tix.ComboBox" title="Tix.ComboBox"><tt class="xref py py-class docutils literal"><span class="pre">ComboBox</span></tt></a> widget so that they can be quickly selected
+again.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.FileEntry">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">FileEntry</tt><a class="headerlink" href="#Tix.FileEntry" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixFileEntry.htm">FileEntry</a>
+widget can be used to input a filename. The user can type in the filename
+manually. Alternatively, the user can press the button widget that sits next to
+the entry, which will bring up a file selection dialog.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hierarchical-listbox">
+<h3>24.3.2.3. Hierarchical ListBox<a class="headerlink" href="#hierarchical-listbox" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Tix.HList">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">HList</tt><a class="headerlink" href="#Tix.HList" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixHList.htm">HList</a> widget
+can be used to display any data that have a hierarchical structure, for example,
+file system directory trees. The list entries are indented and connected by
+branch lines according to their places in the hierarchy.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.CheckList">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">CheckList</tt><a class="headerlink" href="#Tix.CheckList" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixCheckList.htm">CheckList</a>
+widget displays a list of items to be selected by the user. CheckList acts
+similarly to the Tk checkbutton or radiobutton widgets, except it is capable of
+handling many more items than checkbuttons or radiobuttons.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.Tree">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Tree</tt><a class="headerlink" href="#Tix.Tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixTree.htm">Tree</a> widget
+can be used to display hierarchical data in a tree form. The user can adjust the
+view of the tree by opening or closing parts of the tree.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="tabular-listbox">
+<h3>24.3.2.4. Tabular ListBox<a class="headerlink" href="#tabular-listbox" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Tix.TList">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">TList</tt><a class="headerlink" href="#Tix.TList" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixTList.htm">TList</a> widget
+can be used to display data in a tabular format. The list entries of a
+<a class="reference internal" href="#Tix.TList" title="Tix.TList"><tt class="xref py py-class docutils literal"><span class="pre">TList</span></tt></a> widget are similar to the entries in the Tk listbox widget.  The
+main differences are (1) the <a class="reference internal" href="#Tix.TList" title="Tix.TList"><tt class="xref py py-class docutils literal"><span class="pre">TList</span></tt></a> widget can display the list entries
+in a two dimensional format and (2) you can use graphical images as well as
+multiple colors and fonts for the list entries.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="manager-widgets">
+<h3>24.3.2.5. Manager Widgets<a class="headerlink" href="#manager-widgets" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Tix.PanedWindow">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">PanedWindow</tt><a class="headerlink" href="#Tix.PanedWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixPanedWindow.htm">PanedWindow</a>
+widget allows the user to interactively manipulate the sizes of several panes.
+The panes can be arranged either vertically or horizontally.  The user changes
+the sizes of the panes by dragging the resize handle between two panes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.ListNoteBook">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">ListNoteBook</tt><a class="headerlink" href="#Tix.ListNoteBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixListNoteBook.htm">ListNoteBook</a>
+widget is very similar to the <tt class="xref py py-class docutils literal"><span class="pre">TixNoteBook</span></tt> widget: it can be used to
+display many windows in a limited space using a notebook metaphor. The notebook
+is divided into a stack of pages (windows). At one time only one of these pages
+can be shown. The user can navigate through these pages by choosing the name of
+the desired page in the <tt class="xref py py-attr docutils literal"><span class="pre">hlist</span></tt> subwidget.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Tix.NoteBook">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">NoteBook</tt><a class="headerlink" href="#Tix.NoteBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixNoteBook.htm">NoteBook</a>
+widget can be used to display many windows in a limited space using a notebook
+metaphor. The notebook is divided into a stack of pages. At one time only one of
+these pages can be shown. The user can navigate through these pages by choosing
+the visual &#8220;tabs&#8221; at the top of the NoteBook widget.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="image-types">
+<h3>24.3.2.6. Image Types<a class="headerlink" href="#image-types" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> module adds:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/pixmap.htm">pixmap</a>
+capabilities to all <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> and <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> widgets to create color images
+from XPM files.</li>
+<li><a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/compound.htm">Compound</a> image
+types can be used to create images that consists of multiple horizontal lines;
+each line is composed of a series of items (texts, bitmaps, images or spaces)
+arranged from left to right. For example, a compound image can be used to
+display a bitmap and a text string simultaneously in a Tk <tt class="xref py py-class docutils literal"><span class="pre">Button</span></tt>
+widget.</li>
+</ul>
+</div>
+<div class="section" id="miscellaneous-widgets">
+<h3>24.3.2.7. Miscellaneous Widgets<a class="headerlink" href="#miscellaneous-widgets" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Tix.InputOnly">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">InputOnly</tt><a class="headerlink" href="#Tix.InputOnly" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixInputOnly.htm">InputOnly</a>
+widgets are to accept inputs from the user, which can be done with the <tt class="docutils literal"><span class="pre">bind</span></tt>
+command (Unix only).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="form-geometry-manager">
+<h3>24.3.2.8. Form Geometry Manager<a class="headerlink" href="#form-geometry-manager" title="Permalink to this headline">¶</a></h3>
+<p>In addition, <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> augments <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> by providing:</p>
+<dl class="class">
+<dt id="Tix.Form">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">Form</tt><a class="headerlink" href="#Tix.Form" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tixForm.htm">Form</a> geometry
+manager based on attachment rules for all Tk widgets.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="tix-commands">
+<h2>24.3.3. Tix Commands<a class="headerlink" href="#tix-commands" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Tix.tixCommand">
+<em class="property">class </em><tt class="descclassname">Tix.</tt><tt class="descname">tixCommand</tt><a class="headerlink" href="#Tix.tixCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference external" href="http://tix.sourceforge.net/dist/current/man/html/TixCmd/tix.htm">tix commands</a> provide
+access to miscellaneous elements of <a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a>&#8216;s internal state and the
+<a class="reference internal" href="#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> application context.  Most of the information manipulated by these
+methods pertains to the application as a whole, or to a screen or display,
+rather than to a particular window.</p>
+<p>To view the current settings, the common usage is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">Tix</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">Tix</span><span class="o">.</span><span class="n">Tk</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">root</span><span class="o">.</span><span class="n">tix_configure</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_configure">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_configure</tt><big>(</big><em>cnf=None **kw</em><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query or modify the configuration options of the Tix application context. If no
+option is specified, returns a dictionary all of the available options.  If
+option is specified with no value, then the method returns a list describing the
+one named option (this list will be identical to the corresponding sublist of
+the value returned if no option is specified).  If one or more option-value
+pairs are specified, then the method modifies the given option(s) to have the
+given value(s); in this case the method returns an empty string. Option may be
+any of the configuration options.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_cget">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_cget</tt><big>(</big><em>option</em><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_cget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current value of the configuration option given by <em>option</em>. Option
+may be any of the configuration options.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_getbitmap">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_getbitmap</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_getbitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locates a bitmap file of the name <tt class="docutils literal"><span class="pre">name.xpm</span></tt> or <tt class="docutils literal"><span class="pre">name</span></tt> in one of the bitmap
+directories (see the <a class="reference internal" href="#Tix.tixCommand.tix_addbitmapdir" title="Tix.tixCommand.tix_addbitmapdir"><tt class="xref py py-meth docutils literal"><span class="pre">tix_addbitmapdir()</span></tt></a> method).  By using
+<a class="reference internal" href="#Tix.tixCommand.tix_getbitmap" title="Tix.tixCommand.tix_getbitmap"><tt class="xref py py-meth docutils literal"><span class="pre">tix_getbitmap()</span></tt></a>, you can avoid hard coding the pathnames of the bitmap
+files in your application. When successful, it returns the complete pathname of
+the bitmap file, prefixed with the character <tt class="docutils literal"><span class="pre">&#64;</span></tt>.  The returned value can be
+used to configure the <tt class="docutils literal"><span class="pre">bitmap</span></tt> option of the Tk and Tix widgets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_addbitmapdir">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_addbitmapdir</tt><big>(</big><em>directory</em><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_addbitmapdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tix maintains a list of directories under which the <a class="reference internal" href="#Tix.tixCommand.tix_getimage" title="Tix.tixCommand.tix_getimage"><tt class="xref py py-meth docutils literal"><span class="pre">tix_getimage()</span></tt></a> and
+<a class="reference internal" href="#Tix.tixCommand.tix_getbitmap" title="Tix.tixCommand.tix_getbitmap"><tt class="xref py py-meth docutils literal"><span class="pre">tix_getbitmap()</span></tt></a> methods will search for image files.  The standard bitmap
+directory is <tt class="file docutils literal"><span class="pre">$TIX_LIBRARY/bitmaps</span></tt>. The <a class="reference internal" href="#Tix.tixCommand.tix_addbitmapdir" title="Tix.tixCommand.tix_addbitmapdir"><tt class="xref py py-meth docutils literal"><span class="pre">tix_addbitmapdir()</span></tt></a> method
+adds <em>directory</em> into this list. By using this method, the image files of an
+applications can also be located using the <a class="reference internal" href="#Tix.tixCommand.tix_getimage" title="Tix.tixCommand.tix_getimage"><tt class="xref py py-meth docutils literal"><span class="pre">tix_getimage()</span></tt></a> or
+<a class="reference internal" href="#Tix.tixCommand.tix_getbitmap" title="Tix.tixCommand.tix_getbitmap"><tt class="xref py py-meth docutils literal"><span class="pre">tix_getbitmap()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_filedialog">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_filedialog</tt><big>(</big><span class="optional">[</span><em>dlgclass</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_filedialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the file selection dialog that may be shared among different calls from
+this application.  This method will create a file selection dialog widget when
+it is called the first time. This dialog will be returned by all subsequent
+calls to <a class="reference internal" href="#Tix.tixCommand.tix_filedialog" title="Tix.tixCommand.tix_filedialog"><tt class="xref py py-meth docutils literal"><span class="pre">tix_filedialog()</span></tt></a>.  An optional dlgclass parameter can be passed
+as a string to specified what type of file selection dialog widget is desired.
+Possible options are <tt class="docutils literal"><span class="pre">tix</span></tt>, <tt class="docutils literal"><span class="pre">FileSelectDialog</span></tt> or <tt class="docutils literal"><span class="pre">tixExFileSelectDialog</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_getimage">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_getimage</tt><big>(</big><em>self</em>, <em>name</em><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_getimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locates an image file of the name <tt class="file docutils literal"><span class="pre">name.xpm</span></tt>, <tt class="file docutils literal"><span class="pre">name.xbm</span></tt> or
+<tt class="file docutils literal"><span class="pre">name.ppm</span></tt> in one of the bitmap directories (see the
+<a class="reference internal" href="#Tix.tixCommand.tix_addbitmapdir" title="Tix.tixCommand.tix_addbitmapdir"><tt class="xref py py-meth docutils literal"><span class="pre">tix_addbitmapdir()</span></tt></a> method above). If more than one file with the same name
+(but different extensions) exist, then the image type is chosen according to the
+depth of the X display: xbm images are chosen on monochrome displays and color
+images are chosen on color displays. By using <a class="reference internal" href="#Tix.tixCommand.tix_getimage" title="Tix.tixCommand.tix_getimage"><tt class="xref py py-meth docutils literal"><span class="pre">tix_getimage()</span></tt></a>, you can
+avoid hard coding the pathnames of the image files in your application. When
+successful, this method returns the name of the newly created image, which can
+be used to configure the <tt class="docutils literal"><span class="pre">image</span></tt> option of the Tk and Tix widgets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_option_get">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_option_get</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_option_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the options maintained by the Tix scheme mechanism.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Tix.tixCommand.tix_resetoptions">
+<tt class="descclassname">tixCommand.</tt><tt class="descname">tix_resetoptions</tt><big>(</big><em>newScheme</em>, <em>newFontSet</em><span class="optional">[</span>, <em>newScmPrio</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#Tix.tixCommand.tix_resetoptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the scheme and fontset of the Tix application to <em>newScheme</em> and
+<em>newFontSet</em>, respectively.  This affects only those widgets created after this
+call.  Therefore, it is best to call the resetoptions method before the creation
+of any widgets in a Tix application.</p>
+<p>The optional parameter <em>newScmPrio</em> can be given to reset the priority level of
+the Tk options set by the Tix schemes.</p>
+<p>Because of the way Tk handles the X option database, after Tix has been has
+imported and inited, it is not possible to reset the color schemes and font sets
+using the <tt class="xref py py-meth docutils literal"><span class="pre">tix_config()</span></tt> method. Instead, the <a class="reference internal" href="#Tix.tixCommand.tix_resetoptions" title="Tix.tixCommand.tix_resetoptions"><tt class="xref py py-meth docutils literal"><span class="pre">tix_resetoptions()</span></tt></a>
+method must be used.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">24.3. <tt class="docutils literal"><span class="pre">Tix</span></tt> &#8212; Extension widgets for Tk</a><ul>
+<li><a class="reference internal" href="#using-tix">24.3.1. Using Tix</a></li>
+<li><a class="reference internal" href="#tix-widgets">24.3.2. Tix Widgets</a><ul>
+<li><a class="reference internal" href="#basic-widgets">24.3.2.1. Basic Widgets</a></li>
+<li><a class="reference internal" href="#file-selectors">24.3.2.2. File Selectors</a></li>
+<li><a class="reference internal" href="#hierarchical-listbox">24.3.2.3. Hierarchical ListBox</a></li>
+<li><a class="reference internal" href="#tabular-listbox">24.3.2.4. Tabular ListBox</a></li>
+<li><a class="reference internal" href="#manager-widgets">24.3.2.5. Manager Widgets</a></li>
+<li><a class="reference internal" href="#image-types">24.3.2.6. Image Types</a></li>
+<li><a class="reference internal" href="#miscellaneous-widgets">24.3.2.7. Miscellaneous Widgets</a></li>
+<li><a class="reference internal" href="#form-geometry-manager">24.3.2.8. Form Geometry Manager</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tix-commands">24.3.3. Tix Commands</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ttk.html"
+                        title="previous chapter">24.2. <tt class="docutils literal"><span class="pre">ttk</span></tt> &#8212; Tk themed widgets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scrolledtext.html"
+                        title="next chapter">24.4. <tt class="docutils literal docutils literal"><span class="pre">ScrolledText</span></tt> &#8212; Scrolled Text Widget</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/tix.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="scrolledtext.html" title="24.4. ScrolledText — Scrolled Text Widget"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ttk.html" title="24.2. ttk — Tk themed widgets"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="tk.html" >24. Graphical User Interfaces with Tk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

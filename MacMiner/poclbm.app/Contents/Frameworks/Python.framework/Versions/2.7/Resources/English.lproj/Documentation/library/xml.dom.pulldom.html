@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>19.10. xml.dom.pulldom — Support for building partial DOM trees &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="19. Structured Markup Processing Tools" href="markup.html" />
+    <link rel="next" title="19.11. xml.sax — Support for SAX2 parsers" href="xml.sax.html" />
+    <link rel="prev" title="19.9. xml.dom.minidom — Minimal DOM implementation" href="xml.dom.minidom.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.html" title="19.11. xml.sax — Support for SAX2 parsers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xml.dom.minidom.html" title="19.9. xml.dom.minidom — Minimal DOM implementation"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" accesskey="U">19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xml.dom.pulldom">
+<span id="xml-dom-pulldom-support-for-building-partial-dom-trees"></span><h1>19.10. <a class="reference internal" href="#module-xml.dom.pulldom" title="xml.dom.pulldom: Support for building partial DOM trees from SAX events."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom.pulldom</span></tt></a> &#8212; Support for building partial DOM trees<a class="headerlink" href="#module-xml.dom.pulldom" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/xml/dom/pulldom.py">Lib/xml/dom/pulldom.py</a></p>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-xml.dom.pulldom" title="xml.dom.pulldom: Support for building partial DOM trees from SAX events."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom.pulldom</span></tt></a> allows building only selected portions of a Document
+Object Model representation of a document from SAX events.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <a class="reference internal" href="#module-xml.dom.pulldom" title="xml.dom.pulldom: Support for building partial DOM trees from SAX events."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom.pulldom</span></tt></a> module is not secure against
+maliciously constructed data.  If you need to parse untrusted or
+unauthenticated data see <a class="reference internal" href="xml.html#xml-vulnerabilities"><em>XML vulnerabilities</em></a>.</p>
+</div>
+<dl class="class">
+<dt id="xml.dom.pulldom.PullDOM">
+<em class="property">class </em><tt class="descclassname">xml.dom.pulldom.</tt><tt class="descname">PullDOM</tt><big>(</big><span class="optional">[</span><em>documentFactory</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.dom.pulldom.PullDOM" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.ContentHandler" title="xml.sax.handler.ContentHandler"><tt class="xref py py-class docutils literal"><span class="pre">xml.sax.handler.ContentHandler</span></tt></a> implementation that ...</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="xml.dom.pulldom.DOMEventStream">
+<em class="property">class </em><tt class="descclassname">xml.dom.pulldom.</tt><tt class="descname">DOMEventStream</tt><big>(</big><em>stream</em>, <em>parser</em>, <em>bufsize</em><big>)</big><a class="headerlink" href="#xml.dom.pulldom.DOMEventStream" title="Permalink to this definition">¶</a></dt>
+<dd><p>...</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="xml.dom.pulldom.SAX2DOM">
+<em class="property">class </em><tt class="descclassname">xml.dom.pulldom.</tt><tt class="descname">SAX2DOM</tt><big>(</big><span class="optional">[</span><em>documentFactory</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.dom.pulldom.SAX2DOM" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.ContentHandler" title="xml.sax.handler.ContentHandler"><tt class="xref py py-class docutils literal"><span class="pre">xml.sax.handler.ContentHandler</span></tt></a> implementation that ...</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xml.dom.pulldom.parse">
+<tt class="descclassname">xml.dom.pulldom.</tt><tt class="descname">parse</tt><big>(</big><em>stream_or_string</em><span class="optional">[</span>, <em>parser</em><span class="optional">[</span>, <em>bufsize</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.dom.pulldom.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>...</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xml.dom.pulldom.parseString">
+<tt class="descclassname">xml.dom.pulldom.</tt><tt class="descname">parseString</tt><big>(</big><em>string</em><span class="optional">[</span>, <em>parser</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.dom.pulldom.parseString" title="Permalink to this definition">¶</a></dt>
+<dd><p>...</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xml.dom.pulldom.default_bufsize">
+<tt class="descclassname">xml.dom.pulldom.</tt><tt class="descname">default_bufsize</tt><a class="headerlink" href="#xml.dom.pulldom.default_bufsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default value for the <em>bufsize</em> parameter to <a class="reference internal" href="#xml.dom.pulldom.parse" title="xml.dom.pulldom.parse"><tt class="xref py py-func docutils literal"><span class="pre">parse()</span></tt></a>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1: </span>The value of this variable can be changed before calling <a class="reference internal" href="#xml.dom.pulldom.parse" title="xml.dom.pulldom.parse"><tt class="xref py py-func docutils literal"><span class="pre">parse()</span></tt></a> and the
+new value will take effect.</p>
+</dd></dl>
+
+<div class="section" id="domeventstream-objects">
+<span id="id1"></span><h2>19.10.1. DOMEventStream Objects<a class="headerlink" href="#domeventstream-objects" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="xml.dom.pulldom.DOMEventStream.getEvent">
+<tt class="descclassname">DOMEventStream.</tt><tt class="descname">getEvent</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.dom.pulldom.DOMEventStream.getEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>...</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.pulldom.DOMEventStream.expandNode">
+<tt class="descclassname">DOMEventStream.</tt><tt class="descname">expandNode</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#xml.dom.pulldom.DOMEventStream.expandNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>...</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.dom.pulldom.DOMEventStream.reset">
+<tt class="descclassname">DOMEventStream.</tt><tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.dom.pulldom.DOMEventStream.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>...</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19.10. <tt class="docutils literal"><span class="pre">xml.dom.pulldom</span></tt> &#8212; Support for building partial DOM trees</a><ul>
+<li><a class="reference internal" href="#domeventstream-objects">19.10.1. DOMEventStream Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xml.dom.minidom.html"
+                        title="previous chapter">19.9. <tt class="docutils literal docutils literal docutils literal"><span class="pre">xml.dom.minidom</span></tt> &#8212; Minimal DOM implementation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xml.sax.html"
+                        title="next chapter">19.11. <tt class="docutils literal"><span class="pre">xml.sax</span></tt> &#8212; Support for SAX2 parsers</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/xml.dom.pulldom.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.html" title="19.11. xml.sax — Support for SAX2 parsers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xml.dom.minidom.html" title="19.9. xml.dom.minidom — Minimal DOM implementation"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" >19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

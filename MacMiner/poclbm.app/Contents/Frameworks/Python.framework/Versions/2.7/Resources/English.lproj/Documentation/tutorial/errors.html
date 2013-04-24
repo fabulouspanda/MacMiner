@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8. Errors and Exceptions &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="The Python Tutorial" href="index.html" />
+    <link rel="next" title="9. Classes" href="classes.html" />
+    <link rel="prev" title="7. Input and Output" href="inputoutput.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="classes.html" title="9. Classes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="inputoutput.html" title="7. Input and Output"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">The Python Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="errors-and-exceptions">
+<span id="tut-errors"></span><h1>8. Errors and Exceptions<a class="headerlink" href="#errors-and-exceptions" title="Permalink to this headline">¶</a></h1>
+<p>Until now error messages haven&#8217;t been more than mentioned, but if you have tried
+out the examples you have probably seen some.  There are (at least) two
+distinguishable kinds of errors: <em>syntax errors</em> and <em>exceptions</em>.</p>
+<div class="section" id="syntax-errors">
+<span id="tut-syntaxerrors"></span><h2>8.1. Syntax Errors<a class="headerlink" href="#syntax-errors" title="Permalink to this headline">¶</a></h2>
+<p>Syntax errors, also known as parsing errors, are perhaps the most common kind of
+complaint you get while you are still learning Python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">while</span> <span class="bp">True</span> <span class="k">print</span> <span class="s">&#39;Hello world&#39;</span>
+<span class="go">  File &quot;&lt;stdin&gt;&quot;, line 1, in ?</span>
+<span class="go">    while True print &#39;Hello world&#39;</span>
+<span class="go">                   ^</span>
+<span class="go">SyntaxError: invalid syntax</span>
+</pre></div>
+</div>
+<p>The parser repeats the offending line and displays a little &#8216;arrow&#8217; pointing at
+the earliest point in the line where the error was detected.  The error is
+caused by (or at least detected at) the token <em>preceding</em> the arrow: in the
+example, the error is detected at the keyword <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a>, since a colon
+(<tt class="docutils literal"><span class="pre">':'</span></tt>) is missing before it.  File name and line number are printed so you
+know where to look in case the input came from a script.</p>
+</div>
+<div class="section" id="exceptions">
+<span id="tut-exceptions"></span><h2>8.2. Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Even if a statement or expression is syntactically correct, it may cause an
+error when an attempt is made to execute it. Errors detected during execution
+are called <em>exceptions</em> and are not unconditionally fatal: you will soon learn
+how to handle them in Python programs.  Most exceptions are not handled by
+programs, however, and result in error messages as shown here:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">0</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+<span class="nc">ZeroDivisionError</span>: <span class="n-Identifier">integer division or modulo by zero</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">4</span> <span class="o">+</span> <span class="n">spam</span><span class="o">*</span><span class="mi">3</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+<span class="nc">NameError</span>: <span class="n-Identifier">name &#39;spam&#39; is not defined</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;2&#39;</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+<span class="nc">TypeError</span>: <span class="n-Identifier">cannot concatenate &#39;str&#39; and &#39;int&#39; objects</span>
+</pre></div>
+</div>
+<p>The last line of the error message indicates what happened. Exceptions come in
+different types, and the type is printed as part of the message: the types in
+the example are <a class="reference internal" href="../library/exceptions.html#exceptions.ZeroDivisionError" title="exceptions.ZeroDivisionError"><tt class="xref py py-exc docutils literal"><span class="pre">ZeroDivisionError</span></tt></a>, <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> and <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>.
+The string printed as the exception type is the name of the built-in exception
+that occurred.  This is true for all built-in exceptions, but need not be true
+for user-defined exceptions (although it is a useful convention). Standard
+exception names are built-in identifiers (not reserved keywords).</p>
+<p>The rest of the line provides detail based on the type of exception and what
+caused it.</p>
+<p>The preceding part of the error message shows the context where the exception
+happened, in the form of a stack traceback. In general it contains a stack
+traceback listing source lines; however, it will not display lines read from
+standard input.</p>
+<p><a class="reference internal" href="../library/exceptions.html#bltin-exceptions"><em>Built-in Exceptions</em></a> lists the built-in exceptions and their meanings.</p>
+</div>
+<div class="section" id="handling-exceptions">
+<span id="tut-handling"></span><h2>8.3. Handling Exceptions<a class="headerlink" href="#handling-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to write programs that handle selected exceptions. Look at the
+following example, which asks the user for input until a valid integer has been
+entered, but allows the user to interrupt the program (using <tt class="kbd docutils literal"><span class="pre">Control-C</span></tt> or
+whatever the operating system supports); note that a user-generated interruption
+is signalled by raising the <a class="reference internal" href="../library/exceptions.html#exceptions.KeyboardInterrupt" title="exceptions.KeyboardInterrupt"><tt class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></tt></a> exception.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Please enter a number: &quot;</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">break</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="s">&quot;Oops!  That was no valid number.  Try again...&quot;</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement works as follows.</p>
+<ul class="simple">
+<li>First, the <em>try clause</em> (the statement(s) between the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> and
+<a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> keywords) is executed.</li>
+<li>If no exception occurs, the <em>except clause</em> is skipped and execution of the
+<a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement is finished.</li>
+<li>If an exception occurs during execution of the try clause, the rest of the
+clause is skipped.  Then if its type matches the exception named after the
+<a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> keyword, the except clause is executed, and then execution
+continues after the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement.</li>
+<li>If an exception occurs which does not match the exception named in the except
+clause, it is passed on to outer <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statements; if no handler is
+found, it is an <em>unhandled exception</em> and execution stops with a message as
+shown above.</li>
+</ul>
+<p>A <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement may have more than one except clause, to specify
+handlers for different exceptions.  At most one handler will be executed.
+Handlers only handle exceptions that occur in the corresponding try clause, not
+in other handlers of the same <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement.  An except clause may
+name multiple exceptions as a parenthesized tuple, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span> <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">NameError</span><span class="p">):</span>
+<span class="o">...</span>     <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Note that the parentheses around this tuple are required, because
+<tt class="docutils literal"><span class="pre">except</span> <span class="pre">ValueError,</span> <span class="pre">e:</span></tt> was the syntax used for what is normally
+written as <tt class="docutils literal"><span class="pre">except</span> <span class="pre">ValueError</span> <span class="pre">as</span> <span class="pre">e:</span></tt> in modern Python (described
+below). The old syntax is still supported for backwards compatibility.
+This means <tt class="docutils literal"><span class="pre">except</span> <span class="pre">RuntimeError,</span> <span class="pre">TypeError</span></tt> is not equivalent to
+<tt class="docutils literal"><span class="pre">except</span> <span class="pre">(RuntimeError,</span> <span class="pre">TypeError):</span></tt> but to <tt class="docutils literal"><span class="pre">except</span> <span class="pre">RuntimeError</span> <span class="pre">as</span>
+<span class="pre">TypeError:</span></tt> which is not what you want.</p>
+<p>The last except clause may omit the exception name(s), to serve as a wildcard.
+Use this with extreme caution, since it is easy to mask a real programming error
+in this way!  It can also be used to print an error message and then re-raise
+the exception (allowing a caller to handle the exception as well):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;myfile.txt&#39;</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;I/O error({0}): {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">errno</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Could not convert data to an integer.&quot;</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Unexpected error:&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">raise</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ... <a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> statement has an optional <em>else
+clause</em>, which, when present, must follow all except clauses.  It is useful for
+code that must be executed if the try clause does not raise an exception.  For
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;cannot open&#39;</span><span class="p">,</span> <span class="n">arg</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">arg</span><span class="p">,</span> <span class="s">&#39;has&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()),</span> <span class="s">&#39;lines&#39;</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The use of the <a class="reference internal" href="../reference/compound_stmts.html#else"><tt class="xref std std-keyword docutils literal"><span class="pre">else</span></tt></a> clause is better than adding additional code to
+the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> clause because it avoids accidentally catching an exception
+that wasn&#8217;t raised by the code being protected by the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ...
+<a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> statement.</p>
+<p>When an exception occurs, it may have an associated value, also known as the
+exception&#8217;s <em>argument</em>. The presence and type of the argument depend on the
+exception type.</p>
+<p>The except clause may specify a variable after the exception name (or tuple).
+The variable is bound to an exception instance with the arguments stored in
+<tt class="docutils literal"><span class="pre">instance.args</span></tt>.  For convenience, the exception instance defines
+<a class="reference internal" href="../reference/datamodel.html#object.__str__" title="object.__str__"><tt class="xref py py-meth docutils literal"><span class="pre">__str__()</span></tt></a> so the arguments can be printed directly without having to
+reference <tt class="docutils literal"><span class="pre">.args</span></tt>.</p>
+<p>One may also instantiate an exception first before raising it and add any
+attributes to it as desired.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;spam&#39;</span><span class="p">,</span> <span class="s">&#39;eggs&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">inst</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="nb">type</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>     <span class="c"># the exception instance</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">inst</span><span class="o">.</span><span class="n">args</span>      <span class="c"># arguments stored in .args</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">inst</span>           <span class="c"># __str__ allows args to printed directly</span>
+<span class="gp">... </span>   <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">args</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="s">&#39;x =&#39;</span><span class="p">,</span> <span class="n">x</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="s">&#39;y =&#39;</span><span class="p">,</span> <span class="n">y</span>
+<span class="gp">...</span>
+<span class="go">&lt;type &#39;exceptions.Exception&#39;&gt;</span>
+<span class="go">(&#39;spam&#39;, &#39;eggs&#39;)</span>
+<span class="go">(&#39;spam&#39;, &#39;eggs&#39;)</span>
+<span class="go">x = spam</span>
+<span class="go">y = eggs</span>
+</pre></div>
+</div>
+<p>If an exception has an argument, it is printed as the last part (&#8216;detail&#8217;) of
+the message for unhandled exceptions.</p>
+<p>Exception handlers don&#8217;t just handle exceptions if they occur immediately in the
+try clause, but also if they occur inside functions that are called (even
+indirectly) in the try clause. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">this_fails</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">0</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">this_fails</span><span class="p">()</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">ZeroDivisionError</span> <span class="k">as</span> <span class="n">detail</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Handling run-time error:&#39;</span><span class="p">,</span> <span class="n">detail</span>
+<span class="gp">...</span>
+<span class="go">Handling run-time error: integer division or modulo by zero</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="raising-exceptions">
+<span id="tut-raising"></span><h2>8.4. Raising Exceptions<a class="headerlink" href="#raising-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../reference/simple_stmts.html#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> statement allows the programmer to force a specified
+exception to occur. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;HiThere&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+<span class="nc">NameError</span>: <span class="n-Identifier">HiThere</span>
+</pre></div>
+</div>
+<p>The sole argument to <a class="reference internal" href="../reference/simple_stmts.html#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> indicates the exception to be raised.
+This must be either an exception instance or an exception class (a class that
+derives from <tt class="xref py py-class docutils literal"><span class="pre">Exception</span></tt>).</p>
+<p>If you need to determine whether an exception was raised but don&#8217;t intend to
+handle it, a simpler form of the <a class="reference internal" href="../reference/simple_stmts.html#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> statement allows you to
+re-raise the exception:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s">&#39;HiThere&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;An exception flew by!&#39;</span>
+<span class="gp">... </span>    <span class="k">raise</span>
+<span class="gp">...</span>
+<span class="go">An exception flew by!</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">2</span>, in <span class="n-Identifier">?</span>
+<span class="nc">NameError</span>: <span class="n-Identifier">HiThere</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="user-defined-exceptions">
+<span id="tut-userexceptions"></span><h2>8.5. User-defined Exceptions<a class="headerlink" href="#user-defined-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Programs may name their own exceptions by creating a new exception class (see
+<a class="reference internal" href="classes.html#tut-classes"><em>Classes</em></a> for more about Python classes).  Exceptions should typically
+be derived from the <a class="reference internal" href="../library/exceptions.html#exceptions.Exception" title="exceptions.Exception"><tt class="xref py py-exc docutils literal"><span class="pre">Exception</span></tt></a> class, either directly or indirectly.  For
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">raise</span> <span class="n">MyError</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="n">MyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;My exception occurred, value:&#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span>
+<span class="gp">...</span>
+<span class="go">My exception occurred, value: 4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">raise</span> <span class="n">MyError</span><span class="p">(</span><span class="s">&#39;oops!&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+<span class="nc">__main__.MyError</span>: <span class="n-Identifier">&#39;oops!&#39;</span>
+</pre></div>
+</div>
+<p>In this example, the default <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt></a> of <tt class="xref py py-class docutils literal"><span class="pre">Exception</span></tt> has been
+overridden.  The new behavior simply creates the <em>value</em> attribute.  This
+replaces the default behavior of creating the <em>args</em> attribute.</p>
+<p>Exception classes can be defined which do anything any other class can do, but
+are usually kept simple, often only offering a number of attributes that allow
+information about the error to be extracted by handlers for the exception.  When
+creating a module that can raise several distinct errors, a common practice is
+to create a base class for exceptions defined by that module, and subclass that
+to create specific exception classes for different error conditions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for exceptions in this module.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">InputError</span><span class="p">(</span><span class="n">Error</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised for errors in the input.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        expr -- input expression in which the error occurred</span>
+<span class="sd">        msg  -- explanation of the error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
+
+<span class="k">class</span> <span class="nc">TransitionError</span><span class="p">(</span><span class="n">Error</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when an operation attempts a state transition that&#39;s not</span>
+<span class="sd">    allowed.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        prev -- state at beginning of transition</span>
+<span class="sd">        next -- attempted new state</span>
+<span class="sd">        msg  -- explanation of why the specific transition is not allowed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prev</span><span class="p">,</span> <span class="nb">next</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev</span> <span class="o">=</span> <span class="n">prev</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next</span> <span class="o">=</span> <span class="nb">next</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span>
+</pre></div>
+</div>
+<p>Most exceptions are defined with names that end in &#8220;Error,&#8221; similar to the
+naming of the standard exceptions.</p>
+<p>Many standard modules define their own exceptions to report errors that may
+occur in functions they define.  More information on classes is presented in
+chapter <a class="reference internal" href="classes.html#tut-classes"><em>Classes</em></a>.</p>
+</div>
+<div class="section" id="defining-clean-up-actions">
+<span id="tut-cleanup"></span><h2>8.6. Defining Clean-up Actions<a class="headerlink" href="#defining-clean-up-actions" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement has another optional clause which is intended to
+define clean-up actions that must be executed under all circumstances.  For
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">raise</span> <span class="ne">KeyboardInterrupt</span>
+<span class="gp">... </span><span class="k">finally</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&#39;Goodbye, world!&#39;</span>
+<span class="gp">...</span>
+<span class="go">Goodbye, world!</span>
+<span class="nc">KeyboardInterrupt</span>
+</pre></div>
+</div>
+<p>A <em>finally clause</em> is always executed before leaving the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a>
+statement, whether an exception has occurred or not. When an exception has
+occurred in the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> clause and has not been handled by an
+<a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> clause (or it has occurred in a <a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> or
+<a class="reference internal" href="../reference/compound_stmts.html#else"><tt class="xref std std-keyword docutils literal"><span class="pre">else</span></tt></a> clause), it is re-raised after the <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause has
+been executed.  The <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause is also executed &#8220;on the way out&#8221;
+when any other clause of the <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement is left via a
+<a class="reference internal" href="../reference/simple_stmts.html#break"><tt class="xref std std-keyword docutils literal"><span class="pre">break</span></tt></a>, <a class="reference internal" href="../reference/simple_stmts.html#continue"><tt class="xref std std-keyword docutils literal"><span class="pre">continue</span></tt></a> or <a class="reference internal" href="../reference/simple_stmts.html#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> statement.  A more
+complicated example (having <a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> and <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clauses in
+the same <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement works as of Python 2.5):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">result</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="s">&quot;division by zero!&quot;</span>
+<span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="s">&quot;result is&quot;</span><span class="p">,</span> <span class="n">result</span>
+<span class="gp">... </span>    <span class="k">finally</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">print</span> <span class="s">&quot;executing finally clause&quot;</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">divide</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">result is 2</span>
+<span class="go">executing finally clause</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">divide</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">division by zero!</span>
+<span class="go">executing finally clause</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">divide</span><span class="p">(</span><span class="s">&quot;2&quot;</span><span class="p">,</span> <span class="s">&quot;1&quot;</span><span class="p">)</span>
+<span class="go">executing finally clause</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">3</span>, in <span class="n-Identifier">divide</span>
+<span class="nc">TypeError: unsupported operand type(s) for /</span>: <span class="n-Identifier">&#39;str&#39; and &#39;str&#39;</span>
+</pre></div>
+</div>
+<p>As you can see, the <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause is executed in any event.  The
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> raised by dividing two strings is not handled by the
+<a class="reference internal" href="../reference/compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> clause and therefore re-raised after the <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a>
+clause has been executed.</p>
+<p>In real world applications, the <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause is useful for
+releasing external resources (such as files or network connections), regardless
+of whether the use of the resource was successful.</p>
+</div>
+<div class="section" id="predefined-clean-up-actions">
+<span id="tut-cleanup-with"></span><h2>8.7. Predefined Clean-up Actions<a class="headerlink" href="#predefined-clean-up-actions" title="Permalink to this headline">¶</a></h2>
+<p>Some objects define standard clean-up actions to be undertaken when the object
+is no longer needed, regardless of whether or not the operation using the object
+succeeded or failed. Look at the following example, which tries to open a file
+and print its contents to the screen.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;myfile.txt&quot;</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>The problem with this code is that it leaves the file open for an indeterminate
+amount of time after the code has finished executing. This is not an issue in
+simple scripts, but can be a problem for larger applications. The
+<a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement allows objects like files to be used in a way that
+ensures they are always cleaned up promptly and correctly.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;myfile.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>After the statement is executed, the file <em>f</em> is always closed, even if a
+problem was encountered while processing the lines. Other objects which provide
+predefined clean-up actions will indicate this in their documentation.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8. Errors and Exceptions</a><ul>
+<li><a class="reference internal" href="#syntax-errors">8.1. Syntax Errors</a></li>
+<li><a class="reference internal" href="#exceptions">8.2. Exceptions</a></li>
+<li><a class="reference internal" href="#handling-exceptions">8.3. Handling Exceptions</a></li>
+<li><a class="reference internal" href="#raising-exceptions">8.4. Raising Exceptions</a></li>
+<li><a class="reference internal" href="#user-defined-exceptions">8.5. User-defined Exceptions</a></li>
+<li><a class="reference internal" href="#defining-clean-up-actions">8.6. Defining Clean-up Actions</a></li>
+<li><a class="reference internal" href="#predefined-clean-up-actions">8.7. Predefined Clean-up Actions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="inputoutput.html"
+                        title="previous chapter">7. Input and Output</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="classes.html"
+                        title="next chapter">9. Classes</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/tutorial/errors.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="classes.html" title="9. Classes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="inputoutput.html" title="7. Input and Output"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

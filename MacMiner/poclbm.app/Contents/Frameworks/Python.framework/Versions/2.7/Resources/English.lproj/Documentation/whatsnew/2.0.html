@@ -1,0 +1,1192 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>What’s New in Python 2.0 &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="What’s New in Python" href="index.html" />
+    <link rel="next" title="The Python Tutorial" href="../tutorial/index.html" />
+    <link rel="prev" title="What’s New in Python 2.1" href="2.1.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tutorial/index.html" title="The Python Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="2.1.html" title="What’s New in Python 2.1"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">What&#8217;s New in Python</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="what-s-new-in-python-2-0">
+<h1>What&#8217;s New in Python 2.0<a class="headerlink" href="#what-s-new-in-python-2-0" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">A.M. Kuchling and Moshe Zadka</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>A new release of Python, version 2.0, was released on October 16, 2000. This
+article covers the exciting new features in 2.0, highlights some other useful
+changes, and points out a few incompatible changes that may require rewriting
+code.</p>
+<p>Python&#8217;s development never completely stops between releases, and a steady flow
+of bug fixes and improvements are always being submitted. A host of minor fixes,
+a few optimizations, additional docstrings, and better error messages went into
+2.0; to list them all would be impossible, but they&#8217;re certainly significant.
+Consult the publicly-available CVS logs if you want to see the full list.  This
+progress is due to the five developers working for  PythonLabs are now getting
+paid to spend their days fixing bugs, and also due to the improved communication
+resulting  from moving to SourceForge.</p>
+</div>
+<div class="section" id="what-about-python-1-6">
+<h2>What About Python 1.6?<a class="headerlink" href="#what-about-python-1-6" title="Permalink to this headline">¶</a></h2>
+<p>Python 1.6 can be thought of as the Contractual Obligations Python release.
+After the core development team left CNRI in May 2000, CNRI requested that a 1.6
+release be created, containing all the work on Python that had been performed at
+CNRI.  Python 1.6 therefore represents the state of the CVS tree as of May 2000,
+with the most significant new feature being Unicode support.  Development
+continued after May, of course, so the 1.6 tree received a few fixes to ensure
+that it&#8217;s forward-compatible with Python 2.0.  1.6 is therefore part of Python&#8217;s
+evolution, and not a side branch.</p>
+<p>So, should you take much interest in Python 1.6?  Probably not.  The 1.6final
+and 2.0beta1 releases were made on the same day (September 5, 2000), the plan
+being to finalize Python 2.0 within a month or so.  If you have applications to
+maintain, there seems little point in breaking things by moving to 1.6, fixing
+them, and then having another round of breakage within a month by moving to 2.0;
+you&#8217;re better off just going straight to 2.0.  Most of the really interesting
+features described in this document are only in 2.0, because a lot of work was
+done between May and September.</p>
+</div>
+<div class="section" id="new-development-process">
+<h2>New Development Process<a class="headerlink" href="#new-development-process" title="Permalink to this headline">¶</a></h2>
+<p>The most important change in Python 2.0 may not be to the code at all, but to
+how Python is developed: in May 2000 the Python developers began using the tools
+made available by SourceForge for storing  source code, tracking bug reports,
+and managing the queue of patch submissions.  To report bugs or submit patches
+for Python 2.0, use the bug tracking and patch manager tools available from
+Python&#8217;s project page, located at <a class="reference external" href="http://sourceforge.net/projects/python/">http://sourceforge.net/projects/python/</a>.</p>
+<p>The most important of the services now hosted at SourceForge is the Python CVS
+tree, the version-controlled repository containing the source code for Python.
+Previously, there were roughly 7 or so people who had write access to the CVS
+tree, and all patches had to be inspected and checked in by one of the people on
+this short list. Obviously, this wasn&#8217;t very scalable.  By moving the CVS tree
+to SourceForge, it became possible to grant write access to more people; as of
+September 2000 there were 27 people able to check in changes, a fourfold
+increase.  This makes possible large-scale changes that wouldn&#8217;t be attempted if
+they&#8217;d have to be filtered through the small group of core developers.  For
+example, one day Peter Schneider-Kamp took it into his head to drop K&amp;R C
+compatibility and convert the C source for Python to ANSI C. After getting
+approval on the python-dev mailing list, he launched into a flurry of checkins
+that lasted about a week, other developers joined in to help, and the job was
+done.  If there were only 5 people with write access, probably that task would
+have been viewed as &#8220;nice, but not worth the time and effort needed&#8221; and it
+would never have gotten done.</p>
+<p>The shift to using SourceForge&#8217;s services has resulted in a remarkable increase
+in the speed of development.  Patches now get submitted, commented on, revised
+by people other than the original submitter, and bounced back and forth between
+people until the patch is deemed worth checking in.  Bugs are tracked in one
+central location and can be assigned to a specific person for fixing, and we can
+count the number of open bugs to measure progress.  This didn&#8217;t come without a
+cost: developers now have more e-mail to deal with, more mailing lists to
+follow, and special tools had to be written for the new environment. For
+example, SourceForge sends default patch and bug notification e-mail messages
+that are completely unhelpful, so Ka-Ping Yee wrote an HTML screen-scraper that
+sends more useful messages.</p>
+<p>The ease of adding code caused a few initial growing pains, such as code was
+checked in before it was ready or without getting clear agreement from the
+developer group.  The approval process that has emerged is somewhat similar to
+that used by the Apache group. Developers can vote +1, +0, -0, or -1 on a patch;
++1 and -1 denote acceptance or rejection, while +0 and -0 mean the developer is
+mostly indifferent to the change, though with a slight positive or negative
+slant.  The most significant change from the Apache model is that the voting is
+essentially advisory, letting Guido van Rossum, who has Benevolent Dictator For
+Life status, know what the general opinion is. He can still ignore the result of
+a vote, and approve or reject a change even if the community disagrees with him.</p>
+<p>Producing an actual patch is the last step in adding a new feature, and is
+usually easy compared to the earlier task of coming up with a good design.
+Discussions of new features can often explode into lengthy mailing list threads,
+making the discussion hard to follow, and no one can read every posting to
+python-dev.  Therefore, a relatively formal process has been set up to write
+Python Enhancement Proposals (PEPs), modelled on the Internet RFC process.  PEPs
+are draft documents that describe a proposed new feature, and are continually
+revised until the community reaches a consensus, either accepting or rejecting
+the proposal.  Quoting from the introduction to PEP 1, &#8220;PEP Purpose and
+Guidelines&#8221;:</p>
+<blockquote class="epigraph">
+<div><p>PEP stands for Python Enhancement Proposal.  A PEP is a design document
+providing information to the Python community, or describing a new feature for
+Python.  The PEP should provide a concise technical specification of the feature
+and a rationale for the feature.</p>
+<p>We intend PEPs to be the primary mechanisms for proposing new features, for
+collecting community input on an issue, and for documenting the design decisions
+that have gone into Python.  The PEP author is responsible for building
+consensus within the community and documenting dissenting opinions.</p>
+</div></blockquote>
+<p>Read the rest of PEP 1 for the details of the PEP editorial process, style, and
+format.  PEPs are kept in the Python CVS tree on SourceForge, though they&#8217;re not
+part of the Python 2.0 distribution, and are also available in HTML form from
+<a class="reference external" href="http://www.python.org/peps/">http://www.python.org/peps/</a>.  As of September 2000, there are 25 PEPS, ranging
+from PEP 201, &#8220;Lockstep Iteration&#8221;, to PEP 225, &#8220;Elementwise/Objectwise
+Operators&#8221;.</p>
+</div>
+<div class="section" id="unicode">
+<h2>Unicode<a class="headerlink" href="#unicode" title="Permalink to this headline">¶</a></h2>
+<p>The largest new feature in Python 2.0 is a new fundamental data type: Unicode
+strings.  Unicode uses 16-bit numbers to represent characters instead of the
+8-bit number used by ASCII, meaning that 65,536 distinct characters can be
+supported.</p>
+<p>The final interface for Unicode support was arrived at through countless often-
+stormy discussions on the python-dev mailing list, and mostly implemented by
+Marc-André Lemburg, based on a Unicode string type implementation by Fredrik
+Lundh.  A detailed explanation of the interface was written up as <span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0100"><strong>PEP 100</strong></a>,
+&#8220;Python Unicode Integration&#8221;. This article will simply cover the most
+significant points about the Unicode interfaces.</p>
+<p>In Python source code, Unicode strings are written as <tt class="docutils literal"><span class="pre">u&quot;string&quot;</span></tt>.  Arbitrary
+Unicode characters can be written using a new escape sequence, <tt class="docutils literal"><span class="pre">\uHHHH</span></tt>, where
+<em>HHHH</em> is a 4-digit hexadecimal number from 0000 to FFFF.  The existing
+<tt class="docutils literal"><span class="pre">\xHHHH</span></tt> escape sequence can also be used, and octal escapes can be used for
+characters up to U+01FF, which is represented by <tt class="docutils literal"><span class="pre">\777</span></tt>.</p>
+<p>Unicode strings, just like regular strings, are an immutable sequence type.
+They can be indexed and sliced, but not modified in place. Unicode strings have
+an <tt class="docutils literal"><span class="pre">encode(</span> <span class="pre">[encoding]</span> <span class="pre">)</span></tt> method that returns an 8-bit string in the desired
+encoding.  Encodings are named by strings, such as <tt class="docutils literal"><span class="pre">'ascii'</span></tt>, <tt class="docutils literal"><span class="pre">'utf-8'</span></tt>,
+<tt class="docutils literal"><span class="pre">'iso-8859-1'</span></tt>, or whatever.  A codec API is defined for implementing and
+registering new encodings that are then available throughout a Python program.
+If an encoding isn&#8217;t specified, the default encoding is usually 7-bit ASCII,
+though it can be changed for your Python installation by calling the
+<tt class="xref py py-func docutils literal"><span class="pre">sys.setdefaultencoding(encoding)()</span></tt> function in a customised version of
+<tt class="file docutils literal"><span class="pre">site.py</span></tt>.</p>
+<p>Combining 8-bit and Unicode strings always coerces to Unicode, using the default
+ASCII encoding; the result of <tt class="docutils literal"><span class="pre">'a'</span> <span class="pre">+</span> <span class="pre">u'bc'</span></tt> is <tt class="docutils literal"><span class="pre">u'abc'</span></tt>.</p>
+<p>New built-in functions have been added, and existing built-ins modified to
+support Unicode:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">unichr(ch)</span></tt> returns a Unicode string 1 character long, containing the
+character <em>ch</em>.</li>
+<li><tt class="docutils literal"><span class="pre">ord(u)</span></tt>, where <em>u</em> is a 1-character regular or Unicode string, returns the
+number of the character as an integer.</li>
+<li><tt class="docutils literal"><span class="pre">unicode(string</span> <span class="pre">[,</span> <span class="pre">encoding]</span>&nbsp; <span class="pre">[,</span> <span class="pre">errors]</span> <span class="pre">)</span></tt> creates a Unicode string
+from an 8-bit string.  <tt class="docutils literal"><span class="pre">encoding</span></tt> is a string naming the encoding to use. The
+<tt class="docutils literal"><span class="pre">errors</span></tt> parameter specifies the treatment of characters that are invalid for
+the current encoding; passing <tt class="docutils literal"><span class="pre">'strict'</span></tt> as the value causes an exception to
+be raised on any encoding error, while <tt class="docutils literal"><span class="pre">'ignore'</span></tt> causes errors to be silently
+ignored and <tt class="docutils literal"><span class="pre">'replace'</span></tt> uses U+FFFD, the official replacement character, in
+case of any problems.</li>
+<li>The <a class="reference internal" href="../reference/simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement, and various built-ins such as <tt class="docutils literal"><span class="pre">eval()</span></tt>,
+<tt class="docutils literal"><span class="pre">getattr()</span></tt>, and <tt class="docutils literal"><span class="pre">setattr()</span></tt> will also accept Unicode strings as well as
+regular strings.  (It&#8217;s possible that the process of fixing this missed some
+built-ins; if you find a built-in function that accepts strings but doesn&#8217;t
+accept Unicode strings at all, please report it as a bug.)</li>
+</ul>
+<p>A new module, <a class="reference internal" href="../library/unicodedata.html#module-unicodedata" title="unicodedata: Access the Unicode Database."><tt class="xref py py-mod docutils literal"><span class="pre">unicodedata</span></tt></a>, provides an interface to Unicode character
+properties.  For example, <tt class="docutils literal"><span class="pre">unicodedata.category(u'A')</span></tt> returns the 2-character
+string &#8216;Lu&#8217;, the &#8216;L&#8217; denoting it&#8217;s a letter, and &#8216;u&#8217; meaning that it&#8217;s
+uppercase. <tt class="docutils literal"><span class="pre">unicodedata.bidirectional(u'\u0660')</span></tt> returns &#8216;AN&#8217;, meaning that
+U+0660 is an Arabic number.</p>
+<p>The <a class="reference internal" href="../library/codecs.html#module-codecs" title="codecs: Encode and decode data and streams."><tt class="xref py py-mod docutils literal"><span class="pre">codecs</span></tt></a> module contains functions to look up existing encodings and
+register new ones.  Unless you want to implement a new encoding, you&#8217;ll most
+often use the <tt class="xref py py-func docutils literal"><span class="pre">codecs.lookup(encoding)()</span></tt> function, which returns a
+4-element tuple: <tt class="docutils literal"><span class="pre">(encode_func,</span> <span class="pre">decode_func,</span> <span class="pre">stream_reader,</span> <span class="pre">stream_writer)</span></tt>.</p>
+<ul class="simple">
+<li><em>encode_func</em> is a function that takes a Unicode string, and returns a 2-tuple
+<tt class="docutils literal"><span class="pre">(string,</span> <span class="pre">length)</span></tt>.  <em>string</em> is an 8-bit string containing a portion (perhaps
+all) of the Unicode string converted into the given encoding, and <em>length</em> tells
+you how much of the Unicode string was converted.</li>
+<li><em>decode_func</em> is the opposite of <em>encode_func</em>, taking an 8-bit string and
+returning a 2-tuple <tt class="docutils literal"><span class="pre">(ustring,</span> <span class="pre">length)</span></tt>, consisting of the resulting Unicode
+string <em>ustring</em> and the integer <em>length</em> telling how much of the 8-bit string
+was consumed.</li>
+<li><em>stream_reader</em> is a class that supports decoding input from a stream.
+<em>stream_reader(file_obj)</em> returns an object that supports the <tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt>,
+<a class="reference internal" href="../library/readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-meth docutils literal"><span class="pre">readline()</span></tt></a>, and <tt class="xref py py-meth docutils literal"><span class="pre">readlines()</span></tt> methods.  These methods will all
+translate from the given encoding and return Unicode strings.</li>
+<li><em>stream_writer</em>, similarly, is a class that supports encoding output to a
+stream.  <em>stream_writer(file_obj)</em> returns an object that supports the
+<tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">writelines()</span></tt> methods.  These methods expect Unicode
+strings, translating them to the given encoding on output.</li>
+</ul>
+<p>For example, the following code writes a Unicode string into a file,  encoding
+it as UTF-8:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">codecs</span>
+
+<span class="n">unistr</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\u0660\u2000</span><span class="s">ab ...&#39;</span>
+
+<span class="p">(</span><span class="n">UTF8_encode</span><span class="p">,</span> <span class="n">UTF8_decode</span><span class="p">,</span>
+ <span class="n">UTF8_streamreader</span><span class="p">,</span> <span class="n">UTF8_streamwriter</span><span class="p">)</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">UTF8_streamwriter</span><span class="p">(</span> <span class="nb">open</span><span class="p">(</span> <span class="s">&#39;/tmp/output&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="n">unistr</span> <span class="p">)</span>
+<span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following code would then read UTF-8 input from the file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">input</span> <span class="o">=</span> <span class="n">UTF8_streamreader</span><span class="p">(</span> <span class="nb">open</span><span class="p">(</span> <span class="s">&#39;/tmp/output&#39;</span><span class="p">,</span> <span class="s">&#39;rb&#39;</span><span class="p">)</span> <span class="p">)</span>
+<span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="nb">input</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Unicode-aware regular expressions are available through the <a class="reference internal" href="../library/re.html#module-re" title="re: Regular expression operations."><tt class="xref py py-mod docutils literal"><span class="pre">re</span></tt></a> module,
+which has a new underlying implementation called SRE written by Fredrik Lundh of
+Secret Labs AB.</p>
+<p>A <tt class="docutils literal"><span class="pre">-U</span></tt> command line option was added which causes the Python compiler to
+interpret all string literals as Unicode string literals. This is intended to be
+used in testing and future-proofing your Python code, since some future version
+of Python may drop support for 8-bit strings and provide only Unicode strings.</p>
+</div>
+<div class="section" id="list-comprehensions">
+<h2>List Comprehensions<a class="headerlink" href="#list-comprehensions" title="Permalink to this headline">¶</a></h2>
+<p>Lists are a workhorse data type in Python, and many programs manipulate a list
+at some point.  Two common operations on lists are to loop over them, and either
+pick out the elements that meet a certain criterion, or apply some function to
+each element.  For example, given a list of strings, you might want to pull out
+all the strings containing a given substring, or strip off trailing whitespace
+from each line.</p>
+<p>The existing <a class="reference internal" href="../library/functions.html#map" title="map"><tt class="xref py py-func docutils literal"><span class="pre">map()</span></tt></a> and <a class="reference internal" href="../library/functions.html#filter" title="filter"><tt class="xref py py-func docutils literal"><span class="pre">filter()</span></tt></a> functions can be used for this
+purpose, but they require a function as one of their arguments.  This is fine if
+there&#8217;s an existing built-in function that can be passed directly, but if there
+isn&#8217;t, you have to create a little function to do the required work, and
+Python&#8217;s scoping rules make the result ugly if the little function needs
+additional information.  Take the first example in the previous paragraph,
+finding all the strings in the list containing a given substring.  You could
+write the following to do it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Given the list L, make a list of all strings</span>
+<span class="c"># containing the substring S.</span>
+<span class="n">sublist</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">,</span> <span class="n">substring</span><span class="o">=</span><span class="n">S</span><span class="p">:</span>
+                     <span class="n">string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">substring</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">L</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Because of Python&#8217;s scoping rules, a default argument is used so that the
+anonymous function created by the <a class="reference internal" href="../reference/expressions.html#lambda"><tt class="xref std std-keyword docutils literal"><span class="pre">lambda</span></tt></a> statement knows what
+substring is being searched for.  List comprehensions make this cleaner:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sublist</span> <span class="o">=</span> <span class="p">[</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">L</span> <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>List comprehensions have the form:</p>
+<div class="highlight-python"><pre>[ expression for expr in sequence1
+             for expr2 in sequence2 ...
+             for exprN in sequenceN
+             if condition ]</pre>
+</div>
+<p>The <a class="reference internal" href="../reference/compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a>...<a class="reference internal" href="../reference/expressions.html#in"><tt class="xref std std-keyword docutils literal"><span class="pre">in</span></tt></a> clauses contain the sequences to be
+iterated over.  The sequences do not have to be the same length, because they
+are <em>not</em> iterated over in parallel, but from left to right; this is explained
+more clearly in the following paragraphs.  The elements of the generated list
+will be the successive values of <em>expression</em>.  The final <a class="reference internal" href="../reference/compound_stmts.html#if"><tt class="xref std std-keyword docutils literal"><span class="pre">if</span></tt></a> clause
+is optional; if present, <em>expression</em> is only evaluated and added to the result
+if <em>condition</em> is true.</p>
+<p>To make the semantics very clear, a list comprehension is equivalent to the
+following Python code:</p>
+<div class="highlight-python"><pre>for expr1 in sequence1:
+    for expr2 in sequence2:
+    ...
+        for exprN in sequenceN:
+             if (condition):
+                  # Append the value of
+                  # the expression to the
+                  # resulting list.</pre>
+</div>
+<p>This means that when there are multiple <a class="reference internal" href="../reference/compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a>...<a class="reference internal" href="../reference/expressions.html#in"><tt class="xref std std-keyword docutils literal"><span class="pre">in</span></tt></a>
+clauses, the resulting list will be equal to the product of the lengths of all
+the sequences.  If you have two lists of length 3, the output list is 9 elements
+long:</p>
+<div class="highlight-python"><pre>seq1 = 'abc'
+seq2 = (1,2,3)
+&gt;&gt;&gt; [ (x,y) for x in seq1 for y in seq2]
+[('a', 1), ('a', 2), ('a', 3), ('b', 1), ('b', 2), ('b', 3), ('c', 1),
+('c', 2), ('c', 3)]</pre>
+</div>
+<p>To avoid introducing an ambiguity into Python&#8217;s grammar, if <em>expression</em> is
+creating a tuple, it must be surrounded with parentheses.  The first list
+comprehension below is a syntax error, while the second one is correct:</p>
+<div class="highlight-python"><pre># Syntax error
+[ x,y for x in seq1 for y in seq2]
+# Correct
+[ (x,y) for x in seq1 for y in seq2]</pre>
+</div>
+<p>The idea of list comprehensions originally comes from the functional programming
+language Haskell (<a class="reference external" href="http://www.haskell.org">http://www.haskell.org</a>).  Greg Ewing argued most effectively
+for adding them to Python and wrote the initial list comprehension patch, which
+was then discussed for a seemingly endless time on the python-dev mailing list
+and kept up-to-date by Skip Montanaro.</p>
+</div>
+<div class="section" id="augmented-assignment">
+<h2>Augmented Assignment<a class="headerlink" href="#augmented-assignment" title="Permalink to this headline">¶</a></h2>
+<p>Augmented assignment operators, another long-requested feature, have been added
+to Python 2.0.  Augmented assignment operators include <tt class="docutils literal"><span class="pre">+=</span></tt>, <tt class="docutils literal"><span class="pre">-=</span></tt>, <tt class="docutils literal"><span class="pre">*=</span></tt>,
+and so forth.  For example, the statement <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+=</span> <span class="pre">2</span></tt> increments the value of the
+variable  <tt class="docutils literal"><span class="pre">a</span></tt> by 2, equivalent to the slightly lengthier <tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">+</span> <span class="pre">2</span></tt>.</p>
+<p>The full list of supported assignment operators is <tt class="docutils literal"><span class="pre">+=</span></tt>, <tt class="docutils literal"><span class="pre">-=</span></tt>, <tt class="docutils literal"><span class="pre">*=</span></tt>,
+<tt class="docutils literal"><span class="pre">/=</span></tt>, <tt class="docutils literal"><span class="pre">%=</span></tt>, <tt class="docutils literal"><span class="pre">**=</span></tt>, <tt class="docutils literal"><span class="pre">&amp;=</span></tt>, <tt class="docutils literal"><span class="pre">|=</span></tt>, <tt class="docutils literal"><span class="pre">^=</span></tt>, <tt class="docutils literal"><span class="pre">&gt;&gt;=</span></tt>, and <tt class="docutils literal"><span class="pre">&lt;&lt;=</span></tt>.  Python
+classes can override the augmented assignment operators by defining methods
+named <a class="reference internal" href="../reference/datamodel.html#object.__iadd__" title="object.__iadd__"><tt class="xref py py-meth docutils literal"><span class="pre">__iadd__()</span></tt></a>, <a class="reference internal" href="../reference/datamodel.html#object.__isub__" title="object.__isub__"><tt class="xref py py-meth docutils literal"><span class="pre">__isub__()</span></tt></a>, etc.  For example, the following
+<tt class="xref py py-class docutils literal"><span class="pre">Number</span></tt> class stores a number and supports using += to create a new
+instance with an incremented value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Number</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">def</span> <span class="nf">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">increment</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Number</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">increment</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">Number</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">+=</span> <span class="mi">3</span>
+<span class="k">print</span> <span class="n">n</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../reference/datamodel.html#object.__iadd__" title="object.__iadd__"><tt class="xref py py-meth docutils literal"><span class="pre">__iadd__()</span></tt></a> special method is called with the value of the increment,
+and should return a new instance with an appropriately modified value; this
+return value is bound as the new value of the variable on the left-hand side.</p>
+<p>Augmented assignment operators were first introduced in the C programming
+language, and most C-derived languages, such as <strong class="program">awk</strong>, C++, Java, Perl,
+and PHP also support them.  The augmented assignment patch was implemented by
+Thomas Wouters.</p>
+</div>
+<div class="section" id="string-methods">
+<h2>String Methods<a class="headerlink" href="#string-methods" title="Permalink to this headline">¶</a></h2>
+<p>Until now string-manipulation functionality was in the <a class="reference internal" href="../library/string.html#module-string" title="string: Common string operations."><tt class="xref py py-mod docutils literal"><span class="pre">string</span></tt></a> module,
+which was usually a front-end for the <tt class="xref py py-mod docutils literal"><span class="pre">strop</span></tt> module written in C.  The
+addition of Unicode posed a difficulty for the <tt class="xref py py-mod docutils literal"><span class="pre">strop</span></tt> module, because the
+functions would all need to be rewritten in order to accept either 8-bit or
+Unicode strings.  For functions such as <a class="reference internal" href="../library/string.html#string.replace" title="string.replace"><tt class="xref py py-func docutils literal"><span class="pre">string.replace()</span></tt></a>, which takes 3
+string arguments, that means eight possible permutations, and correspondingly
+complicated code.</p>
+<p>Instead, Python 2.0 pushes the problem onto the string type, making string
+manipulation functionality available through methods on both 8-bit strings and
+Unicode strings.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;andrew&#39;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+<span class="go">&#39;Andrew&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;hostname&#39;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;os&#39;</span><span class="p">,</span> <span class="s">&#39;linux&#39;</span><span class="p">)</span>
+<span class="go">&#39;hlinuxtname&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;moshe&#39;</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;sh&#39;</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p>One thing that hasn&#8217;t changed, a noteworthy April Fools&#8217; joke notwithstanding,
+is that Python strings are immutable. Thus, the string methods return new
+strings, and do not modify the string on which they operate.</p>
+<p>The old <a class="reference internal" href="../library/string.html#module-string" title="string: Common string operations."><tt class="xref py py-mod docutils literal"><span class="pre">string</span></tt></a> module is still around for backwards compatibility, but it
+mostly acts as a front-end to the new string methods.</p>
+<p>Two methods which have no parallel in pre-2.0 versions, although they did exist
+in JPython for quite some time, are <tt class="xref py py-meth docutils literal"><span class="pre">startswith()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">endswith()</span></tt>.
+<tt class="docutils literal"><span class="pre">s.startswith(t)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">s[:len(t)]</span> <span class="pre">==</span> <span class="pre">t</span></tt>, while
+<tt class="docutils literal"><span class="pre">s.endswith(t)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">s[-len(t):]</span> <span class="pre">==</span> <span class="pre">t</span></tt>.</p>
+<p>One other method which deserves special mention is <tt class="xref py py-meth docutils literal"><span class="pre">join()</span></tt>.  The
+<tt class="xref py py-meth docutils literal"><span class="pre">join()</span></tt> method of a string receives one parameter, a sequence of strings,
+and is equivalent to the <a class="reference internal" href="../library/string.html#string.join" title="string.join"><tt class="xref py py-func docutils literal"><span class="pre">string.join()</span></tt></a> function from the old <a class="reference internal" href="../library/string.html#module-string" title="string: Common string operations."><tt class="xref py py-mod docutils literal"><span class="pre">string</span></tt></a>
+module, with the arguments reversed. In other words, <tt class="docutils literal"><span class="pre">s.join(seq)</span></tt> is
+equivalent to the old <tt class="docutils literal"><span class="pre">string.join(seq,</span> <span class="pre">s)</span></tt>.</p>
+</div>
+<div class="section" id="garbage-collection-of-cycles">
+<h2>Garbage Collection of Cycles<a class="headerlink" href="#garbage-collection-of-cycles" title="Permalink to this headline">¶</a></h2>
+<p>The C implementation of Python uses reference counting to implement garbage
+collection.  Every Python object maintains a count of the number of references
+pointing to itself, and adjusts the count as references are created or
+destroyed.  Once the reference count reaches zero, the object is no longer
+accessible, since you need to have a reference to an object to access it, and if
+the count is zero, no references exist any longer.</p>
+<p>Reference counting has some pleasant properties: it&#8217;s easy to understand and
+implement, and the resulting implementation is portable, fairly fast, and reacts
+well with other libraries that implement their own memory handling schemes.  The
+major problem with reference counting is that it sometimes doesn&#8217;t realise that
+objects are no longer accessible, resulting in a memory leak.  This happens when
+there are cycles of references.</p>
+<p>Consider the simplest possible cycle,  a class instance which has a reference to
+itself:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">SomeClass</span><span class="p">()</span>
+<span class="n">instance</span><span class="o">.</span><span class="n">myself</span> <span class="o">=</span> <span class="n">instance</span>
+</pre></div>
+</div>
+<p>After the above two lines of code have been executed, the reference count of
+<tt class="docutils literal"><span class="pre">instance</span></tt> is 2; one reference is from the variable named <tt class="docutils literal"><span class="pre">'instance'</span></tt>, and
+the other is from the <tt class="docutils literal"><span class="pre">myself</span></tt> attribute of the instance.</p>
+<p>If the next line of code is <tt class="docutils literal"><span class="pre">del</span> <span class="pre">instance</span></tt>, what happens?  The reference count
+of <tt class="docutils literal"><span class="pre">instance</span></tt> is decreased by 1, so it has a reference count of 1; the
+reference in the <tt class="docutils literal"><span class="pre">myself</span></tt> attribute still exists.  Yet the instance is no
+longer accessible through Python code, and it could be deleted.  Several objects
+can participate in a cycle if they have references to each other, causing all of
+the objects to be leaked.</p>
+<p>Python 2.0 fixes this problem by periodically executing a cycle detection
+algorithm which looks for inaccessible cycles and deletes the objects involved.
+A new <a class="reference internal" href="../library/gc.html#module-gc" title="gc: Interface to the cycle-detecting garbage collector."><tt class="xref py py-mod docutils literal"><span class="pre">gc</span></tt></a> module provides functions to perform a garbage collection,
+obtain debugging statistics, and tuning the collector&#8217;s parameters.</p>
+<p>Running the cycle detection algorithm takes some time, and therefore will result
+in some additional overhead.  It is hoped that after we&#8217;ve gotten experience
+with the cycle collection from using 2.0, Python 2.1 will be able to minimize
+the overhead with careful tuning.  It&#8217;s not yet obvious how much performance is
+lost, because benchmarking this is tricky and depends crucially on how often the
+program creates and destroys objects.  The detection of cycles can be disabled
+when Python is compiled, if you can&#8217;t afford even a tiny speed penalty or
+suspect that the cycle collection is buggy, by specifying the
+<em class="xref std std-option">--without-cycle-gc</em> switch when running the <strong class="program">configure</strong>
+script.</p>
+<p>Several people tackled this problem and contributed to a solution.  An early
+implementation of the cycle detection approach was written by Toby Kelsey.  The
+current algorithm was suggested by Eric Tiedemann during a visit to CNRI, and
+Guido van Rossum and Neil Schemenauer wrote two different implementations, which
+were later integrated by Neil.  Lots of other people offered suggestions along
+the way; the March 2000 archives of the python-dev mailing list contain most of
+the relevant discussion, especially in the threads titled &#8220;Reference cycle
+collection for Python&#8221; and &#8220;Finalization again&#8221;.</p>
+</div>
+<div class="section" id="other-core-changes">
+<h2>Other Core Changes<a class="headerlink" href="#other-core-changes" title="Permalink to this headline">¶</a></h2>
+<p>Various minor changes have been made to Python&#8217;s syntax and built-in functions.
+None of the changes are very far-reaching, but they&#8217;re handy conveniences.</p>
+<div class="section" id="minor-language-changes">
+<h3>Minor Language Changes<a class="headerlink" href="#minor-language-changes" title="Permalink to this headline">¶</a></h3>
+<p>A new syntax makes it more convenient to call a given function with a tuple of
+arguments and/or a dictionary of keyword arguments. In Python 1.5 and earlier,
+you&#8217;d use the <a class="reference internal" href="../library/functions.html#apply" title="apply"><tt class="xref py py-func docutils literal"><span class="pre">apply()</span></tt></a> built-in function: <tt class="docutils literal"><span class="pre">apply(f,</span> <span class="pre">args,</span> <span class="pre">kw)</span></tt> calls the
+function <tt class="xref py py-func docutils literal"><span class="pre">f()</span></tt> with the argument tuple <em>args</em> and the keyword arguments in
+the dictionary <em>kw</em>.  <a class="reference internal" href="../library/functions.html#apply" title="apply"><tt class="xref py py-func docutils literal"><span class="pre">apply()</span></tt></a>  is the same in 2.0, but thanks to a patch
+from Greg Ewing, <tt class="docutils literal"><span class="pre">f(*args,</span> <span class="pre">**kw)</span></tt> as a shorter and clearer way to achieve the
+same effect.  This syntax is symmetrical with the syntax for defining
+functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="c"># args is a tuple of positional args,</span>
+    <span class="c"># kw is a dictionary of keyword args</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> statement can now have its output directed to a file-like
+object by following the <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> with  <tt class="docutils literal"><span class="pre">&gt;&gt;</span> <span class="pre">file</span></tt>, similar to the
+redirection operator in Unix shells. Previously you&#8217;d either have to use the
+<tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> method of the file-like object, which lacks the convenience and
+simplicity of <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a>, or you could assign a new value to
+<tt class="docutils literal"><span class="pre">sys.stdout</span></tt> and then restore the old value.  For sending output to standard
+error, it&#8217;s much easier to write this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;Warning: action field not supplied&quot;</span>
+</pre></div>
+</div>
+<p>Modules can now be renamed on importing them, using the syntax <tt class="docutils literal"><span class="pre">import</span> <span class="pre">module</span>
+<span class="pre">as</span> <span class="pre">name</span></tt> or <tt class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">name</span> <span class="pre">as</span> <span class="pre">othername</span></tt>.  The patch was submitted
+by Thomas Wouters.</p>
+<p>A new format style is available when using the <tt class="docutils literal"><span class="pre">%</span></tt> operator; &#8216;%r&#8217; will insert
+the <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> of its argument.  This was also added from symmetry
+considerations, this time for symmetry with the existing &#8216;%s&#8217; format style,
+which inserts the <a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a> of its argument.  For example, <tt class="docutils literal"><span class="pre">'%r</span> <span class="pre">%s'</span> <span class="pre">%</span> <span class="pre">('abc',</span>
+<span class="pre">'abc')</span></tt> returns a string containing <tt class="docutils literal"><span class="pre">'abc'</span> <span class="pre">abc</span></tt>.</p>
+<p>Previously there was no way to implement a class that overrode Python&#8217;s built-in
+<a class="reference internal" href="../reference/expressions.html#in"><tt class="xref std std-keyword docutils literal"><span class="pre">in</span></tt></a> operator and implemented a custom version.  <tt class="docutils literal"><span class="pre">obj</span> <span class="pre">in</span> <span class="pre">seq</span></tt> returns
+true if <em>obj</em> is present in the sequence <em>seq</em>; Python computes this by simply
+trying every index of the sequence until either <em>obj</em> is found or an
+<a class="reference internal" href="../library/exceptions.html#exceptions.IndexError" title="exceptions.IndexError"><tt class="xref py py-exc docutils literal"><span class="pre">IndexError</span></tt></a> is encountered.  Moshe Zadka contributed a patch which adds a
+<a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><tt class="xref py py-meth docutils literal"><span class="pre">__contains__()</span></tt></a> magic method for providing a custom implementation for
+<a class="reference internal" href="../reference/expressions.html#in"><tt class="xref std std-keyword docutils literal"><span class="pre">in</span></tt></a>. Additionally, new built-in objects written in C can define what
+<a class="reference internal" href="../reference/expressions.html#in"><tt class="xref std std-keyword docutils literal"><span class="pre">in</span></tt></a> means for them via a new slot in the sequence protocol.</p>
+<p>Earlier versions of Python used a recursive algorithm for deleting objects.
+Deeply nested data structures could cause the interpreter to fill up the C stack
+and crash; Christian Tismer rewrote the deletion logic to fix this problem.  On
+a related note, comparing recursive objects recursed infinitely and crashed;
+Jeremy Hylton rewrote the code to no longer crash, producing a useful result
+instead.  For example, after this code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The comparison <tt class="docutils literal"><span class="pre">a==b</span></tt> returns true, because the two recursive data structures
+are isomorphic. See the thread &#8220;trashcan and PR#7&#8221; in the April 2000 archives of
+the python-dev mailing list for the discussion leading up to this
+implementation, and some useful relevant links.    Note that comparisons can now
+also raise exceptions. In earlier versions of Python, a comparison operation
+such as <tt class="docutils literal"><span class="pre">cmp(a,b)</span></tt> would always produce an answer, even if a user-defined
+<a class="reference internal" href="../reference/datamodel.html#object.__cmp__" title="object.__cmp__"><tt class="xref py py-meth docutils literal"><span class="pre">__cmp__()</span></tt></a> method encountered an error, since the resulting exception would
+simply be silently swallowed.</p>
+<p>Work has been done on porting Python to 64-bit Windows on the Itanium processor,
+mostly by Trent Mick of ActiveState.  (Confusingly, <tt class="docutils literal"><span class="pre">sys.platform</span></tt> is still
+<tt class="docutils literal"><span class="pre">'win32'</span></tt> on Win64 because it seems that for ease of porting, MS Visual C++
+treats code as 32 bit on Itanium.) PythonWin also supports Windows CE; see the
+Python CE page at <a class="reference external" href="http://pythonce.sourceforge.net/">http://pythonce.sourceforge.net/</a> for more information.</p>
+<p>Another new platform is Darwin/MacOS X; initial support for it is in Python 2.0.
+Dynamic loading works, if you specify &#8220;configure &#8211;with-dyld &#8211;with-suffix=.x&#8221;.
+Consult the README in the Python source distribution for more instructions.</p>
+<p>An attempt has been made to alleviate one of Python&#8217;s warts, the often-confusing
+<a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> exception when code refers to a local variable before the
+variable has been assigned a value.  For example, the following code raises an
+exception on the <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> statement in both 1.5.2 and 2.0; in 1.5.2 a
+<a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> exception is raised, while 2.0 raises a new
+<a class="reference internal" href="../library/exceptions.html#exceptions.UnboundLocalError" title="exceptions.UnboundLocalError"><tt class="xref py py-exc docutils literal"><span class="pre">UnboundLocalError</span></tt></a> exception. <a class="reference internal" href="../library/exceptions.html#exceptions.UnboundLocalError" title="exceptions.UnboundLocalError"><tt class="xref py py-exc docutils literal"><span class="pre">UnboundLocalError</span></tt></a> is a subclass of
+<a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a>, so any existing code that expects <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> to be
+raised should still work.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">f</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;i=&quot;</span><span class="p">,</span><span class="n">i</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">f</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Two new exceptions, <a class="reference internal" href="../library/exceptions.html#exceptions.TabError" title="exceptions.TabError"><tt class="xref py py-exc docutils literal"><span class="pre">TabError</span></tt></a> and <a class="reference internal" href="../library/exceptions.html#exceptions.IndentationError" title="exceptions.IndentationError"><tt class="xref py py-exc docutils literal"><span class="pre">IndentationError</span></tt></a>, have been
+introduced.  They&#8217;re both subclasses of <a class="reference internal" href="../library/exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a>, and are raised when
+Python code is found to be improperly indented.</p>
+</div>
+<div class="section" id="changes-to-built-in-functions">
+<h3>Changes to Built-in Functions<a class="headerlink" href="#changes-to-built-in-functions" title="Permalink to this headline">¶</a></h3>
+<p>A new built-in, <tt class="xref py py-func docutils literal"><span class="pre">zip(seq1,</span> <span class="pre">seq2,</span> <span class="pre">...)()</span></tt>, has been added.  <a class="reference internal" href="../library/functions.html#zip" title="zip"><tt class="xref py py-func docutils literal"><span class="pre">zip()</span></tt></a>
+returns a list of tuples where each tuple contains the i-th element from each of
+the argument sequences.  The difference between <a class="reference internal" href="../library/functions.html#zip" title="zip"><tt class="xref py py-func docutils literal"><span class="pre">zip()</span></tt></a> and <tt class="docutils literal"><span class="pre">map(None,</span>
+<span class="pre">seq1,</span> <span class="pre">seq2)</span></tt> is that <a class="reference internal" href="../library/functions.html#map" title="map"><tt class="xref py py-func docutils literal"><span class="pre">map()</span></tt></a> pads the sequences with <tt class="xref docutils literal"><span class="pre">None</span></tt> if the
+sequences aren&#8217;t all of the same length, while <a class="reference internal" href="../library/functions.html#zip" title="zip"><tt class="xref py py-func docutils literal"><span class="pre">zip()</span></tt></a> truncates the
+returned list to the length of the shortest argument sequence.</p>
+<p>The <a class="reference internal" href="../library/functions.html#int" title="int"><tt class="xref py py-func docutils literal"><span class="pre">int()</span></tt></a> and <a class="reference internal" href="../library/functions.html#long" title="long"><tt class="xref py py-func docutils literal"><span class="pre">long()</span></tt></a> functions now accept an optional &#8220;base&#8221;
+parameter when the first argument is a string. <tt class="docutils literal"><span class="pre">int('123',</span> <span class="pre">10)</span></tt> returns 123,
+while <tt class="docutils literal"><span class="pre">int('123',</span> <span class="pre">16)</span></tt> returns 291.  <tt class="docutils literal"><span class="pre">int(123,</span> <span class="pre">16)</span></tt> raises a
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception with the message &#8220;can&#8217;t convert non-string with
+explicit base&#8221;.</p>
+<p>A new variable holding more detailed version information has been added to the
+<a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a> module.  <tt class="docutils literal"><span class="pre">sys.version_info</span></tt> is a tuple <tt class="docutils literal"><span class="pre">(major,</span> <span class="pre">minor,</span> <span class="pre">micro,</span>
+<span class="pre">level,</span> <span class="pre">serial)</span></tt> For example, in a hypothetical 2.0.1beta1, <tt class="docutils literal"><span class="pre">sys.version_info</span></tt>
+would be <tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">'beta',</span> <span class="pre">1)</span></tt>. <em>level</em> is a string such as <tt class="docutils literal"><span class="pre">&quot;alpha&quot;</span></tt>,
+<tt class="docutils literal"><span class="pre">&quot;beta&quot;</span></tt>, or <tt class="docutils literal"><span class="pre">&quot;final&quot;</span></tt> for a final release.</p>
+<p>Dictionaries have an odd new method, <tt class="xref py py-meth docutils literal"><span class="pre">setdefault(key,</span> <span class="pre">default)()</span></tt>, which
+behaves similarly to the existing <tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt> method.  However, if the key is
+missing, <tt class="xref py py-meth docutils literal"><span class="pre">setdefault()</span></tt> both returns the value of <em>default</em> as <tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt>
+would do, and also inserts it into the dictionary as the value for <em>key</em>.  Thus,
+the following lines of code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="nb">dict</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span> <span class="n">key</span> <span class="p">):</span> <span class="k">return</span> <span class="nb">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>can be reduced to a single <tt class="docutils literal"><span class="pre">return</span> <span class="pre">dict.setdefault(key,</span> <span class="pre">[])</span></tt> statement.</p>
+<p>The interpreter sets a maximum recursion depth in order to catch runaway
+recursion before filling the C stack and causing a core dump or GPF..
+Previously this limit was fixed when you compiled Python, but in 2.0 the maximum
+recursion depth can be read and modified using <a class="reference internal" href="../library/sys.html#sys.getrecursionlimit" title="sys.getrecursionlimit"><tt class="xref py py-func docutils literal"><span class="pre">sys.getrecursionlimit()</span></tt></a> and
+<a class="reference internal" href="../library/sys.html#sys.setrecursionlimit" title="sys.setrecursionlimit"><tt class="xref py py-func docutils literal"><span class="pre">sys.setrecursionlimit()</span></tt></a>. The default value is 1000, and a rough maximum
+value for a given platform can be found by running a new script,
+<tt class="file docutils literal"><span class="pre">Misc/find_recursionlimit.py</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="porting-to-2-0">
+<h2>Porting to 2.0<a class="headerlink" href="#porting-to-2-0" title="Permalink to this headline">¶</a></h2>
+<p>New Python releases try hard to be compatible with previous releases, and the
+record has been pretty good.  However, some changes are considered useful
+enough, usually because they fix initial design decisions that turned out to be
+actively mistaken, that breaking backward compatibility can&#8217;t always be avoided.
+This section lists the changes in Python 2.0 that may cause old Python code to
+break.</p>
+<p>The change which will probably break the most code is tightening up the
+arguments accepted by some methods.  Some methods would take multiple arguments
+and treat them as a tuple, particularly various list methods such as
+<tt class="xref py py-meth docutils literal"><span class="pre">append()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">insert()</span></tt>. In earlier versions of Python, if <tt class="docutils literal"><span class="pre">L</span></tt> is
+a list, <tt class="docutils literal"><span class="pre">L.append(</span> <span class="pre">1,2</span> <span class="pre">)</span></tt> appends the tuple <tt class="docutils literal"><span class="pre">(1,2)</span></tt> to the list.  In Python
+2.0 this causes a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception to be raised, with the message:
+&#8216;append requires exactly 1 argument; 2 given&#8217;.  The fix is to simply add an
+extra set of parentheses to pass both values as a tuple:  <tt class="docutils literal"><span class="pre">L.append(</span> <span class="pre">(1,2)</span> <span class="pre">)</span></tt>.</p>
+<p>The earlier versions of these methods were more forgiving because they used an
+old function in Python&#8217;s C interface to parse their arguments; 2.0 modernizes
+them to use <tt class="xref py py-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt>, the current argument parsing function,
+which provides more helpful error messages and treats multi-argument calls as
+errors.  If you absolutely must use 2.0 but can&#8217;t fix your code, you can edit
+<tt class="file docutils literal"><span class="pre">Objects/listobject.c</span></tt> and define the preprocessor symbol
+<tt class="docutils literal"><span class="pre">NO_STRICT_LIST_APPEND</span></tt> to preserve the old behaviour; this isn&#8217;t recommended.</p>
+<p>Some of the functions in the <a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><tt class="xref py py-mod docutils literal"><span class="pre">socket</span></tt></a> module are still forgiving in this
+way.  For example, <tt class="xref py py-func docutils literal"><span class="pre">socket.connect(</span> <span class="pre">('hostname',</span> <span class="pre">25)</span> <span class="pre">)()</span></tt> is the correct
+form, passing a tuple representing an IP address, but <tt class="xref py py-func docutils literal"><span class="pre">socket.connect(</span>
+<span class="pre">'hostname',</span> <span class="pre">25</span> <span class="pre">)()</span></tt> also works. <tt class="xref py py-func docutils literal"><span class="pre">socket.connect_ex()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">socket.bind()</span></tt>
+are similarly easy-going.  2.0alpha1 tightened these functions up, but because
+the documentation actually used the erroneous multiple argument form, many
+people wrote code which would break with the stricter checking.  GvR backed out
+the changes in the face of public reaction, so for the <a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><tt class="xref py py-mod docutils literal"><span class="pre">socket</span></tt></a> module, the
+documentation was fixed and the multiple argument form is simply marked as
+deprecated; it <em>will</em> be tightened up again in a future Python version.</p>
+<p>The <tt class="docutils literal"><span class="pre">\x</span></tt> escape in string literals now takes exactly 2 hex digits.  Previously
+it would consume all the hex digits following the &#8216;x&#8217; and take the lowest 8 bits
+of the result, so <tt class="docutils literal"><span class="pre">\x123456</span></tt> was equivalent to <tt class="docutils literal"><span class="pre">\x56</span></tt>.</p>
+<p>The <a class="reference internal" href="../library/exceptions.html#exceptions.AttributeError" title="exceptions.AttributeError"><tt class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></tt></a> and <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> exceptions have a more friendly
+error message, whose text will be something like <tt class="docutils literal"><span class="pre">'Spam'</span> <span class="pre">instance</span> <span class="pre">has</span> <span class="pre">no</span>
+<span class="pre">attribute</span> <span class="pre">'eggs'</span></tt> or <tt class="docutils literal"><span class="pre">name</span> <span class="pre">'eggs'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">defined</span></tt>.  Previously the error
+message was just the missing attribute name <tt class="docutils literal"><span class="pre">eggs</span></tt>, and code written to take
+advantage of this fact will break in 2.0.</p>
+<p>Some work has been done to make integers and long integers a bit more
+interchangeable.  In 1.5.2, large-file support was added for Solaris, to allow
+reading files larger than 2 GiB; this made the <tt class="xref py py-meth docutils literal"><span class="pre">tell()</span></tt> method of file
+objects return a long integer instead of a regular integer.  Some code would
+subtract two file offsets and attempt to use the result to multiply a sequence
+or slice a string, but this raised a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>.  In 2.0, long integers
+can be used to multiply or slice a sequence, and it&#8217;ll behave as you&#8217;d
+intuitively expect it to; <tt class="docutils literal"><span class="pre">3L</span> <span class="pre">*</span> <span class="pre">'abc'</span></tt> produces &#8216;abcabcabc&#8217;, and
+<tt class="docutils literal"><span class="pre">(0,1,2,3)[2L:4L]</span></tt> produces (2,3). Long integers can also be used in various
+contexts where previously only integers were accepted, such as in the
+<tt class="xref py py-meth docutils literal"><span class="pre">seek()</span></tt> method of file objects, and in the formats supported by the <tt class="docutils literal"><span class="pre">%</span></tt>
+operator (<tt class="docutils literal"><span class="pre">%d</span></tt>, <tt class="docutils literal"><span class="pre">%i</span></tt>, <tt class="docutils literal"><span class="pre">%x</span></tt>, etc.).  For example, <tt class="docutils literal"><span class="pre">&quot;%d&quot;</span> <span class="pre">%</span> <span class="pre">2L**64</span></tt> will
+produce the string <tt class="docutils literal"><span class="pre">18446744073709551616</span></tt>.</p>
+<p>The subtlest long integer change of all is that the <a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a> of a long
+integer no longer has a trailing &#8216;L&#8217; character, though <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> still
+includes it.  The &#8216;L&#8217; annoyed many people who wanted to print long integers that
+looked just like regular integers, since they had to go out of their way to chop
+off the character.  This is no longer a problem in 2.0, but code which does
+<tt class="docutils literal"><span class="pre">str(longval)[:-1]</span></tt> and assumes the &#8216;L&#8217; is there, will now lose the final
+digit.</p>
+<p>Taking the <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> of a float now uses a different formatting precision
+than <a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a>.  <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> uses <tt class="docutils literal"><span class="pre">%.17g</span></tt> format string for C&#8217;s
+<tt class="xref py py-func docutils literal"><span class="pre">sprintf()</span></tt>, while <a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a> uses <tt class="docutils literal"><span class="pre">%.12g</span></tt> as before.  The effect is that
+<a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> may occasionally show more decimal places than  <a class="reference internal" href="../library/functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a>, for
+certain numbers.  For example, the number 8.1 can&#8217;t be represented exactly in
+binary, so <tt class="docutils literal"><span class="pre">repr(8.1)</span></tt> is <tt class="docutils literal"><span class="pre">'8.0999999999999996'</span></tt>, while str(8.1) is
+<tt class="docutils literal"><span class="pre">'8.1'</span></tt>.</p>
+<p>The <tt class="docutils literal"><span class="pre">-X</span></tt> command-line option, which turned all standard exceptions into
+strings instead of classes, has been removed; the standard exceptions will now
+always be classes.  The <a class="reference internal" href="../library/exceptions.html#module-exceptions" title="exceptions: Standard exception classes."><tt class="xref py py-mod docutils literal"><span class="pre">exceptions</span></tt></a> module containing the standard
+exceptions was translated from Python to a built-in C module, written by Barry
+Warsaw and Fredrik Lundh.</p>
+</div>
+<div class="section" id="extending-embedding-changes">
+<h2>Extending/Embedding Changes<a class="headerlink" href="#extending-embedding-changes" title="Permalink to this headline">¶</a></h2>
+<p>Some of the changes are under the covers, and will only be apparent to people
+writing C extension modules or embedding a Python interpreter in a larger
+application.  If you aren&#8217;t dealing with Python&#8217;s C API, you can safely skip
+this section.</p>
+<p>The version number of the Python C API was incremented, so C extensions compiled
+for 1.5.2 must be recompiled in order to work with 2.0.  On Windows, it&#8217;s not
+possible for Python 2.0 to import a third party extension built for Python 1.5.x
+due to how Windows DLLs work, so Python will raise an exception and the import
+will fail.</p>
+<p>Users of Jim Fulton&#8217;s ExtensionClass module will be pleased to find out that
+hooks have been added so that ExtensionClasses are now supported by
+<a class="reference internal" href="../library/functions.html#isinstance" title="isinstance"><tt class="xref py py-func docutils literal"><span class="pre">isinstance()</span></tt></a> and <a class="reference internal" href="../library/functions.html#issubclass" title="issubclass"><tt class="xref py py-func docutils literal"><span class="pre">issubclass()</span></tt></a>. This means you no longer have to
+remember to write code such as <tt class="docutils literal"><span class="pre">if</span> <span class="pre">type(obj)</span> <span class="pre">==</span> <span class="pre">myExtensionClass</span></tt>, but can use
+the more natural <tt class="docutils literal"><span class="pre">if</span> <span class="pre">isinstance(obj,</span> <span class="pre">myExtensionClass)</span></tt>.</p>
+<p>The <tt class="file docutils literal"><span class="pre">Python/importdl.c</span></tt> file, which was a mass of #ifdefs to support
+dynamic loading on many different platforms, was cleaned up and reorganised by
+Greg Stein.  <tt class="file docutils literal"><span class="pre">importdl.c</span></tt> is now quite small, and platform-specific code
+has been moved into a bunch of <tt class="file docutils literal"><span class="pre">Python/dynload_*.c</span></tt> files.  Another
+cleanup: there were also a number of <tt class="file docutils literal"><span class="pre">my*.h</span></tt> files in the Include/
+directory that held various portability hacks; they&#8217;ve been merged into a single
+file, <tt class="file docutils literal"><span class="pre">Include/pyport.h</span></tt>.</p>
+<p>Vladimir Marangozov&#8217;s long-awaited malloc restructuring was completed, to make
+it easy to have the Python interpreter use a custom allocator instead of C&#8217;s
+standard <tt class="xref py py-func docutils literal"><span class="pre">malloc()</span></tt>.  For documentation, read the comments in
+<tt class="file docutils literal"><span class="pre">Include/pymem.h</span></tt> and <tt class="file docutils literal"><span class="pre">Include/objimpl.h</span></tt>.  For the lengthy
+discussions during which the interface was hammered out, see the Web archives of
+the &#8216;patches&#8217; and &#8216;python-dev&#8217; lists at python.org.</p>
+<p>Recent versions of the GUSI development environment for MacOS support POSIX
+threads.  Therefore, Python&#8217;s POSIX threading support now works on the
+Macintosh.  Threading support using the user-space GNU <tt class="docutils literal"><span class="pre">pth</span></tt> library was also
+contributed.</p>
+<p>Threading support on Windows was enhanced, too.  Windows supports thread locks
+that use kernel objects only in case of contention; in the common case when
+there&#8217;s no contention, they use simpler functions which are an order of
+magnitude faster.  A threaded version of Python 1.5.2 on NT is twice as slow as
+an unthreaded version; with the 2.0 changes, the difference is only 10%.  These
+improvements were contributed by Yakov Markovitch.</p>
+<p>Python 2.0&#8217;s source now uses only ANSI C prototypes, so compiling Python now
+requires an ANSI C compiler, and can no longer be done using a compiler that
+only supports K&amp;R C.</p>
+<p>Previously the Python virtual machine used 16-bit numbers in its bytecode,
+limiting the size of source files.  In particular, this affected the maximum
+size of literal lists and dictionaries in Python source; occasionally people who
+are generating Python code would run into this limit.  A patch by Charles G.
+Waldman raises the limit from <tt class="docutils literal"><span class="pre">2^16</span></tt> to <tt class="docutils literal"><span class="pre">2^{32}</span></tt>.</p>
+<p>Three new convenience functions intended for adding constants to a module&#8217;s
+dictionary at module initialization time were added: <tt class="xref py py-func docutils literal"><span class="pre">PyModule_AddObject()</span></tt>,
+<tt class="xref py py-func docutils literal"><span class="pre">PyModule_AddIntConstant()</span></tt>, and <tt class="xref py py-func docutils literal"><span class="pre">PyModule_AddStringConstant()</span></tt>.  Each
+of these functions takes a module object, a null-terminated C string containing
+the name to be added, and a third argument for the value to be assigned to the
+name.  This third argument is, respectively, a Python object, a C long, or a C
+string.</p>
+<p>A wrapper API was added for Unix-style signal handlers. <tt class="xref py py-func docutils literal"><span class="pre">PyOS_getsig()</span></tt> gets
+a signal handler and <tt class="xref py py-func docutils literal"><span class="pre">PyOS_setsig()</span></tt> will set a new handler.</p>
+</div>
+<div class="section" id="distutils-making-modules-easy-to-install">
+<h2>Distutils: Making Modules Easy to Install<a class="headerlink" href="#distutils-making-modules-easy-to-install" title="Permalink to this headline">¶</a></h2>
+<p>Before Python 2.0, installing modules was a tedious affair &#8211; there was no way
+to figure out automatically where Python is installed, or what compiler options
+to use for extension modules.  Software authors had to go through an arduous
+ritual of editing Makefiles and configuration files, which only really work on
+Unix and leave Windows and MacOS unsupported.  Python users faced wildly
+differing installation instructions which varied between different extension
+packages, which made administering a Python installation something of  a chore.</p>
+<p>The SIG for distribution utilities, shepherded by Greg Ward, has created the
+Distutils, a system to make package installation much easier.  They form the
+<a class="reference internal" href="../library/distutils.html#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><tt class="xref py py-mod docutils literal"><span class="pre">distutils</span></tt></a> package, a new part of Python&#8217;s standard library. In the best
+case, installing a Python module from source will require the same steps: first
+you simply mean unpack the tarball or zip archive, and the run &#8220;<tt class="docutils literal"><span class="pre">python</span>
+<span class="pre">setup.py</span> <span class="pre">install</span></tt>&#8221;.  The platform will be automatically detected, the compiler
+will be recognized, C extension modules will be compiled, and the distribution
+installed into the proper directory.  Optional command-line arguments provide
+more control over the installation process, the distutils package offers many
+places to override defaults &#8211; separating the build from the install, building
+or installing in non-default directories, and more.</p>
+<p>In order to use the Distutils, you need to write a <tt class="file docutils literal"><span class="pre">setup.py</span></tt> script.  For
+the simple case, when the software contains only .py files, a minimal
+<tt class="file docutils literal"><span class="pre">setup.py</span></tt> can be just a few lines long:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
+<span class="n">setup</span> <span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s">&quot;1.0&quot;</span><span class="p">,</span>
+       <span class="n">py_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;module1&quot;</span><span class="p">,</span> <span class="s">&quot;module2&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <tt class="file docutils literal"><span class="pre">setup.py</span></tt> file isn&#8217;t much more complicated if the software consists
+of a few packages:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span>
+<span class="n">setup</span> <span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s">&quot;1.0&quot;</span><span class="p">,</span>
+       <span class="n">packages</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;package&quot;</span><span class="p">,</span> <span class="s">&quot;package.subpackage&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>A C extension can be the most complicated case; here&#8217;s an example taken from
+the PyXML package:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
+
+<span class="n">expat_extension</span> <span class="o">=</span> <span class="n">Extension</span><span class="p">(</span><span class="s">&#39;xml.parsers.pyexpat&#39;</span><span class="p">,</span>
+     <span class="n">define_macros</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;XML_NS&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)],</span>
+     <span class="n">include_dirs</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;extensions/expat/xmltok&#39;</span><span class="p">,</span>
+                      <span class="s">&#39;extensions/expat/xmlparse&#39;</span> <span class="p">],</span>
+     <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;extensions/pyexpat.c&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;extensions/expat/xmltok/xmltok.c&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;extensions/expat/xmltok/xmlrole.c&#39;</span><span class="p">,</span> <span class="p">]</span>
+       <span class="p">)</span>
+<span class="n">setup</span> <span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;PyXML&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s">&quot;0.5.4&quot;</span><span class="p">,</span>
+       <span class="n">ext_modules</span> <span class="o">=</span><span class="p">[</span> <span class="n">expat_extension</span> <span class="p">]</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>The Distutils can also take care of creating source and binary distributions.
+The &#8220;sdist&#8221; command, run by &#8220;<tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">sdist</span></tt>&#8216;, builds a source
+distribution such as <tt class="file docutils literal"><span class="pre">foo-1.0.tar.gz</span></tt>. Adding new commands isn&#8217;t
+difficult, &#8220;bdist_rpm&#8221; and &#8220;bdist_wininst&#8221; commands have already been
+contributed to create an RPM distribution and a Windows installer for the
+software, respectively.  Commands to create other distribution formats such as
+Debian packages and Solaris <tt class="file docutils literal"><span class="pre">.pkg</span></tt> files are in various stages of
+development.</p>
+<p>All this is documented in a new manual, <em>Distributing Python Modules</em>, that
+joins the basic set of Python documentation.</p>
+</div>
+<div class="section" id="xml-modules">
+<h2>XML Modules<a class="headerlink" href="#xml-modules" title="Permalink to this headline">¶</a></h2>
+<p>Python 1.5.2 included a simple XML parser in the form of the <tt class="xref py py-mod docutils literal"><span class="pre">xmllib</span></tt>
+module, contributed by Sjoerd Mullender.  Since 1.5.2&#8217;s release, two different
+interfaces for processing XML have become common: SAX2 (version 2 of the Simple
+API for XML) provides an event-driven interface with some similarities to
+<tt class="xref py py-mod docutils literal"><span class="pre">xmllib</span></tt>, and the DOM (Document Object Model) provides a tree-based
+interface, transforming an XML document into a tree of nodes that can be
+traversed and modified.  Python 2.0 includes a SAX2 interface and a stripped-
+down DOM interface as part of the <a class="reference internal" href="../library/xml.html#module-xml" title="xml: Package containing XML processing modules"><tt class="xref py py-mod docutils literal"><span class="pre">xml</span></tt></a> package. Here we will give a brief
+overview of these new interfaces; consult the Python documentation or the source
+code for complete details. The Python XML SIG is also working on improved
+documentation.</p>
+<div class="section" id="sax2-support">
+<h3>SAX2 Support<a class="headerlink" href="#sax2-support" title="Permalink to this headline">¶</a></h3>
+<p>SAX defines an event-driven interface for parsing XML.  To use SAX, you must
+write a SAX handler class.  Handler classes inherit from various classes
+provided by SAX, and override various methods that will then be called by the
+XML parser.  For example, the <tt class="xref py py-meth docutils literal"><span class="pre">startElement()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">endElement()</span></tt>
+methods are called for every starting and end tag encountered by the parser, the
+<tt class="xref py py-meth docutils literal"><span class="pre">characters()</span></tt> method is called for every chunk of character data, and so
+forth.</p>
+<p>The advantage of the event-driven approach is that the whole document doesn&#8217;t
+have to be resident in memory at any one time, which matters if you are
+processing really huge documents.  However, writing the SAX handler class can
+get very complicated if you&#8217;re trying to modify the document structure in some
+elaborate way.</p>
+<p>For example, this little example program defines a handler that prints a message
+for every starting and ending tag, and then parses the file <tt class="file docutils literal"><span class="pre">hamlet.xml</span></tt>
+using it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">xml</span> <span class="kn">import</span> <span class="n">sax</span>
+
+<span class="k">class</span> <span class="nc">SimpleHandler</span><span class="p">(</span><span class="n">sax</span><span class="o">.</span><span class="n">ContentHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">startElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;Start of element:&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">endElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;End of element:&#39;</span><span class="p">,</span> <span class="n">name</span>
+
+<span class="c"># Create a parser object</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">sax</span><span class="o">.</span><span class="n">make_parser</span><span class="p">()</span>
+
+<span class="c"># Tell it what handler to use</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">SimpleHandler</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">setContentHandler</span><span class="p">(</span> <span class="n">handler</span> <span class="p">)</span>
+
+<span class="c"># Parse a file!</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">&#39;hamlet.xml&#39;</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, consult the Python documentation, or the XML HOWTO at
+<a class="reference external" href="http://pyxml.sourceforge.net/topics/howto/xml-howto.html">http://pyxml.sourceforge.net/topics/howto/xml-howto.html</a>.</p>
+</div>
+<div class="section" id="dom-support">
+<h3>DOM Support<a class="headerlink" href="#dom-support" title="Permalink to this headline">¶</a></h3>
+<p>The Document Object Model is a tree-based representation for an XML document.  A
+top-level <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> instance is the root of the tree, and has a single
+child which is the top-level <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> instance. This <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt>
+has children nodes representing character data and any sub-elements, which may
+have further children of their own, and so forth.  Using the DOM you can
+traverse the resulting tree any way you like, access element and attribute
+values, insert and delete nodes, and convert the tree back into XML.</p>
+<p>The DOM is useful for modifying XML documents, because you can create a DOM
+tree, modify it by adding new nodes or rearranging subtrees, and then produce a
+new XML document as output.  You can also construct a DOM tree manually and
+convert it to XML, which can be a more flexible way of producing XML output than
+simply writing <tt class="docutils literal"><span class="pre">&lt;tag1&gt;</span></tt>...<tt class="docutils literal"><span class="pre">&lt;/tag1&gt;</span></tt> to a file.</p>
+<p>The DOM implementation included with Python lives in the <a class="reference internal" href="../library/xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><tt class="xref py py-mod docutils literal"><span class="pre">xml.dom.minidom</span></tt></a>
+module.  It&#8217;s a lightweight implementation of the Level 1 DOM with support for
+XML namespaces.  The  <tt class="xref py py-func docutils literal"><span class="pre">parse()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">parseString()</span></tt> convenience
+functions are provided for generating a DOM tree:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">xml.dom</span> <span class="kn">import</span> <span class="n">minidom</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">minidom</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s">&#39;hamlet.xml&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">doc</span></tt> is a <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt> instance.  <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt>, like all the other
+DOM classes such as <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">Text</span></tt>, is a subclass of the
+<tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> base class.  All the nodes in a DOM tree therefore support certain
+common methods, such as <tt class="xref py py-meth docutils literal"><span class="pre">toxml()</span></tt> which returns a string containing the XML
+representation of the node and its children.  Each class also has special
+methods of its own; for example, <tt class="xref py py-class docutils literal"><span class="pre">Element</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">Document</span></tt>
+instances have a method to find all child elements with a given tag name.
+Continuing from the previous 2-line example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">perslist</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">getElementsByTagName</span><span class="p">(</span> <span class="s">&#39;PERSONA&#39;</span> <span class="p">)</span>
+<span class="k">print</span> <span class="n">perslist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">toxml</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">perslist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">toxml</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For the <em>Hamlet</em> XML file, the above few lines output:</p>
+<div class="highlight-python"><pre>&lt;PERSONA&gt;CLAUDIUS, king of Denmark. &lt;/PERSONA&gt;
+&lt;PERSONA&gt;HAMLET, son to the late, and nephew to the present king.&lt;/PERSONA&gt;</pre>
+</div>
+<p>The root element of the document is available as <tt class="docutils literal"><span class="pre">doc.documentElement</span></tt>, and
+its children can be easily modified by deleting, adding, or removing nodes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">root</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">documentElement</span>
+
+<span class="c"># Remove the first child</span>
+<span class="n">root</span><span class="o">.</span><span class="n">removeChild</span><span class="p">(</span> <span class="n">root</span><span class="o">.</span><span class="n">childNodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+<span class="c"># Move the new first child to the end</span>
+<span class="n">root</span><span class="o">.</span><span class="n">appendChild</span><span class="p">(</span> <span class="n">root</span><span class="o">.</span><span class="n">childNodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+
+<span class="c"># Insert the new first child (originally,</span>
+<span class="c"># the third child) before the 20th child.</span>
+<span class="n">root</span><span class="o">.</span><span class="n">insertBefore</span><span class="p">(</span> <span class="n">root</span><span class="o">.</span><span class="n">childNodes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">root</span><span class="o">.</span><span class="n">childNodes</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Again, I will refer you to the Python documentation for a complete listing of
+the different <tt class="xref py py-class docutils literal"><span class="pre">Node</span></tt> classes and their various methods.</p>
+</div>
+<div class="section" id="relationship-to-pyxml">
+<h3>Relationship to PyXML<a class="headerlink" href="#relationship-to-pyxml" title="Permalink to this headline">¶</a></h3>
+<p>The XML Special Interest Group has been working on XML-related Python code for a
+while.  Its code distribution, called PyXML, is available from the SIG&#8217;s Web
+pages at <a class="reference external" href="http://www.python.org/sigs/xml-sig/">http://www.python.org/sigs/xml-sig/</a>. The PyXML distribution also used
+the package name <tt class="docutils literal"><span class="pre">xml</span></tt>.  If you&#8217;ve written programs that used PyXML, you&#8217;re
+probably wondering about its compatibility with the 2.0 <a class="reference internal" href="../library/xml.html#module-xml" title="xml: Package containing XML processing modules"><tt class="xref py py-mod docutils literal"><span class="pre">xml</span></tt></a> package.</p>
+<p>The answer is that Python 2.0&#8217;s <a class="reference internal" href="../library/xml.html#module-xml" title="xml: Package containing XML processing modules"><tt class="xref py py-mod docutils literal"><span class="pre">xml</span></tt></a> package isn&#8217;t compatible with PyXML,
+but can be made compatible by installing a recent version PyXML.  Many
+applications can get by with the XML support that is included with Python 2.0,
+but more complicated applications will require that the full PyXML package will
+be installed.  When installed, PyXML versions 0.6.0 or greater will replace the
+<a class="reference internal" href="../library/xml.html#module-xml" title="xml: Package containing XML processing modules"><tt class="xref py py-mod docutils literal"><span class="pre">xml</span></tt></a> package shipped with Python, and will be a strict superset of the
+standard package, adding a bunch of additional features.  Some of the additional
+features in PyXML include:</p>
+<ul class="simple">
+<li>4DOM, a full DOM implementation from FourThought, Inc.</li>
+<li>The xmlproc validating parser, written by Lars Marius Garshol.</li>
+<li>The <tt class="xref py py-mod docutils literal"><span class="pre">sgmlop</span></tt> parser accelerator module, written by Fredrik Lundh.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-changes">
+<h2>Module changes<a class="headerlink" href="#module-changes" title="Permalink to this headline">¶</a></h2>
+<p>Lots of improvements and bugfixes were made to Python&#8217;s extensive standard
+library; some of the affected modules include <a class="reference internal" href="../library/readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">readline</span></tt></a>,
+<a class="reference internal" href="../library/configparser.html#module-ConfigParser" title="ConfigParser: Configuration file parser."><tt class="xref py py-mod docutils literal"><span class="pre">ConfigParser</span></tt></a>, <a class="reference internal" href="../library/cgi.html#module-cgi" title="cgi: Helpers for running Python scripts via the Common Gateway Interface."><tt class="xref py py-mod docutils literal"><span class="pre">cgi</span></tt></a>, <a class="reference internal" href="../library/calendar.html#module-calendar" title="calendar: Functions for working with calendars, including some emulation of the Unix cal program."><tt class="xref py py-mod docutils literal"><span class="pre">calendar</span></tt></a>, <a class="reference internal" href="../library/posix.html#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a>, <a class="reference internal" href="../library/readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">readline</span></tt></a>,
+<tt class="xref py py-mod docutils literal"><span class="pre">xmllib</span></tt>, <a class="reference internal" href="../library/aifc.html#module-aifc" title="aifc: Read and write audio files in AIFF or AIFC format."><tt class="xref py py-mod docutils literal"><span class="pre">aifc</span></tt></a>, <tt class="xref py py-mod docutils literal"><span class="pre">chunk,</span> <span class="pre">wave</span></tt>, <a class="reference internal" href="../library/random.html#module-random" title="random: Generate pseudo-random numbers with various common distributions."><tt class="xref py py-mod docutils literal"><span class="pre">random</span></tt></a>, <a class="reference internal" href="../library/shelve.html#module-shelve" title="shelve: Python object persistence."><tt class="xref py py-mod docutils literal"><span class="pre">shelve</span></tt></a>,
+and <a class="reference internal" href="../library/nntplib.html#module-nntplib" title="nntplib: NNTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">nntplib</span></tt></a>.  Consult the CVS logs for the exact patch-by-patch details.</p>
+<p>Brian Gallew contributed OpenSSL support for the <a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><tt class="xref py py-mod docutils literal"><span class="pre">socket</span></tt></a> module.  OpenSSL
+is an implementation of the Secure Socket Layer, which encrypts the data being
+sent over a socket.  When compiling Python, you can edit <tt class="file docutils literal"><span class="pre">Modules/Setup</span></tt>
+to include SSL support, which adds an additional function to the <a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><tt class="xref py py-mod docutils literal"><span class="pre">socket</span></tt></a>
+module: <tt class="xref py py-func docutils literal"><span class="pre">socket.ssl(socket,</span> <span class="pre">keyfile,</span> <span class="pre">certfile)()</span></tt>, which takes a socket
+object and returns an SSL socket.  The <a class="reference internal" href="../library/httplib.html#module-httplib" title="httplib: HTTP and HTTPS protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">httplib</span></tt></a> and <a class="reference internal" href="../library/urllib.html#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> modules
+were also changed to support <tt class="docutils literal"><span class="pre">https://</span></tt> URLs, though no one has implemented
+FTP or SMTP over SSL.</p>
+<p>The <a class="reference internal" href="../library/httplib.html#module-httplib" title="httplib: HTTP and HTTPS protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">httplib</span></tt></a> module has been rewritten by Greg Stein to support HTTP/1.1.
+Backward compatibility with the 1.5 version of <a class="reference internal" href="../library/httplib.html#module-httplib" title="httplib: HTTP and HTTPS protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">httplib</span></tt></a> is provided,
+though using HTTP/1.1 features such as pipelining will require rewriting code to
+use a different set of interfaces.</p>
+<p>The <a class="reference internal" href="../library/tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> module now supports Tcl/Tk version 8.1, 8.2, or 8.3, and
+support for the older 7.x versions has been dropped.  The Tkinter module now
+supports displaying Unicode strings in Tk widgets. Also, Fredrik Lundh
+contributed an optimization which makes operations like <tt class="docutils literal"><span class="pre">create_line</span></tt> and
+<tt class="docutils literal"><span class="pre">create_polygon</span></tt> much faster, especially when using lots of coordinates.</p>
+<p>The <a class="reference internal" href="../library/curses.html#module-curses" title="curses: An interface to the curses library, providing portable terminal handling. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">curses</span></tt></a> module has been greatly extended, starting from Oliver
+Andrich&#8217;s enhanced version, to provide many additional functions from ncurses
+and SYSV curses, such as colour, alternative character set support, pads, and
+mouse support.  This means the module is no longer compatible with operating
+systems that only have BSD curses, but there don&#8217;t seem to be any currently
+maintained OSes that fall into this category.</p>
+<p>As mentioned in the earlier discussion of 2.0&#8217;s Unicode support, the underlying
+implementation of the regular expressions provided by the <a class="reference internal" href="../library/re.html#module-re" title="re: Regular expression operations."><tt class="xref py py-mod docutils literal"><span class="pre">re</span></tt></a> module has
+been changed.  SRE, a new regular expression engine written by Fredrik Lundh and
+partially funded by Hewlett Packard, supports matching against both 8-bit
+strings and Unicode strings.</p>
+</div>
+<div class="section" id="new-modules">
+<h2>New modules<a class="headerlink" href="#new-modules" title="Permalink to this headline">¶</a></h2>
+<p>A number of new modules were added.  We&#8217;ll simply list them with brief
+descriptions; consult the 2.0 documentation for the details of a particular
+module.</p>
+<ul class="simple">
+<li><a class="reference internal" href="../library/atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a>:  For registering functions to be called before the Python
+interpreter exits. Code that currently sets <tt class="docutils literal"><span class="pre">sys.exitfunc</span></tt> directly should be
+changed to  use the <a class="reference internal" href="../library/atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> module instead, importing <a class="reference internal" href="../library/atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> and
+calling <a class="reference internal" href="../library/atexit.html#atexit.register" title="atexit.register"><tt class="xref py py-func docutils literal"><span class="pre">atexit.register()</span></tt></a> with  the function to be called on exit.
+(Contributed by Skip Montanaro.)</li>
+<li><a class="reference internal" href="../library/codecs.html#module-codecs" title="codecs: Encode and decode data and streams."><tt class="xref py py-mod docutils literal"><span class="pre">codecs</span></tt></a>, <tt class="xref py py-mod docutils literal"><span class="pre">encodings</span></tt>, <a class="reference internal" href="../library/unicodedata.html#module-unicodedata" title="unicodedata: Access the Unicode Database."><tt class="xref py py-mod docutils literal"><span class="pre">unicodedata</span></tt></a>:  Added as part of the new
+Unicode support.</li>
+<li><a class="reference internal" href="../library/filecmp.html#module-filecmp" title="filecmp: Compare files efficiently."><tt class="xref py py-mod docutils literal"><span class="pre">filecmp</span></tt></a>: Supersedes the old <a class="reference internal" href="../library/functions.html#cmp" title="cmp"><tt class="xref py py-mod docutils literal"><span class="pre">cmp</span></tt></a>, <tt class="xref py py-mod docutils literal"><span class="pre">cmpcache</span></tt> and
+<tt class="xref py py-mod docutils literal"><span class="pre">dircmp</span></tt> modules, which have now become deprecated. (Contributed by Gordon
+MacMillan and Moshe Zadka.)</li>
+<li><a class="reference internal" href="../library/gettext.html#module-gettext" title="gettext: Multilingual internationalization services."><tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt></a>: This module provides internationalization (I18N) and
+localization (L10N) support for Python programs by providing an interface to the
+GNU gettext message catalog library. (Integrated by Barry Warsaw, from separate
+contributions by Martin  von Löwis, Peter Funk, and James Henstridge.)</li>
+<li><tt class="xref py py-mod docutils literal"><span class="pre">linuxaudiodev</span></tt>: Support for the <tt class="file docutils literal"><span class="pre">/dev/audio</span></tt> device on Linux, a
+twin to the existing <a class="reference internal" href="../library/sunaudio.html#module-sunaudiodev" title="sunaudiodev: Access to Sun audio hardware. (deprecated) (SunOS)"><tt class="xref py py-mod docutils literal"><span class="pre">sunaudiodev</span></tt></a> module. (Contributed by Peter Bosch,
+with fixes by Jeremy Hylton.)</li>
+<li><a class="reference internal" href="../library/mmap.html#module-mmap" title="mmap: Interface to memory-mapped files for Unix and Windows."><tt class="xref py py-mod docutils literal"><span class="pre">mmap</span></tt></a>: An interface to memory-mapped files on both Windows and Unix.  A
+file&#8217;s contents can be mapped directly into memory, at which point it behaves
+like a mutable string, so its contents can be read and modified.  They can even
+be passed to functions that expect ordinary strings, such as the <a class="reference internal" href="../library/re.html#module-re" title="re: Regular expression operations."><tt class="xref py py-mod docutils literal"><span class="pre">re</span></tt></a>
+module. (Contributed by Sam Rushing, with some extensions by A.M. Kuchling.)</li>
+<li><tt class="xref py py-mod docutils literal"><span class="pre">pyexpat</span></tt>: An interface to the Expat XML parser. (Contributed by Paul
+Prescod.)</li>
+<li><a class="reference internal" href="../library/robotparser.html#module-robotparser" title="robotparser: Loads a robots.txt file and answers questions about fetchability of other URLs."><tt class="xref py py-mod docutils literal"><span class="pre">robotparser</span></tt></a>: Parse a <tt class="file docutils literal"><span class="pre">robots.txt</span></tt> file, which is used for writing
+Web spiders that politely avoid certain areas of a Web site.  The parser accepts
+the contents of a <tt class="file docutils literal"><span class="pre">robots.txt</span></tt> file, builds a set of rules from it, and
+can then answer questions about the fetchability of a given URL.  (Contributed
+by Skip Montanaro.)</li>
+<li><a class="reference internal" href="../library/tabnanny.html#module-tabnanny" title="tabnanny: Tool for detecting white space related problems in Python source files in a directory tree."><tt class="xref py py-mod docutils literal"><span class="pre">tabnanny</span></tt></a>: A module/script to  check Python source code for ambiguous
+indentation. (Contributed by Tim Peters.)</li>
+<li><a class="reference internal" href="../library/userdict.html#module-UserString" title="UserString: Class wrapper for string objects."><tt class="xref py py-mod docutils literal"><span class="pre">UserString</span></tt></a>: A base class useful for deriving objects that behave like
+strings.</li>
+<li><a class="reference internal" href="../library/webbrowser.html#module-webbrowser" title="webbrowser: Easy-to-use controller for Web browsers."><tt class="xref py py-mod docutils literal"><span class="pre">webbrowser</span></tt></a>: A module that provides a platform independent way to launch
+a web browser on a specific URL. For each platform, various browsers are tried
+in a specific order. The user can alter which browser is launched by setting the
+<em>BROWSER</em> environment variable.  (Originally inspired by Eric S. Raymond&#8217;s patch
+to <a class="reference internal" href="../library/urllib.html#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> which added similar functionality, but the final module comes
+from code originally  implemented by Fred Drake as
+<tt class="file docutils literal"><span class="pre">Tools/idle/BrowserControl.py</span></tt>, and adapted for the standard library by
+Fred.)</li>
+<li><a class="reference internal" href="../library/_winreg.html#module-_winreg" title="_winreg: Routines and objects for manipulating the Windows registry. (Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">_winreg</span></tt></a>: An interface to the Windows registry.  <a class="reference internal" href="../library/_winreg.html#module-_winreg" title="_winreg: Routines and objects for manipulating the Windows registry. (Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">_winreg</span></tt></a> is an
+adaptation of functions that have been part of PythonWin since 1995, but has now
+been added to the core  distribution, and enhanced to support Unicode.
+<a class="reference internal" href="../library/_winreg.html#module-_winreg" title="_winreg: Routines and objects for manipulating the Windows registry. (Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">_winreg</span></tt></a> was written by Bill Tutt and Mark Hammond.</li>
+<li><a class="reference internal" href="../library/zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><tt class="xref py py-mod docutils literal"><span class="pre">zipfile</span></tt></a>: A module for reading and writing ZIP-format archives.  These
+are archives produced by <strong class="program">PKZIP</strong> on DOS/Windows or <strong class="program">zip</strong> on
+Unix, not to be confused with <strong class="program">gzip</strong>-format files (which are
+supported by the <a class="reference internal" href="../library/gzip.html#module-gzip" title="gzip: Interfaces for gzip compression and decompression using file objects."><tt class="xref py py-mod docutils literal"><span class="pre">gzip</span></tt></a> module) (Contributed by James C. Ahlstrom.)</li>
+<li><a class="reference internal" href="../library/imputil.html#module-imputil" title="imputil: Manage and augment the import process. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">imputil</span></tt></a>: A module that provides a simpler way for writing customised
+import hooks, in comparison to the existing <tt class="xref py py-mod docutils literal"><span class="pre">ihooks</span></tt> module.  (Implemented
+by Greg Stein, with much discussion on python-dev along the way.)</li>
+</ul>
+</div>
+<div class="section" id="idle-improvements">
+<h2>IDLE Improvements<a class="headerlink" href="#idle-improvements" title="Permalink to this headline">¶</a></h2>
+<p>IDLE is the official Python cross-platform IDE, written using Tkinter. Python
+2.0 includes IDLE 0.6, which adds a number of new features and improvements.  A
+partial list:</p>
+<ul class="simple">
+<li>UI improvements and optimizations, especially in the area of syntax
+highlighting and auto-indentation.</li>
+<li>The class browser now shows more information, such as the top level functions
+in a module.</li>
+<li>Tab width is now a user settable option. When opening an existing Python file,
+IDLE automatically detects the indentation conventions, and adapts.</li>
+<li>There is now support for calling browsers on various platforms, used to open
+the Python documentation in a browser.</li>
+<li>IDLE now has a command line, which is largely similar to  the vanilla Python
+interpreter.</li>
+<li>Call tips were added in many places.</li>
+<li>IDLE can now be installed as a package.</li>
+<li>In the editor window, there is now a line/column bar at the bottom.</li>
+<li>Three new keystroke commands: Check module (Alt-F5), Import module (F5) and
+Run script (Ctrl-F5).</li>
+</ul>
+</div>
+<div class="section" id="deleted-and-deprecated-modules">
+<h2>Deleted and Deprecated Modules<a class="headerlink" href="#deleted-and-deprecated-modules" title="Permalink to this headline">¶</a></h2>
+<p>A few modules have been dropped because they&#8217;re obsolete, or because there are
+now better ways to do the same thing.  The <tt class="xref py py-mod docutils literal"><span class="pre">stdwin</span></tt> module is gone; it was
+for a platform-independent windowing toolkit that&#8217;s no longer developed.</p>
+<p>A number of modules have been moved to the <tt class="file docutils literal"><span class="pre">lib-old</span></tt> subdirectory:
+<a class="reference internal" href="../library/functions.html#cmp" title="cmp"><tt class="xref py py-mod docutils literal"><span class="pre">cmp</span></tt></a>, <tt class="xref py py-mod docutils literal"><span class="pre">cmpcache</span></tt>, <tt class="xref py py-mod docutils literal"><span class="pre">dircmp</span></tt>, <tt class="xref py py-mod docutils literal"><span class="pre">dump</span></tt>,  <tt class="xref py py-mod docutils literal"><span class="pre">find</span></tt>,
+<tt class="xref py py-mod docutils literal"><span class="pre">grep</span></tt>, <tt class="xref py py-mod docutils literal"><span class="pre">packmail</span></tt>,  <tt class="xref py py-mod docutils literal"><span class="pre">poly</span></tt>, <tt class="xref py py-mod docutils literal"><span class="pre">util</span></tt>, <tt class="xref py py-mod docutils literal"><span class="pre">whatsound</span></tt>,
+<tt class="xref py py-mod docutils literal"><span class="pre">zmod</span></tt>.  If you have code which relies on a module  that&#8217;s been moved to
+<tt class="file docutils literal"><span class="pre">lib-old</span></tt>, you can simply add that directory to <tt class="docutils literal"><span class="pre">sys.path</span></tt>   to get them
+back, but you&#8217;re encouraged to update any code that uses these modules.</p>
+</div>
+<div class="section" id="acknowledgements">
+<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
+<p>The authors would like to thank the following people for offering suggestions on
+various drafts of this article: David Bolen, Mark Hammond, Gregg Hauser, Jeremy
+Hylton, Fredrik Lundh, Detlef Lannert, Aahz Maruch, Skip Montanaro, Vladimir
+Marangozov, Tobias Polzin, Guido van Rossum, Neil Schemenauer, and Russ Schmidt.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">What&#8217;s New in Python 2.0</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#what-about-python-1-6">What About Python 1.6?</a></li>
+<li><a class="reference internal" href="#new-development-process">New Development Process</a></li>
+<li><a class="reference internal" href="#unicode">Unicode</a></li>
+<li><a class="reference internal" href="#list-comprehensions">List Comprehensions</a></li>
+<li><a class="reference internal" href="#augmented-assignment">Augmented Assignment</a></li>
+<li><a class="reference internal" href="#string-methods">String Methods</a></li>
+<li><a class="reference internal" href="#garbage-collection-of-cycles">Garbage Collection of Cycles</a></li>
+<li><a class="reference internal" href="#other-core-changes">Other Core Changes</a><ul>
+<li><a class="reference internal" href="#minor-language-changes">Minor Language Changes</a></li>
+<li><a class="reference internal" href="#changes-to-built-in-functions">Changes to Built-in Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#porting-to-2-0">Porting to 2.0</a></li>
+<li><a class="reference internal" href="#extending-embedding-changes">Extending/Embedding Changes</a></li>
+<li><a class="reference internal" href="#distutils-making-modules-easy-to-install">Distutils: Making Modules Easy to Install</a></li>
+<li><a class="reference internal" href="#xml-modules">XML Modules</a><ul>
+<li><a class="reference internal" href="#sax2-support">SAX2 Support</a></li>
+<li><a class="reference internal" href="#dom-support">DOM Support</a></li>
+<li><a class="reference internal" href="#relationship-to-pyxml">Relationship to PyXML</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-changes">Module changes</a></li>
+<li><a class="reference internal" href="#new-modules">New modules</a></li>
+<li><a class="reference internal" href="#idle-improvements">IDLE Improvements</a></li>
+<li><a class="reference internal" href="#deleted-and-deprecated-modules">Deleted and Deprecated Modules</a></li>
+<li><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="2.1.html"
+                        title="previous chapter">What&#8217;s New in Python 2.1</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../tutorial/index.html"
+                        title="next chapter">The Python Tutorial</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/whatsnew/2.0.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../tutorial/index.html" title="The Python Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="2.1.html" title="What’s New in Python 2.1"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >What&#8217;s New in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

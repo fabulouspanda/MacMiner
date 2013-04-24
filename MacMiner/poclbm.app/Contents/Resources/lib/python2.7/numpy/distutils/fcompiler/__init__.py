@@ -213,6 +213,10 @@ class FCompiler(CCompiler):
     # command/{build_ext.py, build_clib.py, config.py} files.
     c_compiler = None
 
+    # extra_{f77,f90}_compile_args are set by build_ext.build_extension method
+    extra_f77_compile_args = []
+    extra_f90_compile_args = []
+
     def __init__(self, *args, **kw):
         CCompiler.__init__(self, *args, **kw)
         self.distutils_vars = self.distutils_vars.clone(self._environment_hook)
@@ -560,18 +564,21 @@ class FCompiler(CCompiler):
             flavor = ':f77'
             compiler = self.compiler_f77
             src_flags = get_f77flags(src)
+            extra_compile_args = self.extra_f77_compile_args or []
         elif is_free_format(src):
             flavor = ':f90'
             compiler = self.compiler_f90
             if compiler is None:
                 raise DistutilsExecError('f90 not supported by %s needed for %s'\
                       % (self.__class__.__name__,src))
+            extra_compile_args = self.extra_f90_compile_args or []
         else:
             flavor = ':fix'
             compiler = self.compiler_fix
             if compiler is None:
                 raise DistutilsExecError('f90 (fixed) not supported by %s needed for %s'\
                       % (self.__class__.__name__,src))
+            extra_compile_args = self.extra_f90_compile_args or []
         if self.object_switch[-1]==' ':
             o_args = [self.object_switch.strip(),obj]
         else:
@@ -580,13 +587,17 @@ class FCompiler(CCompiler):
         assert self.compile_switch.strip()
         s_args = [self.compile_switch, src]
 
+        if extra_compile_args:
+            log.info('extra %s options: %r' \
+                     % (flavor[1:], ' '.join(extra_compile_args)))
+
         extra_flags = src_flags.get(self.compiler_type,[])
         if extra_flags:
             log.info('using compile options from source: %r' \
                      % ' '.join(extra_flags))
 
         command = compiler + cc_args + extra_flags + s_args + o_args \
-                  + extra_postargs
+                  + extra_postargs + extra_compile_args
 
         display = '%s: %s' % (os.path.basename(compiler[0]) + flavor,
                               src)
@@ -695,16 +706,16 @@ _default_compilers = (
     ('win32', ('gnu','intelv','absoft','compaqv','intelev','gnu95','g95',
                'intelvem', 'intelem')),
     ('cygwin.*', ('gnu','intelv','absoft','compaqv','intelev','gnu95','g95')),
-    ('linux.*', ('gnu','intel','lahey','pg','absoft','nag','vast','compaq',
-                'intele','intelem','gnu95','g95','pathf95')),
-    ('darwin.*', ('nag', 'absoft', 'ibm', 'intel', 'gnu', 'gnu95', 'g95', 'pg')),
+    ('linux.*', ('gnu95','intel','lahey','pg','absoft','nag','vast','compaq',
+                'intele','intelem','gnu','g95','pathf95')),
+    ('darwin.*', ('gnu95', 'nag', 'absoft', 'ibm', 'intel', 'gnu', 'g95', 'pg')),
     ('sunos.*', ('sun','gnu','gnu95','g95')),
     ('irix.*', ('mips','gnu','gnu95',)),
     ('aix.*', ('ibm','gnu','gnu95',)),
     # os.name mappings
     ('posix', ('gnu','gnu95',)),
     ('nt', ('gnu','gnu95',)),
-    ('mac', ('gnu','gnu95','pg')),
+    ('mac', ('gnu95','gnu','pg')),
     )
 
 fcompiler_class = None
@@ -803,6 +814,9 @@ def get_default_fcompiler(osname=None, platform=None, requiref90=False,
                                               c_compiler=c_compiler)
     return compiler_type
 
+# Flag to avoid rechecking for Fortran compiler every time
+failed_fcompiler = False
+
 def new_fcompiler(plat=None,
                   compiler=None,
                   verbose=0,
@@ -813,6 +827,10 @@ def new_fcompiler(plat=None,
     """Generate an instance of some FCompiler subclass for the supplied
     platform/compiler combination.
     """
+    global failed_fcompiler
+    if failed_fcompiler:
+        return None
+
     load_all_fcompiler_classes()
     if plat is None:
         plat = os.name
@@ -830,6 +848,7 @@ def new_fcompiler(plat=None,
             msg = msg + " Supported compilers are: %s)" \
                   % (','.join(fcompiler_class.keys()))
         log.warn(msg)
+        failed_fcompiler = True
         return None
 
     compiler = klass(verbose=verbose, dry_run=dry_run, force=force)
@@ -960,6 +979,8 @@ def get_f77flags(src):
         flags[fcname] = split_quoted(fflags)
     f.close()
     return flags
+
+# TODO: implement get_f90flags and use it in _compile similarly to get_f77flags
 
 if __name__ == '__main__':
     show_fcompilers()

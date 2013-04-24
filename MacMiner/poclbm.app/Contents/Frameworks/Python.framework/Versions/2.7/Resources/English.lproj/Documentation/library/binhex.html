@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.13. binhex — Encode and decode binhex4 files &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="18. Internet Data Handling" href="netdata.html" />
+    <link rel="next" title="18.14. binascii — Convert between binary and ASCII" href="binascii.html" />
+    <link rel="prev" title="18.12. base64 — RFC 3548: Base16, Base32, Base64 Data Encodings" href="base64.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="binascii.html" title="18.14. binascii — Convert between binary and ASCII"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="base64.html" title="18.12. base64 — RFC 3548: Base16, Base32, Base64 Data Encodings"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-binhex">
+<span id="binhex-encode-and-decode-binhex4-files"></span><h1>18.13. <a class="reference internal" href="#module-binhex" title="binhex: Encode and decode files in binhex4 format."><tt class="xref py py-mod docutils literal"><span class="pre">binhex</span></tt></a> &#8212; Encode and decode binhex4 files<a class="headerlink" href="#module-binhex" title="Permalink to this headline">¶</a></h1>
+<p>This module encodes and decodes files in binhex4 format, a format allowing
+representation of Macintosh files in ASCII.  On the Macintosh, both forks of a
+file and the finder information are encoded (or decoded), on other platforms
+only the data fork is handled.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In Python 3.x, special Macintosh support has been removed.</p>
+</div>
+<p>The <a class="reference internal" href="#module-binhex" title="binhex: Encode and decode files in binhex4 format."><tt class="xref py py-mod docutils literal"><span class="pre">binhex</span></tt></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="binhex.binhex">
+<tt class="descclassname">binhex.</tt><tt class="descname">binhex</tt><big>(</big><em>input</em>, <em>output</em><big>)</big><a class="headerlink" href="#binhex.binhex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a binary file with filename <em>input</em> to binhex file <em>output</em>. The
+<em>output</em> parameter can either be a filename or a file-like object (any object
+supporting a <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt> method).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="binhex.hexbin">
+<tt class="descclassname">binhex.</tt><tt class="descname">hexbin</tt><big>(</big><em>input</em><span class="optional">[</span>, <em>output</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#binhex.hexbin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a binhex file <em>input</em>. <em>input</em> may be a filename or a file-like object
+supporting <tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt> methods. The resulting file is written
+to a file named <em>output</em>, unless the argument is omitted in which case the
+output filename is read from the binhex file.</p>
+</dd></dl>
+
+<p>The following exception is also defined:</p>
+<dl class="exception">
+<dt id="binhex.Error">
+<em class="property">exception </em><tt class="descclassname">binhex.</tt><tt class="descname">Error</tt><a class="headerlink" href="#binhex.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when something can&#8217;t be encoded using the binhex format (for
+example, a filename is too long to fit in the filename field), or when input is
+not properly encoded binhex data.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="binascii.html#module-binascii" title="binascii: Tools for converting between binary and various ASCII-encoded binary representations."><tt class="xref py py-mod docutils literal"><span class="pre">binascii</span></tt></a></dt>
+<dd>Support module containing ASCII-to-binary and binary-to-ASCII conversions.</dd>
+</dl>
+</div>
+<div class="section" id="notes">
+<span id="binhex-notes"></span><h2>18.13.1. Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>There is an alternative, more powerful interface to the coder and decoder, see
+the source for details.</p>
+<p>If you code or decode textfiles on non-Macintosh platforms they will still use
+the old Macintosh newline convention (carriage-return as end of line).</p>
+<p>As of this writing, <a class="reference internal" href="#binhex.hexbin" title="binhex.hexbin"><tt class="xref py py-func docutils literal"><span class="pre">hexbin()</span></tt></a> appears to not work in all cases.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.13. <tt class="docutils literal"><span class="pre">binhex</span></tt> &#8212; Encode and decode binhex4 files</a><ul>
+<li><a class="reference internal" href="#notes">18.13.1. Notes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="base64.html"
+                        title="previous chapter">18.12. <tt class="docutils literal docutils literal"><span class="pre">base64</span></tt> &#8212; RFC 3548: Base16, Base32, Base64 Data Encodings</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="binascii.html"
+                        title="next chapter">18.14. <tt class="docutils literal docutils literal"><span class="pre">binascii</span></tt> &#8212; Convert between binary and ASCII</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/binhex.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="binascii.html" title="18.14. binascii — Convert between binary and ASCII"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="base64.html" title="18.12. base64 — RFC 3548: Base16, Base32, Base64 Data Encodings"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

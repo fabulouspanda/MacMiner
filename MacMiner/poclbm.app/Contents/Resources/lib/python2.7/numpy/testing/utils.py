@@ -16,7 +16,8 @@ __all__ = ['assert_equal', 'assert_almost_equal','assert_approx_equal',
            'decorate_methods', 'jiffies', 'memusage', 'print_assert_equal',
            'raises', 'rand', 'rundocs', 'runstring', 'verbose', 'measure',
            'assert_', 'assert_array_almost_equal_nulp',
-           'assert_array_max_ulp', 'assert_warns', 'assert_allclose']
+           'assert_array_max_ulp', 'assert_warns', 'assert_no_warnings',
+           'assert_allclose']
 
 verbose = 0
 
@@ -341,9 +342,8 @@ def print_assert_equal(test_string,actual,desired):
 
     """
     import pprint
-    try:
-        assert(actual == desired)
-    except AssertionError:
+
+    if not (actual == desired):
         import cStringIO
         msg = cStringIO.StringIO()
         msg.write(test_string)
@@ -568,12 +568,12 @@ def assert_approx_equal(actual,desired,significant=7,err_msg='',verbose=True):
 
 def assert_array_compare(comparison, x, y, err_msg='', verbose=True,
                          header=''):
-    from numpy.core import array, isnan, isinf, any
+    from numpy.core import array, isnan, isinf, any, all, inf
     x = array(x, copy=False, subok=True)
     y = array(y, copy=False, subok=True)
 
     def isnumber(x):
-        return x.dtype.char in '?bhilqpBHILQPfdgFDG'
+        return x.dtype.char in '?bhilqpBHILQPefdgFDG'
 
     def chk_same_position(x_id, y_id, hasval='nan'):
         """Handling nan/inf: check that x and y have the nan/inf at the same
@@ -599,22 +599,31 @@ def assert_array_compare(comparison, x, y, err_msg='', verbose=True,
             if not cond :
                 raise AssertionError(msg)
 
-        if (isnumber(x) and isnumber(y)) and (any(isnan(x)) or any(isnan(y))):
-            x_id = isnan(x)
-            y_id = isnan(y)
-            chk_same_position(x_id, y_id, hasval='nan')
-            # If only one item, it was a nan, so just return
-            if x.size == y.size == 1:
+        if isnumber(x) and isnumber(y):
+            x_isnan, y_isnan = isnan(x), isnan(y)
+            x_isinf, y_isinf = isinf(x), isinf(y)
+
+            # Validate that the special values are in the same place
+            if any(x_isnan) or any(y_isnan):
+                chk_same_position(x_isnan, y_isnan, hasval='nan')
+            if any(x_isinf) or any(y_isinf):
+                # Check +inf and -inf separately, since they are different
+                chk_same_position(x == +inf, y == +inf, hasval='+inf')
+                chk_same_position(x == -inf, y == -inf, hasval='-inf')
+
+            # Combine all the special values
+            x_id, y_id = x_isnan, y_isnan
+            x_id |= x_isinf
+            y_id |= y_isinf
+
+            # Only do the comparison if actual values are left
+            if all(x_id):
                 return
-            val = comparison(x[~x_id], y[~y_id])
-        elif (isnumber(x) and isnumber(y)) and (any(isinf(x)) or any(isinf(y))):
-            x_id = isinf(x)
-            y_id = isinf(y)
-            chk_same_position(x_id, y_id, hasval='inf')
-            # If only one item, it was a inf, so just return
-            if x.size == y.size == 1:
-                return
-            val = comparison(x[~x_id], y[~y_id])
+
+            if any(x_id):
+                val = comparison(x[~x_id], y[~y_id])
+            else:
+                val = comparison(x, y)
         else:
             val = comparison(x,y)
 
@@ -635,7 +644,10 @@ def assert_array_compare(comparison, x, y, err_msg='', verbose=True,
             if not cond :
                 raise AssertionError(msg)
     except ValueError, e:
-        header = 'error during assertion:\n%s\n\n%s' % (e, header)
+        import traceback
+        efmt = traceback.format_exc()
+        header = 'error during assertion:\n\n%s\n\n%s' % (efmt, header)
+
         msg = build_err_msg([x, y], err_msg, verbose=verbose, header=header,
                             names=('x', 'y'))
         raise ValueError(msg)
@@ -955,10 +967,9 @@ def rundocs(filename=None, raise_on_error=True):
     -----
     The doctests can be run by the user/developer by adding the ``doctests``
     argument to the ``test()`` call. For example, to run all tests (including
-    doctests) for `numpy.lib`::
+    doctests) for `numpy.lib`:
 
-      >>> np.lib.test(doctests=True)
-
+    >>> np.lib.test(doctests=True) #doctest: +SKIP
     """
     import doctest, imp
     if filename is None:
@@ -1117,7 +1128,7 @@ def _assert_valid_refcount(op):
     for j in range(15):
         d = op(b,c)
 
-    assert(sys.getrefcount(i) >= rc)
+    assert_(sys.getrefcount(i) >= rc)
 
 def assert_allclose(actual, desired, rtol=1e-7, atol=0,
                     err_msg='', verbose=True):
@@ -1380,7 +1391,7 @@ class WarningMessage(object):
                     "line : %r}" % (self.message, self._category_name,
                                     self.filename, self.lineno, self.line))
 
-class WarningManager:
+class WarningManager(object):
     """
     A context manager that copies and restores the warnings filter upon
     exiting the context.
@@ -1454,7 +1465,7 @@ def assert_warns(warning_class, func, *args, **kw):
 
     Returns
     -------
-    None
+    The value returned by `func`.
 
     """
 
@@ -1464,7 +1475,7 @@ def assert_warns(warning_class, func, *args, **kw):
     l = ctx.__enter__()
     warnings.simplefilter('always')
     try:
-        func(*args, **kw)
+        result = func(*args, **kw)
         if not len(l) > 0:
             raise AssertionError("No warning raised when calling %s"
                     % func.__name__)
@@ -1473,3 +1484,36 @@ def assert_warns(warning_class, func, *args, **kw):
                     "%s( is %s)" % (func.__name__, warning_class, l[0]))
     finally:
         ctx.__exit__()
+    return result
+
+def assert_no_warnings(func, *args, **kw):
+    """
+    Fail if the given callable produces any warnings.
+
+    Parameters
+    ----------
+    func : callable
+        The callable to test.
+    \\*args : Arguments
+        Arguments passed to `func`.
+    \\*\\*kwargs : Kwargs
+        Keyword arguments passed to `func`.
+    
+    Returns
+    -------
+    The value returned by `func`.
+
+    """
+    # XXX: once we may depend on python >= 2.6, this can be replaced by the
+    # warnings module context manager.
+    ctx = WarningManager(record=True)
+    l = ctx.__enter__()
+    warnings.simplefilter('always')
+    try:
+        result = func(*args, **kw)
+        if len(l) > 0:
+            raise AssertionError("Got warnings when calling %s: %s"
+                    % (func.__name__, l))
+    finally:
+        ctx.__exit__()
+    return result

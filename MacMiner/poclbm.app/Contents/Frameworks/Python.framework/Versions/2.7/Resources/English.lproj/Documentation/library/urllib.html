@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>20.5. urllib — Open arbitrary resources by URL &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="next" title="20.6. urllib2 — extensible library for opening URLs" href="urllib2.html" />
+    <link rel="prev" title="20.4. wsgiref — WSGI Utilities and Reference Implementation" href="wsgiref.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="20.6. urllib2 — extensible library for opening URLs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="wsgiref.html" title="20.4. wsgiref — WSGI Utilities and Reference Implementation"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-urllib">
+<span id="urllib-open-arbitrary-resources-by-url"></span><h1>20.5. <a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> &#8212; Open arbitrary resources by URL<a class="headerlink" href="#module-urllib" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> module has been split into parts and renamed in
+Python 3 to <tt class="xref py py-mod docutils literal"><span class="pre">urllib.request</span></tt>, <tt class="xref py py-mod docutils literal"><span class="pre">urllib.parse</span></tt>,
+and <tt class="xref py py-mod docutils literal"><span class="pre">urllib.error</span></tt>. The <a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt
+imports when converting your sources to Python 3.
+Also note that the <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urllib.urlopen()</span></tt></a> function has been removed in
+Python 3 in favor of <a class="reference internal" href="urllib2.html#urllib2.urlopen" title="urllib2.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urllib2.urlopen()</span></tt></a>.</p>
+</div>
+<p id="index-0">This module provides a high-level interface for fetching data across the World
+Wide Web.  In particular, the <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> function is similar to the
+built-in function <a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a>, but accepts Universal Resource Locators (URLs)
+instead of filenames.  Some restrictions apply &#8212; it can only open URLs for
+reading, and no seek operations are available.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When opening HTTPS URLs, it does not attempt to validate the
+server certificate.  Use at your own risk!</p>
+</div>
+<div class="section" id="high-level-interface">
+<h2>20.5.1. High-level interface<a class="headerlink" href="#high-level-interface" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="urllib.urlopen">
+<tt class="descclassname">urllib.</tt><tt class="descname">urlopen</tt><big>(</big><em>url</em><span class="optional">[</span>, <em>data</em><span class="optional">[</span>, <em>proxies</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.urlopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a network object denoted by a URL for reading.  If the URL does not
+have a scheme identifier, or if it has <tt class="file docutils literal"><span class="pre">file:</span></tt> as its scheme
+identifier, this opens a local file (without <a class="reference internal" href="../glossary.html#term-universal-newlines"><em class="xref std std-term">universal newlines</em></a>);
+otherwise it opens a socket to a server somewhere on the network.  If the
+connection cannot be made the <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a> exception is raised.  If all
+went well, a file-like object is returned.  This supports the following
+methods: <tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt>, <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-meth docutils literal"><span class="pre">readline()</span></tt></a>, <tt class="xref py py-meth docutils literal"><span class="pre">readlines()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">fileno()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">info()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">getcode()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">geturl()</span></tt>.  It also
+has proper support for the <a class="reference internal" href="../glossary.html#term-iterator"><em class="xref std std-term">iterator</em></a> protocol. One caveat: the
+<tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt> method, if the size argument is omitted or negative, may not
+read until the end of the data stream; there is no good way to determine
+that the entire stream from a socket has been read in the general case.</p>
+<p>Except for the <tt class="xref py py-meth docutils literal"><span class="pre">info()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">getcode()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">geturl()</span></tt> methods,
+these methods have the same interface as for file objects &#8212; see section
+<a class="reference internal" href="stdtypes.html#bltin-file-objects"><em>File Objects</em></a> in this manual.  (It is not a built-in file object,
+however, so it can&#8217;t be used at those few places where a true built-in file
+object is required.)</p>
+<p id="index-1">The <tt class="xref py py-meth docutils literal"><span class="pre">info()</span></tt> method returns an instance of the class
+<a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><tt class="xref py py-class docutils literal"><span class="pre">mimetools.Message</span></tt></a> containing meta-information associated with the
+URL.  When the method is HTTP, these headers are those returned by the server
+at the head of the retrieved HTML page (including Content-Length and
+Content-Type).  When the method is FTP, a Content-Length header will be
+present if (as is now usual) the server passed back a file length in response
+to the FTP retrieval request. A Content-Type header will be present if the
+MIME type can be guessed.  When the method is local-file, returned headers
+will include a Date representing the file&#8217;s last-modified time, a
+Content-Length giving file size, and a Content-Type containing a guess at the
+file&#8217;s type. See also the description of the <a class="reference internal" href="mimetools.html#module-mimetools" title="mimetools: Tools for parsing MIME-style message bodies. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">mimetools</span></tt></a> module.</p>
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">geturl()</span></tt> method returns the real URL of the page.  In some cases, the
+HTTP server redirects a client to another URL.  The <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> function
+handles this transparently, but in some cases the caller needs to know which URL
+the client was redirected to.  The <tt class="xref py py-meth docutils literal"><span class="pre">geturl()</span></tt> method can be used to get at
+this redirected URL.</p>
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">getcode()</span></tt> method returns the HTTP status code that was sent with the
+response, or <tt class="xref docutils literal"><span class="pre">None</span></tt> if the URL is no HTTP URL.</p>
+<p>If the <em>url</em> uses the <tt class="file docutils literal"><span class="pre">http:</span></tt> scheme identifier, the optional <em>data</em>
+argument may be given to specify a <tt class="docutils literal"><span class="pre">POST</span></tt> request (normally the request type
+is <tt class="docutils literal"><span class="pre">GET</span></tt>).  The <em>data</em> argument must be in standard
+<em class="mimetype">application/x-www-form-urlencoded</em> format; see the <a class="reference internal" href="#urllib.urlencode" title="urllib.urlencode"><tt class="xref py py-func docutils literal"><span class="pre">urlencode()</span></tt></a>
+function below.</p>
+<p>The <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> function works transparently with proxies which do not
+require authentication.  In a Unix or Windows environment, set the
+<span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">http_proxy</span></tt>, or <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">ftp_proxy</span></tt> environment variables to a URL that
+identifies the proxy server before starting the Python interpreter.  For example
+(the <tt class="docutils literal"><span class="pre">'%'</span></tt> is the command prompt):</p>
+<div class="highlight-python"><pre>% http_proxy="http://www.someproxy.com:3128"
+% export http_proxy
+% python
+...</pre>
+</div>
+<p>The <span class="target" id="index-4"></span><tt class="xref std std-envvar docutils literal"><span class="pre">no_proxy</span></tt> environment variable can be used to specify hosts which
+shouldn&#8217;t be reached via proxy; if set, it should be a comma-separated list
+of hostname suffixes, optionally with <tt class="docutils literal"><span class="pre">:port</span></tt> appended, for example
+<tt class="docutils literal"><span class="pre">cern.ch,ncsa.uiuc.edu,some.host:8080</span></tt>.</p>
+<p>In a Windows environment, if no proxy environment variables are set, proxy
+settings are obtained from the registry&#8217;s Internet Settings section.</p>
+<p id="index-5">In a Mac OS X  environment, <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> will retrieve proxy information
+from the OS X System Configuration Framework, which can be managed with
+Network System Preferences panel.</p>
+<p>Alternatively, the optional <em>proxies</em> argument may be used to explicitly specify
+proxies.  It must be a dictionary mapping scheme names to proxy URLs, where an
+empty dictionary causes no proxies to be used, and <tt class="xref docutils literal"><span class="pre">None</span></tt> (the default value)
+causes environmental proxy settings to be used as discussed above.  For
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Use http://www.someproxy.com:3128 for http proxying</span>
+<span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;http&#39;</span><span class="p">:</span> <span class="s">&#39;http://www.someproxy.com:3128&#39;</span><span class="p">}</span>
+<span class="n">filehandle</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">some_url</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="n">proxies</span><span class="p">)</span>
+<span class="c"># Don&#39;t use any proxies</span>
+<span class="n">filehandle</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">some_url</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="p">{})</span>
+<span class="c"># Use proxies from environment - both versions are equivalent</span>
+<span class="n">filehandle</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">some_url</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">filehandle</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">some_url</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Proxies which require authentication for use are not currently supported; this
+is considered an implementation limitation.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3: </span>Added the <em>proxies</em> support.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>Added <tt class="xref py py-meth docutils literal"><span class="pre">getcode()</span></tt> to returned object and support for the
+<span class="target" id="index-6"></span><tt class="xref std std-envvar docutils literal"><span class="pre">no_proxy</span></tt> environment variable.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> function has been removed in Python 3 in favor
+of <a class="reference internal" href="urllib2.html#urllib2.urlopen" title="urllib2.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urllib2.urlopen()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.urlretrieve">
+<tt class="descclassname">urllib.</tt><tt class="descname">urlretrieve</tt><big>(</big><em>url</em><span class="optional">[</span>, <em>filename</em><span class="optional">[</span>, <em>reporthook</em><span class="optional">[</span>, <em>data</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.urlretrieve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a network object denoted by a URL to a local file, if necessary. If the URL
+points to a local file, or a valid cached copy of the object exists, the object
+is not copied.  Return a tuple <tt class="docutils literal"><span class="pre">(filename,</span> <span class="pre">headers)</span></tt> where <em>filename</em> is the
+local file name under which the object can be found, and <em>headers</em> is whatever
+the <tt class="xref py py-meth docutils literal"><span class="pre">info()</span></tt> method of the object returned by <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> returned (for
+a remote object, possibly cached). Exceptions are the same as for
+<a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a>.</p>
+<p>The second argument, if present, specifies the file location to copy to (if
+absent, the location will be a tempfile with a generated name). The third
+argument, if present, is a hook function that will be called once on
+establishment of the network connection and once after each block read
+thereafter.  The hook will be passed three arguments; a count of blocks
+transferred so far, a block size in bytes, and the total size of the file.  The
+third argument may be <tt class="docutils literal"><span class="pre">-1</span></tt> on older FTP servers which do not return a file
+size in response to a retrieval request.</p>
+<p>If the <em>url</em> uses the <tt class="file docutils literal"><span class="pre">http:</span></tt> scheme identifier, the optional <em>data</em>
+argument may be given to specify a <tt class="docutils literal"><span class="pre">POST</span></tt> request (normally the request type
+is <tt class="docutils literal"><span class="pre">GET</span></tt>).  The <em>data</em> argument must in standard
+<em class="mimetype">application/x-www-form-urlencoded</em> format; see the <a class="reference internal" href="#urllib.urlencode" title="urllib.urlencode"><tt class="xref py py-func docutils literal"><span class="pre">urlencode()</span></tt></a>
+function below.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span><a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> will raise <a class="reference internal" href="#urllib.ContentTooShortError" title="urllib.ContentTooShortError"><tt class="xref py py-exc docutils literal"><span class="pre">ContentTooShortError</span></tt></a> when it detects that
+the amount of data available  was less than the expected amount (which is the
+size reported by a  <em>Content-Length</em> header). This can occur, for example, when
+the  download is interrupted.<p>The <em>Content-Length</em> is treated as a lower bound: if there&#8217;s more data  to read,
+<a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> reads more data, but if less data is available,  it raises
+the exception.</p>
+<p>You can still retrieve the downloaded data in this case, it is stored  in the
+<tt class="xref py py-attr docutils literal"><span class="pre">content</span></tt> attribute of the exception instance.</p>
+<p>If no <em>Content-Length</em> header was supplied, <a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> can not check
+the size of the data it has downloaded, and just returns it.  In this case you
+just have to assume that the download was successful.</p>
+</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="urllib._urlopener">
+<tt class="descclassname">urllib.</tt><tt class="descname">_urlopener</tt><a class="headerlink" href="#urllib._urlopener" title="Permalink to this definition">¶</a></dt>
+<dd><p>The public functions <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> and <a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> create an instance
+of the <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a> class and use it to perform their requested
+actions.  To override this functionality, programmers can create a subclass of
+<a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a> or <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a>, then assign an instance of that
+class to the <tt class="docutils literal"><span class="pre">urllib._urlopener</span></tt> variable before calling the desired function.
+For example, applications may want to specify a different
+<em class="mailheader">User-Agent</em> header than <a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a> defines.  This can be
+accomplished with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib</span>
+
+<span class="k">class</span> <span class="nc">AppURLopener</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">FancyURLopener</span><span class="p">):</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="s">&quot;App/1.7&quot;</span>
+
+<span class="n">urllib</span><span class="o">.</span><span class="n">_urlopener</span> <span class="o">=</span> <span class="n">AppURLopener</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.urlcleanup">
+<tt class="descclassname">urllib.</tt><tt class="descname">urlcleanup</tt><big>(</big><big>)</big><a class="headerlink" href="#urllib.urlcleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the cache that may have been built up by previous calls to
+<a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="utility-functions">
+<h2>20.5.2. Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="urllib.quote">
+<tt class="descclassname">urllib.</tt><tt class="descname">quote</tt><big>(</big><em>string</em><span class="optional">[</span>, <em>safe</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.quote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace special characters in <em>string</em> using the <tt class="docutils literal"><span class="pre">%xx</span></tt> escape. Letters,
+digits, and the characters <tt class="docutils literal"><span class="pre">'_.-'</span></tt> are never quoted. By default, this
+function is intended for quoting the path section of the URL. The optional
+<em>safe</em> parameter specifies additional characters that should not be quoted
+&#8212; its default value is <tt class="docutils literal"><span class="pre">'/'</span></tt>.</p>
+<p>Example: <tt class="docutils literal"><span class="pre">quote('/~connolly/')</span></tt> yields <tt class="docutils literal"><span class="pre">'/%7econnolly/'</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.quote_plus">
+<tt class="descclassname">urllib.</tt><tt class="descname">quote_plus</tt><big>(</big><em>string</em><span class="optional">[</span>, <em>safe</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.quote_plus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#urllib.quote" title="urllib.quote"><tt class="xref py py-func docutils literal"><span class="pre">quote()</span></tt></a>, but also replaces spaces by plus signs, as required for
+quoting HTML form values when building up a query string to go into a URL.
+Plus signs in the original string are escaped unless they are included in
+<em>safe</em>.  It also does not have <em>safe</em> default to <tt class="docutils literal"><span class="pre">'/'</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.unquote">
+<tt class="descclassname">urllib.</tt><tt class="descname">unquote</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#urllib.unquote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace <tt class="docutils literal"><span class="pre">%xx</span></tt> escapes by their single-character equivalent.</p>
+<p>Example: <tt class="docutils literal"><span class="pre">unquote('/%7Econnolly/')</span></tt> yields <tt class="docutils literal"><span class="pre">'/~connolly/'</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.unquote_plus">
+<tt class="descclassname">urllib.</tt><tt class="descname">unquote_plus</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#urllib.unquote_plus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#urllib.unquote" title="urllib.unquote"><tt class="xref py py-func docutils literal"><span class="pre">unquote()</span></tt></a>, but also replaces plus signs by spaces, as required for
+unquoting HTML form values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.urlencode">
+<tt class="descclassname">urllib.</tt><tt class="descname">urlencode</tt><big>(</big><em>query</em><span class="optional">[</span>, <em>doseq</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.urlencode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a mapping object or a sequence of two-element tuples to a
+&#8220;percent-encoded&#8221; string, suitable to pass to <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> above as the
+optional <em>data</em> argument.  This is useful to pass a dictionary of form
+fields to a <tt class="docutils literal"><span class="pre">POST</span></tt> request.  The resulting string is a series of
+<tt class="docutils literal"><span class="pre">key=value</span></tt> pairs separated by <tt class="docutils literal"><span class="pre">'&amp;'</span></tt> characters, where both <em>key</em> and
+<em>value</em> are quoted using <a class="reference internal" href="#urllib.quote_plus" title="urllib.quote_plus"><tt class="xref py py-func docutils literal"><span class="pre">quote_plus()</span></tt></a> above.  When a sequence of
+two-element tuples is used as the <em>query</em> argument, the first element of
+each tuple is a key and the second is a value. The value element in itself
+can be a sequence and in that case, if the optional parameter <em>doseq</em> is
+evaluates to <em>True</em>, individual <tt class="docutils literal"><span class="pre">key=value</span></tt> pairs separated by <tt class="docutils literal"><span class="pre">'&amp;'</span></tt> are
+generated for each element of the value sequence for the key.  The order of
+parameters in the encoded string will match the order of parameter tuples in
+the sequence. The <a class="reference internal" href="urlparse.html#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><tt class="xref py py-mod docutils literal"><span class="pre">urlparse</span></tt></a> module provides the functions
+<tt class="xref py py-func docutils literal"><span class="pre">parse_qs()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">parse_qsl()</span></tt> which are used to parse query strings
+into Python data structures.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.pathname2url">
+<tt class="descclassname">urllib.</tt><tt class="descname">pathname2url</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#urllib.pathname2url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the pathname <em>path</em> from the local syntax for a path to the form used in
+the path component of a URL.  This does not produce a complete URL.  The return
+value will already be quoted using the <a class="reference internal" href="#urllib.quote" title="urllib.quote"><tt class="xref py py-func docutils literal"><span class="pre">quote()</span></tt></a> function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.url2pathname">
+<tt class="descclassname">urllib.</tt><tt class="descname">url2pathname</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#urllib.url2pathname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the path component <em>path</em> from an percent-encoded URL to the local syntax for a
+path.  This does not accept a complete URL.  This function uses <a class="reference internal" href="#urllib.unquote" title="urllib.unquote"><tt class="xref py py-func docutils literal"><span class="pre">unquote()</span></tt></a>
+to decode <em>path</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="urllib.getproxies">
+<tt class="descclassname">urllib.</tt><tt class="descname">getproxies</tt><big>(</big><big>)</big><a class="headerlink" href="#urllib.getproxies" title="Permalink to this definition">¶</a></dt>
+<dd><p>This helper function returns a dictionary of scheme to proxy server URL
+mappings. It scans the environment for variables named <tt class="docutils literal"><span class="pre">&lt;scheme&gt;_proxy</span></tt>,
+in case insensitive way, for all operating systems first, and when it cannot
+find it, looks for proxy information from Mac OSX System Configuration for
+Mac OS X and Windows Systems Registry for Windows.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="url-opener-objects">
+<h2>20.5.3. URL Opener objects<a class="headerlink" href="#url-opener-objects" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="urllib.URLopener">
+<em class="property">class </em><tt class="descclassname">urllib.</tt><tt class="descname">URLopener</tt><big>(</big><span class="optional">[</span><em>proxies</em><span class="optional">[</span>, <em>**x509</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.URLopener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for opening and reading URLs.  Unless you need to support opening
+objects using schemes other than <tt class="file docutils literal"><span class="pre">http:</span></tt>, <tt class="file docutils literal"><span class="pre">ftp:</span></tt>, or <tt class="file docutils literal"><span class="pre">file:</span></tt>,
+you probably want to use <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a>.</p>
+<p>By default, the <a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a> class sends a <em class="mailheader">User-Agent</em> header
+of <tt class="docutils literal"><span class="pre">urllib/VVV</span></tt>, where <em>VVV</em> is the <a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> version number.
+Applications can define their own <em class="mailheader">User-Agent</em> header by subclassing
+<a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a> or <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a> and setting the class attribute
+<a class="reference internal" href="#urllib.URLopener.version" title="urllib.URLopener.version"><tt class="xref py py-attr docutils literal"><span class="pre">version</span></tt></a> to an appropriate string value in the subclass definition.</p>
+<p>The optional <em>proxies</em> parameter should be a dictionary mapping scheme names to
+proxy URLs, where an empty dictionary turns proxies off completely.  Its default
+value is <tt class="xref docutils literal"><span class="pre">None</span></tt>, in which case environmental proxy settings will be used if
+present, as discussed in the definition of <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a>, above.</p>
+<p>Additional keyword parameters, collected in <em>x509</em>, may be used for
+authentication of the client when using the <tt class="file docutils literal"><span class="pre">https:</span></tt> scheme.  The keywords
+<em>key_file</em> and <em>cert_file</em> are supported to provide an  SSL key and certificate;
+both are needed to support client authentication.</p>
+<p><a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a> objects will raise an <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a> exception if the server
+returns an error code.</p>
+<blockquote>
+<div><dl class="method">
+<dt id="urllib.URLopener.open">
+<tt class="descname">open</tt><big>(</big><em>fullurl</em><span class="optional">[</span>, <em>data</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.URLopener.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open <em>fullurl</em> using the appropriate protocol.  This method sets up cache and
+proxy information, then calls the appropriate open method with its input
+arguments.  If the scheme is not recognized, <a class="reference internal" href="#urllib.URLopener.open_unknown" title="urllib.URLopener.open_unknown"><tt class="xref py py-meth docutils literal"><span class="pre">open_unknown()</span></tt></a> is called.
+The <em>data</em> argument has the same meaning as the <em>data</em> argument of
+<a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="urllib.URLopener.open_unknown">
+<tt class="descname">open_unknown</tt><big>(</big><em>fullurl</em><span class="optional">[</span>, <em>data</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.URLopener.open_unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overridable interface to open unknown URL types.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="urllib.URLopener.retrieve">
+<tt class="descname">retrieve</tt><big>(</big><em>url</em><span class="optional">[</span>, <em>filename</em><span class="optional">[</span>, <em>reporthook</em><span class="optional">[</span>, <em>data</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.URLopener.retrieve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the contents of <em>url</em> and places it in <em>filename</em>.  The return value
+is a tuple consisting of a local filename and either a
+<a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><tt class="xref py py-class docutils literal"><span class="pre">mimetools.Message</span></tt></a> object containing the response headers (for remote
+URLs) or <tt class="xref docutils literal"><span class="pre">None</span></tt> (for local URLs).  The caller must then open and read the
+contents of <em>filename</em>.  If <em>filename</em> is not given and the URL refers to a
+local file, the input filename is returned.  If the URL is non-local and
+<em>filename</em> is not given, the filename is the output of <a class="reference internal" href="tempfile.html#tempfile.mktemp" title="tempfile.mktemp"><tt class="xref py py-func docutils literal"><span class="pre">tempfile.mktemp()</span></tt></a>
+with a suffix that matches the suffix of the last path component of the input
+URL.  If <em>reporthook</em> is given, it must be a function accepting three numeric
+parameters.  It will be called after each chunk of data is read from the
+network.  <em>reporthook</em> is ignored for local URLs.</p>
+<p>If the <em>url</em> uses the <tt class="file docutils literal"><span class="pre">http:</span></tt> scheme identifier, the optional <em>data</em>
+argument may be given to specify a <tt class="docutils literal"><span class="pre">POST</span></tt> request (normally the request type
+is <tt class="docutils literal"><span class="pre">GET</span></tt>).  The <em>data</em> argument must in standard
+<em class="mimetype">application/x-www-form-urlencoded</em> format; see the <a class="reference internal" href="#urllib.urlencode" title="urllib.urlencode"><tt class="xref py py-func docutils literal"><span class="pre">urlencode()</span></tt></a>
+function below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="urllib.URLopener.version">
+<tt class="descname">version</tt><a class="headerlink" href="#urllib.URLopener.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Variable that specifies the user agent of the opener object.  To get
+<a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> to tell servers that it is a particular user agent, set this in a
+subclass as a class variable or in the constructor before calling the base
+constructor.</p>
+</dd></dl>
+
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="urllib.FancyURLopener">
+<em class="property">class </em><tt class="descclassname">urllib.</tt><tt class="descname">FancyURLopener</tt><big>(</big><em>...</em><big>)</big><a class="headerlink" href="#urllib.FancyURLopener" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a> subclasses <a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a> providing default handling
+for the following HTTP response codes: 301, 302, 303, 307 and 401.  For the 30x
+response codes listed above, the <em class="mailheader">Location</em> header is used to fetch
+the actual URL.  For 401 response codes (authentication required), basic HTTP
+authentication is performed.  For the 30x response codes, recursion is bounded
+by the value of the <em>maxtries</em> attribute, which defaults to 10.</p>
+<p>For all other response codes, the method <tt class="xref py py-meth docutils literal"><span class="pre">http_error_default()</span></tt> is called
+which you can override in subclasses to handle the error appropriately.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">According to the letter of <span class="target" id="index-7"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2616.html"><strong>RFC 2616</strong></a>, 301 and 302 responses to POST requests
+must not be automatically redirected without confirmation by the user.  In
+reality, browsers do allow automatic redirection of these responses, changing
+the POST to a GET, and <a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> reproduces this behaviour.</p>
+</div>
+<p>The parameters to the constructor are the same as those for <a class="reference internal" href="#urllib.URLopener" title="urllib.URLopener"><tt class="xref py py-class docutils literal"><span class="pre">URLopener</span></tt></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<blockquote>
+<div>When performing basic authentication, a <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a> instance calls
+its <a class="reference internal" href="#urllib.FancyURLopener.prompt_user_passwd" title="urllib.FancyURLopener.prompt_user_passwd"><tt class="xref py py-meth docutils literal"><span class="pre">prompt_user_passwd()</span></tt></a> method.  The default implementation asks the
+users for the required information on the controlling terminal.  A subclass may
+override this method to support more appropriate behavior if needed.</div></blockquote>
+<p>The <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a> class offers one additional method that should be
+overloaded to provide the appropriate behavior:</p>
+<dl class="last method">
+<dt id="urllib.FancyURLopener.prompt_user_passwd">
+<tt class="descname">prompt_user_passwd</tt><big>(</big><em>host</em>, <em>realm</em><big>)</big><a class="headerlink" href="#urllib.FancyURLopener.prompt_user_passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information needed to authenticate the user at the given host in the
+specified security realm.  The return value should be a tuple, <tt class="docutils literal"><span class="pre">(user,</span>
+<span class="pre">password)</span></tt>, which can be used for basic authentication.</p>
+<p>The implementation prompts for this information on the terminal; an application
+should override this method to use an appropriate interaction model in the local
+environment.</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="urllib.ContentTooShortError">
+<em class="property">exception </em><tt class="descclassname">urllib.</tt><tt class="descname">ContentTooShortError</tt><big>(</big><em>msg</em><span class="optional">[</span>, <em>content</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#urllib.ContentTooShortError" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception is raised when the <a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> function detects that the
+amount of the downloaded data is less than the  expected amount (given by the
+<em>Content-Length</em> header). The <tt class="xref py py-attr docutils literal"><span class="pre">content</span></tt> attribute stores the downloaded
+(and supposedly truncated) data.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="urllib-restrictions">
+<h2>20.5.4. <a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> Restrictions<a class="headerlink" href="#urllib-restrictions" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div></div></blockquote>
+<ul id="index-8">
+<li><p class="first">Currently, only the following protocols are supported: HTTP, (versions 0.9 and
+1.0),  FTP, and local files.</p>
+</li>
+<li><p class="first">The caching feature of <a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> has been disabled until I find the
+time to hack proper processing of Expiration time headers.</p>
+</li>
+<li><p class="first">There should be a function to query whether a particular URL is in the cache.</p>
+</li>
+<li><p class="first">For backward compatibility, if a URL appears to point to a local file but the
+file can&#8217;t be opened, the URL is re-interpreted using the FTP protocol.  This
+can sometimes cause confusing error messages.</p>
+</li>
+<li><p class="first">The <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> and <a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> functions can cause arbitrarily
+long delays while waiting for a network connection to be set up.  This means
+that it is difficult to build an interactive Web client using these functions
+without using threads.</p>
+</li>
+<li id="index-9"><p class="first">The data returned by <a class="reference internal" href="#urllib.urlopen" title="urllib.urlopen"><tt class="xref py py-func docutils literal"><span class="pre">urlopen()</span></tt></a> or <a class="reference internal" href="#urllib.urlretrieve" title="urllib.urlretrieve"><tt class="xref py py-func docutils literal"><span class="pre">urlretrieve()</span></tt></a> is the raw data
+returned by the server.  This may be binary data (such as an image), plain text
+or (for example) HTML.  The HTTP protocol provides type information in the reply
+header, which can be inspected by looking at the <em class="mailheader">Content-Type</em>
+header.  If the returned data is HTML, you can use the module <a class="reference internal" href="htmllib.html#module-htmllib" title="htmllib: A parser for HTML documents. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">htmllib</span></tt></a> to
+parse it.</p>
+</li>
+<li id="index-10"><p class="first">The code handling the FTP protocol cannot differentiate between a file and a
+directory.  This can lead to unexpected behavior when attempting to read a URL
+that points to a file that is not accessible.  If the URL ends in a <tt class="docutils literal"><span class="pre">/</span></tt>, it is
+assumed to refer to a directory and will be handled accordingly.  But if an
+attempt to read a file leads to a 550 error (meaning the URL cannot be found or
+is not accessible, often for permission reasons), then the path is treated as a
+directory in order to handle the case when a directory is specified by a URL but
+the trailing <tt class="docutils literal"><span class="pre">/</span></tt> has been left off.  This can cause misleading results when
+you try to fetch a file whose read permissions make it inaccessible; the FTP
+code will try to read it, fail with a 550 error, and then perform a directory
+listing for the unreadable file. If fine-grained control is needed, consider
+using the <a class="reference internal" href="ftplib.html#module-ftplib" title="ftplib: FTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">ftplib</span></tt></a> module, subclassing <a class="reference internal" href="#urllib.FancyURLopener" title="urllib.FancyURLopener"><tt class="xref py py-class docutils literal"><span class="pre">FancyURLopener</span></tt></a>, or changing
+<em>_urlopener</em> to meet your needs.</p>
+</li>
+<li><p class="first">This module does not support the use of proxies which require authentication.
+This may be implemented in the future.</p>
+</li>
+<li id="index-11"><p class="first">Although the <a class="reference internal" href="#module-urllib" title="urllib: Open an arbitrary network resource by URL (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">urllib</span></tt></a> module contains (undocumented) routines to parse
+and unparse URL strings, the recommended interface for URL manipulation is in
+module <a class="reference internal" href="urlparse.html#module-urlparse" title="urlparse: Parse URLs into or assemble them from components."><tt class="xref py py-mod docutils literal"><span class="pre">urlparse</span></tt></a>.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<span id="urllib-examples"></span><h2>20.5.5. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example session that uses the <tt class="docutils literal"><span class="pre">GET</span></tt> method to retrieve a URL
+containing parameters:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span><span class="s">&#39;spam&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;eggs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;bacon&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://www.musi-cal.com/cgi-bin/query?</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following example uses the <tt class="docutils literal"><span class="pre">POST</span></tt> method instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">({</span><span class="s">&#39;spam&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;eggs&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;bacon&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&quot;http://www.musi-cal.com/cgi-bin/query&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following example uses an explicitly specified HTTP proxy, overriding
+environment settings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;http&#39;</span><span class="p">:</span> <span class="s">&#39;http://proxy.example.com:8080/&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">FancyURLopener</span><span class="p">(</span><span class="n">proxies</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;http://www.python.org&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The following example uses no proxies at all, overriding environment settings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">FancyURLopener</span><span class="p">({})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;http://www.python.org/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.5. <tt class="docutils literal"><span class="pre">urllib</span></tt> &#8212; Open arbitrary resources by URL</a><ul>
+<li><a class="reference internal" href="#high-level-interface">20.5.1. High-level interface</a></li>
+<li><a class="reference internal" href="#utility-functions">20.5.2. Utility functions</a></li>
+<li><a class="reference internal" href="#url-opener-objects">20.5.3. URL Opener objects</a></li>
+<li><a class="reference internal" href="#urllib-restrictions">20.5.4. <tt class="docutils literal"><span class="pre">urllib</span></tt> Restrictions</a></li>
+<li><a class="reference internal" href="#examples">20.5.5. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="wsgiref.html"
+                        title="previous chapter">20.4. <tt class="docutils literal docutils literal"><span class="pre">wsgiref</span></tt> &#8212; WSGI Utilities and Reference Implementation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="urllib2.html"
+                        title="next chapter">20.6. <tt class="docutils literal docutils literal"><span class="pre">urllib2</span></tt> &#8212; extensible library for opening URLs</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/urllib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="20.6. urllib2 — extensible library for opening URLs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="wsgiref.html" title="20.4. wsgiref — WSGI Utilities and Reference Implementation"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" >20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

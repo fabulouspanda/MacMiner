@@ -15,7 +15,7 @@
 
 #if PY_VERSION_HEX >= 0x03000000
 #ifndef NPY_PY3K
-#define NPY_PY3K
+#define NPY_PY3K 1
 #endif
 #endif
 
@@ -137,17 +137,6 @@ PyUnicode_Concat2(PyObject **left, PyObject *right)
     *left = newobj;
 }
 
-
-/*
- * Accessing items of ob_base
- */
-
-#if (PY_VERSION_HEX < 0x02060000)
-#define Py_TYPE(o)    (((PyObject*)(o))->ob_type)
-#define Py_REFCNT(o)  (((PyObject*)(o))->ob_refcnt)
-#define Py_SIZE(o)    (((PyVarObject*)(o))->ob_size)
-#endif
-
 /*
  * PyFile_* compatibility
  */
@@ -204,7 +193,7 @@ npy_PyFile_Dup(PyObject *file, char *mode)
         fclose(handle);
         return NULL;
     }
-    fseek(handle, pos, SEEK_SET);
+    npy_fseek(handle, pos, SEEK_SET);
     return handle;
 }
 
@@ -215,11 +204,11 @@ static NPY_INLINE int
 npy_PyFile_DupClose(PyObject *file, FILE* handle)
 {
     PyObject *ret;
-    long position;
-    position = ftell(handle);
+    Py_ssize_t position;
+    position = npy_ftell(handle);
     fclose(handle);
 
-    ret = PyObject_CallMethod(file, "seek", "li", position, 0);
+    ret = PyObject_CallMethod(file, "seek", NPY_SSIZE_T_PYFMT "i", position, 0);
     if (ret == NULL) {
         return -1;
     }
@@ -248,7 +237,7 @@ npy_PyFile_Check(PyObject *file)
 #endif
 
 static NPY_INLINE PyObject*
-npy_PyFile_OpenFile(PyObject *filename, char *mode)
+npy_PyFile_OpenFile(PyObject *filename, const char *mode)
 {
     PyObject *open;
     open = PyDict_GetItemString(PyEval_GetBuiltins(), "open");
@@ -256,6 +245,19 @@ npy_PyFile_OpenFile(PyObject *filename, char *mode)
         return NULL;
     }
     return PyObject_CallFunction(open, "Os", filename, mode);
+}
+
+static NPY_INLINE int
+npy_PyFile_CloseFile(PyObject *file)
+{
+    PyObject *ret;
+
+    ret = PyObject_CallMethod(file, "close", NULL);
+    if (ret == NULL) {
+        return -1;
+    }
+    Py_DECREF(ret);
+    return 0;
 }
 
 /*
@@ -348,7 +350,7 @@ NpyCapsule_Check(PyObject *ptr)
     return PyCapsule_CheckExact(ptr);
 }
 
-static void
+static NPY_INLINE void
 simple_capsule_dtor(PyObject *cap)
 {
     PyArray_free(PyCapsule_GetPointer(cap, NULL));
@@ -387,7 +389,7 @@ NpyCapsule_Check(PyObject *ptr)
     return PyCObject_Check(ptr);
 }
 
-static void
+static NPY_INLINE void
 simple_capsule_dtor(void *ptr)
 {
     PyArray_free(ptr);

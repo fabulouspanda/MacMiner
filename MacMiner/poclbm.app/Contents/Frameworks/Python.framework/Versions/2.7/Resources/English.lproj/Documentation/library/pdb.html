@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>26.2. pdb — The Python Debugger &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="26. Debugging and Profiling" href="debug.html" />
+    <link rel="next" title="26.4. The Python Profilers" href="profile.html" />
+    <link rel="prev" title="26.1. bdb — Debugger framework" href="bdb.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="profile.html" title="26.4. The Python Profilers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bdb.html" title="26.1. bdb — Debugger framework"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="debug.html" accesskey="U">26. Debugging and Profiling</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-pdb">
+<span id="pdb-the-python-debugger"></span><span id="debugger"></span><h1>26.2. <a class="reference internal" href="#module-pdb" title="pdb: The Python debugger for interactive interpreters."><tt class="xref py py-mod docutils literal"><span class="pre">pdb</span></tt></a> &#8212; The Python Debugger<a class="headerlink" href="#module-pdb" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">The module <a class="reference internal" href="#module-pdb" title="pdb: The Python debugger for interactive interpreters."><tt class="xref py py-mod docutils literal"><span class="pre">pdb</span></tt></a> defines an interactive source code debugger for Python
+programs.  It supports setting (conditional) breakpoints and single stepping at
+the source line level, inspection of stack frames, source code listing, and
+evaluation of arbitrary Python code in the context of any stack frame.  It also
+supports post-mortem debugging and can be called under program control.</p>
+<p id="index-1">The debugger is extensible &#8212; it is actually defined as the class <a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><tt class="xref py py-class docutils literal"><span class="pre">Pdb</span></tt></a>.
+This is currently undocumented but easily understood by reading the source.  The
+extension interface uses the modules <a class="reference internal" href="bdb.html#module-bdb" title="bdb: Debugger framework."><tt class="xref py py-mod docutils literal"><span class="pre">bdb</span></tt></a> and <a class="reference internal" href="cmd.html#module-cmd" title="cmd: Build line-oriented command interpreters."><tt class="xref py py-mod docutils literal"><span class="pre">cmd</span></tt></a>.</p>
+<p>The debugger&#8217;s prompt is <tt class="docutils literal"><span class="pre">(Pdb)</span></tt>. Typical usage to run a program under control
+of the debugger is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pdb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mymodule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;mymodule.test()&#39;</span><span class="p">)</span>
+<span class="go">&gt; &lt;string&gt;(0)?()</span>
+<span class="go">(Pdb) continue</span>
+<span class="go">&gt; &lt;string&gt;(1)?()</span>
+<span class="go">(Pdb) continue</span>
+<span class="go">NameError: &#39;spam&#39;</span>
+<span class="go">&gt; &lt;string&gt;(1)?()</span>
+<span class="go">(Pdb)</span>
+</pre></div>
+</div>
+<p><tt class="file docutils literal"><span class="pre">pdb.py</span></tt> can also be invoked as a script to debug other scripts.  For
+example:</p>
+<div class="highlight-python"><pre>python -m pdb myscript.py</pre>
+</div>
+<p>When invoked as a script, pdb will automatically enter post-mortem debugging if
+the program being debugged exits abnormally. After post-mortem debugging (or
+after normal exit of the program), pdb will restart the program. Automatic
+restarting preserves pdb&#8217;s state (such as breakpoints) and in most cases is more
+useful than quitting the debugger upon program&#8217;s exit.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4: </span>Restarting post-mortem behavior added.</p>
+<p>The typical usage to break into the debugger from a running program is to
+insert</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>at the location you want to break into the debugger.  You can then step through
+the code following this statement, and continue running without the debugger using
+the <tt class="docutils literal"><span class="pre">c</span></tt> command.</p>
+<p>The typical usage to inspect a crashed program is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pdb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mymodule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mymodule</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n-Identifier">?</span>
+  File <span class="nb">&quot;./mymodule.py&quot;</span>, line <span class="m">4</span>, in <span class="n-Identifier">test</span>
+    <span class="n">test2</span><span class="p">()</span>
+  File <span class="nb">&quot;./mymodule.py&quot;</span>, line <span class="m">3</span>, in <span class="n-Identifier">test2</span>
+    <span class="k">print</span> <span class="n">spam</span>
+<span class="nc">NameError</span>: <span class="n-Identifier">spam</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb</span><span class="o">.</span><span class="n">pm</span><span class="p">()</span>
+<span class="go">&gt; ./mymodule.py(3)test2()</span>
+<span class="go">-&gt; print spam</span>
+<span class="go">(Pdb)</span>
+</pre></div>
+</div>
+<p>The module defines the following functions; each enters the debugger in a
+slightly different way:</p>
+<dl class="function">
+<dt id="pdb.run">
+<tt class="descclassname">pdb.</tt><tt class="descname">run</tt><big>(</big><em>statement</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the <em>statement</em> (given as a string) under debugger control.  The
+debugger prompt appears before any code is executed; you can set breakpoints and
+type <tt class="docutils literal"><span class="pre">continue</span></tt>, or you can step through the statement using <tt class="docutils literal"><span class="pre">step</span></tt> or
+<tt class="docutils literal"><span class="pre">next</span></tt> (all these commands are explained below).  The optional <em>globals</em> and
+<em>locals</em> arguments specify the environment in which the code is executed; by
+default the dictionary of the module <a class="reference internal" href="__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> is used.  (See the
+explanation of the <a class="reference internal" href="../reference/simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement or the <a class="reference internal" href="functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a> built-in
+function.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdb.runeval">
+<tt class="descclassname">pdb.</tt><tt class="descname">runeval</tt><big>(</big><em>expression</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.runeval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the <em>expression</em> (given as a string) under debugger control.  When
+<a class="reference internal" href="#pdb.runeval" title="pdb.runeval"><tt class="xref py py-func docutils literal"><span class="pre">runeval()</span></tt></a> returns, it returns the value of the expression.  Otherwise this
+function is similar to <a class="reference internal" href="#pdb.run" title="pdb.run"><tt class="xref py py-func docutils literal"><span class="pre">run()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdb.runcall">
+<tt class="descclassname">pdb.</tt><tt class="descname">runcall</tt><big>(</big><em>function</em><span class="optional">[</span>, <em>argument</em>, <em>...</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.runcall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the <em>function</em> (a function or method object, not a string) with the given
+arguments.  When <a class="reference internal" href="#pdb.runcall" title="pdb.runcall"><tt class="xref py py-func docutils literal"><span class="pre">runcall()</span></tt></a> returns, it returns whatever the function call
+returned.  The debugger prompt appears as soon as the function is entered.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdb.set_trace">
+<tt class="descclassname">pdb.</tt><tt class="descname">set_trace</tt><big>(</big><big>)</big><a class="headerlink" href="#pdb.set_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter the debugger at the calling stack frame.  This is useful to hard-code a
+breakpoint at a given point in a program, even if the code is not otherwise
+being debugged (e.g. when an assertion fails).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdb.post_mortem">
+<tt class="descclassname">pdb.</tt><tt class="descname">post_mortem</tt><big>(</big><span class="optional">[</span><em>traceback</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.post_mortem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter post-mortem debugging of the given <em>traceback</em> object.  If no
+<em>traceback</em> is given, it uses the one of the exception that is currently
+being handled (an exception must be being handled if the default is to be
+used).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pdb.pm">
+<tt class="descclassname">pdb.</tt><tt class="descname">pm</tt><big>(</big><big>)</big><a class="headerlink" href="#pdb.pm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter post-mortem debugging of the traceback found in
+<a class="reference internal" href="sys.html#sys.last_traceback" title="sys.last_traceback"><tt class="xref py py-data docutils literal"><span class="pre">sys.last_traceback</span></tt></a>.</p>
+</dd></dl>
+
+<p>The <tt class="docutils literal"><span class="pre">run*</span></tt> functions and <a class="reference internal" href="#pdb.set_trace" title="pdb.set_trace"><tt class="xref py py-func docutils literal"><span class="pre">set_trace()</span></tt></a> are aliases for instantiating the
+<a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><tt class="xref py py-class docutils literal"><span class="pre">Pdb</span></tt></a> class and calling the method of the same name.  If you want to
+access further features, you have to do this yourself:</p>
+<dl class="class">
+<dt id="pdb.Pdb">
+<em class="property">class </em><tt class="descclassname">pdb.</tt><tt class="descname">Pdb</tt><big>(</big><em>completekey='tab'</em>, <em>stdin=None</em>, <em>stdout=None</em>, <em>skip=None</em><big>)</big><a class="headerlink" href="#pdb.Pdb" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><tt class="xref py py-class docutils literal"><span class="pre">Pdb</span></tt></a> is the debugger class.</p>
+<p>The <em>completekey</em>, <em>stdin</em> and <em>stdout</em> arguments are passed to the
+underlying <a class="reference internal" href="cmd.html#cmd.Cmd" title="cmd.Cmd"><tt class="xref py py-class docutils literal"><span class="pre">cmd.Cmd</span></tt></a> class; see the description there.</p>
+<p>The <em>skip</em> argument, if given, must be an iterable of glob-style module name
+patterns.  The debugger will not step into frames that originate in a module
+that matches one of these patterns. <a class="footnote-reference" href="#id3" id="id1">[1]</a></p>
+<p>Example call to enable tracing with <em>skip</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">Pdb</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;django.*&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7: </span>The <em>skip</em> argument.</p>
+<dl class="method">
+<dt id="pdb.Pdb.run">
+<tt class="descname">run</tt><big>(</big><em>statement</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.Pdb.run" title="Permalink to this definition">¶</a></dt>
+<dt id="pdb.Pdb.runeval">
+<tt class="descname">runeval</tt><big>(</big><em>expression</em><span class="optional">[</span>, <em>globals</em><span class="optional">[</span>, <em>locals</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.Pdb.runeval" title="Permalink to this definition">¶</a></dt>
+<dt id="pdb.Pdb.runcall">
+<tt class="descname">runcall</tt><big>(</big><em>function</em><span class="optional">[</span>, <em>argument</em>, <em>...</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#pdb.Pdb.runcall" title="Permalink to this definition">¶</a></dt>
+<dt id="pdb.Pdb.set_trace">
+<tt class="descname">set_trace</tt><big>(</big><big>)</big><a class="headerlink" href="#pdb.Pdb.set_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>See the documentation for the functions explained above.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="debugger-commands">
+<span id="id2"></span><h1>26.3. Debugger Commands<a class="headerlink" href="#debugger-commands" title="Permalink to this headline">¶</a></h1>
+<p>The debugger recognizes the following commands.  Most commands can be
+abbreviated to one or two letters; e.g. <tt class="docutils literal"><span class="pre">h(elp)</span></tt> means that either <tt class="docutils literal"><span class="pre">h</span></tt> or
+<tt class="docutils literal"><span class="pre">help</span></tt> can be used to enter the help command (but not <tt class="docutils literal"><span class="pre">he</span></tt> or <tt class="docutils literal"><span class="pre">hel</span></tt>, nor
+<tt class="docutils literal"><span class="pre">H</span></tt> or <tt class="docutils literal"><span class="pre">Help</span></tt> or <tt class="docutils literal"><span class="pre">HELP</span></tt>).  Arguments to commands must be separated by
+whitespace (spaces or tabs).  Optional arguments are enclosed in square brackets
+(<tt class="docutils literal"><span class="pre">[]</span></tt>) in the command syntax; the square brackets must not be typed.
+Alternatives in the command syntax are separated by a vertical bar (<tt class="docutils literal"><span class="pre">|</span></tt>).</p>
+<p>Entering a blank line repeats the last command entered.  Exception: if the last
+command was a <tt class="docutils literal"><span class="pre">list</span></tt> command, the next 11 lines are listed.</p>
+<p>Commands that the debugger doesn&#8217;t recognize are assumed to be Python statements
+and are executed in the context of the program being debugged.  Python
+statements can also be prefixed with an exclamation point (<tt class="docutils literal"><span class="pre">!</span></tt>).  This is a
+powerful way to inspect the program being debugged; it is even possible to
+change a variable or call a function.  When an exception occurs in such a
+statement, the exception name is printed but the debugger&#8217;s state is not
+changed.</p>
+<p>Multiple commands may be entered on a single line, separated by <tt class="docutils literal"><span class="pre">;;</span></tt>.  (A
+single <tt class="docutils literal"><span class="pre">;</span></tt> is not used as it is the separator for multiple commands in a line
+that is passed to the Python parser.) No intelligence is applied to separating
+the commands; the input is split at the first <tt class="docutils literal"><span class="pre">;;</span></tt> pair, even if it is in the
+middle of a quoted string.</p>
+<p>The debugger supports aliases.  Aliases can have parameters which allows one a
+certain level of adaptability to the context under examination.</p>
+<p id="index-2">If a file <tt class="file docutils literal"><span class="pre">.pdbrc</span></tt>  exists in the user&#8217;s home directory or in the current
+directory, it is read in and executed as if it had been typed at the debugger
+prompt. This is particularly useful for aliases.  If both files exist, the one
+in the home directory is read first and aliases defined there can be overridden
+by the local file.</p>
+<dl class="docutils">
+<dt>h(elp) [<em>command</em>]</dt>
+<dd>Without argument, print the list of available commands.  With a <em>command</em> as
+argument, print help about that command.  <tt class="docutils literal"><span class="pre">help</span> <span class="pre">pdb</span></tt> displays the full
+documentation file; if the environment variable <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PAGER</span></tt> is defined, the
+file is piped through that command instead.  Since the <em>command</em> argument must
+be an identifier, <tt class="docutils literal"><span class="pre">help</span> <span class="pre">exec</span></tt> must be entered to get help on the <tt class="docutils literal"><span class="pre">!</span></tt>
+command.</dd>
+<dt>w(here)</dt>
+<dd>Print a stack trace, with the most recent frame at the bottom.  An arrow
+indicates the current frame, which determines the context of most commands.</dd>
+<dt>d(own)</dt>
+<dd>Move the current frame one level down in the stack trace (to a newer frame).</dd>
+<dt>u(p)</dt>
+<dd>Move the current frame one level up in the stack trace (to an older frame).</dd>
+<dt>b(reak) [[<em>filename</em>:]<em>lineno</em> | <em>function</em>[, <em>condition</em>]]</dt>
+<dd><p class="first">With a <em>lineno</em> argument, set a break there in the current file.  With a
+<em>function</em> argument, set a break at the first executable statement within that
+function. The line number may be prefixed with a filename and a colon, to
+specify a breakpoint in another file (probably one that hasn&#8217;t been loaded yet).
+The file is searched on <tt class="docutils literal"><span class="pre">sys.path</span></tt>. Note that each breakpoint is assigned a
+number to which all the other breakpoint commands refer.</p>
+<p>If a second argument is present, it is an expression which must evaluate to true
+before the breakpoint is honored.</p>
+<p class="last">Without argument, list all breaks, including for each breakpoint, the number of
+times that breakpoint has been hit, the current ignore count, and the associated
+condition if any.</p>
+</dd>
+<dt>tbreak [[<em>filename</em>:]<em>lineno</em> | <em>function</em>[, <em>condition</em>]]</dt>
+<dd>Temporary breakpoint, which is removed automatically when it is first hit.  The
+arguments are the same as break.</dd>
+<dt>cl(ear) [<em>filename:lineno</em> | <em>bpnumber</em> [<em>bpnumber ...</em>]]</dt>
+<dd>With a <em>filename:lineno</em> argument, clear all the breakpoints at this line.
+With a space separated list of breakpoint numbers, clear those breakpoints.
+Without argument, clear all breaks (but first ask confirmation).</dd>
+<dt>disable [<em>bpnumber</em> [<em>bpnumber ...</em>]]</dt>
+<dd>Disables the breakpoints given as a space separated list of breakpoint numbers.
+Disabling a breakpoint means it cannot cause the program to stop execution, but
+unlike clearing a breakpoint, it remains in the list of breakpoints and can be
+(re-)enabled.</dd>
+<dt>enable [<em>bpnumber</em> [<em>bpnumber ...</em>]]</dt>
+<dd>Enables the breakpoints specified.</dd>
+<dt>ignore <em>bpnumber</em> [<em>count</em>]</dt>
+<dd>Sets the ignore count for the given breakpoint number.  If count is omitted, the
+ignore count is set to 0.  A breakpoint becomes active when the ignore count is
+zero.  When non-zero, the count is decremented each time the breakpoint is
+reached and the breakpoint is not disabled and any associated condition
+evaluates to true.</dd>
+<dt>condition <em>bpnumber</em> [<em>condition</em>]</dt>
+<dd>Condition is an expression which must evaluate to true before the breakpoint is
+honored.  If condition is absent, any existing condition is removed; i.e., the
+breakpoint is made unconditional.</dd>
+<dt>commands [<em>bpnumber</em>]</dt>
+<dd><p class="first">Specify a list of commands for breakpoint number <em>bpnumber</em>.  The commands
+themselves appear on the following lines.  Type a line containing just &#8216;end&#8217; to
+terminate the commands. An example:</p>
+<div class="highlight-python"><pre>(Pdb) commands 1
+(com) print some_variable
+(com) end
+(Pdb)</pre>
+</div>
+<p>To remove all commands from a breakpoint, type commands and follow it
+immediately with  end; that is, give no commands.</p>
+<p>With no <em>bpnumber</em> argument, commands refers to the last breakpoint set.</p>
+<p>You can use breakpoint commands to start your program up again. Simply use the
+continue command, or step, or any other command that resumes execution.</p>
+<p>Specifying any command resuming execution (currently continue, step, next,
+return, jump, quit and their abbreviations) terminates the command list (as if
+that command was immediately followed by end). This is because any time you
+resume execution (even with a simple next or step), you may encounter another
+breakpoint&#8211;which could have its own command list, leading to ambiguities about
+which list to execute.</p>
+<p>If you use the &#8216;silent&#8217; command in the command list, the usual message about
+stopping at a breakpoint is not printed.  This may be desirable for breakpoints
+that are to print a specific message and then continue.  If none of the other
+commands print anything, you see no sign that the breakpoint was reached.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd>
+<dt>s(tep)</dt>
+<dd>Execute the current line, stop at the first possible occasion (either in a
+function that is called or on the next line in the current function).</dd>
+<dt>n(ext)</dt>
+<dd>Continue execution until the next line in the current function is reached or it
+returns.  (The difference between <tt class="docutils literal"><span class="pre">next</span></tt> and <tt class="docutils literal"><span class="pre">step</span></tt> is that <tt class="docutils literal"><span class="pre">step</span></tt> stops
+inside a called function, while <tt class="docutils literal"><span class="pre">next</span></tt> executes called functions at (nearly)
+full speed, only stopping at the next line in the current function.)</dd>
+<dt>unt(il)</dt>
+<dd><p class="first">Continue execution until the line with the line number greater than the
+current one is reached or when returning from current frame.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd>
+<dt>r(eturn)</dt>
+<dd>Continue execution until the current function returns.</dd>
+<dt>c(ont(inue))</dt>
+<dd>Continue execution, only stop when a breakpoint is encountered.</dd>
+<dt>j(ump) <em>lineno</em></dt>
+<dd><p class="first">Set the next line that will be executed.  Only available in the bottom-most
+frame.  This lets you jump back and execute code again, or jump forward to skip
+code that you don&#8217;t want to run.</p>
+<p class="last">It should be noted that not all jumps are allowed &#8212; for instance it is not
+possible to jump into the middle of a <a class="reference internal" href="../reference/compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> loop or out of a
+<a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause.</p>
+</dd>
+<dt>l(ist) [<em>first</em>[, <em>last</em>]]</dt>
+<dd>List source code for the current file.  Without arguments, list 11 lines around
+the current line or continue the previous listing.  With one argument, list 11
+lines around at that line.  With two arguments, list the given range; if the
+second argument is less than the first, it is interpreted as a count.</dd>
+<dt>a(rgs)</dt>
+<dd>Print the argument list of the current function.</dd>
+<dt>p <em>expression</em></dt>
+<dd><p class="first">Evaluate the <em>expression</em> in the current context and print its value.</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="docutils literal"><span class="pre">print</span></tt> can also be used, but is not a debugger command &#8212; this executes the
+Python <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> statement.</p>
+</div>
+</dd>
+<dt>pp <em>expression</em></dt>
+<dd>Like the <tt class="docutils literal"><span class="pre">p</span></tt> command, except the value of the expression is pretty-printed
+using the <a class="reference internal" href="pprint.html#module-pprint" title="pprint: Data pretty printer."><tt class="xref py py-mod docutils literal"><span class="pre">pprint</span></tt></a> module.</dd>
+<dt>alias [<em>name</em> [command]]</dt>
+<dd><p class="first">Creates an alias called <em>name</em> that executes <em>command</em>.  The command must <em>not</em>
+be enclosed in quotes.  Replaceable parameters can be indicated by <tt class="docutils literal"><span class="pre">%1</span></tt>,
+<tt class="docutils literal"><span class="pre">%2</span></tt>, and so on, while <tt class="docutils literal"><span class="pre">%*</span></tt> is replaced by all the parameters.  If no
+command is given, the current alias for <em>name</em> is shown. If no arguments are
+given, all aliases are listed.</p>
+<p>Aliases may be nested and can contain anything that can be legally typed at the
+pdb prompt.  Note that internal pdb commands <em>can</em> be overridden by aliases.
+Such a command is then hidden until the alias is removed.  Aliasing is
+recursively applied to the first word of the command line; all other words in
+the line are left alone.</p>
+<p>As an example, here are two useful aliases (especially when placed in the
+<tt class="file docutils literal"><span class="pre">.pdbrc</span></tt> file):</p>
+<div class="last highlight-python"><pre>#Print instance variables (usage "pi classInst")
+alias pi for k in %1.__dict__.keys(): print "%1.",k,"=",%1.__dict__[k]
+#Print instance variables in self
+alias ps pi self</pre>
+</div>
+</dd>
+<dt>unalias <em>name</em></dt>
+<dd>Deletes the specified alias.</dd>
+<dt>[!]<em>statement</em></dt>
+<dd><p class="first">Execute the (one-line) <em>statement</em> in the context of the current stack frame.
+The exclamation point can be omitted unless the first word of the statement
+resembles a debugger command. To set a global variable, you can prefix the
+assignment command with a <tt class="docutils literal"><span class="pre">global</span></tt> command on the same line, e.g.:</p>
+<div class="last highlight-python"><pre>(Pdb) global list_options; list_options = ['-l']
+(Pdb)</pre>
+</div>
+</dd>
+<dt>run [<em>args</em> ...]</dt>
+<dd><p class="first">Restart the debugged Python program. If an argument is supplied, it is split
+with &#8220;shlex&#8221; and the result is used as the new sys.argv. History, breakpoints,
+actions and debugger options are preserved. &#8220;restart&#8221; is an alias for &#8220;run&#8221;.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd>
+<dt>q(uit)</dt>
+<dd>Quit from the debugger. The program being executed is aborted.</dd>
+</dl>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Whether a frame is considered to originate in a certain module
+is determined by the <tt class="docutils literal"><span class="pre">__name__</span></tt> in the frame globals.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">26.2. <tt class="docutils literal"><span class="pre">pdb</span></tt> &#8212; The Python Debugger</a></li>
+<li><a class="reference internal" href="#debugger-commands">26.3. Debugger Commands</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bdb.html"
+                        title="previous chapter">26.1. <tt class="docutils literal docutils literal docutils literal"><span class="pre">bdb</span></tt> &#8212; Debugger framework</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="profile.html"
+                        title="next chapter">26.4. The Python Profilers</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/pdb.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="profile.html" title="26.4. The Python Profilers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bdb.html" title="26.1. bdb — Debugger framework"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="debug.html" >26. Debugging and Profiling</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

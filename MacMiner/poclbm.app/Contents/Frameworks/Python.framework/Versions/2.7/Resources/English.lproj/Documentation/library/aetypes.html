@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>37.4. aetypes — AppleEvent objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="37. MacPython OSA Modules" href="macosa.html" />
+    <link rel="next" title="37.5. MiniAEFrame — Open Scripting Architecture server support" href="miniaeframe.html" />
+    <link rel="prev" title="37.3. aepack — Conversion between Python variables and AppleEvent data containers" href="aepack.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="miniaeframe.html" title="37.5. MiniAEFrame — Open Scripting Architecture server support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aepack.html" title="37.3. aepack — Conversion between Python variables and AppleEvent data containers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="macosa.html" accesskey="U">37. MacPython OSA Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-aetypes">
+<span id="aetypes-appleevent-objects"></span><h1>37.4. <a class="reference internal" href="#module-aetypes" title="aetypes: Python representation of the Apple Event Object Model. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aetypes</span></tt></a> &#8212; AppleEvent objects<a class="headerlink" href="#module-aetypes" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Mac</p>
+<p>The <a class="reference internal" href="#module-aetypes" title="aetypes: Python representation of the Apple Event Object Model. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aetypes</span></tt></a> defines classes used to represent Apple Event data
+descriptors and Apple Event object specifiers.</p>
+<p>Apple Event data is contained in descriptors, and these descriptors are typed.
+For many descriptors the Python representation is simply the corresponding
+Python type: <tt class="docutils literal"><span class="pre">typeText</span></tt> in OSA is a Python string, <tt class="docutils literal"><span class="pre">typeFloat</span></tt> is a float,
+etc. For OSA types that have no direct Python counterpart this module declares
+classes. Packing and unpacking instances of these classes is handled
+automatically by <a class="reference internal" href="aepack.html#module-aepack" title="aepack: Conversion between Python variables and AppleEvent data containers. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aepack</span></tt></a>.</p>
+<p>An object specifier is essentially an address of an object implemented in a
+Apple Event server. An Apple Event specifier is used as the direct object for an
+Apple Event or as the argument of an optional parameter. The <a class="reference internal" href="#module-aetypes" title="aetypes: Python representation of the Apple Event Object Model. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aetypes</span></tt></a>
+module contains the base classes for OSA classes and properties, which are used
+by the packages generated by <a class="reference internal" href="gensuitemodule.html#module-gensuitemodule" title="gensuitemodule: Create a stub package from an OSA dictionary (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">gensuitemodule</span></tt></a> to populate the classes and
+properties in a given suite.</p>
+<p>For reasons of backward compatibility, and for cases where you need to script an
+application for which you have not generated the stub package this module also
+contains object specifiers for a number of common OSA classes such as
+<tt class="docutils literal"><span class="pre">Document</span></tt>, <tt class="docutils literal"><span class="pre">Window</span></tt>, <tt class="docutils literal"><span class="pre">Character</span></tt>, etc.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module has been removed in Python 3.x.</p>
+</div>
+<p>The <tt class="xref py py-mod docutils literal"><span class="pre">AEObjects</span></tt> module defines the following classes to represent Apple
+Event descriptor data:</p>
+<dl class="class">
+<dt id="aetypes.Unknown">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Unknown</tt><big>(</big><em>type</em>, <em>data</em><big>)</big><a class="headerlink" href="#aetypes.Unknown" title="Permalink to this definition">¶</a></dt>
+<dd><p>The representation of OSA descriptor data for which the <a class="reference internal" href="aepack.html#module-aepack" title="aepack: Conversion between Python variables and AppleEvent data containers. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aepack</span></tt></a> and
+<a class="reference internal" href="#module-aetypes" title="aetypes: Python representation of the Apple Event Object Model. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aetypes</span></tt></a> modules have no support, i.e. anything that is not represented by
+the other classes here and that is not equivalent to a simple Python value.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Enum">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Enum</tt><big>(</big><em>enum</em><big>)</big><a class="headerlink" href="#aetypes.Enum" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration value with the given 4-character string value.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.InsertionLoc">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">InsertionLoc</tt><big>(</big><em>of</em>, <em>pos</em><big>)</big><a class="headerlink" href="#aetypes.InsertionLoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position <tt class="docutils literal"><span class="pre">pos</span></tt> in object <tt class="docutils literal"><span class="pre">of</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Boolean">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Boolean</tt><big>(</big><em>bool</em><big>)</big><a class="headerlink" href="#aetypes.Boolean" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.StyledText">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">StyledText</tt><big>(</big><em>style</em>, <em>text</em><big>)</big><a class="headerlink" href="#aetypes.StyledText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text with style information (font, face, etc) included.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.AEText">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">AEText</tt><big>(</big><em>script</em>, <em>style</em>, <em>text</em><big>)</big><a class="headerlink" href="#aetypes.AEText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text with script system and style information included.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.IntlText">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">IntlText</tt><big>(</big><em>script</em>, <em>language</em>, <em>text</em><big>)</big><a class="headerlink" href="#aetypes.IntlText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text with script system and language information included.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.IntlWritingCode">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">IntlWritingCode</tt><big>(</big><em>script</em>, <em>language</em><big>)</big><a class="headerlink" href="#aetypes.IntlWritingCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Script system and language information.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.QDPoint">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">QDPoint</tt><big>(</big><em>v</em>, <em>h</em><big>)</big><a class="headerlink" href="#aetypes.QDPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>A quickdraw point.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.QDRectangle">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">QDRectangle</tt><big>(</big><em>v0</em>, <em>h0</em>, <em>v1</em>, <em>h1</em><big>)</big><a class="headerlink" href="#aetypes.QDRectangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A quickdraw rectangle.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.RGBColor">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">RGBColor</tt><big>(</big><em>r</em>, <em>g</em>, <em>b</em><big>)</big><a class="headerlink" href="#aetypes.RGBColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A color.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Type">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Type</tt><big>(</big><em>type</em><big>)</big><a class="headerlink" href="#aetypes.Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>An OSA type value with the given 4-character name.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Keyword">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Keyword</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#aetypes.Keyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>An OSA keyword with the given 4-character name.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Range">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Range</tt><big>(</big><em>start</em>, <em>stop</em><big>)</big><a class="headerlink" href="#aetypes.Range" title="Permalink to this definition">¶</a></dt>
+<dd><p>A range.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Ordinal">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Ordinal</tt><big>(</big><em>abso</em><big>)</big><a class="headerlink" href="#aetypes.Ordinal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Non-numeric absolute positions, such as <tt class="docutils literal"><span class="pre">&quot;firs&quot;</span></tt>, first, or <tt class="docutils literal"><span class="pre">&quot;midd&quot;</span></tt>,
+middle.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Logical">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Logical</tt><big>(</big><em>logc</em>, <em>term</em><big>)</big><a class="headerlink" href="#aetypes.Logical" title="Permalink to this definition">¶</a></dt>
+<dd><p>The logical expression of applying operator <tt class="docutils literal"><span class="pre">logc</span></tt> to <tt class="docutils literal"><span class="pre">term</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.Comparison">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">Comparison</tt><big>(</big><em>obj1</em>, <em>relo</em>, <em>obj2</em><big>)</big><a class="headerlink" href="#aetypes.Comparison" title="Permalink to this definition">¶</a></dt>
+<dd><p>The comparison <tt class="docutils literal"><span class="pre">relo</span></tt> of <tt class="docutils literal"><span class="pre">obj1</span></tt> to <tt class="docutils literal"><span class="pre">obj2</span></tt>.</p>
+</dd></dl>
+
+<p>The following classes are used as base classes by the generated stub packages to
+represent AppleScript classes and properties in Python:</p>
+<dl class="class">
+<dt id="aetypes.ComponentItem">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">ComponentItem</tt><big>(</big><em>which</em><span class="optional">[</span>, <em>fr</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#aetypes.ComponentItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract baseclass for an OSA class. The subclass should set the class attribute
+<tt class="docutils literal"><span class="pre">want</span></tt> to the 4-character OSA class code. Instances of subclasses of this
+class are equivalent to AppleScript Object Specifiers. Upon instantiation you
+should pass a selector in <tt class="docutils literal"><span class="pre">which</span></tt>, and optionally a parent object in <tt class="docutils literal"><span class="pre">fr</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.NProperty">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">NProperty</tt><big>(</big><em>fr</em><big>)</big><a class="headerlink" href="#aetypes.NProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract baseclass for an OSA property. The subclass should set the class
+attributes <tt class="docutils literal"><span class="pre">want</span></tt> and <tt class="docutils literal"><span class="pre">which</span></tt> to designate which property we are talking
+about. Instances of subclasses of this class are Object Specifiers.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="aetypes.ObjectSpecifier">
+<em class="property">class </em><tt class="descclassname">aetypes.</tt><tt class="descname">ObjectSpecifier</tt><big>(</big><em>want</em>, <em>form</em>, <em>seld</em><span class="optional">[</span>, <em>fr</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#aetypes.ObjectSpecifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class of <tt class="docutils literal"><span class="pre">ComponentItem</span></tt> and <tt class="docutils literal"><span class="pre">NProperty</span></tt>, a general OSA Object
+Specifier. See the Apple Open Scripting Architecture documentation for the
+parameters. Note that this class is not abstract.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aepack.html"
+                        title="previous chapter">37.3. <tt class="docutils literal docutils literal docutils literal"><span class="pre">aepack</span></tt> &#8212; Conversion between Python variables and AppleEvent data containers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="miniaeframe.html"
+                        title="next chapter">37.5. <tt class="docutils literal"><span class="pre">MiniAEFrame</span></tt> &#8212; Open Scripting Architecture server support</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/aetypes.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="miniaeframe.html" title="37.5. MiniAEFrame — Open Scripting Architecture server support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aepack.html" title="37.3. aepack — Conversion between Python variables and AppleEvent data containers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="macosa.html" >37. MacPython OSA Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

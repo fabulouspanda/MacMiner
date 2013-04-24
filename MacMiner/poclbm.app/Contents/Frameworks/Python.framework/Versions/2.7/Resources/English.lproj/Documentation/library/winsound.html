@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>34.4. winsound — Sound-playing interface for Windows &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="34. MS Windows Specific Services" href="windows.html" />
+    <link rel="next" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="prev" title="34.3. _winreg – Windows registry access" href="_winreg.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="35. Unix Specific Services"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="_winreg.html" title="34.3. _winreg – Windows registry access"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="windows.html" accesskey="U">34. MS Windows Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-winsound">
+<span id="winsound-sound-playing-interface-for-windows"></span><h1>34.4. <a class="reference internal" href="#module-winsound" title="winsound: Access to the sound-playing machinery for Windows. (Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">winsound</span></tt></a> &#8212; Sound-playing interface for Windows<a class="headerlink" href="#module-winsound" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Windows</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.2.</span></p>
+<p>The <a class="reference internal" href="#module-winsound" title="winsound: Access to the sound-playing machinery for Windows. (Windows)"><tt class="xref py py-mod docutils literal"><span class="pre">winsound</span></tt></a> module provides access to the basic sound-playing machinery
+provided by Windows platforms.  It includes functions and several constants.</p>
+<dl class="function">
+<dt id="winsound.Beep">
+<tt class="descclassname">winsound.</tt><tt class="descname">Beep</tt><big>(</big><em>frequency</em>, <em>duration</em><big>)</big><a class="headerlink" href="#winsound.Beep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Beep the PC&#8217;s speaker. The <em>frequency</em> parameter specifies frequency, in hertz,
+of the sound, and must be in the range 37 through 32,767. The <em>duration</em>
+parameter specifies the number of milliseconds the sound should last.  If the
+system is not able to beep the speaker, <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><tt class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></tt></a> is raised.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="winsound.PlaySound">
+<tt class="descclassname">winsound.</tt><tt class="descname">PlaySound</tt><big>(</big><em>sound</em>, <em>flags</em><big>)</big><a class="headerlink" href="#winsound.PlaySound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the underlying <tt class="xref c c-func docutils literal"><span class="pre">PlaySound()</span></tt> function from the Platform API.  The
+<em>sound</em> parameter may be a filename, audio data as a string, or <tt class="xref docutils literal"><span class="pre">None</span></tt>.  Its
+interpretation depends on the value of <em>flags</em>, which can be a bitwise ORed
+combination of the constants described below. If the <em>sound</em> parameter is
+<tt class="xref docutils literal"><span class="pre">None</span></tt>, any currently playing waveform sound is stopped. If the system
+indicates an error, <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><tt class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></tt></a> is raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="winsound.MessageBeep">
+<tt class="descclassname">winsound.</tt><tt class="descname">MessageBeep</tt><big>(</big><span class="optional">[</span><em>type=MB_OK</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#winsound.MessageBeep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the underlying <tt class="xref c c-func docutils literal"><span class="pre">MessageBeep()</span></tt> function from the Platform API.  This
+plays a sound as specified in the registry.  The <em>type</em> argument specifies which
+sound to play; possible values are <tt class="docutils literal"><span class="pre">-1</span></tt>, <tt class="docutils literal"><span class="pre">MB_ICONASTERISK</span></tt>,
+<tt class="docutils literal"><span class="pre">MB_ICONEXCLAMATION</span></tt>, <tt class="docutils literal"><span class="pre">MB_ICONHAND</span></tt>, <tt class="docutils literal"><span class="pre">MB_ICONQUESTION</span></tt>, and <tt class="docutils literal"><span class="pre">MB_OK</span></tt>, all
+described below.  The value <tt class="docutils literal"><span class="pre">-1</span></tt> produces a &#8220;simple beep&#8221;; this is the final
+fallback if a sound cannot be played otherwise.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_FILENAME">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_FILENAME</tt><a class="headerlink" href="#winsound.SND_FILENAME" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>sound</em> parameter is the name of a WAV file. Do not use with
+<a class="reference internal" href="#winsound.SND_ALIAS" title="winsound.SND_ALIAS"><tt class="xref py py-const docutils literal"><span class="pre">SND_ALIAS</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_ALIAS">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_ALIAS</tt><a class="headerlink" href="#winsound.SND_ALIAS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>sound</em> parameter is a sound association name from the registry.  If the
+registry contains no such name, play the system default sound unless
+<a class="reference internal" href="#winsound.SND_NODEFAULT" title="winsound.SND_NODEFAULT"><tt class="xref py py-const docutils literal"><span class="pre">SND_NODEFAULT</span></tt></a> is also specified. If no default sound is registered,
+raise <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><tt class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></tt></a>. Do not use with <a class="reference internal" href="#winsound.SND_FILENAME" title="winsound.SND_FILENAME"><tt class="xref py py-const docutils literal"><span class="pre">SND_FILENAME</span></tt></a>.</p>
+<p>All Win32 systems support at least the following; most systems support many
+more:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head"><a class="reference internal" href="#winsound.PlaySound" title="winsound.PlaySound"><tt class="xref py py-func docutils literal"><span class="pre">PlaySound()</span></tt></a> <em>name</em></th>
+<th class="head">Corresponding Control Panel Sound name</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">'SystemAsterisk'</span></tt></td>
+<td>Asterisk</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'SystemExclamation'</span></tt></td>
+<td>Exclamation</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'SystemExit'</span></tt></td>
+<td>Exit Windows</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'SystemHand'</span></tt></td>
+<td>Critical Stop</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'SystemQuestion'</span></tt></td>
+<td>Question</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">winsound</span>
+<span class="c"># Play Windows exit sound.</span>
+<span class="n">winsound</span><span class="o">.</span><span class="n">PlaySound</span><span class="p">(</span><span class="s">&quot;SystemExit&quot;</span><span class="p">,</span> <span class="n">winsound</span><span class="o">.</span><span class="n">SND_ALIAS</span><span class="p">)</span>
+
+<span class="c"># Probably play Windows default sound, if any is registered (because</span>
+<span class="c"># &quot;*&quot; probably isn&#39;t the registered name of any sound).</span>
+<span class="n">winsound</span><span class="o">.</span><span class="n">PlaySound</span><span class="p">(</span><span class="s">&quot;*&quot;</span><span class="p">,</span> <span class="n">winsound</span><span class="o">.</span><span class="n">SND_ALIAS</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_LOOP">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_LOOP</tt><a class="headerlink" href="#winsound.SND_LOOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the sound repeatedly.  The <a class="reference internal" href="#winsound.SND_ASYNC" title="winsound.SND_ASYNC"><tt class="xref py py-const docutils literal"><span class="pre">SND_ASYNC</span></tt></a> flag must also be used to
+avoid blocking.  Cannot be used with <a class="reference internal" href="#winsound.SND_MEMORY" title="winsound.SND_MEMORY"><tt class="xref py py-const docutils literal"><span class="pre">SND_MEMORY</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_MEMORY">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_MEMORY</tt><a class="headerlink" href="#winsound.SND_MEMORY" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <em>sound</em> parameter to <a class="reference internal" href="#winsound.PlaySound" title="winsound.PlaySound"><tt class="xref py py-func docutils literal"><span class="pre">PlaySound()</span></tt></a> is a memory image of a WAV file, as a
+string.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module does not support playing from a memory image asynchronously, so a
+combination of this flag and <a class="reference internal" href="#winsound.SND_ASYNC" title="winsound.SND_ASYNC"><tt class="xref py py-const docutils literal"><span class="pre">SND_ASYNC</span></tt></a> will raise <a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><tt class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></tt></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_PURGE">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_PURGE</tt><a class="headerlink" href="#winsound.SND_PURGE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop playing all instances of the specified sound.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This flag is not supported on modern Windows platforms.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_ASYNC">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_ASYNC</tt><a class="headerlink" href="#winsound.SND_ASYNC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return immediately, allowing sounds to play asynchronously.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_NODEFAULT">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_NODEFAULT</tt><a class="headerlink" href="#winsound.SND_NODEFAULT" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the specified sound cannot be found, do not play the system default sound.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_NOSTOP">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_NOSTOP</tt><a class="headerlink" href="#winsound.SND_NOSTOP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not interrupt sounds currently playing.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.SND_NOWAIT">
+<tt class="descclassname">winsound.</tt><tt class="descname">SND_NOWAIT</tt><a class="headerlink" href="#winsound.SND_NOWAIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return immediately if the sound driver is busy.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.MB_ICONASTERISK">
+<tt class="descclassname">winsound.</tt><tt class="descname">MB_ICONASTERISK</tt><a class="headerlink" href="#winsound.MB_ICONASTERISK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the <tt class="docutils literal"><span class="pre">SystemDefault</span></tt> sound.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.MB_ICONEXCLAMATION">
+<tt class="descclassname">winsound.</tt><tt class="descname">MB_ICONEXCLAMATION</tt><a class="headerlink" href="#winsound.MB_ICONEXCLAMATION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the <tt class="docutils literal"><span class="pre">SystemExclamation</span></tt> sound.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.MB_ICONHAND">
+<tt class="descclassname">winsound.</tt><tt class="descname">MB_ICONHAND</tt><a class="headerlink" href="#winsound.MB_ICONHAND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the <tt class="docutils literal"><span class="pre">SystemHand</span></tt> sound.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.MB_ICONQUESTION">
+<tt class="descclassname">winsound.</tt><tt class="descname">MB_ICONQUESTION</tt><a class="headerlink" href="#winsound.MB_ICONQUESTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the <tt class="docutils literal"><span class="pre">SystemQuestion</span></tt> sound.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="winsound.MB_OK">
+<tt class="descclassname">winsound.</tt><tt class="descname">MB_OK</tt><a class="headerlink" href="#winsound.MB_OK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play the <tt class="docutils literal"><span class="pre">SystemDefault</span></tt> sound.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="_winreg.html"
+                        title="previous chapter">34.3. <tt class="docutils literal docutils literal docutils literal"><span class="pre">_winreg</span></tt> &#8211; Windows registry access</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unix.html"
+                        title="next chapter">35. Unix Specific Services</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/winsound.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="35. Unix Specific Services"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="_winreg.html" title="34.3. _winreg – Windows registry access"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="windows.html" >34. MS Windows Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

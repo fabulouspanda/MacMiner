@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>20.12. smtplib — SMTP protocol client &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="next" title="20.13. smtpd — SMTP Server" href="smtpd.html" />
+    <link rel="prev" title="20.11. nntplib — NNTP protocol client" href="nntplib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smtpd.html" title="20.13. smtpd — SMTP Server"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nntplib.html" title="20.11. nntplib — NNTP protocol client"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-smtplib">
+<span id="smtplib-smtp-protocol-client"></span><h1>20.12. <a class="reference internal" href="#module-smtplib" title="smtplib: SMTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">smtplib</span></tt></a> &#8212; SMTP protocol client<a class="headerlink" href="#module-smtplib" title="Permalink to this headline">¶</a></h1>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/smtplib.py">Lib/smtplib.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-smtplib" title="smtplib: SMTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">smtplib</span></tt></a> module defines an SMTP client session object that can be used
+to send mail to any Internet machine with an SMTP or ESMTP listener daemon.  For
+details of SMTP and ESMTP operation, consult <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc821.html"><strong>RFC 821</strong></a> (Simple Mail Transfer
+Protocol) and <span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc1869.html"><strong>RFC 1869</strong></a> (SMTP Service Extensions).</p>
+<dl class="class">
+<dt id="smtplib.SMTP">
+<em class="property">class </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTP</tt><big>(</big><span class="optional">[</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">[</span>, <em>local_hostname</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#smtplib.SMTP" title="smtplib.SMTP"><tt class="xref py py-class docutils literal"><span class="pre">SMTP</span></tt></a> instance encapsulates an SMTP connection.  It has methods
+that support a full repertoire of SMTP and ESMTP operations. If the optional
+host and port parameters are given, the SMTP <a class="reference internal" href="#smtplib.SMTP.connect" title="smtplib.SMTP.connect"><tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt></a> method is called
+with those parameters during initialization.  An <a class="reference internal" href="#smtplib.SMTPConnectError" title="smtplib.SMTPConnectError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPConnectError</span></tt></a> is
+raised if the specified host doesn&#8217;t respond correctly. The optional
+<em>timeout</em> parameter specifies a timeout in seconds for blocking operations
+like the connection attempt (if not specified, the global default timeout
+setting will be used).</p>
+<p>For normal use, you should only require the initialization/connect,
+<a class="reference internal" href="#smtplib.SMTP.sendmail" title="smtplib.SMTP.sendmail"><tt class="xref py py-meth docutils literal"><span class="pre">sendmail()</span></tt></a>, and <tt class="xref py py-meth docutils literal"><span class="pre">quit()</span></tt> methods.
+An example is included below.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span><em>timeout</em> was added.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="smtplib.SMTP_SSL">
+<em class="property">class </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTP_SSL</tt><big>(</big><span class="optional">[</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">[</span>, <em>local_hostname</em><span class="optional">[</span>, <em>keyfile</em><span class="optional">[</span>, <em>certfile</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP_SSL" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#smtplib.SMTP_SSL" title="smtplib.SMTP_SSL"><tt class="xref py py-class docutils literal"><span class="pre">SMTP_SSL</span></tt></a> instance behaves exactly the same as instances of
+<a class="reference internal" href="#smtplib.SMTP" title="smtplib.SMTP"><tt class="xref py py-class docutils literal"><span class="pre">SMTP</span></tt></a>. <a class="reference internal" href="#smtplib.SMTP_SSL" title="smtplib.SMTP_SSL"><tt class="xref py py-class docutils literal"><span class="pre">SMTP_SSL</span></tt></a> should be used for situations where SSL is
+required from the beginning of the connection and using <tt class="xref py py-meth docutils literal"><span class="pre">starttls()</span></tt> is
+not appropriate. If <em>host</em> is not specified, the local host is used. If
+<em>port</em> is omitted, the standard SMTP-over-SSL port (465) is used. <em>keyfile</em>
+and <em>certfile</em> are also optional, and can contain a PEM formatted private key
+and certificate chain file for the SSL connection. The optional <em>timeout</em>
+parameter specifies a timeout in seconds for blocking operations like the
+connection attempt (if not specified, the global default timeout setting
+will be used).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="smtplib.LMTP">
+<em class="property">class </em><tt class="descclassname">smtplib.</tt><tt class="descname">LMTP</tt><big>(</big><span class="optional">[</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">[</span>, <em>local_hostname</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.LMTP" title="Permalink to this definition">¶</a></dt>
+<dd><p>The LMTP protocol, which is very similar to ESMTP, is heavily based on the
+standard SMTP client. It&#8217;s common to use Unix sockets for LMTP, so our <tt class="xref py py-meth docutils literal"><span class="pre">connect()</span></tt>
+method must support that as well as a regular host:port server. To specify a
+Unix socket, you must use an absolute path for <em>host</em>, starting with a &#8216;/&#8217;.</p>
+<p>Authentication is supported, using the regular SMTP mechanism. When using a Unix
+socket, LMTP generally don&#8217;t support or require any authentication, but your
+mileage might vary.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<p>A nice selection of exceptions is defined as well:</p>
+<dl class="exception">
+<dt id="smtplib.SMTPException">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPException</tt><a class="headerlink" href="#smtplib.SMTPException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base exception class for all exceptions raised by this module.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPServerDisconnected">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPServerDisconnected</tt><a class="headerlink" href="#smtplib.SMTPServerDisconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception is raised when the server unexpectedly disconnects, or when an
+attempt is made to use the <a class="reference internal" href="#smtplib.SMTP" title="smtplib.SMTP"><tt class="xref py py-class docutils literal"><span class="pre">SMTP</span></tt></a> instance before connecting it to a
+server.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPResponseException">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPResponseException</tt><a class="headerlink" href="#smtplib.SMTPResponseException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all exceptions that include an SMTP error code. These exceptions
+are generated in some instances when the SMTP server returns an error code.  The
+error code is stored in the <tt class="xref py py-attr docutils literal"><span class="pre">smtp_code</span></tt> attribute of the error, and the
+<tt class="xref py py-attr docutils literal"><span class="pre">smtp_error</span></tt> attribute is set to the error message.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPSenderRefused">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPSenderRefused</tt><a class="headerlink" href="#smtplib.SMTPSenderRefused" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sender address refused.  In addition to the attributes set by on all
+<a class="reference internal" href="#smtplib.SMTPResponseException" title="smtplib.SMTPResponseException"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPResponseException</span></tt></a> exceptions, this sets &#8216;sender&#8217; to the string that
+the SMTP server refused.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPRecipientsRefused">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPRecipientsRefused</tt><a class="headerlink" href="#smtplib.SMTPRecipientsRefused" title="Permalink to this definition">¶</a></dt>
+<dd><p>All recipient addresses refused.  The errors for each recipient are accessible
+through the attribute <tt class="xref py py-attr docutils literal"><span class="pre">recipients</span></tt>, which is a dictionary of exactly the
+same sort as <a class="reference internal" href="#smtplib.SMTP.sendmail" title="smtplib.SMTP.sendmail"><tt class="xref py py-meth docutils literal"><span class="pre">SMTP.sendmail()</span></tt></a> returns.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPDataError">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPDataError</tt><a class="headerlink" href="#smtplib.SMTPDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>The SMTP server refused to accept the message data.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPConnectError">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPConnectError</tt><a class="headerlink" href="#smtplib.SMTPConnectError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error occurred during establishment of a connection  with the server.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPHeloError">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPHeloError</tt><a class="headerlink" href="#smtplib.SMTPHeloError" title="Permalink to this definition">¶</a></dt>
+<dd><p>The server refused our <tt class="docutils literal"><span class="pre">HELO</span></tt> message.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="smtplib.SMTPAuthenticationError">
+<em class="property">exception </em><tt class="descclassname">smtplib.</tt><tt class="descname">SMTPAuthenticationError</tt><a class="headerlink" href="#smtplib.SMTPAuthenticationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>SMTP authentication went wrong.  Most probably the server didn&#8217;t accept the
+username/password combination provided.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><span class="target" id="index-3"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc821.html"><strong>RFC 821</strong></a> - Simple Mail Transfer Protocol</dt>
+<dd>Protocol definition for SMTP.  This document covers the model, operating
+procedure, and protocol details for SMTP.</dd>
+<dt><span class="target" id="index-4"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc1869.html"><strong>RFC 1869</strong></a> - SMTP Service Extensions</dt>
+<dd>Definition of the ESMTP extensions for SMTP.  This describes a framework for
+extending SMTP with new commands, supporting dynamic discovery of the commands
+provided by the server, and defines a few additional commands.</dd>
+</dl>
+</div>
+<div class="section" id="smtp-objects">
+<span id="id1"></span><h2>20.12.1. SMTP Objects<a class="headerlink" href="#smtp-objects" title="Permalink to this headline">¶</a></h2>
+<p>An <a class="reference internal" href="#smtplib.SMTP" title="smtplib.SMTP"><tt class="xref py py-class docutils literal"><span class="pre">SMTP</span></tt></a> instance has the following methods:</p>
+<dl class="method">
+<dt id="smtplib.SMTP.set_debuglevel">
+<tt class="descclassname">SMTP.</tt><tt class="descname">set_debuglevel</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#smtplib.SMTP.set_debuglevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the debug output level.  A true value for <em>level</em> results in debug messages
+for connection and for all messages sent to and received from the server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.connect">
+<tt class="descclassname">SMTP.</tt><tt class="descname">connect</tt><big>(</big><span class="optional">[</span><em>host</em><span class="optional">[</span>, <em>port</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to a host on a given port.  The defaults are to connect to the local
+host at the standard SMTP port (25). If the hostname ends with a colon (<tt class="docutils literal"><span class="pre">':'</span></tt>)
+followed by a number, that suffix will be stripped off and the number
+interpreted as the port number to use. This method is automatically invoked by
+the constructor if a host is specified during instantiation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.docmd">
+<tt class="descclassname">SMTP.</tt><tt class="descname">docmd</tt><big>(</big><em>cmd</em><span class="optional">[</span>, <em>argstring</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP.docmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a command <em>cmd</em> to the server.  The optional argument <em>argstring</em> is simply
+concatenated to the command, separated by a space.</p>
+<p>This returns a 2-tuple composed of a numeric response code and the actual
+response line (multiline responses are joined into one long line.)</p>
+<p>In normal operation it should not be necessary to call this method explicitly.
+It is used to implement other methods and may be useful for testing private
+extensions.</p>
+<p>If the connection to the server is lost while waiting for the reply,
+<a class="reference internal" href="#smtplib.SMTPServerDisconnected" title="smtplib.SMTPServerDisconnected"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPServerDisconnected</span></tt></a> will be raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.helo">
+<tt class="descclassname">SMTP.</tt><tt class="descname">helo</tt><big>(</big><span class="optional">[</span><em>hostname</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP.helo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify yourself to the SMTP server using <tt class="docutils literal"><span class="pre">HELO</span></tt>.  The hostname argument
+defaults to the fully qualified domain name of the local host.
+The message returned by the server is stored as the <tt class="xref py py-attr docutils literal"><span class="pre">helo_resp</span></tt> attribute
+of the object.</p>
+<p>In normal operation it should not be necessary to call this method explicitly.
+It will be implicitly called by the <a class="reference internal" href="#smtplib.SMTP.sendmail" title="smtplib.SMTP.sendmail"><tt class="xref py py-meth docutils literal"><span class="pre">sendmail()</span></tt></a> when necessary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.ehlo">
+<tt class="descclassname">SMTP.</tt><tt class="descname">ehlo</tt><big>(</big><span class="optional">[</span><em>hostname</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP.ehlo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify yourself to an ESMTP server using <tt class="docutils literal"><span class="pre">EHLO</span></tt>.  The hostname argument
+defaults to the fully qualified domain name of the local host.  Examine the
+response for ESMTP option and store them for use by <a class="reference internal" href="#smtplib.SMTP.has_extn" title="smtplib.SMTP.has_extn"><tt class="xref py py-meth docutils literal"><span class="pre">has_extn()</span></tt></a>.
+Also sets several informational attributes: the message returned by
+the server is stored as the <tt class="xref py py-attr docutils literal"><span class="pre">ehlo_resp</span></tt> attribute, <tt class="xref py py-attr docutils literal"><span class="pre">does_esmtp</span></tt>
+is set to true or false depending on whether the server supports ESMTP, and
+<tt class="xref py py-attr docutils literal"><span class="pre">esmtp_features</span></tt> will be a dictionary containing the names of the
+SMTP service extensions this server supports, and their
+parameters (if any).</p>
+<p>Unless you wish to use <a class="reference internal" href="#smtplib.SMTP.has_extn" title="smtplib.SMTP.has_extn"><tt class="xref py py-meth docutils literal"><span class="pre">has_extn()</span></tt></a> before sending mail, it should not be
+necessary to call this method explicitly.  It will be implicitly called by
+<a class="reference internal" href="#smtplib.SMTP.sendmail" title="smtplib.SMTP.sendmail"><tt class="xref py py-meth docutils literal"><span class="pre">sendmail()</span></tt></a> when necessary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.ehlo_or_helo_if_needed">
+<tt class="descclassname">SMTP.</tt><tt class="descname">ehlo_or_helo_if_needed</tt><big>(</big><big>)</big><a class="headerlink" href="#smtplib.SMTP.ehlo_or_helo_if_needed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method call <a class="reference internal" href="#smtplib.SMTP.ehlo" title="smtplib.SMTP.ehlo"><tt class="xref py py-meth docutils literal"><span class="pre">ehlo()</span></tt></a> and or <a class="reference internal" href="#smtplib.SMTP.helo" title="smtplib.SMTP.helo"><tt class="xref py py-meth docutils literal"><span class="pre">helo()</span></tt></a> if there has been no
+previous <tt class="docutils literal"><span class="pre">EHLO</span></tt> or <tt class="docutils literal"><span class="pre">HELO</span></tt> command this session.  It tries ESMTP <tt class="docutils literal"><span class="pre">EHLO</span></tt>
+first.</p>
+<dl class="docutils">
+<dt><a class="reference internal" href="#smtplib.SMTPHeloError" title="smtplib.SMTPHeloError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPHeloError</span></tt></a></dt>
+<dd>The server didn&#8217;t reply properly to the <tt class="docutils literal"><span class="pre">HELO</span></tt> greeting.</dd>
+</dl>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.has_extn">
+<tt class="descclassname">SMTP.</tt><tt class="descname">has_extn</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#smtplib.SMTP.has_extn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> if <em>name</em> is in the set of SMTP service extensions returned
+by the server, <a class="reference internal" href="constants.html#False" title="False"><tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt></a> otherwise. Case is ignored.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.verify">
+<tt class="descclassname">SMTP.</tt><tt class="descname">verify</tt><big>(</big><em>address</em><big>)</big><a class="headerlink" href="#smtplib.SMTP.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the validity of an address on this server using SMTP <tt class="docutils literal"><span class="pre">VRFY</span></tt>. Returns a
+tuple consisting of code 250 and a full <span class="target" id="index-5"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc822.html"><strong>RFC 822</strong></a> address (including human
+name) if the user address is valid. Otherwise returns an SMTP error code of 400
+or greater and an error string.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Many sites disable SMTP <tt class="docutils literal"><span class="pre">VRFY</span></tt> in order to foil spammers.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.login">
+<tt class="descclassname">SMTP.</tt><tt class="descname">login</tt><big>(</big><em>user</em>, <em>password</em><big>)</big><a class="headerlink" href="#smtplib.SMTP.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log in on an SMTP server that requires authentication. The arguments are the
+username and the password to authenticate with. If there has been no previous
+<tt class="docutils literal"><span class="pre">EHLO</span></tt> or <tt class="docutils literal"><span class="pre">HELO</span></tt> command this session, this method tries ESMTP <tt class="docutils literal"><span class="pre">EHLO</span></tt>
+first. This method will return normally if the authentication was successful, or
+may raise the following exceptions:</p>
+<dl class="docutils">
+<dt><a class="reference internal" href="#smtplib.SMTPHeloError" title="smtplib.SMTPHeloError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPHeloError</span></tt></a></dt>
+<dd>The server didn&#8217;t reply properly to the <tt class="docutils literal"><span class="pre">HELO</span></tt> greeting.</dd>
+<dt><a class="reference internal" href="#smtplib.SMTPAuthenticationError" title="smtplib.SMTPAuthenticationError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPAuthenticationError</span></tt></a></dt>
+<dd>The server didn&#8217;t accept the username/password combination.</dd>
+<dt><a class="reference internal" href="#smtplib.SMTPException" title="smtplib.SMTPException"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPException</span></tt></a></dt>
+<dd>No suitable authentication method was found.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.starttls">
+<tt class="descclassname">SMTP.</tt><tt class="descname">starttls</tt><big>(</big><span class="optional">[</span><em>keyfile</em><span class="optional">[</span>, <em>certfile</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP.starttls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put the SMTP connection in TLS (Transport Layer Security) mode.  All SMTP
+commands that follow will be encrypted.  You should then call <a class="reference internal" href="#smtplib.SMTP.ehlo" title="smtplib.SMTP.ehlo"><tt class="xref py py-meth docutils literal"><span class="pre">ehlo()</span></tt></a>
+again.</p>
+<p>If <em>keyfile</em> and <em>certfile</em> are provided, these are passed to the <a class="reference internal" href="socket.html#module-socket" title="socket: Low-level networking interface."><tt class="xref py py-mod docutils literal"><span class="pre">socket</span></tt></a>
+module&#8217;s <a class="reference internal" href="ssl.html#module-ssl" title="ssl: TLS/SSL wrapper for socket objects"><tt class="xref py py-func docutils literal"><span class="pre">ssl()</span></tt></a> function.</p>
+<p>If there has been no previous <tt class="docutils literal"><span class="pre">EHLO</span></tt> or <tt class="docutils literal"><span class="pre">HELO</span></tt> command this session,
+this method tries ESMTP <tt class="docutils literal"><span class="pre">EHLO</span></tt> first.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6.</span></p>
+<dl class="docutils">
+<dt><a class="reference internal" href="#smtplib.SMTPHeloError" title="smtplib.SMTPHeloError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPHeloError</span></tt></a></dt>
+<dd>The server didn&#8217;t reply properly to the <tt class="docutils literal"><span class="pre">HELO</span></tt> greeting.</dd>
+<dt><a class="reference internal" href="#smtplib.SMTPException" title="smtplib.SMTPException"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPException</span></tt></a></dt>
+<dd>The server does not support the STARTTLS extension.</dd>
+</dl>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6.</span></p>
+<dl class="docutils">
+<dt><a class="reference internal" href="exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><tt class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></tt></a></dt>
+<dd>SSL/TLS support is not available to your Python interpreter.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.sendmail">
+<tt class="descclassname">SMTP.</tt><tt class="descname">sendmail</tt><big>(</big><em>from_addr</em>, <em>to_addrs</em>, <em>msg</em><span class="optional">[</span>, <em>mail_options</em>, <em>rcpt_options</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#smtplib.SMTP.sendmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send mail.  The required arguments are an <span class="target" id="index-6"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc822.html"><strong>RFC 822</strong></a> from-address string, a list
+of <span class="target" id="index-7"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc822.html"><strong>RFC 822</strong></a> to-address strings (a bare string will be treated as a list with 1
+address), and a message string.  The caller may pass a list of ESMTP options
+(such as <tt class="docutils literal"><span class="pre">8bitmime</span></tt>) to be used in <tt class="docutils literal"><span class="pre">MAIL</span> <span class="pre">FROM</span></tt> commands as <em>mail_options</em>.
+ESMTP options (such as <tt class="docutils literal"><span class="pre">DSN</span></tt> commands) that should be used with all <tt class="docutils literal"><span class="pre">RCPT</span></tt>
+commands can be passed as <em>rcpt_options</em>.  (If you need to use different ESMTP
+options to different recipients you have to use the low-level methods such as
+<tt class="xref py py-meth docutils literal"><span class="pre">mail()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">rcpt()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">data()</span></tt> to send the message.)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <em>from_addr</em> and <em>to_addrs</em> parameters are used to construct the message
+envelope used by the transport agents. The <a class="reference internal" href="#smtplib.SMTP" title="smtplib.SMTP"><tt class="xref py py-class docutils literal"><span class="pre">SMTP</span></tt></a> does not modify the
+message headers in any way.</p>
+</div>
+<p>If there has been no previous <tt class="docutils literal"><span class="pre">EHLO</span></tt> or <tt class="docutils literal"><span class="pre">HELO</span></tt> command this session, this
+method tries ESMTP <tt class="docutils literal"><span class="pre">EHLO</span></tt> first. If the server does ESMTP, message size and
+each of the specified options will be passed to it (if the option is in the
+feature set the server advertises).  If <tt class="docutils literal"><span class="pre">EHLO</span></tt> fails, <tt class="docutils literal"><span class="pre">HELO</span></tt> will be tried
+and ESMTP options suppressed.</p>
+<p>This method will return normally if the mail is accepted for at least one
+recipient. Otherwise it will raise an exception.  That is, if this method does
+not raise an exception, then someone should get your mail. If this method does
+not raise an exception, it returns a dictionary, with one entry for each
+recipient that was refused.  Each entry contains a tuple of the SMTP error code
+and the accompanying error message sent by the server.</p>
+<p>This method may raise the following exceptions:</p>
+<dl class="docutils">
+<dt><a class="reference internal" href="#smtplib.SMTPRecipientsRefused" title="smtplib.SMTPRecipientsRefused"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPRecipientsRefused</span></tt></a></dt>
+<dd>All recipients were refused.  Nobody got the mail.  The <tt class="xref py py-attr docutils literal"><span class="pre">recipients</span></tt>
+attribute of the exception object is a dictionary with information about the
+refused recipients (like the one returned when at least one recipient was
+accepted).</dd>
+<dt><a class="reference internal" href="#smtplib.SMTPHeloError" title="smtplib.SMTPHeloError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPHeloError</span></tt></a></dt>
+<dd>The server didn&#8217;t reply properly to the <tt class="docutils literal"><span class="pre">HELO</span></tt> greeting.</dd>
+<dt><a class="reference internal" href="#smtplib.SMTPSenderRefused" title="smtplib.SMTPSenderRefused"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPSenderRefused</span></tt></a></dt>
+<dd>The server didn&#8217;t accept the <em>from_addr</em>.</dd>
+<dt><a class="reference internal" href="#smtplib.SMTPDataError" title="smtplib.SMTPDataError"><tt class="xref py py-exc docutils literal"><span class="pre">SMTPDataError</span></tt></a></dt>
+<dd>The server replied with an unexpected error code (other than a refusal of a
+recipient).</dd>
+</dl>
+<p>Unless otherwise noted, the connection will be open even after an exception is
+raised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="smtplib.SMTP.quit">
+<tt class="descclassname">SMTP.</tt><tt class="descname">quit</tt><big>(</big><big>)</big><a class="headerlink" href="#smtplib.SMTP.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminate the SMTP session and close the connection.  Return the result of
+the SMTP <tt class="docutils literal"><span class="pre">QUIT</span></tt> command.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>Return a value.</p>
+</dd></dl>
+
+<p>Low-level methods corresponding to the standard SMTP/ESMTP commands <tt class="docutils literal"><span class="pre">HELP</span></tt>,
+<tt class="docutils literal"><span class="pre">RSET</span></tt>, <tt class="docutils literal"><span class="pre">NOOP</span></tt>, <tt class="docutils literal"><span class="pre">MAIL</span></tt>, <tt class="docutils literal"><span class="pre">RCPT</span></tt>, and <tt class="docutils literal"><span class="pre">DATA</span></tt> are also supported.
+Normally these do not need to be called directly, so they are not documented
+here.  For details, consult the module code.</p>
+</div>
+<div class="section" id="smtp-example">
+<span id="id2"></span><h2>20.12.2. SMTP Example<a class="headerlink" href="#smtp-example" title="Permalink to this headline">¶</a></h2>
+<p>This example prompts the user for addresses needed in the message envelope (&#8216;To&#8217;
+and &#8216;From&#8217; addresses), and the message to be delivered.  Note that the headers
+to be included with the message must be included in the message as entered; this
+example doesn&#8217;t do any processing of the <span class="target" id="index-8"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc822.html"><strong>RFC 822</strong></a> headers.  In particular, the
+&#8216;To&#8217; and &#8216;From&#8217; addresses must be included in the message headers explicitly.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">smtplib</span>
+
+<span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="n">prompt</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="n">fromaddr</span> <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s">&quot;From: &quot;</span><span class="p">)</span>
+<span class="n">toaddrs</span>  <span class="o">=</span> <span class="n">prompt</span><span class="p">(</span><span class="s">&quot;To: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Enter message, end with ^D (Unix) or ^Z (Windows):&quot;</span>
+
+<span class="c"># Add the From: and To: headers at the start!</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;From: </span><span class="si">%s</span><span class="se">\r\n</span><span class="s">To: </span><span class="si">%s</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span>
+       <span class="o">%</span> <span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="s">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">toaddrs</span><span class="p">)))</span>
+<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">EOFError</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="n">line</span>
+
+<span class="k">print</span> <span class="s">&quot;Message length is &quot;</span> <span class="o">+</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+
+<span class="n">server</span> <span class="o">=</span> <span class="n">smtplib</span><span class="o">.</span><span class="n">SMTP</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">set_debuglevel</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">sendmail</span><span class="p">(</span><span class="n">fromaddr</span><span class="p">,</span> <span class="n">toaddrs</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+<span class="n">server</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In general, you will want to use the <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package&#8217;s features to
+construct an email message, which you can then convert to a string and send
+via <tt class="xref py py-meth docutils literal"><span class="pre">sendmail()</span></tt>; see <a class="reference internal" href="email-examples.html#email-examples"><em>email: Examples</em></a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.12. <tt class="docutils literal"><span class="pre">smtplib</span></tt> &#8212; SMTP protocol client</a><ul>
+<li><a class="reference internal" href="#smtp-objects">20.12.1. SMTP Objects</a></li>
+<li><a class="reference internal" href="#smtp-example">20.12.2. SMTP Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nntplib.html"
+                        title="previous chapter">20.11. <tt class="docutils literal docutils literal docutils literal"><span class="pre">nntplib</span></tt> &#8212; NNTP protocol client</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="smtpd.html"
+                        title="next chapter">20.13. <tt class="docutils literal docutils literal"><span class="pre">smtpd</span></tt> &#8212; SMTP Server</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/smtplib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smtpd.html" title="20.13. smtpd — SMTP Server"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nntplib.html" title="20.11. nntplib — NNTP protocol client"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" >20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

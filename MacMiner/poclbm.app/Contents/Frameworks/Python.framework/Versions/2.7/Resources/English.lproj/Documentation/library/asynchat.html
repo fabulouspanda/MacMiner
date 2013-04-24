@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>17.7. asynchat — Asynchronous socket command/response handler &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="17. Interprocess Communication and Networking" href="ipc.html" />
+    <link rel="next" title="18. Internet Data Handling" href="netdata.html" />
+    <link rel="prev" title="17.6. asyncore — Asynchronous socket handler" href="asyncore.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="netdata.html" title="18. Internet Data Handling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="asyncore.html" title="17.6. asyncore — Asynchronous socket handler"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="ipc.html" accesskey="U">17. Interprocess Communication and Networking</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-asynchat">
+<span id="asynchat-asynchronous-socket-command-response-handler"></span><h1>17.7. <a class="reference internal" href="#module-asynchat" title="asynchat: Support for asynchronous command/response protocols."><tt class="xref py py-mod docutils literal"><span class="pre">asynchat</span></tt></a> &#8212; Asynchronous socket command/response handler<a class="headerlink" href="#module-asynchat" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/asynchat.py">Lib/asynchat.py</a></p>
+<hr class="docutils" />
+<p>This module builds on the <a class="reference internal" href="asyncore.html#module-asyncore" title="asyncore: A base class for developing asynchronous socket handling services."><tt class="xref py py-mod docutils literal"><span class="pre">asyncore</span></tt></a> infrastructure, simplifying
+asynchronous clients and servers and making it easier to handle protocols
+whose elements are terminated by arbitrary strings, or are of variable length.
+<a class="reference internal" href="#module-asynchat" title="asynchat: Support for asynchronous command/response protocols."><tt class="xref py py-mod docutils literal"><span class="pre">asynchat</span></tt></a> defines the abstract class <a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a> that you
+subclass, providing implementations of the <tt class="xref py py-meth docutils literal"><span class="pre">collect_incoming_data()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">found_terminator()</span></tt> methods. It uses the same asynchronous loop as
+<a class="reference internal" href="asyncore.html#module-asyncore" title="asyncore: A base class for developing asynchronous socket handling services."><tt class="xref py py-mod docutils literal"><span class="pre">asyncore</span></tt></a>, and the two types of channel, <a class="reference internal" href="asyncore.html#asyncore.dispatcher" title="asyncore.dispatcher"><tt class="xref py py-class docutils literal"><span class="pre">asyncore.dispatcher</span></tt></a>
+and <a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">asynchat.async_chat</span></tt></a>, can freely be mixed in the channel map.
+Typically an <a class="reference internal" href="asyncore.html#asyncore.dispatcher" title="asyncore.dispatcher"><tt class="xref py py-class docutils literal"><span class="pre">asyncore.dispatcher</span></tt></a> server channel generates new
+<a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">asynchat.async_chat</span></tt></a> channel objects as it receives incoming
+connection requests.</p>
+<dl class="class">
+<dt id="asynchat.async_chat">
+<em class="property">class </em><tt class="descclassname">asynchat.</tt><tt class="descname">async_chat</tt><a class="headerlink" href="#asynchat.async_chat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is an abstract subclass of <a class="reference internal" href="asyncore.html#asyncore.dispatcher" title="asyncore.dispatcher"><tt class="xref py py-class docutils literal"><span class="pre">asyncore.dispatcher</span></tt></a>. To make
+practical use of the code you must subclass <a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a>, providing
+meaningful <a class="reference internal" href="#asynchat.async_chat.collect_incoming_data" title="asynchat.async_chat.collect_incoming_data"><tt class="xref py py-meth docutils literal"><span class="pre">collect_incoming_data()</span></tt></a> and <a class="reference internal" href="#asynchat.async_chat.found_terminator" title="asynchat.async_chat.found_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">found_terminator()</span></tt></a>
+methods.
+The <a class="reference internal" href="asyncore.html#asyncore.dispatcher" title="asyncore.dispatcher"><tt class="xref py py-class docutils literal"><span class="pre">asyncore.dispatcher</span></tt></a> methods can be used, although not all make
+sense in a message/response context.</p>
+<p>Like <a class="reference internal" href="asyncore.html#asyncore.dispatcher" title="asyncore.dispatcher"><tt class="xref py py-class docutils literal"><span class="pre">asyncore.dispatcher</span></tt></a>, <a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a> defines a set of
+events that are generated by an analysis of socket conditions after a
+<tt class="xref c c-func docutils literal"><span class="pre">select()</span></tt> call. Once the polling loop has been started the
+<a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a> object&#8217;s methods are called by the event-processing
+framework with no action on the part of the programmer.</p>
+<p>Two class attributes can be modified, to improve performance, or possibly
+even to conserve memory.</p>
+<dl class="data">
+<dt id="asynchat.async_chat.ac_in_buffer_size">
+<tt class="descname">ac_in_buffer_size</tt><a class="headerlink" href="#asynchat.async_chat.ac_in_buffer_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The asynchronous input buffer size (default <tt class="docutils literal"><span class="pre">4096</span></tt>).</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="asynchat.async_chat.ac_out_buffer_size">
+<tt class="descname">ac_out_buffer_size</tt><a class="headerlink" href="#asynchat.async_chat.ac_out_buffer_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The asynchronous output buffer size (default <tt class="docutils literal"><span class="pre">4096</span></tt>).</p>
+</dd></dl>
+
+<p>Unlike <a class="reference internal" href="asyncore.html#asyncore.dispatcher" title="asyncore.dispatcher"><tt class="xref py py-class docutils literal"><span class="pre">asyncore.dispatcher</span></tt></a>, <a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a> allows you to
+define a first-in-first-out queue (fifo) of <em>producers</em>. A producer need
+have only one method, <tt class="xref py py-meth docutils literal"><span class="pre">more()</span></tt>, which should return data to be
+transmitted on the channel.
+The producer indicates exhaustion (<em>i.e.</em> that it contains no more data) by
+having its <tt class="xref py py-meth docutils literal"><span class="pre">more()</span></tt> method return the empty string. At this point the
+<a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a> object removes the producer from the fifo and starts
+using the next producer, if any. When the producer fifo is empty the
+<tt class="xref py py-meth docutils literal"><span class="pre">handle_write()</span></tt> method does nothing. You use the channel object&#8217;s
+<a class="reference internal" href="#asynchat.async_chat.set_terminator" title="asynchat.async_chat.set_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">set_terminator()</span></tt></a> method to describe how to recognize the end of, or
+an important breakpoint in, an incoming transmission from the remote
+endpoint.</p>
+<p>To build a functioning <a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a> subclass your  input methods
+<a class="reference internal" href="#asynchat.async_chat.collect_incoming_data" title="asynchat.async_chat.collect_incoming_data"><tt class="xref py py-meth docutils literal"><span class="pre">collect_incoming_data()</span></tt></a> and <a class="reference internal" href="#asynchat.async_chat.found_terminator" title="asynchat.async_chat.found_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">found_terminator()</span></tt></a> must handle the
+data that the channel receives asynchronously. The methods are described
+below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.close_when_done">
+<tt class="descclassname">async_chat.</tt><tt class="descname">close_when_done</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.async_chat.close_when_done" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes a <tt class="xref docutils literal"><span class="pre">None</span></tt> on to the producer fifo. When this producer is popped off
+the fifo it causes the channel to be closed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.collect_incoming_data">
+<tt class="descclassname">async_chat.</tt><tt class="descname">collect_incoming_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#asynchat.async_chat.collect_incoming_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called with <em>data</em> holding an arbitrary amount of received data.  The
+default method, which must be overridden, raises a
+<a class="reference internal" href="exceptions.html#exceptions.NotImplementedError" title="exceptions.NotImplementedError"><tt class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></tt></a> exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.discard_buffers">
+<tt class="descclassname">async_chat.</tt><tt class="descname">discard_buffers</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.async_chat.discard_buffers" title="Permalink to this definition">¶</a></dt>
+<dd><p>In emergencies this method will discard any data held in the input and/or
+output buffers and the producer fifo.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.found_terminator">
+<tt class="descclassname">async_chat.</tt><tt class="descname">found_terminator</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.async_chat.found_terminator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the incoming data stream  matches the termination condition set
+by <a class="reference internal" href="#asynchat.async_chat.set_terminator" title="asynchat.async_chat.set_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">set_terminator()</span></tt></a>. The default method, which must be overridden,
+raises a <a class="reference internal" href="exceptions.html#exceptions.NotImplementedError" title="exceptions.NotImplementedError"><tt class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></tt></a> exception. The buffered input data
+should be available via an instance attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.get_terminator">
+<tt class="descclassname">async_chat.</tt><tt class="descname">get_terminator</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.async_chat.get_terminator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current terminator for the channel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.push">
+<tt class="descclassname">async_chat.</tt><tt class="descname">push</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#asynchat.async_chat.push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes data on to the channel&#8217;s fifo to ensure its transmission.
+This is all you need to do to have the channel write the data out to the
+network, although it is possible to use your own producers in more complex
+schemes to implement encryption and chunking, for example.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.push_with_producer">
+<tt class="descclassname">async_chat.</tt><tt class="descname">push_with_producer</tt><big>(</big><em>producer</em><big>)</big><a class="headerlink" href="#asynchat.async_chat.push_with_producer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a producer object and adds it to the producer fifo associated with
+the channel.  When all currently-pushed producers have been exhausted the
+channel will consume this producer&#8217;s data by calling its <tt class="xref py py-meth docutils literal"><span class="pre">more()</span></tt>
+method and send the data to the remote endpoint.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.async_chat.set_terminator">
+<tt class="descclassname">async_chat.</tt><tt class="descname">set_terminator</tt><big>(</big><em>term</em><big>)</big><a class="headerlink" href="#asynchat.async_chat.set_terminator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the terminating condition to be recognized on the channel.  <tt class="docutils literal"><span class="pre">term</span></tt>
+may be any of three types of value, corresponding to three different ways
+to handle incoming protocol data.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">term</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><em>string</em></td>
+<td>Will call <a class="reference internal" href="#asynchat.async_chat.found_terminator" title="asynchat.async_chat.found_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">found_terminator()</span></tt></a> when the
+string is found in the input stream</td>
+</tr>
+<tr><td><em>integer</em></td>
+<td>Will call <a class="reference internal" href="#asynchat.async_chat.found_terminator" title="asynchat.async_chat.found_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">found_terminator()</span></tt></a> when the
+indicated number of characters have been
+received</td>
+</tr>
+<tr><td><tt class="xref docutils literal"><span class="pre">None</span></tt></td>
+<td>The channel continues to collect data
+forever</td>
+</tr>
+</tbody>
+</table>
+<p>Note that any data following the terminator will be available for reading
+by the channel after <a class="reference internal" href="#asynchat.async_chat.found_terminator" title="asynchat.async_chat.found_terminator"><tt class="xref py py-meth docutils literal"><span class="pre">found_terminator()</span></tt></a> is called.</p>
+</dd></dl>
+
+<div class="section" id="asynchat-auxiliary-classes">
+<h2>17.7.1. asynchat - Auxiliary Classes<a class="headerlink" href="#asynchat-auxiliary-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="asynchat.fifo">
+<em class="property">class </em><tt class="descclassname">asynchat.</tt><tt class="descname">fifo</tt><big>(</big><span class="optional">[</span><em>list=None</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#asynchat.fifo" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#asynchat.fifo" title="asynchat.fifo"><tt class="xref py py-class docutils literal"><span class="pre">fifo</span></tt></a> holding data which has been pushed by the application but
+not yet popped for writing to the channel.  A <a class="reference internal" href="#asynchat.fifo" title="asynchat.fifo"><tt class="xref py py-class docutils literal"><span class="pre">fifo</span></tt></a> is a list used
+to hold data and/or producers until they are required.  If the <em>list</em>
+argument is provided then it should contain producers or data items to be
+written to the channel.</p>
+<dl class="method">
+<dt id="asynchat.fifo.is_empty">
+<tt class="descname">is_empty</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.fifo.is_empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="xref docutils literal"><span class="pre">True</span></tt> if and only if the fifo is empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.fifo.first">
+<tt class="descname">first</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.fifo.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the least-recently <a class="reference internal" href="#asynchat.fifo.push" title="asynchat.fifo.push"><tt class="xref py py-meth docutils literal"><span class="pre">push()</span></tt></a>ed item from the fifo.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.fifo.push">
+<tt class="descname">push</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#asynchat.fifo.push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the given data (which may be a string or a producer object) to the
+producer fifo.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asynchat.fifo.pop">
+<tt class="descname">pop</tt><big>(</big><big>)</big><a class="headerlink" href="#asynchat.fifo.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the fifo is not empty, returns <tt class="docutils literal"><span class="pre">True,</span> <span class="pre">first()</span></tt>, deleting the popped
+item.  Returns <tt class="docutils literal"><span class="pre">False,</span> <span class="pre">None</span></tt> for an empty fifo.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="asynchat-example">
+<span id="id1"></span><h2>17.7.2. asynchat Example<a class="headerlink" href="#asynchat-example" title="Permalink to this headline">¶</a></h2>
+<p>The following partial example shows how HTTP requests can be read with
+<a class="reference internal" href="#asynchat.async_chat" title="asynchat.async_chat"><tt class="xref py py-class docutils literal"><span class="pre">async_chat</span></tt></a>.  A web server might create an
+<tt class="xref py py-class docutils literal"><span class="pre">http_request_handler</span></tt> object for each incoming client connection.
+Notice that initially the channel terminator is set to match the blank line at
+the end of the HTTP headers, and a flag indicates that the headers are being
+read.</p>
+<p>Once the headers have been read, if the request is of type POST (indicating
+that further data are present in the input stream) then the
+<tt class="docutils literal"><span class="pre">Content-Length:</span></tt> header is used to set a numeric terminator to read the
+right amount of data from the channel.</p>
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">handle_request()</span></tt> method is called once all relevant input has been
+marshalled, after setting the channel terminator to <tt class="xref docutils literal"><span class="pre">None</span></tt> to ensure that
+any extraneous data sent by the web client are ignored.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">http_request_handler</span><span class="p">(</span><span class="n">asynchat</span><span class="o">.</span><span class="n">async_chat</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">sessions</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+        <span class="n">asynchat</span><span class="o">.</span><span class="n">async_chat</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock</span><span class="o">=</span><span class="n">sock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sessions</span> <span class="o">=</span> <span class="n">sessions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ibuffer</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obuffer</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_terminator</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\r\n\r\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reading_headers</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handling</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cgi_data</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
+
+    <span class="k">def</span> <span class="nf">collect_incoming_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Buffer the data&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ibuffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">found_terminator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading_headers</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reading_headers</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_headers</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ibuffer</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ibuffer</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">op</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;POST&quot;</span><span class="p">:</span>
+                <span class="n">clen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">getheader</span><span class="p">(</span><span class="s">&quot;content-length&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_terminator</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">clen</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handling</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_terminator</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle_request</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">handling</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_terminator</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span> <span class="c"># browsers sometimes over-send</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cgi_data</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ibuffer</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handling</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ibuffer</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle_request</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">17.7. <tt class="docutils literal"><span class="pre">asynchat</span></tt> &#8212; Asynchronous socket command/response handler</a><ul>
+<li><a class="reference internal" href="#asynchat-auxiliary-classes">17.7.1. asynchat - Auxiliary Classes</a></li>
+<li><a class="reference internal" href="#asynchat-example">17.7.2. asynchat Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="asyncore.html"
+                        title="previous chapter">17.6. <tt class="docutils literal"><span class="pre">asyncore</span></tt> &#8212; Asynchronous socket handler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="netdata.html"
+                        title="next chapter">18. Internet Data Handling</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/asynchat.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="netdata.html" title="18. Internet Data Handling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="asyncore.html" title="17.6. asyncore — Asynchronous socket handler"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="ipc.html" >17. Interprocess Communication and Networking</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

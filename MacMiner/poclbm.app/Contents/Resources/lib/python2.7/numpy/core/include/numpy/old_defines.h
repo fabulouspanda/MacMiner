@@ -1,3 +1,11 @@
+/* This header is deprecated as of NumPy 1.7 */
+#ifndef OLD_DEFINES_H
+#define OLD_DEFINES_H
+
+#if defined(NPY_NO_DEPRECATED_API) && NPY_NO_DEPRECATED_API >= NPY_1_7_API_VERSION
+#error The header "old_defines.h" is deprecated as of NumPy 1.7.
+#endif
+
 #define NDARRAY_VERSION NPY_VERSION
 
 #define PyArray_MIN_BUFSIZE NPY_MIN_BUFSIZE
@@ -173,3 +181,7 @@
 #define PyArray_USE_PYMEM NPY_USE_PYMEM
 
 #define PyArray_RemoveLargest PyArray_RemoveSmallest
+
+#define PyArray_UCS4 npy_ucs4
+
+#endif

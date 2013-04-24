@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Python Standard Library &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="next" title="1. Introduction" href="intro.html" />
+    <link rel="prev" title="9. Full Grammar specification" href="../reference/grammar.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="1. Introduction"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../reference/grammar.html" title="9. Full Grammar specification"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+ 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-python-standard-library">
+<span id="library-index"></span><h1>The Python Standard Library<a class="headerlink" href="#the-python-standard-library" title="Permalink to this headline">¶</a></h1>
+<p>While <a class="reference internal" href="../reference/index.html#reference-index"><em>The Python Language Reference</em></a> describes the exact syntax and
+semantics of the Python language, this library reference manual
+describes the standard library that is distributed with Python. It also
+describes some of the optional components that are commonly included
+in Python distributions.</p>
+<p>Python&#8217;s standard library is very extensive, offering a wide range of
+facilities as indicated by the long table of contents listed below. The
+library contains built-in modules (written in C) that provide access to
+system functionality such as file I/O that would otherwise be
+inaccessible to Python programmers, as well as modules written in Python
+that provide standardized solutions for many problems that occur in
+everyday programming. Some of these modules are explicitly designed to
+encourage and enhance the portability of Python programs by abstracting
+away platform-specifics into platform-neutral APIs.</p>
+<p>The Python installers for the Windows platform usually includes
+the entire standard library and often also include many additional
+components. For Unix-like operating systems Python is normally provided
+as a collection of packages, so it may be necessary to use the packaging
+tools provided with the operating system to obtain some or all of the
+optional components.</p>
+<p>In addition to the standard library, there is a growing collection of
+several thousand components (from individual programs and modules to
+packages and entire application development frameworks), available from
+the <a class="reference external" href="http://pypi.python.org/pypi">Python Package Index</a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">2. Built-in Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html#non-essential-built-in-functions">3. Non-essential Built-in Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">4. Built-in Constants</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="constants.html#constants-added-by-the-site-module">4.1. Constants added by the <tt class="docutils literal"><span class="pre">site</span></tt> module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stdtypes.html">5. Built-in Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#truth-value-testing">5.1. Truth Value Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#boolean-operations-and-or-not">5.2. Boolean Operations &#8212; <tt class="docutils literal"><span class="pre">and</span></tt>, <tt class="docutils literal"><span class="pre">or</span></tt>, <tt class="docutils literal"><span class="pre">not</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#comparisons">5.3. Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#numeric-types-int-float-long-complex">5.4. Numeric Types &#8212; <tt class="docutils literal"><span class="pre">int</span></tt>, <tt class="docutils literal"><span class="pre">float</span></tt>, <tt class="docutils literal"><span class="pre">long</span></tt>, <tt class="docutils literal"><span class="pre">complex</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#iterator-types">5.5. Iterator Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#sequence-types-str-unicode-list-tuple-bytearray-buffer-xrange">5.6. Sequence Types &#8212; <tt class="docutils literal"><span class="pre">str</span></tt>, <tt class="docutils literal"><span class="pre">unicode</span></tt>, <tt class="docutils literal"><span class="pre">list</span></tt>, <tt class="docutils literal"><span class="pre">tuple</span></tt>, <tt class="docutils literal"><span class="pre">bytearray</span></tt>, <tt class="docutils literal"><span class="pre">buffer</span></tt>, <tt class="docutils literal"><span class="pre">xrange</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#set-types-set-frozenset">5.7. Set Types &#8212; <tt class="docutils literal"><span class="pre">set</span></tt>, <tt class="docutils literal"><span class="pre">frozenset</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#mapping-types-dict">5.8. Mapping Types &#8212; <tt class="docutils literal"><span class="pre">dict</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#file-objects">5.9. File Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#memoryview-type">5.10. memoryview type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#context-manager-types">5.11. Context Manager Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#other-built-in-types">5.12. Other Built-in Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stdtypes.html#special-attributes">5.13. Special Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">6. Built-in Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exception-hierarchy">6.1. Exception hierarchy</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="strings.html">7. String Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="string.html">7.1. <tt class="docutils literal"><span class="pre">string</span></tt> &#8212; Common string operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="re.html">7.2. <tt class="docutils literal"><span class="pre">re</span></tt> &#8212; Regular expression operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="struct.html">7.3. <tt class="docutils literal"><span class="pre">struct</span></tt> &#8212; Interpret strings as packed binary data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="difflib.html">7.4. <tt class="docutils literal"><span class="pre">difflib</span></tt> &#8212; Helpers for computing deltas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stringio.html">7.5. <tt class="docutils literal"><span class="pre">StringIO</span></tt> &#8212; Read and write strings as files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stringio.html#module-cStringIO">7.6. <tt class="docutils literal"><span class="pre">cStringIO</span></tt> &#8212; Faster version of <tt class="docutils literal"><span class="pre">StringIO</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="textwrap.html">7.7. <tt class="docutils literal"><span class="pre">textwrap</span></tt> &#8212; Text wrapping and filling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codecs.html">7.8. <tt class="docutils literal"><span class="pre">codecs</span></tt> &#8212; Codec registry and base classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicodedata.html">7.9. <tt class="docutils literal"><span class="pre">unicodedata</span></tt> &#8212; Unicode Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stringprep.html">7.10. <tt class="docutils literal"><span class="pre">stringprep</span></tt> &#8212; Internet String Preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpformat.html">7.11. <tt class="docutils literal"><span class="pre">fpformat</span></tt> &#8212; Floating point conversions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes.html">8. Data Types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html">8.1. <tt class="docutils literal"><span class="pre">datetime</span></tt> &#8212; Basic date and time types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calendar.html">8.2. <tt class="docutils literal"><span class="pre">calendar</span></tt> &#8212; General calendar-related functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html">8.3. <tt class="docutils literal"><span class="pre">collections</span></tt> &#8212; High-performance container datatypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heapq.html">8.4. <tt class="docutils literal"><span class="pre">heapq</span></tt> &#8212; Heap queue algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bisect.html">8.5. <tt class="docutils literal"><span class="pre">bisect</span></tt> &#8212; Array bisection algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array.html">8.6. <tt class="docutils literal"><span class="pre">array</span></tt> &#8212; Efficient arrays of numeric values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sets.html">8.7. <tt class="docutils literal"><span class="pre">sets</span></tt> &#8212; Unordered collections of unique elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sched.html">8.8. <tt class="docutils literal"><span class="pre">sched</span></tt> &#8212; Event scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mutex.html">8.9. <tt class="docutils literal"><span class="pre">mutex</span></tt> &#8212; Mutual exclusion support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queue.html">8.10. <tt class="docutils literal"><span class="pre">Queue</span></tt> &#8212; A synchronized queue class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weakref.html">8.11. <tt class="docutils literal"><span class="pre">weakref</span></tt> &#8212; Weak references</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userdict.html">8.12. <tt class="docutils literal"><span class="pre">UserDict</span></tt> &#8212; Class wrapper for dictionary objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userdict.html#module-UserList">8.13. <tt class="docutils literal"><span class="pre">UserList</span></tt> &#8212; Class wrapper for list objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="userdict.html#module-UserString">8.14. <tt class="docutils literal"><span class="pre">UserString</span></tt> &#8212; Class wrapper for string objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html">8.15. <tt class="docutils literal"><span class="pre">types</span></tt> &#8212; Names for built-in types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="new.html">8.16. <tt class="docutils literal"><span class="pre">new</span></tt> &#8212; Creation of runtime internal objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="copy.html">8.17. <tt class="docutils literal"><span class="pre">copy</span></tt> &#8212; Shallow and deep copy operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pprint.html">8.18. <tt class="docutils literal"><span class="pre">pprint</span></tt> &#8212; Data pretty printer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="repr.html">8.19. <tt class="docutils literal"><span class="pre">repr</span></tt> &#8212; Alternate <tt class="docutils literal"><span class="pre">repr()</span></tt> implementation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="numeric.html">9. Numeric and Mathematical Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="numbers.html">9.1. <tt class="docutils literal"><span class="pre">numbers</span></tt> &#8212; Numeric abstract base classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math.html">9.2. <tt class="docutils literal"><span class="pre">math</span></tt> &#8212; Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmath.html">9.3. <tt class="docutils literal"><span class="pre">cmath</span></tt> &#8212; Mathematical functions for complex numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decimal.html">9.4. <tt class="docutils literal"><span class="pre">decimal</span></tt> &#8212; Decimal fixed point and floating point arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fractions.html">9.5. <tt class="docutils literal"><span class="pre">fractions</span></tt> &#8212; Rational numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random.html">9.6. <tt class="docutils literal"><span class="pre">random</span></tt> &#8212; Generate pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="itertools.html">9.7. <tt class="docutils literal"><span class="pre">itertools</span></tt> &#8212; Functions creating iterators for efficient looping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functools.html">9.8. <tt class="docutils literal"><span class="pre">functools</span></tt> &#8212; Higher-order functions and operations on callable objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operator.html">9.9. <tt class="docutils literal"><span class="pre">operator</span></tt> &#8212; Standard operators as functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filesys.html">10. File and Directory Access</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="os.path.html">10.1. <tt class="docutils literal"><span class="pre">os.path</span></tt> &#8212; Common pathname manipulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fileinput.html">10.2. <tt class="docutils literal"><span class="pre">fileinput</span></tt> &#8212; Iterate over lines from multiple input streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stat.html">10.3. <tt class="docutils literal"><span class="pre">stat</span></tt> &#8212; Interpreting <tt class="docutils literal"><span class="pre">stat()</span></tt> results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statvfs.html">10.4. <tt class="docutils literal"><span class="pre">statvfs</span></tt> &#8212; Constants used with <tt class="docutils literal"><span class="pre">os.statvfs()</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="filecmp.html">10.5. <tt class="docutils literal"><span class="pre">filecmp</span></tt> &#8212; File and Directory Comparisons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tempfile.html">10.6. <tt class="docutils literal"><span class="pre">tempfile</span></tt> &#8212; Generate temporary files and directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glob.html">10.7. <tt class="docutils literal"><span class="pre">glob</span></tt> &#8212; Unix style pathname pattern expansion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fnmatch.html">10.8. <tt class="docutils literal"><span class="pre">fnmatch</span></tt> &#8212; Unix filename pattern matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linecache.html">10.9. <tt class="docutils literal"><span class="pre">linecache</span></tt> &#8212; Random access to text lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shutil.html">10.10. <tt class="docutils literal"><span class="pre">shutil</span></tt> &#8212; High-level file operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dircache.html">10.11. <tt class="docutils literal"><span class="pre">dircache</span></tt> &#8212; Cached directory listings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macpath.html">10.12. <tt class="docutils literal"><span class="pre">macpath</span></tt> &#8212; Mac OS 9 path manipulation functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="persistence.html">11. Data Persistence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html">11.1. <tt class="docutils literal"><span class="pre">pickle</span></tt> &#8212; Python object serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickle.html#module-cPickle">11.2. <tt class="docutils literal"><span class="pre">cPickle</span></tt> &#8212; A faster <tt class="docutils literal"><span class="pre">pickle</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="copy_reg.html">11.3. <tt class="docutils literal"><span class="pre">copy_reg</span></tt> &#8212; Register <tt class="docutils literal"><span class="pre">pickle</span></tt> support functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shelve.html">11.4. <tt class="docutils literal"><span class="pre">shelve</span></tt> &#8212; Python object persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marshal.html">11.5. <tt class="docutils literal"><span class="pre">marshal</span></tt> &#8212; Internal Python object serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anydbm.html">11.6. <tt class="docutils literal"><span class="pre">anydbm</span></tt> &#8212; Generic access to DBM-style databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="whichdb.html">11.7. <tt class="docutils literal"><span class="pre">whichdb</span></tt> &#8212; Guess which DBM module created a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dbm.html">11.8. <tt class="docutils literal"><span class="pre">dbm</span></tt> &#8212; Simple &#8220;database&#8221; interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gdbm.html">11.9. <tt class="docutils literal"><span class="pre">gdbm</span></tt> &#8212; GNU&#8217;s reinterpretation of dbm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dbhash.html">11.10. <tt class="docutils literal"><span class="pre">dbhash</span></tt> &#8212; DBM-style interface to the BSD database library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bsddb.html">11.11. <tt class="docutils literal"><span class="pre">bsddb</span></tt> &#8212; Interface to Berkeley DB library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dumbdbm.html">11.12. <tt class="docutils literal"><span class="pre">dumbdbm</span></tt> &#8212; Portable DBM implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sqlite3.html">11.13. <tt class="docutils literal"><span class="pre">sqlite3</span></tt> &#8212; DB-API 2.0 interface for SQLite databases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="archiving.html">12. Data Compression and Archiving</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zlib.html">12.1. <tt class="docutils literal"><span class="pre">zlib</span></tt> &#8212; Compression compatible with <strong class="program">gzip</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gzip.html">12.2. <tt class="docutils literal"><span class="pre">gzip</span></tt> &#8212; Support for <strong class="program">gzip</strong> files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bz2.html">12.3. <tt class="docutils literal"><span class="pre">bz2</span></tt> &#8212; Compression compatible with <strong class="program">bzip2</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="zipfile.html">12.4. <tt class="docutils literal"><span class="pre">zipfile</span></tt> &#8212; Work with ZIP archives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarfile.html">12.5. <tt class="docutils literal"><span class="pre">tarfile</span></tt> &#8212; Read and write tar archive files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fileformats.html">13. File Formats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="csv.html">13.1. <tt class="docutils literal"><span class="pre">csv</span></tt> &#8212; CSV File Reading and Writing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configparser.html">13.2. <tt class="docutils literal"><span class="pre">ConfigParser</span></tt> &#8212; Configuration file parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="robotparser.html">13.3. <tt class="docutils literal"><span class="pre">robotparser</span></tt> &#8212;  Parser for robots.txt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="netrc.html">13.4. <tt class="docutils literal"><span class="pre">netrc</span></tt> &#8212; netrc file processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xdrlib.html">13.5. <tt class="docutils literal"><span class="pre">xdrlib</span></tt> &#8212; Encode and decode XDR data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plistlib.html">13.6. <tt class="docutils literal"><span class="pre">plistlib</span></tt> &#8212; Generate and parse Mac OS X <tt class="docutils literal"><span class="pre">.plist</span></tt> files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="crypto.html">14. Cryptographic Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hashlib.html">14.1. <tt class="docutils literal"><span class="pre">hashlib</span></tt> &#8212; Secure hashes and message digests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hmac.html">14.2. <tt class="docutils literal"><span class="pre">hmac</span></tt> &#8212; Keyed-Hashing for Message Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="md5.html">14.3. <tt class="docutils literal"><span class="pre">md5</span></tt> &#8212; MD5 message digest algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sha.html">14.4. <tt class="docutils literal"><span class="pre">sha</span></tt> &#8212; SHA-1 message digest algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="allos.html">15. Generic Operating System Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="os.html">15.1. <tt class="docutils literal"><span class="pre">os</span></tt> &#8212; Miscellaneous operating system interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html">15.2. <tt class="docutils literal"><span class="pre">io</span></tt> &#8212; Core tools for working with streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">15.3. <tt class="docutils literal"><span class="pre">time</span></tt> &#8212; Time access and conversions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="argparse.html">15.4. <tt class="docutils literal"><span class="pre">argparse</span></tt> &#8212; Parser for command-line options, arguments and sub-commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="optparse.html">15.5. <tt class="docutils literal"><span class="pre">optparse</span></tt> &#8212; Parser for command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getopt.html">15.6. <tt class="docutils literal"><span class="pre">getopt</span></tt> &#8212; C-style parser for command line options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">15.7. <tt class="docutils literal"><span class="pre">logging</span></tt> &#8212; Logging facility for Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.config.html">15.8. <tt class="docutils literal"><span class="pre">logging.config</span></tt> &#8212; Logging configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.handlers.html">15.9. <tt class="docutils literal"><span class="pre">logging.handlers</span></tt> &#8212; Logging handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getpass.html">15.10. <tt class="docutils literal"><span class="pre">getpass</span></tt> &#8212; Portable password input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curses.html">15.11. <tt class="docutils literal"><span class="pre">curses</span></tt> &#8212; Terminal handling for character-cell displays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curses.html#module-curses.textpad">15.12. <tt class="docutils literal"><span class="pre">curses.textpad</span></tt> &#8212; Text input widget for curses programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curses.ascii.html">15.13. <tt class="docutils literal"><span class="pre">curses.ascii</span></tt> &#8212; Utilities for ASCII characters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="curses.panel.html">15.14. <tt class="docutils literal"><span class="pre">curses.panel</span></tt> &#8212; A panel stack extension for curses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="platform.html">15.15. <tt class="docutils literal"><span class="pre">platform</span></tt> &#8212;  Access to underlying platform&#8217;s identifying data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errno.html">15.16. <tt class="docutils literal"><span class="pre">errno</span></tt> &#8212; Standard errno system symbols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ctypes.html">15.17. <tt class="docutils literal"><span class="pre">ctypes</span></tt> &#8212; A foreign function library for Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="someos.html">16. Optional Operating System Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="select.html">16.1. <tt class="docutils literal"><span class="pre">select</span></tt> &#8212; Waiting for I/O completion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html">16.2. <tt class="docutils literal"><span class="pre">threading</span></tt> &#8212; Higher-level threading interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thread.html">16.3. <tt class="docutils literal"><span class="pre">thread</span></tt> &#8212; Multiple threads of control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dummy_threading.html">16.4. <tt class="docutils literal"><span class="pre">dummy_threading</span></tt> &#8212; Drop-in replacement for the <tt class="docutils literal"><span class="pre">threading</span></tt> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dummy_thread.html">16.5. <tt class="docutils literal"><span class="pre">dummy_thread</span></tt> &#8212; Drop-in replacement for the <tt class="docutils literal"><span class="pre">thread</span></tt> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html">16.6. <tt class="docutils literal"><span class="pre">multiprocessing</span></tt> &#8212; Process-based &#8220;threading&#8221; interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mmap.html">16.7. <tt class="docutils literal"><span class="pre">mmap</span></tt> &#8212; Memory-mapped file support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readline.html">16.8. <tt class="docutils literal"><span class="pre">readline</span></tt> &#8212; GNU readline interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcompleter.html">16.9. <tt class="docutils literal"><span class="pre">rlcompleter</span></tt> &#8212; Completion function for GNU readline</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ipc.html">17. Interprocess Communication and Networking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html">17.1. <tt class="docutils literal"><span class="pre">subprocess</span></tt> &#8212; Subprocess management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socket.html">17.2. <tt class="docutils literal"><span class="pre">socket</span></tt> &#8212; Low-level networking interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssl.html">17.3. <tt class="docutils literal"><span class="pre">ssl</span></tt> &#8212; TLS/SSL wrapper for socket objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="signal.html">17.4. <tt class="docutils literal"><span class="pre">signal</span></tt> &#8212; Set handlers for asynchronous events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="popen2.html">17.5. <tt class="docutils literal"><span class="pre">popen2</span></tt> &#8212; Subprocesses with accessible I/O streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncore.html">17.6. <tt class="docutils literal"><span class="pre">asyncore</span></tt> &#8212; Asynchronous socket handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asynchat.html">17.7. <tt class="docutils literal"><span class="pre">asynchat</span></tt> &#8212; Asynchronous socket command/response handler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="netdata.html">18. Internet Data Handling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="email.html">18.1. <tt class="docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">18.2. <tt class="docutils literal"><span class="pre">json</span></tt> &#8212; JSON encoder and decoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mailcap.html">18.3. <tt class="docutils literal"><span class="pre">mailcap</span></tt> &#8212; Mailcap file handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html">18.4. <tt class="docutils literal"><span class="pre">mailbox</span></tt> &#8212; Manipulate mailboxes in various formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mhlib.html">18.5. <tt class="docutils literal"><span class="pre">mhlib</span></tt> &#8212; Access to MH mailboxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetools.html">18.6. <tt class="docutils literal"><span class="pre">mimetools</span></tt> &#8212; Tools for parsing MIME messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes.html">18.7. <tt class="docutils literal"><span class="pre">mimetypes</span></tt> &#8212; Map filenames to MIME types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimewriter.html">18.8. <tt class="docutils literal"><span class="pre">MimeWriter</span></tt> &#8212; Generic MIME file writer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimify.html">18.9. <tt class="docutils literal"><span class="pre">mimify</span></tt> &#8212; MIME processing of mail messages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multifile.html">18.10. <tt class="docutils literal"><span class="pre">multifile</span></tt> &#8212; Support for files containing distinct parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rfc822.html">18.11. <tt class="docutils literal"><span class="pre">rfc822</span></tt> &#8212; Parse RFC 2822 mail headers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base64.html">18.12. <tt class="docutils literal"><span class="pre">base64</span></tt> &#8212; RFC 3548: Base16, Base32, Base64 Data Encodings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binhex.html">18.13. <tt class="docutils literal"><span class="pre">binhex</span></tt> &#8212; Encode and decode binhex4 files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="binascii.html">18.14. <tt class="docutils literal"><span class="pre">binascii</span></tt> &#8212; Convert between binary and ASCII</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quopri.html">18.15. <tt class="docutils literal"><span class="pre">quopri</span></tt> &#8212; Encode and decode MIME quoted-printable data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uu.html">18.16. <tt class="docutils literal"><span class="pre">uu</span></tt> &#8212; Encode and decode uuencode files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="markup.html">19. Structured Markup Processing Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="htmlparser.html">19.1. <tt class="docutils literal"><span class="pre">HTMLParser</span></tt> &#8212; Simple HTML and XHTML parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sgmllib.html">19.2. <tt class="docutils literal"><span class="pre">sgmllib</span></tt> &#8212; Simple SGML parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="htmllib.html">19.3. <tt class="docutils literal"><span class="pre">htmllib</span></tt> &#8212; A parser for HTML documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="htmllib.html#module-htmlentitydefs">19.4. <tt class="docutils literal"><span class="pre">htmlentitydefs</span></tt> &#8212; Definitions of HTML general entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html">19.5. XML Processing Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html#xml-vulnerabilities">19.6. XML vulnerabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.etree.elementtree.html">19.7. <tt class="docutils literal"><span class="pre">xml.etree.ElementTree</span></tt> &#8212; The ElementTree XML API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.html">19.8. <tt class="docutils literal"><span class="pre">xml.dom</span></tt> &#8212; The Document Object Model API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.minidom.html">19.9. <tt class="docutils literal"><span class="pre">xml.dom.minidom</span></tt> &#8212; Minimal DOM implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.dom.pulldom.html">19.10. <tt class="docutils literal"><span class="pre">xml.dom.pulldom</span></tt> &#8212; Support for building partial DOM trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.html">19.11. <tt class="docutils literal"><span class="pre">xml.sax</span></tt> &#8212; Support for SAX2 parsers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.handler.html">19.12. <tt class="docutils literal"><span class="pre">xml.sax.handler</span></tt> &#8212; Base classes for SAX handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.utils.html">19.13. <tt class="docutils literal"><span class="pre">xml.sax.saxutils</span></tt> &#8212; SAX Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.sax.reader.html">19.14. <tt class="docutils literal"><span class="pre">xml.sax.xmlreader</span></tt> &#8212; Interface for XML parsers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyexpat.html">19.15. <tt class="docutils literal"><span class="pre">xml.parsers.expat</span></tt> &#8212; Fast XML parsing using Expat</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="internet.html">20. Internet Protocols and Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webbrowser.html">20.1. <tt class="docutils literal"><span class="pre">webbrowser</span></tt> &#8212; Convenient Web-browser controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cgi.html">20.2. <tt class="docutils literal"><span class="pre">cgi</span></tt> &#8212; Common Gateway Interface support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cgitb.html">20.3. <tt class="docutils literal"><span class="pre">cgitb</span></tt> &#8212; Traceback manager for CGI scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wsgiref.html">20.4. <tt class="docutils literal"><span class="pre">wsgiref</span></tt> &#8212; WSGI Utilities and Reference Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="urllib.html">20.5. <tt class="docutils literal"><span class="pre">urllib</span></tt> &#8212; Open arbitrary resources by URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="urllib2.html">20.6. <tt class="docutils literal"><span class="pre">urllib2</span></tt> &#8212; extensible library for opening URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="httplib.html">20.7. <tt class="docutils literal"><span class="pre">httplib</span></tt> &#8212; HTTP protocol client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ftplib.html">20.8. <tt class="docutils literal"><span class="pre">ftplib</span></tt> &#8212; FTP protocol client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="poplib.html">20.9. <tt class="docutils literal"><span class="pre">poplib</span></tt> &#8212; POP3 protocol client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imaplib.html">20.10. <tt class="docutils literal"><span class="pre">imaplib</span></tt> &#8212; IMAP4 protocol client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nntplib.html">20.11. <tt class="docutils literal"><span class="pre">nntplib</span></tt> &#8212; NNTP protocol client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smtplib.html">20.12. <tt class="docutils literal"><span class="pre">smtplib</span></tt> &#8212; SMTP protocol client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="smtpd.html">20.13. <tt class="docutils literal"><span class="pre">smtpd</span></tt> &#8212; SMTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="telnetlib.html">20.14. <tt class="docutils literal"><span class="pre">telnetlib</span></tt> &#8212; Telnet client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uuid.html">20.15. <tt class="docutils literal"><span class="pre">uuid</span></tt> &#8212; UUID objects according to RFC 4122</a></li>
+<li class="toctree-l2"><a class="reference internal" href="urlparse.html">20.16. <tt class="docutils literal"><span class="pre">urlparse</span></tt> &#8212; Parse URLs into components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="socketserver.html">20.17. <tt class="docutils literal"><span class="pre">SocketServer</span></tt> &#8212; A framework for network servers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basehttpserver.html">20.18. <tt class="docutils literal"><span class="pre">BaseHTTPServer</span></tt> &#8212; Basic HTTP server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simplehttpserver.html">20.19. <tt class="docutils literal"><span class="pre">SimpleHTTPServer</span></tt> &#8212; Simple HTTP request handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cgihttpserver.html">20.20. <tt class="docutils literal"><span class="pre">CGIHTTPServer</span></tt> &#8212; CGI-capable HTTP request handler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookielib.html">20.21. <tt class="docutils literal"><span class="pre">cookielib</span></tt> &#8212; Cookie handling for HTTP clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cookie.html">20.22. <tt class="docutils literal"><span class="pre">Cookie</span></tt> &#8212; HTTP state management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xmlrpclib.html">20.23. <tt class="docutils literal"><span class="pre">xmlrpclib</span></tt> &#8212; XML-RPC client access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simplexmlrpcserver.html">20.24. <tt class="docutils literal"><span class="pre">SimpleXMLRPCServer</span></tt> &#8212; Basic XML-RPC server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docxmlrpcserver.html">20.25. <tt class="docutils literal"><span class="pre">DocXMLRPCServer</span></tt> &#8212; Self-documenting XML-RPC server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mm.html">21. Multimedia Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="audioop.html">21.1. <tt class="docutils literal"><span class="pre">audioop</span></tt> &#8212; Manipulate raw audio data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imageop.html">21.2. <tt class="docutils literal"><span class="pre">imageop</span></tt> &#8212; Manipulate raw image data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aifc.html">21.3. <tt class="docutils literal"><span class="pre">aifc</span></tt> &#8212; Read and write AIFF and AIFC files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sunau.html">21.4. <tt class="docutils literal"><span class="pre">sunau</span></tt> &#8212; Read and write Sun AU files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wave.html">21.5. <tt class="docutils literal"><span class="pre">wave</span></tt> &#8212; Read and write WAV files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chunk.html">21.6. <tt class="docutils literal"><span class="pre">chunk</span></tt> &#8212; Read IFF chunked data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colorsys.html">21.7. <tt class="docutils literal"><span class="pre">colorsys</span></tt> &#8212; Conversions between color systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imghdr.html">21.8. <tt class="docutils literal"><span class="pre">imghdr</span></tt> &#8212; Determine the type of an image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sndhdr.html">21.9. <tt class="docutils literal"><span class="pre">sndhdr</span></tt> &#8212; Determine type of sound file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ossaudiodev.html">21.10. <tt class="docutils literal"><span class="pre">ossaudiodev</span></tt> &#8212; Access to OSS-compatible audio devices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="i18n.html">22. Internationalization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gettext.html">22.1. <tt class="docutils literal"><span class="pre">gettext</span></tt> &#8212; Multilingual internationalization services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="locale.html">22.2. <tt class="docutils literal"><span class="pre">locale</span></tt> &#8212; Internationalization services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="frameworks.html">23. Program Frameworks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cmd.html">23.1. <tt class="docutils literal"><span class="pre">cmd</span></tt> &#8212; Support for line-oriented command interpreters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shlex.html">23.2. <tt class="docutils literal"><span class="pre">shlex</span></tt> &#8212; Simple lexical analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tk.html">24. Graphical User Interfaces with Tk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html">24.1. <tt class="docutils literal"><span class="pre">Tkinter</span></tt> &#8212; Python interface to Tcl/Tk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html">24.2. <tt class="docutils literal"><span class="pre">ttk</span></tt> &#8212; Tk themed widgets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tix.html">24.3. <tt class="docutils literal"><span class="pre">Tix</span></tt> &#8212; Extension widgets for Tk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scrolledtext.html">24.4. <tt class="docutils literal"><span class="pre">ScrolledText</span></tt> &#8212; Scrolled Text Widget</a></li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html">24.5. <tt class="docutils literal"><span class="pre">turtle</span></tt> &#8212; Turtle graphics for Tk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="idle.html">24.6. IDLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="othergui.html">24.7. Other Graphical User Interface Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">25. Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydoc.html">25.1. <tt class="docutils literal"><span class="pre">pydoc</span></tt> &#8212; Documentation generator and online help system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="doctest.html">25.2. <tt class="docutils literal"><span class="pre">doctest</span></tt> &#8212; Test interactive Python examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittest.html">25.3. <tt class="docutils literal"><span class="pre">unittest</span></tt> &#8212; Unit testing framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2to3.html">25.4. 2to3 - Automated Python 2 to 3 code translation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html">25.5. <tt class="docutils literal"><span class="pre">test</span></tt> &#8212; Regression tests package for Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="test.html#module-test.test_support">25.6. <tt class="docutils literal"><span class="pre">test.test_support</span></tt> &#8212; Utility functions for tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="debug.html">26. Debugging and Profiling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bdb.html">26.1. <tt class="docutils literal"><span class="pre">bdb</span></tt> &#8212; Debugger framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html">26.2. <tt class="docutils literal"><span class="pre">pdb</span></tt> &#8212; The Python Debugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdb.html#debugger-commands">26.3. Debugger Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profile.html">26.4. The Python Profilers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hotshot.html">26.5. <tt class="docutils literal"><span class="pre">hotshot</span></tt> &#8212; High performance logging profiler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeit.html">26.6. <tt class="docutils literal"><span class="pre">timeit</span></tt> &#8212; Measure execution time of small code snippets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="trace.html">26.7. <tt class="docutils literal"><span class="pre">trace</span></tt> &#8212; Trace or track Python statement execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">27. Python Runtime Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sys.html">27.1. <tt class="docutils literal"><span class="pre">sys</span></tt> &#8212; System-specific parameters and functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysconfig.html">27.2. <tt class="docutils literal"><span class="pre">sysconfig</span></tt> &#8212; Provide access to Python&#8217;s configuration information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="__builtin__.html">27.3. <tt class="docutils literal"><span class="pre">__builtin__</span></tt> &#8212; Built-in objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="future_builtins.html">27.4. <tt class="docutils literal"><span class="pre">future_builtins</span></tt> &#8212; Python 3 builtins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="__main__.html">27.5. <tt class="docutils literal"><span class="pre">__main__</span></tt> &#8212; Top-level script environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="warnings.html">27.6. <tt class="docutils literal"><span class="pre">warnings</span></tt> &#8212; Warning control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contextlib.html">27.7. <tt class="docutils literal"><span class="pre">contextlib</span></tt> &#8212; Utilities for <tt class="docutils literal"><span class="pre">with</span></tt>-statement contexts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abc.html">27.8. <tt class="docutils literal"><span class="pre">abc</span></tt> &#8212; Abstract Base Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="atexit.html">27.9. <tt class="docutils literal"><span class="pre">atexit</span></tt> &#8212; Exit handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="traceback.html">27.10. <tt class="docutils literal"><span class="pre">traceback</span></tt> &#8212; Print or retrieve a stack traceback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="__future__.html">27.11. <tt class="docutils literal"><span class="pre">__future__</span></tt> &#8212; Future statement definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gc.html">27.12. <tt class="docutils literal"><span class="pre">gc</span></tt> &#8212; Garbage Collector interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="inspect.html">27.13. <tt class="docutils literal"><span class="pre">inspect</span></tt> &#8212; Inspect live objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="site.html">27.14. <tt class="docutils literal"><span class="pre">site</span></tt> &#8212; Site-specific configuration hook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html">27.15. <tt class="docutils literal"><span class="pre">user</span></tt> &#8212; User-specific configuration hook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpectl.html">27.16. <tt class="docutils literal"><span class="pre">fpectl</span></tt> &#8212; Floating point exception control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distutils.html">27.17. <tt class="docutils literal"><span class="pre">distutils</span></tt> &#8212; Building and installing Python modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custominterp.html">28. Custom Python Interpreters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code.html">28.1. <tt class="docutils literal"><span class="pre">code</span></tt> &#8212; Interpreter base classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeop.html">28.2. <tt class="docutils literal"><span class="pre">codeop</span></tt> &#8212; Compile Python code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="restricted.html">29. Restricted Execution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rexec.html">29.1. <tt class="docutils literal"><span class="pre">rexec</span></tt> &#8212; Restricted execution framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bastion.html">29.2. <tt class="docutils literal"><span class="pre">Bastion</span></tt> &#8212; Restricting access to objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">30. Importing Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imp.html">30.1. <tt class="docutils literal"><span class="pre">imp</span></tt> &#8212; Access the <tt class="docutils literal"><span class="pre">import</span></tt> internals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importlib.html">30.2. <tt class="docutils literal"><span class="pre">importlib</span></tt> &#8211; Convenience wrappers for <tt class="docutils literal"><span class="pre">__import__()</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputil.html">30.3. <tt class="docutils literal"><span class="pre">imputil</span></tt> &#8212; Import utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zipimport.html">30.4. <tt class="docutils literal"><span class="pre">zipimport</span></tt> &#8212; Import modules from Zip archives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pkgutil.html">30.5. <tt class="docutils literal"><span class="pre">pkgutil</span></tt> &#8212; Package extension utility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modulefinder.html">30.6. <tt class="docutils literal"><span class="pre">modulefinder</span></tt> &#8212; Find modules used by a script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runpy.html">30.7. <tt class="docutils literal"><span class="pre">runpy</span></tt> &#8212; Locating and executing Python modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">31. Python Language Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parser.html">31.1. <tt class="docutils literal"><span class="pre">parser</span></tt> &#8212; Access Python parse trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ast.html">31.2. <tt class="docutils literal"><span class="pre">ast</span></tt> &#8212; Abstract Syntax Trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="symtable.html">31.3. <tt class="docutils literal"><span class="pre">symtable</span></tt> &#8212; Access to the compiler&#8217;s symbol tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="symbol.html">31.4. <tt class="docutils literal"><span class="pre">symbol</span></tt> &#8212; Constants used with Python parse trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="token.html">31.5. <tt class="docutils literal"><span class="pre">token</span></tt> &#8212; Constants used with Python parse trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keyword.html">31.6. <tt class="docutils literal"><span class="pre">keyword</span></tt> &#8212; Testing for Python keywords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tokenize.html">31.7. <tt class="docutils literal"><span class="pre">tokenize</span></tt> &#8212; Tokenizer for Python source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabnanny.html">31.8. <tt class="docutils literal"><span class="pre">tabnanny</span></tt> &#8212; Detection of ambiguous indentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyclbr.html">31.9. <tt class="docutils literal"><span class="pre">pyclbr</span></tt> &#8212; Python class browser support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="py_compile.html">31.10. <tt class="docutils literal"><span class="pre">py_compile</span></tt> &#8212; Compile Python source files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compileall.html">31.11. <tt class="docutils literal"><span class="pre">compileall</span></tt> &#8212; Byte-compile Python libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis.html">31.12. <tt class="docutils literal"><span class="pre">dis</span></tt> &#8212; Disassembler for Python bytecode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pickletools.html">31.13. <tt class="docutils literal"><span class="pre">pickletools</span></tt> &#8212; Tools for pickle developers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compiler.html">32. Python compiler package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#module-compiler">32.1. The basic interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#limitations">32.2. Limitations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#python-abstract-syntax">32.3. Python Abstract Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#module-compiler.visitor">32.4. Using Visitors to Walk ASTs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compiler.html#bytecode-generation">32.5. Bytecode Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">33. Miscellaneous Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="formatter.html">33.1. <tt class="docutils literal"><span class="pre">formatter</span></tt> &#8212; Generic output formatting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">34. MS Windows Specific Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msilib.html">34.1. <tt class="docutils literal"><span class="pre">msilib</span></tt> &#8212; Read and write Microsoft Installer files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msvcrt.html">34.2. <tt class="docutils literal"><span class="pre">msvcrt</span></tt> &#8211; Useful routines from the MS VC++ runtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_winreg.html">34.3. <tt class="docutils literal"><span class="pre">_winreg</span></tt> &#8211; Windows registry access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="winsound.html">34.4. <tt class="docutils literal"><span class="pre">winsound</span></tt> &#8212; Sound-playing interface for Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unix.html">35. Unix Specific Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="posix.html">35.1. <tt class="docutils literal"><span class="pre">posix</span></tt> &#8212; The most common POSIX system calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pwd.html">35.2. <tt class="docutils literal"><span class="pre">pwd</span></tt> &#8212; The password database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spwd.html">35.3. <tt class="docutils literal"><span class="pre">spwd</span></tt> &#8212; The shadow password database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grp.html">35.4. <tt class="docutils literal"><span class="pre">grp</span></tt> &#8212; The group database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="crypt.html">35.5. <tt class="docutils literal"><span class="pre">crypt</span></tt> &#8212; Function to check Unix passwords</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dl.html">35.6. <tt class="docutils literal"><span class="pre">dl</span></tt> &#8212; Call C functions in shared objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="termios.html">35.7. <tt class="docutils literal"><span class="pre">termios</span></tt> &#8212; POSIX style tty control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tty.html">35.8. <tt class="docutils literal"><span class="pre">tty</span></tt> &#8212; Terminal control functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pty.html">35.9. <tt class="docutils literal"><span class="pre">pty</span></tt> &#8212; Pseudo-terminal utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fcntl.html">35.10. <tt class="docutils literal"><span class="pre">fcntl</span></tt> &#8212; The <tt class="docutils literal"><span class="pre">fcntl()</span></tt> and <tt class="docutils literal"><span class="pre">ioctl()</span></tt> system calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipes.html">35.11. <tt class="docutils literal"><span class="pre">pipes</span></tt> &#8212; Interface to shell pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="posixfile.html">35.12. <tt class="docutils literal"><span class="pre">posixfile</span></tt> &#8212; File-like objects with locking support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resource.html">35.13. <tt class="docutils literal"><span class="pre">resource</span></tt> &#8212; Resource usage information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nis.html">35.14. <tt class="docutils literal"><span class="pre">nis</span></tt> &#8212; Interface to Sun&#8217;s NIS (Yellow Pages)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syslog.html">35.15. <tt class="docutils literal"><span class="pre">syslog</span></tt> &#8212; Unix syslog library routines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commands.html">35.16. <tt class="docutils literal"><span class="pre">commands</span></tt> &#8212; Utilities for running commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mac.html">36. Mac OS X specific services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ic.html">36.1. <tt class="docutils literal"><span class="pre">ic</span></tt> &#8212; Access to the Mac OS X Internet Config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macos.html">36.2. <tt class="docutils literal"><span class="pre">MacOS</span></tt> &#8212; Access to Mac OS interpreter features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macostools.html">36.3. <tt class="docutils literal"><span class="pre">macostools</span></tt> &#8212; Convenience routines for file manipulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macostools.html#module-findertools">36.4. <tt class="docutils literal"><span class="pre">findertools</span></tt> &#8212; The <strong class="program">finder</strong>&#8216;s Apple Events interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="easydialogs.html">36.5. <tt class="docutils literal"><span class="pre">EasyDialogs</span></tt> &#8212; Basic Macintosh dialogs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework.html">36.6. <tt class="docutils literal"><span class="pre">FrameWork</span></tt> &#8212; Interactive application framework</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogil.html">36.7. <tt class="docutils literal"><span class="pre">autoGIL</span></tt> &#8212; Global Interpreter Lock handling in event loops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="carbon.html">36.8. Mac OS Toolbox Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="colorpicker.html">36.9. <tt class="docutils literal"><span class="pre">ColorPicker</span></tt> &#8212; Color selection dialog</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="macosa.html">37. MacPython OSA Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gensuitemodule.html">37.1. <tt class="docutils literal"><span class="pre">gensuitemodule</span></tt> &#8212; Generate OSA stub packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aetools.html">37.2. <tt class="docutils literal"><span class="pre">aetools</span></tt> &#8212; OSA client support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aepack.html">37.3. <tt class="docutils literal"><span class="pre">aepack</span></tt> &#8212; Conversion between Python variables and AppleEvent data containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aetypes.html">37.4. <tt class="docutils literal"><span class="pre">aetypes</span></tt> &#8212; AppleEvent objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miniaeframe.html">37.5. <tt class="docutils literal"><span class="pre">MiniAEFrame</span></tt> &#8212; Open Scripting Architecture server support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sgi.html">38. SGI IRIX Specific Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="al.html">38.1. <tt class="docutils literal"><span class="pre">al</span></tt> &#8212; Audio functions on the SGI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="al.html#module-AL">38.2. <tt class="docutils literal"><span class="pre">AL</span></tt> &#8212; Constants used with the <tt class="docutils literal"><span class="pre">al</span></tt> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cd.html">38.3. <tt class="docutils literal"><span class="pre">cd</span></tt> &#8212; CD-ROM access on SGI systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fl.html">38.4. <tt class="docutils literal"><span class="pre">fl</span></tt> &#8212; FORMS library for graphical user interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fl.html#module-FL">38.5. <tt class="docutils literal"><span class="pre">FL</span></tt> &#8212; Constants used with the <tt class="docutils literal"><span class="pre">fl</span></tt> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fl.html#module-flp">38.6. <tt class="docutils literal"><span class="pre">flp</span></tt> &#8212; Functions for loading stored FORMS designs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fm.html">38.7. <tt class="docutils literal"><span class="pre">fm</span></tt> &#8212; <em>Font Manager</em> interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gl.html">38.8. <tt class="docutils literal"><span class="pre">gl</span></tt> &#8212; <em>Graphics Library</em> interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gl.html#module-DEVICE">38.9. <tt class="docutils literal"><span class="pre">DEVICE</span></tt> &#8212; Constants used with the <tt class="docutils literal"><span class="pre">gl</span></tt> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gl.html#module-GL">38.10. <tt class="docutils literal"><span class="pre">GL</span></tt> &#8212; Constants used with the <tt class="docutils literal"><span class="pre">gl</span></tt> module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imgfile.html">38.11. <tt class="docutils literal"><span class="pre">imgfile</span></tt> &#8212; Support for SGI imglib files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jpeg.html">38.12. <tt class="docutils literal"><span class="pre">jpeg</span></tt> &#8212; Read and write JPEG files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sun.html">39. SunOS Specific Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sunaudio.html">39.1. <tt class="docutils literal"><span class="pre">sunaudiodev</span></tt> &#8212; Access to Sun audio hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sunaudio.html#module-SUNAUDIODEV">39.2. <tt class="docutils literal"><span class="pre">SUNAUDIODEV</span></tt> &#8212; Constants used with <tt class="docutils literal"><span class="pre">sunaudiodev</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="undoc.html">40. Undocumented Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="undoc.html#miscellaneous-useful-utilities">40.1. Miscellaneous useful utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="undoc.html#platform-specific-modules">40.2. Platform specific modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="undoc.html#multimedia">40.3. Multimedia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="undoc.html#undocumented-mac-os-modules">40.4. Undocumented Mac OS modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="undoc.html#obsolete">40.5. Obsolete</a></li>
+<li class="toctree-l2"><a class="reference internal" href="undoc.html#sgi-specific-extension-modules">40.6. SGI-specific Extension modules</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../reference/grammar.html"
+                        title="previous chapter">9. Full Grammar specification</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="next chapter">1. Introduction</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/index.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="1. Introduction"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../reference/grammar.html" title="9. Full Grammar specification"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

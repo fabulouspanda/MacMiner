@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Long Integer Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Floating Point Objects" href="float.html" />
+    <link rel="prev" title="Boolean Objects" href="bool.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="float.html" title="Floating Point Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bool.html" title="Boolean Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="long-integer-objects">
+<span id="longobjects"></span><h1>Long Integer Objects<a class="headerlink" href="#long-integer-objects" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="PyLongObject">
+<tt class="descname">PyLongObject</tt><a class="headerlink" href="#PyLongObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> represents a Python long integer object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyLong_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyLong_Type</tt><a class="headerlink" href="#PyLong_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject"><tt class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></tt></a> represents the Python long integer type.
+This is the same object as <tt class="docutils literal"><span class="pre">long</span></tt> and <tt class="docutils literal"><span class="pre">types.LongType</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_Check">
+int <tt class="descname">PyLong_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyLong_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> or a subtype of
+<a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_CheckExact">
+int <tt class="descname">PyLong_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyLong_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a>, but not a subtype of
+<a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromLong">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromLong</tt><big>(</big>long<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromLong" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from <em>v</em>, or <em>NULL</em> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromUnsignedLong">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromUnsignedLong</tt><big>(</big>unsigned long<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromUnsignedLong" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span></tt>, or
+<em>NULL</em> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromSsize_t">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromSsize_t</tt><big>(</big>Py_ssize_t<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromSsize_t" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from a C <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt>, or
+<em>NULL</em> on failure.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromSize_t">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromSize_t</tt><big>(</big>size_t<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromSize_t" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from a C <tt class="xref c c-type docutils literal"><span class="pre">size_t</span></tt>, or
+<em>NULL</em> on failure.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromSsize_t</tt><big>(</big>Py_ssize_t<em>&nbsp;v</em><big>)</big></dt>
+<dd><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object with a value of <em>v</em>, or <em>NULL</em>
+on failure.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromSize_t</tt><big>(</big>size_t<em>&nbsp;v</em><big>)</big></dt>
+<dd><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object with a value of <em>v</em>, or <em>NULL</em>
+on failure.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromLongLong">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromLongLong</tt><big>(</big>PY_LONG_LONG<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromLongLong" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt>, or <em>NULL</em>
+on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromUnsignedLongLong">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromUnsignedLongLong</tt><big>(</big>unsigned PY_LONG_LONG<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromUnsignedLongLong" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt>,
+or <em>NULL</em> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromDouble">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromDouble</tt><big>(</big>double<em>&nbsp;v</em><big>)</big><a class="headerlink" href="#PyLong_FromDouble" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> object from the integer part of <em>v</em>, or
+<em>NULL</em> on failure.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromString">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromString</tt><big>(</big>char<em>&nbsp;*str</em>, char<em>&nbsp;**pend</em>, int<em>&nbsp;base</em><big>)</big><a class="headerlink" href="#PyLong_FromString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new <a class="reference internal" href="#PyLongObject" title="PyLongObject"><tt class="xref c c-type docutils literal"><span class="pre">PyLongObject</span></tt></a> based on the string value in <em>str</em>, which is
+interpreted according to the radix in <em>base</em>.  If <em>pend</em> is non-<em>NULL</em>,
+<em>*pend</em> will point to the first character in <em>str</em> which follows the
+representation of the number.  If <em>base</em> is <tt class="docutils literal"><span class="pre">0</span></tt>, the radix will be determined
+based on the leading characters of <em>str</em>: if <em>str</em> starts with <tt class="docutils literal"><span class="pre">'0x'</span></tt> or
+<tt class="docutils literal"><span class="pre">'0X'</span></tt>, radix 16 will be used; if <em>str</em> starts with <tt class="docutils literal"><span class="pre">'0'</span></tt>, radix 8 will be
+used; otherwise radix 10 will be used.  If <em>base</em> is not <tt class="docutils literal"><span class="pre">0</span></tt>, it must be
+between <tt class="docutils literal"><span class="pre">2</span></tt> and <tt class="docutils literal"><span class="pre">36</span></tt>, inclusive.  Leading spaces are ignored.  If there are
+no digits, <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> will be raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromUnicode">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromUnicode</tt><big>(</big><a class="reference internal" href="unicode.html#Py_UNICODE" title="Py_UNICODE">Py_UNICODE</a><em>&nbsp;*u</em>, Py_ssize_t<em>&nbsp;length</em>, int<em>&nbsp;base</em><big>)</big><a class="headerlink" href="#PyLong_FromUnicode" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Convert a sequence of Unicode digits to a Python long integer value.  The first
+parameter, <em>u</em>, points to the first character of the Unicode string, <em>length</em>
+gives the number of characters, and <em>base</em> is the radix for the conversion.  The
+radix must be in the range [2, 36]; if it is out of range, <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a>
+will be raised.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> for <em>length</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_FromVoidPtr">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyLong_FromVoidPtr</tt><big>(</big>void<em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyLong_FromVoidPtr" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a Python integer or long integer from the pointer <em>p</em>. The pointer value
+can be retrieved from the resulting value using <a class="reference internal" href="#PyLong_AsVoidPtr" title="PyLong_AsVoidPtr"><tt class="xref c c-func docutils literal"><span class="pre">PyLong_AsVoidPtr()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>If the integer is larger than LONG_MAX, a positive long integer is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsLong">
+long <tt class="descname">PyLong_AsLong</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsLong" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Return a C <tt class="xref c c-type docutils literal"><span class="pre">long</span></tt> representation of the contents of <em>pylong</em>.  If
+<em>pylong</em> is greater than <tt class="xref py py-const docutils literal"><span class="pre">LONG_MAX</span></tt>, an <a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> is raised
+and <tt class="docutils literal"><span class="pre">-1</span></tt> will be returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsLongAndOverflow">
+long <tt class="descname">PyLong_AsLongAndOverflow</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em>, int<em>&nbsp;*overflow</em><big>)</big><a class="headerlink" href="#PyLong_AsLongAndOverflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">long</span></tt> representation of the contents of
+<em>pylong</em>.  If <em>pylong</em> is greater than <tt class="xref py py-const docutils literal"><span class="pre">LONG_MAX</span></tt> or less
+than <tt class="xref py py-const docutils literal"><span class="pre">LONG_MIN</span></tt>, set <em>*overflow</em> to <tt class="docutils literal"><span class="pre">1</span></tt> or <tt class="docutils literal"><span class="pre">-1</span></tt>,
+respectively, and return <tt class="docutils literal"><span class="pre">-1</span></tt>; otherwise, set <em>*overflow</em> to
+<tt class="docutils literal"><span class="pre">0</span></tt>.  If any other exception occurs (for example a TypeError or
+MemoryError), then <tt class="docutils literal"><span class="pre">-1</span></tt> will be returned and <em>*overflow</em> will
+be <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsLongLongAndOverflow">
+PY_LONG_LONG <tt class="descname">PyLong_AsLongLongAndOverflow</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em>, int<em>&nbsp;*overflow</em><big>)</big><a class="headerlink" href="#PyLong_AsLongLongAndOverflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt> representation of the contents of
+<em>pylong</em>.  If <em>pylong</em> is greater than <tt class="xref py py-const docutils literal"><span class="pre">PY_LLONG_MAX</span></tt> or less
+than <tt class="xref py py-const docutils literal"><span class="pre">PY_LLONG_MIN</span></tt>, set <em>*overflow</em> to <tt class="docutils literal"><span class="pre">1</span></tt> or <tt class="docutils literal"><span class="pre">-1</span></tt>,
+respectively, and return <tt class="docutils literal"><span class="pre">-1</span></tt>; otherwise, set <em>*overflow</em> to
+<tt class="docutils literal"><span class="pre">0</span></tt>.  If any other exception occurs (for example a TypeError or
+MemoryError), then <tt class="docutils literal"><span class="pre">-1</span></tt> will be returned and <em>*overflow</em> will
+be <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsSsize_t">
+Py_ssize_t <tt class="descname">PyLong_AsSsize_t</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsSsize_t" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-3">Return a C <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt> representation of the contents of <em>pylong</em>.  If
+<em>pylong</em> is greater than <tt class="xref py py-const docutils literal"><span class="pre">PY_SSIZE_T_MAX</span></tt>, an <a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> is raised
+and <tt class="docutils literal"><span class="pre">-1</span></tt> will be returned.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsUnsignedLong">
+unsigned long <tt class="descname">PyLong_AsUnsignedLong</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsUnsignedLong" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-4">Return a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span></tt> representation of the contents of <em>pylong</em>.
+If <em>pylong</em> is greater than <tt class="xref py py-const docutils literal"><span class="pre">ULONG_MAX</span></tt>, an <a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> is
+raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+Py_ssize_t <tt class="descname">PyLong_AsSsize_t</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big></dt>
+<dd><p id="index-5">Return a <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt> representation of the contents of <em>pylong</em>.  If
+<em>pylong</em> is greater than <tt class="xref py py-const docutils literal"><span class="pre">PY_SSIZE_T_MAX</span></tt>, an <a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> is
+raised.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsLongLong">
+PY_LONG_LONG <tt class="descname">PyLong_AsLongLong</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsLongLong" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-6">Return a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt> from a Python long integer.  If
+<em>pylong</em> cannot be represented as a <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt>, an
+<a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> is raised and <tt class="docutils literal"><span class="pre">-1</span></tt> is returned.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsUnsignedLongLong">
+unsigned PY_LONG_LONG <tt class="descname">PyLong_AsUnsignedLongLong</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsUnsignedLongLong" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-7">Return a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt> from a Python long integer. If
+<em>pylong</em> cannot be represented as an <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt>, an
+<a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> is raised and <tt class="docutils literal"><span class="pre">(unsigned</span> <span class="pre">long</span> <span class="pre">long)-1</span></tt> is
+returned.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>A negative <em>pylong</em> now raises <a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a>, not
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsUnsignedLongMask">
+unsigned long <tt class="descname">PyLong_AsUnsignedLongMask</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*io</em><big>)</big><a class="headerlink" href="#PyLong_AsUnsignedLongMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span></tt> from a Python long integer, without checking
+for overflow.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsUnsignedLongLongMask">
+unsigned PY_LONG_LONG <tt class="descname">PyLong_AsUnsignedLongLongMask</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*io</em><big>)</big><a class="headerlink" href="#PyLong_AsUnsignedLongLongMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt> from a Python long integer, without
+checking for overflow.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsDouble">
+double <tt class="descname">PyLong_AsDouble</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsDouble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> representation of the contents of <em>pylong</em>.  If
+<em>pylong</em> cannot be approximately represented as a <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt>, an
+<a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> exception is raised and <tt class="docutils literal"><span class="pre">-1.0</span></tt> will be returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyLong_AsVoidPtr">
+void* <tt class="descname">PyLong_AsVoidPtr</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*pylong</em><big>)</big><a class="headerlink" href="#PyLong_AsVoidPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a Python integer or long integer <em>pylong</em> to a C <tt class="xref c c-type docutils literal"><span class="pre">void</span></tt> pointer.
+If <em>pylong</em> cannot be converted, an <a class="reference internal" href="../library/exceptions.html#exceptions.OverflowError" title="exceptions.OverflowError"><tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt></a> will be raised.  This
+is only assured to produce a usable <tt class="xref c c-type docutils literal"><span class="pre">void</span></tt> pointer for values created
+with <a class="reference internal" href="#PyLong_FromVoidPtr" title="PyLong_FromVoidPtr"><tt class="xref c c-func docutils literal"><span class="pre">PyLong_FromVoidPtr()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>For values outside 0..LONG_MAX, both signed and unsigned integers are accepted.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bool.html"
+                        title="previous chapter">Boolean Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="float.html"
+                        title="next chapter">Floating Point Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/long.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="float.html" title="Floating Point Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bool.html" title="Boolean Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

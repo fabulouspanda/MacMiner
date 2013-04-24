@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.11. __future__ — Future statement definitions &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="27. Python Runtime Services" href="python.html" />
+    <link rel="next" title="27.12. gc — Garbage Collector interface" href="gc.html" />
+    <link rel="prev" title="27.10. traceback — Print or retrieve a stack traceback" href="traceback.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gc.html" title="27.12. gc — Garbage Collector interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="traceback.html" title="27.10. traceback — Print or retrieve a stack traceback"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" accesskey="U">27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-__future__">
+<span id="future-future-statement-definitions"></span><h1>27.11. <a class="reference internal" href="#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a> &#8212; Future statement definitions<a class="headerlink" href="#module-__future__" title="Permalink to this headline">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/__future__.py">Lib/__future__.py</a></p>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a> is a real module, and serves three purposes:</p>
+<ul class="simple">
+<li>To avoid confusing existing tools that analyze import statements and expect to
+find the modules they&#8217;re importing.</li>
+<li>To ensure that <a class="reference internal" href="../reference/simple_stmts.html#future"><em>future statements</em></a> run under releases prior to
+2.1 at least yield runtime exceptions (the import of <a class="reference internal" href="#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a> will
+fail, because there was no module of that name prior to 2.1).</li>
+<li>To document when incompatible changes were introduced, and when they will be
+&#8212; or were &#8212; made mandatory.  This is a form of executable documentation, and
+can be inspected programmatically via importing <a class="reference internal" href="#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a> and examining
+its contents.</li>
+</ul>
+<p>Each statement in <tt class="file docutils literal"><span class="pre">__future__.py</span></tt> is of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">FeatureName</span> <span class="o">=</span> <span class="n">_Feature</span><span class="p">(</span><span class="n">OptionalRelease</span><span class="p">,</span> <span class="n">MandatoryRelease</span><span class="p">,</span>
+                       <span class="n">CompilerFlag</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where, normally, <em>OptionalRelease</em> is less than <em>MandatoryRelease</em>, and both are
+5-tuples of the same form as <tt class="docutils literal"><span class="pre">sys.version_info</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">PY_MAJOR_VERSION</span><span class="p">,</span> <span class="c"># the 2 in 2.1.0a3; an int</span>
+ <span class="n">PY_MINOR_VERSION</span><span class="p">,</span> <span class="c"># the 1; an int</span>
+ <span class="n">PY_MICRO_VERSION</span><span class="p">,</span> <span class="c"># the 0; an int</span>
+ <span class="n">PY_RELEASE_LEVEL</span><span class="p">,</span> <span class="c"># &quot;alpha&quot;, &quot;beta&quot;, &quot;candidate&quot; or &quot;final&quot;; string</span>
+ <span class="n">PY_RELEASE_SERIAL</span> <span class="c"># the 3; an int</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><em>OptionalRelease</em> records the first release in which the feature was accepted.</p>
+<p>In the case of a <em>MandatoryRelease</em> that has not yet occurred,
+<em>MandatoryRelease</em> predicts the release in which the feature will become part of
+the language.</p>
+<p>Else <em>MandatoryRelease</em> records when the feature became part of the language; in
+releases at or after that, modules no longer need a future statement to use the
+feature in question, but may continue to use such imports.</p>
+<p><em>MandatoryRelease</em> may also be <tt class="xref docutils literal"><span class="pre">None</span></tt>, meaning that a planned feature got
+dropped.</p>
+<p>Instances of class <tt class="xref py py-class docutils literal"><span class="pre">_Feature</span></tt> have two corresponding methods,
+<tt class="xref py py-meth docutils literal"><span class="pre">getOptionalRelease()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">getMandatoryRelease()</span></tt>.</p>
+<p><em>CompilerFlag</em> is the (bitfield) flag that should be passed in the fourth
+argument to the built-in function <a class="reference internal" href="functions.html#compile" title="compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> to enable the feature in
+dynamically compiled code.  This flag is stored in the <tt class="xref py py-attr docutils literal"><span class="pre">compiler_flag</span></tt>
+attribute on <tt class="xref py py-class docutils literal"><span class="pre">_Feature</span></tt> instances.</p>
+<p>No feature description will ever be deleted from <a class="reference internal" href="#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a>. Since its
+introduction in Python 2.1 the following features have found their way into the
+language using this mechanism:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="14%" />
+<col width="16%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">feature</th>
+<th class="head">optional in</th>
+<th class="head">mandatory in</th>
+<th class="head">effect</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>nested_scopes</td>
+<td>2.1.0b1</td>
+<td>2.2</td>
+<td><span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0227"><strong>PEP 227</strong></a>:
+<em>Statically Nested Scopes</em></td>
+</tr>
+<tr><td>generators</td>
+<td>2.2.0a1</td>
+<td>2.3</td>
+<td><span class="target" id="index-1"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0255"><strong>PEP 255</strong></a>:
+<em>Simple Generators</em></td>
+</tr>
+<tr><td>division</td>
+<td>2.2.0a2</td>
+<td>3.0</td>
+<td><span class="target" id="index-2"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0238"><strong>PEP 238</strong></a>:
+<em>Changing the Division Operator</em></td>
+</tr>
+<tr><td>absolute_import</td>
+<td>2.5.0a1</td>
+<td>3.0</td>
+<td><span class="target" id="index-3"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0328"><strong>PEP 328</strong></a>:
+<em>Imports: Multi-Line and Absolute/Relative</em></td>
+</tr>
+<tr><td>with_statement</td>
+<td>2.5.0a1</td>
+<td>2.6</td>
+<td><span class="target" id="index-4"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0343"><strong>PEP 343</strong></a>:
+<em>The &#8220;with&#8221; Statement</em></td>
+</tr>
+<tr><td>print_function</td>
+<td>2.6.0a2</td>
+<td>3.0</td>
+<td><span class="target" id="index-5"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-3105"><strong>PEP 3105</strong></a>:
+<em>Make print a function</em></td>
+</tr>
+<tr><td>unicode_literals</td>
+<td>2.6.0a2</td>
+<td>3.0</td>
+<td><span class="target" id="index-6"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-3112"><strong>PEP 3112</strong></a>:
+<em>Bytes literals in Python 3000</em></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="../reference/simple_stmts.html#future"><em>Future statements</em></a></dt>
+<dd>How the compiler treats future imports.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="traceback.html"
+                        title="previous chapter">27.10. <tt class="docutils literal"><span class="pre">traceback</span></tt> &#8212; Print or retrieve a stack traceback</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gc.html"
+                        title="next chapter">27.12. <tt class="docutils literal"><span class="pre">gc</span></tt> &#8212; Garbage Collector interface</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/__future__.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gc.html" title="27.12. gc — Garbage Collector interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="traceback.html" title="27.10. traceback — Print or retrieve a stack traceback"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" >27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Socket Programming HOWTO &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python HOWTOs" href="index.html" />
+    <link rel="next" title="Sorting HOW TO" href="sorting.html" />
+    <link rel="prev" title="Regular Expression HOWTO" href="regex.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sorting.html" title="Sorting HOW TO"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="regex.html" title="Regular Expression HOWTO"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="socket-programming-howto">
+<span id="socket-howto"></span><h1>Socket Programming HOWTO<a class="headerlink" href="#socket-programming-howto" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Gordon McMillan</td>
+</tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">Abstract</p>
+<p>Sockets are used nearly everywhere, but are one of the most severely
+misunderstood technologies around. This is a 10,000 foot overview of sockets.
+It&#8217;s not really a tutorial - you&#8217;ll still have work to do in getting things
+operational. It doesn&#8217;t cover the fine points (and there are a lot of them), but
+I hope it will give you enough background to begin using them decently.</p>
+</div>
+<div class="section" id="sockets">
+<h2>Sockets<a class="headerlink" href="#sockets" title="Permalink to this headline">¶</a></h2>
+<p>Sockets are used nearly everywhere, but are one of the most severely
+misunderstood technologies around. This is a 10,000 foot overview of sockets.
+It&#8217;s not really a tutorial - you&#8217;ll still have work to do in getting things
+working. It doesn&#8217;t cover the fine points (and there are a lot of them), but I
+hope it will give you enough background to begin using them decently.</p>
+<p>I&#8217;m only going to talk about INET sockets, but they account for at least 99% of
+the sockets in use. And I&#8217;ll only talk about STREAM sockets - unless you really
+know what you&#8217;re doing (in which case this HOWTO isn&#8217;t for you!), you&#8217;ll get
+better behavior and performance from a STREAM socket than anything else. I will
+try to clear up the mystery of what a socket is, as well as some hints on how to
+work with blocking and non-blocking sockets. But I&#8217;ll start by talking about
+blocking sockets. You&#8217;ll need to know how they work before dealing with
+non-blocking sockets.</p>
+<p>Part of the trouble with understanding these things is that &#8220;socket&#8221; can mean a
+number of subtly different things, depending on context. So first, let&#8217;s make a
+distinction between a &#8220;client&#8221; socket - an endpoint of a conversation, and a
+&#8220;server&#8221; socket, which is more like a switchboard operator. The client
+application (your browser, for example) uses &#8220;client&#8221; sockets exclusively; the
+web server it&#8217;s talking to uses both &#8220;server&#8221; sockets and &#8220;client&#8221; sockets.</p>
+<div class="section" id="history">
+<h3>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h3>
+<p>Of the various forms of <abbr title="Inter Process Communication">IPC</abbr>,
+sockets are by far the most popular.  On any given platform, there are
+likely to be other forms of IPC that are faster, but for
+cross-platform communication, sockets are about the only game in town.</p>
+<p>They were invented in Berkeley as part of the BSD flavor of Unix. They spread
+like wildfire with the Internet. With good reason &#8212; the combination of sockets
+with INET makes talking to arbitrary machines around the world unbelievably easy
+(at least compared to other schemes).</p>
+</div>
+</div>
+<div class="section" id="creating-a-socket">
+<h2>Creating a Socket<a class="headerlink" href="#creating-a-socket" title="Permalink to this headline">¶</a></h2>
+<p>Roughly speaking, when you clicked on the link that brought you to this page,
+your browser did something like the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#create an INET, STREAMing socket</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span>
+    <span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="c">#now connect to the web server on port 80</span>
+<span class="c"># - the normal http port</span>
+<span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s">&quot;www.mcmillan-inc.com&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>When the <tt class="docutils literal"><span class="pre">connect</span></tt> completes, the socket <tt class="docutils literal"><span class="pre">s</span></tt> can be used to send
+in a request for the text of the page. The same socket will read the
+reply, and then be destroyed. That&#8217;s right, destroyed. Client sockets
+are normally only used for one exchange (or a small set of sequential
+exchanges).</p>
+<p>What happens in the web server is a bit more complex. First, the web server
+creates a &#8220;server socket&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#create an INET, STREAMing socket</span>
+<span class="n">serversocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span>
+    <span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="c">#bind the socket to a public host,</span>
+<span class="c"># and a well-known port</span>
+<span class="n">serversocket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">(),</span> <span class="mi">80</span><span class="p">))</span>
+<span class="c">#become a server socket</span>
+<span class="n">serversocket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A couple things to notice: we used <tt class="docutils literal"><span class="pre">socket.gethostname()</span></tt> so that the socket
+would be visible to the outside world. If we had used <tt class="docutils literal"><span class="pre">s.bind(('',</span> <span class="pre">80))</span></tt> or
+<tt class="docutils literal"><span class="pre">s.bind(('localhost',</span> <span class="pre">80))</span></tt> or <tt class="docutils literal"><span class="pre">s.bind(('127.0.0.1',</span> <span class="pre">80))</span></tt> we would still
+have a &#8220;server&#8221; socket, but one that was only visible within the same machine.</p>
+<p>A second thing to note: low number ports are usually reserved for &#8220;well known&#8221;
+services (HTTP, SNMP etc). If you&#8217;re playing around, use a nice high number (4
+digits).</p>
+<p>Finally, the argument to <tt class="docutils literal"><span class="pre">listen</span></tt> tells the socket library that we want it to
+queue up as many as 5 connect requests (the normal max) before refusing outside
+connections. If the rest of the code is written properly, that should be plenty.</p>
+<p>Now that we have a &#8220;server&#8221; socket, listening on port 80, we can enter the
+mainloop of the web server:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="c">#accept connections from outside</span>
+    <span class="p">(</span><span class="n">clientsocket</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span> <span class="o">=</span> <span class="n">serversocket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="c">#now do something with the clientsocket</span>
+    <span class="c">#in this case, we&#39;ll pretend this is a threaded server</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">client_thread</span><span class="p">(</span><span class="n">clientsocket</span><span class="p">)</span>
+    <span class="n">ct</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>There&#8217;s actually 3 general ways in which this loop could work - dispatching a
+thread to handle <tt class="docutils literal"><span class="pre">clientsocket</span></tt>, create a new process to handle
+<tt class="docutils literal"><span class="pre">clientsocket</span></tt>, or restructure this app to use non-blocking sockets, and
+mulitplex between our &#8220;server&#8221; socket and any active <tt class="docutils literal"><span class="pre">clientsocket</span></tt>s using
+<tt class="docutils literal"><span class="pre">select</span></tt>. More about that later. The important thing to understand now is
+this: this is <em>all</em> a &#8220;server&#8221; socket does. It doesn&#8217;t send any data. It doesn&#8217;t
+receive any data. It just produces &#8220;client&#8221; sockets. Each <tt class="docutils literal"><span class="pre">clientsocket</span></tt> is
+created in response to some <em>other</em> &#8220;client&#8221; socket doing a <tt class="docutils literal"><span class="pre">connect()</span></tt> to the
+host and port we&#8217;re bound to. As soon as we&#8217;ve created that <tt class="docutils literal"><span class="pre">clientsocket</span></tt>, we
+go back to listening for more connections. The two &#8220;clients&#8221; are free to chat it
+up - they are using some dynamically allocated port which will be recycled when
+the conversation ends.</p>
+<div class="section" id="ipc">
+<h3>IPC<a class="headerlink" href="#ipc" title="Permalink to this headline">¶</a></h3>
+<p>If you need fast IPC between two processes on one machine, you should look into
+whatever form of shared memory the platform offers. A simple protocol based
+around shared memory and locks or semaphores is by far the fastest technique.</p>
+<p>If you do decide to use sockets, bind the &#8220;server&#8221; socket to <tt class="docutils literal"><span class="pre">'localhost'</span></tt>. On
+most platforms, this will take a shortcut around a couple of layers of network
+code and be quite a bit faster.</p>
+</div>
+</div>
+<div class="section" id="using-a-socket">
+<h2>Using a Socket<a class="headerlink" href="#using-a-socket" title="Permalink to this headline">¶</a></h2>
+<p>The first thing to note, is that the web browser&#8217;s &#8220;client&#8221; socket and the web
+server&#8217;s &#8220;client&#8221; socket are identical beasts. That is, this is a &#8220;peer to peer&#8221;
+conversation. Or to put it another way, <em>as the designer, you will have to
+decide what the rules of etiquette are for a conversation</em>. Normally, the
+<tt class="docutils literal"><span class="pre">connect</span></tt>ing socket starts the conversation, by sending in a request, or
+perhaps a signon. But that&#8217;s a design decision - it&#8217;s not a rule of sockets.</p>
+<p>Now there are two sets of verbs to use for communication. You can use <tt class="docutils literal"><span class="pre">send</span></tt>
+and <tt class="docutils literal"><span class="pre">recv</span></tt>, or you can transform your client socket into a file-like beast and
+use <tt class="docutils literal"><span class="pre">read</span></tt> and <tt class="docutils literal"><span class="pre">write</span></tt>. The latter is the way Java presents its sockets.
+I&#8217;m not going to talk about it here, except to warn you that you need to use
+<tt class="docutils literal"><span class="pre">flush</span></tt> on sockets. These are buffered &#8220;files&#8221;, and a common mistake is to
+<tt class="docutils literal"><span class="pre">write</span></tt> something, and then <tt class="docutils literal"><span class="pre">read</span></tt> for a reply. Without a <tt class="docutils literal"><span class="pre">flush</span></tt> in
+there, you may wait forever for the reply, because the request may still be in
+your output buffer.</p>
+<p>Now we come to the major stumbling block of sockets - <tt class="docutils literal"><span class="pre">send</span></tt> and <tt class="docutils literal"><span class="pre">recv</span></tt> operate
+on the network buffers. They do not necessarily handle all the bytes you hand
+them (or expect from them), because their major focus is handling the network
+buffers. In general, they return when the associated network buffers have been
+filled (<tt class="docutils literal"><span class="pre">send</span></tt>) or emptied (<tt class="docutils literal"><span class="pre">recv</span></tt>). They then tell you how many bytes they
+handled. It is <em>your</em> responsibility to call them again until your message has
+been completely dealt with.</p>
+<p>When a <tt class="docutils literal"><span class="pre">recv</span></tt> returns 0 bytes, it means the other side has closed (or is in
+the process of closing) the connection.  You will not receive any more data on
+this connection. Ever.  You may be able to send data successfully; I&#8217;ll talk
+more about this later.</p>
+<p>A protocol like HTTP uses a socket for only one transfer. The client sends a
+request, then reads a reply.  That&#8217;s it. The socket is discarded. This means that
+a client can detect the end of the reply by receiving 0 bytes.</p>
+<p>But if you plan to reuse your socket for further transfers, you need to realize
+that <em>there is no</em> <abbr title="End of Transfer">EOT</abbr> <em>on a socket.</em> I repeat: if a socket
+<tt class="docutils literal"><span class="pre">send</span></tt> or <tt class="docutils literal"><span class="pre">recv</span></tt> returns after handling 0 bytes, the connection has been
+broken.  If the connection has <em>not</em> been broken, you may wait on a <tt class="docutils literal"><span class="pre">recv</span></tt>
+forever, because the socket will <em>not</em> tell you that there&#8217;s nothing more to
+read (for now).  Now if you think about that a bit, you&#8217;ll come to realize a
+fundamental truth of sockets: <em>messages must either be fixed length</em> (yuck), <em>or
+be delimited</em> (shrug), <em>or indicate how long they are</em> (much better), <em>or end by
+shutting down the connection</em>. The choice is entirely yours, (but some ways are
+righter than others).</p>
+<p>Assuming you don&#8217;t want to end the connection, the simplest solution is a fixed
+length message:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">mysocket</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;demonstration class only</span>
+<span class="sd">      - coded for clarity, not efficiency</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sock</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sock</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span>
+                <span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">sock</span>
+
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">mysend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="n">totalsent</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">totalsent</span> <span class="o">&lt;</span> <span class="n">MSGLEN</span><span class="p">:</span>
+            <span class="n">sent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="n">totalsent</span><span class="p">:])</span>
+            <span class="k">if</span> <span class="n">sent</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;socket connection broken&quot;</span><span class="p">)</span>
+            <span class="n">totalsent</span> <span class="o">=</span> <span class="n">totalsent</span> <span class="o">+</span> <span class="n">sent</span>
+
+    <span class="k">def</span> <span class="nf">myreceive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">MSGLEN</span><span class="p">:</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">MSGLEN</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">chunk</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;socket connection broken&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">+</span> <span class="n">chunk</span>
+        <span class="k">return</span> <span class="n">msg</span>
+</pre></div>
+</div>
+<p>The sending code here is usable for almost any messaging scheme - in Python you
+send strings, and you can use <tt class="docutils literal"><span class="pre">len()</span></tt> to determine its length (even if it has
+embedded <tt class="docutils literal"><span class="pre">\0</span></tt> characters). It&#8217;s mostly the receiving code that gets more
+complex. (And in C, it&#8217;s not much worse, except you can&#8217;t use <tt class="docutils literal"><span class="pre">strlen</span></tt> if the
+message has embedded <tt class="docutils literal"><span class="pre">\0</span></tt>s.)</p>
+<p>The easiest enhancement is to make the first character of the message an
+indicator of message type, and have the type determine the length. Now you have
+two <tt class="docutils literal"><span class="pre">recv</span></tt>s - the first to get (at least) that first character so you can
+look up the length, and the second in a loop to get the rest. If you decide to
+go the delimited route, you&#8217;ll be receiving in some arbitrary chunk size, (4096
+or 8192 is frequently a good match for network buffer sizes), and scanning what
+you&#8217;ve received for a delimiter.</p>
+<p>One complication to be aware of: if your conversational protocol allows multiple
+messages to be sent back to back (without some kind of reply), and you pass
+<tt class="docutils literal"><span class="pre">recv</span></tt> an arbitrary chunk size, you may end up reading the start of a
+following message. You&#8217;ll need to put that aside and hold onto it, until it&#8217;s
+needed.</p>
+<p>Prefixing the message with it&#8217;s length (say, as 5 numeric characters) gets more
+complex, because (believe it or not), you may not get all 5 characters in one
+<tt class="docutils literal"><span class="pre">recv</span></tt>. In playing around, you&#8217;ll get away with it; but in high network loads,
+your code will very quickly break unless you use two <tt class="docutils literal"><span class="pre">recv</span></tt> loops - the first
+to determine the length, the second to get the data part of the message. Nasty.
+This is also when you&#8217;ll discover that <tt class="docutils literal"><span class="pre">send</span></tt> does not always manage to get
+rid of everything in one pass. And despite having read this, you will eventually
+get bit by it!</p>
+<p>In the interests of space, building your character, (and preserving my
+competitive position), these enhancements are left as an exercise for the
+reader. Lets move on to cleaning up.</p>
+<div class="section" id="binary-data">
+<h3>Binary Data<a class="headerlink" href="#binary-data" title="Permalink to this headline">¶</a></h3>
+<p>It is perfectly possible to send binary data over a socket. The major problem is
+that not all machines use the same formats for binary data. For example, a
+Motorola chip will represent a 16 bit integer with the value 1 as the two hex
+bytes 00 01. Intel and DEC, however, are byte-reversed - that same 1 is 01 00.
+Socket libraries have calls for converting 16 and 32 bit integers - <tt class="docutils literal"><span class="pre">ntohl,</span>
+<span class="pre">htonl,</span> <span class="pre">ntohs,</span> <span class="pre">htons</span></tt> where &#8220;n&#8221; means <em>network</em> and &#8220;h&#8221; means <em>host</em>, &#8220;s&#8221; means
+<em>short</em> and &#8220;l&#8221; means <em>long</em>. Where network order is host order, these do
+nothing, but where the machine is byte-reversed, these swap the bytes around
+appropriately.</p>
+<p>In these days of 32 bit machines, the ascii representation of binary data is
+frequently smaller than the binary representation. That&#8217;s because a surprising
+amount of the time, all those longs have the value 0, or maybe 1. The string &#8220;0&#8221;
+would be two bytes, while binary is four. Of course, this doesn&#8217;t fit well with
+fixed-length messages. Decisions, decisions.</p>
+</div>
+</div>
+<div class="section" id="disconnecting">
+<h2>Disconnecting<a class="headerlink" href="#disconnecting" title="Permalink to this headline">¶</a></h2>
+<p>Strictly speaking, you&#8217;re supposed to use <tt class="docutils literal"><span class="pre">shutdown</span></tt> on a socket before you
+<tt class="docutils literal"><span class="pre">close</span></tt> it.  The <tt class="docutils literal"><span class="pre">shutdown</span></tt> is an advisory to the socket at the other end.
+Depending on the argument you pass it, it can mean &#8220;I&#8217;m not going to send
+anymore, but I&#8217;ll still listen&#8221;, or &#8220;I&#8217;m not listening, good riddance!&#8221;.  Most
+socket libraries, however, are so used to programmers neglecting to use this
+piece of etiquette that normally a <tt class="docutils literal"><span class="pre">close</span></tt> is the same as <tt class="docutils literal"><span class="pre">shutdown();</span>
+<span class="pre">close()</span></tt>.  So in most situations, an explicit <tt class="docutils literal"><span class="pre">shutdown</span></tt> is not needed.</p>
+<p>One way to use <tt class="docutils literal"><span class="pre">shutdown</span></tt> effectively is in an HTTP-like exchange. The client
+sends a request and then does a <tt class="docutils literal"><span class="pre">shutdown(1)</span></tt>. This tells the server &#8220;This
+client is done sending, but can still receive.&#8221;  The server can detect &#8220;EOF&#8221; by
+a receive of 0 bytes. It can assume it has the complete request.  The server
+sends a reply. If the <tt class="docutils literal"><span class="pre">send</span></tt> completes successfully then, indeed, the client
+was still receiving.</p>
+<p>Python takes the automatic shutdown a step further, and says that when a socket
+is garbage collected, it will automatically do a <tt class="docutils literal"><span class="pre">close</span></tt> if it&#8217;s needed. But
+relying on this is a very bad habit. If your socket just disappears without
+doing a <tt class="docutils literal"><span class="pre">close</span></tt>, the socket at the other end may hang indefinitely, thinking
+you&#8217;re just being slow. <em>Please</em> <tt class="docutils literal"><span class="pre">close</span></tt> your sockets when you&#8217;re done.</p>
+<div class="section" id="when-sockets-die">
+<h3>When Sockets Die<a class="headerlink" href="#when-sockets-die" title="Permalink to this headline">¶</a></h3>
+<p>Probably the worst thing about using blocking sockets is what happens when the
+other side comes down hard (without doing a <tt class="docutils literal"><span class="pre">close</span></tt>). Your socket is likely to
+hang. SOCKSTREAM is a reliable protocol, and it will wait a long, long time
+before giving up on a connection. If you&#8217;re using threads, the entire thread is
+essentially dead. There&#8217;s not much you can do about it. As long as you aren&#8217;t
+doing something dumb, like holding a lock while doing a blocking read, the
+thread isn&#8217;t really consuming much in the way of resources. Do <em>not</em> try to kill
+the thread - part of the reason that threads are more efficient than processes
+is that they avoid the overhead associated with the automatic recycling of
+resources. In other words, if you do manage to kill the thread, your whole
+process is likely to be screwed up.</p>
+</div>
+</div>
+<div class="section" id="non-blocking-sockets">
+<h2>Non-blocking Sockets<a class="headerlink" href="#non-blocking-sockets" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;ve understood the preceding, you already know most of what you need to
+know about the mechanics of using sockets. You&#8217;ll still use the same calls, in
+much the same ways. It&#8217;s just that, if you do it right, your app will be almost
+inside-out.</p>
+<p>In Python, you use <tt class="docutils literal"><span class="pre">socket.setblocking(0)</span></tt> to make it non-blocking. In C, it&#8217;s
+more complex, (for one thing, you&#8217;ll need to choose between the BSD flavor
+<tt class="docutils literal"><span class="pre">O_NONBLOCK</span></tt> and the almost indistinguishable Posix flavor <tt class="docutils literal"><span class="pre">O_NDELAY</span></tt>, which
+is completely different from <tt class="docutils literal"><span class="pre">TCP_NODELAY</span></tt>), but it&#8217;s the exact same idea. You
+do this after creating the socket, but before using it. (Actually, if you&#8217;re
+nuts, you can switch back and forth.)</p>
+<p>The major mechanical difference is that <tt class="docutils literal"><span class="pre">send</span></tt>, <tt class="docutils literal"><span class="pre">recv</span></tt>, <tt class="docutils literal"><span class="pre">connect</span></tt> and
+<tt class="docutils literal"><span class="pre">accept</span></tt> can return without having done anything. You have (of course) a
+number of choices. You can check return code and error codes and generally drive
+yourself crazy. If you don&#8217;t believe me, try it sometime. Your app will grow
+large, buggy and suck CPU. So let&#8217;s skip the brain-dead solutions and do it
+right.</p>
+<p>Use <tt class="docutils literal"><span class="pre">select</span></tt>.</p>
+<p>In C, coding <tt class="docutils literal"><span class="pre">select</span></tt> is fairly complex. In Python, it&#8217;s a piece of cake, but
+it&#8217;s close enough to the C version that if you understand <tt class="docutils literal"><span class="pre">select</span></tt> in Python,
+you&#8217;ll have little trouble with it in C:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ready_to_read</span><span class="p">,</span> <span class="n">ready_to_write</span><span class="p">,</span> <span class="n">in_error</span> <span class="o">=</span> \
+               <span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+                  <span class="n">potential_readers</span><span class="p">,</span>
+                  <span class="n">potential_writers</span><span class="p">,</span>
+                  <span class="n">potential_errs</span><span class="p">,</span>
+                  <span class="n">timeout</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You pass <tt class="docutils literal"><span class="pre">select</span></tt> three lists: the first contains all sockets that you might
+want to try reading; the second all the sockets you might want to try writing
+to, and the last (normally left empty) those that you want to check for errors.
+You should note that a socket can go into more than one list. The <tt class="docutils literal"><span class="pre">select</span></tt>
+call is blocking, but you can give it a timeout. This is generally a sensible
+thing to do - give it a nice long timeout (say a minute) unless you have good
+reason to do otherwise.</p>
+<p>In return, you will get three lists. They contain the sockets that are actually
+readable, writable and in error. Each of these lists is a subset (possibly
+empty) of the corresponding list you passed in.</p>
+<p>If a socket is in the output readable list, you can be
+as-close-to-certain-as-we-ever-get-in-this-business that a <tt class="docutils literal"><span class="pre">recv</span></tt> on that
+socket will return <em>something</em>. Same idea for the writable list. You&#8217;ll be able
+to send <em>something</em>. Maybe not all you want to, but <em>something</em> is better than
+nothing.  (Actually, any reasonably healthy socket will return as writable - it
+just means outbound network buffer space is available.)</p>
+<p>If you have a &#8220;server&#8221; socket, put it in the potential_readers list. If it comes
+out in the readable list, your <tt class="docutils literal"><span class="pre">accept</span></tt> will (almost certainly) work. If you
+have created a new socket to <tt class="docutils literal"><span class="pre">connect</span></tt> to someone else, put it in the
+potential_writers list. If it shows up in the writable list, you have a decent
+chance that it has connected.</p>
+<p>One very nasty problem with <tt class="docutils literal"><span class="pre">select</span></tt>: if somewhere in those input lists of
+sockets is one which has died a nasty death, the <tt class="docutils literal"><span class="pre">select</span></tt> will fail. You then
+need to loop through every single damn socket in all those lists and do a
+<tt class="docutils literal"><span class="pre">select([sock],[],[],0)</span></tt> until you find the bad one. That timeout of 0 means
+it won&#8217;t take long, but it&#8217;s ugly.</p>
+<p>Actually, <tt class="docutils literal"><span class="pre">select</span></tt> can be handy even with blocking sockets. It&#8217;s one way of
+determining whether you will block - the socket returns as readable when there&#8217;s
+something in the buffers.  However, this still doesn&#8217;t help with the problem of
+determining whether the other end is done, or just busy with something else.</p>
+<p><strong>Portability alert</strong>: On Unix, <tt class="docutils literal"><span class="pre">select</span></tt> works both with the sockets and
+files. Don&#8217;t try this on Windows. On Windows, <tt class="docutils literal"><span class="pre">select</span></tt> works with sockets
+only. Also note that in C, many of the more advanced socket options are done
+differently on Windows. In fact, on Windows I usually use threads (which work
+very, very well) with my sockets. Face it, if you want any kind of performance,
+your code will look very different on Windows than on Unix.</p>
+<div class="section" id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s no question that the fastest sockets code uses non-blocking sockets and
+select to multiplex them. You can put together something that will saturate a
+LAN connection without putting any strain on the CPU. The trouble is that an app
+written this way can&#8217;t do much of anything else - it needs to be ready to
+shuffle bytes around at all times.</p>
+<p>Assuming that your app is actually supposed to do something more than that,
+threading is the optimal solution, (and using non-blocking sockets will be
+faster than using blocking sockets). Unfortunately, threading support in Unixes
+varies both in API and quality. So the normal Unix solution is to fork a
+subprocess to deal with each connection. The overhead for this is significant
+(and don&#8217;t do this on Windows - the overhead of process creation is enormous
+there). It also means that unless each subprocess is completely independent,
+you&#8217;ll need to use another form of IPC, say a pipe, or shared memory and
+semaphores, to communicate between the parent and child processes.</p>
+<p>Finally, remember that even though blocking sockets are somewhat slower than
+non-blocking, in many cases they are the &#8220;right&#8221; solution. After all, if your
+app is driven by the data it receives over a socket, there&#8217;s not much sense in
+complicating the logic just so your app can wait on <tt class="docutils literal"><span class="pre">select</span></tt> instead of
+<tt class="docutils literal"><span class="pre">recv</span></tt>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Socket Programming HOWTO</a><ul>
+<li><a class="reference internal" href="#sockets">Sockets</a><ul>
+<li><a class="reference internal" href="#history">History</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-socket">Creating a Socket</a><ul>
+<li><a class="reference internal" href="#ipc">IPC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-a-socket">Using a Socket</a><ul>
+<li><a class="reference internal" href="#binary-data">Binary Data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#disconnecting">Disconnecting</a><ul>
+<li><a class="reference internal" href="#when-sockets-die">When Sockets Die</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-blocking-sockets">Non-blocking Sockets</a><ul>
+<li><a class="reference internal" href="#performance">Performance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="regex.html"
+                        title="previous chapter">Regular Expression HOWTO</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sorting.html"
+                        title="next chapter">Sorting HOW TO</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/howto/sockets.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sorting.html" title="Sorting HOW TO"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="regex.html" title="Regular Expression HOWTO"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

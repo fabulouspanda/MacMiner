@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.3. __builtin__ — Built-in objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="27. Python Runtime Services" href="python.html" />
+    <link rel="next" title="27.4. future_builtins — Python 3 builtins" href="future_builtins.html" />
+    <link rel="prev" title="27.2. sysconfig — Provide access to Python’s configuration information" href="sysconfig.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="future_builtins.html" title="27.4. future_builtins — Python 3 builtins"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sysconfig.html" title="27.2. sysconfig — Provide access to Python’s configuration information"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" accesskey="U">27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-__builtin__">
+<span id="builtin-built-in-objects"></span><h1>27.3. <a class="reference internal" href="#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a> &#8212; Built-in objects<a class="headerlink" href="#module-__builtin__" title="Permalink to this headline">¶</a></h1>
+<p>This module provides direct access to all &#8216;built-in&#8217; identifiers of Python; for
+example, <tt class="docutils literal"><span class="pre">__builtin__.open</span></tt> is the full name for the built-in function
+<a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a>.  See <a class="reference internal" href="functions.html#built-in-funcs"><em>Built-in Functions</em></a> and <a class="reference internal" href="constants.html#built-in-consts"><em>Built-in Constants</em></a> for
+documentation.</p>
+<p>This module is not normally accessed explicitly by most applications, but can be
+useful in modules that provide objects with the same name as a built-in value,
+but in which the built-in of that name is also needed.  For example, in a module
+that wants to implement an <a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> function that wraps the built-in
+<a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a>, this module can be used directly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">__builtin__</span>
+
+<span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">UpperCaser</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">UpperCaser</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;Wrapper around a file that converts output to upper-case.&#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="n">f</span>
+
+    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="c"># ...</span>
+</pre></div>
+</div>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> Most modules have the name <tt class="docutils literal"><span class="pre">__builtins__</span></tt> (note the <tt class="docutils literal"><span class="pre">'s'</span></tt>) made available
+as part of their globals.  The value of <tt class="docutils literal"><span class="pre">__builtins__</span></tt> is normally either
+this module or the value of this modules&#8217;s <tt class="xref py py-attr docutils literal"><span class="pre">__dict__</span></tt> attribute.  Since
+this is an implementation detail, it may not be used by alternate
+implementations of Python.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sysconfig.html"
+                        title="previous chapter">27.2. <tt class="docutils literal"><span class="pre">sysconfig</span></tt> &#8212; Provide access to Python&#8217;s configuration information</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="future_builtins.html"
+                        title="next chapter">27.4. <tt class="docutils literal"><span class="pre">future_builtins</span></tt> &#8212; Python 3 builtins</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/__builtin__.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="future_builtins.html" title="27.4. future_builtins — Python 3 builtins"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sysconfig.html" title="27.2. sysconfig — Provide access to Python’s configuration information"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" >27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

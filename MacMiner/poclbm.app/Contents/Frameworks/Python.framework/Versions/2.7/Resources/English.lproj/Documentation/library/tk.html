@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>24. Graphical User Interfaces with Tk &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="The Python Standard Library" href="index.html" />
+    <link rel="next" title="24.1. Tkinter — Python interface to Tcl/Tk" href="tkinter.html" />
+    <link rel="prev" title="23.2. shlex — Simple lexical analysis" href="shlex.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tkinter.html" title="24.1. Tkinter — Python interface to Tcl/Tk"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="shlex.html" title="23.2. shlex — Simple lexical analysis"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">The Python Standard Library</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="graphical-user-interfaces-with-tk">
+<span id="tkinter"></span><h1>24. Graphical User Interfaces with Tk<a class="headerlink" href="#graphical-user-interfaces-with-tk" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Tk/Tcl has long been an integral part of Python.  It provides a robust and
+platform independent windowing toolkit, that is available to Python programmers
+using the <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> module, and its extensions, the <a class="reference internal" href="tix.html#module-Tix" title="Tix: Tk Extension Widgets for Tkinter"><tt class="xref py py-mod docutils literal"><span class="pre">Tix</span></tt></a> and
+the <a class="reference internal" href="ttk.html#module-ttk" title="ttk: Tk themed widget set"><tt class="xref py py-mod docutils literal"><span class="pre">ttk</span></tt></a> modules.</p>
+<p>The <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> module is a thin object-oriented layer on top of Tcl/Tk. To
+use <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a>, you don&#8217;t need to write Tcl code, but you will need to
+consult the Tk documentation, and occasionally the Tcl documentation.
+<a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> is a set of wrappers that implement the Tk widgets as Python
+classes.  In addition, the internal module <tt class="xref py py-mod docutils literal"><span class="pre">_tkinter</span></tt> provides a threadsafe
+mechanism which allows Python and Tcl to interact.</p>
+<p><a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a>&#8216;s chief virtues are that it is fast, and that it usually comes
+bundled with Python. Although its standard documentation is weak, good
+material is available, which includes: references, tutorials, a book and
+others. <a class="reference internal" href="tkinter.html#module-Tkinter" title="Tkinter: Interface to Tcl/Tk for graphical user interfaces"><tt class="xref py py-mod docutils literal"><span class="pre">Tkinter</span></tt></a> is also famous for having an outdated look and feel,
+which has been vastly improved in Tk 8.5. Nevertheless, there are many other
+GUI libraries that you could be interested in. For more information about
+alternatives, see the <a class="reference internal" href="othergui.html#other-gui-packages"><em>Other Graphical User Interface Packages</em></a> section.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tkinter.html">24.1. <tt class="docutils literal"><span class="pre">Tkinter</span></tt> &#8212; Python interface to Tcl/Tk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html#tkinter-modules">24.1.1. Tkinter Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html#tkinter-life-preserver">24.1.2. Tkinter Life Preserver</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#how-to-use-this-section">24.1.2.1. How To Use This Section</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#a-simple-hello-world-program">24.1.2.2. A Simple Hello World Program</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html#a-very-quick-look-at-tcl-tk">24.1.3. A (Very) Quick Look at Tcl/Tk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html#mapping-basic-tk-into-tkinter">24.1.4. Mapping Basic Tk into Tkinter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html#how-tk-and-tkinter-are-related">24.1.5. How Tk and Tkinter are Related</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tkinter.html#handy-reference">24.1.6. Handy Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#setting-options">24.1.6.1. Setting Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#the-packer">24.1.6.2. The Packer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#packer-options">24.1.6.3. Packer Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#coupling-widget-variables">24.1.6.4. Coupling Widget Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#the-window-manager">24.1.6.5. The Window Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#tk-option-data-types">24.1.6.6. Tk Option Data Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#bindings-and-events">24.1.6.7. Bindings and Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#the-index-parameter">24.1.6.8. The index Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tkinter.html#images">24.1.6.9. Images</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ttk.html">24.2. <tt class="docutils literal"><span class="pre">ttk</span></tt> &#8212; Tk themed widgets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#using-ttk">24.2.1. Using Ttk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#ttk-widgets">24.2.2. Ttk Widgets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#widget">24.2.3. Widget</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#standard-options">24.2.3.1. Standard Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#scrollable-widget-options">24.2.3.2. Scrollable Widget Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#label-options">24.2.3.3. Label Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#compatibility-options">24.2.3.4. Compatibility Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#widget-states">24.2.3.5. Widget States</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#ttk-widget">24.2.3.6. ttk.Widget</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#combobox">24.2.4. Combobox</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#options">24.2.4.1. Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#virtual-events">24.2.4.2. Virtual events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#ttk-combobox">24.2.4.3. ttk.Combobox</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#notebook">24.2.5. Notebook</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#id1">24.2.5.1. Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#tab-options">24.2.5.2. Tab Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#tab-identifiers">24.2.5.3. Tab Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#id2">24.2.5.4. Virtual Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#ttk-notebook">24.2.5.5. ttk.Notebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#progressbar">24.2.6. Progressbar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#id3">24.2.6.1. Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#ttk-progressbar">24.2.6.2. ttk.Progressbar</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#separator">24.2.7. Separator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#id4">24.2.7.1. Options</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#sizegrip">24.2.8. Sizegrip</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#platform-specific-notes">24.2.8.1. Platform-specific notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#bugs">24.2.8.2. Bugs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#treeview">24.2.9. Treeview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#id5">24.2.9.1. Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#item-options">24.2.9.2. Item Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#tag-options">24.2.9.3. Tag Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#column-identifiers">24.2.9.4. Column Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#id6">24.2.9.5. Virtual Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#ttk-treeview">24.2.9.6. ttk.Treeview</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ttk.html#ttk-styling">24.2.10. Ttk Styling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ttk.html#layouts">24.2.10.1. Layouts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tix.html">24.3. <tt class="docutils literal"><span class="pre">Tix</span></tt> &#8212; Extension widgets for Tk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tix.html#using-tix">24.3.1. Using Tix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tix.html#tix-widgets">24.3.2. Tix Widgets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#basic-widgets">24.3.2.1. Basic Widgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#file-selectors">24.3.2.2. File Selectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#hierarchical-listbox">24.3.2.3. Hierarchical ListBox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#tabular-listbox">24.3.2.4. Tabular ListBox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#manager-widgets">24.3.2.5. Manager Widgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#image-types">24.3.2.6. Image Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#miscellaneous-widgets">24.3.2.7. Miscellaneous Widgets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tix.html#form-geometry-manager">24.3.2.8. Form Geometry Manager</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tix.html#tix-commands">24.3.3. Tix Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scrolledtext.html">24.4. <tt class="docutils literal"><span class="pre">ScrolledText</span></tt> &#8212; Scrolled Text Widget</a></li>
+<li class="toctree-l1"><a class="reference internal" href="turtle.html">24.5. <tt class="docutils literal"><span class="pre">turtle</span></tt> &#8212; Turtle graphics for Tk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#introduction">24.5.1. Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#overview-over-available-turtle-and-screen-methods">24.5.2. Overview over available Turtle and Screen methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#turtle-methods">24.5.2.1. Turtle methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#methods-of-turtlescreen-screen">24.5.2.2. Methods of TurtleScreen/Screen</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#methods-of-rawturtle-turtle-and-corresponding-functions">24.5.3. Methods of RawTurtle/Turtle and corresponding functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#turtle-motion">24.5.3.1. Turtle motion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#tell-turtle-s-state">24.5.3.2. Tell Turtle&#8217;s state</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#settings-for-measurement">24.5.3.3. Settings for measurement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#pen-control">24.5.3.4. Pen control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="turtle.html#drawing-state">24.5.3.4.1. Drawing state</a></li>
+<li class="toctree-l4"><a class="reference internal" href="turtle.html#color-control">24.5.3.4.2. Color control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="turtle.html#filling">24.5.3.4.3. Filling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="turtle.html#more-drawing-control">24.5.3.4.4. More drawing control</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#turtle-state">24.5.3.5. Turtle state</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="turtle.html#visibility">24.5.3.5.1. Visibility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="turtle.html#appearance">24.5.3.5.2. Appearance</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#using-events">24.5.3.6. Using events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#special-turtle-methods">24.5.3.7. Special Turtle methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#excursus-about-the-use-of-compound-shapes">24.5.3.8. Excursus about the use of compound shapes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#methods-of-turtlescreen-screen-and-corresponding-functions">24.5.4. Methods of TurtleScreen/Screen and corresponding functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#window-control">24.5.4.1. Window control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#animation-control">24.5.4.2. Animation control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#using-screen-events">24.5.4.3. Using screen events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#settings-and-special-methods">24.5.4.4. Settings and special methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#methods-specific-to-screen-not-inherited-from-turtlescreen">24.5.4.5. Methods specific to Screen, not inherited from TurtleScreen</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#the-public-classes-of-the-module-turtle">24.5.5. The public classes of the module <tt class="docutils literal"><span class="pre">turtle</span></tt></a></li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#help-and-configuration">24.5.6. Help and configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#how-to-use-help">24.5.6.1. How to use help</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#translation-of-docstrings-into-different-languages">24.5.6.2. Translation of docstrings into different languages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="turtle.html#how-to-configure-screen-and-turtles">24.5.6.3. How to configure Screen and Turtles</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="turtle.html#demo-scripts">24.5.7. Demo scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="idle.html">24.6. IDLE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="idle.html#menus">24.6.1. Menus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#file-menu">24.6.1.1. File menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#edit-menu">24.6.1.2. Edit menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#windows-menu">24.6.1.3. Windows menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#debug-menu">24.6.1.4. Debug menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#edit-context-menu">24.6.1.5. Edit context menu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#shell-context-menu">24.6.1.6. Shell context menu</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="idle.html#basic-editing-and-navigation">24.6.2. Basic editing and navigation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#automatic-indentation">24.6.2.1. Automatic indentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#python-shell-window">24.6.2.2. Python Shell window</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="idle.html#syntax-colors">24.6.3. Syntax colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="idle.html#startup">24.6.4. Startup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="idle.html#command-line-usage">24.6.4.1. Command line usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="othergui.html">24.7. Other Graphical User Interface Packages</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="shlex.html"
+                        title="previous chapter">23.2. <tt class="docutils literal docutils literal docutils literal"><span class="pre">shlex</span></tt> &#8212; Simple lexical analysis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tkinter.html"
+                        title="next chapter">24.1. <tt class="docutils literal"><span class="pre">Tkinter</span></tt> &#8212; Python interface to Tcl/Tk</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/tk.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tkinter.html" title="24.1. Tkinter — Python interface to Tcl/Tk"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="shlex.html" title="23.2. shlex — Simple lexical analysis"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

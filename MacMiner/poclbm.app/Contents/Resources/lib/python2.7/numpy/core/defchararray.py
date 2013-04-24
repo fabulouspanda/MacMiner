@@ -259,18 +259,23 @@ def str_len(a):
 
 def add(x1, x2):
     """
-    Return (x1 + x2), that is string concatenation, element-wise for a
-    pair of array_likes of str or unicode.
+    Return element-wise string concatenation for two arrays of str or unicode.
+
+    Arrays `x1` and `x2` must have the same shape.
 
     Parameters
     ----------
     x1 : array_like of str or unicode
+        Input array.
     x2 : array_like of str or unicode
+        Input array.
 
     Returns
     -------
-    out : ndarray
+    add : ndarray
         Output array of `string_` or `unicode_`, depending on input types
+        of the same shape as `x1` and `x2`.
+
     """
     arr1 = numpy.asarray(x1)
     arr2 = numpy.asarray(x2)
@@ -301,7 +306,7 @@ def multiply(a, i):
     a_arr = numpy.asarray(a)
     i_arr = numpy.asarray(i)
     if not issubclass(i_arr.dtype.type, integer):
-        raise ValueError, "Can only multiply by integers"
+        raise ValueError("Can only multiply by integers")
     out_size = _get_num_chars(a_arr) * max(long(i_arr.max()), 0)
     return _vec_string(
         a_arr, (a_arr.dtype.type, out_size), '__mul__', (i_arr,))
@@ -344,6 +349,7 @@ def capitalize(a):
     Parameters
     ----------
     a : array_like of str or unicode
+        Input array of strings to capitalize.
 
     Returns
     -------
@@ -363,6 +369,7 @@ def capitalize(a):
     >>> np.char.capitalize(c)
     array(['A1b2', '1b2a', 'B2a1', '2a1b'],
         dtype='|S4')
+
     """
     a_arr = numpy.asarray(a)
     return _vec_string(a_arr, a_arr.dtype, 'capitalize')
@@ -608,14 +615,16 @@ def expandtabs(a, tabsize=8):
     Return a copy of each string element where all tab characters are
     replaced by one or more spaces, depending on the current column
     and the given `tabsize`. The column number is reset to zero after
-    each newline occurring in the string. If `tabsize` is not given, a
-    tab size of 8 characters is assumed. This doesn't understand other
+    each newline occurring in the string. This doesn't understand other
     non-printing characters or escape sequences.
 
     Parameters
     ----------
     a : array_like of str or unicode
+        Input array
     tabsize : int, optional
+        Replace tabs with `tabsize` number of spaces.  If not given defaults
+        to 8 spaces.
 
     Returns
     -------
@@ -625,6 +634,7 @@ def expandtabs(a, tabsize=8):
     See also
     --------
     str.expandtabs
+
     """
     return _to_string_or_unicode_array(
         _vec_string(a, object_, 'expandtabs', (tabsize,)))
@@ -955,7 +965,7 @@ else:
 
 def lower(a):
     """
-    Return an array with the elements of `a` converted to lowercase.
+    Return an array with the elements converted to lowercase.
 
     Call `str.lower` element-wise.
 
@@ -963,11 +973,12 @@ def lower(a):
 
     Parameters
     ----------
-    a : array-like of str or unicode
+    a : array_like, {str, unicode}
+        Input array.
 
     Returns
     -------
-    out : ndarray, str or unicode
+    out : ndarray, {str, unicode}
         Output array of str or unicode, depending on input type
 
     See also
@@ -982,6 +993,7 @@ def lower(a):
     >>> np.char.lower(c)
     array(['a1b c', '1bca', 'bca1'],
           dtype='|S5')
+
     """
     a_arr = numpy.asarray(a)
     return _vec_string(a_arr, a_arr.dtype, 'lower')
@@ -995,18 +1007,19 @@ def lstrip(a, chars=None):
 
     Parameters
     ----------
-    a : array-like of str or unicode
+    a : array-like, {str, unicode}
+        Input array.
 
-    chars : str or unicode, optional
-       The `chars` argument is a string specifying the set of
-       characters to be removed. If omitted or None, the `chars`
-       argument defaults to removing whitespace. The `chars` argument
-       is not a prefix; rather, all combinations of its values are
-       stripped.
+    chars : {str, unicode}, optional
+        The `chars` argument is a string specifying the set of
+        characters to be removed. If omitted or None, the `chars`
+        argument defaults to removing whitespace. The `chars` argument
+        is not a prefix; rather, all combinations of its values are
+        stripped.
 
     Returns
     -------
-    out : ndarray, str or unicode
+    out : ndarray, {str, unicode}
         Output array of str or unicode, depending on input type
 
     See also
@@ -1019,9 +1032,14 @@ def lstrip(a, chars=None):
     >>> c
     array(['aAaAaA', '  aA  ', 'abBABba'],
         dtype='|S7')
-    >>> np.char.lstrip(c, 'a') # 'a' unstripped from c[1] because whitespace leading
+
+    The 'a' variable is unstripped from c[1] because whitespace leading.
+
+    >>> np.char.lstrip(c, 'a')
     array(['AaAaA', '  aA  ', 'bBABba'],
         dtype='|S7')
+
+
     >>> np.char.lstrip(c, 'A') # leaves c unchanged
     array(['aAaAaA', '  aA  ', 'abBABba'],
         dtype='|S7')
@@ -1051,12 +1069,14 @@ if sys.version_info >= (2, 5):
 
         Parameters
         ----------
-        a : array-like of str or unicode
-        sep : str or unicode
+        a : array_like, {str, unicode}
+            Input array
+        sep : {str, unicode}
+            Separator to split each string element in `a`.
 
         Returns
         -------
-        out : ndarray
+        out : ndarray, {str, unicode}
             Output array of str or unicode, depending on input type.
             The output array will have an extra dimension with 3
             elements per input element.
@@ -1064,6 +1084,7 @@ if sys.version_info >= (2, 5):
         See also
         --------
         str.partition
+
         """
         return _to_string_or_unicode_array(
             _vec_string(a, object_, 'partition', (sep,)))
@@ -1224,7 +1245,7 @@ else:
 if sys.version_info >= (2, 5):
     def rpartition(a, sep):
         """
-        Partition each element in `a` around `sep`.
+        Partition (split) each element around the right-most separator.
 
         Calls `str.rpartition` element-wise.
 
@@ -1236,8 +1257,10 @@ if sys.version_info >= (2, 5):
 
         Parameters
         ----------
-        a : array-like of str or unicode
+        a : array_like of str or unicode
+            Input array
         sep : str or unicode
+            Right-most separator to split each element in array.
 
         Returns
         -------
@@ -1249,6 +1272,7 @@ if sys.version_info >= (2, 5):
         See also
         --------
         str.rpartition
+
         """
         return _to_string_or_unicode_array(
             _vec_string(a, object_, 'rpartition', (sep,)))
@@ -1473,7 +1497,7 @@ def strip(a, chars=None):
 
 def swapcase(a):
     """
-    For each element in `a`, return a copy of the string with
+    Return element-wise a copy of the string with
     uppercase characters converted to lowercase and vice versa.
 
     Calls `str.swapcase` element-wise.
@@ -1482,11 +1506,12 @@ def swapcase(a):
 
     Parameters
     ----------
-    a : array-like of str or unicode
+    a : array_like, {str, unicode}
+        Input array.
 
     Returns
     -------
-    out : ndarray
+    out : ndarray, {str, unicode}
         Output array of str or unicode, depending on input type
 
     See also
@@ -1501,14 +1526,16 @@ def swapcase(a):
     >>> np.char.swapcase(c)
     array(['A1b C', '1B cA', 'B cA1', 'Ca1B'],
         dtype='|S5')
+
     """
     a_arr = numpy.asarray(a)
     return _vec_string(a_arr, a_arr.dtype, 'swapcase')
 
 def title(a):
     """
-    For each element in `a`, return a titlecased version of the
-    string: words start with uppercase characters, all remaining cased
+    Return element-wise title cased version of string or unicode.
+
+    Title case words start with uppercase characters, all remaining cased
     characters are lowercase.
 
     Calls `str.title` element-wise.
@@ -1517,7 +1544,8 @@ def title(a):
 
     Parameters
     ----------
-    a : array-like of str or unicode
+    a : array_like, {str, unicode}
+        Input array.
 
     Returns
     -------
@@ -1536,6 +1564,7 @@ def title(a):
     >>> np.char.title(c)
     array(['A1B C', '1B Ca', 'B Ca1', 'Ca1B'],
         dtype='|S5')
+
     """
     a_arr = numpy.asarray(a)
     return _vec_string(a_arr, a_arr.dtype, 'title')
@@ -1577,7 +1606,7 @@ def translate(a, table, deletechars=None):
 
 def upper(a):
     """
-    Return an array with the elements of `a` converted to uppercase.
+    Return an array with the elements converted to uppercase.
 
     Calls `str.upper` element-wise.
 
@@ -1585,11 +1614,12 @@ def upper(a):
 
     Parameters
     ----------
-    a : array-like of str or unicode
+    a : array_like, {str, unicode}
+        Input array.
 
     Returns
     -------
-    out : ndarray
+    out : ndarray, {str, unicode}
         Output array of str or unicode, depending on input type
 
     See also
@@ -1604,30 +1634,33 @@ def upper(a):
     >>> np.char.upper(c)
     array(['A1B C', '1BCA', 'BCA1'],
         dtype='|S5')
+
     """
     a_arr = numpy.asarray(a)
     return _vec_string(a_arr, a_arr.dtype, 'upper')
 
 def zfill(a, width):
     """
-    Return the numeric string left-filled with zeros in a string of
-    length `width`.
+    Return the numeric string left-filled with zeros
 
     Calls `str.zfill` element-wise.
 
     Parameters
     ----------
-    a : array-like of str or unicode
+    a : array_like, {str, unicode}
+        Input array.
     width : int
+        Width of string to left-fill elements in `a`.
 
     Returns
     -------
-    out : ndarray
+    out : ndarray, {str, unicode}
         Output array of str or unicode, depending on input type
 
     See also
     --------
     str.zfill
+
     """
     a_arr = numpy.asarray(a)
     width_arr = numpy.asarray(width)
@@ -1637,7 +1670,7 @@ def zfill(a, width):
 
 def isnumeric(a):
     """
-    For each element in `a`, return True if there are only numeric
+    For each element, return True if there are only numeric
     characters in the element.
 
     Calls `unicode.isnumeric` element-wise.
@@ -1648,24 +1681,26 @@ def isnumeric(a):
 
     Parameters
     ----------
-    a : array-like of unicode
+    a : array_like, unicode
+        Input array.
 
     Returns
     -------
-    out : ndarray
-        Array of booleans
+    out : ndarray, bool
+        Array of booleans of same shape as `a`.
 
     See also
     --------
     unicode.isnumeric
+
     """
     if _use_unicode(a) != unicode_:
-        raise TypeError, "isnumeric is only available for Unicode strings and arrays"
+        raise TypeError("isnumeric is only available for Unicode strings and arrays")
     return _vec_string(a, bool_, 'isnumeric')
 
 def isdecimal(a):
     """
-    For each element in `a`, return True if there are only decimal
+    For each element, return True if there are only decimal
     characters in the element.
 
     Calls `unicode.isdecimal` element-wise.
@@ -1676,19 +1711,21 @@ def isdecimal(a):
 
     Parameters
     ----------
-    a : array-like of unicode
+    a : array_like, unicode
+        Input array.
 
     Returns
     -------
-    out : ndarray
-        Array of booleans
+    out : ndarray, bool
+        Array of booleans identical in shape to `a`.
 
     See also
     --------
     unicode.isdecimal
+
     """
     if _use_unicode(a) != unicode_:
-        raise TypeError, "isnumeric is only available for Unicode strings and arrays"
+        raise TypeError("isnumeric is only available for Unicode strings and arrays")
     return _vec_string(a, bool_, 'isdecimal')
 
 
@@ -1872,11 +1909,11 @@ class chararray(ndarray):
     def __array_finalize__(self, obj):
         # The b is a special case because it is used for reconstructing.
         if not _globalvar and self.dtype.char not in 'SUbc':
-            raise ValueError, "Can only create a chararray from string data."
+            raise ValueError("Can only create a chararray from string data.")
 
     def __getitem__(self, obj):
         val = ndarray.__getitem__(self, obj)
-        if issubclass(val.dtype.type, character):
+        if issubclass(val.dtype.type, character) and not _len(val) == 0:
             temp = val.rstrip()
             if _len(temp) == 0:
                 val = ''

@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Method Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="File Objects" href="file.html" />
+    <link rel="prev" title="Function Objects" href="function.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="file.html" title="File Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="Function Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="method-objects">
+<span id="id1"></span><h1>Method Objects<a class="headerlink" href="#method-objects" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">There are some useful functions that are useful for working with method objects.</p>
+<dl class="var">
+<dt id="PyMethod_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyMethod_Type</tt><a class="headerlink" href="#PyMethod_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject"><tt class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></tt></a> represents the Python method type.  This
+is exposed to Python programs as <tt class="docutils literal"><span class="pre">types.MethodType</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_Check">
+int <tt class="descname">PyMethod_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyMethod_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>o</em> is a method object (has type <a class="reference internal" href="#PyMethod_Type" title="PyMethod_Type"><tt class="xref c c-data docutils literal"><span class="pre">PyMethod_Type</span></tt></a>).  The
+parameter must not be <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_New">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_New</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*func</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*self</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*class</em><big>)</big><a class="headerlink" href="#PyMethod_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new method object, with <em>func</em> being any callable object; this is the
+function that will be called when the method is called.  If this method should
+be bound to an instance, <em>self</em> should be the instance and <em>class</em> should be the
+class of <em>self</em>, otherwise <em>self</em> should be <em>NULL</em> and <em>class</em> should be the
+class which provides the unbound method..</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_Class">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_Class</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyMethod_Class" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the class object from which the method <em>meth</em> was created; if this was
+created from an instance, it will be the class of the instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_GET_CLASS">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_GET_CLASS</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyMethod_GET_CLASS" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Macro version of <a class="reference internal" href="#PyMethod_Class" title="PyMethod_Class"><tt class="xref c c-func docutils literal"><span class="pre">PyMethod_Class()</span></tt></a> which avoids error checking.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_Function">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_Function</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyMethod_Function" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the function object associated with the method <em>meth</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_GET_FUNCTION">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_GET_FUNCTION</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyMethod_GET_FUNCTION" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Macro version of <a class="reference internal" href="#PyMethod_Function" title="PyMethod_Function"><tt class="xref c c-func docutils literal"><span class="pre">PyMethod_Function()</span></tt></a> which avoids error checking.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_Self">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_Self</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyMethod_Self" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the instance associated with the method <em>meth</em> if it is bound, otherwise
+return <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_GET_SELF">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyMethod_GET_SELF</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*meth</em><big>)</big><a class="headerlink" href="#PyMethod_GET_SELF" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Macro version of <a class="reference internal" href="#PyMethod_Self" title="PyMethod_Self"><tt class="xref c c-func docutils literal"><span class="pre">PyMethod_Self()</span></tt></a> which avoids error checking.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyMethod_ClearFreeList">
+int <tt class="descname">PyMethod_ClearFreeList</tt><big>(</big><big>)</big><a class="headerlink" href="#PyMethod_ClearFreeList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the free list. Return the total number of freed items.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="function.html"
+                        title="previous chapter">Function Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="file.html"
+                        title="next chapter">File Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/method.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="file.html" title="File Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="Function Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

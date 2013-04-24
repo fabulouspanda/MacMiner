@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Supporting Cyclic Garbage Collection &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Object Implementation Support" href="objimpl.html" />
+    <link rel="next" title="Distributing Python Modules" href="../distutils/index.html" />
+    <link rel="prev" title="Type Objects" href="typeobj.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../distutils/index.html" title="Distributing Python Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="typeobj.html" title="Type Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="objimpl.html" accesskey="U">Object Implementation Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="supporting-cyclic-garbage-collection">
+<span id="supporting-cycle-detection"></span><h1>Supporting Cyclic Garbage Collection<a class="headerlink" href="#supporting-cyclic-garbage-collection" title="Permalink to this headline">¶</a></h1>
+<p>Python&#8217;s support for detecting and collecting garbage which involves circular
+references requires support from object types which are &#8220;containers&#8221; for other
+objects which may also be containers.  Types which do not store references to
+other objects, or which only store references to atomic types (such as numbers
+or strings), do not need to provide any explicit support for garbage
+collection.</p>
+<p>To create a container type, the <tt class="xref py py-attr docutils literal"><span class="pre">tp_flags</span></tt> field of the type object must
+include the <a class="reference internal" href="typeobj.html#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><tt class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></tt></a> and provide an implementation of the
+<tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler.  If instances of the type are mutable, a
+<tt class="xref py py-attr docutils literal"><span class="pre">tp_clear</span></tt> implementation must also be provided.</p>
+<dl class="data">
+<dt>
+<tt class="descname">Py_TPFLAGS_HAVE_GC</tt></dt>
+<dd><p>Objects with a type with this flag set must conform with the rules
+documented here.  For convenience these objects will be referred to as
+container objects.</p>
+</dd></dl>
+
+<p>Constructors for container types must conform to two rules:</p>
+<ol class="arabic simple">
+<li>The memory for the object must be allocated using <a class="reference internal" href="#PyObject_GC_New" title="PyObject_GC_New"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_New()</span></tt></a>
+or <a class="reference internal" href="#PyObject_GC_NewVar" title="PyObject_GC_NewVar"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_NewVar()</span></tt></a>.</li>
+<li>Once all the fields which may contain references to other containers are
+initialized, it must call <a class="reference internal" href="#PyObject_GC_Track" title="PyObject_GC_Track"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_Track()</span></tt></a>.</li>
+</ol>
+<dl class="function">
+<dt id="PyObject_GC_New">
+TYPE* <tt class="descname">PyObject_GC_New</tt><big>(</big>TYPE, <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em><big>)</big><a class="headerlink" href="#PyObject_GC_New" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analogous to <a class="reference internal" href="allocation.html#PyObject_New" title="PyObject_New"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_New()</span></tt></a> but for container objects with the
+<a class="reference internal" href="typeobj.html#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><tt class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></tt></a> flag set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyObject_GC_NewVar">
+TYPE* <tt class="descname">PyObject_GC_NewVar</tt><big>(</big>TYPE, <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, Py_ssize_t<em>&nbsp;size</em><big>)</big><a class="headerlink" href="#PyObject_GC_NewVar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analogous to <a class="reference internal" href="allocation.html#PyObject_NewVar" title="PyObject_NewVar"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_NewVar()</span></tt></a> but for container objects with the
+<a class="reference internal" href="typeobj.html#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><tt class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></tt></a> flag set.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>size</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyObject_GC_Resize">
+TYPE* <tt class="descname">PyObject_GC_Resize</tt><big>(</big>TYPE, <a class="reference internal" href="structures.html#PyVarObject" title="PyVarObject">PyVarObject</a><em>&nbsp;*op</em>, Py_ssize_t<em>&nbsp;newsize</em><big>)</big><a class="headerlink" href="#PyObject_GC_Resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize an object allocated by <a class="reference internal" href="allocation.html#PyObject_NewVar" title="PyObject_NewVar"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_NewVar()</span></tt></a>.  Returns the
+resized object or <em>NULL</em> on failure.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>newsize</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyObject_GC_Track">
+void <tt class="descname">PyObject_GC_Track</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*op</em><big>)</big><a class="headerlink" href="#PyObject_GC_Track" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the object <em>op</em> to the set of container objects tracked by the
+collector.  The collector can run at unexpected times so objects must be
+valid while being tracked.  This should be called once all the fields
+followed by the <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler become valid, usually near the
+end of the constructor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_PyObject_GC_TRACK">
+void <tt class="descname">_PyObject_GC_TRACK</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*op</em><big>)</big><a class="headerlink" href="#_PyObject_GC_TRACK" title="Permalink to this definition">¶</a></dt>
+<dd><p>A macro version of <a class="reference internal" href="#PyObject_GC_Track" title="PyObject_GC_Track"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_Track()</span></tt></a>.  It should not be used for
+extension modules.</p>
+</dd></dl>
+
+<p>Similarly, the deallocator for the object must conform to a similar pair of
+rules:</p>
+<ol class="arabic simple">
+<li>Before fields which refer to other containers are invalidated,
+<a class="reference internal" href="#PyObject_GC_UnTrack" title="PyObject_GC_UnTrack"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_UnTrack()</span></tt></a> must be called.</li>
+<li>The object&#8217;s memory must be deallocated using <a class="reference internal" href="#PyObject_GC_Del" title="PyObject_GC_Del"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_Del()</span></tt></a>.</li>
+</ol>
+<dl class="function">
+<dt id="PyObject_GC_Del">
+void <tt class="descname">PyObject_GC_Del</tt><big>(</big>void<em>&nbsp;*op</em><big>)</big><a class="headerlink" href="#PyObject_GC_Del" title="Permalink to this definition">¶</a></dt>
+<dd><p>Releases memory allocated to an object using <a class="reference internal" href="#PyObject_GC_New" title="PyObject_GC_New"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_New()</span></tt></a> or
+<a class="reference internal" href="#PyObject_GC_NewVar" title="PyObject_GC_NewVar"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_NewVar()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyObject_GC_UnTrack">
+void <tt class="descname">PyObject_GC_UnTrack</tt><big>(</big>void<em>&nbsp;*op</em><big>)</big><a class="headerlink" href="#PyObject_GC_UnTrack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the object <em>op</em> from the set of container objects tracked by the
+collector.  Note that <a class="reference internal" href="#PyObject_GC_Track" title="PyObject_GC_Track"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_Track()</span></tt></a> can be called again on
+this object to add it back to the set of tracked objects.  The deallocator
+(<tt class="xref py py-attr docutils literal"><span class="pre">tp_dealloc</span></tt> handler) should call this for the object before any of
+the fields used by the <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler become invalid.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_PyObject_GC_UNTRACK">
+void <tt class="descname">_PyObject_GC_UNTRACK</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*op</em><big>)</big><a class="headerlink" href="#_PyObject_GC_UNTRACK" title="Permalink to this definition">¶</a></dt>
+<dd><p>A macro version of <a class="reference internal" href="#PyObject_GC_UnTrack" title="PyObject_GC_UnTrack"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GC_UnTrack()</span></tt></a>.  It should not be used for
+extension modules.</p>
+</dd></dl>
+
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler accepts a function parameter of this type:</p>
+<dl class="type">
+<dt id="visitproc">
+int <tt class="descname">(*visitproc)</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*object</em>, void<em>&nbsp;*arg</em><big>)</big><a class="headerlink" href="#visitproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of the visitor function passed to the <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler.
+The function should be called with an object to traverse as <em>object</em> and
+the third parameter to the <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler as <em>arg</em>.  The
+Python core uses several visitor functions to implement cyclic garbage
+detection; it&#8217;s not expected that users will need to write their own
+visitor functions.</p>
+</dd></dl>
+
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handler must have the following type:</p>
+<dl class="type">
+<dt id="traverseproc">
+int <tt class="descname">(*traverseproc)</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*self</em>, <a class="reference internal" href="#visitproc" title="visitproc">visitproc</a><em>&nbsp;visit</em>, void<em>&nbsp;*arg</em><big>)</big><a class="headerlink" href="#traverseproc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traversal function for a container object.  Implementations must call the
+<em>visit</em> function for each object directly contained by <em>self</em>, with the
+parameters to <em>visit</em> being the contained object and the <em>arg</em> value passed
+to the handler.  The <em>visit</em> function must not be called with a <em>NULL</em>
+object argument.  If <em>visit</em> returns a non-zero value that value should be
+returned immediately.</p>
+</dd></dl>
+
+<p>To simplify writing <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> handlers, a <a class="reference internal" href="#Py_VISIT" title="Py_VISIT"><tt class="xref c c-func docutils literal"><span class="pre">Py_VISIT()</span></tt></a> macro is
+provided.  In order to use this macro, the <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt> implementation
+must name its arguments exactly <em>visit</em> and <em>arg</em>:</p>
+<dl class="function">
+<dt id="Py_VISIT">
+void <tt class="descname">Py_VISIT</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#Py_VISIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the <em>visit</em> callback, with arguments <em>o</em> and <em>arg</em>. If <em>visit</em> returns
+a non-zero value, then return it.  Using this macro, <tt class="xref py py-attr docutils literal"><span class="pre">tp_traverse</span></tt>
+handlers look like:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">static</span> <span class="kt">int</span>
+<span class="nf">my_traverse</span><span class="p">(</span><span class="n">Noddy</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">visitproc</span> <span class="n">visit</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">bar</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">tp_clear</span></tt> handler must be of the <a class="reference internal" href="#inquiry" title="inquiry"><tt class="xref c c-type docutils literal"><span class="pre">inquiry</span></tt></a> type, or <em>NULL</em>
+if the object is immutable.</p>
+<dl class="type">
+<dt id="inquiry">
+int <tt class="descname">(*inquiry)</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*self</em><big>)</big><a class="headerlink" href="#inquiry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drop references that may have created reference cycles.  Immutable objects
+do not have to define this method since they can never directly create
+reference cycles.  Note that the object must still be valid after calling
+this method (don&#8217;t just call <a class="reference internal" href="refcounting.html#Py_DECREF" title="Py_DECREF"><tt class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></tt></a> on a reference).  The
+collector will call this method if it detects that this object is involved
+in a reference cycle.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="typeobj.html"
+                        title="previous chapter">Type Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../distutils/index.html"
+                        title="next chapter">Distributing Python Modules</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/gcsupport.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../distutils/index.html" title="Distributing Python Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="typeobj.html" title="Type Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="objimpl.html" >Object Implementation Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

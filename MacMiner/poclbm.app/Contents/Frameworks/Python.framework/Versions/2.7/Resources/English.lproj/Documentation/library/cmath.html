@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9.3. cmath — Mathematical functions for complex numbers &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="9. Numeric and Mathematical Modules" href="numeric.html" />
+    <link rel="next" title="9.4. decimal — Decimal fixed point and floating point arithmetic" href="decimal.html" />
+    <link rel="prev" title="9.2. math — Mathematical functions" href="math.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="decimal.html" title="9.4. decimal — Decimal fixed point and floating point arithmetic"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="math.html" title="9.2. math — Mathematical functions"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" accesskey="U">9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cmath">
+<span id="cmath-mathematical-functions-for-complex-numbers"></span><h1>9.3. <a class="reference internal" href="#module-cmath" title="cmath: Mathematical functions for complex numbers."><tt class="xref py py-mod docutils literal"><span class="pre">cmath</span></tt></a> &#8212; Mathematical functions for complex numbers<a class="headerlink" href="#module-cmath" title="Permalink to this headline">¶</a></h1>
+<p>This module is always available.  It provides access to mathematical functions
+for complex numbers.  The functions in this module accept integers,
+floating-point numbers or complex numbers as arguments. They will also accept
+any Python object that has either a <a class="reference internal" href="../reference/datamodel.html#object.__complex__" title="object.__complex__"><tt class="xref py py-meth docutils literal"><span class="pre">__complex__()</span></tt></a> or a <a class="reference internal" href="../reference/datamodel.html#object.__float__" title="object.__float__"><tt class="xref py py-meth docutils literal"><span class="pre">__float__()</span></tt></a>
+method: these methods are used to convert the object to a complex or
+floating-point number, respectively, and the function is then applied to the
+result of the conversion.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On platforms with hardware and system-level support for signed
+zeros, functions involving branch cuts are continuous on <em>both</em>
+sides of the branch cut: the sign of the zero distinguishes one
+side of the branch cut from the other.  On platforms that do not
+support signed zeros the continuity is as specified below.</p>
+</div>
+<div class="section" id="conversions-to-and-from-polar-coordinates">
+<h2>9.3.1. Conversions to and from polar coordinates<a class="headerlink" href="#conversions-to-and-from-polar-coordinates" title="Permalink to this headline">¶</a></h2>
+<p>A Python complex number <tt class="docutils literal"><span class="pre">z</span></tt> is stored internally using <em>rectangular</em>
+or <em>Cartesian</em> coordinates.  It is completely determined by its <em>real
+part</em> <tt class="docutils literal"><span class="pre">z.real</span></tt> and its <em>imaginary part</em> <tt class="docutils literal"><span class="pre">z.imag</span></tt>.  In other
+words:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">z</span> <span class="o">==</span> <span class="n">z</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="n">z</span><span class="o">.</span><span class="n">imag</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span>
+</pre></div>
+</div>
+<p><em>Polar coordinates</em> give an alternative way to represent a complex
+number.  In polar coordinates, a complex number <em>z</em> is defined by the
+modulus <em>r</em> and the phase angle <em>phi</em>. The modulus <em>r</em> is the distance
+from <em>z</em> to the origin, while the phase <em>phi</em> is the counterclockwise
+angle, measured in radians, from the positive x-axis to the line
+segment that joins the origin to <em>z</em>.</p>
+<p>The following functions can be used to convert from the native
+rectangular coordinates to polar coordinates and back.</p>
+<dl class="function">
+<dt id="cmath.phase">
+<tt class="descclassname">cmath.</tt><tt class="descname">phase</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the phase of <em>x</em> (also known as the <em>argument</em> of <em>x</em>), as a
+float.  <tt class="docutils literal"><span class="pre">phase(x)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">math.atan2(x.imag,</span>
+<span class="pre">x.real)</span></tt>.  The result lies in the range [-π, π], and the branch
+cut for this operation lies along the negative real axis,
+continuous from above.  On systems with support for signed zeros
+(which includes most systems in current use), this means that the
+sign of the result is the same as the sign of <tt class="docutils literal"><span class="pre">x.imag</span></tt>, even when
+<tt class="docutils literal"><span class="pre">x.imag</span></tt> is zero:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">phase</span><span class="p">(</span><span class="nb">complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+<span class="go">3.1415926535897931</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phase</span><span class="p">(</span><span class="nb">complex</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0</span><span class="p">))</span>
+<span class="go">-3.1415926535897931</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The modulus (absolute value) of a complex number <em>x</em> can be
+computed using the built-in <a class="reference internal" href="functions.html#abs" title="abs"><tt class="xref py py-func docutils literal"><span class="pre">abs()</span></tt></a> function.  There is no
+separate <a class="reference internal" href="#module-cmath" title="cmath: Mathematical functions for complex numbers."><tt class="xref py py-mod docutils literal"><span class="pre">cmath</span></tt></a> module function for this operation.</p>
+</div>
+<dl class="function">
+<dt id="cmath.polar">
+<tt class="descclassname">cmath.</tt><tt class="descname">polar</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.polar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the representation of <em>x</em> in polar coordinates.  Returns a
+pair <tt class="docutils literal"><span class="pre">(r,</span> <span class="pre">phi)</span></tt> where <em>r</em> is the modulus of <em>x</em> and phi is the
+phase of <em>x</em>.  <tt class="docutils literal"><span class="pre">polar(x)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">(abs(x),</span>
+<span class="pre">phase(x))</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.rect">
+<tt class="descclassname">cmath.</tt><tt class="descname">rect</tt><big>(</big><em>r</em>, <em>phi</em><big>)</big><a class="headerlink" href="#cmath.rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the complex number <em>x</em> with polar coordinates <em>r</em> and <em>phi</em>.
+Equivalent to <tt class="docutils literal"><span class="pre">r</span> <span class="pre">*</span> <span class="pre">(math.cos(phi)</span> <span class="pre">+</span> <span class="pre">math.sin(phi)*1j)</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="power-and-logarithmic-functions">
+<h2>9.3.2. Power and logarithmic functions<a class="headerlink" href="#power-and-logarithmic-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cmath.exp">
+<tt class="descclassname">cmath.</tt><tt class="descname">exp</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the exponential value <tt class="docutils literal"><span class="pre">e**x</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.log">
+<tt class="descclassname">cmath.</tt><tt class="descname">log</tt><big>(</big><em>x</em><span class="optional">[</span>, <em>base</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#cmath.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the logarithm of <em>x</em> to the given <em>base</em>. If the <em>base</em> is not
+specified, returns the natural logarithm of <em>x</em>. There is one branch cut, from 0
+along the negative real axis to -∞, continuous from above.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4: </span><em>base</em> argument added.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.log10">
+<tt class="descclassname">cmath.</tt><tt class="descname">log10</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.log10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the base-10 logarithm of <em>x</em>. This has the same branch cut as
+<a class="reference internal" href="#cmath.log" title="cmath.log"><tt class="xref py py-func docutils literal"><span class="pre">log()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.sqrt">
+<tt class="descclassname">cmath.</tt><tt class="descname">sqrt</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.sqrt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the square root of <em>x</em>. This has the same branch cut as <a class="reference internal" href="#cmath.log" title="cmath.log"><tt class="xref py py-func docutils literal"><span class="pre">log()</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="trigonometric-functions">
+<h2>9.3.3. Trigonometric functions<a class="headerlink" href="#trigonometric-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cmath.acos">
+<tt class="descclassname">cmath.</tt><tt class="descname">acos</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.acos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the arc cosine of <em>x</em>. There are two branch cuts: One extends right from
+1 along the real axis to ∞, continuous from below. The other extends left from
+-1 along the real axis to -∞, continuous from above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.asin">
+<tt class="descclassname">cmath.</tt><tt class="descname">asin</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.asin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the arc sine of <em>x</em>. This has the same branch cuts as <a class="reference internal" href="#cmath.acos" title="cmath.acos"><tt class="xref py py-func docutils literal"><span class="pre">acos()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.atan">
+<tt class="descclassname">cmath.</tt><tt class="descname">atan</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.atan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the arc tangent of <em>x</em>. There are two branch cuts: One extends from
+<tt class="docutils literal"><span class="pre">1j</span></tt> along the imaginary axis to <tt class="docutils literal"><span class="pre">∞j</span></tt>, continuous from the right. The
+other extends from <tt class="docutils literal"><span class="pre">-1j</span></tt> along the imaginary axis to <tt class="docutils literal"><span class="pre">-∞j</span></tt>, continuous
+from the left.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>direction of continuity of upper cut reversed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.cos">
+<tt class="descclassname">cmath.</tt><tt class="descname">cos</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the cosine of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.sin">
+<tt class="descclassname">cmath.</tt><tt class="descname">sin</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sine of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.tan">
+<tt class="descclassname">cmath.</tt><tt class="descname">tan</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.tan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tangent of <em>x</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="hyperbolic-functions">
+<h2>9.3.4. Hyperbolic functions<a class="headerlink" href="#hyperbolic-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cmath.acosh">
+<tt class="descclassname">cmath.</tt><tt class="descname">acosh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.acosh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic arc cosine of <em>x</em>. There is one branch cut, extending left
+from 1 along the real axis to -∞, continuous from above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.asinh">
+<tt class="descclassname">cmath.</tt><tt class="descname">asinh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.asinh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic arc sine of <em>x</em>. There are two branch cuts:
+One extends from <tt class="docutils literal"><span class="pre">1j</span></tt> along the imaginary axis to <tt class="docutils literal"><span class="pre">∞j</span></tt>,
+continuous from the right.  The other extends from <tt class="docutils literal"><span class="pre">-1j</span></tt> along
+the imaginary axis to <tt class="docutils literal"><span class="pre">-∞j</span></tt>, continuous from the left.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>branch cuts moved to match those recommended by the C99 standard</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.atanh">
+<tt class="descclassname">cmath.</tt><tt class="descname">atanh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.atanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic arc tangent of <em>x</em>. There are two branch cuts: One
+extends from <tt class="docutils literal"><span class="pre">1</span></tt> along the real axis to <tt class="docutils literal"><span class="pre">∞</span></tt>, continuous from below. The
+other extends from <tt class="docutils literal"><span class="pre">-1</span></tt> along the real axis to <tt class="docutils literal"><span class="pre">-∞</span></tt>, continuous from
+above.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>direction of continuity of right cut reversed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.cosh">
+<tt class="descclassname">cmath.</tt><tt class="descname">cosh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.cosh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic cosine of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.sinh">
+<tt class="descclassname">cmath.</tt><tt class="descname">sinh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.sinh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic sine of <em>x</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.tanh">
+<tt class="descclassname">cmath.</tt><tt class="descname">tanh</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.tanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hyperbolic tangent of <em>x</em>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="classification-functions">
+<h2>9.3.5. Classification functions<a class="headerlink" href="#classification-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="cmath.isinf">
+<tt class="descclassname">cmath.</tt><tt class="descname">isinf</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.isinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>True</em> if the real or the imaginary part of x is positive
+or negative infinity.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cmath.isnan">
+<tt class="descclassname">cmath.</tt><tt class="descname">isnan</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#cmath.isnan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>True</em> if the real or imaginary part of x is not a number (NaN).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h2>9.3.6. Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="cmath.pi">
+<tt class="descclassname">cmath.</tt><tt class="descname">pi</tt><a class="headerlink" href="#cmath.pi" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mathematical constant <em>π</em>, as a float.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="cmath.e">
+<tt class="descclassname">cmath.</tt><tt class="descname">e</tt><a class="headerlink" href="#cmath.e" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mathematical constant <em>e</em>, as a float.</p>
+</dd></dl>
+
+<p id="index-0">Note that the selection of functions is similar, but not identical, to that in
+module <a class="reference internal" href="math.html#module-math" title="math: Mathematical functions (sin() etc.)."><tt class="xref py py-mod docutils literal"><span class="pre">math</span></tt></a>.  The reason for having two modules is that some users aren&#8217;t
+interested in complex numbers, and perhaps don&#8217;t even know what they are.  They
+would rather have <tt class="docutils literal"><span class="pre">math.sqrt(-1)</span></tt> raise an exception than return a complex
+number. Also note that the functions defined in <a class="reference internal" href="#module-cmath" title="cmath: Mathematical functions for complex numbers."><tt class="xref py py-mod docutils literal"><span class="pre">cmath</span></tt></a> always return a
+complex number, even if the answer can be expressed as a real number (in which
+case the complex number has an imaginary part of zero).</p>
+<p>A note on branch cuts: They are curves along which the given function fails to
+be continuous.  They are a necessary feature of many complex functions.  It is
+assumed that if you need to compute with complex functions, you will understand
+about branch cuts.  Consult almost any (not too elementary) book on complex
+variables for enlightenment.  For information of the proper choice of branch
+cuts for numerical purposes, a good reference should be the following:</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Kahan, W:  Branch cuts for complex elementary functions; or, Much ado about
+nothing&#8217;s sign bit.  In Iserles, A., and Powell, M. (eds.), The state of the art
+in numerical analysis. Clarendon Press (1987) pp165-211.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9.3. <tt class="docutils literal"><span class="pre">cmath</span></tt> &#8212; Mathematical functions for complex numbers</a><ul>
+<li><a class="reference internal" href="#conversions-to-and-from-polar-coordinates">9.3.1. Conversions to and from polar coordinates</a></li>
+<li><a class="reference internal" href="#power-and-logarithmic-functions">9.3.2. Power and logarithmic functions</a></li>
+<li><a class="reference internal" href="#trigonometric-functions">9.3.3. Trigonometric functions</a></li>
+<li><a class="reference internal" href="#hyperbolic-functions">9.3.4. Hyperbolic functions</a></li>
+<li><a class="reference internal" href="#classification-functions">9.3.5. Classification functions</a></li>
+<li><a class="reference internal" href="#constants">9.3.6. Constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="math.html"
+                        title="previous chapter">9.2. <tt class="docutils literal"><span class="pre">math</span></tt> &#8212; Mathematical functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="decimal.html"
+                        title="next chapter">9.4. <tt class="docutils literal"><span class="pre">decimal</span></tt> &#8212; Decimal fixed point and floating point arithmetic</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/cmath.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="decimal.html" title="9.4. decimal — Decimal fixed point and floating point arithmetic"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="math.html" title="9.2. math — Mathematical functions"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" >9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

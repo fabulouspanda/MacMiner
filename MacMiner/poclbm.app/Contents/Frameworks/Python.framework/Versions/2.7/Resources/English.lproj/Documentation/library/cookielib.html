@@ -1,0 +1,912 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>20.21. cookielib — Cookie handling for HTTP clients &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="next" title="20.22. Cookie — HTTP state management" href="cookie.html" />
+    <link rel="prev" title="20.20. CGIHTTPServer — CGI-capable HTTP request handler" href="cgihttpserver.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookie.html" title="20.22. Cookie — HTTP state management"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cgihttpserver.html" title="20.20. CGIHTTPServer — CGI-capable HTTP request handler"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-cookielib">
+<span id="cookielib-cookie-handling-for-http-clients"></span><h1>20.21. <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> &#8212; Cookie handling for HTTP clients<a class="headerlink" href="#module-cookielib" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> module has been renamed to <tt class="xref py py-mod docutils literal"><span class="pre">http.cookiejar</span></tt> in
+Python 3.  The <a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt imports when
+converting your sources to Python 3.</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/cookielib.py">Lib/cookielib.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> module defines classes for automatic handling of HTTP
+cookies.  It is useful for accessing web sites that require small pieces of data
+&#8211; <em class="dfn">cookies</em> &#8211; to be set on the client machine by an HTTP response from a
+web server, and then returned to the server in later HTTP requests.</p>
+<p>Both the regular Netscape cookie protocol and the protocol defined by
+<span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2965.html"><strong>RFC 2965</strong></a> are handled.  RFC 2965 handling is switched off by default.
+<span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2109.html"><strong>RFC 2109</strong></a> cookies are parsed as Netscape cookies and subsequently treated
+either as Netscape or RFC 2965 cookies according to the &#8216;policy&#8217; in effect.
+Note that the great majority of cookies on the Internet are Netscape cookies.
+<a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> attempts to follow the de-facto Netscape cookie protocol (which
+differs substantially from that set out in the original Netscape specification),
+including taking note of the <tt class="docutils literal"><span class="pre">max-age</span></tt> and <tt class="docutils literal"><span class="pre">port</span></tt> cookie-attributes
+introduced with RFC 2965.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The various named parameters found in <em class="mailheader">Set-Cookie</em> and
+<em class="mailheader">Set-Cookie2</em> headers (eg. <tt class="docutils literal"><span class="pre">domain</span></tt> and <tt class="docutils literal"><span class="pre">expires</span></tt>) are
+conventionally referred to as <em class="dfn">attributes</em>.  To distinguish them from
+Python attributes, the documentation for this module uses the term
+<em class="dfn">cookie-attribute</em> instead.</p>
+</div>
+<p>The module defines the following exception:</p>
+<dl class="exception">
+<dt id="cookielib.LoadError">
+<em class="property">exception </em><tt class="descclassname">cookielib.</tt><tt class="descname">LoadError</tt><a class="headerlink" href="#cookielib.LoadError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instances of <a class="reference internal" href="#cookielib.FileCookieJar" title="cookielib.FileCookieJar"><tt class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></tt></a> raise this exception on failure to load
+cookies from a file.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For backwards-compatibility with Python 2.4 (which raised an <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a>),
+<a class="reference internal" href="#cookielib.LoadError" title="cookielib.LoadError"><tt class="xref py py-exc docutils literal"><span class="pre">LoadError</span></tt></a> is a subclass of <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a>.</p>
+</div>
+</dd></dl>
+
+<p>The following classes are provided:</p>
+<dl class="class">
+<dt id="cookielib.CookieJar">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">CookieJar</tt><big>(</big><em>policy=None</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>policy</em> is an object implementing the <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> interface.</p>
+<p>The <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> class stores HTTP cookies.  It extracts cookies from HTTP
+requests, and returns them in HTTP responses. <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> instances
+automatically expire contained cookies when necessary.  Subclasses are also
+responsible for storing and retrieving cookies from a file or database.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cookielib.FileCookieJar">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">FileCookieJar</tt><big>(</big><em>filename</em>, <em>delayload=None</em>, <em>policy=None</em><big>)</big><a class="headerlink" href="#cookielib.FileCookieJar" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>policy</em> is an object implementing the <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> interface.  For the
+other arguments, see the documentation for the corresponding attributes.</p>
+<p>A <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> which can load cookies from, and perhaps save cookies to, a
+file on disk.  Cookies are <strong>NOT</strong> loaded from the named file until either the
+<a class="reference internal" href="#cookielib.FileCookieJar.load" title="cookielib.FileCookieJar.load"><tt class="xref py py-meth docutils literal"><span class="pre">load()</span></tt></a> or <a class="reference internal" href="#cookielib.FileCookieJar.revert" title="cookielib.FileCookieJar.revert"><tt class="xref py py-meth docutils literal"><span class="pre">revert()</span></tt></a> method is called.  Subclasses of this class are
+documented in section <a class="reference internal" href="#file-cookie-jar-classes"><em>FileCookieJar subclasses and co-operation with web browsers</em></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cookielib.CookiePolicy">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">CookiePolicy</tt><a class="headerlink" href="#cookielib.CookiePolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is responsible for deciding whether each cookie should be accepted
+from / returned to the server.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cookielib.DefaultCookiePolicy">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">DefaultCookiePolicy</tt><big>(</big><em>blocked_domains=None</em>, <em>allowed_domains=None</em>, <em>netscape=True</em>, <em>rfc2965=False</em>, <em>rfc2109_as_netscape=None</em>, <em>hide_cookie2=False</em>, <em>strict_domain=False</em>, <em>strict_rfc2965_unverifiable=True</em>, <em>strict_ns_unverifiable=False</em>, <em>strict_ns_domain=DefaultCookiePolicy.DomainLiberal</em>, <em>strict_ns_set_initial_dollar=False</em>, <em>strict_ns_set_path=False</em><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor arguments should be passed as keyword arguments only.
+<em>blocked_domains</em> is a sequence of domain names that we never accept cookies
+from, nor return cookies to. <em>allowed_domains</em> if not <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>, this is a
+sequence of the only domains for which we accept and return cookies.  For all
+other arguments, see the documentation for <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> and
+<a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a> objects.</p>
+<p><a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a> implements the standard accept / reject rules for
+Netscape and RFC 2965 cookies.  By default, RFC 2109 cookies (ie. cookies
+received in a <em class="mailheader">Set-Cookie</em> header with a version cookie-attribute of
+1) are treated according to the RFC 2965 rules.  However, if RFC 2965 handling
+is turned off or <a class="reference internal" href="#cookielib.DefaultCookiePolicy.rfc2109_as_netscape" title="cookielib.DefaultCookiePolicy.rfc2109_as_netscape"><tt class="xref py py-attr docutils literal"><span class="pre">rfc2109_as_netscape</span></tt></a> is True, RFC 2109 cookies are
+&#8216;downgraded&#8217; by the <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> instance to Netscape cookies, by
+setting the <tt class="xref py py-attr docutils literal"><span class="pre">version</span></tt> attribute of the <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> instance to 0.
+<a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a> also provides some parameters to allow some
+fine-tuning of policy.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cookielib.Cookie">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">Cookie</tt><a class="headerlink" href="#cookielib.Cookie" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents Netscape, RFC 2109 and RFC 2965 cookies.  It is not
+expected that users of <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> construct their own <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a>
+instances.  Instead, if necessary, call <tt class="xref py py-meth docutils literal"><span class="pre">make_cookies()</span></tt> on a
+<a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> instance.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="docutils">
+<dt>Module <a class="reference internal" href="urllib2.html#module-urllib2" title="urllib2: Next generation URL opening library."><tt class="xref py py-mod docutils literal"><span class="pre">urllib2</span></tt></a></dt>
+<dd>URL opening with automatic cookie handling.</dd>
+<dt>Module <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-mod docutils literal"><span class="pre">Cookie</span></tt></a></dt>
+<dd>HTTP cookie classes, principally useful for server-side code.  The
+<a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> and <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-mod docutils literal"><span class="pre">Cookie</span></tt></a> modules do not depend on each other.</dd>
+<dt><a class="reference external" href="http://wp.netscape.com/newsref/std/cookie_spec.html">http://wp.netscape.com/newsref/std/cookie_spec.html</a></dt>
+<dd>The specification of the original Netscape cookie protocol.  Though this is
+still the dominant protocol, the &#8216;Netscape cookie protocol&#8217; implemented by all
+the major browsers (and <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a>) only bears a passing resemblance to
+the one sketched out in <tt class="docutils literal"><span class="pre">cookie_spec.html</span></tt>.</dd>
+<dt><span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2109.html"><strong>RFC 2109</strong></a> - HTTP State Management Mechanism</dt>
+<dd>Obsoleted by RFC 2965. Uses <em class="mailheader">Set-Cookie</em> with version=1.</dd>
+<dt><span class="target" id="index-3"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2965.html"><strong>RFC 2965</strong></a> - HTTP State Management Mechanism</dt>
+<dd>The Netscape protocol with the bugs fixed.  Uses <em class="mailheader">Set-Cookie2</em> in
+place of <em class="mailheader">Set-Cookie</em>.  Not widely used.</dd>
+<dt><a class="reference external" href="http://kristol.org/cookie/errata.html">http://kristol.org/cookie/errata.html</a></dt>
+<dd>Unfinished errata to RFC 2965.</dd>
+</dl>
+<p class="last"><span class="target" id="index-4"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2964.html"><strong>RFC 2964</strong></a> - Use of HTTP State Management</p>
+</div>
+<div class="section" id="cookiejar-and-filecookiejar-objects">
+<span id="cookie-jar-objects"></span><h2>20.21.1. CookieJar and FileCookieJar Objects<a class="headerlink" href="#cookiejar-and-filecookiejar-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> objects support the <a class="reference internal" href="../glossary.html#term-iterator"><em class="xref std std-term">iterator</em></a> protocol for iterating over
+contained <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> objects.</p>
+<p><a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> has the following methods:</p>
+<dl class="method">
+<dt id="cookielib.CookieJar.add_cookie_header">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">add_cookie_header</tt><big>(</big><em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar.add_cookie_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add correct <em class="mailheader">Cookie</em> header to <em>request</em>.</p>
+<p>If policy allows (ie. the <tt class="xref py py-attr docutils literal"><span class="pre">rfc2965</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">hide_cookie2</span></tt> attributes of
+the <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a>&#8216;s <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> instance are true and false
+respectively), the <em class="mailheader">Cookie2</em> header is also added when appropriate.</p>
+<p>The <em>request</em> object (usually a <a class="reference internal" href="urllib2.html#urllib2.Request" title="urllib2.Request"><tt class="xref py py-class docutils literal"><span class="pre">urllib2.Request</span></tt></a> instance) must support
+the methods <tt class="xref py py-meth docutils literal"><span class="pre">get_full_url()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">get_host()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">get_type()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">unverifiable()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">get_origin_req_host()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">has_header()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">get_header()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">header_items()</span></tt>, and <tt class="xref py py-meth docutils literal"><span class="pre">add_unredirected_header()</span></tt>,as
+documented by <a class="reference internal" href="urllib2.html#module-urllib2" title="urllib2: Next generation URL opening library."><tt class="xref py py-mod docutils literal"><span class="pre">urllib2</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.extract_cookies">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">extract_cookies</tt><big>(</big><em>response</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar.extract_cookies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract cookies from HTTP <em>response</em> and store them in the <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a>,
+where allowed by policy.</p>
+<p>The <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> will look for allowable <em class="mailheader">Set-Cookie</em> and
+<em class="mailheader">Set-Cookie2</em> headers in the <em>response</em> argument, and store cookies
+as appropriate (subject to the <a class="reference internal" href="#cookielib.CookiePolicy.set_ok" title="cookielib.CookiePolicy.set_ok"><tt class="xref py py-meth docutils literal"><span class="pre">CookiePolicy.set_ok()</span></tt></a> method&#8217;s approval).</p>
+<p>The <em>response</em> object (usually the result of a call to <a class="reference internal" href="urllib2.html#urllib2.urlopen" title="urllib2.urlopen"><tt class="xref py py-meth docutils literal"><span class="pre">urllib2.urlopen()</span></tt></a>,
+or similar) should support an <tt class="xref py py-meth docutils literal"><span class="pre">info()</span></tt> method, which returns an object with
+a <tt class="xref py py-meth docutils literal"><span class="pre">getallmatchingheaders()</span></tt> method (usually a <a class="reference internal" href="mimetools.html#mimetools.Message" title="mimetools.Message"><tt class="xref py py-class docutils literal"><span class="pre">mimetools.Message</span></tt></a>
+instance).</p>
+<p>The <em>request</em> object (usually a <a class="reference internal" href="urllib2.html#urllib2.Request" title="urllib2.Request"><tt class="xref py py-class docutils literal"><span class="pre">urllib2.Request</span></tt></a> instance) must support
+the methods <tt class="xref py py-meth docutils literal"><span class="pre">get_full_url()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">get_host()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">unverifiable()</span></tt>, and
+<tt class="xref py py-meth docutils literal"><span class="pre">get_origin_req_host()</span></tt>, as documented by <a class="reference internal" href="urllib2.html#module-urllib2" title="urllib2: Next generation URL opening library."><tt class="xref py py-mod docutils literal"><span class="pre">urllib2</span></tt></a>.  The request is
+used to set default values for cookie-attributes as well as for checking that
+the cookie is allowed to be set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.set_policy">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">set_policy</tt><big>(</big><em>policy</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar.set_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> instance to be used.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.make_cookies">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">make_cookies</tt><big>(</big><em>response</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar.make_cookies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return sequence of <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> objects extracted from <em>response</em> object.</p>
+<p>See the documentation for <a class="reference internal" href="#cookielib.CookieJar.extract_cookies" title="cookielib.CookieJar.extract_cookies"><tt class="xref py py-meth docutils literal"><span class="pre">extract_cookies()</span></tt></a> for the interfaces required of
+the <em>response</em> and <em>request</em> arguments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.set_cookie_if_ok">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">set_cookie_if_ok</tt><big>(</big><em>cookie</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar.set_cookie_if_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> if policy says it&#8217;s OK to do so.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.set_cookie">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">set_cookie</tt><big>(</big><em>cookie</em><big>)</big><a class="headerlink" href="#cookielib.CookieJar.set_cookie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a>, without checking with policy to see whether or not it
+should be set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.clear">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">clear</tt><big>(</big><span class="optional">[</span><em>domain</em><span class="optional">[</span>, <em>path</em><span class="optional">[</span>, <em>name</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#cookielib.CookieJar.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear some cookies.</p>
+<p>If invoked without arguments, clear all cookies.  If given a single argument,
+only cookies belonging to that <em>domain</em> will be removed. If given two arguments,
+cookies belonging to the specified <em>domain</em> and URL <em>path</em> are removed.  If
+given three arguments, then the cookie with the specified <em>domain</em>, <em>path</em> and
+<em>name</em> is removed.</p>
+<p>Raises <a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><tt class="xref py py-exc docutils literal"><span class="pre">KeyError</span></tt></a> if no matching cookie exists.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookieJar.clear_session_cookies">
+<tt class="descclassname">CookieJar.</tt><tt class="descname">clear_session_cookies</tt><big>(</big><big>)</big><a class="headerlink" href="#cookielib.CookieJar.clear_session_cookies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard all session cookies.</p>
+<p>Discards all contained cookies that have a true <tt class="xref py py-attr docutils literal"><span class="pre">discard</span></tt> attribute
+(usually because they had either no <tt class="docutils literal"><span class="pre">max-age</span></tt> or <tt class="docutils literal"><span class="pre">expires</span></tt> cookie-attribute,
+or an explicit <tt class="docutils literal"><span class="pre">discard</span></tt> cookie-attribute).  For interactive browsers, the end
+of a session usually corresponds to closing the browser window.</p>
+<p>Note that the <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt> method won&#8217;t save session cookies anyway, unless you
+ask otherwise by passing a true <em>ignore_discard</em> argument.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#cookielib.FileCookieJar" title="cookielib.FileCookieJar"><tt class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></tt></a> implements the following additional methods:</p>
+<dl class="method">
+<dt id="cookielib.FileCookieJar.save">
+<tt class="descclassname">FileCookieJar.</tt><tt class="descname">save</tt><big>(</big><em>filename=None</em>, <em>ignore_discard=False</em>, <em>ignore_expires=False</em><big>)</big><a class="headerlink" href="#cookielib.FileCookieJar.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save cookies to a file.</p>
+<p>This base class raises <a class="reference internal" href="exceptions.html#exceptions.NotImplementedError" title="exceptions.NotImplementedError"><tt class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></tt></a>.  Subclasses may leave this
+method unimplemented.</p>
+<p><em>filename</em> is the name of file in which to save cookies.  If <em>filename</em> is not
+specified, <tt class="xref py py-attr docutils literal"><span class="pre">self.filename</span></tt> is used (whose default is the value passed to
+the constructor, if any); if <tt class="xref py py-attr docutils literal"><span class="pre">self.filename</span></tt> is <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>,
+<a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> is raised.</p>
+<p><em>ignore_discard</em>: save even cookies set to be discarded. <em>ignore_expires</em>: save
+even cookies that have expired</p>
+<p>The file is overwritten if it already exists, thus wiping all the cookies it
+contains.  Saved cookies can be restored later using the <a class="reference internal" href="#cookielib.FileCookieJar.load" title="cookielib.FileCookieJar.load"><tt class="xref py py-meth docutils literal"><span class="pre">load()</span></tt></a> or
+<a class="reference internal" href="#cookielib.FileCookieJar.revert" title="cookielib.FileCookieJar.revert"><tt class="xref py py-meth docutils literal"><span class="pre">revert()</span></tt></a> methods.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.FileCookieJar.load">
+<tt class="descclassname">FileCookieJar.</tt><tt class="descname">load</tt><big>(</big><em>filename=None</em>, <em>ignore_discard=False</em>, <em>ignore_expires=False</em><big>)</big><a class="headerlink" href="#cookielib.FileCookieJar.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load cookies from a file.</p>
+<p>Old cookies are kept unless overwritten by newly loaded ones.</p>
+<p>Arguments are as for <a class="reference internal" href="#cookielib.FileCookieJar.save" title="cookielib.FileCookieJar.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.</p>
+<p>The named file must be in the format understood by the class, or
+<a class="reference internal" href="#cookielib.LoadError" title="cookielib.LoadError"><tt class="xref py py-exc docutils literal"><span class="pre">LoadError</span></tt></a> will be raised.  Also, <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a> may be raised, for
+example if the file does not exist.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">For backwards-compatibility with Python 2.4 (which raised an <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a>),
+<a class="reference internal" href="#cookielib.LoadError" title="cookielib.LoadError"><tt class="xref py py-exc docutils literal"><span class="pre">LoadError</span></tt></a> is a subclass of <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.FileCookieJar.revert">
+<tt class="descclassname">FileCookieJar.</tt><tt class="descname">revert</tt><big>(</big><em>filename=None</em>, <em>ignore_discard=False</em>, <em>ignore_expires=False</em><big>)</big><a class="headerlink" href="#cookielib.FileCookieJar.revert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear all cookies and reload cookies from a saved file.</p>
+<p><a class="reference internal" href="#cookielib.FileCookieJar.revert" title="cookielib.FileCookieJar.revert"><tt class="xref py py-meth docutils literal"><span class="pre">revert()</span></tt></a> can raise the same exceptions as <a class="reference internal" href="#cookielib.FileCookieJar.load" title="cookielib.FileCookieJar.load"><tt class="xref py py-meth docutils literal"><span class="pre">load()</span></tt></a>. If there is a
+failure, the object&#8217;s state will not be altered.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#cookielib.FileCookieJar" title="cookielib.FileCookieJar"><tt class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></tt></a> instances have the following public attributes:</p>
+<dl class="attribute">
+<dt id="cookielib.FileCookieJar.filename">
+<tt class="descclassname">FileCookieJar.</tt><tt class="descname">filename</tt><a class="headerlink" href="#cookielib.FileCookieJar.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filename of default file in which to keep cookies.  This attribute may be
+assigned to.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.FileCookieJar.delayload">
+<tt class="descclassname">FileCookieJar.</tt><tt class="descname">delayload</tt><a class="headerlink" href="#cookielib.FileCookieJar.delayload" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, load cookies lazily from disk.  This attribute should not be assigned
+to.  This is only a hint, since this only affects performance, not behaviour
+(unless the cookies on disk are changing). A <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> object may
+ignore it.  None of the <a class="reference internal" href="#cookielib.FileCookieJar" title="cookielib.FileCookieJar"><tt class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></tt></a> classes included in the standard
+library lazily loads cookies.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="filecookiejar-subclasses-and-co-operation-with-web-browsers">
+<span id="file-cookie-jar-classes"></span><h2>20.21.2. FileCookieJar subclasses and co-operation with web browsers<a class="headerlink" href="#filecookiejar-subclasses-and-co-operation-with-web-browsers" title="Permalink to this headline">¶</a></h2>
+<p>The following <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> subclasses are provided for reading and
+writing .</p>
+<dl class="class">
+<dt id="cookielib.MozillaCookieJar">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">MozillaCookieJar</tt><big>(</big><em>filename</em>, <em>delayload=None</em>, <em>policy=None</em><big>)</big><a class="headerlink" href="#cookielib.MozillaCookieJar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#cookielib.FileCookieJar" title="cookielib.FileCookieJar"><tt class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></tt></a> that can load from and save cookies to disk in the
+Mozilla <tt class="docutils literal"><span class="pre">cookies.txt</span></tt> file format (which is also used by the Lynx and Netscape
+browsers).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Version 3 of the Firefox web browser no longer writes cookies in the
+<tt class="docutils literal"><span class="pre">cookies.txt</span></tt> file format.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This loses information about RFC 2965 cookies, and also about newer or
+non-standard cookie-attributes such as <tt class="docutils literal"><span class="pre">port</span></tt>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Back up your cookies before saving if you have cookies whose loss / corruption
+would be inconvenient (there are some subtleties which may lead to slight
+changes in the file over a load / save round-trip).</p>
+</div>
+<p>Also note that cookies saved while Mozilla is running will get clobbered by
+Mozilla.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="cookielib.LWPCookieJar">
+<em class="property">class </em><tt class="descclassname">cookielib.</tt><tt class="descname">LWPCookieJar</tt><big>(</big><em>filename</em>, <em>delayload=None</em>, <em>policy=None</em><big>)</big><a class="headerlink" href="#cookielib.LWPCookieJar" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#cookielib.FileCookieJar" title="cookielib.FileCookieJar"><tt class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></tt></a> that can load from and save cookies to disk in format
+compatible with the libwww-perl library&#8217;s <tt class="docutils literal"><span class="pre">Set-Cookie3</span></tt> file format.  This is
+convenient if you want to store cookies in a human-readable file.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="cookiepolicy-objects">
+<span id="cookie-policy-objects"></span><h2>20.21.3. CookiePolicy Objects<a class="headerlink" href="#cookiepolicy-objects" title="Permalink to this headline">¶</a></h2>
+<p>Objects implementing the <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> interface have the following
+methods:</p>
+<dl class="method">
+<dt id="cookielib.CookiePolicy.set_ok">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">set_ok</tt><big>(</big><em>cookie</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookiePolicy.set_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return boolean value indicating whether cookie should be accepted from server.</p>
+<p><em>cookie</em> is a <a class="reference internal" href="#cookielib.Cookie" title="cookielib.Cookie"><tt class="xref py py-class docutils literal"><span class="pre">cookielib.Cookie</span></tt></a> instance.  <em>request</em> is an object
+implementing the interface defined by the documentation for
+<a class="reference internal" href="#cookielib.CookieJar.extract_cookies" title="cookielib.CookieJar.extract_cookies"><tt class="xref py py-meth docutils literal"><span class="pre">CookieJar.extract_cookies()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookiePolicy.return_ok">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">return_ok</tt><big>(</big><em>cookie</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookiePolicy.return_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return boolean value indicating whether cookie should be returned to server.</p>
+<p><em>cookie</em> is a <a class="reference internal" href="#cookielib.Cookie" title="cookielib.Cookie"><tt class="xref py py-class docutils literal"><span class="pre">cookielib.Cookie</span></tt></a> instance.  <em>request</em> is an object
+implementing the interface defined by the documentation for
+<a class="reference internal" href="#cookielib.CookieJar.add_cookie_header" title="cookielib.CookieJar.add_cookie_header"><tt class="xref py py-meth docutils literal"><span class="pre">CookieJar.add_cookie_header()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookiePolicy.domain_return_ok">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">domain_return_ok</tt><big>(</big><em>domain</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookiePolicy.domain_return_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return false if cookies should not be returned, given cookie domain.</p>
+<p>This method is an optimization.  It removes the need for checking every cookie
+with a particular domain (which might involve reading many files).  Returning
+true from <a class="reference internal" href="#cookielib.CookiePolicy.domain_return_ok" title="cookielib.CookiePolicy.domain_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">domain_return_ok()</span></tt></a> and <a class="reference internal" href="#cookielib.CookiePolicy.path_return_ok" title="cookielib.CookiePolicy.path_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">path_return_ok()</span></tt></a> leaves all the
+work to <a class="reference internal" href="#cookielib.CookiePolicy.return_ok" title="cookielib.CookiePolicy.return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">return_ok()</span></tt></a>.</p>
+<p>If <a class="reference internal" href="#cookielib.CookiePolicy.domain_return_ok" title="cookielib.CookiePolicy.domain_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">domain_return_ok()</span></tt></a> returns true for the cookie domain,
+<a class="reference internal" href="#cookielib.CookiePolicy.path_return_ok" title="cookielib.CookiePolicy.path_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">path_return_ok()</span></tt></a> is called for the cookie path.  Otherwise,
+<a class="reference internal" href="#cookielib.CookiePolicy.path_return_ok" title="cookielib.CookiePolicy.path_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">path_return_ok()</span></tt></a> and <a class="reference internal" href="#cookielib.CookiePolicy.return_ok" title="cookielib.CookiePolicy.return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">return_ok()</span></tt></a> are never called for that cookie
+domain.  If <a class="reference internal" href="#cookielib.CookiePolicy.path_return_ok" title="cookielib.CookiePolicy.path_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">path_return_ok()</span></tt></a> returns true, <a class="reference internal" href="#cookielib.CookiePolicy.return_ok" title="cookielib.CookiePolicy.return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">return_ok()</span></tt></a> is called
+with the <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> object itself for a full check.  Otherwise,
+<a class="reference internal" href="#cookielib.CookiePolicy.return_ok" title="cookielib.CookiePolicy.return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">return_ok()</span></tt></a> is never called for that cookie path.</p>
+<p>Note that <a class="reference internal" href="#cookielib.CookiePolicy.domain_return_ok" title="cookielib.CookiePolicy.domain_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">domain_return_ok()</span></tt></a> is called for every <em>cookie</em> domain, not just
+for the <em>request</em> domain.  For example, the function might be called with both
+<tt class="docutils literal"><span class="pre">&quot;.example.com&quot;</span></tt> and <tt class="docutils literal"><span class="pre">&quot;www.example.com&quot;</span></tt> if the request domain is
+<tt class="docutils literal"><span class="pre">&quot;www.example.com&quot;</span></tt>.  The same goes for <a class="reference internal" href="#cookielib.CookiePolicy.path_return_ok" title="cookielib.CookiePolicy.path_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">path_return_ok()</span></tt></a>.</p>
+<p>The <em>request</em> argument is as documented for <a class="reference internal" href="#cookielib.CookiePolicy.return_ok" title="cookielib.CookiePolicy.return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">return_ok()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.CookiePolicy.path_return_ok">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">path_return_ok</tt><big>(</big><em>path</em>, <em>request</em><big>)</big><a class="headerlink" href="#cookielib.CookiePolicy.path_return_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return false if cookies should not be returned, given cookie path.</p>
+<p>See the documentation for <a class="reference internal" href="#cookielib.CookiePolicy.domain_return_ok" title="cookielib.CookiePolicy.domain_return_ok"><tt class="xref py py-meth docutils literal"><span class="pre">domain_return_ok()</span></tt></a>.</p>
+</dd></dl>
+
+<p>In addition to implementing the methods above, implementations of the
+<a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> interface must also supply the following attributes,
+indicating which protocols should be used, and how.  All of these attributes may
+be assigned to.</p>
+<dl class="attribute">
+<dt id="cookielib.CookiePolicy.netscape">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">netscape</tt><a class="headerlink" href="#cookielib.CookiePolicy.netscape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement Netscape protocol.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.CookiePolicy.rfc2965">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">rfc2965</tt><a class="headerlink" href="#cookielib.CookiePolicy.rfc2965" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement RFC 2965 protocol.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.CookiePolicy.hide_cookie2">
+<tt class="descclassname">CookiePolicy.</tt><tt class="descname">hide_cookie2</tt><a class="headerlink" href="#cookielib.CookiePolicy.hide_cookie2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t add <em class="mailheader">Cookie2</em> header to requests (the presence of this header
+indicates to the server that we understand RFC 2965 cookies).</p>
+</dd></dl>
+
+<p>The most useful way to define a <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> class is by subclassing
+from <a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a> and overriding some or all of the methods
+above.  <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> itself may be used as a &#8216;null policy&#8217; to allow
+setting and receiving any and all cookies (this is unlikely to be useful).</p>
+</div>
+<div class="section" id="defaultcookiepolicy-objects">
+<span id="default-cookie-policy-objects"></span><h2>20.21.4. DefaultCookiePolicy Objects<a class="headerlink" href="#defaultcookiepolicy-objects" title="Permalink to this headline">¶</a></h2>
+<p>Implements the standard rules for accepting and returning cookies.</p>
+<p>Both RFC 2965 and Netscape cookies are covered.  RFC 2965 handling is switched
+off by default.</p>
+<p>The easiest way to provide your own policy is to override this class and call
+its methods in your overridden implementations before adding your own additional
+checks:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cookielib</span>
+<span class="k">class</span> <span class="nc">MyCookiePolicy</span><span class="p">(</span><span class="n">cookielib</span><span class="o">.</span><span class="n">DefaultCookiePolicy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cookielib</span><span class="o">.</span><span class="n">DefaultCookiePolicy</span><span class="o">.</span><span class="n">set_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">i_dont_want_to_store_this_cookie</span><span class="p">(</span><span class="n">cookie</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<p>In addition to the features required to implement the <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a>
+interface, this class allows you to block and allow domains from setting and
+receiving cookies.  There are also some strictness switches that allow you to
+tighten up the rather loose Netscape protocol rules a little bit (at the cost of
+blocking some benign cookies).</p>
+<p>A domain blacklist and whitelist is provided (both off by default). Only domains
+not in the blacklist and present in the whitelist (if the whitelist is active)
+participate in cookie setting and returning.  Use the <em>blocked_domains</em>
+constructor argument, and <tt class="xref py py-meth docutils literal"><span class="pre">blocked_domains()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">set_blocked_domains()</span></tt> methods (and the corresponding argument and methods
+for <em>allowed_domains</em>).  If you set a whitelist, you can turn it off again by
+setting it to <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+<p>Domains in block or allow lists that do not start with a dot must equal the
+cookie domain to be matched.  For example, <tt class="docutils literal"><span class="pre">&quot;example.com&quot;</span></tt> matches a blacklist
+entry of <tt class="docutils literal"><span class="pre">&quot;example.com&quot;</span></tt>, but <tt class="docutils literal"><span class="pre">&quot;www.example.com&quot;</span></tt> does not.  Domains that do
+start with a dot are matched by more specific domains too. For example, both
+<tt class="docutils literal"><span class="pre">&quot;www.example.com&quot;</span></tt> and <tt class="docutils literal"><span class="pre">&quot;www.coyote.example.com&quot;</span></tt> match <tt class="docutils literal"><span class="pre">&quot;.example.com&quot;</span></tt>
+(but <tt class="docutils literal"><span class="pre">&quot;example.com&quot;</span></tt> itself does not).  IP addresses are an exception, and
+must match exactly.  For example, if blocked_domains contains <tt class="docutils literal"><span class="pre">&quot;192.168.1.2&quot;</span></tt>
+and <tt class="docutils literal"><span class="pre">&quot;.168.1.2&quot;</span></tt>, 192.168.1.2 is blocked, but 193.168.1.2 is not.</p>
+<p><a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a> implements the following additional methods:</p>
+<dl class="method">
+<dt id="cookielib.DefaultCookiePolicy.blocked_domains">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">blocked_domains</tt><big>(</big><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy.blocked_domains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sequence of blocked domains (as a tuple).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.DefaultCookiePolicy.set_blocked_domains">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">set_blocked_domains</tt><big>(</big><em>blocked_domains</em><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy.set_blocked_domains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the sequence of blocked domains.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.DefaultCookiePolicy.is_blocked">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">is_blocked</tt><big>(</big><em>domain</em><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy.is_blocked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether <em>domain</em> is on the blacklist for setting or receiving cookies.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.DefaultCookiePolicy.allowed_domains">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">allowed_domains</tt><big>(</big><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy.allowed_domains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>, or the sequence of allowed domains (as a tuple).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.DefaultCookiePolicy.set_allowed_domains">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">set_allowed_domains</tt><big>(</big><em>allowed_domains</em><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy.set_allowed_domains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the sequence of allowed domains, or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.DefaultCookiePolicy.is_not_allowed">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">is_not_allowed</tt><big>(</big><em>domain</em><big>)</big><a class="headerlink" href="#cookielib.DefaultCookiePolicy.is_not_allowed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether <em>domain</em> is not on the whitelist for setting or receiving
+cookies.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a> instances have the following attributes, which are
+all initialised from the constructor arguments of the same name, and which may
+all be assigned to.</p>
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.rfc2109_as_netscape">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">rfc2109_as_netscape</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.rfc2109_as_netscape" title="Permalink to this definition">¶</a></dt>
+<dd><p>If true, request that the <a class="reference internal" href="#cookielib.CookieJar" title="cookielib.CookieJar"><tt class="xref py py-class docutils literal"><span class="pre">CookieJar</span></tt></a> instance downgrade RFC 2109 cookies
+(ie. cookies received in a <em class="mailheader">Set-Cookie</em> header with a version
+cookie-attribute of 1) to Netscape cookies by setting the version attribute of
+the <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> instance to 0.  The default value is <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>, in which
+case RFC 2109 cookies are downgraded if and only if RFC 2965 handling is turned
+off.  Therefore, RFC 2109 cookies are downgraded by default.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<p>General strictness switches:</p>
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.strict_domain">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">strict_domain</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.strict_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t allow sites to set two-component domains with country-code top-level
+domains like <tt class="docutils literal"><span class="pre">.co.uk</span></tt>, <tt class="docutils literal"><span class="pre">.gov.uk</span></tt>, <tt class="docutils literal"><span class="pre">.co.nz</span></tt>.etc.  This is far from perfect
+and isn&#8217;t guaranteed to work!</p>
+</dd></dl>
+
+<p>RFC 2965 protocol strictness switches:</p>
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.strict_rfc2965_unverifiable">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">strict_rfc2965_unverifiable</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.strict_rfc2965_unverifiable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Follow RFC 2965 rules on unverifiable transactions (usually, an unverifiable
+transaction is one resulting from a redirect or a request for an image hosted on
+another site).  If this is false, cookies are <em>never</em> blocked on the basis of
+verifiability</p>
+</dd></dl>
+
+<p>Netscape protocol strictness switches:</p>
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.strict_ns_unverifiable">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">strict_ns_unverifiable</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.strict_ns_unverifiable" title="Permalink to this definition">¶</a></dt>
+<dd><p>apply RFC 2965 rules on unverifiable transactions even to Netscape cookies</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.strict_ns_domain">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">strict_ns_domain</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.strict_ns_domain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flags indicating how strict to be with domain-matching rules for Netscape
+cookies.  See below for acceptable values.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.strict_ns_set_initial_dollar">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">strict_ns_set_initial_dollar</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.strict_ns_set_initial_dollar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ignore cookies in Set-Cookie: headers that have names starting with <tt class="docutils literal"><span class="pre">'$'</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.strict_ns_set_path">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">strict_ns_set_path</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.strict_ns_set_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don&#8217;t allow setting cookies whose path doesn&#8217;t path-match request URI.</p>
+</dd></dl>
+
+<p><tt class="xref py py-attr docutils literal"><span class="pre">strict_ns_domain</span></tt> is a collection of flags.  Its value is constructed by
+or-ing together (for example, <tt class="docutils literal"><span class="pre">DomainStrictNoDots|DomainStrictNonDomain</span></tt> means
+both flags are set).</p>
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.DomainStrictNoDots">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">DomainStrictNoDots</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.DomainStrictNoDots" title="Permalink to this definition">¶</a></dt>
+<dd><p>When setting cookies, the &#8216;host prefix&#8217; must not contain a dot (eg.
+<tt class="docutils literal"><span class="pre">www.foo.bar.com</span></tt> can&#8217;t set a cookie for <tt class="docutils literal"><span class="pre">.bar.com</span></tt>, because <tt class="docutils literal"><span class="pre">www.foo</span></tt>
+contains a dot).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.DomainStrictNonDomain">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">DomainStrictNonDomain</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.DomainStrictNonDomain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cookies that did not explicitly specify a <tt class="docutils literal"><span class="pre">domain</span></tt> cookie-attribute can only
+be returned to a domain equal to the domain that set the cookie (eg.
+<tt class="docutils literal"><span class="pre">spam.example.com</span></tt> won&#8217;t be returned cookies from <tt class="docutils literal"><span class="pre">example.com</span></tt> that had no
+<tt class="docutils literal"><span class="pre">domain</span></tt> cookie-attribute).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.DomainRFC2965Match">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">DomainRFC2965Match</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.DomainRFC2965Match" title="Permalink to this definition">¶</a></dt>
+<dd><p>When setting cookies, require a full RFC 2965 domain-match.</p>
+</dd></dl>
+
+<p>The following attributes are provided for convenience, and are the most useful
+combinations of the above flags:</p>
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.DomainLiberal">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">DomainLiberal</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.DomainLiberal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to 0 (ie. all of the above Netscape domain strictness flags switched
+off).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.DefaultCookiePolicy.DomainStrict">
+<tt class="descclassname">DefaultCookiePolicy.</tt><tt class="descname">DomainStrict</tt><a class="headerlink" href="#cookielib.DefaultCookiePolicy.DomainStrict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equivalent to <tt class="docutils literal"><span class="pre">DomainStrictNoDots|DomainStrictNonDomain</span></tt>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="cookie-objects">
+<span id="cookielib-cookie-objects"></span><h2>20.21.5. Cookie Objects<a class="headerlink" href="#cookie-objects" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> instances have Python attributes roughly corresponding to the
+standard cookie-attributes specified in the various cookie standards.  The
+correspondence is not one-to-one, because there are complicated rules for
+assigning default values, because the <tt class="docutils literal"><span class="pre">max-age</span></tt> and <tt class="docutils literal"><span class="pre">expires</span></tt>
+cookie-attributes contain equivalent information, and because RFC 2109 cookies
+may be &#8216;downgraded&#8217; by <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> from version 1 to version 0 (Netscape)
+cookies.</p>
+<p>Assignment to these attributes should not be necessary other than in rare
+circumstances in a <a class="reference internal" href="#cookielib.CookiePolicy" title="cookielib.CookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></tt></a> method.  The class does not enforce
+internal consistency, so you should know what you&#8217;re doing if you do that.</p>
+<dl class="attribute">
+<dt id="cookielib.Cookie.version">
+<tt class="descclassname">Cookie.</tt><tt class="descname">version</tt><a class="headerlink" href="#cookielib.Cookie.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.  Netscape cookies have <a class="reference internal" href="#cookielib.Cookie.version" title="cookielib.Cookie.version"><tt class="xref py py-attr docutils literal"><span class="pre">version</span></tt></a> 0. RFC 2965 and
+RFC 2109 cookies have a <tt class="docutils literal"><span class="pre">version</span></tt> cookie-attribute of 1.  However, note that
+<a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> may &#8216;downgrade&#8217; RFC 2109 cookies to Netscape cookies, in which
+case <a class="reference internal" href="#cookielib.Cookie.version" title="cookielib.Cookie.version"><tt class="xref py py-attr docutils literal"><span class="pre">version</span></tt></a> is 0.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.name">
+<tt class="descclassname">Cookie.</tt><tt class="descname">name</tt><a class="headerlink" href="#cookielib.Cookie.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cookie name (a string).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.value">
+<tt class="descclassname">Cookie.</tt><tt class="descname">value</tt><a class="headerlink" href="#cookielib.Cookie.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cookie value (a string), or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.port">
+<tt class="descclassname">Cookie.</tt><tt class="descname">port</tt><a class="headerlink" href="#cookielib.Cookie.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>String representing a port or a set of ports (eg. &#8216;80&#8217;, or &#8216;80,8080&#8217;), or
+<a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.path">
+<tt class="descclassname">Cookie.</tt><tt class="descname">path</tt><a class="headerlink" href="#cookielib.Cookie.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cookie path (a string, eg. <tt class="docutils literal"><span class="pre">'/acme/rocket_launchers'</span></tt>).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.secure">
+<tt class="descclassname">Cookie.</tt><tt class="descname">secure</tt><a class="headerlink" href="#cookielib.Cookie.secure" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if cookie should only be returned over a secure connection.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.expires">
+<tt class="descclassname">Cookie.</tt><tt class="descname">expires</tt><a class="headerlink" href="#cookielib.Cookie.expires" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer expiry date in seconds since epoch, or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.  See also the
+<a class="reference internal" href="#cookielib.Cookie.is_expired" title="cookielib.Cookie.is_expired"><tt class="xref py py-meth docutils literal"><span class="pre">is_expired()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.discard">
+<tt class="descclassname">Cookie.</tt><tt class="descname">discard</tt><a class="headerlink" href="#cookielib.Cookie.discard" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if this is a session cookie.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.comment">
+<tt class="descclassname">Cookie.</tt><tt class="descname">comment</tt><a class="headerlink" href="#cookielib.Cookie.comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>String comment from the server explaining the function of this cookie, or
+<a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.comment_url">
+<tt class="descclassname">Cookie.</tt><tt class="descname">comment_url</tt><a class="headerlink" href="#cookielib.Cookie.comment_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>URL linking to a comment from the server explaining the function of this cookie,
+or <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.rfc2109">
+<tt class="descclassname">Cookie.</tt><tt class="descname">rfc2109</tt><a class="headerlink" href="#cookielib.Cookie.rfc2109" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if this cookie was received as an RFC 2109 cookie (ie. the cookie
+arrived in a <em class="mailheader">Set-Cookie</em> header, and the value of the Version
+cookie-attribute in that header was 1).  This attribute is provided because
+<a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a> may &#8216;downgrade&#8217; RFC 2109 cookies to Netscape cookies, in
+which case <a class="reference internal" href="#cookielib.Cookie.version" title="cookielib.Cookie.version"><tt class="xref py py-attr docutils literal"><span class="pre">version</span></tt></a> is 0.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.port_specified">
+<tt class="descclassname">Cookie.</tt><tt class="descname">port_specified</tt><a class="headerlink" href="#cookielib.Cookie.port_specified" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if a port or set of ports was explicitly specified by the server (in the
+<em class="mailheader">Set-Cookie</em> / <em class="mailheader">Set-Cookie2</em> header).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.domain_specified">
+<tt class="descclassname">Cookie.</tt><tt class="descname">domain_specified</tt><a class="headerlink" href="#cookielib.Cookie.domain_specified" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if a domain was explicitly specified by the server.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cookielib.Cookie.domain_initial_dot">
+<tt class="descclassname">Cookie.</tt><tt class="descname">domain_initial_dot</tt><a class="headerlink" href="#cookielib.Cookie.domain_initial_dot" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the domain explicitly specified by the server began with a dot
+(<tt class="docutils literal"><span class="pre">'.'</span></tt>).</p>
+</dd></dl>
+
+<p>Cookies may have additional non-standard cookie-attributes.  These may be
+accessed using the following methods:</p>
+<dl class="method">
+<dt id="cookielib.Cookie.has_nonstandard_attr">
+<tt class="descclassname">Cookie.</tt><tt class="descname">has_nonstandard_attr</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#cookielib.Cookie.has_nonstandard_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if cookie has the named cookie-attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.Cookie.get_nonstandard_attr">
+<tt class="descclassname">Cookie.</tt><tt class="descname">get_nonstandard_attr</tt><big>(</big><em>name</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#cookielib.Cookie.get_nonstandard_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>If cookie has the named cookie-attribute, return its value. Otherwise, return
+<em>default</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cookielib.Cookie.set_nonstandard_attr">
+<tt class="descclassname">Cookie.</tt><tt class="descname">set_nonstandard_attr</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="headerlink" href="#cookielib.Cookie.set_nonstandard_attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of the named cookie-attribute.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="cookie.html#module-Cookie" title="Cookie: Support for HTTP state management (cookies)."><tt class="xref py py-class docutils literal"><span class="pre">Cookie</span></tt></a> class also defines the following method:</p>
+<dl class="method">
+<dt id="cookielib.Cookie.is_expired">
+<tt class="descclassname">Cookie.</tt><tt class="descname">is_expired</tt><big>(</big><span class="optional">[</span><em>now=None</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#cookielib.Cookie.is_expired" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if cookie has passed the time at which the server requested it should
+expire.  If <em>now</em> is given (in seconds since the epoch), return whether the
+cookie has expired at the specified time.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<span id="cookielib-examples"></span><h2>20.21.6. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The first example shows the most common usage of <a class="reference internal" href="#module-cookielib" title="cookielib: Classes for automatic handling of HTTP cookies."><tt class="xref py py-mod docutils literal"><span class="pre">cookielib</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">cookielib</span><span class="o">,</span> <span class="nn">urllib2</span>
+<span class="n">cj</span> <span class="o">=</span> <span class="n">cookielib</span><span class="o">.</span><span class="n">CookieJar</span><span class="p">()</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cj</span><span class="p">))</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;http://example.com/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This example illustrates how to open a URL using your Netscape, Mozilla, or Lynx
+cookies (assumes Unix/Netscape convention for location of the cookies file):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">cookielib</span><span class="o">,</span> <span class="nn">urllib2</span>
+<span class="n">cj</span> <span class="o">=</span> <span class="n">cookielib</span><span class="o">.</span><span class="n">MozillaCookieJar</span><span class="p">()</span>
+<span class="n">cj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">&quot;~&quot;</span><span class="p">),</span> <span class="s">&quot;.netscape&quot;</span><span class="p">,</span> <span class="s">&quot;cookies.txt&quot;</span><span class="p">))</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cj</span><span class="p">))</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;http://example.com/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The next example illustrates the use of <a class="reference internal" href="#cookielib.DefaultCookiePolicy" title="cookielib.DefaultCookiePolicy"><tt class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></tt></a>. Turn on
+RFC 2965 cookies, be more strict about domains when setting and returning
+Netscape cookies, and block some domains from setting cookies or having them
+returned:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="kn">from</span> <span class="nn">cookielib</span> <span class="kn">import</span> <span class="n">CookieJar</span><span class="p">,</span> <span class="n">DefaultCookiePolicy</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="n">DefaultCookiePolicy</span><span class="p">(</span>
+    <span class="n">rfc2965</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">strict_ns_domain</span><span class="o">=</span><span class="n">DefaultCookiePolicy</span><span class="o">.</span><span class="n">DomainStrict</span><span class="p">,</span>
+    <span class="n">blocked_domains</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;ads.net&quot;</span><span class="p">,</span> <span class="s">&quot;.ads.net&quot;</span><span class="p">])</span>
+<span class="n">cj</span> <span class="o">=</span> <span class="n">CookieJar</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">(</span><span class="n">cj</span><span class="p">))</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;http://example.com/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.21. <tt class="docutils literal"><span class="pre">cookielib</span></tt> &#8212; Cookie handling for HTTP clients</a><ul>
+<li><a class="reference internal" href="#cookiejar-and-filecookiejar-objects">20.21.1. CookieJar and FileCookieJar Objects</a></li>
+<li><a class="reference internal" href="#filecookiejar-subclasses-and-co-operation-with-web-browsers">20.21.2. FileCookieJar subclasses and co-operation with web browsers</a></li>
+<li><a class="reference internal" href="#cookiepolicy-objects">20.21.3. CookiePolicy Objects</a></li>
+<li><a class="reference internal" href="#defaultcookiepolicy-objects">20.21.4. DefaultCookiePolicy Objects</a></li>
+<li><a class="reference internal" href="#cookie-objects">20.21.5. Cookie Objects</a></li>
+<li><a class="reference internal" href="#examples">20.21.6. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cgihttpserver.html"
+                        title="previous chapter">20.20. <tt class="docutils literal docutils literal"><span class="pre">CGIHTTPServer</span></tt> &#8212; CGI-capable HTTP request handler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cookie.html"
+                        title="next chapter">20.22. <tt class="docutils literal docutils literal"><span class="pre">Cookie</span></tt> &#8212; HTTP state management</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/cookielib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cookie.html" title="20.22. Cookie — HTTP state management"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cgihttpserver.html" title="20.20. CGIHTTPServer — CGI-capable HTTP request handler"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" >20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

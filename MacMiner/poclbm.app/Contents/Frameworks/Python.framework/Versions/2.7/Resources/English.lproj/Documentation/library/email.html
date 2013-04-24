@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.1. email — An email and MIME handling package &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="18. Internet Data Handling" href="netdata.html" />
+    <link rel="next" title="18.1.1. email.message: Representing an email message" href="email.message.html" />
+    <link rel="prev" title="18. Internet Data Handling" href="netdata.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.message.html" title="18.1.1. email.message: Representing an email message"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="netdata.html" title="18. Internet Data Handling"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" accesskey="U">18. Internet Data Handling</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-email">
+<span id="email-an-email-and-mime-handling-package"></span><h1>18.1. <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> &#8212; An email and MIME handling package<a class="headerlink" href="#module-email" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<p>The <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package is a library for managing email messages, including
+MIME and other <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a>-based message documents.  It subsumes most of the
+functionality in several older standard modules such as <a class="reference internal" href="rfc822.html#module-rfc822" title="rfc822: Parse 2822 style mail messages. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rfc822</span></tt></a>,
+<a class="reference internal" href="mimetools.html#module-mimetools" title="mimetools: Tools for parsing MIME-style message bodies. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">mimetools</span></tt></a>, <a class="reference internal" href="multifile.html#module-multifile" title="multifile: Support for reading files which contain distinct parts, such as some MIME data. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">multifile</span></tt></a>, and other non-standard packages such as
+<tt class="xref py py-mod docutils literal"><span class="pre">mimecntl</span></tt>.  It is specifically <em>not</em> designed to do any sending of email
+messages to SMTP (<span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2821.html"><strong>RFC 2821</strong></a>), NNTP, or other servers; those are functions of
+modules such as <a class="reference internal" href="smtplib.html#module-smtplib" title="smtplib: SMTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">smtplib</span></tt></a> and <a class="reference internal" href="nntplib.html#module-nntplib" title="nntplib: NNTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">nntplib</span></tt></a>. The <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package
+attempts to be as RFC-compliant as possible, supporting in addition to
+<span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a>, such MIME-related RFCs as <span class="target" id="index-3"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2045.html"><strong>RFC 2045</strong></a>, <span class="target" id="index-4"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2046.html"><strong>RFC 2046</strong></a>, <span class="target" id="index-5"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2047.html"><strong>RFC 2047</strong></a>,
+and <span class="target" id="index-6"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2231.html"><strong>RFC 2231</strong></a>.</p>
+<p>The primary distinguishing feature of the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package is that it splits
+the parsing and generating of email messages from the internal <em>object model</em>
+representation of email.  Applications using the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package deal
+primarily with objects; you can add sub-objects to messages, remove sub-objects
+from messages, completely re-arrange the contents, etc.  There is a separate
+parser and a separate generator which handles the transformation from flat text
+to the object model, and then back to flat text again.  There are also handy
+subclasses for some common MIME object types, and a few miscellaneous utilities
+that help with such common tasks as extracting and parsing message field values,
+creating RFC-compliant dates, etc.</p>
+<p>The following sections describe the functionality of the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package.
+The ordering follows a progression that should be common in applications: an
+email message is read as flat text from a file or other source, the text is
+parsed to produce the object structure of the email message, this structure is
+manipulated, and finally, the object tree is rendered back into flat text.</p>
+<p>It is perfectly feasible to create the object structure out of whole cloth &#8212;
+i.e. completely from scratch.  From there, a similar progression can be taken as
+above.</p>
+<p>Also included are detailed specifications of all the classes and modules that
+the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package provides, the exception classes you might encounter
+while using the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package, some auxiliary utilities, and a few
+examples.  For users of the older <tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt> package, or previous versions
+of the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package, a section on differences and porting is provided.</p>
+<p>Contents of the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package documentation:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="email.message.html">18.1.1. <tt class="docutils literal"><span class="pre">email.message</span></tt>: Representing an email message</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.parser.html">18.1.2. <tt class="docutils literal"><span class="pre">email.parser</span></tt>: Parsing email messages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="email.parser.html#feedparser-api">18.1.2.1. FeedParser API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.parser.html#parser-class-api">18.1.2.2. Parser class API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.parser.html#additional-notes">18.1.2.3. Additional notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="email.generator.html">18.1.3. <tt class="docutils literal"><span class="pre">email.generator</span></tt>: Generating MIME documents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.mime.html">18.1.4. <tt class="docutils literal"><span class="pre">email.mime</span></tt>: Creating email and MIME objects from scratch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.header.html">18.1.5. <tt class="docutils literal"><span class="pre">email.header</span></tt>: Internationalized headers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.charset.html">18.1.6. <tt class="docutils literal"><span class="pre">email.charset</span></tt>: Representing character sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.encoders.html">18.1.7. <tt class="docutils literal"><span class="pre">email.encoders</span></tt>: Encoders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.errors.html">18.1.8. <tt class="docutils literal"><span class="pre">email.errors</span></tt>: Exception and Defect classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.util.html">18.1.9. <tt class="docutils literal"><span class="pre">email.utils</span></tt>: Miscellaneous utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email.iterators.html">18.1.10. <tt class="docutils literal"><span class="pre">email.iterators</span></tt>: Iterators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="email-examples.html">18.1.11. <tt class="docutils literal"><span class="pre">email</span></tt>: Examples</a></li>
+</ul>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="smtplib.html#module-smtplib" title="smtplib: SMTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">smtplib</span></tt></a></dt>
+<dd>SMTP protocol client</dd>
+<dt>Module <a class="reference internal" href="nntplib.html#module-nntplib" title="nntplib: NNTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">nntplib</span></tt></a></dt>
+<dd>NNTP protocol client</dd>
+</dl>
+</div>
+<div class="section" id="package-history">
+<span id="email-pkg-history"></span><h2>18.1.12. Package History<a class="headerlink" href="#package-history" title="Permalink to this headline">¶</a></h2>
+<p>This table describes the release history of the email package, corresponding to
+the version of Python that the package was released with.  For purposes of this
+document, when you see a note about change or added versions, these refer to the
+Python version the change was made in, <em>not</em> the email package version.  This
+table also describes the Python compatibility of each version of the package.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="44%" />
+<col width="34%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">email version</th>
+<th class="head">distributed with</th>
+<th class="head">compatible with</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">1.x</span></tt></td>
+<td>Python 2.2.0 to Python 2.2.1</td>
+<td><em>no longer supported</em></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">2.5</span></tt></td>
+<td>Python 2.2.2+ and Python 2.3</td>
+<td>Python 2.1 to 2.5</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">3.0</span></tt></td>
+<td>Python 2.4</td>
+<td>Python 2.3 to 2.5</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">4.0</span></tt></td>
+<td>Python 2.5</td>
+<td>Python 2.3 to 2.5</td>
+</tr>
+</tbody>
+</table>
+<p>Here are the major differences between <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> version 4 and version 3:</p>
+<ul>
+<li><p class="first">All modules have been renamed according to <span class="target" id="index-7"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0008"><strong>PEP 8</strong></a> standards.  For example,
+the version 3 module <tt class="xref py py-mod docutils literal"><span class="pre">email.Message</span></tt> was renamed to <a class="reference internal" href="email.message.html#module-email.message" title="email.message: The base class representing email messages."><tt class="xref py py-mod docutils literal"><span class="pre">email.message</span></tt></a> in
+version 4.</p>
+</li>
+<li><p class="first">A new subpackage <a class="reference internal" href="email.mime.html#module-email.mime" title="email.mime: Build MIME messages."><tt class="xref py py-mod docutils literal"><span class="pre">email.mime</span></tt></a> was added and all the version 3
+<tt class="xref py py-mod docutils literal"><span class="pre">email.MIME*</span></tt> modules were renamed and situated into the <a class="reference internal" href="email.mime.html#module-email.mime" title="email.mime: Build MIME messages."><tt class="xref py py-mod docutils literal"><span class="pre">email.mime</span></tt></a>
+subpackage.  For example, the version 3 module <tt class="xref py py-mod docutils literal"><span class="pre">email.MIMEText</span></tt> was renamed
+to <tt class="xref py py-mod docutils literal"><span class="pre">email.mime.text</span></tt>.</p>
+<p><em>Note that the version 3 names will continue to work until Python 2.6</em>.</p>
+</li>
+<li><p class="first">The <tt class="xref py py-mod docutils literal"><span class="pre">email.mime.application</span></tt> module was added, which contains the
+<tt class="xref py py-class docutils literal"><span class="pre">MIMEApplication</span></tt> class.</p>
+</li>
+<li><p class="first">Methods that were deprecated in version 3 have been removed.  These include
+<tt class="xref py py-meth docutils literal"><span class="pre">Generator.__call__()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">Message.get_type()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">Message.get_main_type()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">Message.get_subtype()</span></tt>.</p>
+</li>
+<li><p class="first">Fixes have been added for <span class="target" id="index-8"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2231.html"><strong>RFC 2231</strong></a> support which can change some of the
+return types for <tt class="xref py py-func docutils literal"><span class="pre">Message.get_param()</span></tt> and friends.  Under some
+circumstances, values which used to return a 3-tuple now return simple strings
+(specifically, if all extended parameter segments were unencoded, there is no
+language and charset designation expected, so the return type is now a simple
+string).  Also, %-decoding used to be done for both encoded and unencoded
+segments; this decoding is now done only for encoded segments.</p>
+</li>
+</ul>
+<p>Here are the major differences between <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> version 3 and version 2:</p>
+<ul class="simple">
+<li>The <tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt> class was introduced, and the <tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> class
+was implemented in terms of the <tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt>.  All parsing therefore is
+non-strict, and parsing will make a best effort never to raise an exception.
+Problems found while parsing messages are stored in the message&#8217;s <em>defect</em>
+attribute.</li>
+<li>All aspects of the API which raised <a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><tt class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></tt></a>s in version 2
+have been removed.  These include the <em>_encoder</em> argument to the
+<tt class="xref py py-class docutils literal"><span class="pre">MIMEText</span></tt> constructor, the <tt class="xref py py-meth docutils literal"><span class="pre">Message.add_payload()</span></tt> method, the
+<tt class="xref py py-func docutils literal"><span class="pre">Utils.dump_address_pair()</span></tt> function, and the functions <tt class="xref py py-func docutils literal"><span class="pre">Utils.decode()</span></tt>
+and <tt class="xref py py-func docutils literal"><span class="pre">Utils.encode()</span></tt>.</li>
+<li>New <a class="reference internal" href="exceptions.html#exceptions.DeprecationWarning" title="exceptions.DeprecationWarning"><tt class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></tt></a>s have been added to:
+<tt class="xref py py-meth docutils literal"><span class="pre">Generator.__call__()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">Message.get_type()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">Message.get_main_type()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">Message.get_subtype()</span></tt>, and the <em>strict</em>
+argument to the <tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> class.  These are expected to be removed in
+future versions.</li>
+<li>Support for Pythons earlier than 2.3 has been removed.</li>
+</ul>
+<p>Here are the differences between <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> version 2 and version 1:</p>
+<ul>
+<li><p class="first">The <tt class="xref py py-mod docutils literal"><span class="pre">email.Header</span></tt> and <tt class="xref py py-mod docutils literal"><span class="pre">email.Charset</span></tt> modules have been added.</p>
+</li>
+<li><p class="first">The pickle format for <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> instances has changed. Since this was
+never (and still isn&#8217;t) formally defined, this isn&#8217;t considered a backward
+incompatibility.  However if your application pickles and unpickles
+<tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> instances, be aware that in <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> version 2,
+<tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> instances now have private variables <em>_charset</em> and
+<em>_default_type</em>.</p>
+</li>
+<li><p class="first">Several methods in the <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> class have been deprecated, or their
+signatures changed.  Also, many new methods have been added.  See the
+documentation for the <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> class for details.  The changes should be
+completely backward compatible.</p>
+</li>
+<li><p class="first">The object structure has changed in the face of <em class="mimetype">message/rfc822</em>
+content types.  In <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> version 1, such a type would be represented by a
+scalar payload, i.e. the container message&#8217;s <tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt> returned
+false, <tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt> was not a list object, but a single <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt>
+instance.</p>
+<p>This structure was inconsistent with the rest of the package, so the object
+representation for <em class="mimetype">message/rfc822</em> content types was changed.  In
+<a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> version 2, the container <em>does</em> return <tt class="xref docutils literal"><span class="pre">True</span></tt> from
+<tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt>, and <tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt> returns a list containing a single
+<tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> item.</p>
+<p>Note that this is one place that backward compatibility could not be completely
+maintained.  However, if you&#8217;re already testing the return type of
+<tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt>, you should be fine.  You just need to make sure your code
+doesn&#8217;t do a <tt class="xref py py-meth docutils literal"><span class="pre">set_payload()</span></tt> with a <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> instance on a container
+with a content type of <em class="mimetype">message/rfc822</em>.</p>
+</li>
+<li><p class="first">The <tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> constructor&#8217;s <em>strict</em> argument was added, and its
+<tt class="xref py py-meth docutils literal"><span class="pre">parse()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">parsestr()</span></tt> methods grew a <em>headersonly</em> argument.  The
+<em>strict</em> flag was also added to functions <a class="reference internal" href="email.parser.html#email.message_from_file" title="email.message_from_file"><tt class="xref py py-func docutils literal"><span class="pre">email.message_from_file()</span></tt></a> and
+<a class="reference internal" href="email.parser.html#email.message_from_string" title="email.message_from_string"><tt class="xref py py-func docutils literal"><span class="pre">email.message_from_string()</span></tt></a>.</p>
+</li>
+<li><p class="first"><tt class="xref py py-meth docutils literal"><span class="pre">Generator.__call__()</span></tt> is deprecated; use <tt class="xref py py-meth docutils literal"><span class="pre">Generator.flatten()</span></tt>
+instead.  The <tt class="xref py py-class docutils literal"><span class="pre">Generator</span></tt> class has also grown the <tt class="xref py py-meth docutils literal"><span class="pre">clone()</span></tt> method.</p>
+</li>
+<li><p class="first">The <tt class="xref py py-class docutils literal"><span class="pre">DecodedGenerator</span></tt> class in the <tt class="xref py py-mod docutils literal"><span class="pre">email.Generator</span></tt> module was
+added.</p>
+</li>
+<li><p class="first">The intermediate base classes <tt class="xref py py-class docutils literal"><span class="pre">MIMENonMultipart</span></tt> and
+<tt class="xref py py-class docutils literal"><span class="pre">MIMEMultipart</span></tt> have been added, and interposed in the class hierarchy
+for most of the other MIME-related derived classes.</p>
+</li>
+<li><p class="first">The <em>_encoder</em> argument to the <tt class="xref py py-class docutils literal"><span class="pre">MIMEText</span></tt> constructor has been
+deprecated.  Encoding  now happens implicitly based on the <em>_charset</em> argument.</p>
+</li>
+<li><p class="first">The following functions in the <tt class="xref py py-mod docutils literal"><span class="pre">email.Utils</span></tt> module have been deprecated:
+<tt class="xref py py-func docutils literal"><span class="pre">dump_address_pairs()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">decode()</span></tt>, and <tt class="xref py py-func docutils literal"><span class="pre">encode()</span></tt>.  The following
+functions have been added to the module: <tt class="xref py py-func docutils literal"><span class="pre">make_msgid()</span></tt>,
+<tt class="xref py py-func docutils literal"><span class="pre">decode_rfc2231()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">encode_rfc2231()</span></tt>, and <tt class="xref py py-func docutils literal"><span class="pre">decode_params()</span></tt>.</p>
+</li>
+<li><p class="first">The non-public function <tt class="xref py py-func docutils literal"><span class="pre">email.Iterators._structure()</span></tt> was added.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="differences-from-mimelib">
+<h2>18.1.13. Differences from <tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt><a class="headerlink" href="#differences-from-mimelib" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package was originally prototyped as a separate library called
+<a class="reference external" href="http://mimelib.sf.net/">mimelib</a>. Changes have been made so that method names
+are more consistent, and some methods or modules have either been added or
+removed.  The semantics of some of the methods have also changed.  For the most
+part, any functionality available in <tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt> is still available in the
+<a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package, albeit often in a different way.  Backward compatibility
+between the <tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt> package and the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package was not a
+priority.</p>
+<p>Here is a brief description of the differences between the <tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt> and
+the <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> packages, along with hints on how to port your applications.</p>
+<p>Of course, the most visible difference between the two packages is that the
+package name has been changed to <a class="reference internal" href="#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a>.  In addition, the top-level
+package has the following differences:</p>
+<ul class="simple">
+<li><tt class="xref py py-func docutils literal"><span class="pre">messageFromString()</span></tt> has been renamed to <a class="reference internal" href="email.parser.html#email.message_from_string" title="email.message_from_string"><tt class="xref py py-func docutils literal"><span class="pre">message_from_string()</span></tt></a>.</li>
+<li><tt class="xref py py-func docutils literal"><span class="pre">messageFromFile()</span></tt> has been renamed to <a class="reference internal" href="email.parser.html#email.message_from_file" title="email.message_from_file"><tt class="xref py py-func docutils literal"><span class="pre">message_from_file()</span></tt></a>.</li>
+</ul>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> class has the following differences:</p>
+<ul class="simple">
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">asString()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">as_string()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">ismultipart()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt>.</li>
+<li>The <tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt> method has grown a <em>decode</em> optional argument.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getall()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_all()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">addheader()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">add_header()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">gettype()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_type()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getmaintype()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_main_type()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getsubtype()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_subtype()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getparams()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_params()</span></tt>. Also, whereas
+<tt class="xref py py-meth docutils literal"><span class="pre">getparams()</span></tt> returned a list of strings, <tt class="xref py py-meth docutils literal"><span class="pre">get_params()</span></tt> returns a list
+of 2-tuples, effectively the key/value pairs of the parameters, split on the
+<tt class="docutils literal"><span class="pre">'='</span></tt> sign.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getparam()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_param()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getcharsets()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_charsets()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getfilename()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_filename()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getboundary()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">get_boundary()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">setboundary()</span></tt> was renamed to <tt class="xref py py-meth docutils literal"><span class="pre">set_boundary()</span></tt>.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getdecodedpayload()</span></tt> was removed.  To get similar
+functionality, pass the value 1 to the <em>decode</em> flag of the get_payload()
+method.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getpayloadastext()</span></tt> was removed.  Similar functionality is
+supported by the <tt class="xref py py-class docutils literal"><span class="pre">DecodedGenerator</span></tt> class in the <a class="reference internal" href="email.generator.html#module-email.generator" title="email.generator: Generate flat text email messages from a message structure."><tt class="xref py py-mod docutils literal"><span class="pre">email.generator</span></tt></a>
+module.</li>
+<li>The method <tt class="xref py py-meth docutils literal"><span class="pre">getbodyastext()</span></tt> was removed.  You can get similar
+functionality by creating an iterator with <tt class="xref py py-func docutils literal"><span class="pre">typed_subpart_iterator()</span></tt> in the
+<a class="reference internal" href="email.iterators.html#module-email.iterators" title="email.iterators: Iterate over a  message object tree."><tt class="xref py py-mod docutils literal"><span class="pre">email.iterators</span></tt></a> module.</li>
+</ul>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> class has no differences in its public interface. It does
+have some additional smarts to recognize <em class="mimetype">message/delivery-status</em>
+type messages, which it represents as a <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> instance containing
+separate <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> subparts for each header block in the delivery status
+notification <a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<p>The <tt class="xref py py-class docutils literal"><span class="pre">Generator</span></tt> class has no differences in its public interface.  There
+is a new class in the <a class="reference internal" href="email.generator.html#module-email.generator" title="email.generator: Generate flat text email messages from a message structure."><tt class="xref py py-mod docutils literal"><span class="pre">email.generator</span></tt></a> module though, called
+<tt class="xref py py-class docutils literal"><span class="pre">DecodedGenerator</span></tt> which provides most of the functionality previously
+available in the <tt class="xref py py-meth docutils literal"><span class="pre">Message.getpayloadastext()</span></tt> method.</p>
+<p>The following modules and classes have been changed:</p>
+<ul>
+<li><p class="first">The <tt class="xref py py-class docutils literal"><span class="pre">MIMEBase</span></tt> class constructor arguments <em>_major</em> and <em>_minor</em> have
+changed to <em>_maintype</em> and <em>_subtype</em> respectively.</p>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">Image</span></tt> class/module has been renamed to <tt class="docutils literal"><span class="pre">MIMEImage</span></tt>.  The <em>_minor</em>
+argument has been renamed to <em>_subtype</em>.</p>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">Text</span></tt> class/module has been renamed to <tt class="docutils literal"><span class="pre">MIMEText</span></tt>.  The <em>_minor</em>
+argument has been renamed to <em>_subtype</em>.</p>
+</li>
+<li><p class="first">The <tt class="docutils literal"><span class="pre">MessageRFC822</span></tt> class/module has been renamed to <tt class="docutils literal"><span class="pre">MIMEMessage</span></tt>.  Note
+that an earlier version of <tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt> called this class/module <tt class="docutils literal"><span class="pre">RFC822</span></tt>,
+but that clashed with the Python standard library module <a class="reference internal" href="rfc822.html#module-rfc822" title="rfc822: Parse 2822 style mail messages. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rfc822</span></tt></a> on some
+case-insensitive file systems.</p>
+<p>Also, the <tt class="xref py py-class docutils literal"><span class="pre">MIMEMessage</span></tt> class now represents any kind of MIME message
+with main type <em class="mimetype">message</em>.  It takes an optional argument <em>_subtype</em>
+which is used to set the MIME subtype.  <em>_subtype</em> defaults to
+<em class="mimetype">rfc822</em>.</p>
+</li>
+</ul>
+<p><tt class="xref py py-mod docutils literal"><span class="pre">mimelib</span></tt> provided some utility functions in its <tt class="xref py py-mod docutils literal"><span class="pre">address</span></tt> and
+<tt class="xref py py-mod docutils literal"><span class="pre">date</span></tt> modules.  All of these functions have been moved to the
+<a class="reference internal" href="email.util.html#module-email.utils" title="email.utils: Miscellaneous email package utilities."><tt class="xref py py-mod docutils literal"><span class="pre">email.utils</span></tt></a> module.</p>
+<p>The <tt class="docutils literal"><span class="pre">MsgReader</span></tt> class/module has been removed.  Its functionality is most
+closely supported in the <tt class="xref py py-func docutils literal"><span class="pre">body_line_iterator()</span></tt> function in the
+<a class="reference internal" href="email.iterators.html#module-email.iterators" title="email.iterators: Iterate over a  message object tree."><tt class="xref py py-mod docutils literal"><span class="pre">email.iterators</span></tt></a> module.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Delivery Status Notifications (DSN) are defined in <span class="target" id="index-9"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc1894.html"><strong>RFC 1894</strong></a>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.1. <tt class="docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a><ul>
+<li><a class="reference internal" href="#package-history">18.1.12. Package History</a></li>
+<li><a class="reference internal" href="#differences-from-mimelib">18.1.13. Differences from <tt class="docutils literal"><span class="pre">mimelib</span></tt></a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="netdata.html"
+                        title="previous chapter">18. Internet Data Handling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="email.message.html"
+                        title="next chapter">18.1.1. <tt class="docutils literal"><span class="pre">email.message</span></tt>: Representing an email message</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/email.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.message.html" title="18.1.1. email.message: Representing an email message"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="netdata.html" title="18. Internet Data Handling"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

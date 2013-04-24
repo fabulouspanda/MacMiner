@@ -1,0 +1,812 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HOWTO Use Python in the web &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python HOWTOs" href="index.html" />
+    <link rel="next" title="Argparse Tutorial" href="argparse.html" />
+    <link rel="prev" title="HOWTO Fetch Internet Resources Using urllib2" href="urllib2.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="argparse.html" title="Argparse Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="HOWTO Fetch Internet Resources Using urllib2"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="howto-use-python-in-the-web">
+<h1>HOWTO Use Python in the web<a class="headerlink" href="#howto-use-python-in-the-web" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Marek Kubica</td>
+</tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">Abstract</p>
+<p>This document shows how Python fits into the web.  It presents some ways
+to integrate Python with a web server, and general practices useful for
+developing web sites.</p>
+</div>
+<p>Programming for the Web has become a hot topic since the rise of &#8220;Web 2.0&#8221;,
+which focuses on user-generated content on web sites.  It has always been
+possible to use Python for creating web sites, but it was a rather tedious task.
+Therefore, many frameworks and helper tools have been created to assist
+developers in creating faster and more robust sites.  This HOWTO describes
+some of the methods used to combine Python with a web server to create
+dynamic content.  It is not meant as a complete introduction, as this topic is
+far too broad to be covered in one single document.  However, a short overview
+of the most popular libraries is provided.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">While this HOWTO tries to give an overview of Python in the web, it cannot
+always be as up to date as desired.  Web development in Python is rapidly
+moving forward, so the wiki page on <a class="reference external" href="http://wiki.python.org/moin/WebProgramming">Web Programming</a> may be more in sync with
+recent development.</p>
+</div>
+<div class="section" id="the-low-level-view">
+<h2>The Low-Level View<a class="headerlink" href="#the-low-level-view" title="Permalink to this headline">¶</a></h2>
+<p>When a user enters a web site, their browser makes a connection to the site&#8217;s
+web server (this is called the <em>request</em>).  The server looks up the file in the
+file system and sends it back to the user&#8217;s browser, which displays it (this is
+the <em>response</em>).  This is roughly how the underlying protocol, HTTP, works.</p>
+<p>Dynamic web sites are not based on files in the file system, but rather on
+programs which are run by the web server when a request comes in, and which
+<em>generate</em> the content that is returned to the user.  They can do all sorts of
+useful things, like display the postings of a bulletin board, show your email,
+configure software, or just display the current time.  These programs can be
+written in any programming language the server supports.  Since most servers
+support Python, it is easy to use Python to create dynamic web sites.</p>
+<p>Most HTTP servers are written in C or C++, so they cannot execute Python code
+directly &#8211; a bridge is needed between the server and the program.  These
+bridges, or rather interfaces, define how programs interact with the server.
+There have been numerous attempts to create the best possible interface, but
+there are only a few worth mentioning.</p>
+<p>Not every web server supports every interface.  Many web servers only support
+old, now-obsolete interfaces; however, they can often be extended using
+third-party modules to support newer ones.</p>
+<div class="section" id="common-gateway-interface">
+<h3>Common Gateway Interface<a class="headerlink" href="#common-gateway-interface" title="Permalink to this headline">¶</a></h3>
+<p>This interface, most commonly referred to as &#8220;CGI&#8221;, is the oldest, and is
+supported by nearly every web server out of the box.  Programs using CGI to
+communicate with their web server need to be started by the server for every
+request.  So, every request starts a new Python interpreter &#8211; which takes some
+time to start up &#8211; thus making the whole interface only usable for low load
+situations.</p>
+<p>The upside of CGI is that it is simple &#8211; writing a Python program which uses
+CGI is a matter of about three lines of code.  This simplicity comes at a
+price: it does very few things to help the developer.</p>
+<p>Writing CGI programs, while still possible, is no longer recommended.  With
+<a class="reference internal" href="#wsgi"><em>WSGI</em></a>, a topic covered later in this document, it is possible to write
+programs that emulate CGI, so they can be run as CGI if no better option is
+available.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>The Python standard library includes some modules that are helpful for
+creating plain CGI programs:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../library/cgi.html#module-cgi" title="cgi: Helpers for running Python scripts via the Common Gateway Interface."><tt class="xref py py-mod docutils literal"><span class="pre">cgi</span></tt></a> &#8211; Handling of user input in CGI scripts</li>
+<li><a class="reference internal" href="../library/cgitb.html#module-cgitb" title="cgitb: Configurable traceback handler for CGI scripts."><tt class="xref py py-mod docutils literal"><span class="pre">cgitb</span></tt></a> &#8211; Displays nice tracebacks when errors happen in CGI
+applications, instead of presenting a &#8220;500 Internal Server Error&#8221; message</li>
+</ul>
+<p class="last">The Python wiki features a page on <a class="reference external" href="http://wiki.python.org/moin/CgiScripts">CGI scripts</a> with some additional information
+about CGI in Python.</p>
+</div>
+<div class="section" id="simple-script-for-testing-cgi">
+<h4>Simple script for testing CGI<a class="headerlink" href="#simple-script-for-testing-cgi" title="Permalink to this headline">¶</a></h4>
+<p>To test whether your web server works with CGI, you can use this short and
+simple CGI program:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: UTF-8 -*-</span>
+
+<span class="c"># enable debugging</span>
+<span class="kn">import</span> <span class="nn">cgitb</span>
+<span class="n">cgitb</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+<span class="k">print</span> <span class="s">&quot;Content-Type: text/plain;charset=utf-8&quot;</span>
+<span class="k">print</span>
+
+<span class="k">print</span> <span class="s">&quot;Hello World!&quot;</span>
+</pre></div>
+</div>
+<p>Depending on your web server configuration, you may need to save this code with
+a <tt class="docutils literal"><span class="pre">.py</span></tt> or <tt class="docutils literal"><span class="pre">.cgi</span></tt> extension.  Additionally, this file may also need to be
+in a <tt class="docutils literal"><span class="pre">cgi-bin</span></tt> folder, for security reasons.</p>
+<p>You might wonder what the <tt class="docutils literal"><span class="pre">cgitb</span></tt> line is about.  This line makes it possible
+to display a nice traceback instead of just crashing and displaying an &#8220;Internal
+Server Error&#8221; in the user&#8217;s browser.  This is useful for debugging, but it might
+risk exposing some confidential data to the user.  You should not use <tt class="docutils literal"><span class="pre">cgitb</span></tt>
+in production code for this reason.  You should <em>always</em> catch exceptions, and
+display proper error pages &#8211; end-users don&#8217;t like to see nondescript &#8220;Internal
+Server Errors&#8221; in their browsers.</p>
+</div>
+<div class="section" id="setting-up-cgi-on-your-own-server">
+<h4>Setting up CGI on your own server<a class="headerlink" href="#setting-up-cgi-on-your-own-server" title="Permalink to this headline">¶</a></h4>
+<p>If you don&#8217;t have your own web server, this does not apply to you.  You can
+check whether it works as-is, and if not you will need to talk to the
+administrator of your web server. If it is a big host, you can try filing a
+ticket asking for Python support.</p>
+<p>If you are your own administrator or want to set up CGI for testing purposes on
+your own computers, you have to configure it by yourself.  There is no single
+way to configure CGI, as there are many web servers with different
+configuration options.  Currently the most widely used free web server is
+<a class="reference external" href="http://httpd.apache.org/">Apache HTTPd</a>, or Apache for short. Apache can be
+easily installed on nearly every system using the system&#8217;s package management
+tool.  <a class="reference external" href="http://www.lighttpd.net">lighttpd</a> is another alternative and is
+said to have better performance.  On many systems this server can also be
+installed using the package management tool, so manually compiling the web
+server may not be needed.</p>
+<ul class="simple">
+<li>On Apache you can take a look at the <a class="reference external" href="http://httpd.apache.org/docs/2.2/howto/cgi.html">Dynamic Content with CGI</a> tutorial, where everything
+is described.  Most of the time it is enough just to set <tt class="docutils literal"><span class="pre">+ExecCGI</span></tt>.  The
+tutorial also describes the most common gotchas that might arise.</li>
+<li>On lighttpd you need to use the <a class="reference external" href="http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModCGI">CGI module</a>, which can be configured
+in a straightforward way.  It boils down to setting <tt class="docutils literal"><span class="pre">cgi.assign</span></tt> properly.</li>
+</ul>
+</div>
+<div class="section" id="common-problems-with-cgi-scripts">
+<h4>Common problems with CGI scripts<a class="headerlink" href="#common-problems-with-cgi-scripts" title="Permalink to this headline">¶</a></h4>
+<p>Using CGI sometimes leads to small annoyances while trying to get these
+scripts to run.  Sometimes a seemingly correct script does not work as
+expected, the cause being some small hidden problem that&#8217;s difficult to spot.</p>
+<p>Some of these potential problems are:</p>
+<ul class="simple">
+<li>The Python script is not marked as executable.  When CGI scripts are not
+executable most web servers will let the user download it, instead of
+running it and sending the output to the user.  For CGI scripts to run
+properly on Unix-like operating systems, the <tt class="docutils literal"><span class="pre">+x</span></tt> bit needs to be set.
+Using <tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">a+x</span> <span class="pre">your_script.py</span></tt> may solve this problem.</li>
+<li>On a Unix-like system, The line endings in the program file must be Unix
+style line endings.  This is important because the web server checks the
+first line of the script (called shebang) and tries to run the program
+specified there.  It gets easily confused by Windows line endings (Carriage
+Return &amp; Line Feed, also called CRLF), so you have to convert the file to
+Unix line endings (only Line Feed, LF).  This can be done automatically by
+uploading the file via FTP in text mode instead of binary mode, but the
+preferred way is just telling your editor to save the files with Unix line
+endings.  Most editors support this.</li>
+<li>Your web server must be able to read the file, and you need to make sure the
+permissions are correct.  On unix-like systems, the server often runs as user
+and group <tt class="docutils literal"><span class="pre">www-data</span></tt>, so it might be worth a try to change the file
+ownership, or making the file world readable by using <tt class="docutils literal"><span class="pre">chmod</span> <span class="pre">a+r</span>
+<span class="pre">your_script.py</span></tt>.</li>
+<li>The web server must know that the file you&#8217;re trying to access is a CGI script.
+Check the configuration of your web server, as it may be configured
+to expect a specific file extension for CGI scripts.</li>
+<li>On Unix-like systems, the path to the interpreter in the shebang
+(<tt class="docutils literal"><span class="pre">#!/usr/bin/env</span> <span class="pre">python</span></tt>) must be correct.  This line calls
+<tt class="docutils literal"><span class="pre">/usr/bin/env</span></tt> to find Python, but it will fail if there is no
+<tt class="docutils literal"><span class="pre">/usr/bin/env</span></tt>, or if Python is not in the web server&#8217;s path.  If you know
+where your Python is installed, you can also use that full path.  The
+commands <tt class="docutils literal"><span class="pre">whereis</span> <span class="pre">python</span></tt> and <tt class="docutils literal"><span class="pre">type</span> <span class="pre">-p</span> <span class="pre">python</span></tt> could help you find
+where it is installed.  Once you know the path, you can change the shebang
+accordingly: <tt class="docutils literal"><span class="pre">#!/usr/bin/python</span></tt>.</li>
+<li>The file must not contain a BOM (Byte Order Mark). The BOM is meant for
+determining the byte order of UTF-16 and UTF-32 encodings, but some editors
+write this also into UTF-8 files.  The BOM interferes with the shebang line,
+so be sure to tell your editor not to write the BOM.</li>
+<li>If the web server is using <a class="reference internal" href="#mod-python"><em>mod_python</em></a>, <tt class="docutils literal"><span class="pre">mod_python</span></tt> may be having
+problems.  <tt class="docutils literal"><span class="pre">mod_python</span></tt> is able to handle CGI scripts by itself, but it can
+also be a source of issues.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="mod-python">
+<span id="id1"></span><h3>mod_python<a class="headerlink" href="#mod-python" title="Permalink to this headline">¶</a></h3>
+<p>People coming from PHP often find it hard to grasp how to use Python in the web.
+Their first thought is mostly <a class="reference external" href="http://www.modpython.org/">mod_python</a>,
+because they think that this is the equivalent to <tt class="docutils literal"><span class="pre">mod_php</span></tt>.  Actually, there
+are many differences.  What <tt class="docutils literal"><span class="pre">mod_python</span></tt> does is embed the interpreter into
+the Apache process, thus speeding up requests by not having to start a Python
+interpreter for each request.  On the other hand, it is not &#8220;Python intermixed
+with HTML&#8221; in the way that PHP is often intermixed with HTML. The Python
+equivalent of that is a template engine.  <tt class="docutils literal"><span class="pre">mod_python</span></tt> itself is much more
+powerful and provides more access to Apache internals.  It can emulate CGI,
+work in a &#8220;Python Server Pages&#8221; mode (similar to JSP) which is &#8220;HTML
+intermingled with Python&#8221;, and it has a &#8220;Publisher&#8221; which designates one file
+to accept all requests and decide what to do with them.</p>
+<p><tt class="docutils literal"><span class="pre">mod_python</span></tt> does have some problems.  Unlike the PHP interpreter, the Python
+interpreter uses caching when executing files, so changes to a file will
+require the web server to be restarted.  Another problem is the basic concept
+&#8211; Apache starts child processes to handle the requests, and unfortunately
+every child process needs to load the whole Python interpreter even if it does
+not use it.  This makes the whole web server slower.  Another problem is that,
+because <tt class="docutils literal"><span class="pre">mod_python</span></tt> is linked against a specific version of <tt class="docutils literal"><span class="pre">libpython</span></tt>,
+it is not possible to switch from an older version to a newer (e.g. 2.4 to 2.5)
+without recompiling <tt class="docutils literal"><span class="pre">mod_python</span></tt>.  <tt class="docutils literal"><span class="pre">mod_python</span></tt> is also bound to the Apache
+web server, so programs written for <tt class="docutils literal"><span class="pre">mod_python</span></tt> cannot easily run on other
+web servers.</p>
+<p>These are the reasons why <tt class="docutils literal"><span class="pre">mod_python</span></tt> should be avoided when writing new
+programs.  In some circumstances it still might be a good idea to use
+<tt class="docutils literal"><span class="pre">mod_python</span></tt> for deployment, but WSGI makes it possible to run WSGI programs
+under <tt class="docutils literal"><span class="pre">mod_python</span></tt> as well.</p>
+</div>
+<div class="section" id="fastcgi-and-scgi">
+<h3>FastCGI and SCGI<a class="headerlink" href="#fastcgi-and-scgi" title="Permalink to this headline">¶</a></h3>
+<p>FastCGI and SCGI try to solve the performance problem of CGI in another way.
+Instead of embedding the interpreter into the web server, they create
+long-running background processes. There is still a module in the web server
+which makes it possible for the web server to &#8220;speak&#8221; with the background
+process.  As the background process is independent of the server, it can be
+written in any language, including Python.  The language just needs to have a
+library which handles the communication with the webserver.</p>
+<p>The difference between FastCGI and SCGI is very small, as SCGI is essentially
+just a &#8220;simpler FastCGI&#8221;.  As the web server support for SCGI is limited,
+most people use FastCGI instead, which works the same way.  Almost everything
+that applies to SCGI also applies to FastCGI as well, so we&#8217;ll only cover
+the latter.</p>
+<p>These days, FastCGI is never used directly.  Just like <tt class="docutils literal"><span class="pre">mod_python</span></tt>, it is only
+used for the deployment of WSGI applications.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<ul class="last simple">
+<li><a class="reference external" href="http://www.vmunix.com/mark/blog/archives/2006/01/02/fastcgi-scgi-and-apache-background-and-future/">FastCGI, SCGI, and Apache: Background and Future</a>
+is a discussion on why the concept of FastCGI and SCGI is better than that
+of mod_python.</li>
+</ul>
+</div>
+<div class="section" id="setting-up-fastcgi">
+<h4>Setting up FastCGI<a class="headerlink" href="#setting-up-fastcgi" title="Permalink to this headline">¶</a></h4>
+<p>Each web server requires a specific module.</p>
+<ul class="simple">
+<li>Apache has both <a class="reference external" href="http://www.fastcgi.com/drupal/">mod_fastcgi</a> and <a class="reference external" href="http://httpd.apache.org/mod_fcgid/">mod_fcgid</a>.  <tt class="docutils literal"><span class="pre">mod_fastcgi</span></tt> is the original one, but it
+has some licensing issues, which is why it is sometimes considered non-free.
+<tt class="docutils literal"><span class="pre">mod_fcgid</span></tt> is a smaller, compatible alternative.  One of these modules needs
+to be loaded by Apache.</li>
+<li>lighttpd ships its own <a class="reference external" href="http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModFastCGI">FastCGI module</a> as well as an
+<a class="reference external" href="http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModSCGI">SCGI module</a>.</li>
+<li><a class="reference external" href="http://nginx.org/">nginx</a> also supports <a class="reference external" href="http://wiki.nginx.org/NginxSimplePythonFCGI">FastCGI</a>.</li>
+</ul>
+<p>Once you have installed and configured the module, you can test it with the
+following WSGI-application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- coding: UTF-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">cgi</span> <span class="kn">import</span> <span class="n">escape</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">flup.server.fcgi</span> <span class="kn">import</span> <span class="n">WSGIServer</span>
+
+<span class="k">def</span> <span class="nf">app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+    <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;200 OK&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s">&#39;text/html&#39;</span><span class="p">)])</span>
+
+    <span class="k">yield</span> <span class="s">&#39;&lt;h1&gt;FastCGI Environment&lt;/h1&gt;&#39;</span>
+    <span class="k">yield</span> <span class="s">&#39;&lt;table&gt;&#39;</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+         <span class="k">yield</span> <span class="s">&#39;&lt;tr&gt;&lt;th&gt;</span><span class="si">%s</span><span class="s">&lt;/th&gt;&lt;td&gt;</span><span class="si">%s</span><span class="s">&lt;/td&gt;&lt;/tr&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">escape</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">escape</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="k">yield</span> <span class="s">&#39;&lt;/table&gt;&#39;</span>
+
+<span class="n">WSGIServer</span><span class="p">(</span><span class="n">app</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is a simple WSGI application, but you need to install <a class="reference external" href="http://pypi.python.org/pypi/flup/1.0">flup</a> first, as flup handles the low level
+FastCGI access.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">There is some documentation on <a class="reference external" href="http://docs.djangoproject.com/en/dev/howto/deployment/fastcgi/">setting up Django with FastCGI</a>, most of
+which can be reused for other WSGI-compliant frameworks and libraries.
+Only the <tt class="docutils literal"><span class="pre">manage.py</span></tt> part has to be changed, the example used here can be
+used instead.  Django does more or less the exact same thing.</p>
+</div>
+</div>
+</div>
+<div class="section" id="mod-wsgi">
+<h3>mod_wsgi<a class="headerlink" href="#mod-wsgi" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://code.google.com/p/modwsgi/">mod_wsgi</a> is an attempt to get rid of the
+low level gateways.  Given that FastCGI, SCGI, and mod_python are mostly used to
+deploy WSGI applications, mod_wsgi was started to directly embed WSGI applications
+into the Apache web server. mod_wsgi is specifically designed to host WSGI
+applications.  It makes the deployment of WSGI applications much easier than
+deployment using other low level methods, which need glue code.  The downside
+is that mod_wsgi is limited to the Apache web server; other servers would need
+their own implementations of mod_wsgi.</p>
+<p>mod_wsgi supports two modes: embedded mode, in which it integrates with the
+Apache process, and daemon mode, which is more FastCGI-like.  Unlike FastCGI,
+mod_wsgi handles the worker-processes by itself, which makes administration
+easier.</p>
+</div>
+</div>
+<div class="section" id="step-back-wsgi">
+<span id="wsgi"></span><h2>Step back: WSGI<a class="headerlink" href="#step-back-wsgi" title="Permalink to this headline">¶</a></h2>
+<p>WSGI has already been mentioned several times, so it has to be something
+important.  In fact it really is, and now it is time to explain it.</p>
+<p>The <em>Web Server Gateway Interface</em>,  or WSGI for short, is defined in
+<span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0333"><strong>PEP 333</strong></a> and is currently the best way to do Python web programming.  While
+it is great for programmers writing frameworks, a normal web developer does not
+need to get in direct contact with it.  When choosing a framework for web
+development it is a good idea to choose one which supports WSGI.</p>
+<p>The big benefit of WSGI is the unification of the application programming
+interface.  When your program is compatible with WSGI &#8211; which at the outer
+level means that the framework you are using has support for WSGI &#8211; your
+program can be deployed via any web server interface for which there are WSGI
+wrappers.  You do not need to care about whether the application user uses
+mod_python or FastCGI or mod_wsgi &#8211; with WSGI your application will work on
+any gateway interface.  The Python standard library contains its own WSGI
+server, <a class="reference internal" href="../library/wsgiref.html#module-wsgiref" title="wsgiref: WSGI Utilities and Reference Implementation."><tt class="xref py py-mod docutils literal"><span class="pre">wsgiref</span></tt></a>, which is a small web server that can be used for
+testing.</p>
+<p>A really great WSGI feature is middleware.  Middleware is a layer around your
+program which can add various functionality to it.  There is quite a bit of
+<a class="reference external" href="http://www.wsgi.org/en/latest/libraries.html">middleware</a> already
+available.  For example, instead of writing your own session management (HTTP
+is a stateless protocol, so to associate multiple HTTP requests with a single
+user your application must create and manage such state via a session), you can
+just download middleware which does that, plug it in, and get on with coding
+the unique parts of your application.  The same thing with compression &#8211; there
+is existing middleware which handles compressing your HTML using gzip to save
+on your server&#8217;s bandwidth.  Authentication is another a problem easily solved
+using existing middleware.</p>
+<p>Although WSGI may seem complex, the initial phase of learning can be very
+rewarding because WSGI and the associated middleware already have solutions to
+many problems that might arise while developing web sites.</p>
+<div class="section" id="wsgi-servers">
+<h3>WSGI Servers<a class="headerlink" href="#wsgi-servers" title="Permalink to this headline">¶</a></h3>
+<p>The code that is used to connect to various low level gateways like CGI or
+mod_python is called a <em>WSGI server</em>.  One of these servers is <tt class="docutils literal"><span class="pre">flup</span></tt>, which
+supports FastCGI and SCGI, as well as <a class="reference external" href="http://en.wikipedia.org/wiki/Apache_JServ_Protocol">AJP</a>.  Some of these servers
+are written in Python, as <tt class="docutils literal"><span class="pre">flup</span></tt> is, but there also exist others which are
+written in C and can be used as drop-in replacements.</p>
+<p>There are many servers already available, so a Python web application
+can be deployed nearly anywhere.  This is one big advantage that Python has
+compared with other web technologies.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>A good overview of WSGI-related code can be found in the <a class="reference external" href="http://www.wsgi.org/en/latest/index.html">WSGI homepage</a>, which contains an extensive list of <a class="reference external" href="http://www.wsgi.org/en/latest/servers.html">WSGI servers</a> which can be used by <em>any</em> application
+supporting WSGI.</p>
+<p>You might be interested in some WSGI-supporting modules already contained in
+the standard library, namely:</p>
+<ul class="last simple">
+<li><a class="reference internal" href="../library/wsgiref.html#module-wsgiref" title="wsgiref: WSGI Utilities and Reference Implementation."><tt class="xref py py-mod docutils literal"><span class="pre">wsgiref</span></tt></a> &#8211; some tiny utilities and servers for WSGI</li>
+</ul>
+</div>
+</div>
+<div class="section" id="case-study-moinmoin">
+<h3>Case study: MoinMoin<a class="headerlink" href="#case-study-moinmoin" title="Permalink to this headline">¶</a></h3>
+<p>What does WSGI give the web application developer?  Let&#8217;s take a look at
+an application that&#8217;s been around for a while, which was written in
+Python without using WSGI.</p>
+<p>One of the most widely used wiki software packages is <a class="reference external" href="http://moinmo.in/">MoinMoin</a>.  It was created in 2000, so it predates WSGI by about
+three years.  Older versions needed separate code to run on CGI, mod_python,
+FastCGI and standalone.</p>
+<p>It now includes support for WSGI.  Using WSGI, it is possible to deploy
+MoinMoin on any WSGI compliant server, with no additional glue code.
+Unlike the pre-WSGI versions, this could include WSGI servers that the
+authors of MoinMoin know nothing about.</p>
+</div>
+</div>
+<div class="section" id="model-view-controller">
+<h2>Model-View-Controller<a class="headerlink" href="#model-view-controller" title="Permalink to this headline">¶</a></h2>
+<p>The term <em>MVC</em> is often encountered in statements such as &#8220;framework <em>foo</em>
+supports MVC&#8221;.  MVC is more about the overall organization of code, rather than
+any particular API.  Many web frameworks use this model to help the developer
+bring structure to their program.  Bigger web applications can have lots of
+code, so it is a good idea to have an effective structure right from the beginning.
+That way, even users of other frameworks (or even other languages, since MVC is
+not Python-specific) can easily understand the code, given that they are
+already familiar with the MVC structure.</p>
+<p>MVC stands for three components:</p>
+<ul class="simple">
+<li>The <em>model</em>.  This is the data that will be displayed and modified.  In
+Python frameworks, this component is often represented by the classes used by
+an object-relational mapper.</li>
+<li>The <em>view</em>.  This component&#8217;s job is to display the data of the model to the
+user.  Typically this component is implemented via templates.</li>
+<li>The <em>controller</em>.  This is the layer between the user and the model.  The
+controller reacts to user actions (like opening some specific URL), tells
+the model to modify the data if necessary, and tells the view code what to
+display,</li>
+</ul>
+<p>While one might think that MVC is a complex design pattern, in fact it is not.
+It is used in Python because it has turned out to be useful for creating clean,
+maintainable web sites.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">While not all Python frameworks explicitly support MVC, it is often trivial
+to create a web site which uses the MVC pattern by separating the data logic
+(the model) from the user interaction logic (the controller) and the
+templates (the view).  That&#8217;s why it is important not to write unnecessary
+Python code in the templates &#8211; it works against the MVC model and creates
+chaos in the code base, making it harder to understand and modify.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">The English Wikipedia has an article about the <a class="reference external" href="http://en.wikipedia.org/wiki/Model-view-controller">Model-View-Controller pattern</a>.  It includes a long
+list of web frameworks for various programming languages.</p>
+</div>
+</div>
+<div class="section" id="ingredients-for-websites">
+<h2>Ingredients for Websites<a class="headerlink" href="#ingredients-for-websites" title="Permalink to this headline">¶</a></h2>
+<p>Websites are complex constructs, so tools have been created to help web
+developers make their code easier to write and more maintainable.  Tools like
+these exist for all web frameworks in all languages.  Developers are not forced
+to use these tools, and often there is no &#8220;best&#8221; tool.  It is worth learning
+about the available tools because they can greatly simplify the process of
+developing a web site.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">There are far more components than can be presented here.  The Python wiki
+has a page about these components, called
+<a class="reference external" href="http://wiki.python.org/moin/WebComponents">Web Components</a>.</p>
+</div>
+<div class="section" id="templates">
+<h3>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h3>
+<p>Mixing of HTML and Python code is made possible by a few libraries.  While
+convenient at first, it leads to horribly unmaintainable code.  That&#8217;s why
+templates exist.  Templates are, in the simplest case, just HTML files with
+placeholders.  The HTML is sent to the user&#8217;s browser after filling in the
+placeholders.</p>
+<p>Python already includes two ways to build simple templates:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="s">&quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello </span><span class="si">%s</span><span class="s">!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">template</span> <span class="o">%</span> <span class="s">&quot;Reader&quot;</span>
+<span class="go">&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Reader!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s">&quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello ${name}&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Dinsdale&#39;</span><span class="p">))</span>
+<span class="go">&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello Dinsdale!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;</span>
+</pre></div>
+</div>
+<p>To generate complex HTML based on non-trivial model data, conditional
+and looping constructs like Python&#8217;s <em>for</em> and <em>if</em> are generally needed.
+<em>Template engines</em> support templates of this complexity.</p>
+<p>There are a lot of template engines available for Python which can be used with
+or without a <a class="reference internal" href="#framework">framework</a>.  Some of these define a plain-text programming
+language which is easy to learn, partly because it is limited in scope.
+Others use XML, and the template output is guaranteed to be always be valid
+XML.  There are many other variations.</p>
+<p>Some <a class="reference internal" href="#frameworks">frameworks</a> ship their own template engine or recommend one in
+particular.  In the absence of a reason to use a different template engine,
+using the one provided by or recommended by the framework is a good idea.</p>
+<p>Popular template engines include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://www.makotemplates.org/">Mako</a></li>
+<li><a class="reference external" href="http://genshi.edgewall.org/">Genshi</a></li>
+<li><a class="reference external" href="http://jinja.pocoo.org/2/">Jinja</a></li>
+</ul>
+</div></blockquote>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">There are many template engines competing for attention, because it is
+pretty easy to create them in Python.  The page <a class="reference external" href="http://wiki.python.org/moin/Templating">Templating</a> in the wiki lists a big,
+ever-growing number of these.  The three listed above are considered &#8220;second
+generation&#8221; template engines and are a good place to start.</p>
+</div>
+</div>
+<div class="section" id="data-persistence">
+<h3>Data persistence<a class="headerlink" href="#data-persistence" title="Permalink to this headline">¶</a></h3>
+<p><em>Data persistence</em>, while sounding very complicated, is just about storing data.
+This data might be the text of blog entries, the postings on a bulletin board or
+the text of a wiki page.  There are, of course, a number of different ways to store
+information on a web server.</p>
+<p>Often, relational database engines like <a class="reference external" href="http://www.mysql.com/">MySQL</a> or
+<a class="reference external" href="http://www.postgresql.org/">PostgreSQL</a> are used because of their good
+performance when handling very large databases consisting of millions of
+entries.  There is also a small database engine called <a class="reference external" href="http://www.sqlite.org/">SQLite</a>, which is bundled with Python in the <a class="reference internal" href="../library/sqlite3.html#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><tt class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></tt></a>
+module, and which uses only one file.  It has no other dependencies.  For
+smaller sites SQLite is just enough.</p>
+<p>Relational databases are <em>queried</em> using a language called <a class="reference external" href="http://en.wikipedia.org/wiki/SQL">SQL</a>.  Python programmers in general do not
+like SQL too much, as they prefer to work with objects.  It is possible to save
+Python objects into a database using a technology called <a class="reference external" href="http://en.wikipedia.org/wiki/Object-relational_mapping">ORM</a> (Object Relational
+Mapping).  ORM translates all object-oriented access into SQL code under the
+hood, so the developer does not need to think about it.  Most <a class="reference internal" href="#frameworks">frameworks</a> use
+ORMs, and it works quite well.</p>
+<p>A second possibility is storing data in normal, plain text files (some
+times called &#8220;flat files&#8221;).  This is very easy for simple sites,
+but can be difficult to get right if the web site is performing many
+updates to the stored data.</p>
+<p>A third possibility are object oriented databases (also called &#8220;object
+databases&#8221;).  These databases store the object data in a form that closely
+parallels the way the objects are structured in memory during program
+execution.  (By contrast, ORMs store the object data as rows of data in tables
+and relations between those rows.)  Storing the objects directly has the
+advantage that nearly all objects can be saved in a straightforward way, unlike
+in relational databases where some objects are very hard to represent.</p>
+<p><a class="reference internal" href="#frameworks">Frameworks</a> often give hints on which data storage method to choose.  It is
+usually a good idea to stick to the data store recommended by the framework
+unless the application has special requirements better satisfied by an
+alternate storage mechanism.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<ul class="last simple">
+<li><a class="reference external" href="http://wiki.python.org/moin/PersistenceTools">Persistence Tools</a> lists
+possibilities on how to save data in the file system.  Some of these
+modules are part of the standard library</li>
+<li><a class="reference external" href="http://wiki.python.org/moin/DatabaseProgramming">Database Programming</a>
+helps with choosing a method for saving data</li>
+<li><a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a>, the most powerful OR-Mapper
+for Python, and <a class="reference external" href="http://elixir.ematia.de/">Elixir</a>, which makes
+SQLAlchemy easier to use</li>
+<li><a class="reference external" href="http://www.sqlobject.org/">SQLObject</a>, another popular OR-Mapper</li>
+<li><a class="reference external" href="https://launchpad.net/zodb">ZODB</a> and <a class="reference external" href="http://www.mems-exchange.org/software/durus/">Durus</a>, two object oriented
+databases</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="frameworks">
+<span id="framework"></span><h2>Frameworks<a class="headerlink" href="#frameworks" title="Permalink to this headline">¶</a></h2>
+<p>The process of creating code to run web sites involves writing code to provide
+various services.  The code to provide a particular service often works the
+same way regardless of the complexity or purpose of the web site in question.
+Abstracting these common solutions into reusable code produces what are called
+&#8220;frameworks&#8221; for web development.  Perhaps the most well-known framework for
+web development is Ruby on Rails, but Python has its own frameworks.  Some of
+these were partly inspired by Rails, or borrowed ideas from Rails, but many
+existed a long time before Rails.</p>
+<p>Originally Python web frameworks tended to incorporate all of the services
+needed to develop web sites as a giant, integrated set of tools.  No two web
+frameworks were interoperable:  a program developed for one could not be
+deployed on a different one without considerable re-engineering work.  This led
+to the development of &#8220;minimalist&#8221; web frameworks that provided just the tools
+to communicate between the Python code and the http protocol, with all other
+services to be added on top via separate components.  Some ad hoc standards
+were developed that allowed for limited interoperability between frameworks,
+such as a standard that allowed different template engines to be used
+interchangeably.</p>
+<p>Since the advent of WSGI, the Python web framework world has been evolving
+toward interoperability based on the WSGI standard.  Now many web frameworks,
+whether &#8220;full stack&#8221; (providing all the tools one needs to deploy the most
+complex web sites) or minimalist, or anything in between, are built from
+collections of reusable components that can be used with more than one
+framework.</p>
+<p>The majority of users will probably want to select a &#8220;full stack&#8221; framework
+that has an active community.  These frameworks tend to be well documented,
+and provide the easiest path to producing a fully functional web site in
+minimal time.</p>
+<div class="section" id="some-notable-frameworks">
+<h3>Some notable frameworks<a class="headerlink" href="#some-notable-frameworks" title="Permalink to this headline">¶</a></h3>
+<p>There are an incredible number of frameworks, so they cannot all be covered
+here.  Instead we will briefly touch on some of the most popular.</p>
+<div class="section" id="django">
+<h4>Django<a class="headerlink" href="#django" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://www.djangoproject.com/">Django</a> is a framework consisting of several
+tightly coupled elements which were written from scratch and work together very
+well.  It includes an ORM which is quite powerful while being simple to use,
+and has a great online administration interface which makes it possible to edit
+the data in the database with a browser.  The template engine is text-based and
+is designed to be usable for page designers who cannot write Python.  It
+supports template inheritance and filters (which work like Unix pipes).  Django
+has many handy features bundled, such as creation of RSS feeds or generic views,
+which make it possible to create web sites almost without writing any Python code.</p>
+<p>It has a big, international community, the members of which have created many
+web sites.  There are also a lot of add-on projects which extend Django&#8217;s normal
+functionality.  This is partly due to Django&#8217;s well written <a class="reference external" href="http://docs.djangoproject.com/">online
+documentation</a> and the <a class="reference external" href="http://www.djangobook.com/">Django book</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although Django is an MVC-style framework, it names the elements
+differently, which is described in the <a class="reference external" href="http://docs.djangoproject.com/en/dev/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names">Django FAQ</a>.</p>
+</div>
+</div>
+<div class="section" id="turbogears">
+<h4>TurboGears<a class="headerlink" href="#turbogears" title="Permalink to this headline">¶</a></h4>
+<p>Another popular web framework for Python is <a class="reference external" href="http://www.turbogears.org/">TurboGears</a>.  TurboGears takes the approach of using already
+existing components and combining them with glue code to create a seamless
+experience.  TurboGears gives the user flexibility in choosing components. For
+example the ORM and template engine can be changed to use packages different
+from those used by default.</p>
+<p>The documentation can be found in the <a class="reference external" href="http://docs.turbogears.org/">TurboGears wiki</a>, where links to screencasts can be found.
+TurboGears has also an active user community which can respond to most related
+questions.  There is also a <a class="reference external" href="http://turbogearsbook.com/">TurboGears book</a>
+published, which is a good starting point.</p>
+<p>The newest version of TurboGears, version 2.0, moves even further in direction
+of WSGI support and a component-based architecture.  TurboGears 2 is based on
+the WSGI stack of another popular component-based web framework, <a class="reference external" href="http://pylonshq.com/">Pylons</a>.</p>
+</div>
+<div class="section" id="zope">
+<h4>Zope<a class="headerlink" href="#zope" title="Permalink to this headline">¶</a></h4>
+<p>The Zope framework is one of the &#8220;old original&#8221; frameworks.  Its current
+incarnation in Zope2 is a tightly integrated full-stack framework.  One of its
+most interesting feature is its tight integration with a powerful object
+database called the <a class="reference external" href="https://launchpad.net/zodb">ZODB</a> (Zope Object Database).
+Because of its highly integrated nature, Zope wound up in a somewhat isolated
+ecosystem:  code written for Zope wasn&#8217;t very usable outside of Zope, and
+vice-versa.  To solve this problem the Zope 3 effort was started.  Zope 3
+re-engineers Zope as a set of more cleanly isolated components.  This effort
+was started before the advent of the WSGI standard, but there is WSGI support
+for Zope 3 from the <a class="reference external" href="http://repoze.org/">Repoze</a> project.  Zope components
+have many years of production use behind them, and the Zope 3 project gives
+access to these components to the wider Python community.  There is even a
+separate framework based on the Zope components: <a class="reference external" href="http://grok.zope.org/">Grok</a>.</p>
+<p>Zope is also the infrastructure used by the <a class="reference external" href="http://plone.org/">Plone</a> content
+management system, one of the most powerful and popular content management
+systems available.</p>
+</div>
+<div class="section" id="other-notable-frameworks">
+<h4>Other notable frameworks<a class="headerlink" href="#other-notable-frameworks" title="Permalink to this headline">¶</a></h4>
+<p>Of course these are not the only frameworks that are available.  There are
+many other frameworks worth mentioning.</p>
+<p>Another framework that&#8217;s already been mentioned is <a class="reference external" href="http://pylonshq.com/">Pylons</a>.  Pylons is much
+like TurboGears, but with an even stronger emphasis on flexibility, which comes
+at the cost of being more difficult to use.  Nearly every component can be
+exchanged, which makes it necessary to use the documentation of every single
+component, of which there are many.  Pylons builds upon <a class="reference external" href="http://pythonpaste.org/">Paste</a>, an extensive set of tools which are handy for WSGI.</p>
+<p>And that&#8217;s still not everything.  The most up-to-date information can always be
+found in the Python wiki.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p>The Python wiki contains an extensive list of <a class="reference external" href="http://wiki.python.org/moin/WebFrameworks">web frameworks</a>.</p>
+<p class="last">Most frameworks also have their own mailing lists and IRC channels, look out
+for these on the projects&#8217; web sites.  There is also a general &#8220;Python in the
+Web&#8221; IRC channel on freenode called <a class="reference external" href="http://wiki.python.org/moin/PoundPythonWeb">#python.web</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HOWTO Use Python in the web</a><ul>
+<li><a class="reference internal" href="#the-low-level-view">The Low-Level View</a><ul>
+<li><a class="reference internal" href="#common-gateway-interface">Common Gateway Interface</a><ul>
+<li><a class="reference internal" href="#simple-script-for-testing-cgi">Simple script for testing CGI</a></li>
+<li><a class="reference internal" href="#setting-up-cgi-on-your-own-server">Setting up CGI on your own server</a></li>
+<li><a class="reference internal" href="#common-problems-with-cgi-scripts">Common problems with CGI scripts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mod-python">mod_python</a></li>
+<li><a class="reference internal" href="#fastcgi-and-scgi">FastCGI and SCGI</a><ul>
+<li><a class="reference internal" href="#setting-up-fastcgi">Setting up FastCGI</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mod-wsgi">mod_wsgi</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#step-back-wsgi">Step back: WSGI</a><ul>
+<li><a class="reference internal" href="#wsgi-servers">WSGI Servers</a></li>
+<li><a class="reference internal" href="#case-study-moinmoin">Case study: MoinMoin</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#model-view-controller">Model-View-Controller</a></li>
+<li><a class="reference internal" href="#ingredients-for-websites">Ingredients for Websites</a><ul>
+<li><a class="reference internal" href="#templates">Templates</a></li>
+<li><a class="reference internal" href="#data-persistence">Data persistence</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#frameworks">Frameworks</a><ul>
+<li><a class="reference internal" href="#some-notable-frameworks">Some notable frameworks</a><ul>
+<li><a class="reference internal" href="#django">Django</a></li>
+<li><a class="reference internal" href="#turbogears">TurboGears</a></li>
+<li><a class="reference internal" href="#zope">Zope</a></li>
+<li><a class="reference internal" href="#other-notable-frameworks">Other notable frameworks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="urllib2.html"
+                        title="previous chapter">HOWTO Fetch Internet Resources Using urllib2</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="argparse.html"
+                        title="next chapter">Argparse Tutorial</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/howto/webservers.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="argparse.html" title="Argparse Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="HOWTO Fetch Internet Resources Using urllib2"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

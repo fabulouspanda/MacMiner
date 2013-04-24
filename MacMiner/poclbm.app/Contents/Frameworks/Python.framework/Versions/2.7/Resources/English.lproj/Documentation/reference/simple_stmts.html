@@ -1,0 +1,867 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Simple statements &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="The Python Language Reference" href="index.html" />
+    <link rel="next" title="7. Compound statements" href="compound_stmts.html" />
+    <link rel="prev" title="5. Expressions" href="expressions.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compound_stmts.html" title="7. Compound statements"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="expressions.html" title="5. Expressions"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">The Python Language Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="simple-statements">
+<span id="simple"></span><h1>6. Simple statements<a class="headerlink" href="#simple-statements" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Simple statements are comprised within a single logical line. Several simple
+statements may occur on a single line separated by semicolons.  The syntax for
+simple statements is:</p>
+<pre>
+<strong id="grammar-token-simple_stmt">simple_stmt</strong> ::=  <a class="reference internal" href="#grammar-token-expression_stmt"><tt class="xref docutils literal"><span class="pre">expression_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-assert_stmt"><tt class="xref docutils literal"><span class="pre">assert_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-assignment_stmt"><tt class="xref docutils literal"><span class="pre">assignment_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-augmented_assignment_stmt"><tt class="xref docutils literal"><span class="pre">augmented_assignment_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-pass_stmt"><tt class="xref docutils literal"><span class="pre">pass_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-del_stmt"><tt class="xref docutils literal"><span class="pre">del_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-print_stmt"><tt class="xref docutils literal"><span class="pre">print_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-return_stmt"><tt class="xref docutils literal"><span class="pre">return_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-yield_stmt"><tt class="xref docutils literal"><span class="pre">yield_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-raise_stmt"><tt class="xref docutils literal"><span class="pre">raise_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-break_stmt"><tt class="xref docutils literal"><span class="pre">break_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-continue_stmt"><tt class="xref docutils literal"><span class="pre">continue_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-import_stmt"><tt class="xref docutils literal"><span class="pre">import_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-global_stmt"><tt class="xref docutils literal"><span class="pre">global_stmt</span></tt></a>
+                 | <a class="reference internal" href="#grammar-token-exec_stmt"><tt class="xref docutils literal"><span class="pre">exec_stmt</span></tt></a>
+</pre>
+<div class="section" id="expression-statements">
+<span id="exprstmts"></span><h2>6.1. Expression statements<a class="headerlink" href="#expression-statements" title="Permalink to this headline">¶</a></h2>
+<p id="index-1">Expression statements are used (mostly interactively) to compute and write a
+value, or (usually) to call a procedure (a function that returns no meaningful
+result; in Python, procedures return the value <tt class="xref docutils literal"><span class="pre">None</span></tt>).  Other uses of
+expression statements are allowed and occasionally useful.  The syntax for an
+expression statement is:</p>
+<pre>
+<strong id="grammar-token-expression_stmt">expression_stmt</strong> ::=  <a class="reference internal" href="expressions.html#grammar-token-expression_list"><tt class="xref docutils literal"><span class="pre">expression_list</span></tt></a>
+</pre>
+<p>An expression statement evaluates the expression list (which may be a single
+expression).</p>
+<p id="index-2">In interactive mode, if the value is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, it is converted to a string
+using the built-in <a class="reference internal" href="../library/repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> function and the resulting string is written to
+standard output (see section <a class="reference internal" href="#print"><em>The print statement</em></a>) on a line by itself.  (Expression
+statements yielding <tt class="xref docutils literal"><span class="pre">None</span></tt> are not written, so that procedure calls do not
+cause any output.)</p>
+</div>
+<div class="section" id="assignment-statements">
+<span id="assignment"></span><h2>6.2. Assignment statements<a class="headerlink" href="#assignment-statements" title="Permalink to this headline">¶</a></h2>
+<p id="index-3">Assignment statements are used to (re)bind names to values and to modify
+attributes or items of mutable objects:</p>
+<pre>
+<strong id="grammar-token-assignment_stmt">assignment_stmt</strong> ::=  (<a class="reference internal" href="#grammar-token-target_list"><tt class="xref docutils literal"><span class="pre">target_list</span></tt></a> &quot;=&quot;)+ (<a class="reference internal" href="expressions.html#grammar-token-expression_list"><tt class="xref docutils literal"><span class="pre">expression_list</span></tt></a> | <a class="reference internal" href="expressions.html#grammar-token-yield_expression"><tt class="xref docutils literal"><span class="pre">yield_expression</span></tt></a>)
+<strong id="grammar-token-target_list">target_list    </strong> ::=  <a class="reference internal" href="#grammar-token-target"><tt class="xref docutils literal"><span class="pre">target</span></tt></a> (&quot;,&quot; <a class="reference internal" href="#grammar-token-target"><tt class="xref docutils literal"><span class="pre">target</span></tt></a>)* [&quot;,&quot;]
+<strong id="grammar-token-target">target         </strong> ::=  <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a>
+                     | &quot;(&quot; <a class="reference internal" href="#grammar-token-target_list"><tt class="xref docutils literal"><span class="pre">target_list</span></tt></a> &quot;)&quot;
+                     | &quot;[&quot; <a class="reference internal" href="#grammar-token-target_list"><tt class="xref docutils literal"><span class="pre">target_list</span></tt></a> &quot;]&quot;
+                     | <a class="reference internal" href="expressions.html#grammar-token-attributeref"><tt class="xref docutils literal"><span class="pre">attributeref</span></tt></a>
+                     | <a class="reference internal" href="expressions.html#grammar-token-subscription"><tt class="xref docutils literal"><span class="pre">subscription</span></tt></a>
+                     | <a class="reference internal" href="expressions.html#grammar-token-slicing"><tt class="xref docutils literal"><span class="pre">slicing</span></tt></a>
+</pre>
+<p>(See section <a class="reference internal" href="expressions.html#primaries"><em>Primaries</em></a> for the syntax definitions for the last three
+symbols.)</p>
+<p id="index-4">An assignment statement evaluates the expression list (remember that this can be
+a single expression or a comma-separated list, the latter yielding a tuple) and
+assigns the single resulting object to each of the target lists, from left to
+right.</p>
+<p id="index-5">Assignment is defined recursively depending on the form of the target (list).
+When a target is part of a mutable object (an attribute reference, subscription
+or slicing), the mutable object must ultimately perform the assignment and
+decide about its validity, and may raise an exception if the assignment is
+unacceptable.  The rules observed by various types and the exceptions raised are
+given with the definition of the object types (see section <a class="reference internal" href="datamodel.html#types"><em>The standard type hierarchy</em></a>).</p>
+<p id="index-6">Assignment of an object to a target list is recursively defined as follows.</p>
+<ul class="simple">
+<li>If the target list is a single target: The object is assigned to that target.</li>
+<li>If the target list is a comma-separated list of targets: The object must be an
+iterable with the same number of items as there are targets in the target list,
+and the items are assigned, from left to right, to the corresponding targets.</li>
+</ul>
+<p>Assignment of an object to a single target is recursively defined as follows.</p>
+<ul>
+<li><p class="first">If the target is an identifier (name):</p>
+<blockquote>
+<div></div></blockquote>
+<ul class="simple" id="index-7">
+<li>If the name does not occur in a <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement in the current
+code block: the name is bound to the object in the current local namespace.</li>
+<li>Otherwise: the name is bound to the object in the current global namespace.</li>
+</ul>
+<p id="index-8">The name is rebound if it was already bound.  This may cause the reference count
+for the object previously bound to the name to reach zero, causing the object to
+be deallocated and its destructor (if it has one) to be called.</p>
+</li>
+<li><p class="first">If the target is a target list enclosed in parentheses or in square brackets:
+The object must be an iterable with the same number of items as there are
+targets in the target list, and its items are assigned, from left to right,
+to the corresponding targets.</p>
+</li>
+<li id="index-9"><p class="first">If the target is an attribute reference: The primary expression in the
+reference is evaluated.  It should yield an object with assignable attributes;
+if this is not the case, <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> is raised.  That object is then
+asked to assign the assigned object to the given attribute; if it cannot
+perform the assignment, it raises an exception (usually but not necessarily
+<a class="reference internal" href="../library/exceptions.html#exceptions.AttributeError" title="exceptions.AttributeError"><tt class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></tt></a>).</p>
+<p id="attr-target-note">Note: If the object is a class instance and the attribute reference occurs on
+both sides of the assignment operator, the RHS expression, <tt class="docutils literal"><span class="pre">a.x</span></tt> can access
+either an instance attribute or (if no instance attribute exists) a class
+attribute.  The LHS target <tt class="docutils literal"><span class="pre">a.x</span></tt> is always set as an instance attribute,
+creating it if necessary.  Thus, the two occurrences of <tt class="docutils literal"><span class="pre">a.x</span></tt> do not
+necessarily refer to the same attribute: if the RHS expression refers to a
+class attribute, the LHS creates a new instance attribute as the target of the
+assignment:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Cls</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>             <span class="c"># class variable</span>
+<span class="n">inst</span> <span class="o">=</span> <span class="n">Cls</span><span class="p">()</span>
+<span class="n">inst</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>   <span class="c"># writes inst.x as 4 leaving Cls.x as 3</span>
+</pre></div>
+</div>
+<p>This description does not necessarily apply to descriptor attributes, such as
+properties created with <a class="reference internal" href="../library/functions.html#property" title="property"><tt class="xref py py-func docutils literal"><span class="pre">property()</span></tt></a>.</p>
+</li>
+<li id="index-10"><p class="first">If the target is a subscription: The primary expression in the reference is
+evaluated.  It should yield either a mutable sequence object (such as a list) or
+a mapping object (such as a dictionary). Next, the subscript expression is
+evaluated.</p>
+<p id="index-11">If the primary is a mutable sequence object (such as a list), the subscript must
+yield a plain integer.  If it is negative, the sequence&#8217;s length is added to it.
+The resulting value must be a nonnegative integer less than the sequence&#8217;s
+length, and the sequence is asked to assign the assigned object to its item with
+that index.  If the index is out of range, <a class="reference internal" href="../library/exceptions.html#exceptions.IndexError" title="exceptions.IndexError"><tt class="xref py py-exc docutils literal"><span class="pre">IndexError</span></tt></a> is raised
+(assignment to a subscripted sequence cannot add new items to a list).</p>
+<p id="index-12">If the primary is a mapping object (such as a dictionary), the subscript must
+have a type compatible with the mapping&#8217;s key type, and the mapping is then
+asked to create a key/datum pair which maps the subscript to the assigned
+object.  This can either replace an existing key/value pair with the same key
+value, or insert a new key/value pair (if no key with the same value existed).</p>
+</li>
+<li id="index-13"><p class="first">If the target is a slicing: The primary expression in the reference is
+evaluated.  It should yield a mutable sequence object (such as a list).  The
+assigned object should be a sequence object of the same type.  Next, the lower
+and upper bound expressions are evaluated, insofar they are present; defaults
+are zero and the sequence&#8217;s length.  The bounds should evaluate to (small)
+integers.  If either bound is negative, the sequence&#8217;s length is added to it.
+The resulting bounds are clipped to lie between zero and the sequence&#8217;s length,
+inclusive.  Finally, the sequence object is asked to replace the slice with the
+items of the assigned sequence.  The length of the slice may be different from
+the length of the assigned sequence, thus changing the length of the target
+sequence, if the object allows it.</p>
+</li>
+</ul>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> In the current implementation, the syntax for targets is taken to be the same
+as for expressions, and invalid syntax is rejected during the code generation
+phase, causing less detailed error messages.</p>
+</div>
+<p>WARNING: Although the definition of assignment implies that overlaps between the
+left-hand side and the right-hand side are &#8216;safe&#8217; (for example <tt class="docutils literal"><span class="pre">a,</span> <span class="pre">b</span> <span class="pre">=</span> <span class="pre">b,</span> <span class="pre">a</span></tt>
+swaps two variables), overlaps <em>within</em> the collection of assigned-to variables
+are not safe!  For instance, the following program prints <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">2]</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="k">print</span> <span class="n">x</span>
+</pre></div>
+</div>
+<div class="section" id="augmented-assignment-statements">
+<span id="augassign"></span><h3>6.2.1. Augmented assignment statements<a class="headerlink" href="#augmented-assignment-statements" title="Permalink to this headline">¶</a></h3>
+<p id="index-14">Augmented assignment is the combination, in a single statement, of a binary
+operation and an assignment statement:</p>
+<pre>
+<strong id="grammar-token-augmented_assignment_stmt">augmented_assignment_stmt</strong> ::=  <a class="reference internal" href="#grammar-token-augtarget"><tt class="xref docutils literal"><span class="pre">augtarget</span></tt></a> <a class="reference internal" href="#grammar-token-augop"><tt class="xref docutils literal"><span class="pre">augop</span></tt></a> (<a class="reference internal" href="expressions.html#grammar-token-expression_list"><tt class="xref docutils literal"><span class="pre">expression_list</span></tt></a> | <a class="reference internal" href="expressions.html#grammar-token-yield_expression"><tt class="xref docutils literal"><span class="pre">yield_expression</span></tt></a>)
+<strong id="grammar-token-augtarget">augtarget                </strong> ::=  <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> | <a class="reference internal" href="expressions.html#grammar-token-attributeref"><tt class="xref docutils literal"><span class="pre">attributeref</span></tt></a> | <a class="reference internal" href="expressions.html#grammar-token-subscription"><tt class="xref docutils literal"><span class="pre">subscription</span></tt></a> | <a class="reference internal" href="expressions.html#grammar-token-slicing"><tt class="xref docutils literal"><span class="pre">slicing</span></tt></a>
+<strong id="grammar-token-augop">augop                    </strong> ::=  &quot;+=&quot; | &quot;-=&quot; | &quot;*=&quot; | &quot;/=&quot; | &quot;//=&quot; | &quot;%=&quot; | &quot;**=&quot;
+                               | &quot;&gt;&gt;=&quot; | &quot;&lt;&lt;=&quot; | &quot;&amp;=&quot; | &quot;^=&quot; | &quot;|=&quot;
+</pre>
+<p>(See section <a class="reference internal" href="expressions.html#primaries"><em>Primaries</em></a> for the syntax definitions for the last three
+symbols.)</p>
+<p>An augmented assignment evaluates the target (which, unlike normal assignment
+statements, cannot be an unpacking) and the expression list, performs the binary
+operation specific to the type of assignment on the two operands, and assigns
+the result to the original target.  The target is only evaluated once.</p>
+<p>An augmented assignment expression like <tt class="docutils literal"><span class="pre">x</span> <span class="pre">+=</span> <span class="pre">1</span></tt> can be rewritten as <tt class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">x</span> <span class="pre">+</span>
+<span class="pre">1</span></tt> to achieve a similar, but not exactly equal effect. In the augmented
+version, <tt class="docutils literal"><span class="pre">x</span></tt> is only evaluated once. Also, when possible, the actual operation
+is performed <em>in-place</em>, meaning that rather than creating a new object and
+assigning that to the target, the old object is modified instead.</p>
+<p>With the exception of assigning to tuples and multiple targets in a single
+statement, the assignment done by augmented assignment statements is handled the
+same way as normal assignments. Similarly, with the exception of the possible
+<em>in-place</em> behavior, the binary operation performed by augmented assignment is
+the same as the normal binary operations.</p>
+<p>For targets which are attribute references, the same <a class="reference internal" href="#attr-target-note"><em>caveat about class
+and instance attributes</em></a> applies as for regular assignments.</p>
+</div>
+</div>
+<div class="section" id="the-assert-statement">
+<span id="assert"></span><h2>6.3. The <a class="reference internal" href="#assert"><tt class="xref std std-keyword docutils literal"><span class="pre">assert</span></tt></a> statement<a class="headerlink" href="#the-assert-statement" title="Permalink to this headline">¶</a></h2>
+<p id="index-15">Assert statements are a convenient way to insert debugging assertions into a
+program:</p>
+<pre>
+<strong id="grammar-token-assert_stmt">assert_stmt</strong> ::=  &quot;assert&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a> [&quot;,&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a>]
+</pre>
+<p>The simple form, <tt class="docutils literal"><span class="pre">assert</span> <span class="pre">expression</span></tt>, is equivalent to</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">__debug__</span><span class="p">:</span>
+   <span class="k">if</span> <span class="ow">not</span> <span class="n">expression</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">AssertionError</span>
+</pre></div>
+</div>
+<p>The extended form, <tt class="docutils literal"><span class="pre">assert</span> <span class="pre">expression1,</span> <span class="pre">expression2</span></tt>, is equivalent to</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">__debug__</span><span class="p">:</span>
+   <span class="k">if</span> <span class="ow">not</span> <span class="n">expression1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">expression2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p id="index-16">These equivalences assume that <a class="reference internal" href="../library/constants.html#__debug__" title="__debug__"><tt class="xref py py-const docutils literal"><span class="pre">__debug__</span></tt></a> and <a class="reference internal" href="../library/exceptions.html#exceptions.AssertionError" title="exceptions.AssertionError"><tt class="xref py py-exc docutils literal"><span class="pre">AssertionError</span></tt></a> refer to
+the built-in variables with those names.  In the current implementation, the
+built-in variable <a class="reference internal" href="../library/constants.html#__debug__" title="__debug__"><tt class="xref py py-const docutils literal"><span class="pre">__debug__</span></tt></a> is <tt class="xref docutils literal"><span class="pre">True</span></tt> under normal circumstances,
+<tt class="xref docutils literal"><span class="pre">False</span></tt> when optimization is requested (command line option -O).  The current
+code generator emits no code for an assert statement when optimization is
+requested at compile time.  Note that it is unnecessary to include the source
+code for the expression that failed in the error message; it will be displayed
+as part of the stack trace.</p>
+<p>Assignments to <a class="reference internal" href="../library/constants.html#__debug__" title="__debug__"><tt class="xref py py-const docutils literal"><span class="pre">__debug__</span></tt></a> are illegal.  The value for the built-in variable
+is determined when the interpreter starts.</p>
+</div>
+<div class="section" id="the-pass-statement">
+<span id="pass"></span><h2>6.4. The <a class="reference internal" href="#pass"><tt class="xref std std-keyword docutils literal"><span class="pre">pass</span></tt></a> statement<a class="headerlink" href="#the-pass-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-17">
+<strong id="grammar-token-pass_stmt">pass_stmt</strong> ::=  &quot;pass&quot;
+</pre>
+<p><a class="reference internal" href="#pass"><tt class="xref std std-keyword docutils literal"><span class="pre">pass</span></tt></a> is a null operation &#8212; when it is executed, nothing happens.
+It is useful as a placeholder when a statement is required syntactically, but no
+code needs to be executed, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span> <span class="k">pass</span>    <span class="c"># a function that does nothing (yet)</span>
+
+<span class="k">class</span> <span class="nc">C</span><span class="p">:</span> <span class="k">pass</span>       <span class="c"># a class with no methods (yet)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-del-statement">
+<span id="del"></span><h2>6.5. The <a class="reference internal" href="#del"><tt class="xref std std-keyword docutils literal"><span class="pre">del</span></tt></a> statement<a class="headerlink" href="#the-del-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-18">
+<strong id="grammar-token-del_stmt">del_stmt</strong> ::=  &quot;del&quot; <a class="reference internal" href="#grammar-token-target_list"><tt class="xref docutils literal"><span class="pre">target_list</span></tt></a>
+</pre>
+<p>Deletion is recursively defined very similar to the way assignment is defined.
+Rather than spelling it out in full details, here are some hints.</p>
+<p>Deletion of a target list recursively deletes each target, from left to right.</p>
+<p id="index-19">Deletion of a name removes the binding of that name  from the local or global
+namespace, depending on whether the name occurs in a <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement
+in the same code block.  If the name is unbound, a <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> exception
+will be raised.</p>
+<p id="index-20">It is illegal to delete a name from the local namespace if it occurs as a free
+variable in a nested block.</p>
+<p id="index-21">Deletion of attribute references, subscriptions and slicings is passed to the
+primary object involved; deletion of a slicing is in general equivalent to
+assignment of an empty slice of the right type (but even this is determined by
+the sliced object).</p>
+</div>
+<div class="section" id="the-print-statement">
+<span id="print"></span><h2>6.6. The <a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> statement<a class="headerlink" href="#the-print-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-22">
+<strong id="grammar-token-print_stmt">print_stmt</strong> ::=  &quot;print&quot; ([<a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a> (&quot;,&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a>)* [&quot;,&quot;]]
+                | &quot;&gt;&gt;&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a> [(&quot;,&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a>)+ [&quot;,&quot;]])
+</pre>
+<p><a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> evaluates each expression in turn and writes the resulting
+object to standard output (see below).  If an object is not a string, it is
+first converted to a string using the rules for string conversions.  The
+(resulting or original) string is then written.  A space is written before each
+object is (converted and) written, unless the output system believes it is
+positioned at the beginning of a line.  This is the case (1) when no characters
+have yet been written to standard output, (2) when the last character written to
+standard output is a whitespace character except <tt class="docutils literal"><span class="pre">'</span> <span class="pre">'</span></tt>, or (3) when the last
+write operation on standard output was not a <a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> statement.
+(In some cases it may be functional to write an empty string to standard output
+for this reason.)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Objects which act like file objects but which are not the built-in file objects
+often do not properly emulate this aspect of the file object&#8217;s behavior, so it
+is best not to rely on this.</p>
+</div>
+<p id="index-23">A <tt class="docutils literal"><span class="pre">'\n'</span></tt> character is written at the end, unless the <a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a>
+statement ends with a comma.  This is the only action if the statement contains
+just the keyword <a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a>.</p>
+<p id="index-24">Standard output is defined as the file object named <tt class="docutils literal"><span class="pre">stdout</span></tt> in the built-in
+module <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a>.  If no such object exists, or if it does not have a
+<tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> method, a <a class="reference internal" href="../library/exceptions.html#exceptions.RuntimeError" title="exceptions.RuntimeError"><tt class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></tt></a> exception is raised.</p>
+<p id="index-25"><a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> also has an extended form, defined by the second portion of the
+syntax described above. This form is sometimes referred to as &#8220;<a class="reference internal" href="#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a>
+chevron.&#8221; In this form, the first expression after the <tt class="docutils literal"><span class="pre">&gt;&gt;</span></tt> must evaluate to a
+&#8220;file-like&#8221; object, specifically an object that has a <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> method as
+described above.  With this extended form, the subsequent expressions are
+printed to this file object.  If the first expression evaluates to <tt class="xref docutils literal"><span class="pre">None</span></tt>,
+then <tt class="docutils literal"><span class="pre">sys.stdout</span></tt> is used as the file for output.</p>
+</div>
+<div class="section" id="the-return-statement">
+<span id="return"></span><h2>6.7. The <a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> statement<a class="headerlink" href="#the-return-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-26">
+<strong id="grammar-token-return_stmt">return_stmt</strong> ::=  &quot;return&quot; [<a class="reference internal" href="expressions.html#grammar-token-expression_list"><tt class="xref docutils literal"><span class="pre">expression_list</span></tt></a>]
+</pre>
+<p><a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> may only occur syntactically nested in a function definition,
+not within a nested class definition.</p>
+<p>If an expression list is present, it is evaluated, else <tt class="xref docutils literal"><span class="pre">None</span></tt> is substituted.</p>
+<p><a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> leaves the current function call with the expression list (or
+<tt class="xref docutils literal"><span class="pre">None</span></tt>) as return value.</p>
+<p id="index-27">When <a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> passes control out of a <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement with a
+<a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause, that <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause is executed before
+really leaving the function.</p>
+<p>In a generator function, the <a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> statement is not allowed to
+include an <a class="reference internal" href="expressions.html#grammar-token-expression_list"><tt class="xref std std-token docutils literal"><span class="pre">expression_list</span></tt></a>.  In that context, a bare <a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a>
+indicates that the generator is done and will cause <a class="reference internal" href="../library/exceptions.html#exceptions.StopIteration" title="exceptions.StopIteration"><tt class="xref py py-exc docutils literal"><span class="pre">StopIteration</span></tt></a> to be
+raised.</p>
+</div>
+<div class="section" id="the-yield-statement">
+<span id="yield"></span><h2>6.8. The <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> statement<a class="headerlink" href="#the-yield-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-28">
+<strong id="grammar-token-yield_stmt">yield_stmt</strong> ::=  <a class="reference internal" href="expressions.html#grammar-token-yield_expression"><tt class="xref docutils literal"><span class="pre">yield_expression</span></tt></a>
+</pre>
+<p>The <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> statement is only used when defining a generator function,
+and is only used in the body of the generator function. Using a <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a>
+statement in a function definition is sufficient to cause that definition to
+create a generator function instead of a normal function.</p>
+<p>When a generator function is called, it returns an iterator known as a generator
+iterator, or more commonly, a generator.  The body of the generator function is
+executed by calling the generator&#8217;s <a class="reference internal" href="../library/functions.html#next" title="next"><tt class="xref py py-meth docutils literal"><span class="pre">next()</span></tt></a> method repeatedly until it
+raises an exception.</p>
+<p>When a <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> statement is executed, the state of the generator is
+frozen and the value of <a class="reference internal" href="expressions.html#grammar-token-expression_list"><tt class="xref std std-token docutils literal"><span class="pre">expression_list</span></tt></a> is returned to <a class="reference internal" href="../library/functions.html#next" title="next"><tt class="xref py py-meth docutils literal"><span class="pre">next()</span></tt></a>&#8216;s
+caller.  By &#8220;frozen&#8221; we mean that all local state is retained, including the
+current bindings of local variables, the instruction pointer, and the internal
+evaluation stack: enough information is saved so that the next time <a class="reference internal" href="../library/functions.html#next" title="next"><tt class="xref py py-meth docutils literal"><span class="pre">next()</span></tt></a>
+is invoked, the function can proceed exactly as if the <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a>
+statement were just another external call.</p>
+<p>As of Python version 2.5, the <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> statement is now allowed in the
+<a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> clause of a <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ...  <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> construct.  If
+the generator is not resumed before it is finalized (by reaching a zero
+reference count or by being garbage collected), the generator-iterator&#8217;s
+<tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt> method will be called, allowing any pending <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a>
+clauses to execute.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In Python 2.2, the <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> statement was only allowed when the
+<tt class="docutils literal"><span class="pre">generators</span></tt> feature has been enabled.  This <tt class="docutils literal"><span class="pre">__future__</span></tt>
+import statement was used to enable the feature:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">generators</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><span class="target" id="index-29"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0255"><strong>PEP 0255</strong></a> - Simple Generators</dt>
+<dd>The proposal for adding generators and the <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> statement to Python.</dd>
+<dt><span class="target" id="index-30"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0342"><strong>PEP 0342</strong></a> - Coroutines via Enhanced Generators</dt>
+<dd>The proposal that, among other generator enhancements, proposed allowing
+<a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a> to appear inside a <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ... <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> block.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="the-raise-statement">
+<span id="raise"></span><h2>6.9. The <a class="reference internal" href="#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> statement<a class="headerlink" href="#the-raise-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-31">
+<strong id="grammar-token-raise_stmt">raise_stmt</strong> ::=  &quot;raise&quot; [<a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a> [&quot;,&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a> [&quot;,&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a>]]]
+</pre>
+<p>If no expressions are present, <a class="reference internal" href="#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> re-raises the last exception
+that was active in the current scope.  If no exception is active in the current
+scope, a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception is raised indicating that this is an error
+(if running under IDLE, a <a class="reference internal" href="../library/queue.html#Queue.Empty" title="Queue.Empty"><tt class="xref py py-exc docutils literal"><span class="pre">Queue.Empty</span></tt></a> exception is raised instead).</p>
+<p>Otherwise, <a class="reference internal" href="#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> evaluates the expressions to get three objects,
+using <tt class="xref docutils literal"><span class="pre">None</span></tt> as the value of omitted expressions.  The first two objects are
+used to determine the <em>type</em> and <em>value</em> of the exception.</p>
+<p>If the first object is an instance, the type of the exception is the class of
+the instance, the instance itself is the value, and the second object must be
+<tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+<p>If the first object is a class, it becomes the type of the exception. The second
+object is used to determine the exception value: If it is an instance of the
+class, the instance becomes the exception value. If the second object is a
+tuple, it is used as the argument list for the class constructor; if it is
+<tt class="xref docutils literal"><span class="pre">None</span></tt>, an empty argument list is used, and any other object is treated as a
+single argument to the constructor.  The instance so created by calling the
+constructor is used as the exception value.</p>
+<p id="index-32">If a third object is present and not <tt class="xref docutils literal"><span class="pre">None</span></tt>, it must be a traceback object
+(see section <a class="reference internal" href="datamodel.html#types"><em>The standard type hierarchy</em></a>), and it is substituted instead of the current
+location as the place where the exception occurred.  If the third object is
+present and not a traceback object or <tt class="xref docutils literal"><span class="pre">None</span></tt>, a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception is
+raised.  The three-expression form of <a class="reference internal" href="#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> is useful to re-raise an
+exception transparently in an except clause, but <a class="reference internal" href="#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> with no
+expressions should be preferred if the exception to be re-raised was the most
+recently active exception in the current scope.</p>
+<p>Additional information on exceptions can be found in section <a class="reference internal" href="executionmodel.html#exceptions"><em>Exceptions</em></a>,
+and information about handling exceptions is in section <a class="reference internal" href="compound_stmts.html#try"><em>The try statement</em></a>.</p>
+</div>
+<div class="section" id="the-break-statement">
+<span id="break"></span><h2>6.10. The <a class="reference internal" href="#break"><tt class="xref std std-keyword docutils literal"><span class="pre">break</span></tt></a> statement<a class="headerlink" href="#the-break-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-33">
+<strong id="grammar-token-break_stmt">break_stmt</strong> ::=  &quot;break&quot;
+</pre>
+<p><a class="reference internal" href="#break"><tt class="xref std std-keyword docutils literal"><span class="pre">break</span></tt></a> may only occur syntactically nested in a <a class="reference internal" href="compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> or
+<a class="reference internal" href="compound_stmts.html#while"><tt class="xref std std-keyword docutils literal"><span class="pre">while</span></tt></a> loop, but not nested in a function or class definition within
+that loop.</p>
+<p id="index-34">It terminates the nearest enclosing loop, skipping the optional <a class="reference internal" href="compound_stmts.html#else"><tt class="xref std std-keyword docutils literal"><span class="pre">else</span></tt></a>
+clause if the loop has one.</p>
+<p id="index-35">If a <a class="reference internal" href="compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> loop is terminated by <a class="reference internal" href="#break"><tt class="xref std std-keyword docutils literal"><span class="pre">break</span></tt></a>, the loop control
+target keeps its current value.</p>
+<p id="index-36">When <a class="reference internal" href="#break"><tt class="xref std std-keyword docutils literal"><span class="pre">break</span></tt></a> passes control out of a <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement with a
+<a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause, that <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause is executed before
+really leaving the loop.</p>
+</div>
+<div class="section" id="the-continue-statement">
+<span id="continue"></span><h2>6.11. The <a class="reference internal" href="#continue"><tt class="xref std std-keyword docutils literal"><span class="pre">continue</span></tt></a> statement<a class="headerlink" href="#the-continue-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-37">
+<strong id="grammar-token-continue_stmt">continue_stmt</strong> ::=  &quot;continue&quot;
+</pre>
+<p><a class="reference internal" href="#continue"><tt class="xref std std-keyword docutils literal"><span class="pre">continue</span></tt></a> may only occur syntactically nested in a <a class="reference internal" href="compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> or
+<a class="reference internal" href="compound_stmts.html#while"><tt class="xref std std-keyword docutils literal"><span class="pre">while</span></tt></a> loop, but not nested in a function or class definition or
+<a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause within that loop.  It continues with the next
+cycle of the nearest enclosing loop.</p>
+<p>When <a class="reference internal" href="#continue"><tt class="xref std std-keyword docutils literal"><span class="pre">continue</span></tt></a> passes control out of a <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement with a
+<a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause, that <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> clause is executed before
+really starting the next loop cycle.</p>
+</div>
+<div class="section" id="the-import-statement">
+<span id="from"></span><span id="import"></span><h2>6.12. The <a class="reference internal" href="#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statement<a class="headerlink" href="#the-import-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-38">
+<strong id="grammar-token-import_stmt">import_stmt    </strong> ::=  &quot;import&quot; <a class="reference internal" href="#grammar-token-module"><tt class="xref docutils literal"><span class="pre">module</span></tt></a> [&quot;as&quot; <a class="reference internal" href="#grammar-token-name"><tt class="xref docutils literal"><span class="pre">name</span></tt></a>] ( &quot;,&quot; <a class="reference internal" href="#grammar-token-module"><tt class="xref docutils literal"><span class="pre">module</span></tt></a> [&quot;as&quot; <a class="reference internal" href="#grammar-token-name"><tt class="xref docutils literal"><span class="pre">name</span></tt></a>] )*
+                     | &quot;from&quot; <a class="reference internal" href="#grammar-token-relative_module"><tt class="xref docutils literal"><span class="pre">relative_module</span></tt></a> &quot;import&quot; <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> [&quot;as&quot; <a class="reference internal" href="#grammar-token-name"><tt class="xref docutils literal"><span class="pre">name</span></tt></a>]
+                     ( &quot;,&quot; <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> [&quot;as&quot; <a class="reference internal" href="#grammar-token-name"><tt class="xref docutils literal"><span class="pre">name</span></tt></a>] )*
+                     | &quot;from&quot; <a class="reference internal" href="#grammar-token-relative_module"><tt class="xref docutils literal"><span class="pre">relative_module</span></tt></a> &quot;import&quot; &quot;(&quot; <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> [&quot;as&quot; <a class="reference internal" href="#grammar-token-name"><tt class="xref docutils literal"><span class="pre">name</span></tt></a>]
+                     ( &quot;,&quot; <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> [&quot;as&quot; <a class="reference internal" href="#grammar-token-name"><tt class="xref docutils literal"><span class="pre">name</span></tt></a>] )* [&quot;,&quot;] &quot;)&quot;
+                     | &quot;from&quot; <a class="reference internal" href="#grammar-token-module"><tt class="xref docutils literal"><span class="pre">module</span></tt></a> &quot;import&quot; &quot;*&quot;
+<strong id="grammar-token-module">module         </strong> ::=  (<a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> &quot;.&quot;)* <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a>
+<strong id="grammar-token-relative_module">relative_module</strong> ::=  &quot;.&quot;* <a class="reference internal" href="#grammar-token-module"><tt class="xref docutils literal"><span class="pre">module</span></tt></a> | &quot;.&quot;+
+<strong id="grammar-token-name">name           </strong> ::=  <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a>
+</pre>
+<p>Import statements are executed in two steps: (1) find a module, and initialize
+it if necessary; (2) define a name or names in the local namespace (of the scope
+where the <a class="reference internal" href="#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statement occurs). The statement comes in two
+forms differing on whether it uses the <a class="reference internal" href="#from"><tt class="xref std std-keyword docutils literal"><span class="pre">from</span></tt></a> keyword. The first form
+(without <a class="reference internal" href="#from"><tt class="xref std std-keyword docutils literal"><span class="pre">from</span></tt></a>) repeats these steps for each identifier in the list.
+The form with <a class="reference internal" href="#from"><tt class="xref std std-keyword docutils literal"><span class="pre">from</span></tt></a> performs step (1) once, and then performs step
+(2) repeatedly.</p>
+<p id="index-39">To understand how step (1) occurs, one must first understand how Python handles
+hierarchical naming of modules. To help organize modules and provide a
+hierarchy in naming, Python has a concept of packages. A package can contain
+other packages and modules while modules cannot contain other modules or
+packages. From a file system perspective, packages are directories and modules
+are files. The original <a class="reference external" href="http://www.python.org/doc/essays/packages.html">specification for packages</a> is still available to read,
+although minor details have changed since the writing of that document.</p>
+<p id="index-40">Once the name of the module is known (unless otherwise specified, the term
+&#8220;module&#8221; will refer to both packages and modules), searching
+for the module or package can begin. The first place checked is
+<a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a>, the cache of all modules that have been imported
+previously. If the module is found there then it is used in step (2) of import.</p>
+<p id="index-41">If the module is not found in the cache, then <a class="reference internal" href="../library/sys.html#sys.meta_path" title="sys.meta_path"><tt class="xref py py-data docutils literal"><span class="pre">sys.meta_path</span></tt></a> is searched
+(the specification for <a class="reference internal" href="../library/sys.html#sys.meta_path" title="sys.meta_path"><tt class="xref py py-data docutils literal"><span class="pre">sys.meta_path</span></tt></a> can be found in <span class="target" id="index-42"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a>).
+The object is a list of <a class="reference internal" href="../glossary.html#term-finder"><em class="xref std std-term">finder</em></a> objects which are queried in order as to
+whether they know how to load the module by calling their <tt class="xref py py-meth docutils literal"><span class="pre">find_module()</span></tt>
+method with the name of the module. If the module happens to be contained
+within a package (as denoted by the existence of a dot in the name), then a
+second argument to <tt class="xref py py-meth docutils literal"><span class="pre">find_module()</span></tt> is given as the value of the
+<tt class="xref py py-attr docutils literal"><span class="pre">__path__</span></tt> attribute from the parent package (everything up to the last
+dot in the name of the module being imported). If a finder can find the module
+it returns a <a class="reference internal" href="../glossary.html#term-loader"><em class="xref std std-term">loader</em></a> (discussed later) or returns <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+<p id="index-43">If none of the finders on <a class="reference internal" href="../library/sys.html#sys.meta_path" title="sys.meta_path"><tt class="xref py py-data docutils literal"><span class="pre">sys.meta_path</span></tt></a> are able to find the module
+then some implicitly defined finders are queried. Implementations of Python
+vary in what implicit meta path finders are defined. The one they all do
+define, though, is one that handles <a class="reference internal" href="../library/sys.html#sys.path_hooks" title="sys.path_hooks"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_hooks</span></tt></a>,
+<a class="reference internal" href="../library/sys.html#sys.path_importer_cache" title="sys.path_importer_cache"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_importer_cache</span></tt></a>, and <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+<p>The implicit finder searches for the requested module in the &#8220;paths&#8221; specified
+in one of two places (&#8220;paths&#8221; do not have to be file system paths). If the
+module being imported is supposed to be contained within a package then the
+second argument passed to <tt class="xref py py-meth docutils literal"><span class="pre">find_module()</span></tt>, <tt class="xref py py-attr docutils literal"><span class="pre">__path__</span></tt> on the parent
+package, is used as the source of paths. If the module is not contained in a
+package then <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a> is used as the source of paths.</p>
+<p>Once the source of paths is chosen it is iterated over to find a finder that
+can handle that path. The dict at <a class="reference internal" href="../library/sys.html#sys.path_importer_cache" title="sys.path_importer_cache"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_importer_cache</span></tt></a> caches
+finders for paths and is checked for a finder. If the path does not have a
+finder cached then <a class="reference internal" href="../library/sys.html#sys.path_hooks" title="sys.path_hooks"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_hooks</span></tt></a> is searched by calling each object in
+the list with a single argument of the path, returning a finder or raises
+<a class="reference internal" href="../library/exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a>. If a finder is returned then it is cached in
+<a class="reference internal" href="../library/sys.html#sys.path_importer_cache" title="sys.path_importer_cache"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_importer_cache</span></tt></a> and then used for that path entry. If no finder
+can be found but the path exists then a value of <tt class="xref docutils literal"><span class="pre">None</span></tt> is
+stored in <a class="reference internal" href="../library/sys.html#sys.path_importer_cache" title="sys.path_importer_cache"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_importer_cache</span></tt></a> to signify that an implicit,
+file-based finder that handles modules stored as individual files should be
+used for that path. If the path does not exist then a finder which always
+returns <cite>None`</cite> is placed in the cache for the path.</p>
+<p id="index-44">If no finder can find the module then <a class="reference internal" href="../library/exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a> is raised. Otherwise
+some finder returned a loader whose <tt class="xref py py-meth docutils literal"><span class="pre">load_module()</span></tt> method is called with
+the name of the module to load (see <span class="target" id="index-45"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a> for the original definition of
+loaders). A loader has several responsibilities to perform on a module it
+loads. First, if the module already exists in <a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a> (a
+possibility if the loader is called outside of the import machinery) then it
+is to use that module for initialization and not a new module. But if the
+module does not exist in <a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a> then it is to be added to that
+dict before initialization begins. If an error occurs during loading of the
+module and it was added to <a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a> it is to be removed from the
+dict. If an error occurs but the module was already in <a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a> it
+is left in the dict.</p>
+<p id="index-46">The loader must set several attributes on the module. <tt class="xref py py-data docutils literal"><span class="pre">__name__</span></tt> is to be
+set to the name of the module. <tt class="xref py py-data docutils literal"><span class="pre">__file__</span></tt> is to be the &#8220;path&#8221; to the file
+unless the module is built-in (and thus listed in
+<a class="reference internal" href="../library/sys.html#sys.builtin_module_names" title="sys.builtin_module_names"><tt class="xref py py-data docutils literal"><span class="pre">sys.builtin_module_names</span></tt></a>) in which case the attribute is not set.
+If what is being imported is a package then <tt class="xref py py-data docutils literal"><span class="pre">__path__</span></tt> is to be set to a
+list of paths to be searched when looking for modules and packages contained
+within the package being imported. <tt class="xref py py-data docutils literal"><span class="pre">__package__</span></tt> is optional but should
+be set to the name of package that contains the module or package (the empty
+string is used for module not contained in a package). <tt class="xref py py-data docutils literal"><span class="pre">__loader__</span></tt> is
+also optional but should be set to the loader object that is loading the
+module.</p>
+<p id="index-47">If an error occurs during loading then the loader raises <a class="reference internal" href="../library/exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a> if
+some other exception is not already being propagated. Otherwise the loader
+returns the module that was loaded and initialized.</p>
+<p>When step (1) finishes without raising an exception, step (2) can begin.</p>
+<p>The first form of <a class="reference internal" href="#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statement binds the module name in the local
+namespace to the module object, and then goes on to import the next identifier,
+if any.  If the module name is followed by <a class="reference internal" href="compound_stmts.html#as"><tt class="xref std std-keyword docutils literal"><span class="pre">as</span></tt></a>, the name following
+<a class="reference internal" href="compound_stmts.html#as"><tt class="xref std std-keyword docutils literal"><span class="pre">as</span></tt></a> is used as the local name for the module.</p>
+<p id="index-48">The <a class="reference internal" href="#from"><tt class="xref std std-keyword docutils literal"><span class="pre">from</span></tt></a> form does not bind the module name: it goes through the list
+of identifiers, looks each one of them up in the module found in step (1), and
+binds the name in the local namespace to the object thus found.  As with the
+first form of <a class="reference internal" href="#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a>, an alternate local name can be supplied by
+specifying &#8220;<a class="reference internal" href="compound_stmts.html#as"><tt class="xref std std-keyword docutils literal"><span class="pre">as</span></tt></a> localname&#8221;.  If a name is not found,
+<a class="reference internal" href="../library/exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a> is raised.  If the list of identifiers is replaced by a star
+(<tt class="docutils literal"><span class="pre">'*'</span></tt>), all public names defined in the module are bound in the local
+namespace of the <a class="reference internal" href="#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statement..</p>
+<p id="index-49">The <em>public names</em> defined by a module are determined by checking the module&#8217;s
+namespace for a variable named <tt class="docutils literal"><span class="pre">__all__</span></tt>; if defined, it must be a sequence of
+strings which are names defined or imported by that module.  The names given in
+<tt class="docutils literal"><span class="pre">__all__</span></tt> are all considered public and are required to exist.  If <tt class="docutils literal"><span class="pre">__all__</span></tt>
+is not defined, the set of public names includes all names found in the module&#8217;s
+namespace which do not begin with an underscore character (<tt class="docutils literal"><span class="pre">'_'</span></tt>).
+<tt class="docutils literal"><span class="pre">__all__</span></tt> should contain the entire public API. It is intended to avoid
+accidentally exporting items that are not part of the API (such as library
+modules which were imported and used within the module).</p>
+<p>The <a class="reference internal" href="#from"><tt class="xref std std-keyword docutils literal"><span class="pre">from</span></tt></a> form with <tt class="docutils literal"><span class="pre">*</span></tt> may only occur in a module scope.  If the
+wild card form of import &#8212; <tt class="docutils literal"><span class="pre">import</span> <span class="pre">*</span></tt> &#8212; is used in a function and the
+function contains or is a nested block with free variables, the compiler will
+raise a <a class="reference internal" href="../library/exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a>.</p>
+<p id="index-50">When specifying what module to import you do not have to specify the absolute
+name of the module. When a module or package is contained within another
+package it is possible to make a relative import within the same top package
+without having to mention the package name. By using leading dots in the
+specified module or package after <a class="reference internal" href="#from"><tt class="xref std std-keyword docutils literal"><span class="pre">from</span></tt></a> you can specify how high to
+traverse up the current package hierarchy without specifying exact names. One
+leading dot means the current package where the module making the import
+exists. Two dots means up one package level. Three dots is up two levels, etc.
+So if you execute <tt class="docutils literal"><span class="pre">from</span> <span class="pre">.</span> <span class="pre">import</span> <span class="pre">mod</span></tt> from a module in the <tt class="docutils literal"><span class="pre">pkg</span></tt> package
+then you will end up importing <tt class="docutils literal"><span class="pre">pkg.mod</span></tt>. If you execute <tt class="docutils literal"><span class="pre">from</span> <span class="pre">..subpkg2</span>
+<span class="pre">import</span> <span class="pre">mod</span></tt> from within <tt class="docutils literal"><span class="pre">pkg.subpkg1</span></tt> you will import <tt class="docutils literal"><span class="pre">pkg.subpkg2.mod</span></tt>.
+The specification for relative imports is contained within <span class="target" id="index-51"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0328"><strong>PEP 328</strong></a>.</p>
+<p><a class="reference internal" href="../library/importlib.html#importlib.import_module" title="importlib.import_module"><tt class="xref py py-func docutils literal"><span class="pre">importlib.import_module()</span></tt></a> is provided to support applications that
+determine which modules need to be loaded dynamically.</p>
+<div class="section" id="future-statements">
+<span id="future"></span><h3>6.12.1. Future statements<a class="headerlink" href="#future-statements" title="Permalink to this headline">¶</a></h3>
+<p id="index-52">A <em class="dfn">future statement</em> is a directive to the compiler that a particular
+module should be compiled using syntax or semantics that will be available in a
+specified future release of Python.  The future statement is intended to ease
+migration to future versions of Python that introduce incompatible changes to
+the language.  It allows use of the new features on a per-module basis before
+the release in which the feature becomes standard.</p>
+<pre>
+<strong id="grammar-token-future_statement">future_statement</strong> ::=  &quot;from&quot; &quot;__future__&quot; &quot;import&quot; feature [&quot;as&quot; name]
+                      (&quot;,&quot; feature [&quot;as&quot; name])*
+                      | &quot;from&quot; &quot;__future__&quot; &quot;import&quot; &quot;(&quot; feature [&quot;as&quot; name]
+                      (&quot;,&quot; feature [&quot;as&quot; name])* [&quot;,&quot;] &quot;)&quot;
+<strong id="grammar-token-feature">feature         </strong> ::=  identifier
+<strong id="id1">name            </strong> ::=  identifier
+</pre>
+<p>A future statement must appear near the top of the module.  The only lines that
+can appear before a future statement are:</p>
+<ul class="simple">
+<li>the module docstring (if any),</li>
+<li>comments,</li>
+<li>blank lines, and</li>
+<li>other future statements.</li>
+</ul>
+<p>The features recognized by Python 2.6 are <tt class="docutils literal"><span class="pre">unicode_literals</span></tt>,
+<tt class="docutils literal"><span class="pre">print_function</span></tt>, <tt class="docutils literal"><span class="pre">absolute_import</span></tt>, <tt class="docutils literal"><span class="pre">division</span></tt>, <tt class="docutils literal"><span class="pre">generators</span></tt>,
+<tt class="docutils literal"><span class="pre">nested_scopes</span></tt> and <tt class="docutils literal"><span class="pre">with_statement</span></tt>.  <tt class="docutils literal"><span class="pre">generators</span></tt>, <tt class="docutils literal"><span class="pre">with_statement</span></tt>,
+<tt class="docutils literal"><span class="pre">nested_scopes</span></tt> are redundant in Python version 2.6 and above because they are
+always enabled.</p>
+<p>A future statement is recognized and treated specially at compile time: Changes
+to the semantics of core constructs are often implemented by generating
+different code.  It may even be the case that a new feature introduces new
+incompatible syntax (such as a new reserved word), in which case the compiler
+may need to parse the module differently.  Such decisions cannot be pushed off
+until runtime.</p>
+<p>For any given release, the compiler knows which feature names have been defined,
+and raises a compile-time error if a future statement contains a feature not
+known to it.</p>
+<p>The direct runtime semantics are the same as for any import statement: there is
+a standard module <a class="reference internal" href="../library/__future__.html#module-__future__" title="__future__: Future statement definitions"><tt class="xref py py-mod docutils literal"><span class="pre">__future__</span></tt></a>, described later, and it will be imported in
+the usual way at the time the future statement is executed.</p>
+<p>The interesting runtime semantics depend on the specific feature enabled by the
+future statement.</p>
+<p>Note that there is nothing special about the statement:</p>
+<div class="highlight-python"><pre>import __future__ [as name]</pre>
+</div>
+<p>That is not a future statement; it&#8217;s an ordinary import statement with no
+special semantics or syntax restrictions.</p>
+<p>Code compiled by an <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement or calls to the built-in functions
+<a class="reference internal" href="../library/functions.html#compile" title="compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> and <a class="reference internal" href="../library/functions.html#execfile" title="execfile"><tt class="xref py py-func docutils literal"><span class="pre">execfile()</span></tt></a> that occur in a module <tt class="xref py py-mod docutils literal"><span class="pre">M</span></tt> containing
+a future statement will, by default, use the new  syntax or semantics associated
+with the future statement.  This can, starting with Python 2.2 be controlled by
+optional arguments to <a class="reference internal" href="../library/functions.html#compile" title="compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> &#8212; see the documentation of that function
+for details.</p>
+<p>A future statement typed at an interactive interpreter prompt will take effect
+for the rest of the interpreter session.  If an interpreter is started with the
+<a class="reference internal" href="../using/cmdline.html#cmdoption-i"><em class="xref std std-option">-i</em></a> option, is passed a script name to execute, and the script includes
+a future statement, it will be in effect in the interactive session started
+after the script is executed.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><span class="target" id="index-53"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0236"><strong>PEP 236</strong></a> - Back to the __future__</dt>
+<dd>The original proposal for the __future__ mechanism.</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="section" id="the-global-statement">
+<span id="global"></span><h2>6.13. The <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement<a class="headerlink" href="#the-global-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-54">
+<strong id="grammar-token-global_stmt">global_stmt</strong> ::=  &quot;global&quot; <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a> (&quot;,&quot; <a class="reference internal" href="lexical_analysis.html#grammar-token-identifier"><tt class="xref docutils literal"><span class="pre">identifier</span></tt></a>)*
+</pre>
+<p>The <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement is a declaration which holds for the entire
+current code block.  It means that the listed identifiers are to be interpreted
+as globals.  It would be impossible to assign to a global variable without
+<a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a>, although free variables may refer to globals without being
+declared global.</p>
+<p>Names listed in a <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement must not be used in the same code
+block textually preceding that <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement.</p>
+<p>Names listed in a <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement must not be defined as formal
+parameters or in a <a class="reference internal" href="compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> loop control target, <a class="reference internal" href="compound_stmts.html#class"><tt class="xref std std-keyword docutils literal"><span class="pre">class</span></tt></a>
+definition, function definition, or <a class="reference internal" href="#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statement.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> The current implementation does not enforce the latter two restrictions, but
+programs should not abuse this freedom, as future implementations may enforce
+them or silently change the meaning of the program.</p>
+</div>
+<p id="index-55"><strong>Programmer&#8217;s note:</strong> the <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> is a directive to the parser.  It
+applies only to code parsed at the same time as the <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement.
+In particular, a <a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement contained in an <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a>
+statement does not affect the code block <em>containing</em> the <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a>
+statement, and code contained in an <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement is unaffected by
+<a class="reference internal" href="#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statements in the code containing the <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a>
+statement.  The same applies to the <a class="reference internal" href="../library/functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a>, <a class="reference internal" href="../library/functions.html#execfile" title="execfile"><tt class="xref py py-func docutils literal"><span class="pre">execfile()</span></tt></a> and
+<a class="reference internal" href="../library/functions.html#compile" title="compile"><tt class="xref py py-func docutils literal"><span class="pre">compile()</span></tt></a> functions.</p>
+</div>
+<div class="section" id="the-exec-statement">
+<span id="exec"></span><h2>6.14. The <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement<a class="headerlink" href="#the-exec-statement" title="Permalink to this headline">¶</a></h2>
+<pre id="index-56">
+<strong id="grammar-token-exec_stmt">exec_stmt</strong> ::=  &quot;exec&quot; <a class="reference internal" href="expressions.html#grammar-token-or_expr"><tt class="xref docutils literal"><span class="pre">or_expr</span></tt></a> [&quot;in&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a> [&quot;,&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><tt class="xref docutils literal"><span class="pre">expression</span></tt></a>]]
+</pre>
+<p>This statement supports dynamic execution of Python code.  The first expression
+should evaluate to either a string, an open file object, a code object, or a
+tuple.  If it is a string, the string is parsed as a suite of Python statements
+which is then executed (unless a syntax error occurs). <a class="footnote-reference" href="#id3" id="id2">[1]</a> If it is an open
+file, the file is parsed until EOF and executed.  If it is a code object, it is
+simply executed.  For the interpretation of a tuple, see below.  In all cases,
+the code that&#8217;s executed is expected to be valid as file input (see section
+<a class="reference internal" href="toplevel_components.html#file-input"><em>File input</em></a>).  Be aware that the <a class="reference internal" href="#return"><tt class="xref std std-keyword docutils literal"><span class="pre">return</span></tt></a> and <a class="reference internal" href="#yield"><tt class="xref std std-keyword docutils literal"><span class="pre">yield</span></tt></a>
+statements may not be used outside of function definitions even within the
+context of code passed to the <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement.</p>
+<p>In all cases, if the optional parts are omitted, the code is executed in the
+current scope.  If only the first expression after <tt class="docutils literal"><span class="pre">in</span></tt> is specified,
+it should be a dictionary, which will be used for both the global and the local
+variables.  If two expressions are given, they are used for the global and local
+variables, respectively. If provided, <em>locals</em> can be any mapping object.
+Remember that at module level, globals and locals are the same dictionary. If
+two separate objects are given as <em>globals</em> and <em>locals</em>, the code will be
+executed as if it were embedded in a class definition.</p>
+<p>The first expression may also be a tuple of length 2 or 3.  In this case, the
+optional parts must be omitted.  The form <tt class="docutils literal"><span class="pre">exec(expr,</span> <span class="pre">globals)</span></tt> is equivalent
+to <tt class="docutils literal"><span class="pre">exec</span> <span class="pre">expr</span> <span class="pre">in</span> <span class="pre">globals</span></tt>, while the form <tt class="docutils literal"><span class="pre">exec(expr,</span> <span class="pre">globals,</span> <span class="pre">locals)</span></tt> is
+equivalent to <tt class="docutils literal"><span class="pre">exec</span> <span class="pre">expr</span> <span class="pre">in</span> <span class="pre">globals,</span> <span class="pre">locals</span></tt>.  The tuple form of <tt class="docutils literal"><span class="pre">exec</span></tt>
+provides compatibility with Python 3, where <tt class="docutils literal"><span class="pre">exec</span></tt> is a function rather than
+a statement.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4: </span>Formerly, <em>locals</em> was required to be a dictionary.</p>
+<p id="index-57">As a side effect, an implementation may insert additional keys into the
+dictionaries given besides those corresponding to variable names set by the
+executed code.  For example, the current implementation may add a reference to
+the dictionary of the built-in module <a class="reference internal" href="../library/__builtin__.html#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a> under the key
+<tt class="docutils literal"><span class="pre">__builtins__</span></tt> (!).</p>
+<p id="index-58"><strong>Programmer&#8217;s hints:</strong> dynamic evaluation of expressions is supported by the
+built-in function <a class="reference internal" href="../library/functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a>.  The built-in functions <a class="reference internal" href="../library/functions.html#globals" title="globals"><tt class="xref py py-func docutils literal"><span class="pre">globals()</span></tt></a> and
+<a class="reference internal" href="../library/functions.html#locals" title="locals"><tt class="xref py py-func docutils literal"><span class="pre">locals()</span></tt></a> return the current global and local dictionary, respectively,
+which may be useful to pass around for use by <a class="reference internal" href="#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a>.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>Note that the parser only accepts the Unix-style end of line convention.
+If you are reading the code from a file, make sure to use
+<a class="reference internal" href="../glossary.html#term-universal-newlines"><em class="xref std std-term">universal newlines</em></a> mode to convert Windows or Mac-style newlines.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">6. Simple statements</a><ul>
+<li><a class="reference internal" href="#expression-statements">6.1. Expression statements</a></li>
+<li><a class="reference internal" href="#assignment-statements">6.2. Assignment statements</a><ul>
+<li><a class="reference internal" href="#augmented-assignment-statements">6.2.1. Augmented assignment statements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-assert-statement">6.3. The <tt class="docutils literal"><span class="pre">assert</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-pass-statement">6.4. The <tt class="docutils literal"><span class="pre">pass</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-del-statement">6.5. The <tt class="docutils literal"><span class="pre">del</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-print-statement">6.6. The <tt class="docutils literal"><span class="pre">print</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-return-statement">6.7. The <tt class="docutils literal"><span class="pre">return</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-yield-statement">6.8. The <tt class="docutils literal"><span class="pre">yield</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-raise-statement">6.9. The <tt class="docutils literal"><span class="pre">raise</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-break-statement">6.10. The <tt class="docutils literal"><span class="pre">break</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-continue-statement">6.11. The <tt class="docutils literal"><span class="pre">continue</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-import-statement">6.12. The <tt class="docutils literal"><span class="pre">import</span></tt> statement</a><ul>
+<li><a class="reference internal" href="#future-statements">6.12.1. Future statements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-global-statement">6.13. The <tt class="docutils literal"><span class="pre">global</span></tt> statement</a></li>
+<li><a class="reference internal" href="#the-exec-statement">6.14. The <tt class="docutils literal"><span class="pre">exec</span></tt> statement</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="expressions.html"
+                        title="previous chapter">5. Expressions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="compound_stmts.html"
+                        title="next chapter">7. Compound statements</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/reference/simple_stmts.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="compound_stmts.html" title="7. Compound statements"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="expressions.html" title="5. Expressions"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Language Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

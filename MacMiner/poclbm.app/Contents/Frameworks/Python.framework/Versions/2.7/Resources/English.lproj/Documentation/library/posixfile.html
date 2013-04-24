@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.12. posixfile — File-like objects with locking support &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="next" title="35.13. resource — Resource usage information" href="resource.html" />
+    <link rel="prev" title="35.11. pipes — Interface to shell pipelines" href="pipes.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="resource.html" title="35.13. resource — Resource usage information"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pipes.html" title="35.11. pipes — Interface to shell pipelines"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" accesskey="U">35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-posixfile">
+<span id="posixfile-file-like-objects-with-locking-support"></span><h1>35.12. <a class="reference internal" href="#module-posixfile" title="posixfile: A file-like object with support for locking. (deprecated) (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posixfile</span></tt></a> &#8212; File-like objects with locking support<a class="headerlink" href="#module-posixfile" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Unix</p>
+<p class="deprecated" id="index-0">
+<span class="versionmodified">Deprecated since version 1.5: </span>The locking operation that this module provides is done better and more portably
+by the <a class="reference internal" href="fcntl.html#fcntl.lockf" title="fcntl.lockf"><tt class="xref py py-func docutils literal"><span class="pre">fcntl.lockf()</span></tt></a> call.</p>
+<p id="index-1">This module implements some additional functionality over the built-in file
+objects.  In particular, it implements file locking, control over the file
+flags, and an easy interface to duplicate the file object. The module defines a
+new file object, the posixfile object.  It has all the standard file object
+methods and adds the methods described below.  This module only works for
+certain flavors of Unix, since it uses <a class="reference internal" href="fcntl.html#fcntl.fcntl" title="fcntl.fcntl"><tt class="xref py py-func docutils literal"><span class="pre">fcntl.fcntl()</span></tt></a> for file locking.</p>
+<p>To instantiate a posixfile object, use the <a class="reference internal" href="#posixfile.open" title="posixfile.open"><tt class="xref py py-func docutils literal"><span class="pre">posixfile.open()</span></tt></a> function.  The
+resulting object looks and feels roughly the same as a standard file object.</p>
+<p>The <a class="reference internal" href="#module-posixfile" title="posixfile: A file-like object with support for locking. (deprecated) (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posixfile</span></tt></a> module defines the following constants:</p>
+<dl class="data">
+<dt id="posixfile.SEEK_SET">
+<tt class="descclassname">posixfile.</tt><tt class="descname">SEEK_SET</tt><a class="headerlink" href="#posixfile.SEEK_SET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset is calculated from the start of the file.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="posixfile.SEEK_CUR">
+<tt class="descclassname">posixfile.</tt><tt class="descname">SEEK_CUR</tt><a class="headerlink" href="#posixfile.SEEK_CUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset is calculated from the current position in the file.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="posixfile.SEEK_END">
+<tt class="descclassname">posixfile.</tt><tt class="descname">SEEK_END</tt><a class="headerlink" href="#posixfile.SEEK_END" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset is calculated from the end of the file.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-posixfile" title="posixfile: A file-like object with support for locking. (deprecated) (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posixfile</span></tt></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="posixfile.open">
+<tt class="descclassname">posixfile.</tt><tt class="descname">open</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>bufsize</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#posixfile.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new posixfile object with the given filename and mode.  The <em>filename</em>,
+<em>mode</em> and <em>bufsize</em> arguments are interpreted the same way as by the built-in
+<a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="posixfile.fileopen">
+<tt class="descclassname">posixfile.</tt><tt class="descname">fileopen</tt><big>(</big><em>fileobject</em><big>)</big><a class="headerlink" href="#posixfile.fileopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new posixfile object with the given standard file object. The resulting
+object has the same filename and mode as the original file object.</p>
+</dd></dl>
+
+<p>The posixfile object defines the following additional methods:</p>
+<dl class="method">
+<dt id="posixfile.posixfile.lock">
+<tt class="descclassname">posixfile.</tt><tt class="descname">lock</tt><big>(</big><em>fmt</em><span class="optional">[</span>, <em>len</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>whence</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#posixfile.posixfile.lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lock the specified section of the file that the file object is referring to.
+The format is explained below in a table.  The <em>len</em> argument specifies the
+length of the section that should be locked. The default is <tt class="docutils literal"><span class="pre">0</span></tt>. <em>start</em>
+specifies the starting offset of the section, where the default is <tt class="docutils literal"><span class="pre">0</span></tt>.  The
+<em>whence</em> argument specifies where the offset is relative to. It accepts one of
+the constants <a class="reference internal" href="#posixfile.SEEK_SET" title="posixfile.SEEK_SET"><tt class="xref py py-const docutils literal"><span class="pre">SEEK_SET</span></tt></a>, <a class="reference internal" href="#posixfile.SEEK_CUR" title="posixfile.SEEK_CUR"><tt class="xref py py-const docutils literal"><span class="pre">SEEK_CUR</span></tt></a> or <a class="reference internal" href="#posixfile.SEEK_END" title="posixfile.SEEK_END"><tt class="xref py py-const docutils literal"><span class="pre">SEEK_END</span></tt></a>.  The
+default is <a class="reference internal" href="#posixfile.SEEK_SET" title="posixfile.SEEK_SET"><tt class="xref py py-const docutils literal"><span class="pre">SEEK_SET</span></tt></a>.  For more information about the arguments refer to
+the <em class="manpage">fcntl(2)</em> manual page on your system.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="posixfile.posixfile.flags">
+<tt class="descclassname">posixfile.</tt><tt class="descname">flags</tt><big>(</big><span class="optional">[</span><em>flags</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#posixfile.posixfile.flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the specified flags for the file that the file object is referring to.  The
+new flags are ORed with the old flags, unless specified otherwise.  The format
+is explained below in a table.  Without the <em>flags</em> argument a string indicating
+the current flags is returned (this is the same as the <tt class="docutils literal"><span class="pre">?</span></tt> modifier).  For
+more information about the flags refer to the <em class="manpage">fcntl(2)</em> manual page on
+your system.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="posixfile.posixfile.dup">
+<tt class="descclassname">posixfile.</tt><tt class="descname">dup</tt><big>(</big><big>)</big><a class="headerlink" href="#posixfile.posixfile.dup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicate the file object and the underlying file pointer and file descriptor.
+The resulting object behaves as if it were newly opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="posixfile.posixfile.dup2">
+<tt class="descclassname">posixfile.</tt><tt class="descname">dup2</tt><big>(</big><em>fd</em><big>)</big><a class="headerlink" href="#posixfile.posixfile.dup2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicate the file object and the underlying file pointer and file descriptor.
+The new object will have the given file descriptor. Otherwise the resulting
+object behaves as if it were newly opened.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="posixfile.posixfile.file">
+<tt class="descclassname">posixfile.</tt><tt class="descname">file</tt><big>(</big><big>)</big><a class="headerlink" href="#posixfile.posixfile.file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the standard file object that the posixfile object is based on.  This is
+sometimes necessary for functions that insist on a standard file object.</p>
+</dd></dl>
+
+<p>All methods raise <a class="reference internal" href="exceptions.html#exceptions.IOError" title="exceptions.IOError"><tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt></a> when the request fails.</p>
+<p>Format characters for the <tt class="xref py py-meth docutils literal"><span class="pre">lock()</span></tt> method have the following meaning:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Format</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">u</span></tt></td>
+<td>unlock the specified region</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">r</span></tt></td>
+<td>request a read lock for the specified section</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">w</span></tt></td>
+<td>request a write lock for the specified
+section</td>
+</tr>
+</tbody>
+</table>
+<p>In addition the following modifiers can be added to the format:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="65%" />
+<col width="14%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Modifier</th>
+<th class="head">Meaning</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">|</span></tt></td>
+<td>wait until the lock has been
+granted</td>
+<td>&nbsp;</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">?</span></tt></td>
+<td>return the first lock
+conflicting with the requested
+lock, or <tt class="xref docutils literal"><span class="pre">None</span></tt> if there is
+no conflict.</td>
+<td>(1)</td>
+</tr>
+</tbody>
+</table>
+<p>Note:</p>
+<ol class="arabic simple">
+<li>The lock returned is in the format <tt class="docutils literal"><span class="pre">(mode,</span> <span class="pre">len,</span> <span class="pre">start,</span> <span class="pre">whence,</span> <span class="pre">pid)</span></tt> where
+<em>mode</em> is a character representing the type of lock (&#8216;r&#8217; or &#8216;w&#8217;).  This modifier
+prevents a request from being granted; it is for query purposes only.</li>
+</ol>
+<p>Format characters for the <tt class="xref py py-meth docutils literal"><span class="pre">flags()</span></tt> method have the following meanings:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Format</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">a</span></tt></td>
+<td>append only flag</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">c</span></tt></td>
+<td>close on exec flag</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">n</span></tt></td>
+<td>no delay flag (also called non-blocking flag)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">s</span></tt></td>
+<td>synchronization flag</td>
+</tr>
+</tbody>
+</table>
+<p>In addition the following modifiers can be added to the format:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="66%" />
+<col width="14%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Modifier</th>
+<th class="head">Meaning</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">!</span></tt></td>
+<td>turn the specified flags &#8216;off&#8217;,
+instead of the default &#8216;on&#8217;</td>
+<td>(1)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">=</span></tt></td>
+<td>replace the flags, instead of
+the default &#8216;OR&#8217; operation</td>
+<td>(1)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">?</span></tt></td>
+<td>return a string in which the
+characters represent the flags
+that are set.</td>
+<td>(2)</td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ol class="arabic simple">
+<li>The <tt class="docutils literal"><span class="pre">!</span></tt> and <tt class="docutils literal"><span class="pre">=</span></tt> modifiers are mutually exclusive.</li>
+<li>This string represents the flags after they may have been altered by the same
+call.</li>
+</ol>
+<p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">posixfile</span>
+
+<span class="nb">file</span> <span class="o">=</span> <span class="n">posixfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;testfile&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span><span class="s">&#39;w|&#39;</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pipes.html"
+                        title="previous chapter">35.11. <tt class="docutils literal docutils literal docutils literal"><span class="pre">pipes</span></tt> &#8212; Interface to shell pipelines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="resource.html"
+                        title="next chapter">35.13. <tt class="docutils literal docutils literal"><span class="pre">resource</span></tt> &#8212; Resource usage information</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/posixfile.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="resource.html" title="35.13. resource — Resource usage information"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pipes.html" title="35.11. pipes — Interface to shell pipelines"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" >35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

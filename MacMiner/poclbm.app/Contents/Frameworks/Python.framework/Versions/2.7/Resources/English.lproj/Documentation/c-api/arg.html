@@ -1,0 +1,650 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parsing arguments and building values &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Utilities" href="utilities.html" />
+    <link rel="next" title="String conversion and formatting" href="conversion.html" />
+    <link rel="prev" title="Data marshalling support" href="marshal.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="conversion.html" title="String conversion and formatting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="marshal.html" title="Data marshalling support"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="utilities.html" accesskey="U">Utilities</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="parsing-arguments-and-building-values">
+<span id="arg-parsing"></span><h1>Parsing arguments and building values<a class="headerlink" href="#parsing-arguments-and-building-values" title="Permalink to this headline">¶</a></h1>
+<p>These functions are useful when creating your own extensions functions and
+methods.  Additional information and examples are available in
+<a class="reference internal" href="../extending/index.html#extending-index"><em>Extending and Embedding the Python Interpreter</em></a>.</p>
+<p>The first three of these functions described, <a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a>,
+<a class="reference internal" href="#PyArg_ParseTupleAndKeywords" title="PyArg_ParseTupleAndKeywords"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTupleAndKeywords()</span></tt></a>, and <a class="reference internal" href="#PyArg_Parse" title="PyArg_Parse"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_Parse()</span></tt></a>, all use
+<em>format strings</em> which are used to tell the function about the expected
+arguments.  The format strings use the same syntax for each of these
+functions.</p>
+<p>A format string consists of zero or more &#8220;format units.&#8221;  A format unit
+describes one Python object; it is usually a single character or a
+parenthesized sequence of format units.  With a few exceptions, a format unit
+that is not a parenthesized sequence normally corresponds to a single address
+argument to these functions.  In the following description, the quoted form is
+the format unit; the entry in (round) parentheses is the Python object type
+that matches the format unit; and the entry in [square] brackets is the type
+of the C variable(s) whose address should be passed.</p>
+<p>These formats allow to access an object as a contiguous chunk of memory.
+You don&#8217;t have to provide raw storage for the returned unicode or bytes
+area.  Also, you won&#8217;t have to release any memory yourself, except with the
+<tt class="docutils literal"><span class="pre">es</span></tt>, <tt class="docutils literal"><span class="pre">es#</span></tt>, <tt class="docutils literal"><span class="pre">et</span></tt> and <tt class="docutils literal"><span class="pre">et#</span></tt> formats.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">s</span></tt> (string or Unicode) [const char *]</dt>
+<dd>Convert a Python string or Unicode object to a C pointer to a character
+string.  You must not provide storage for the string itself; a pointer to
+an existing string is stored into the character pointer variable whose
+address you pass.  The C string is NUL-terminated.  The Python string must
+not contain embedded NUL bytes; if it does, a <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception is
+raised. Unicode objects are converted to C strings using the default
+encoding.  If this conversion fails, a <a class="reference internal" href="../library/exceptions.html#exceptions.UnicodeError" title="exceptions.UnicodeError"><tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt></a> is raised.</dd>
+<dt><tt class="docutils literal"><span class="pre">s#</span></tt> (string, Unicode or any read buffer compatible object) [const char *, int (or <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt>, see below)]</dt>
+<dd><p class="first">This variant on <tt class="docutils literal"><span class="pre">s</span></tt> stores into two C variables, the first one a pointer
+to a character string, the second one its length.  In this case the Python
+string may contain embedded null bytes.  Unicode objects pass back a
+pointer to the default encoded string version of the object if such a
+conversion is possible.  All other read-buffer compatible objects pass back
+a reference to the raw internal data representation.</p>
+<p class="last">Starting with Python 2.5 the type of the length argument can be controlled
+by defining the macro <tt class="xref c c-macro docutils literal"><span class="pre">PY_SSIZE_T_CLEAN</span></tt> before including
+<tt class="file docutils literal"><span class="pre">Python.h</span></tt>.  If the macro is defined, length is a <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt>
+rather than an int.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">s*</span></tt> (string, Unicode, or any buffer compatible object) [Py_buffer]</dt>
+<dd><p class="first">Similar to <tt class="docutils literal"><span class="pre">s#</span></tt>, this code fills a Py_buffer structure provided by the
+caller.  The buffer gets locked, so that the caller can subsequently use
+the buffer even inside a <tt class="docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></tt> block; the caller is
+responsible for calling <tt class="docutils literal"><span class="pre">PyBuffer_Release</span></tt> with the structure after it
+has processed the data.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">z</span></tt> (string, Unicode  or <tt class="xref docutils literal"><span class="pre">None</span></tt>) [const char *]</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">s</span></tt>, but the Python object may also be <tt class="xref docutils literal"><span class="pre">None</span></tt>, in which case the C
+pointer is set to <em>NULL</em>.</dd>
+<dt><tt class="docutils literal"><span class="pre">z#</span></tt> (string, Unicode, <tt class="xref docutils literal"><span class="pre">None</span></tt> or any read buffer compatible object) [const char *, int]</dt>
+<dd>This is to <tt class="docutils literal"><span class="pre">s#</span></tt> as <tt class="docutils literal"><span class="pre">z</span></tt> is to <tt class="docutils literal"><span class="pre">s</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">z*</span></tt> (string, Unicode, <tt class="xref docutils literal"><span class="pre">None</span></tt> or any buffer compatible object) [Py_buffer]</dt>
+<dd><p class="first">This is to <tt class="docutils literal"><span class="pre">s*</span></tt> as <tt class="docutils literal"><span class="pre">z</span></tt> is to <tt class="docutils literal"><span class="pre">s</span></tt>.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">u</span></tt> (Unicode) [Py_UNICODE *]</dt>
+<dd>Convert a Python Unicode object to a C pointer to a NUL-terminated buffer
+of 16-bit Unicode (UTF-16) data.  As with <tt class="docutils literal"><span class="pre">s</span></tt>, there is no need to
+provide storage for the Unicode data buffer; a pointer to the existing
+Unicode data is stored into the <a class="reference internal" href="unicode.html#Py_UNICODE" title="Py_UNICODE"><tt class="xref c c-type docutils literal"><span class="pre">Py_UNICODE</span></tt></a> pointer variable whose
+address you pass.</dd>
+<dt><tt class="docutils literal"><span class="pre">u#</span></tt> (Unicode) [Py_UNICODE *, int]</dt>
+<dd>This variant on <tt class="docutils literal"><span class="pre">u</span></tt> stores into two C variables, the first one a pointer
+to a Unicode data buffer, the second one its length. Non-Unicode objects
+are handled by interpreting their read-buffer pointer as pointer to a
+<a class="reference internal" href="unicode.html#Py_UNICODE" title="Py_UNICODE"><tt class="xref c c-type docutils literal"><span class="pre">Py_UNICODE</span></tt></a> array.</dd>
+<dt><tt class="docutils literal"><span class="pre">es</span></tt> (string, Unicode or character buffer compatible object) [const char *encoding, char **buffer]</dt>
+<dd><p class="first">This variant on <tt class="docutils literal"><span class="pre">s</span></tt> is used for encoding Unicode and objects convertible
+to Unicode into a character buffer. It only works for encoded data without
+embedded NUL bytes.</p>
+<p>This format requires two arguments.  The first is only used as input, and
+must be a <tt class="xref c c-type docutils literal"><span class="pre">const</span> <span class="pre">char*</span></tt> which points to the name of an encoding as
+a NUL-terminated string, or <em>NULL</em>, in which case the default encoding is
+used.  An exception is raised if the named encoding is not known to Python.
+The second argument must be a <tt class="xref c c-type docutils literal"><span class="pre">char**</span></tt>; the value of the pointer
+it references will be set to a buffer with the contents of the argument
+text.  The text will be encoded in the encoding specified by the first
+argument.</p>
+<p class="last"><a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a> will allocate a buffer of the needed size, copy
+the encoded data into this buffer and adjust <em>*buffer</em> to reference the
+newly allocated storage.  The caller is responsible for calling
+<a class="reference internal" href="memory.html#PyMem_Free" title="PyMem_Free"><tt class="xref c c-func docutils literal"><span class="pre">PyMem_Free()</span></tt></a> to free the allocated buffer after use.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">et</span></tt> (string, Unicode or character buffer compatible object) [const char *encoding, char **buffer]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">es</span></tt> except that 8-bit string objects are passed through without
+recoding them.  Instead, the implementation assumes that the string object
+uses the encoding passed in as parameter.</dd>
+<dt><tt class="docutils literal"><span class="pre">es#</span></tt> (string, Unicode or character buffer compatible object) [const char *encoding, char **buffer, int *buffer_length]</dt>
+<dd><p class="first">This variant on <tt class="docutils literal"><span class="pre">s#</span></tt> is used for encoding Unicode and objects convertible
+to Unicode into a character buffer.  Unlike the <tt class="docutils literal"><span class="pre">es</span></tt> format, this variant
+allows input data which contains NUL characters.</p>
+<p>It requires three arguments.  The first is only used as input, and must be
+a <tt class="xref c c-type docutils literal"><span class="pre">const</span> <span class="pre">char*</span></tt> which points to the name of an encoding as a
+NUL-terminated string, or <em>NULL</em>, in which case the default encoding is
+used.  An exception is raised if the named encoding is not known to Python.
+The second argument must be a <tt class="xref c c-type docutils literal"><span class="pre">char**</span></tt>; the value of the pointer
+it references will be set to a buffer with the contents of the argument
+text.  The text will be encoded in the encoding specified by the first
+argument.  The third argument must be a pointer to an integer; the
+referenced integer will be set to the number of bytes in the output buffer.</p>
+<p>There are two modes of operation:</p>
+<p>If <em>*buffer</em> points a <em>NULL</em> pointer, the function will allocate a buffer
+of the needed size, copy the encoded data into this buffer and set
+<em>*buffer</em> to reference the newly allocated storage.  The caller is
+responsible for calling <a class="reference internal" href="memory.html#PyMem_Free" title="PyMem_Free"><tt class="xref c c-func docutils literal"><span class="pre">PyMem_Free()</span></tt></a> to free the allocated buffer
+after usage.</p>
+<p>If <em>*buffer</em> points to a non-<em>NULL</em> pointer (an already allocated buffer),
+<a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a> will use this location as the buffer and
+interpret the initial value of <em>*buffer_length</em> as the buffer size.  It
+will then copy the encoded data into the buffer and NUL-terminate it.  If
+the buffer is not large enough, a <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> will be set.</p>
+<p class="last">In both cases, <em>*buffer_length</em> is set to the length of the encoded data
+without the trailing NUL byte.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">et#</span></tt> (string, Unicode or character buffer compatible object) [const char *encoding, char **buffer, int *buffer_length]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">es#</span></tt> except that string objects are passed through without
+recoding them. Instead, the implementation assumes that the string object
+uses the encoding passed in as parameter.</dd>
+<dt><tt class="docutils literal"><span class="pre">b</span></tt> (integer) [unsigned char]</dt>
+<dd>Convert a nonnegative Python integer to an unsigned tiny int, stored in a C
+<tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">char</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">B</span></tt> (integer) [unsigned char]</dt>
+<dd><p class="first">Convert a Python integer to a tiny int without overflow checking, stored in
+a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">char</span></tt>.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">h</span></tt> (integer) [short int]</dt>
+<dd>Convert a Python integer to a C <tt class="xref c c-type docutils literal"><span class="pre">short</span> <span class="pre">int</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">H</span></tt> (integer) [unsigned short int]</dt>
+<dd><p class="first">Convert a Python integer to a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">short</span> <span class="pre">int</span></tt>, without
+overflow checking.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">i</span></tt> (integer) [int]</dt>
+<dd>Convert a Python integer to a plain C <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">I</span></tt> (integer) [unsigned int]</dt>
+<dd><p class="first">Convert a Python integer to a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">int</span></tt>, without overflow
+checking.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">l</span></tt> (integer) [long int]</dt>
+<dd>Convert a Python integer to a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">int</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">k</span></tt> (integer) [unsigned long]</dt>
+<dd><p class="first">Convert a Python integer or long integer to a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span></tt>
+without overflow checking.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">L</span></tt> (integer) [PY_LONG_LONG]</dt>
+<dd>Convert a Python integer to a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt>.  This format is only
+available on platforms that support <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt> (or <tt class="xref c c-type docutils literal"><span class="pre">_int64</span></tt>
+on Windows).</dd>
+<dt><tt class="docutils literal"><span class="pre">K</span></tt> (integer) [unsigned PY_LONG_LONG]</dt>
+<dd><p class="first">Convert a Python integer or long integer to a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt>
+without overflow checking.  This format is only available on platforms that
+support <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt> (or <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">_int64</span></tt> on
+Windows).</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">n</span></tt> (integer) [Py_ssize_t]</dt>
+<dd><p class="first">Convert a Python integer or long integer to a C <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt>.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">c</span></tt> (string of length 1) [char]</dt>
+<dd>Convert a Python character, represented as a string of length 1, to a C
+<tt class="xref c c-type docutils literal"><span class="pre">char</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">f</span></tt> (float) [float]</dt>
+<dd>Convert a Python floating point number to a C <tt class="xref c c-type docutils literal"><span class="pre">float</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">d</span></tt> (float) [double]</dt>
+<dd>Convert a Python floating point number to a C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">D</span></tt> (complex) [Py_complex]</dt>
+<dd>Convert a Python complex number to a C <a class="reference internal" href="complex.html#Py_complex" title="Py_complex"><tt class="xref c c-type docutils literal"><span class="pre">Py_complex</span></tt></a> structure.</dd>
+<dt><tt class="docutils literal"><span class="pre">O</span></tt> (object) [PyObject *]</dt>
+<dd>Store a Python object (without any conversion) in a C object pointer.  The
+C program thus receives the actual object that was passed.  The object&#8217;s
+reference count is not increased.  The pointer stored is not <em>NULL</em>.</dd>
+<dt><tt class="docutils literal"><span class="pre">O!</span></tt> (object) [<em>typeobject</em>, PyObject *]</dt>
+<dd>Store a Python object in a C object pointer.  This is similar to <tt class="docutils literal"><span class="pre">O</span></tt>, but
+takes two C arguments: the first is the address of a Python type object,
+the second is the address of the C variable (of type <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a>)
+into which the object pointer is stored.  If the Python object does not
+have the required type, <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> is raised.</dd>
+<dt><tt class="docutils literal"><span class="pre">O&amp;</span></tt> (object) [<em>converter</em>, <em>anything</em>]</dt>
+<dd><p class="first">Convert a Python object to a C variable through a <em>converter</em> function.
+This takes two arguments: the first is a function, the second is the
+address of a C variable (of arbitrary type), converted to <tt class="xref c c-type docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt>.
+The <em>converter</em> function in turn is called as follows:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">status</span> <span class="o">=</span> <span class="n">converter</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">address</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="last">where <em>object</em> is the Python object to be converted and <em>address</em> is the
+<tt class="xref c c-type docutils literal"><span class="pre">void*</span></tt> argument that was passed to the <a class="reference internal" href="#PyArg_Parse" title="PyArg_Parse"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_Parse*()</span></tt></a>
+function.  The returned <em>status</em> should be <tt class="docutils literal"><span class="pre">1</span></tt> for a successful
+conversion and <tt class="docutils literal"><span class="pre">0</span></tt> if the conversion has failed.  When the conversion
+fails, the <em>converter</em> function should raise an exception and leave the
+content of <em>address</em> unmodified.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">S</span></tt> (string) [PyStringObject *]</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">O</span></tt> but requires that the Python object is a string object.  Raises
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> if the object is not a string object.  The C variable may
+also be declared as <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a>.</dd>
+<dt><tt class="docutils literal"><span class="pre">U</span></tt> (Unicode string) [PyUnicodeObject *]</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">O</span></tt> but requires that the Python object is a Unicode object.  Raises
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> if the object is not a Unicode object.  The C variable may
+also be declared as <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a>.</dd>
+<dt><tt class="docutils literal"><span class="pre">t#</span></tt> (read-only character buffer) [char *, int]</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">s#</span></tt>, but accepts any object which implements the read-only buffer
+interface.  The <tt class="xref c c-type docutils literal"><span class="pre">char*</span></tt> variable is set to point to the first byte
+of the buffer, and the <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> is set to the length of the buffer.
+Only single-segment buffer objects are accepted; <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> is raised
+for all others.</dd>
+<dt><tt class="docutils literal"><span class="pre">w</span></tt> (read-write character buffer) [char *]</dt>
+<dd>Similar to <tt class="docutils literal"><span class="pre">s</span></tt>, but accepts any object which implements the read-write
+buffer interface.  The caller must determine the length of the buffer by
+other means, or use <tt class="docutils literal"><span class="pre">w#</span></tt> instead.  Only single-segment buffer objects are
+accepted; <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> is raised for all others.</dd>
+<dt><tt class="docutils literal"><span class="pre">w#</span></tt> (read-write character buffer) [char *, Py_ssize_t]</dt>
+<dd>Like <tt class="docutils literal"><span class="pre">s#</span></tt>, but accepts any object which implements the read-write buffer
+interface.  The <tt class="xref c c-type docutils literal"><span class="pre">char</span> <span class="pre">*</span></tt> variable is set to point to the first byte
+of the buffer, and the <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt> is set to the length of the
+buffer.  Only single-segment buffer objects are accepted; <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>
+is raised for all others.</dd>
+<dt><tt class="docutils literal"><span class="pre">w*</span></tt> (read-write byte-oriented buffer) [Py_buffer]</dt>
+<dd><p class="first">This is to <tt class="docutils literal"><span class="pre">w</span></tt> what <tt class="docutils literal"><span class="pre">s*</span></tt> is to <tt class="docutils literal"><span class="pre">s</span></tt>.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">(items)</span></tt> (tuple) [<em>matching-items</em>]</dt>
+<dd><p class="first">The object must be a Python sequence whose length is the number of format
+units in <em>items</em>.  The C arguments must correspond to the individual format
+units in <em>items</em>.  Format units for sequences may be nested.</p>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Prior to Python version 1.5.2, this format specifier only accepted a
+tuple containing the individual parameters, not an arbitrary sequence.
+Code which previously caused <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> to be raised here may now
+proceed without an exception.  This is not expected to be a problem for
+existing code.</p>
+</div>
+</dd>
+</dl>
+<p>It is possible to pass Python long integers where integers are requested;
+however no proper range checking is done &#8212; the most significant bits are
+silently truncated when the receiving field is too small to receive the value
+(actually, the semantics are inherited from downcasts in C &#8212; your mileage
+may vary).</p>
+<p>A few other characters have a meaning in a format string.  These may not occur
+inside nested parentheses.  They are:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">|</span></tt></dt>
+<dd>Indicates that the remaining arguments in the Python argument list are
+optional.  The C variables corresponding to optional arguments should be
+initialized to their default value &#8212; when an optional argument is not
+specified, <a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a> does not touch the contents of the
+corresponding C variable(s).</dd>
+<dt><tt class="docutils literal"><span class="pre">:</span></tt></dt>
+<dd>The list of format units ends here; the string after the colon is used as
+the function name in error messages (the &#8220;associated value&#8221; of the
+exception that <a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a> raises).</dd>
+<dt><tt class="docutils literal"><span class="pre">;</span></tt></dt>
+<dd>The list of format units ends here; the string after the semicolon is used
+as the error message <em>instead</em> of the default error message.  <tt class="docutils literal"><span class="pre">:</span></tt> and
+<tt class="docutils literal"><span class="pre">;</span></tt> mutually exclude each other.</dd>
+</dl>
+<p>Note that any Python object references which are provided to the caller are
+<em>borrowed</em> references; do not decrement their reference count!</p>
+<p>Additional arguments passed to these functions must be addresses of variables
+whose type is determined by the format string; these are used to store values
+from the input tuple.  There are a few cases, as described in the list of
+format units above, where these parameters are used as input values; they
+should match what is specified for the corresponding format unit in that case.</p>
+<p>For the conversion to succeed, the <em>arg</em> object must match the format and the
+format must be exhausted.  On success, the <a class="reference internal" href="#PyArg_Parse" title="PyArg_Parse"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_Parse*()</span></tt></a> functions
+return true, otherwise they return false and raise an appropriate exception.
+When the <a class="reference internal" href="#PyArg_Parse" title="PyArg_Parse"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_Parse*()</span></tt></a> functions fail due to conversion failure in
+one of the format units, the variables at the addresses corresponding to that
+and the following format units are left untouched.</p>
+<dl class="function">
+<dt id="PyArg_ParseTuple">
+int <tt class="descname">PyArg_ParseTuple</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, const char<em>&nbsp;*format</em>, ...<big>)</big><a class="headerlink" href="#PyArg_ParseTuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the parameters of a function that takes only positional parameters
+into local variables.  Returns true on success; on failure, it returns
+false and raises the appropriate exception.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyArg_VaParse">
+int <tt class="descname">PyArg_VaParse</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, const char<em>&nbsp;*format</em>, va_list<em>&nbsp;vargs</em><big>)</big><a class="headerlink" href="#PyArg_VaParse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identical to <a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a>, except that it accepts a va_list
+rather than a variable number of arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyArg_ParseTupleAndKeywords">
+int <tt class="descname">PyArg_ParseTupleAndKeywords</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*kw</em>, const char<em>&nbsp;*format</em>, char<em>&nbsp;*keywords[]</em>, ...<big>)</big><a class="headerlink" href="#PyArg_ParseTupleAndKeywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the parameters of a function that takes both positional and keyword
+parameters into local variables.  Returns true on success; on failure, it
+returns false and raises the appropriate exception.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyArg_VaParseTupleAndKeywords">
+int <tt class="descname">PyArg_VaParseTupleAndKeywords</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*kw</em>, const char<em>&nbsp;*format</em>, char<em>&nbsp;*keywords[]</em>, va_list<em>&nbsp;vargs</em><big>)</big><a class="headerlink" href="#PyArg_VaParseTupleAndKeywords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identical to <a class="reference internal" href="#PyArg_ParseTupleAndKeywords" title="PyArg_ParseTupleAndKeywords"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTupleAndKeywords()</span></tt></a>, except that it accepts a
+va_list rather than a variable number of arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyArg_Parse">
+int <tt class="descname">PyArg_Parse</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, const char<em>&nbsp;*format</em>, ...<big>)</big><a class="headerlink" href="#PyArg_Parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used to deconstruct the argument lists of &#8220;old-style&#8221; functions
+&#8212; these are functions which use the <a class="reference internal" href="structures.html#METH_OLDARGS" title="METH_OLDARGS"><tt class="xref py py-const docutils literal"><span class="pre">METH_OLDARGS</span></tt></a> parameter
+parsing method.  This is not recommended for use in parameter parsing in
+new code, and most code in the standard interpreter has been modified to no
+longer use this for that purpose.  It does remain a convenient way to
+decompose other tuples, however, and may continue to be used for that
+purpose.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyArg_UnpackTuple">
+int <tt class="descname">PyArg_UnpackTuple</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, const char<em>&nbsp;*name</em>, Py_ssize_t<em>&nbsp;min</em>, Py_ssize_t<em>&nbsp;max</em>, ...<big>)</big><a class="headerlink" href="#PyArg_UnpackTuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simpler form of parameter retrieval which does not use a format string to
+specify the types of the arguments.  Functions which use this method to
+retrieve their parameters should be declared as <a class="reference internal" href="structures.html#METH_VARARGS" title="METH_VARARGS"><tt class="xref py py-const docutils literal"><span class="pre">METH_VARARGS</span></tt></a> in
+function or method tables.  The tuple containing the actual parameters
+should be passed as <em>args</em>; it must actually be a tuple.  The length of the
+tuple must be at least <em>min</em> and no more than <em>max</em>; <em>min</em> and <em>max</em> may be
+equal.  Additional arguments must be passed to the function, each of which
+should be a pointer to a <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a> variable; these will be filled
+in with the values from <em>args</em>; they will contain borrowed references.  The
+variables which correspond to optional parameters not given by <em>args</em> will
+not be filled in; these should be initialized by the caller. This function
+returns true on success and false if <em>args</em> is not a tuple or contains the
+wrong number of elements; an exception will be set if there was a failure.</p>
+<p>This is an example of the use of this function, taken from the sources for
+the <tt class="xref py py-mod docutils literal"><span class="pre">_weakref</span></tt> helper module for weak references:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">static</span> <span class="n">PyObject</span> <span class="o">*</span>
+<span class="nf">weakref_ref</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">object</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">callback</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">result</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">PyArg_UnpackTuple</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s">&quot;ref&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">callback</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">PyWeakref_NewRef</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">callback</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The call to <a class="reference internal" href="#PyArg_UnpackTuple" title="PyArg_UnpackTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_UnpackTuple()</span></tt></a> in this example is entirely
+equivalent to this call to <a class="reference internal" href="#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a>:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">PyArg_ParseTuple</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s">&quot;O|O:ref&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">object</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">callback</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>min</em> and <em>max</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_BuildValue">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">Py_BuildValue</tt><big>(</big>const char<em>&nbsp;*format</em>, ...<big>)</big><a class="headerlink" href="#Py_BuildValue" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a new value based on a format string similar to those accepted by
+the <a class="reference internal" href="#PyArg_Parse" title="PyArg_Parse"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_Parse*()</span></tt></a> family of functions and a sequence of values.
+Returns the value or <em>NULL</em> in the case of an error; an exception will be
+raised if <em>NULL</em> is returned.</p>
+<p><a class="reference internal" href="#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a> does not always build a tuple.  It builds a tuple
+only if its format string contains two or more format units.  If the format
+string is empty, it returns <tt class="xref docutils literal"><span class="pre">None</span></tt>; if it contains exactly one format
+unit, it returns whatever object is described by that format unit.  To
+force it to return a tuple of size 0 or one, parenthesize the format
+string.</p>
+<p>When memory buffers are passed as parameters to supply data to build
+objects, as for the <tt class="docutils literal"><span class="pre">s</span></tt> and <tt class="docutils literal"><span class="pre">s#</span></tt> formats, the required data is copied.
+Buffers provided by the caller are never referenced by the objects created
+by <a class="reference internal" href="#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a>.  In other words, if your code invokes
+<tt class="xref c c-func docutils literal"><span class="pre">malloc()</span></tt> and passes the allocated memory to <a class="reference internal" href="#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a>,
+your code is responsible for calling <tt class="xref c c-func docutils literal"><span class="pre">free()</span></tt> for that memory once
+<a class="reference internal" href="#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a> returns.</p>
+<p>In the following description, the quoted form is the format unit; the entry
+in (round) parentheses is the Python object type that the format unit will
+return; and the entry in [square] brackets is the type of the C value(s) to
+be passed.</p>
+<p>The characters space, tab, colon and comma are ignored in format strings
+(but not within format units such as <tt class="docutils literal"><span class="pre">s#</span></tt>).  This can be used to make
+long format strings a tad more readable.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">s</span></tt> (string) [char *]</dt>
+<dd>Convert a null-terminated C string to a Python object.  If the C string
+pointer is <em>NULL</em>, <tt class="xref docutils literal"><span class="pre">None</span></tt> is used.</dd>
+<dt><tt class="docutils literal"><span class="pre">s#</span></tt> (string) [char *, int]</dt>
+<dd>Convert a C string and its length to a Python object.  If the C string
+pointer is <em>NULL</em>, the length is ignored and <tt class="xref docutils literal"><span class="pre">None</span></tt> is returned.</dd>
+<dt><tt class="docutils literal"><span class="pre">z</span></tt> (string or <tt class="xref docutils literal"><span class="pre">None</span></tt>) [char *]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">s</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">z#</span></tt> (string or <tt class="xref docutils literal"><span class="pre">None</span></tt>) [char *, int]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">s#</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">u</span></tt> (Unicode string) [Py_UNICODE *]</dt>
+<dd>Convert a null-terminated buffer of Unicode (UCS-2 or UCS-4) data to a
+Python Unicode object.  If the Unicode buffer pointer is <em>NULL</em>,
+<tt class="xref docutils literal"><span class="pre">None</span></tt> is returned.</dd>
+<dt><tt class="docutils literal"><span class="pre">u#</span></tt> (Unicode string) [Py_UNICODE *, int]</dt>
+<dd>Convert a Unicode (UCS-2 or UCS-4) data buffer and its length to a
+Python Unicode object.   If the Unicode buffer pointer is <em>NULL</em>, the
+length is ignored and <tt class="xref docutils literal"><span class="pre">None</span></tt> is returned.</dd>
+<dt><tt class="docutils literal"><span class="pre">i</span></tt> (integer) [int]</dt>
+<dd>Convert a plain C <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> to a Python integer object.</dd>
+<dt><tt class="docutils literal"><span class="pre">b</span></tt> (integer) [char]</dt>
+<dd>Convert a plain C <tt class="xref c c-type docutils literal"><span class="pre">char</span></tt> to a Python integer object.</dd>
+<dt><tt class="docutils literal"><span class="pre">h</span></tt> (integer) [short int]</dt>
+<dd>Convert a plain C <tt class="xref c c-type docutils literal"><span class="pre">short</span> <span class="pre">int</span></tt> to a Python integer object.</dd>
+<dt><tt class="docutils literal"><span class="pre">l</span></tt> (integer) [long int]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">int</span></tt> to a Python integer object.</dd>
+<dt><tt class="docutils literal"><span class="pre">B</span></tt> (integer) [unsigned char]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">char</span></tt> to a Python integer object.</dd>
+<dt><tt class="docutils literal"><span class="pre">H</span></tt> (integer) [unsigned short int]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">short</span> <span class="pre">int</span></tt> to a Python integer object.</dd>
+<dt><tt class="docutils literal"><span class="pre">I</span></tt> (integer/long) [unsigned int]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">int</span></tt> to a Python integer object or a Python
+long integer object, if it is larger than <tt class="docutils literal"><span class="pre">sys.maxint</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">k</span></tt> (integer/long) [unsigned long]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span></tt> to a Python integer object or a
+Python long integer object, if it is larger than <tt class="docutils literal"><span class="pre">sys.maxint</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">L</span></tt> (long) [PY_LONG_LONG]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt> to a Python long integer object. Only
+available on platforms that support <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">K</span></tt> (long) [unsigned PY_LONG_LONG]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt> to a Python long integer object.
+Only available on platforms that support <tt class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">n</span></tt> (int) [Py_ssize_t]</dt>
+<dd><p class="first">Convert a C <tt class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></tt> to a Python integer or long integer.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">c</span></tt> (string of length 1) [char]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> representing a character to a Python string of
+length 1.</dd>
+<dt><tt class="docutils literal"><span class="pre">d</span></tt> (float) [double]</dt>
+<dd>Convert a C <tt class="xref c c-type docutils literal"><span class="pre">double</span></tt> to a Python floating point number.</dd>
+<dt><tt class="docutils literal"><span class="pre">f</span></tt> (float) [float]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">d</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">D</span></tt> (complex) [Py_complex *]</dt>
+<dd>Convert a C <a class="reference internal" href="complex.html#Py_complex" title="Py_complex"><tt class="xref c c-type docutils literal"><span class="pre">Py_complex</span></tt></a> structure to a Python complex number.</dd>
+<dt><tt class="docutils literal"><span class="pre">O</span></tt> (object) [PyObject *]</dt>
+<dd>Pass a Python object untouched (except for its reference count, which is
+incremented by one).  If the object passed in is a <em>NULL</em> pointer, it is
+assumed that this was caused because the call producing the argument
+found an error and set an exception. Therefore, <a class="reference internal" href="#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a>
+will return <em>NULL</em> but won&#8217;t raise an exception.  If no exception has
+been raised yet, <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><tt class="xref py py-exc docutils literal"><span class="pre">SystemError</span></tt></a> is set.</dd>
+<dt><tt class="docutils literal"><span class="pre">S</span></tt> (object) [PyObject *]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">O</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">N</span></tt> (object) [PyObject *]</dt>
+<dd>Same as <tt class="docutils literal"><span class="pre">O</span></tt>, except it doesn&#8217;t increment the reference count on the
+object.  Useful when the object is created by a call to an object
+constructor in the argument list.</dd>
+<dt><tt class="docutils literal"><span class="pre">O&amp;</span></tt> (object) [<em>converter</em>, <em>anything</em>]</dt>
+<dd>Convert <em>anything</em> to a Python object through a <em>converter</em> function.
+The function is called with <em>anything</em> (which should be compatible with
+<tt class="xref c c-type docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt>) as its argument and should return a &#8220;new&#8221; Python
+object, or <em>NULL</em> if an error occurred.</dd>
+<dt><tt class="docutils literal"><span class="pre">(items)</span></tt> (tuple) [<em>matching-items</em>]</dt>
+<dd>Convert a sequence of C values to a Python tuple with the same number of
+items.</dd>
+<dt><tt class="docutils literal"><span class="pre">[items]</span></tt> (list) [<em>matching-items</em>]</dt>
+<dd>Convert a sequence of C values to a Python list with the same number of
+items.</dd>
+<dt><tt class="docutils literal"><span class="pre">{items}</span></tt> (dictionary) [<em>matching-items</em>]</dt>
+<dd>Convert a sequence of C values to a Python dictionary.  Each pair of
+consecutive C values adds one item to the dictionary, serving as key and
+value, respectively.</dd>
+</dl>
+<p>If there is an error in the format string, the <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><tt class="xref py py-exc docutils literal"><span class="pre">SystemError</span></tt></a> exception
+is set and <em>NULL</em> returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_VaBuildValue">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">Py_VaBuildValue</tt><big>(</big>const char<em>&nbsp;*format</em>, va_list<em>&nbsp;vargs</em><big>)</big><a class="headerlink" href="#Py_VaBuildValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identical to <a class="reference internal" href="#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a>, except that it accepts a va_list
+rather than a variable number of arguments.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="marshal.html"
+                        title="previous chapter">Data marshalling support</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="conversion.html"
+                        title="next chapter">String conversion and formatting</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/arg.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="conversion.html" title="String conversion and formatting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="marshal.html" title="Data marshalling support"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="utilities.html" >Utilities</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

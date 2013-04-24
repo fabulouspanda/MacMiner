@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>15.15. platform — Access to underlying platform’s identifying data &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="15. Generic Operating System Services" href="allos.html" />
+    <link rel="next" title="15.16. errno — Standard errno system symbols" href="errno.html" />
+    <link rel="prev" title="15.14. curses.panel — A panel stack extension for curses" href="curses.panel.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errno.html" title="15.16. errno — Standard errno system symbols"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="curses.panel.html" title="15.14. curses.panel — A panel stack extension for curses"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="allos.html" accesskey="U">15. Generic Operating System Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-platform">
+<span id="platform-access-to-underlying-platform-s-identifying-data"></span><h1>15.15. <a class="reference internal" href="#module-platform" title="platform: Retrieves as much platform identifying data as possible."><tt class="xref py py-mod docutils literal"><span class="pre">platform</span></tt></a> &#8212;  Access to underlying platform&#8217;s identifying data<a class="headerlink" href="#module-platform" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/platform.py">Lib/platform.py</a></p>
+<hr class="docutils" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Specific platforms listed alphabetically, with Linux included in the Unix
+section.</p>
+</div>
+<div class="section" id="cross-platform">
+<h2>15.15.1. Cross Platform<a class="headerlink" href="#cross-platform" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="platform.architecture">
+<tt class="descclassname">platform.</tt><tt class="descname">architecture</tt><big>(</big><em>executable=sys.executable</em>, <em>bits=''</em>, <em>linkage=''</em><big>)</big><a class="headerlink" href="#platform.architecture" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the given executable (defaults to the Python interpreter binary) for
+various architecture information.</p>
+<p>Returns a tuple <tt class="docutils literal"><span class="pre">(bits,</span> <span class="pre">linkage)</span></tt> which contain information about the bit
+architecture and the linkage format used for the executable. Both values are
+returned as strings.</p>
+<p>Values that cannot be determined are returned as given by the parameter presets.
+If bits is given as <tt class="docutils literal"><span class="pre">''</span></tt>, the <tt class="xref c c-func docutils literal"><span class="pre">sizeof(pointer)()</span></tt> (or
+<tt class="xref c c-func docutils literal"><span class="pre">sizeof(long)()</span></tt> on Python version &lt; 1.5.2) is used as indicator for the
+supported pointer size.</p>
+<p>The function relies on the system&#8217;s <tt class="file docutils literal"><span class="pre">file</span></tt> command to do the actual work.
+This is available on most if not all Unix  platforms and some non-Unix platforms
+and then only if the executable points to the Python interpreter.  Reasonable
+defaults are used when the above needs are not met.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>On Mac OS X (and perhaps other platforms), executable files may be
+universal files containing multiple architectures.</p>
+<p>To get at the &#8220;64-bitness&#8221; of the current interpreter, it is more
+reliable to query the <a class="reference internal" href="sys.html#sys.maxsize" title="sys.maxsize"><tt class="xref py py-attr docutils literal"><span class="pre">sys.maxsize</span></tt></a> attribute:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">is_64bits</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.machine">
+<tt class="descclassname">platform.</tt><tt class="descname">machine</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the machine type, e.g. <tt class="docutils literal"><span class="pre">'i386'</span></tt>. An empty string is returned if the
+value cannot be determined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.node">
+<tt class="descclassname">platform.</tt><tt class="descname">node</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the computer&#8217;s network name (may not be fully qualified!). An empty
+string is returned if the value cannot be determined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.platform">
+<tt class="descclassname">platform.</tt><tt class="descname">platform</tt><big>(</big><em>aliased=0</em>, <em>terse=0</em><big>)</big><a class="headerlink" href="#platform.platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a single string identifying the underlying platform with as much useful
+information as possible.</p>
+<p>The output is intended to be <em>human readable</em> rather than machine parseable. It
+may look different on different platforms and this is intended.</p>
+<p>If <em>aliased</em> is true, the function will use aliases for various platforms that
+report system names which differ from their common names, for example SunOS will
+be reported as Solaris.  The <a class="reference internal" href="#platform.system_alias" title="platform.system_alias"><tt class="xref py py-func docutils literal"><span class="pre">system_alias()</span></tt></a> function is used to implement
+this.</p>
+<p>Setting <em>terse</em> to true causes the function to return only the absolute minimum
+information needed to identify the platform.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.processor">
+<tt class="descclassname">platform.</tt><tt class="descname">processor</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.processor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the (real) processor name, e.g. <tt class="docutils literal"><span class="pre">'amdk6'</span></tt>.</p>
+<p>An empty string is returned if the value cannot be determined. Note that many
+platforms do not provide this information or simply return the same value as for
+<a class="reference internal" href="#platform.machine" title="platform.machine"><tt class="xref py py-func docutils literal"><span class="pre">machine()</span></tt></a>.  NetBSD does this.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_build">
+<tt class="descclassname">platform.</tt><tt class="descname">python_build</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple <tt class="docutils literal"><span class="pre">(buildno,</span> <span class="pre">builddate)</span></tt> stating the Python build number and
+date as strings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_compiler">
+<tt class="descclassname">platform.</tt><tt class="descname">python_compiler</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_compiler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string identifying the compiler used for compiling Python.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_branch">
+<tt class="descclassname">platform.</tt><tt class="descname">python_branch</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_branch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string identifying the Python implementation SCM branch.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_implementation">
+<tt class="descclassname">platform.</tt><tt class="descname">python_implementation</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_implementation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string identifying the Python implementation. Possible return values
+are: &#8216;CPython&#8217;, &#8216;IronPython&#8217;, &#8216;Jython&#8217;, &#8216;PyPy&#8217;.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_revision">
+<tt class="descclassname">platform.</tt><tt class="descname">python_revision</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string identifying the Python implementation SCM revision.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_version">
+<tt class="descclassname">platform.</tt><tt class="descname">python_version</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Python version as string <tt class="docutils literal"><span class="pre">'major.minor.patchlevel'</span></tt></p>
+<p>Note that unlike the Python <tt class="docutils literal"><span class="pre">sys.version</span></tt>, the returned value will always
+include the patchlevel (it defaults to 0).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.python_version_tuple">
+<tt class="descclassname">platform.</tt><tt class="descname">python_version_tuple</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.python_version_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Python version as tuple <tt class="docutils literal"><span class="pre">(major,</span> <span class="pre">minor,</span> <span class="pre">patchlevel)</span></tt> of strings.</p>
+<p>Note that unlike the Python <tt class="docutils literal"><span class="pre">sys.version</span></tt>, the returned value will always
+include the patchlevel (it defaults to <tt class="docutils literal"><span class="pre">'0'</span></tt>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.release">
+<tt class="descclassname">platform.</tt><tt class="descname">release</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the system&#8217;s release, e.g. <tt class="docutils literal"><span class="pre">'2.2.0'</span></tt> or <tt class="docutils literal"><span class="pre">'NT'</span></tt> An empty string is
+returned if the value cannot be determined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.system">
+<tt class="descclassname">platform.</tt><tt class="descname">system</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the system/OS name, e.g. <tt class="docutils literal"><span class="pre">'Linux'</span></tt>, <tt class="docutils literal"><span class="pre">'Windows'</span></tt>, or <tt class="docutils literal"><span class="pre">'Java'</span></tt>. An
+empty string is returned if the value cannot be determined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.system_alias">
+<tt class="descclassname">platform.</tt><tt class="descname">system_alias</tt><big>(</big><em>system</em>, <em>release</em>, <em>version</em><big>)</big><a class="headerlink" href="#platform.system_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">(system,</span> <span class="pre">release,</span> <span class="pre">version)</span></tt> aliased to common marketing names used
+for some systems.  It also does some reordering of the information in some cases
+where it would otherwise cause confusion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.version">
+<tt class="descclassname">platform.</tt><tt class="descname">version</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the system&#8217;s release version, e.g. <tt class="docutils literal"><span class="pre">'#3</span> <span class="pre">on</span> <span class="pre">degas'</span></tt>. An empty string is
+returned if the value cannot be determined.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.uname">
+<tt class="descclassname">platform.</tt><tt class="descname">uname</tt><big>(</big><big>)</big><a class="headerlink" href="#platform.uname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fairly portable uname interface. Returns a tuple of strings <tt class="docutils literal"><span class="pre">(system,</span> <span class="pre">node,</span>
+<span class="pre">release,</span> <span class="pre">version,</span> <span class="pre">machine,</span> <span class="pre">processor)</span></tt> identifying the underlying platform.</p>
+<p>Note that unlike the <a class="reference internal" href="os.html#os.uname" title="os.uname"><tt class="xref py py-func docutils literal"><span class="pre">os.uname()</span></tt></a> function this also returns possible
+processor information as additional tuple entry.</p>
+<p>Entries which cannot be determined are set to <tt class="docutils literal"><span class="pre">''</span></tt>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="java-platform">
+<h2>15.15.2. Java Platform<a class="headerlink" href="#java-platform" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="platform.java_ver">
+<tt class="descclassname">platform.</tt><tt class="descname">java_ver</tt><big>(</big><em>release=''</em>, <em>vendor=''</em>, <em>vminfo=(''</em>, <em>''</em>, <em>'')</em>, <em>osinfo=(''</em>, <em>''</em>, <em>'')</em><big>)</big><a class="headerlink" href="#platform.java_ver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version interface for Jython.</p>
+<p>Returns a tuple <tt class="docutils literal"><span class="pre">(release,</span> <span class="pre">vendor,</span> <span class="pre">vminfo,</span> <span class="pre">osinfo)</span></tt> with <em>vminfo</em> being a
+tuple <tt class="docutils literal"><span class="pre">(vm_name,</span> <span class="pre">vm_release,</span> <span class="pre">vm_vendor)</span></tt> and <em>osinfo</em> being a tuple
+<tt class="docutils literal"><span class="pre">(os_name,</span> <span class="pre">os_version,</span> <span class="pre">os_arch)</span></tt>. Values which cannot be determined are set to
+the defaults given as parameters (which all default to <tt class="docutils literal"><span class="pre">''</span></tt>).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="windows-platform">
+<h2>15.15.3. Windows Platform<a class="headerlink" href="#windows-platform" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="platform.win32_ver">
+<tt class="descclassname">platform.</tt><tt class="descname">win32_ver</tt><big>(</big><em>release=''</em>, <em>version=''</em>, <em>csd=''</em>, <em>ptype=''</em><big>)</big><a class="headerlink" href="#platform.win32_ver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get additional version information from the Windows Registry and return a tuple
+<tt class="docutils literal"><span class="pre">(version,</span> <span class="pre">csd,</span> <span class="pre">ptype)</span></tt> referring to version number, CSD level
+(service pack) and OS type (multi/single processor).</p>
+<p>As a hint: <em>ptype</em> is <tt class="docutils literal"><span class="pre">'Uniprocessor</span> <span class="pre">Free'</span></tt> on single processor NT machines
+and <tt class="docutils literal"><span class="pre">'Multiprocessor</span> <span class="pre">Free'</span></tt> on multi processor machines. The <em>&#8216;Free&#8217;</em> refers
+to the OS version being free of debugging code. It could also state <em>&#8216;Checked&#8217;</em>
+which means the OS version uses debugging code, i.e. code that checks arguments,
+ranges, etc.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function works best with Mark Hammond&#8217;s
+<tt class="xref py py-mod docutils literal"><span class="pre">win32all</span></tt> package installed, but also on Python 2.3 and
+later (support for this was added in Python 2.6). It obviously
+only runs on Win32 compatible platforms.</p>
+</div>
+</dd></dl>
+
+<div class="section" id="win95-98-specific">
+<h3>15.15.3.1. Win95/98 specific<a class="headerlink" href="#win95-98-specific" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="platform.popen">
+<tt class="descclassname">platform.</tt><tt class="descname">popen</tt><big>(</big><em>cmd</em>, <em>mode='r'</em>, <em>bufsize=None</em><big>)</big><a class="headerlink" href="#platform.popen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Portable <a class="reference internal" href="#platform.popen" title="platform.popen"><tt class="xref py py-func docutils literal"><span class="pre">popen()</span></tt></a> interface.  Find a working popen implementation
+preferring <tt class="xref py py-func docutils literal"><span class="pre">win32pipe.popen()</span></tt>.  On Windows NT, <tt class="xref py py-func docutils literal"><span class="pre">win32pipe.popen()</span></tt>
+should work; on Windows 9x it hangs due to bugs in the MS C library.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="mac-os-platform">
+<h2>15.15.4. Mac OS Platform<a class="headerlink" href="#mac-os-platform" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="platform.mac_ver">
+<tt class="descclassname">platform.</tt><tt class="descname">mac_ver</tt><big>(</big><em>release=''</em>, <em>versioninfo=(''</em>, <em>''</em>, <em>'')</em>, <em>machine=''</em><big>)</big><a class="headerlink" href="#platform.mac_ver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Mac OS version information and return it as tuple <tt class="docutils literal"><span class="pre">(release,</span> <span class="pre">versioninfo,</span>
+<span class="pre">machine)</span></tt> with <em>versioninfo</em> being a tuple <tt class="docutils literal"><span class="pre">(version,</span> <span class="pre">dev_stage,</span>
+<span class="pre">non_release_version)</span></tt>.</p>
+<p>Entries which cannot be determined are set to <tt class="docutils literal"><span class="pre">''</span></tt>.  All tuple entries are
+strings.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="unix-platforms">
+<h2>15.15.5. Unix Platforms<a class="headerlink" href="#unix-platforms" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="platform.dist">
+<tt class="descclassname">platform.</tt><tt class="descname">dist</tt><big>(</big><em>distname=''</em>, <em>version=''</em>, <em>id=''</em>, <em>supported_dists=('SuSE'</em>, <em>'debian'</em>, <em>'redhat'</em>, <em>'mandrake'</em>, <em>...)</em><big>)</big><a class="headerlink" href="#platform.dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an old version of the functionality now provided by
+<a class="reference internal" href="#platform.linux_distribution" title="platform.linux_distribution"><tt class="xref py py-func docutils literal"><span class="pre">linux_distribution()</span></tt></a>. For new code, please use the
+<a class="reference internal" href="#platform.linux_distribution" title="platform.linux_distribution"><tt class="xref py py-func docutils literal"><span class="pre">linux_distribution()</span></tt></a>.</p>
+<p>The only difference between the two is that <tt class="docutils literal"><span class="pre">dist()</span></tt> always
+returns the short name of the distribution taken from the
+<tt class="docutils literal"><span class="pre">supported_dists</span></tt> parameter.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.linux_distribution">
+<tt class="descclassname">platform.</tt><tt class="descname">linux_distribution</tt><big>(</big><em>distname=''</em>, <em>version=''</em>, <em>id=''</em>, <em>supported_dists=('SuSE'</em>, <em>'debian'</em>, <em>'redhat'</em>, <em>'mandrake'</em>, <em>...)</em>, <em>full_distribution_name=1</em><big>)</big><a class="headerlink" href="#platform.linux_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to determine the name of the Linux OS distribution name.</p>
+<p><tt class="docutils literal"><span class="pre">supported_dists</span></tt> may be given to define the set of Linux distributions to
+look for. It defaults to a list of currently supported Linux distributions
+identified by their release file name.</p>
+<p>If <tt class="docutils literal"><span class="pre">full_distribution_name</span></tt> is true (default), the full distribution read
+from the OS is returned. Otherwise the short name taken from
+<tt class="docutils literal"><span class="pre">supported_dists</span></tt> is used.</p>
+<p>Returns a tuple <tt class="docutils literal"><span class="pre">(distname,version,id)</span></tt> which defaults to the args given as
+parameters.  <tt class="docutils literal"><span class="pre">id</span></tt> is the item in parentheses after the version number.  It
+is usually the version codename.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="platform.libc_ver">
+<tt class="descclassname">platform.</tt><tt class="descname">libc_ver</tt><big>(</big><em>executable=sys.executable</em>, <em>lib=''</em>, <em>version=''</em>, <em>chunksize=2048</em><big>)</big><a class="headerlink" href="#platform.libc_ver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to determine the libc version against which the file executable (defaults
+to the Python interpreter) is linked.  Returns a tuple of strings <tt class="docutils literal"><span class="pre">(lib,</span>
+<span class="pre">version)</span></tt> which default to the given parameters in case the lookup fails.</p>
+<p>Note that this function has intimate knowledge of how different libc versions
+add symbols to the executable is probably only usable for executables compiled
+using <strong class="program">gcc</strong>.</p>
+<p>The file is read and scanned in chunks of <em>chunksize</em> bytes.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">15.15. <tt class="docutils literal"><span class="pre">platform</span></tt> &#8212;  Access to underlying platform&#8217;s identifying data</a><ul>
+<li><a class="reference internal" href="#cross-platform">15.15.1. Cross Platform</a></li>
+<li><a class="reference internal" href="#java-platform">15.15.2. Java Platform</a></li>
+<li><a class="reference internal" href="#windows-platform">15.15.3. Windows Platform</a><ul>
+<li><a class="reference internal" href="#win95-98-specific">15.15.3.1. Win95/98 specific</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mac-os-platform">15.15.4. Mac OS Platform</a></li>
+<li><a class="reference internal" href="#unix-platforms">15.15.5. Unix Platforms</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="curses.panel.html"
+                        title="previous chapter">15.14. <tt class="docutils literal docutils literal docutils literal"><span class="pre">curses.panel</span></tt> &#8212; A panel stack extension for curses</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="errno.html"
+                        title="next chapter">15.16. <tt class="docutils literal docutils literal docutils literal"><span class="pre">errno</span></tt> &#8212; Standard errno system symbols</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/platform.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errno.html" title="15.16. errno — Standard errno system symbols"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="curses.panel.html" title="15.14. curses.panel — A panel stack extension for curses"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="allos.html" >15. Generic Operating System Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

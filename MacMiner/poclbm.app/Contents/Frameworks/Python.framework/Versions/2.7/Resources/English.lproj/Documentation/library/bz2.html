@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>12.3. bz2 — Compression compatible with bzip2 &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="12. Data Compression and Archiving" href="archiving.html" />
+    <link rel="next" title="12.4. zipfile — Work with ZIP archives" href="zipfile.html" />
+    <link rel="prev" title="12.2. gzip — Support for gzip files" href="gzip.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="zipfile.html" title="12.4. zipfile — Work with ZIP archives"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gzip.html" title="12.2. gzip — Support for gzip files"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="archiving.html" accesskey="U">12. Data Compression and Archiving</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-bz2">
+<span id="bz2-compression-compatible-with-bzip2"></span><h1>12.3. <a class="reference internal" href="#module-bz2" title="bz2: Interface to compression and decompression routines compatible with bzip2."><tt class="xref py py-mod docutils literal"><span class="pre">bz2</span></tt></a> &#8212; Compression compatible with <strong class="program">bzip2</strong><a class="headerlink" href="#module-bz2" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p>This module provides a comprehensive interface for the bz2 compression library.
+It implements a complete file interface, one-shot (de)compression functions, and
+types for sequential (de)compression.</p>
+<p>Here is a summary of the features offered by the bz2 module:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> class implements a complete file interface, including
+<a class="reference internal" href="#bz2.BZ2File.readline" title="bz2.BZ2File.readline"><tt class="xref py py-meth docutils literal"><span class="pre">readline()</span></tt></a>, <a class="reference internal" href="#bz2.BZ2File.readlines" title="bz2.BZ2File.readlines"><tt class="xref py py-meth docutils literal"><span class="pre">readlines()</span></tt></a>,
+<a class="reference internal" href="#bz2.BZ2File.writelines" title="bz2.BZ2File.writelines"><tt class="xref py py-meth docutils literal"><span class="pre">writelines()</span></tt></a>, <a class="reference internal" href="#bz2.BZ2File.seek" title="bz2.BZ2File.seek"><tt class="xref py py-meth docutils literal"><span class="pre">seek()</span></tt></a>, etc;</li>
+<li><a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> class implements emulated <a class="reference internal" href="#bz2.BZ2File.seek" title="bz2.BZ2File.seek"><tt class="xref py py-meth docutils literal"><span class="pre">seek()</span></tt></a> support;</li>
+<li><a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> class implements universal newline support;</li>
+<li><a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> class offers an optimized line iteration using the readahead
+algorithm borrowed from file objects;</li>
+<li>Sequential (de)compression supported by <a class="reference internal" href="#bz2.BZ2Compressor" title="bz2.BZ2Compressor"><tt class="xref py py-class docutils literal"><span class="pre">BZ2Compressor</span></tt></a> and
+<a class="reference internal" href="#bz2.BZ2Decompressor" title="bz2.BZ2Decompressor"><tt class="xref py py-class docutils literal"><span class="pre">BZ2Decompressor</span></tt></a> classes;</li>
+<li>One-shot (de)compression supported by <a class="reference internal" href="#bz2.compress" title="bz2.compress"><tt class="xref py py-func docutils literal"><span class="pre">compress()</span></tt></a> and <a class="reference internal" href="#bz2.decompress" title="bz2.decompress"><tt class="xref py py-func docutils literal"><span class="pre">decompress()</span></tt></a>
+functions;</li>
+<li>Thread safety uses individual locking mechanism.</li>
+</ul>
+<div class="section" id="de-compression-of-files">
+<h2>12.3.1. (De)compression of files<a class="headerlink" href="#de-compression-of-files" title="Permalink to this headline">¶</a></h2>
+<p>Handling of compressed files is offered by the <a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> class.</p>
+<span class="target" id="index-0"></span><dl class="class">
+<dt id="bz2.BZ2File">
+<em class="property">class </em><tt class="descclassname">bz2.</tt><tt class="descname">BZ2File</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>buffering</em><span class="optional">[</span>, <em>compresslevel</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.BZ2File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a bz2 file. Mode can be either <tt class="docutils literal"><span class="pre">'r'</span></tt> or <tt class="docutils literal"><span class="pre">'w'</span></tt>, for reading (default)
+or writing. When opened for writing, the file will be created if it doesn&#8217;t
+exist, and truncated otherwise. If <em>buffering</em> is given, <tt class="docutils literal"><span class="pre">0</span></tt> means
+unbuffered, and larger numbers specify the buffer size; the default is
+<tt class="docutils literal"><span class="pre">0</span></tt>. If <em>compresslevel</em> is given, it must be a number between <tt class="docutils literal"><span class="pre">1</span></tt> and
+<tt class="docutils literal"><span class="pre">9</span></tt>; the default is <tt class="docutils literal"><span class="pre">9</span></tt>. Add a <tt class="docutils literal"><span class="pre">'U'</span></tt> to mode to open the file for input
+in <a class="reference internal" href="../glossary.html#term-universal-newlines"><em class="xref std std-term">universal newlines</em></a> mode. Any line ending in the input file will be
+seen as a <tt class="docutils literal"><span class="pre">'\n'</span></tt> in Python.  Also, a file so opened gains the attribute
+<tt class="xref py py-attr docutils literal"><span class="pre">newlines</span></tt>; the value for this attribute is one of <tt class="xref docutils literal"><span class="pre">None</span></tt> (no newline
+read yet), <tt class="docutils literal"><span class="pre">'\r'</span></tt>, <tt class="docutils literal"><span class="pre">'\n'</span></tt>, <tt class="docutils literal"><span class="pre">'\r\n'</span></tt> or a tuple containing all the
+newline types seen. Universal newlines are available only when
+reading. Instances support iteration in the same way as normal <a class="reference internal" href="functions.html#file" title="file"><tt class="xref py py-class docutils literal"><span class="pre">file</span></tt></a>
+instances.</p>
+<p><a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> supports the <a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>Support for the <a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement was added.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This class does not support input files containing multiple streams (such
+as those produced by the <strong class="program">pbzip2</strong> tool). When reading such an
+input file, only the first stream will be accessible. If you require
+support for multi-stream files, consider using the third-party
+<tt class="xref py py-mod docutils literal"><span class="pre">bz2file</span></tt> module (available from
+<a class="reference external" href="http://pypi.python.org/pypi/bz2file">PyPI</a>). This module provides a
+backport of Python 3.3&#8217;s <a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> class, which does support
+multi-stream files.</p>
+</div>
+<dl class="method">
+<dt id="bz2.BZ2File.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#bz2.BZ2File.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the file. Sets data attribute <tt class="xref py py-attr docutils literal"><span class="pre">closed</span></tt> to true. A closed file
+cannot be used for further I/O operations. <a class="reference internal" href="#bz2.BZ2File.close" title="bz2.BZ2File.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a> may be called
+more than once without error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.read">
+<tt class="descname">read</tt><big>(</big><span class="optional">[</span><em>size</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.BZ2File.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read at most <em>size</em> uncompressed bytes, returned as a string. If the
+<em>size</em> argument is negative or omitted, read until EOF is reached.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.readline">
+<tt class="descname">readline</tt><big>(</big><span class="optional">[</span><em>size</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.BZ2File.readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next line from the file, as a string, retaining newline. A
+non-negative <em>size</em> argument limits the maximum number of bytes to return
+(an incomplete line may be returned then). Return an empty string at EOF.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.readlines">
+<tt class="descname">readlines</tt><big>(</big><span class="optional">[</span><em>size</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.BZ2File.readlines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of lines read. The optional <em>size</em> argument, if given, is an
+approximate bound on the total number of bytes in the lines returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.xreadlines">
+<tt class="descname">xreadlines</tt><big>(</big><big>)</big><a class="headerlink" href="#bz2.BZ2File.xreadlines" title="Permalink to this definition">¶</a></dt>
+<dd><p>For backward compatibility. <a class="reference internal" href="#bz2.BZ2File" title="bz2.BZ2File"><tt class="xref py py-class docutils literal"><span class="pre">BZ2File</span></tt></a> objects now include the
+performance optimizations previously implemented in the <tt class="xref py py-mod docutils literal"><span class="pre">xreadlines</span></tt>
+module.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.3: </span>This exists only for compatibility with the method by this name on
+<a class="reference internal" href="functions.html#file" title="file"><tt class="xref py py-class docutils literal"><span class="pre">file</span></tt></a> objects, which is deprecated.  Use <tt class="docutils literal"><span class="pre">for</span> <span class="pre">line</span> <span class="pre">in</span> <span class="pre">file</span></tt>
+instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.seek">
+<tt class="descname">seek</tt><big>(</big><em>offset</em><span class="optional">[</span>, <em>whence</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.BZ2File.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move to new file position. Argument <em>offset</em> is a byte count. Optional
+argument <em>whence</em> defaults to <tt class="docutils literal"><span class="pre">os.SEEK_SET</span></tt> or <tt class="docutils literal"><span class="pre">0</span></tt> (offset from start
+of file; offset should be <tt class="docutils literal"><span class="pre">&gt;=</span> <span class="pre">0</span></tt>); other values are <tt class="docutils literal"><span class="pre">os.SEEK_CUR</span></tt> or
+<tt class="docutils literal"><span class="pre">1</span></tt> (move relative to current position; offset can be positive or
+negative), and <tt class="docutils literal"><span class="pre">os.SEEK_END</span></tt> or <tt class="docutils literal"><span class="pre">2</span></tt> (move relative to end of file;
+offset is usually negative, although many platforms allow seeking beyond
+the end of a file).</p>
+<p>Note that seeking of bz2 files is emulated, and depending on the
+parameters the operation may be extremely slow.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.tell">
+<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#bz2.BZ2File.tell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current file position, an integer (may be a long integer).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.write">
+<tt class="descname">write</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#bz2.BZ2File.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write string <em>data</em> to file. Note that due to buffering, <a class="reference internal" href="#bz2.BZ2File.close" title="bz2.BZ2File.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a> may
+be needed before the file on disk reflects the data written.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2File.writelines">
+<tt class="descname">writelines</tt><big>(</big><em>sequence_of_strings</em><big>)</big><a class="headerlink" href="#bz2.BZ2File.writelines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the sequence of strings to the file. Note that newlines are not
+added. The sequence can be any iterable object producing strings. This is
+equivalent to calling write() for each string.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="sequential-de-compression">
+<h2>12.3.2. Sequential (de)compression<a class="headerlink" href="#sequential-de-compression" title="Permalink to this headline">¶</a></h2>
+<p>Sequential compression and decompression is done using the classes
+<a class="reference internal" href="#bz2.BZ2Compressor" title="bz2.BZ2Compressor"><tt class="xref py py-class docutils literal"><span class="pre">BZ2Compressor</span></tt></a> and <a class="reference internal" href="#bz2.BZ2Decompressor" title="bz2.BZ2Decompressor"><tt class="xref py py-class docutils literal"><span class="pre">BZ2Decompressor</span></tt></a>.</p>
+<dl class="class">
+<dt id="bz2.BZ2Compressor">
+<em class="property">class </em><tt class="descclassname">bz2.</tt><tt class="descname">BZ2Compressor</tt><big>(</big><span class="optional">[</span><em>compresslevel</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.BZ2Compressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new compressor object. This object may be used to compress data
+sequentially. If you want to compress data in one shot, use the
+<a class="reference internal" href="#bz2.compress" title="bz2.compress"><tt class="xref py py-func docutils literal"><span class="pre">compress()</span></tt></a> function instead. The <em>compresslevel</em> parameter, if given,
+must be a number between <tt class="docutils literal"><span class="pre">1</span></tt> and <tt class="docutils literal"><span class="pre">9</span></tt>; the default is <tt class="docutils literal"><span class="pre">9</span></tt>.</p>
+<dl class="method">
+<dt id="bz2.BZ2Compressor.compress">
+<tt class="descname">compress</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#bz2.BZ2Compressor.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide more data to the compressor object. It will return chunks of
+compressed data whenever possible. When you&#8217;ve finished providing data to
+compress, call the <a class="reference internal" href="#bz2.BZ2Compressor.flush" title="bz2.BZ2Compressor.flush"><tt class="xref py py-meth docutils literal"><span class="pre">flush()</span></tt></a> method to finish the compression process,
+and return what is left in internal buffers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bz2.BZ2Compressor.flush">
+<tt class="descname">flush</tt><big>(</big><big>)</big><a class="headerlink" href="#bz2.BZ2Compressor.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finish the compression process and return what is left in internal
+buffers. You must not use the compressor object after calling this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bz2.BZ2Decompressor">
+<em class="property">class </em><tt class="descclassname">bz2.</tt><tt class="descname">BZ2Decompressor</tt><a class="headerlink" href="#bz2.BZ2Decompressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new decompressor object. This object may be used to decompress data
+sequentially. If you want to decompress data in one shot, use the
+<a class="reference internal" href="#bz2.decompress" title="bz2.decompress"><tt class="xref py py-func docutils literal"><span class="pre">decompress()</span></tt></a> function instead.</p>
+<dl class="method">
+<dt id="bz2.BZ2Decompressor.decompress">
+<tt class="descname">decompress</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#bz2.BZ2Decompressor.decompress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide more data to the decompressor object. It will return chunks of
+decompressed data whenever possible. If you try to decompress data after
+the end of stream is found, <a class="reference internal" href="exceptions.html#exceptions.EOFError" title="exceptions.EOFError"><tt class="xref py py-exc docutils literal"><span class="pre">EOFError</span></tt></a> will be raised. If any data
+was found after the end of stream, it&#8217;ll be ignored and saved in
+<tt class="xref py py-attr docutils literal"><span class="pre">unused_data</span></tt> attribute.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="one-shot-de-compression">
+<h2>12.3.3. One-shot (de)compression<a class="headerlink" href="#one-shot-de-compression" title="Permalink to this headline">¶</a></h2>
+<p>One-shot compression and decompression is provided through the <a class="reference internal" href="#bz2.compress" title="bz2.compress"><tt class="xref py py-func docutils literal"><span class="pre">compress()</span></tt></a>
+and <a class="reference internal" href="#bz2.decompress" title="bz2.decompress"><tt class="xref py py-func docutils literal"><span class="pre">decompress()</span></tt></a> functions.</p>
+<dl class="function">
+<dt id="bz2.compress">
+<tt class="descclassname">bz2.</tt><tt class="descname">compress</tt><big>(</big><em>data</em><span class="optional">[</span>, <em>compresslevel</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#bz2.compress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compress <em>data</em> in one shot. If you want to compress data sequentially, use
+an instance of <a class="reference internal" href="#bz2.BZ2Compressor" title="bz2.BZ2Compressor"><tt class="xref py py-class docutils literal"><span class="pre">BZ2Compressor</span></tt></a> instead. The <em>compresslevel</em> parameter,
+if given, must be a number between <tt class="docutils literal"><span class="pre">1</span></tt> and <tt class="docutils literal"><span class="pre">9</span></tt>; the default is <tt class="docutils literal"><span class="pre">9</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bz2.decompress">
+<tt class="descclassname">bz2.</tt><tt class="descname">decompress</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#bz2.decompress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decompress <em>data</em> in one shot. If you want to decompress data sequentially,
+use an instance of <a class="reference internal" href="#bz2.BZ2Decompressor" title="bz2.BZ2Decompressor"><tt class="xref py py-class docutils literal"><span class="pre">BZ2Decompressor</span></tt></a> instead.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">12.3. <tt class="docutils literal"><span class="pre">bz2</span></tt> &#8212; Compression compatible with <strong class="program">bzip2</strong></a><ul>
+<li><a class="reference internal" href="#de-compression-of-files">12.3.1. (De)compression of files</a></li>
+<li><a class="reference internal" href="#sequential-de-compression">12.3.2. Sequential (de)compression</a></li>
+<li><a class="reference internal" href="#one-shot-de-compression">12.3.3. One-shot (de)compression</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gzip.html"
+                        title="previous chapter">12.2. <tt class="docutils literal"><span class="pre">gzip</span></tt> &#8212; Support for <strong class="program">gzip</strong> files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="zipfile.html"
+                        title="next chapter">12.4. <tt class="docutils literal"><span class="pre">zipfile</span></tt> &#8212; Work with ZIP archives</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/bz2.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="zipfile.html" title="12.4. zipfile — Work with ZIP archives"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gzip.html" title="12.2. gzip — Support for gzip files"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="archiving.html" >12. Data Compression and Archiving</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

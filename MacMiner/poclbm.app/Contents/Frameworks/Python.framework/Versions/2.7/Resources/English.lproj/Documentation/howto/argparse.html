@@ -1,0 +1,861 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Argparse Tutorial &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python HOWTOs" href="index.html" />
+    <link rel="next" title="Python Frequently Asked Questions" href="../faq/index.html" />
+    <link rel="prev" title="HOWTO Use Python in the web" href="webservers.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../faq/index.html" title="Python Frequently Asked Questions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="webservers.html" title="HOWTO Use Python in the web"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="argparse-tutorial">
+<h1>Argparse Tutorial<a class="headerlink" href="#argparse-tutorial" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Tshepang Lekhonkhobe</td>
+</tr>
+</tbody>
+</table>
+<p id="id1">This tutorial is intended to be a gentle introduction to <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a>, the
+recommended command-line parsing module in the Python standard library.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There&#8217;s two other modules that fulfill the same task, namely
+<a class="reference internal" href="../library/getopt.html#module-getopt" title="getopt: Portable parser for command line options; support both short and long option names."><tt class="xref py py-mod docutils literal"><span class="pre">getopt</span></tt></a> (an equivalent for <tt class="xref c c-func docutils literal"><span class="pre">getopt()</span></tt> from the C
+language) and the deprecated <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">optparse</span></tt></a>.
+Note also that <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a> is based on <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">optparse</span></tt></a>,
+and therefore very similar in terms of usage.</p>
+</div>
+<div class="section" id="concepts">
+<h2>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s show the sort of functionality that we are going to explore in this
+introductory tutorial by making use of the <strong class="command">ls</strong> command:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>ls
+cpython  devguide  prog.py  pypy  rm-unused-function.patch
+<span class="nv">$ </span>ls pypy
+ctypes_configure  demo  dotviewer  include  lib_pypy  lib-python ...
+<span class="nv">$ </span>ls -l
+total 20
+drwxr-xr-x 19 wena wena 4096 Feb 18 18:51 cpython
+drwxr-xr-x  4 wena wena 4096 Feb  8 12:04 devguide
+-rwxr-xr-x  1 wena wena  535 Feb 19 00:05 prog.py
+drwxr-xr-x 14 wena wena 4096 Feb  7 00:59 pypy
+-rw-r--r--  1 wena wena  741 Feb 18 01:01 rm-unused-function.patch
+<span class="nv">$ </span>ls --help
+Usage: ls <span class="o">[</span>OPTION<span class="o">]</span>... <span class="o">[</span>FILE<span class="o">]</span>...
+List information about the FILEs <span class="o">(</span>the current directory by default<span class="o">)</span>.
+Sort entries alphabetically <span class="k">if </span>none of -cftuvSUX nor --sort is specified.
+...
+</pre></div>
+</div>
+<p>A few concepts we can learn from the four commands:</p>
+<ul class="simple">
+<li>The <strong class="command">ls</strong> command is useful when run without any options at all. It defaults
+to displaying the contents of the current directory.</li>
+<li>If we want beyond what it provides by default, we tell it a bit more. In
+this case, we want it to display a different directory, <tt class="docutils literal"><span class="pre">pypy</span></tt>.
+What we did is specify what is known as a positional argument. It&#8217;s named so
+because the program should know what to do with the value, solely based on
+where it appears on the command line. This concept is more relevant
+to a command like <strong class="command">cp</strong>, whose most basic usage is <tt class="docutils literal"><span class="pre">cp</span> <span class="pre">SRC</span> <span class="pre">DEST</span></tt>.
+The first position is <em>what you want copied,</em> and the second
+position is <em>where you want it copied to</em>.</li>
+<li>Now, say we want to change behaviour of the program. In our example,
+we display more info for each file instead of just showing the file names.
+The <tt class="docutils literal"><span class="pre">-l</span></tt> in that case is known as an optional argument.</li>
+<li>That&#8217;s a snippet of the help text. It&#8217;s very useful in that you can
+come across a program you have never used before, and can figure out
+how it works simply by reading it&#8217;s help text.</li>
+</ul>
+</div>
+<div class="section" id="the-basics">
+<h2>The basics<a class="headerlink" href="#the-basics" title="Permalink to this headline">¶</a></h2>
+<p>Let us start with a very simple example which does (almost) nothing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Following is a result of running the code:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py
+<span class="nv">$ </span>python prog.py --help
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span>
+
+optional arguments:
+  -h, --help  show this <span class="nb">help </span>message and <span class="nb">exit</span>
+<span class="nv">$ </span>python prog.py --verbose
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span>
+prog.py: error: unrecognized arguments: --verbose
+<span class="nv">$ </span>python prog.py foo
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span>
+prog.py: error: unrecognized arguments: foo
+</pre></div>
+</div>
+<p>Here is what is happening:</p>
+<ul class="simple">
+<li>Running the script without any options results in nothing displayed to
+stdout. Not so useful.</li>
+<li>The second one starts to display the usefulness of the <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a>
+module. We have done almost nothing, but already we get a nice help message.</li>
+<li>The <tt class="docutils literal"><span class="pre">--help</span></tt> option, which can also be shortened to <tt class="docutils literal"><span class="pre">-h</span></tt>, is the only
+option we get for free (i.e. no need to specify it). Specifying anything
+else results in an error. But even then, we do get a useful usage message,
+also for free.</li>
+</ul>
+</div>
+<div class="section" id="introducing-positional-arguments">
+<h2>Introducing Positional arguments<a class="headerlink" href="#introducing-positional-arguments" title="Permalink to this headline">¶</a></h2>
+<p>An example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;echo&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">args</span><span class="o">.</span><span class="n">echo</span>
+</pre></div>
+</div>
+<p>And running the code:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="nb">echo</span>
+prog.py: error: the following arguments are required: <span class="nb">echo</span>
+<span class="nv">$ </span>python prog.py --help
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="nb">echo</span>
+
+positional arguments:
+  <span class="nb">echo</span>
+
+optional arguments:
+  -h, --help  show this <span class="nb">help </span>message and <span class="nb">exit</span>
+<span class="nv">$ </span>python prog.py foo
+foo
+</pre></div>
+</div>
+<p>Here is what&#8217;s happening:</p>
+<ul class="simple">
+<li>We&#8217;ve added the <tt class="xref py py-meth docutils literal"><span class="pre">add_argument()</span></tt> method, which is what we use to specify
+which command-line options the program is willing to accept. In this case,
+I&#8217;ve named it <tt class="docutils literal"><span class="pre">echo</span></tt> so that it&#8217;s in line with its function.</li>
+<li>Calling our program now requires us to specify an option.</li>
+<li>The <tt class="xref py py-meth docutils literal"><span class="pre">parse_args()</span></tt> method actually returns some data from the
+options specified, in this case, <tt class="docutils literal"><span class="pre">echo</span></tt>.</li>
+<li>The variable is some form of &#8216;magic&#8217; that <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a> performs for free
+(i.e. no need to specify which variable that value is stored in).
+You will also notice that its name matches the string argument given
+to the method, <tt class="docutils literal"><span class="pre">echo</span></tt>.</li>
+</ul>
+<p>Note however that, although the help display looks nice and all, it currently
+is not as helpful as it can be. For example we see that we got <tt class="docutils literal"><span class="pre">echo</span></tt> as a
+positional argument, but we don&#8217;t know what it does, other than by guessing or
+by reading the source code. So, let&#8217;s make it a bit more useful:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;echo&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;echo the string you use here&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">args</span><span class="o">.</span><span class="n">echo</span>
+</pre></div>
+</div>
+<p>And we get:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py -h
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="nb">echo</span>
+
+positional arguments:
+  <span class="nb">echo        echo </span>the string you use here
+
+optional arguments:
+  -h, --help  show this <span class="nb">help </span>message and <span class="nb">exit</span>
+</pre></div>
+</div>
+<p>Now, how about doing something even more useful:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Following is a result of running the code:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4
+Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&quot;prog.py&quot;</span>, line 5, in &lt;module&gt;
+    print args.square**2
+TypeError: unsupported operand <span class="nb">type</span><span class="o">(</span>s<span class="o">)</span> <span class="k">for</span> ** or pow<span class="o">()</span>: <span class="s1">&#39;str&#39;</span> and <span class="s1">&#39;int&#39;</span>
+</pre></div>
+</div>
+<p>That didn&#8217;t go so well. That&#8217;s because <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a> treats the options we
+give it as strings, unless we tell it otherwise. So, let&#8217;s tell
+<a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a> to treat that input as an integer:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">,</span>
+                    <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>Following is a result of running the code:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4
+16
+<span class="nv">$ </span>python prog.py four
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> square
+prog.py: error: argument square: invalid int value: <span class="s1">&#39;four&#39;</span>
+</pre></div>
+</div>
+<p>That went well. The program now even helpfully quits on bad illegal input
+before proceeding.</p>
+</div>
+<div class="section" id="introducing-optional-arguments">
+<h2>Introducing Optional arguments<a class="headerlink" href="#introducing-optional-arguments" title="Permalink to this headline">¶</a></h2>
+<p>So far we, have been playing with positional arguments. Let us
+have a look on how to add optional ones:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;verbosity turned on&quot;</span>
+</pre></div>
+</div>
+<p>And the output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py --verbosity 1
+verbosity turned on
+<span class="nv">$ </span>python prog.py
+<span class="nv">$ </span>python prog.py --help
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--verbosity VERBOSITY<span class="o">]</span>
+
+optional arguments:
+  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  --verbosity VERBOSITY
+                        increase output verbosity
+<span class="nv">$ </span>python prog.py --verbosity
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--verbosity VERBOSITY<span class="o">]</span>
+prog.py: error: argument --verbosity: expected one argument
+</pre></div>
+</div>
+<p>Here is what is happening:</p>
+<ul class="simple">
+<li>The program is written so as to display something when <tt class="docutils literal"><span class="pre">--verbosity</span></tt> is
+specified and display nothing when not.</li>
+<li>To show that the option is actually optional, there is no error when running
+the program without it. Note that by default, if an optional argument isn&#8217;t
+used, the relevant variable, in this case <tt class="xref py py-attr docutils literal"><span class="pre">args.verbosity</span></tt>, is
+given <tt class="xref docutils literal"><span class="pre">None</span></tt> as a value, which is the reason it fails the truth
+test of the <a class="reference internal" href="../reference/compound_stmts.html#if"><tt class="xref std std-keyword docutils literal"><span class="pre">if</span></tt></a> statement.</li>
+<li>The help message is a bit different.</li>
+<li>When using the <tt class="docutils literal"><span class="pre">--verbosity</span></tt> option, one must also specify some value,
+any value.</li>
+</ul>
+<p>The above example accepts arbitrary integer values for <tt class="docutils literal"><span class="pre">--verbosity</span></tt>, but for
+our simple program, only two values are actually useful, <tt class="xref docutils literal"><span class="pre">True</span></tt> or <tt class="xref docutils literal"><span class="pre">False</span></tt>.
+Let&#8217;s modify the code accordingly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">,</span>
+                    <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+   <span class="k">print</span> <span class="s">&quot;verbosity turned on&quot;</span>
+</pre></div>
+</div>
+<p>And the output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py --verbose
+verbosity turned on
+<span class="nv">$ </span>python prog.py --verbose 1
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--verbose<span class="o">]</span>
+prog.py: error: unrecognized arguments: 1
+<span class="nv">$ </span>python prog.py --help
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>--verbose<span class="o">]</span>
+
+optional arguments:
+  -h, --help  show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  --verbose   increase output verbosity
+</pre></div>
+</div>
+<p>Here is what is happening:</p>
+<ul class="simple">
+<li>The option is now more of a flag than something that requires a value.
+We even changed the name of the option to match that idea.
+Note that we now specify a new keyword, <tt class="docutils literal"><span class="pre">action</span></tt>, and give it the value
+<tt class="docutils literal"><span class="pre">&quot;store_true&quot;</span></tt>. This means that, if the option is specified,
+assign the value <tt class="xref docutils literal"><span class="pre">True</span></tt> to <tt class="xref py py-data docutils literal"><span class="pre">args.verbose</span></tt>.
+Not specifying it implies <tt class="xref docutils literal"><span class="pre">False</span></tt>.</li>
+<li>It complains when you specify a value, in true spirit of what flags
+actually are.</li>
+<li>Notice the different help text.</li>
+</ul>
+<div class="section" id="short-options">
+<h3>Short options<a class="headerlink" href="#short-options" title="Permalink to this headline">¶</a></h3>
+<p>If you are familiar with command line usage,
+you will notice that I haven&#8217;t yet touched on the topic of short
+versions of the options. It&#8217;s quite simple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">,</span>
+                    <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;verbosity turned on&quot;</span>
+</pre></div>
+</div>
+<p>And here goes:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py -v
+verbosity turned on
+<span class="nv">$ </span>python prog.py --help
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span>
+
+optional arguments:
+  -h, --help     show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -v, --verbose  increase output verbosity
+</pre></div>
+</div>
+<p>Note that the new ability is also reflected in the help text.</p>
+</div>
+</div>
+<div class="section" id="combining-positional-and-optional-arguments">
+<h2>Combining Positional and Optional arguments<a class="headerlink" href="#combining-positional-and-optional-arguments" title="Permalink to this headline">¶</a></h2>
+<p>Our program keeps growing in complexity:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;the square of {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>And now the output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> square
+prog.py: error: the following arguments are required: square
+<span class="nv">$ </span>python prog.py 4
+16
+<span class="nv">$ </span>python prog.py 4 --verbose
+the square of 4 equals 16
+<span class="nv">$ </span>python prog.py --verbose 4
+the square of 4 equals 16
+</pre></div>
+</div>
+<ul class="simple">
+<li>We&#8217;ve brought back a positional argument, hence the complaint.</li>
+<li>Note that the order does not matter.</li>
+</ul>
+<p>How about we give this program of ours back the ability to have
+multiple verbosity values, and actually get to use them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;the square of {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^2 == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>And the output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4
+16
+<span class="nv">$ </span>python prog.py 4 -v
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v VERBOSITY<span class="o">]</span> square
+prog.py: error: argument -v/--verbosity: expected one argument
+<span class="nv">$ </span>python prog.py 4 -v 1
+4^2 <span class="o">==</span> 16
+<span class="nv">$ </span>python prog.py 4 -v 2
+the square of 4 equals 16
+<span class="nv">$ </span>python prog.py 4 -v 3
+16
+</pre></div>
+</div>
+<p>These all look good except the last one, which exposes a bug in our program.
+Let&#8217;s fix it by restricting the values the <tt class="docutils literal"><span class="pre">--verbosity</span></tt> option can accept:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;the square of {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^2 == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>And the output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4 -v 3
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v <span class="o">{</span>0,1,2<span class="o">}]</span> square
+prog.py: error: argument -v/--verbosity: invalid choice: 3 <span class="o">(</span>choose from 0, 1, 2<span class="o">)</span>
+<span class="nv">$ </span>python prog.py 4 -h
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v <span class="o">{</span>0,1,2<span class="o">}]</span> square
+
+positional arguments:
+  square                display a square of a given number
+
+optional arguments:
+  -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -v <span class="o">{</span>0,1,2<span class="o">}</span>, --verbosity <span class="o">{</span>0,1,2<span class="o">}</span>
+                        increase output verbosity
+</pre></div>
+</div>
+<p>Note that the change also reflects both in the error message as well as the
+help string.</p>
+<p>Now, let&#8217;s use a different approach of playing with verbosity, which is pretty
+common. It also matches the way the CPython executable handles its own
+verbosity argument (check the output of <tt class="docutils literal"><span class="pre">python</span> <span class="pre">--help</span></tt>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;display the square of a given number&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;the square of {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^2 == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>We have introduced another action, &#8220;count&#8221;,
+to count the number of occurences of a specific optional arguments:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4
+16
+<span class="nv">$ </span>python prog.py 4 -v
+4^2 <span class="o">==</span> 16
+<span class="nv">$ </span>python prog.py 4 -vv
+the square of 4 equals 16
+<span class="nv">$ </span>python prog.py 4 --verbosity --verbosity
+the square of 4 equals 16
+<span class="nv">$ </span>python prog.py 4 -v 1
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> square
+prog.py: error: unrecognized arguments: 1
+<span class="nv">$ </span>python prog.py 4 -h
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> square
+
+positional arguments:
+  square           display a square of a given number
+
+optional arguments:
+  -h, --help       show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -v, --verbosity  increase output verbosity
+<span class="nv">$ </span>python prog.py 4 -vvv
+16
+</pre></div>
+</div>
+<ul class="simple">
+<li>Yes, it&#8217;s now more of a flag (similar to <tt class="docutils literal"><span class="pre">action=&quot;store_true&quot;</span></tt>) in the
+previous version of our script. That should explain the complaint.</li>
+<li>It also behaves similar to &#8220;store_true&#8221; action.</li>
+<li>Now here&#8217;s a demonstration of what the &#8220;count&#8221; action gives. You&#8217;ve probably
+seen this sort of usage before.</li>
+<li>And, just like the &#8220;store_true&#8221; action, if you don&#8217;t specify the <tt class="docutils literal"><span class="pre">-v</span></tt> flag,
+that flag is considered to have <tt class="xref docutils literal"><span class="pre">None</span></tt> value.</li>
+<li>As should be expected, specifying the long form of the flag, we should get
+the same output.</li>
+<li>Sadly, our help output isn&#8217;t very informative on the new ability our script
+has acquired, but that can always be fixed by improving the documentation for
+out script (e.g. via the <tt class="docutils literal"><span class="pre">help</span></tt> keyword argument).</li>
+<li>That last output exposes a bug in our program.</li>
+</ul>
+<p>Let&#8217;s fix:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="c"># bugfix: replace == with &gt;=</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;the square of {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^2 == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>And this is what it gives:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4 -vvv
+the square of 4 equals 16
+<span class="nv">$ </span>python prog.py 4 -vvvv
+the square of 4 equals 16
+<span class="nv">$ </span>python prog.py 4
+Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+  File <span class="s2">&quot;prog.py&quot;</span>, line 11, in &lt;module&gt;
+    <span class="k">if </span>args.verbosity &gt;<span class="o">=</span> 2:
+TypeError: unorderable types: NoneType<span class="o">()</span> &gt;<span class="o">=</span> int<span class="o">()</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>First output went well, and fixes the bug we had before.
+That is, we want any value &gt;= 2 to be as verbose as possible.</li>
+<li>Third output not so good.</li>
+</ul>
+<p>Let&#8217;s fix that bug:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;display a square of a given number&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">help</span><span class="o">=</span><span class="s">&quot;increase output verbosity&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;the square of {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^2 == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>We&#8217;ve just introduced yet another keyword, <tt class="docutils literal"><span class="pre">default</span></tt>.
+We&#8217;ve set it to <tt class="docutils literal"><span class="pre">0</span></tt> in order to make it comparable to the other int values.
+Remember that by default,
+if an optional argument isn&#8217;t specified,
+it gets the <tt class="xref docutils literal"><span class="pre">None</span></tt> value, and that cannot be compared to an int value
+(hence the <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception).</p>
+<p>And:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4
+16
+</pre></div>
+</div>
+<p>You can go quite far just with what we&#8217;ve learned so far,
+and we have only scratched the surface.
+The <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a> module is very powerful,
+and we&#8217;ll explore a bit more of it before we end this tutorial.</p>
+</div>
+<div class="section" id="getting-a-little-more-advanced">
+<h2>Getting a little more advanced<a class="headerlink" href="#getting-a-little-more-advanced" title="Permalink to this headline">¶</a></h2>
+<p>What if we wanted to expand our tiny program to perform other powers,
+not just squares:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the base&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the exponent&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="n">args</span><span class="o">.</span><span class="n">y</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{} to the power {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^{} == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> x y
+prog.py: error: the following arguments are required: x, y
+<span class="nv">$ </span>python prog.py -h
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v<span class="o">]</span> x y
+
+positional arguments:
+  x                the base
+  y                the exponent
+
+optional arguments:
+  -h, --help       show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -v, --verbosity
+<span class="nv">$ </span>python prog.py 4 2 -v
+4^2 <span class="o">==</span> 16
+</pre></div>
+</div>
+<p>Notice that so far we&#8217;ve been using verbosity level to <em>change</em> the text
+that gets displayed. The following example instead uses verbosity level
+to display <em>more</em> text instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the base&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the exponent&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="n">args</span><span class="o">.</span><span class="n">y</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;Running &#39;{}&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^{} ==&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+<span class="k">print</span> <span class="n">answer</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4 2
+16
+<span class="nv">$ </span>python prog.py 4 2 -v
+4^2 <span class="o">==</span> 16
+<span class="nv">$ </span>python prog.py 4 2 -vv
+Running <span class="s1">&#39;prog.py&#39;</span>
+4^2 <span class="o">==</span> 16
+</pre></div>
+</div>
+<div class="section" id="conflicting-options">
+<h3>Conflicting options<a class="headerlink" href="#conflicting-options" title="Permalink to this headline">¶</a></h3>
+<p>So far, we have been working with two methods of an
+<a class="reference internal" href="../library/argparse.html#argparse.ArgumentParser" title="argparse.ArgumentParser"><tt class="xref py py-class docutils literal"><span class="pre">argparse.ArgumentParser</span></tt></a> instance. Let&#8217;s introduce a third one,
+<tt class="xref py py-meth docutils literal"><span class="pre">add_mutually_exclusive_group()</span></tt>. It allows for us to specify options that
+conflict with each other. Let&#8217;s also change the rest of the program make the
+new functionality makes more sense:
+we&#8217;ll introduce the <tt class="docutils literal"><span class="pre">--quiet</span></tt> option,
+which will be the opposite of the <tt class="docutils literal"><span class="pre">--verbose</span></tt> one:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+<span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-q&quot;</span><span class="p">,</span> <span class="s">&quot;--quiet&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the base&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the exponent&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="n">args</span><span class="o">.</span><span class="n">y</span>
+
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{} to the power {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^{} == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Our program is now simpler, and we&#8217;ve lost some functionality for the sake of
+demonstration. Anyways, here&#8217;s the output:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py 4 2
+4^2 <span class="o">==</span> 16
+<span class="nv">$ </span>python prog.py 4 2 -q
+16
+<span class="nv">$ </span>python prog.py 4 2 -v
+4 to the power 2 equals 16
+<span class="nv">$ </span>python prog.py 4 2 -vq
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v | -q<span class="o">]</span> x y
+prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose
+<span class="nv">$ </span>python prog.py 4 2 -v --quiet
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v | -q<span class="o">]</span> x y
+prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose
+</pre></div>
+</div>
+<p>That should be easy to follow. I&#8217;ve added that last output so you can see the
+sort of flexibility you get, i.e. mixing long form options with short form
+ones.</p>
+<p>Before we conclude, you probably want to tell your users the main purpose of
+your program, just in case they don&#8217;t know:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">argparse</span>
+
+<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s">&quot;calculate X to the power of Y&quot;</span><span class="p">)</span>
+<span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;-q&quot;</span><span class="p">,</span> <span class="s">&quot;--quiet&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the base&quot;</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s">&quot;the exponent&quot;</span><span class="p">)</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="n">args</span><span class="o">.</span><span class="n">y</span>
+
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">answer</span>
+<span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{} to the power {} equals {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;{}^{} == {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">answer</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that slight difference in the usage text. Note the <tt class="docutils literal"><span class="pre">[-v</span> <span class="pre">|</span> <span class="pre">-q]</span></tt>,
+which tells us that we can either use <tt class="docutils literal"><span class="pre">-v</span></tt> or <tt class="docutils literal"><span class="pre">-q</span></tt>,
+but not both at the same time:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>python prog.py --help
+usage: prog.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-v | -q<span class="o">]</span> x y
+
+calculate X to the power of Y
+
+positional arguments:
+  x              the base
+  y              the exponent
+
+optional arguments:
+  -h, --help     show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  -v, --verbose
+  -q, --quiet
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><tt class="xref py py-mod docutils literal"><span class="pre">argparse</span></tt></a> module offers a lot more than shown here.
+Its docs are quite detailed and thorough, and full of examples.
+Having gone through this tutorial, you should easily digest them
+without feeling overwhelmed.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Argparse Tutorial</a><ul>
+<li><a class="reference internal" href="#concepts">Concepts</a></li>
+<li><a class="reference internal" href="#the-basics">The basics</a></li>
+<li><a class="reference internal" href="#introducing-positional-arguments">Introducing Positional arguments</a></li>
+<li><a class="reference internal" href="#introducing-optional-arguments">Introducing Optional arguments</a><ul>
+<li><a class="reference internal" href="#short-options">Short options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#combining-positional-and-optional-arguments">Combining Positional and Optional arguments</a></li>
+<li><a class="reference internal" href="#getting-a-little-more-advanced">Getting a little more advanced</a><ul>
+<li><a class="reference internal" href="#conflicting-options">Conflicting options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="webservers.html"
+                        title="previous chapter">HOWTO Use Python in the web</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../faq/index.html"
+                        title="next chapter">Python Frequently Asked Questions</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/howto/argparse.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../faq/index.html" title="Python Frequently Asked Questions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="webservers.html" title="HOWTO Use Python in the web"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

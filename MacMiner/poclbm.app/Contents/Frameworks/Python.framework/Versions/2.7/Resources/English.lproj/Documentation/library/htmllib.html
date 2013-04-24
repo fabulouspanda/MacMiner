@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>19.3. htmllib — A parser for HTML documents &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="19. Structured Markup Processing Tools" href="markup.html" />
+    <link rel="next" title="19.5. XML Processing Modules" href="xml.html" />
+    <link rel="prev" title="19.2. sgmllib — Simple SGML parser" href="sgmllib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.html" title="19.5. XML Processing Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sgmllib.html" title="19.2. sgmllib — Simple SGML parser"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" accesskey="U">19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-htmllib">
+<span id="htmllib-a-parser-for-html-documents"></span><h1>19.3. <a class="reference internal" href="#module-htmllib" title="htmllib: A parser for HTML documents. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">htmllib</span></tt></a> &#8212; A parser for HTML documents<a class="headerlink" href="#module-htmllib" title="Permalink to this headline">¶</a></h1>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-htmllib" title="htmllib: A parser for HTML documents. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">htmllib</span></tt></a> module has been removed in Python 3.</p>
+<span class="target" id="index-0"></span><p id="index-1">This module defines a class which can serve as a base for parsing text files
+formatted in the HyperText Mark-up Language (HTML).  The class is not directly
+concerned with I/O &#8212; it must be provided with input in string form via a
+method, and makes calls to methods of a &#8220;formatter&#8221; object in order to produce
+output.  The <a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class is designed to be used as a base class
+for other classes in order to add functionality, and allows most of its methods
+to be extended or overridden.  In turn, this class is derived from and extends
+the <tt class="xref py py-class docutils literal"><span class="pre">SGMLParser</span></tt> class defined in module <a class="reference internal" href="sgmllib.html#module-sgmllib" title="sgmllib: Only as much of an SGML parser as needed to parse HTML. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">sgmllib</span></tt></a>.  The
+<a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> implementation supports the HTML 2.0 language as described
+in <span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc1866.html"><strong>RFC 1866</strong></a>.  Two implementations of formatter objects are provided in the
+<a class="reference internal" href="formatter.html#module-formatter" title="formatter: Generic output formatter and device interface."><tt class="xref py py-mod docutils literal"><span class="pre">formatter</span></tt></a> module; refer to the documentation for that module for
+information on the formatter interface.</p>
+<p>The following is a summary of the interface defined by
+<a class="reference internal" href="sgmllib.html#sgmllib.SGMLParser" title="sgmllib.SGMLParser"><tt class="xref py py-class docutils literal"><span class="pre">sgmllib.SGMLParser</span></tt></a>:</p>
+<ul>
+<li><p class="first">The interface to feed data to an instance is through the <tt class="xref py py-meth docutils literal"><span class="pre">feed()</span></tt> method,
+which takes a string argument.  This can be called with as little or as much
+text at a time as desired; <tt class="docutils literal"><span class="pre">p.feed(a);</span> <span class="pre">p.feed(b)</span></tt> has the same effect as
+<tt class="docutils literal"><span class="pre">p.feed(a+b)</span></tt>.  When the data contains complete HTML markup constructs, these
+are processed immediately; incomplete constructs are saved in a buffer.  To
+force processing of all unprocessed data, call the <tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt> method.</p>
+<p>For example, to parse the entire contents of a file, use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;myfile.html&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">The interface to define semantics for HTML tags is very simple: derive a class
+and define methods called <tt class="xref py py-meth docutils literal"><span class="pre">start_tag()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">end_tag()</span></tt>, or <tt class="xref py py-meth docutils literal"><span class="pre">do_tag()</span></tt>.
+The parser will call these at appropriate moments: <tt class="xref py py-meth docutils literal"><span class="pre">start_tag()</span></tt> or
+<tt class="xref py py-meth docutils literal"><span class="pre">do_tag()</span></tt> is called when an opening tag of the form <tt class="docutils literal"><span class="pre">&lt;tag</span> <span class="pre">...&gt;</span></tt> is
+encountered; <tt class="xref py py-meth docutils literal"><span class="pre">end_tag()</span></tt> is called when a closing tag of the form <tt class="docutils literal"><span class="pre">&lt;tag&gt;</span></tt>
+is encountered.  If an opening tag requires a corresponding closing tag, like
+<tt class="docutils literal"><span class="pre">&lt;H1&gt;</span></tt> ... <tt class="docutils literal"><span class="pre">&lt;/H1&gt;</span></tt>, the class should define the <tt class="xref py py-meth docutils literal"><span class="pre">start_tag()</span></tt> method; if
+a tag requires no closing tag, like <tt class="docutils literal"><span class="pre">&lt;P&gt;</span></tt>, the class should define the
+<tt class="xref py py-meth docutils literal"><span class="pre">do_tag()</span></tt> method.</p>
+</li>
+</ul>
+<p>The module defines a parser class and an exception:</p>
+<dl class="class">
+<dt id="htmllib.HTMLParser">
+<em class="property">class </em><tt class="descclassname">htmllib.</tt><tt class="descname">HTMLParser</tt><big>(</big><em>formatter</em><big>)</big><a class="headerlink" href="#htmllib.HTMLParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the basic HTML parser class.  It supports all entity names required by
+the XHTML 1.0 Recommendation (<a class="reference external" href="http://www.w3.org/TR/xhtml1">http://www.w3.org/TR/xhtml1</a>).   It also defines
+handlers for all HTML 2.0 and many HTML 3.0 and 3.2 elements.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="htmllib.HTMLParseError">
+<em class="property">exception </em><tt class="descclassname">htmllib.</tt><tt class="descname">HTMLParseError</tt><a class="headerlink" href="#htmllib.HTMLParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised by the <a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class when it encounters an error
+while parsing.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="formatter.html#module-formatter" title="formatter: Generic output formatter and device interface."><tt class="xref py py-mod docutils literal"><span class="pre">formatter</span></tt></a></dt>
+<dd>Interface definition for transforming an abstract flow of formatting events into
+specific output events on writer objects.</dd>
+<dt>Module <a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-mod docutils literal"><span class="pre">HTMLParser</span></tt></a></dt>
+<dd>Alternate HTML parser that offers a slightly lower-level view of the input, but
+is designed to work with XHTML, and does not implement some of the SGML syntax
+not used in &#8220;HTML as deployed&#8221; and which isn&#8217;t legal for XHTML.</dd>
+<dt>Module <a class="reference internal" href="#module-htmlentitydefs" title="htmlentitydefs: Definitions of HTML general entities."><tt class="xref py py-mod docutils literal"><span class="pre">htmlentitydefs</span></tt></a></dt>
+<dd>Definition of replacement text for XHTML 1.0  entities.</dd>
+<dt>Module <a class="reference internal" href="sgmllib.html#module-sgmllib" title="sgmllib: Only as much of an SGML parser as needed to parse HTML. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">sgmllib</span></tt></a></dt>
+<dd>Base class for <a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a>.</dd>
+</dl>
+</div>
+<div class="section" id="htmlparser-objects">
+<span id="html-parser-objects"></span><h2>19.3.1. HTMLParser Objects<a class="headerlink" href="#htmlparser-objects" title="Permalink to this headline">¶</a></h2>
+<p>In addition to tag methods, the <a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class provides some
+additional methods and instance variables for use within tag methods.</p>
+<dl class="attribute">
+<dt id="htmllib.HTMLParser.formatter">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">formatter</tt><a class="headerlink" href="#htmllib.HTMLParser.formatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the formatter instance associated with the parser.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="htmllib.HTMLParser.nofill">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">nofill</tt><a class="headerlink" href="#htmllib.HTMLParser.nofill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean flag which should be true when whitespace should not be collapsed, or
+false when it should be.  In general, this should only be true when character
+data is to be treated as &#8220;preformatted&#8221; text, as within a <tt class="docutils literal"><span class="pre">&lt;PRE&gt;</span></tt> element.
+The default value is false.  This affects the operation of <tt class="xref py py-meth docutils literal"><span class="pre">handle_data()</span></tt>
+and <a class="reference internal" href="#htmllib.HTMLParser.save_end" title="htmllib.HTMLParser.save_end"><tt class="xref py py-meth docutils literal"><span class="pre">save_end()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="htmllib.HTMLParser.anchor_bgn">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">anchor_bgn</tt><big>(</big><em>href</em>, <em>name</em>, <em>type</em><big>)</big><a class="headerlink" href="#htmllib.HTMLParser.anchor_bgn" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called at the start of an anchor region.  The arguments
+correspond to the attributes of the <tt class="docutils literal"><span class="pre">&lt;A&gt;</span></tt> tag with the same names.  The
+default implementation maintains a list of hyperlinks (defined by the <tt class="docutils literal"><span class="pre">HREF</span></tt>
+attribute for <tt class="docutils literal"><span class="pre">&lt;A&gt;</span></tt> tags) within the document.  The list of hyperlinks is
+available as the data attribute <tt class="xref py py-attr docutils literal"><span class="pre">anchorlist</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="htmllib.HTMLParser.anchor_end">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">anchor_end</tt><big>(</big><big>)</big><a class="headerlink" href="#htmllib.HTMLParser.anchor_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called at the end of an anchor region.  The default
+implementation adds a textual footnote marker using an index into the list of
+hyperlinks created by <a class="reference internal" href="#htmllib.HTMLParser.anchor_bgn" title="htmllib.HTMLParser.anchor_bgn"><tt class="xref py py-meth docutils literal"><span class="pre">anchor_bgn()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="htmllib.HTMLParser.handle_image">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">handle_image</tt><big>(</big><em>source</em>, <em>alt</em><span class="optional">[</span>, <em>ismap</em><span class="optional">[</span>, <em>align</em><span class="optional">[</span>, <em>width</em><span class="optional">[</span>, <em>height</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#htmllib.HTMLParser.handle_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called to handle images.  The default implementation simply
+passes the <em>alt</em> value to the <tt class="xref py py-meth docutils literal"><span class="pre">handle_data()</span></tt> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="htmllib.HTMLParser.save_bgn">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">save_bgn</tt><big>(</big><big>)</big><a class="headerlink" href="#htmllib.HTMLParser.save_bgn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Begins saving character data in a buffer instead of sending it to the formatter
+object.  Retrieve the stored data via <a class="reference internal" href="#htmllib.HTMLParser.save_end" title="htmllib.HTMLParser.save_end"><tt class="xref py py-meth docutils literal"><span class="pre">save_end()</span></tt></a>. Use of the
+<a class="reference internal" href="#htmllib.HTMLParser.save_bgn" title="htmllib.HTMLParser.save_bgn"><tt class="xref py py-meth docutils literal"><span class="pre">save_bgn()</span></tt></a> / <a class="reference internal" href="#htmllib.HTMLParser.save_end" title="htmllib.HTMLParser.save_end"><tt class="xref py py-meth docutils literal"><span class="pre">save_end()</span></tt></a> pair may not be nested.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="htmllib.HTMLParser.save_end">
+<tt class="descclassname">HTMLParser.</tt><tt class="descname">save_end</tt><big>(</big><big>)</big><a class="headerlink" href="#htmllib.HTMLParser.save_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ends buffering character data and returns all data saved since the preceding
+call to <a class="reference internal" href="#htmllib.HTMLParser.save_bgn" title="htmllib.HTMLParser.save_bgn"><tt class="xref py py-meth docutils literal"><span class="pre">save_bgn()</span></tt></a>.  If the <a class="reference internal" href="#htmllib.HTMLParser.nofill" title="htmllib.HTMLParser.nofill"><tt class="xref py py-attr docutils literal"><span class="pre">nofill</span></tt></a> flag is false, whitespace is
+collapsed to single spaces.  A call to this method without a preceding call to
+<a class="reference internal" href="#htmllib.HTMLParser.save_bgn" title="htmllib.HTMLParser.save_bgn"><tt class="xref py py-meth docutils literal"><span class="pre">save_bgn()</span></tt></a> will raise a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> exception.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-htmlentitydefs">
+<span id="htmlentitydefs-definitions-of-html-general-entities"></span><h1>19.4. <a class="reference internal" href="#module-htmlentitydefs" title="htmlentitydefs: Definitions of HTML general entities."><tt class="xref py py-mod docutils literal"><span class="pre">htmlentitydefs</span></tt></a> &#8212; Definitions of HTML general entities<a class="headerlink" href="#module-htmlentitydefs" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-htmlentitydefs" title="htmlentitydefs: Definitions of HTML general entities."><tt class="xref py py-mod docutils literal"><span class="pre">htmlentitydefs</span></tt></a> module has been renamed to <tt class="xref py py-mod docutils literal"><span class="pre">html.entities</span></tt> in
+Python 3.  The <a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt imports when
+converting your sources to Python 3.</p>
+</div>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/htmlentitydefs.py">Lib/htmlentitydefs.py</a></p>
+<hr class="docutils" />
+<p>This module defines three dictionaries, <tt class="docutils literal"><span class="pre">name2codepoint</span></tt>, <tt class="docutils literal"><span class="pre">codepoint2name</span></tt>,
+and <tt class="docutils literal"><span class="pre">entitydefs</span></tt>. <tt class="docutils literal"><span class="pre">entitydefs</span></tt> is used by the <a class="reference internal" href="#module-htmllib" title="htmllib: A parser for HTML documents. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">htmllib</span></tt></a> module to
+provide the <a class="reference internal" href="#htmlentitydefs.entitydefs" title="htmlentitydefs.entitydefs"><tt class="xref py py-attr docutils literal"><span class="pre">entitydefs</span></tt></a> attribute of the <a class="reference internal" href="htmlparser.html#module-HTMLParser" title="HTMLParser: A simple parser that can handle HTML and XHTML."><tt class="xref py py-class docutils literal"><span class="pre">HTMLParser</span></tt></a> class.  The
+definition provided here contains all the entities defined by XHTML 1.0  that
+can be handled using simple textual substitution in the Latin-1 character set
+(ISO-8859-1).</p>
+<dl class="data">
+<dt id="htmlentitydefs.entitydefs">
+<tt class="descclassname">htmlentitydefs.</tt><tt class="descname">entitydefs</tt><a class="headerlink" href="#htmlentitydefs.entitydefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary mapping XHTML 1.0 entity definitions to their replacement text in
+ISO Latin-1.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="htmlentitydefs.name2codepoint">
+<tt class="descclassname">htmlentitydefs.</tt><tt class="descname">name2codepoint</tt><a class="headerlink" href="#htmlentitydefs.name2codepoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary that maps HTML entity names to the Unicode codepoints.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="htmlentitydefs.codepoint2name">
+<tt class="descclassname">htmlentitydefs.</tt><tt class="descname">codepoint2name</tt><a class="headerlink" href="#htmlentitydefs.codepoint2name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary that maps Unicode codepoints to HTML entity names.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19.3. <tt class="docutils literal"><span class="pre">htmllib</span></tt> &#8212; A parser for HTML documents</a><ul>
+<li><a class="reference internal" href="#htmlparser-objects">19.3.1. HTMLParser Objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-htmlentitydefs">19.4. <tt class="docutils literal"><span class="pre">htmlentitydefs</span></tt> &#8212; Definitions of HTML general entities</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sgmllib.html"
+                        title="previous chapter">19.2. <tt class="docutils literal"><span class="pre">sgmllib</span></tt> &#8212; Simple SGML parser</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xml.html"
+                        title="next chapter">19.5. XML Processing Modules</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/htmllib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xml.html" title="19.5. XML Processing Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sgmllib.html" title="19.2. sgmllib — Simple SGML parser"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" >19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

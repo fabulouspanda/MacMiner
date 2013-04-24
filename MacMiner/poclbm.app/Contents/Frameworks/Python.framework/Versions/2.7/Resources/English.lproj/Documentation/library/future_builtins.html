@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.4. future_builtins — Python 3 builtins &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="27. Python Runtime Services" href="python.html" />
+    <link rel="next" title="27.5. __main__ — Top-level script environment" href="__main__.html" />
+    <link rel="prev" title="27.3. __builtin__ — Built-in objects" href="__builtin__.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="__main__.html" title="27.5. __main__ — Top-level script environment"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="__builtin__.html" title="27.3. __builtin__ — Built-in objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" accesskey="U">27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-future_builtins">
+<span id="future-builtins-python-3-builtins"></span><h1>27.4. <a class="reference internal" href="#module-future_builtins" title="future_builtins"><tt class="xref py py-mod docutils literal"><span class="pre">future_builtins</span></tt></a> &#8212; Python 3 builtins<a class="headerlink" href="#module-future_builtins" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<p>This module provides functions that exist in 2.x, but have different behavior in
+Python 3, so they cannot be put into the 2.x builtins namespace.</p>
+<p>Instead, if you want to write code compatible with Python 3 builtins, import
+them from this module, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">future_builtins</span> <span class="kn">import</span> <span class="nb">map</span><span class="p">,</span> <span class="nb">filter</span>
+
+<span class="o">...</span> <span class="n">code</span> <span class="n">using</span> <span class="n">Python</span> <span class="mi">3</span><span class="o">-</span><span class="n">style</span> <span class="nb">map</span> <span class="ow">and</span> <span class="nb">filter</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool that ports Python 2 code to Python 3 will recognize
+this usage and leave the new builtins alone.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The Python 3 <a class="reference internal" href="functions.html#print" title="print"><tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt></a> function is already in the builtins, but cannot be
+accessed from Python 2 code unless you use the appropriate future statement:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+</pre></div>
+</div>
+</div>
+<p>Available builtins are:</p>
+<dl class="function">
+<dt id="future_builtins.ascii">
+<tt class="descclassname">future_builtins.</tt><tt class="descname">ascii</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#future_builtins.ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the same as <a class="reference internal" href="repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a>.  In Python 3, <a class="reference internal" href="repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> will return
+printable Unicode characters unescaped, while <a class="reference internal" href="#future_builtins.ascii" title="future_builtins.ascii"><tt class="xref py py-func docutils literal"><span class="pre">ascii()</span></tt></a> will always
+backslash-escape them.  Using <a class="reference internal" href="#future_builtins.ascii" title="future_builtins.ascii"><tt class="xref py py-func docutils literal"><span class="pre">future_builtins.ascii()</span></tt></a> instead of
+<a class="reference internal" href="repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> in 2.6 code makes it clear that you need a pure ASCII return
+value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="future_builtins.filter">
+<tt class="descclassname">future_builtins.</tt><tt class="descname">filter</tt><big>(</big><em>function</em>, <em>iterable</em><big>)</big><a class="headerlink" href="#future_builtins.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like <a class="reference internal" href="itertools.html#itertools.ifilter" title="itertools.ifilter"><tt class="xref py py-func docutils literal"><span class="pre">itertools.ifilter()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="future_builtins.hex">
+<tt class="descclassname">future_builtins.</tt><tt class="descname">hex</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#future_builtins.hex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like the built-in <a class="reference internal" href="functions.html#hex" title="hex"><tt class="xref py py-func docutils literal"><span class="pre">hex()</span></tt></a>, but instead of <a class="reference internal" href="../reference/datamodel.html#object.__hex__" title="object.__hex__"><tt class="xref py py-meth docutils literal"><span class="pre">__hex__()</span></tt></a> it will
+use the <a class="reference internal" href="../reference/datamodel.html#object.__index__" title="object.__index__"><tt class="xref py py-meth docutils literal"><span class="pre">__index__()</span></tt></a> method on its argument to get an integer that is
+then converted to hexadecimal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="future_builtins.map">
+<tt class="descclassname">future_builtins.</tt><tt class="descname">map</tt><big>(</big><em>function</em>, <em>iterable</em>, <em>...</em><big>)</big><a class="headerlink" href="#future_builtins.map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like <a class="reference internal" href="itertools.html#itertools.imap" title="itertools.imap"><tt class="xref py py-func docutils literal"><span class="pre">itertools.imap()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="future_builtins.oct">
+<tt class="descclassname">future_builtins.</tt><tt class="descname">oct</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#future_builtins.oct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like the built-in <a class="reference internal" href="functions.html#oct" title="oct"><tt class="xref py py-func docutils literal"><span class="pre">oct()</span></tt></a>, but instead of <a class="reference internal" href="../reference/datamodel.html#object.__oct__" title="object.__oct__"><tt class="xref py py-meth docutils literal"><span class="pre">__oct__()</span></tt></a> it will
+use the <a class="reference internal" href="../reference/datamodel.html#object.__index__" title="object.__index__"><tt class="xref py py-meth docutils literal"><span class="pre">__index__()</span></tt></a> method on its argument to get an integer that is
+then converted to octal.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="future_builtins.zip">
+<tt class="descclassname">future_builtins.</tt><tt class="descname">zip</tt><big>(</big><em>*iterables</em><big>)</big><a class="headerlink" href="#future_builtins.zip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like <a class="reference internal" href="itertools.html#itertools.izip" title="itertools.izip"><tt class="xref py py-func docutils literal"><span class="pre">itertools.izip()</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="__builtin__.html"
+                        title="previous chapter">27.3. <tt class="docutils literal docutils literal"><span class="pre">__builtin__</span></tt> &#8212; Built-in objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="__main__.html"
+                        title="next chapter">27.5. <tt class="docutils literal docutils literal"><span class="pre">__main__</span></tt> &#8212; Top-level script environment</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/future_builtins.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="__main__.html" title="27.5. __main__ — Top-level script environment"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="__builtin__.html" title="27.3. __builtin__ — Built-in objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" >27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

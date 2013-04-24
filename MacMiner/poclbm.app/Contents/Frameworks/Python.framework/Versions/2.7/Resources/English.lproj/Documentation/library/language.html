@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>31. Python Language Services &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="The Python Standard Library" href="index.html" />
+    <link rel="next" title="31.1. parser — Access Python parse trees" href="parser.html" />
+    <link rel="prev" title="30.7. runpy — Locating and executing Python modules" href="runpy.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="31.1. parser — Access Python parse trees"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="runpy.html" title="30.7. runpy — Locating and executing Python modules"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">The Python Standard Library</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python-language-services">
+<span id="language"></span><h1>31. Python Language Services<a class="headerlink" href="#python-language-services" title="Permalink to this headline">¶</a></h1>
+<p>Python provides a number of modules to assist in working with the Python
+language.  These modules support tokenizing, parsing, syntax analysis, bytecode
+disassembly, and various other facilities.</p>
+<p>These modules include:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parser.html">31.1. <tt class="docutils literal"><span class="pre">parser</span></tt> &#8212; Access Python parse trees</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parser.html#creating-st-objects">31.1.1. Creating ST Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parser.html#converting-st-objects">31.1.2. Converting ST Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parser.html#queries-on-st-objects">31.1.3. Queries on ST Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parser.html#exceptions-and-error-handling">31.1.4. Exceptions and Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parser.html#st-objects">31.1.5. ST Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parser.html#example-emulation-of-compile">31.1.6. Example: Emulation of <tt class="docutils literal"><span class="pre">compile()</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ast.html">31.2. <tt class="docutils literal"><span class="pre">ast</span></tt> &#8212; Abstract Syntax Trees</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ast.html#node-classes">31.2.1. Node classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ast.html#abstract-grammar">31.2.2. Abstract Grammar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ast.html#ast-helpers">31.2.3. <tt class="docutils literal"><span class="pre">ast</span></tt> Helpers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="symtable.html">31.3. <tt class="docutils literal"><span class="pre">symtable</span></tt> &#8212; Access to the compiler&#8217;s symbol tables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="symtable.html#generating-symbol-tables">31.3.1. Generating Symbol Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="symtable.html#examining-symbol-tables">31.3.2. Examining Symbol Tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="symbol.html">31.4. <tt class="docutils literal"><span class="pre">symbol</span></tt> &#8212; Constants used with Python parse trees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="token.html">31.5. <tt class="docutils literal"><span class="pre">token</span></tt> &#8212; Constants used with Python parse trees</a></li>
+<li class="toctree-l1"><a class="reference internal" href="keyword.html">31.6. <tt class="docutils literal"><span class="pre">keyword</span></tt> &#8212; Testing for Python keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tokenize.html">31.7. <tt class="docutils literal"><span class="pre">tokenize</span></tt> &#8212; Tokenizer for Python source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tabnanny.html">31.8. <tt class="docutils literal"><span class="pre">tabnanny</span></tt> &#8212; Detection of ambiguous indentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyclbr.html">31.9. <tt class="docutils literal"><span class="pre">pyclbr</span></tt> &#8212; Python class browser support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyclbr.html#class-objects">31.9.1. Class Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyclbr.html#function-objects">31.9.2. Function Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="py_compile.html">31.10. <tt class="docutils literal"><span class="pre">py_compile</span></tt> &#8212; Compile Python source files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compileall.html">31.11. <tt class="docutils literal"><span class="pre">compileall</span></tt> &#8212; Byte-compile Python libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="compileall.html#command-line-use">31.11.1. Command-line use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="compileall.html#public-functions">31.11.2. Public functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dis.html">31.12. <tt class="docutils literal"><span class="pre">dis</span></tt> &#8212; Disassembler for Python bytecode</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dis.html#python-bytecode-instructions">31.12.1. Python Bytecode Instructions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pickletools.html">31.13. <tt class="docutils literal"><span class="pre">pickletools</span></tt> &#8212; Tools for pickle developers</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="runpy.html"
+                        title="previous chapter">30.7. <tt class="docutils literal"><span class="pre">runpy</span></tt> &#8212; Locating and executing Python modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parser.html"
+                        title="next chapter">31.1. <tt class="docutils literal docutils literal"><span class="pre">parser</span></tt> &#8212; Access Python parse trees</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/language.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="31.1. parser — Access Python parse trees"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="runpy.html" title="30.7. runpy — Locating and executing Python modules"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

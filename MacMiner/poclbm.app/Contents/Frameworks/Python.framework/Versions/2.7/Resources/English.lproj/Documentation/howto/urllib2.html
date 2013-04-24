@@ -1,0 +1,738 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HOWTO Fetch Internet Resources Using urllib2 &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python HOWTOs" href="index.html" />
+    <link rel="next" title="HOWTO Use Python in the web" href="webservers.html" />
+    <link rel="prev" title="Unicode HOWTO" href="unicode.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="webservers.html" title="HOWTO Use Python in the web"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unicode.html" title="Unicode HOWTO"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="howto-fetch-internet-resources-using-urllib2">
+<h1>HOWTO Fetch Internet Resources Using urllib2<a class="headerlink" href="#howto-fetch-internet-resources-using-urllib2" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body"><a class="reference external" href="http://www.voidspace.org.uk/python/index.shtml">Michael Foord</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is an French translation of an earlier revision of this
+HOWTO, available at <a class="reference external" href="http://www.voidspace.org.uk/python/articles/urllib2_francais.shtml">urllib2 - Le Manuel manquant</a>.</p>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<div class="sidebar">
+<p class="first sidebar-title">Related Articles</p>
+<p>You may also find useful the following article on fetching web resources
+with Python :</p>
+<ul class="last">
+<li><p class="first"><a class="reference external" href="http://www.voidspace.org.uk/python/articles/authentication.shtml">Basic Authentication</a></p>
+<blockquote>
+<div><p>A tutorial on <em>Basic Authentication</em>, with examples in Python.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<p><strong>urllib2</strong> is a <a class="reference external" href="http://www.python.org">Python</a> module for fetching URLs
+(Uniform Resource Locators). It offers a very simple interface, in the form of
+the <em>urlopen</em> function. This is capable of fetching URLs using a variety of
+different protocols. It also offers a slightly more complex interface for
+handling common situations - like basic authentication, cookies, proxies and so
+on. These are provided by objects called handlers and openers.</p>
+<p>urllib2 supports fetching URLs for many &#8220;URL schemes&#8221; (identified by the string
+before the &#8221;:&#8221; in URL - for example &#8220;ftp&#8221; is the URL scheme of
+&#8220;<a class="reference external" href="ftp://python.org/">ftp://python.org/</a>&#8221;) using their associated network protocols (e.g. FTP, HTTP).
+This tutorial focuses on the most common case, HTTP.</p>
+<p>For straightforward situations <em>urlopen</em> is very easy to use. But as soon as you
+encounter errors or non-trivial cases when opening HTTP URLs, you will need some
+understanding of the HyperText Transfer Protocol. The most comprehensive and
+authoritative reference to HTTP is <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2616.html"><strong>RFC 2616</strong></a>. This is a technical document and
+not intended to be easy to read. This HOWTO aims to illustrate using <em>urllib2</em>,
+with enough detail about HTTP to help you through. It is not intended to replace
+the <a class="reference internal" href="../library/urllib2.html#module-urllib2" title="urllib2: Next generation URL opening library."><tt class="xref py py-mod docutils literal"><span class="pre">urllib2</span></tt></a> docs, but is supplementary to them.</p>
+</div>
+<div class="section" id="fetching-urls">
+<h2>Fetching URLs<a class="headerlink" href="#fetching-urls" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to use urllib2 is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">&#39;http://python.org/&#39;</span><span class="p">)</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Many uses of urllib2 will be that simple (note that instead of an &#8216;http:&#8217; URL we
+could have used an URL starting with &#8216;ftp:&#8217;, &#8216;file:&#8217;, etc.).  However, it&#8217;s the
+purpose of this tutorial to explain the more complicated cases, concentrating on
+HTTP.</p>
+<p>HTTP is based on requests and responses - the client makes requests and servers
+send responses. urllib2 mirrors this with a <tt class="docutils literal"><span class="pre">Request</span></tt> object which represents
+the HTTP request you are making. In its simplest form you create a Request
+object that specifies the URL you want to fetch. Calling <tt class="docutils literal"><span class="pre">urlopen</span></tt> with this
+Request object returns a response object for the URL requested. This response is
+a file-like object, which means you can for example call <tt class="docutils literal"><span class="pre">.read()</span></tt> on the
+response:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s">&#39;http://www.voidspace.org.uk&#39;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="n">the_page</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that urllib2 makes use of the same Request interface to handle all URL
+schemes.  For example, you can make an FTP request like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s">&#39;ftp://example.com/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the case of HTTP, there are two extra things that Request objects allow you
+to do: First, you can pass data to be sent to the server.  Second, you can pass
+extra information (&#8220;metadata&#8221;) <em>about</em> the data or the about request itself, to
+the server - this information is sent as HTTP &#8220;headers&#8221;.  Let&#8217;s look at each of
+these in turn.</p>
+<div class="section" id="data">
+<h3>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes you want to send data to a URL (often the URL will refer to a CGI
+(Common Gateway Interface) script <a class="footnote-reference" href="#id9" id="id1">[1]</a> or other web application). With HTTP,
+this is often done using what&#8217;s known as a <strong>POST</strong> request. This is often what
+your browser does when you submit a HTML form that you filled in on the web. Not
+all POSTs have to come from forms: you can use a POST to transmit arbitrary data
+to your own application. In the common case of HTML forms, the data needs to be
+encoded in a standard way, and then passed to the Request object as the <tt class="docutils literal"><span class="pre">data</span></tt>
+argument. The encoding is done using a function from the <tt class="docutils literal"><span class="pre">urllib</span></tt> library
+<em>not</em> from <tt class="docutils literal"><span class="pre">urllib2</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">&#39;http://www.someserver.com/cgi-bin/register.cgi&#39;</span>
+<span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span> <span class="p">:</span> <span class="s">&#39;Michael Foord&#39;</span><span class="p">,</span>
+          <span class="s">&#39;location&#39;</span> <span class="p">:</span> <span class="s">&#39;Northampton&#39;</span><span class="p">,</span>
+          <span class="s">&#39;language&#39;</span> <span class="p">:</span> <span class="s">&#39;Python&#39;</span> <span class="p">}</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="n">the_page</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that other encodings are sometimes required (e.g. for file upload from HTML
+forms - see <a class="reference external" href="http://www.w3.org/TR/REC-html40/interact/forms.html#h-17.13">HTML Specification, Form Submission</a> for more
+details).</p>
+<p>If you do not pass the <tt class="docutils literal"><span class="pre">data</span></tt> argument, urllib2 uses a <strong>GET</strong> request. One
+way in which GET and POST requests differ is that POST requests often have
+&#8220;side-effects&#8221;: they change the state of the system in some way (for example by
+placing an order with the website for a hundredweight of tinned spam to be
+delivered to your door).  Though the HTTP standard makes it clear that POSTs are
+intended to <em>always</em> cause side-effects, and GET requests <em>never</em> to cause
+side-effects, nothing prevents a GET request from having side-effects, nor a
+POST requests from having no side-effects. Data can also be passed in an HTTP
+GET request by encoding it in the URL itself.</p>
+<p>This is done as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Somebody Here&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Northampton&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s">&#39;language&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Python&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url_values</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">url_values</span>  <span class="c"># The order may differ. </span>
+<span class="go">name=Somebody+Here&amp;language=Python&amp;location=Northampton</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s">&#39;http://www.example.com/example.cgi&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">full_url</span> <span class="o">=</span> <span class="n">url</span> <span class="o">+</span> <span class="s">&#39;?&#39;</span> <span class="o">+</span> <span class="n">url_values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">full_url</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that the full URL is created by adding a <tt class="docutils literal"><span class="pre">?</span></tt> to the URL, followed by
+the encoded values.</p>
+</div>
+<div class="section" id="headers">
+<h3>Headers<a class="headerlink" href="#headers" title="Permalink to this headline">¶</a></h3>
+<p>We&#8217;ll discuss here one particular HTTP header, to illustrate how to add headers
+to your HTTP request.</p>
+<p>Some websites <a class="footnote-reference" href="#id10" id="id2">[2]</a> dislike being browsed by programs, or send different versions
+to different browsers <a class="footnote-reference" href="#id11" id="id3">[3]</a> . By default urllib2 identifies itself as
+<tt class="docutils literal"><span class="pre">Python-urllib/x.y</span></tt> (where <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt> are the major and minor version
+numbers of the Python release,
+e.g. <tt class="docutils literal"><span class="pre">Python-urllib/2.5</span></tt>), which may confuse the site, or just plain
+not work. The way a browser identifies itself is through the
+<tt class="docutils literal"><span class="pre">User-Agent</span></tt> header <a class="footnote-reference" href="#id12" id="id4">[4]</a>. When you create a Request object you can
+pass a dictionary of headers in. The following example makes the same
+request as above, but identifies itself as a version of Internet
+Explorer <a class="footnote-reference" href="#id13" id="id5">[5]</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">&#39;http://www.someserver.com/cgi-bin/register.cgi&#39;</span>
+<span class="n">user_agent</span> <span class="o">=</span> <span class="s">&#39;Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)&#39;</span>
+<span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;name&#39;</span> <span class="p">:</span> <span class="s">&#39;Michael Foord&#39;</span><span class="p">,</span>
+          <span class="s">&#39;location&#39;</span> <span class="p">:</span> <span class="s">&#39;Northampton&#39;</span><span class="p">,</span>
+          <span class="s">&#39;language&#39;</span> <span class="p">:</span> <span class="s">&#39;Python&#39;</span> <span class="p">}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#39;User-Agent&#39;</span> <span class="p">:</span> <span class="n">user_agent</span> <span class="p">}</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="n">the_page</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The response also has two useful methods. See the section on <a class="reference internal" href="#info-and-geturl">info and geturl</a>
+which comes after we have a look at what happens when things go wrong.</p>
+</div>
+</div>
+<div class="section" id="handling-exceptions">
+<h2>Handling Exceptions<a class="headerlink" href="#handling-exceptions" title="Permalink to this headline">¶</a></h2>
+<p><em>urlopen</em> raises <tt class="xref py py-exc docutils literal"><span class="pre">URLError</span></tt> when it cannot handle a response (though as
+usual with Python APIs, built-in exceptions such as <a class="reference internal" href="../library/exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a>,
+<a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> etc. may also be raised).</p>
+<p><tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt> is the subclass of <tt class="xref py py-exc docutils literal"><span class="pre">URLError</span></tt> raised in the specific case of
+HTTP URLs.</p>
+<div class="section" id="urlerror">
+<h3>URLError<a class="headerlink" href="#urlerror" title="Permalink to this headline">¶</a></h3>
+<p>Often, URLError is raised because there is no network connection (no route to
+the specified server), or the specified server doesn&#8217;t exist.  In this case, the
+exception raised will have a &#8216;reason&#8217; attribute, which is a tuple containing an
+error code and a text error message.</p>
+<p>e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s">&#39;http://www.pretend_server.org&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">reason</span>   
+<span class="gp">...</span>
+<span class="go">(4, &#39;getaddrinfo failed&#39;)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="httperror">
+<h3>HTTPError<a class="headerlink" href="#httperror" title="Permalink to this headline">¶</a></h3>
+<p>Every HTTP response from the server contains a numeric &#8220;status code&#8221;. Sometimes
+the status code indicates that the server is unable to fulfil the request. The
+default handlers will handle some of these responses for you (for example, if
+the response is a &#8220;redirection&#8221; that requests the client fetch the document from
+a different URL, urllib2 will handle that for you). For those it can&#8217;t handle,
+urlopen will raise an <tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt>. Typical errors include &#8216;404&#8217; (page not
+found), &#8216;403&#8217; (request forbidden), and &#8216;401&#8217; (authentication required).</p>
+<p>See section 10 of RFC 2616 for a reference on all the HTTP error codes.</p>
+<p>The <tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt> instance raised will have an integer &#8216;code&#8217; attribute, which
+corresponds to the error sent by the server.</p>
+<div class="section" id="error-codes">
+<h4>Error Codes<a class="headerlink" href="#error-codes" title="Permalink to this headline">¶</a></h4>
+<p>Because the default handlers handle redirects (codes in the 300 range), and
+codes in the 100-299 range indicate success, you will usually only see error
+codes in the 400-599 range.</p>
+<p><tt class="docutils literal"><span class="pre">BaseHTTPServer.BaseHTTPRequestHandler.responses</span></tt> is a useful dictionary of
+response codes in that shows all the response codes used by RFC 2616. The
+dictionary is reproduced here for convenience</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Table mapping response codes to messages; entries have the</span>
+<span class="c"># form {code: (shortmessage, longmessage)}.</span>
+<span class="n">responses</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">100</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Continue&#39;</span><span class="p">,</span> <span class="s">&#39;Request received, please continue&#39;</span><span class="p">),</span>
+    <span class="mi">101</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Switching Protocols&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Switching to new protocol; obey Upgrade header&#39;</span><span class="p">),</span>
+
+    <span class="mi">200</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;OK&#39;</span><span class="p">,</span> <span class="s">&#39;Request fulfilled, document follows&#39;</span><span class="p">),</span>
+    <span class="mi">201</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Created&#39;</span><span class="p">,</span> <span class="s">&#39;Document created, URL follows&#39;</span><span class="p">),</span>
+    <span class="mi">202</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Accepted&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Request accepted, processing continues off-line&#39;</span><span class="p">),</span>
+    <span class="mi">203</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Non-Authoritative Information&#39;</span><span class="p">,</span> <span class="s">&#39;Request fulfilled from cache&#39;</span><span class="p">),</span>
+    <span class="mi">204</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;No Content&#39;</span><span class="p">,</span> <span class="s">&#39;Request fulfilled, nothing follows&#39;</span><span class="p">),</span>
+    <span class="mi">205</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Reset Content&#39;</span><span class="p">,</span> <span class="s">&#39;Clear input form for further input.&#39;</span><span class="p">),</span>
+    <span class="mi">206</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Partial Content&#39;</span><span class="p">,</span> <span class="s">&#39;Partial content follows.&#39;</span><span class="p">),</span>
+
+    <span class="mi">300</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Multiple Choices&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Object has several resources -- see URI list&#39;</span><span class="p">),</span>
+    <span class="mi">301</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Moved Permanently&#39;</span><span class="p">,</span> <span class="s">&#39;Object moved permanently -- see URI list&#39;</span><span class="p">),</span>
+    <span class="mi">302</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Found&#39;</span><span class="p">,</span> <span class="s">&#39;Object moved temporarily -- see URI list&#39;</span><span class="p">),</span>
+    <span class="mi">303</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;See Other&#39;</span><span class="p">,</span> <span class="s">&#39;Object moved -- see Method and URL list&#39;</span><span class="p">),</span>
+    <span class="mi">304</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Not Modified&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Document has not changed since given time&#39;</span><span class="p">),</span>
+    <span class="mi">305</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Use Proxy&#39;</span><span class="p">,</span>
+          <span class="s">&#39;You must use proxy specified in Location to access this &#39;</span>
+          <span class="s">&#39;resource.&#39;</span><span class="p">),</span>
+    <span class="mi">307</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Temporary Redirect&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Object moved temporarily -- see URI list&#39;</span><span class="p">),</span>
+
+    <span class="mi">400</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Bad Request&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Bad request syntax or unsupported method&#39;</span><span class="p">),</span>
+    <span class="mi">401</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Unauthorized&#39;</span><span class="p">,</span>
+          <span class="s">&#39;No permission -- see authorization schemes&#39;</span><span class="p">),</span>
+    <span class="mi">402</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Payment Required&#39;</span><span class="p">,</span>
+          <span class="s">&#39;No payment -- see charging schemes&#39;</span><span class="p">),</span>
+    <span class="mi">403</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Forbidden&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Request forbidden -- authorization will not help&#39;</span><span class="p">),</span>
+    <span class="mi">404</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Not Found&#39;</span><span class="p">,</span> <span class="s">&#39;Nothing matches the given URI&#39;</span><span class="p">),</span>
+    <span class="mi">405</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Method Not Allowed&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Specified method is invalid for this server.&#39;</span><span class="p">),</span>
+    <span class="mi">406</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Not Acceptable&#39;</span><span class="p">,</span> <span class="s">&#39;URI not available in preferred format.&#39;</span><span class="p">),</span>
+    <span class="mi">407</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Proxy Authentication Required&#39;</span><span class="p">,</span> <span class="s">&#39;You must authenticate with &#39;</span>
+          <span class="s">&#39;this proxy before proceeding.&#39;</span><span class="p">),</span>
+    <span class="mi">408</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Request Timeout&#39;</span><span class="p">,</span> <span class="s">&#39;Request timed out; try again later.&#39;</span><span class="p">),</span>
+    <span class="mi">409</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Conflict&#39;</span><span class="p">,</span> <span class="s">&#39;Request conflict.&#39;</span><span class="p">),</span>
+    <span class="mi">410</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Gone&#39;</span><span class="p">,</span>
+          <span class="s">&#39;URI no longer exists and has been permanently removed.&#39;</span><span class="p">),</span>
+    <span class="mi">411</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Length Required&#39;</span><span class="p">,</span> <span class="s">&#39;Client must specify Content-Length.&#39;</span><span class="p">),</span>
+    <span class="mi">412</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Precondition Failed&#39;</span><span class="p">,</span> <span class="s">&#39;Precondition in headers is false.&#39;</span><span class="p">),</span>
+    <span class="mi">413</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Request Entity Too Large&#39;</span><span class="p">,</span> <span class="s">&#39;Entity is too large.&#39;</span><span class="p">),</span>
+    <span class="mi">414</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Request-URI Too Long&#39;</span><span class="p">,</span> <span class="s">&#39;URI is too long.&#39;</span><span class="p">),</span>
+    <span class="mi">415</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Unsupported Media Type&#39;</span><span class="p">,</span> <span class="s">&#39;Entity body in unsupported format.&#39;</span><span class="p">),</span>
+    <span class="mi">416</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Requested Range Not Satisfiable&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Cannot satisfy request range.&#39;</span><span class="p">),</span>
+    <span class="mi">417</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Expectation Failed&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Expect condition could not be satisfied.&#39;</span><span class="p">),</span>
+
+    <span class="mi">500</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Internal Server Error&#39;</span><span class="p">,</span> <span class="s">&#39;Server got itself in trouble&#39;</span><span class="p">),</span>
+    <span class="mi">501</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Not Implemented&#39;</span><span class="p">,</span>
+          <span class="s">&#39;Server does not support this operation&#39;</span><span class="p">),</span>
+    <span class="mi">502</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Bad Gateway&#39;</span><span class="p">,</span> <span class="s">&#39;Invalid responses from another server/proxy.&#39;</span><span class="p">),</span>
+    <span class="mi">503</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Service Unavailable&#39;</span><span class="p">,</span>
+          <span class="s">&#39;The server cannot process the request due to a high load&#39;</span><span class="p">),</span>
+    <span class="mi">504</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;Gateway Timeout&#39;</span><span class="p">,</span>
+          <span class="s">&#39;The gateway server did not receive a timely response&#39;</span><span class="p">),</span>
+    <span class="mi">505</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;HTTP Version Not Supported&#39;</span><span class="p">,</span> <span class="s">&#39;Cannot fulfill request.&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>When an error is raised the server responds by returning an HTTP error code
+<em>and</em> an error page. You can use the <tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt> instance as a response on the
+page returned. This means that as well as the code attribute, it also has read,
+geturl, and info, methods.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s">&#39;http://www.python.org/fish.html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">except</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">e</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> 
+<span class="gp">...</span>
+<span class="go">404</span>
+<span class="go">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;</span>
+<span class="go">&quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
+<span class="gp">...</span>
+<span class="go">&lt;title&gt;Page Not Found&lt;/title&gt;</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="wrapping-it-up">
+<h3>Wrapping it Up<a class="headerlink" href="#wrapping-it-up" title="Permalink to this headline">¶</a></h3>
+<p>So if you want to be prepared for <tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt> <em>or</em> <tt class="xref py py-exc docutils literal"><span class="pre">URLError</span></tt> there are two
+basic approaches. I prefer the second approach.</p>
+<div class="section" id="number-1">
+<h4>Number 1<a class="headerlink" href="#number-1" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><pre>from urllib2 import Request, urlopen, URLError, HTTPError
+req = Request(someurl)
+try:
+    response = urlopen(req)
+except HTTPError as e:
+    print 'The server couldn\'t fulfill the request.'
+    print 'Error code: ', e.code
+except URLError as e:
+    print 'We failed to reach a server.'
+    print 'Reason: ', e.reason
+else:
+    # everything is fine</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <tt class="docutils literal"><span class="pre">except</span> <span class="pre">HTTPError</span></tt> <em>must</em> come first, otherwise <tt class="docutils literal"><span class="pre">except</span> <span class="pre">URLError</span></tt>
+will <em>also</em> catch an <tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="number-2">
+<h4>Number 2<a class="headerlink" href="#number-2" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><pre>from urllib2 import Request, urlopen, URLError
+req = Request(someurl)
+try:
+    response = urlopen(req)
+except URLError as e:
+    if hasattr(e, 'reason'):
+        print 'We failed to reach a server.'
+        print 'Reason: ', e.reason
+    elif hasattr(e, 'code'):
+        print 'The server couldn\'t fulfill the request.'
+        print 'Error code: ', e.code
+else:
+    # everything is fine</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="info-and-geturl">
+<h2>info and geturl<a class="headerlink" href="#info-and-geturl" title="Permalink to this headline">¶</a></h2>
+<p>The response returned by urlopen (or the <tt class="xref py py-exc docutils literal"><span class="pre">HTTPError</span></tt> instance) has two useful
+methods <tt class="xref py py-meth docutils literal"><span class="pre">info()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">geturl()</span></tt>.</p>
+<p><strong>geturl</strong> - this returns the real URL of the page fetched. This is useful
+because <tt class="docutils literal"><span class="pre">urlopen</span></tt> (or the opener object used) may have followed a
+redirect. The URL of the page fetched may not be the same as the URL requested.</p>
+<p><strong>info</strong> - this returns a dictionary-like object that describes the page
+fetched, particularly the headers sent by the server. It is currently an
+<tt class="docutils literal"><span class="pre">httplib.HTTPMessage</span></tt> instance.</p>
+<p>Typical headers include &#8216;Content-length&#8217;, &#8216;Content-type&#8217;, and so on. See the
+<a class="reference external" href="http://www.cs.tut.fi/~jkorpela/http.html">Quick Reference to HTTP Headers</a>
+for a useful listing of HTTP headers with brief explanations of their meaning
+and use.</p>
+</div>
+<div class="section" id="openers-and-handlers">
+<h2>Openers and Handlers<a class="headerlink" href="#openers-and-handlers" title="Permalink to this headline">¶</a></h2>
+<p>When you fetch a URL you use an opener (an instance of the perhaps
+confusingly-named <a class="reference internal" href="../library/urllib2.html#urllib2.OpenerDirector" title="urllib2.OpenerDirector"><tt class="xref py py-class docutils literal"><span class="pre">urllib2.OpenerDirector</span></tt></a>). Normally we have been using
+the default opener - via <tt class="docutils literal"><span class="pre">urlopen</span></tt> - but you can create custom
+openers. Openers use handlers. All the &#8220;heavy lifting&#8221; is done by the
+handlers. Each handler knows how to open URLs for a particular URL scheme (http,
+ftp, etc.), or how to handle an aspect of URL opening, for example HTTP
+redirections or HTTP cookies.</p>
+<p>You will want to create openers if you want to fetch URLs with specific handlers
+installed, for example to get an opener that handles cookies, or to get an
+opener that does not handle redirections.</p>
+<p>To create an opener, instantiate an <tt class="docutils literal"><span class="pre">OpenerDirector</span></tt>, and then call
+<tt class="docutils literal"><span class="pre">.add_handler(some_handler_instance)</span></tt> repeatedly.</p>
+<p>Alternatively, you can use <tt class="docutils literal"><span class="pre">build_opener</span></tt>, which is a convenience function for
+creating opener objects with a single function call.  <tt class="docutils literal"><span class="pre">build_opener</span></tt> adds
+several handlers by default, but provides a quick way to add more and/or
+override the default handlers.</p>
+<p>Other sorts of handlers you might want to can handle proxies, authentication,
+and other common but slightly specialised situations.</p>
+<p><tt class="docutils literal"><span class="pre">install_opener</span></tt> can be used to make an <tt class="docutils literal"><span class="pre">opener</span></tt> object the (global) default
+opener. This means that calls to <tt class="docutils literal"><span class="pre">urlopen</span></tt> will use the opener you have
+installed.</p>
+<p>Opener objects have an <tt class="docutils literal"><span class="pre">open</span></tt> method, which can be called directly to fetch
+urls in the same way as the <tt class="docutils literal"><span class="pre">urlopen</span></tt> function: there&#8217;s no need to call
+<tt class="docutils literal"><span class="pre">install_opener</span></tt>, except as a convenience.</p>
+</div>
+<div class="section" id="id6">
+<h2>Basic Authentication<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>To illustrate creating and installing a handler we will use the
+<tt class="docutils literal"><span class="pre">HTTPBasicAuthHandler</span></tt>. For a more detailed discussion of this subject &#8211;
+including an explanation of how Basic Authentication works - see the <a class="reference external" href="http://www.voidspace.org.uk/python/articles/authentication.shtml">Basic
+Authentication Tutorial</a>.</p>
+<p>When authentication is required, the server sends a header (as well as the 401
+error code) requesting authentication.  This specifies the authentication scheme
+and a &#8216;realm&#8217;. The header looks like : <tt class="docutils literal"><span class="pre">WWW-Authenticate:</span> <span class="pre">SCHEME</span>
+<span class="pre">realm=&quot;REALM&quot;</span></tt>.</p>
+<p>e.g.</p>
+<div class="highlight-python"><pre>WWW-Authenticate: Basic realm="cPanel Users"</pre>
+</div>
+<p>The client should then retry the request with the appropriate name and password
+for the realm included as a header in the request. This is &#8216;basic
+authentication&#8217;. In order to simplify this process we can create an instance of
+<tt class="docutils literal"><span class="pre">HTTPBasicAuthHandler</span></tt> and an opener to use this handler.</p>
+<p>The <tt class="docutils literal"><span class="pre">HTTPBasicAuthHandler</span></tt> uses an object called a password manager to handle
+the mapping of URLs and realms to passwords and usernames. If you know what the
+realm is (from the authentication header sent by the server), then you can use a
+<tt class="docutils literal"><span class="pre">HTTPPasswordMgr</span></tt>. Frequently one doesn&#8217;t care what the realm is. In that
+case, it is convenient to use <tt class="docutils literal"><span class="pre">HTTPPasswordMgrWithDefaultRealm</span></tt>. This allows
+you to specify a default username and password for a URL. This will be supplied
+in the absence of you providing an alternative combination for a specific
+realm. We indicate this by providing <tt class="xref docutils literal"><span class="pre">None</span></tt> as the realm argument to the
+<tt class="docutils literal"><span class="pre">add_password</span></tt> method.</p>
+<p>The top-level URL is the first URL that requires authentication. URLs &#8220;deeper&#8221;
+than the URL you pass to .add_password() will also match.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># create a password manager</span>
+<span class="n">password_mgr</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPPasswordMgrWithDefaultRealm</span><span class="p">()</span>
+
+<span class="c"># Add the username and password.</span>
+<span class="c"># If we knew the realm, we could use it instead of None.</span>
+<span class="n">top_level_url</span> <span class="o">=</span> <span class="s">&quot;http://example.com/foo/&quot;</span>
+<span class="n">password_mgr</span><span class="o">.</span><span class="n">add_password</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">top_level_url</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+
+<span class="n">handler</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPBasicAuthHandler</span><span class="p">(</span><span class="n">password_mgr</span><span class="p">)</span>
+
+<span class="c"># create &quot;opener&quot; (OpenerDirector instance)</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+<span class="c"># use the opener to fetch a URL</span>
+<span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">a_url</span><span class="p">)</span>
+
+<span class="c"># Install the opener.</span>
+<span class="c"># Now all calls to urllib2.urlopen use our opener.</span>
+<span class="n">urllib2</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the above example we only supplied our <tt class="docutils literal"><span class="pre">HTTPBasicAuthHandler</span></tt> to
+<tt class="docutils literal"><span class="pre">build_opener</span></tt>. By default openers have the handlers for normal situations
+&#8211; <tt class="docutils literal"><span class="pre">ProxyHandler</span></tt>, <tt class="docutils literal"><span class="pre">UnknownHandler</span></tt>, <tt class="docutils literal"><span class="pre">HTTPHandler</span></tt>,
+<tt class="docutils literal"><span class="pre">HTTPDefaultErrorHandler</span></tt>, <tt class="docutils literal"><span class="pre">HTTPRedirectHandler</span></tt>, <tt class="docutils literal"><span class="pre">FTPHandler</span></tt>,
+<tt class="docutils literal"><span class="pre">FileHandler</span></tt>, <tt class="docutils literal"><span class="pre">HTTPErrorProcessor</span></tt>.</p>
+</div>
+<p><tt class="docutils literal"><span class="pre">top_level_url</span></tt> is in fact <em>either</em> a full URL (including the &#8216;http:&#8217; scheme
+component and the hostname and optionally the port number)
+e.g. &#8220;<a class="reference external" href="http://example.com/">http://example.com/</a>&#8221; <em>or</em> an &#8220;authority&#8221; (i.e. the hostname,
+optionally including the port number) e.g. &#8220;example.com&#8221; or &#8220;example.com:8080&#8221;
+(the latter example includes a port number).  The authority, if present, must
+NOT contain the &#8220;userinfo&#8221; component - for example &#8220;joe&#64;password:example.com&#8221; is
+not correct.</p>
+</div>
+<div class="section" id="proxies">
+<h2>Proxies<a class="headerlink" href="#proxies" title="Permalink to this headline">¶</a></h2>
+<p><strong>urllib2</strong> will auto-detect your proxy settings and use those. This is through
+the <tt class="docutils literal"><span class="pre">ProxyHandler</span></tt> which is part of the normal handler chain. Normally that&#8217;s
+a good thing, but there are occasions when it may not be helpful <a class="footnote-reference" href="#id14" id="id7">[6]</a>. One way
+to do this is to setup our own <tt class="docutils literal"><span class="pre">ProxyHandler</span></tt>, with no proxies defined. This
+is done using similar steps to setting up a <a class="reference external" href="http://www.voidspace.org.uk/python/articles/authentication.shtml">Basic Authentication</a> handler :</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">proxy_support</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">ProxyHandler</span><span class="p">({})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">opener</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">proxy_support</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urllib2</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Currently <tt class="docutils literal"><span class="pre">urllib2</span></tt> <em>does not</em> support fetching of <tt class="docutils literal"><span class="pre">https</span></tt> locations
+through a proxy.  However, this can be enabled by extending urllib2 as
+shown in the recipe <a class="footnote-reference" href="#id15" id="id8">[7]</a>.</p>
+</div>
+</div>
+<div class="section" id="sockets-and-layers">
+<h2>Sockets and Layers<a class="headerlink" href="#sockets-and-layers" title="Permalink to this headline">¶</a></h2>
+<p>The Python support for fetching resources from the web is layered. urllib2 uses
+the httplib library, which in turn uses the socket library.</p>
+<p>As of Python 2.3 you can specify how long a socket should wait for a response
+before timing out. This can be useful in applications which have to fetch web
+pages. By default the socket module has <em>no timeout</em> and can hang. Currently,
+the socket timeout is not exposed at the httplib or urllib2 levels.  However,
+you can set the default timeout globally for all sockets using</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+
+<span class="c"># timeout in seconds</span>
+<span class="n">timeout</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">socket</span><span class="o">.</span><span class="n">setdefaulttimeout</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+
+<span class="c"># this call to urllib2.urlopen now uses the default timeout</span>
+<span class="c"># we have set in the socket module</span>
+<span class="n">req</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="s">&#39;http://www.voidspace.org.uk&#39;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="footnotes">
+<h2>Footnotes<a class="headerlink" href="#footnotes" title="Permalink to this headline">¶</a></h2>
+<p>This document was reviewed and revised by John Lee.</p>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For an introduction to the CGI protocol see
+<a class="reference external" href="http://www.pyzine.com/Issue008/Section_Articles/article_CGIOne.html">Writing Web Applications in Python</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Like Google for example. The <em>proper</em> way to use google from a program
+is to use <a class="reference external" href="http://pygoogle.sourceforge.net">PyGoogle</a> of course. See
+<a class="reference external" href="http://www.voidspace.org.uk/python/recipebook.shtml#google">Voidspace Google</a>
+for some examples of using the Google API.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Browser sniffing is a very bad practise for website design - building
+sites using web standards is much more sensible. Unfortunately a lot of
+sites still send different versions to different browsers.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id12" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td>The user agent for MSIE 6 is
+<em>&#8216;Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)&#8217;</em></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id13" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td>For details of more HTTP request headers, see
+<a class="reference external" href="http://www.cs.tut.fi/~jkorpela/http.html">Quick Reference to HTTP Headers</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id14" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[6]</a></td><td>In my case I have to use a proxy to access the internet at work. If you
+attempt to fetch <em>localhost</em> URLs through this proxy it blocks them. IE
+is set to use the proxy, which urllib2 picks up on. In order to test
+scripts with a localhost server, I have to prevent urllib2 from using
+the proxy.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id15" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[7]</a></td><td>urllib2 opener for SSL proxy (CONNECT method): <a class="reference external" href="http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/456195">ASPN Cookbook Recipe</a>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HOWTO Fetch Internet Resources Using urllib2</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#fetching-urls">Fetching URLs</a><ul>
+<li><a class="reference internal" href="#data">Data</a></li>
+<li><a class="reference internal" href="#headers">Headers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#handling-exceptions">Handling Exceptions</a><ul>
+<li><a class="reference internal" href="#urlerror">URLError</a></li>
+<li><a class="reference internal" href="#httperror">HTTPError</a><ul>
+<li><a class="reference internal" href="#error-codes">Error Codes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wrapping-it-up">Wrapping it Up</a><ul>
+<li><a class="reference internal" href="#number-1">Number 1</a></li>
+<li><a class="reference internal" href="#number-2">Number 2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#info-and-geturl">info and geturl</a></li>
+<li><a class="reference internal" href="#openers-and-handlers">Openers and Handlers</a></li>
+<li><a class="reference internal" href="#id6">Basic Authentication</a></li>
+<li><a class="reference internal" href="#proxies">Proxies</a></li>
+<li><a class="reference internal" href="#sockets-and-layers">Sockets and Layers</a></li>
+<li><a class="reference internal" href="#footnotes">Footnotes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unicode.html"
+                        title="previous chapter">Unicode HOWTO</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="webservers.html"
+                        title="next chapter">HOWTO Use Python in the web</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/howto/urllib2.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="webservers.html" title="HOWTO Use Python in the web"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unicode.html" title="Unicode HOWTO"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python HOWTOs</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Extending/Embedding FAQ &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python Frequently Asked Questions" href="index.html" />
+    <link rel="next" title="Python on Windows FAQ" href="windows.html" />
+    <link rel="prev" title="Library and Extension FAQ" href="library.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Python on Windows FAQ"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="library.html" title="Library and Extension FAQ"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python Frequently Asked Questions</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="extending-embedding-faq">
+<h1><a class="toc-backref" href="#id2">Extending/Embedding FAQ</a><a class="headerlink" href="#extending-embedding-faq" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#extending-embedding-faq" id="id2">Extending/Embedding FAQ</a><ul>
+<li><a class="reference internal" href="#can-i-create-my-own-functions-in-c" id="id3">Can I create my own functions in C?</a></li>
+<li><a class="reference internal" href="#id1" id="id4">Can I create my own functions in C++?</a></li>
+<li><a class="reference internal" href="#writing-c-is-hard-are-there-any-alternatives" id="id5">Writing C is hard; are there any alternatives?</a></li>
+<li><a class="reference internal" href="#how-can-i-execute-arbitrary-python-statements-from-c" id="id6">How can I execute arbitrary Python statements from C?</a></li>
+<li><a class="reference internal" href="#how-can-i-evaluate-an-arbitrary-python-expression-from-c" id="id7">How can I evaluate an arbitrary Python expression from C?</a></li>
+<li><a class="reference internal" href="#how-do-i-extract-c-values-from-a-python-object" id="id8">How do I extract C values from a Python object?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-py-buildvalue-to-create-a-tuple-of-arbitrary-length" id="id9">How do I use Py_BuildValue() to create a tuple of arbitrary length?</a></li>
+<li><a class="reference internal" href="#how-do-i-call-an-object-s-method-from-c" id="id10">How do I call an object&#8217;s method from C?</a></li>
+<li><a class="reference internal" href="#how-do-i-catch-the-output-from-pyerr-print-or-anything-that-prints-to-stdout-stderr" id="id11">How do I catch the output from PyErr_Print() (or anything that prints to stdout/stderr)?</a></li>
+<li><a class="reference internal" href="#how-do-i-access-a-module-written-in-python-from-c" id="id12">How do I access a module written in Python from C?</a></li>
+<li><a class="reference internal" href="#how-do-i-interface-to-c-objects-from-python" id="id13">How do I interface to C++ objects from Python?</a></li>
+<li><a class="reference internal" href="#i-added-a-module-using-the-setup-file-and-the-make-fails-why" id="id14">I added a module using the Setup file and the make fails; why?</a></li>
+<li><a class="reference internal" href="#how-do-i-debug-an-extension" id="id15">How do I debug an extension?</a></li>
+<li><a class="reference internal" href="#i-want-to-compile-a-python-module-on-my-linux-system-but-some-files-are-missing-why" id="id16">I want to compile a Python module on my Linux system, but some files are missing. Why?</a></li>
+<li><a class="reference internal" href="#what-does-systemerror-pyimport-fixupextension-module-yourmodule-not-loaded-mean" id="id17">What does &#8220;SystemError: _PyImport_FixupExtension: module yourmodule not loaded&#8221; mean?</a></li>
+<li><a class="reference internal" href="#how-do-i-tell-incomplete-input-from-invalid-input" id="id18">How do I tell &#8220;incomplete input&#8221; from &#8220;invalid input&#8221;?</a></li>
+<li><a class="reference internal" href="#how-do-i-find-undefined-g-symbols-builtin-new-or-pure-virtual" id="id19">How do I find undefined g++ symbols __builtin_new or __pure_virtual?</a></li>
+<li><a class="reference internal" href="#can-i-create-an-object-class-with-some-methods-implemented-in-c-and-others-in-python-e-g-through-inheritance" id="id20">Can I create an object class with some methods implemented in C and others in Python (e.g. through inheritance)?</a></li>
+<li><a class="reference internal" href="#when-importing-module-x-why-do-i-get-undefined-symbol-pyunicodeucs2" id="id21">When importing module X, why do I get &#8220;undefined symbol: PyUnicodeUCS2*&#8221;?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="can-i-create-my-own-functions-in-c">
+<h2><a class="toc-backref" href="#id3">Can I create my own functions in C?</a><a class="headerlink" href="#can-i-create-my-own-functions-in-c" title="Permalink to this headline">¶</a></h2>
+<p>Yes, you can create built-in modules containing functions, variables, exceptions
+and even new types in C.  This is explained in the document
+<a class="reference internal" href="../extending/index.html#extending-index"><em>Extending and Embedding the Python Interpreter</em></a>.</p>
+<p>Most intermediate or advanced Python books will also cover this topic.</p>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id4">Can I create my own functions in C++?</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Yes, using the C compatibility features found in C++.  Place <tt class="docutils literal"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span> <span class="pre">{</span>
+<span class="pre">...</span> <span class="pre">}</span></tt> around the Python include files and put <tt class="docutils literal"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></tt> before each
+function that is going to be called by the Python interpreter.  Global or static
+C++ objects with constructors are probably not a good idea.</p>
+</div>
+<div class="section" id="writing-c-is-hard-are-there-any-alternatives">
+<span id="c-wrapper-software"></span><h2><a class="toc-backref" href="#id5">Writing C is hard; are there any alternatives?</a><a class="headerlink" href="#writing-c-is-hard-are-there-any-alternatives" title="Permalink to this headline">¶</a></h2>
+<p>There are a number of alternatives to writing your own C extensions, depending
+on what you&#8217;re trying to do.</p>
+<p>If you need more speed, <a class="reference external" href="http://psyco.sourceforge.net/">Psyco</a> generates x86
+assembly code from Python bytecode.  You can use Psyco to compile the most
+time-critical functions in your code, and gain a significant improvement with
+very little effort, as long as you&#8217;re running on a machine with an
+x86-compatible processor.</p>
+<p><a class="reference external" href="http://www.cosc.canterbury.ac.nz/~greg/python/Pyrex/">Pyrex</a> is a compiler
+that accepts a slightly modified form of Python and generates the corresponding
+C code.  Pyrex makes it possible to write an extension without having to learn
+Python&#8217;s C API.</p>
+<p>If you need to interface to some C or C++ library for which no Python extension
+currently exists, you can try wrapping the library&#8217;s data types and functions
+with a tool such as <a class="reference external" href="http://www.swig.org">SWIG</a>.  <a class="reference external" href="http://www.riverbankcomputing.co.uk/software/sip/">SIP</a>, <a class="reference external" href="http://cxx.sourceforge.net/">CXX</a> <a class="reference external" href="http://www.boost.org/libs/python/doc/index.html">Boost</a>, or <a class="reference external" href="http://www.scipy.org/Weave">Weave</a> are also alternatives for wrapping
+C++ libraries.</p>
+</div>
+<div class="section" id="how-can-i-execute-arbitrary-python-statements-from-c">
+<h2><a class="toc-backref" href="#id6">How can I execute arbitrary Python statements from C?</a><a class="headerlink" href="#how-can-i-execute-arbitrary-python-statements-from-c" title="Permalink to this headline">¶</a></h2>
+<p>The highest-level function to do this is <a class="reference internal" href="../c-api/veryhigh.html#PyRun_SimpleString" title="PyRun_SimpleString"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleString()</span></tt></a> which takes
+a single string argument to be executed in the context of the module
+<tt class="docutils literal"><span class="pre">__main__</span></tt> and returns 0 for success and -1 when an exception occurred
+(including <tt class="docutils literal"><span class="pre">SyntaxError</span></tt>).  If you want more control, use
+<a class="reference internal" href="../c-api/veryhigh.html#PyRun_String" title="PyRun_String"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_String()</span></tt></a>; see the source for <a class="reference internal" href="../c-api/veryhigh.html#PyRun_SimpleString" title="PyRun_SimpleString"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleString()</span></tt></a> in
+<tt class="docutils literal"><span class="pre">Python/pythonrun.c</span></tt>.</p>
+</div>
+<div class="section" id="how-can-i-evaluate-an-arbitrary-python-expression-from-c">
+<h2><a class="toc-backref" href="#id7">How can I evaluate an arbitrary Python expression from C?</a><a class="headerlink" href="#how-can-i-evaluate-an-arbitrary-python-expression-from-c" title="Permalink to this headline">¶</a></h2>
+<p>Call the function <a class="reference internal" href="../c-api/veryhigh.html#PyRun_String" title="PyRun_String"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_String()</span></tt></a> from the previous question with the
+start symbol <a class="reference internal" href="../c-api/veryhigh.html#Py_eval_input" title="Py_eval_input"><tt class="xref c c-data docutils literal"><span class="pre">Py_eval_input</span></tt></a>; it parses an expression, evaluates it and
+returns its value.</p>
+</div>
+<div class="section" id="how-do-i-extract-c-values-from-a-python-object">
+<h2><a class="toc-backref" href="#id8">How do I extract C values from a Python object?</a><a class="headerlink" href="#how-do-i-extract-c-values-from-a-python-object" title="Permalink to this headline">¶</a></h2>
+<p>That depends on the object&#8217;s type.  If it&#8217;s a tuple, <a class="reference internal" href="../c-api/tuple.html#PyTuple_Size" title="PyTuple_Size"><tt class="xref c c-func docutils literal"><span class="pre">PyTuple_Size()</span></tt></a>
+returns its length and <a class="reference internal" href="../c-api/tuple.html#PyTuple_GetItem" title="PyTuple_GetItem"><tt class="xref c c-func docutils literal"><span class="pre">PyTuple_GetItem()</span></tt></a> returns the item at a specified
+index.  Lists have similar functions, <tt class="xref c c-func docutils literal"><span class="pre">PyListSize()</span></tt> and
+<a class="reference internal" href="../c-api/list.html#PyList_GetItem" title="PyList_GetItem"><tt class="xref c c-func docutils literal"><span class="pre">PyList_GetItem()</span></tt></a>.</p>
+<p>For strings, <a class="reference internal" href="../c-api/string.html#PyString_Size" title="PyString_Size"><tt class="xref c c-func docutils literal"><span class="pre">PyString_Size()</span></tt></a> returns its length and
+<a class="reference internal" href="../c-api/string.html#PyString_AsString" title="PyString_AsString"><tt class="xref c c-func docutils literal"><span class="pre">PyString_AsString()</span></tt></a> a pointer to its value.  Note that Python strings may
+contain null bytes so C&#8217;s <tt class="xref c c-func docutils literal"><span class="pre">strlen()</span></tt> should not be used.</p>
+<p>To test the type of an object, first make sure it isn&#8217;t <em>NULL</em>, and then use
+<a class="reference internal" href="../c-api/string.html#PyString_Check" title="PyString_Check"><tt class="xref c c-func docutils literal"><span class="pre">PyString_Check()</span></tt></a>, <a class="reference internal" href="../c-api/tuple.html#PyTuple_Check" title="PyTuple_Check"><tt class="xref c c-func docutils literal"><span class="pre">PyTuple_Check()</span></tt></a>, <a class="reference internal" href="../c-api/list.html#PyList_Check" title="PyList_Check"><tt class="xref c c-func docutils literal"><span class="pre">PyList_Check()</span></tt></a>, etc.</p>
+<p>There is also a high-level API to Python objects which is provided by the
+so-called &#8216;abstract&#8217; interface &#8211; read <tt class="docutils literal"><span class="pre">Include/abstract.h</span></tt> for further
+details.  It allows interfacing with any kind of Python sequence using calls
+like <a class="reference internal" href="../c-api/sequence.html#PySequence_Length" title="PySequence_Length"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Length()</span></tt></a>, <a class="reference internal" href="../c-api/sequence.html#PySequence_GetItem" title="PySequence_GetItem"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_GetItem()</span></tt></a>, etc.)  as well as
+many other useful protocols.</p>
+</div>
+<div class="section" id="how-do-i-use-py-buildvalue-to-create-a-tuple-of-arbitrary-length">
+<h2><a class="toc-backref" href="#id9">How do I use Py_BuildValue() to create a tuple of arbitrary length?</a><a class="headerlink" href="#how-do-i-use-py-buildvalue-to-create-a-tuple-of-arbitrary-length" title="Permalink to this headline">¶</a></h2>
+<p>You can&#8217;t.  Use <tt class="docutils literal"><span class="pre">t</span> <span class="pre">=</span> <span class="pre">PyTuple_New(n)</span></tt> instead, and fill it with objects using
+<tt class="docutils literal"><span class="pre">PyTuple_SetItem(t,</span> <span class="pre">i,</span> <span class="pre">o)</span></tt> &#8211; note that this &#8220;eats&#8221; a reference count of
+<tt class="docutils literal"><span class="pre">o</span></tt>, so you have to <a class="reference internal" href="../c-api/refcounting.html#Py_INCREF" title="Py_INCREF"><tt class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></tt></a> it.  Lists have similar functions
+<tt class="docutils literal"><span class="pre">PyList_New(n)</span></tt> and <tt class="docutils literal"><span class="pre">PyList_SetItem(l,</span> <span class="pre">i,</span> <span class="pre">o)</span></tt>.  Note that you <em>must</em> set all
+the tuple items to some value before you pass the tuple to Python code &#8211;
+<tt class="docutils literal"><span class="pre">PyTuple_New(n)</span></tt> initializes them to NULL, which isn&#8217;t a valid Python value.</p>
+</div>
+<div class="section" id="how-do-i-call-an-object-s-method-from-c">
+<h2><a class="toc-backref" href="#id10">How do I call an object&#8217;s method from C?</a><a class="headerlink" href="#how-do-i-call-an-object-s-method-from-c" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../c-api/object.html#PyObject_CallMethod" title="PyObject_CallMethod"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_CallMethod()</span></tt></a> function can be used to call an arbitrary
+method of an object.  The parameters are the object, the name of the method to
+call, a format string like that used with <a class="reference internal" href="../c-api/arg.html#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a>, and the
+argument values:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">PyObject</span> <span class="o">*</span>
+<span class="n">PyObject_CallMethod</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">object</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">method_name</span><span class="p">,</span>
+                    <span class="kt">char</span> <span class="o">*</span><span class="n">arg_format</span><span class="p">,</span> <span class="p">...);</span>
+</pre></div>
+</div>
+<p>This works for any object that has methods &#8211; whether built-in or user-defined.
+You are responsible for eventually <a class="reference internal" href="../c-api/refcounting.html#Py_DECREF" title="Py_DECREF"><tt class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></tt></a>&#8216;ing the return value.</p>
+<p>To call, e.g., a file object&#8217;s &#8220;seek&#8221; method with arguments 10, 0 (assuming the
+file object pointer is &#8220;f&#8221;):</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">res</span> <span class="o">=</span> <span class="n">PyObject_CallMethod</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&quot;seek&quot;</span><span class="p">,</span> <span class="s">&quot;(ii)&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span> <span class="n">an</span> <span class="n">exception</span> <span class="n">occurred</span> <span class="p">...</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+        <span class="n">Py_DECREF</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that since <a class="reference internal" href="../c-api/object.html#PyObject_CallObject" title="PyObject_CallObject"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_CallObject()</span></tt></a> <em>always</em> wants a tuple for the
+argument list, to call a function without arguments, pass &#8220;()&#8221; for the format,
+and to call a function with one argument, surround the argument in parentheses,
+e.g. &#8220;(i)&#8221;.</p>
+</div>
+<div class="section" id="how-do-i-catch-the-output-from-pyerr-print-or-anything-that-prints-to-stdout-stderr">
+<h2><a class="toc-backref" href="#id11">How do I catch the output from PyErr_Print() (or anything that prints to stdout/stderr)?</a><a class="headerlink" href="#how-do-i-catch-the-output-from-pyerr-print-or-anything-that-prints-to-stdout-stderr" title="Permalink to this headline">¶</a></h2>
+<p>In Python code, define an object that supports the <tt class="docutils literal"><span class="pre">write()</span></tt> method.  Assign
+this object to <a class="reference internal" href="../library/sys.html#sys.stdout" title="sys.stdout"><tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt></a> and <a class="reference internal" href="../library/sys.html#sys.stderr" title="sys.stderr"><tt class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></tt></a>.  Call print_error, or
+just allow the standard traceback mechanism to work. Then, the output will go
+wherever your <tt class="docutils literal"><span class="pre">write()</span></tt> method sends it.</p>
+<p>The easiest way to do this is to use the StringIO class in the standard library.</p>
+<p>Sample code and use for catching stdout:</p>
+<div class="highlight-c"><pre>&gt;&gt;&gt; class StdoutCatcher:
+...     def __init__(self):
+...         self.data = ''
+...     def write(self, stuff):
+...         self.data = self.data + stuff
+...
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.stdout = StdoutCatcher()
+&gt;&gt;&gt; print 'foo'
+&gt;&gt;&gt; print 'hello world!'
+&gt;&gt;&gt; sys.stderr.write(sys.stdout.data)
+foo
+hello world!</pre>
+</div>
+</div>
+<div class="section" id="how-do-i-access-a-module-written-in-python-from-c">
+<h2><a class="toc-backref" href="#id12">How do I access a module written in Python from C?</a><a class="headerlink" href="#how-do-i-access-a-module-written-in-python-from-c" title="Permalink to this headline">¶</a></h2>
+<p>You can get a pointer to the module object as follows:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">module</span> <span class="o">=</span> <span class="n">PyImport_ImportModule</span><span class="p">(</span><span class="s">&quot;&lt;modulename&gt;&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>If the module hasn&#8217;t been imported yet (i.e. it is not yet present in
+<a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a>), this initializes the module; otherwise it simply returns
+the value of <tt class="docutils literal"><span class="pre">sys.modules[&quot;&lt;modulename&gt;&quot;]</span></tt>.  Note that it doesn&#8217;t enter the
+module into any namespace &#8211; it only ensures it has been initialized and is
+stored in <a class="reference internal" href="../library/sys.html#sys.modules" title="sys.modules"><tt class="xref py py-data docutils literal"><span class="pre">sys.modules</span></tt></a>.</p>
+<p>You can then access the module&#8217;s attributes (i.e. any name defined in the
+module) as follows:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">attr</span> <span class="o">=</span> <span class="n">PyObject_GetAttrString</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s">&quot;&lt;attrname&gt;&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Calling <a class="reference internal" href="../c-api/object.html#PyObject_SetAttrString" title="PyObject_SetAttrString"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_SetAttrString()</span></tt></a> to assign to variables in the module
+also works.</p>
+</div>
+<div class="section" id="how-do-i-interface-to-c-objects-from-python">
+<h2><a class="toc-backref" href="#id13">How do I interface to C++ objects from Python?</a><a class="headerlink" href="#how-do-i-interface-to-c-objects-from-python" title="Permalink to this headline">¶</a></h2>
+<p>Depending on your requirements, there are many approaches.  To do this manually,
+begin by reading <a class="reference internal" href="../extending/index.html#extending-index"><em>the &#8220;Extending and Embedding&#8221; document</em></a>.  Realize that for the Python run-time system, there isn&#8217;t a
+whole lot of difference between C and C++ &#8211; so the strategy of building a new
+Python type around a C structure (pointer) type will also work for C++ objects.</p>
+<p>For C++ libraries, see <a class="reference internal" href="#c-wrapper-software"><em>Writing C is hard; are there any alternatives?</em></a>.</p>
+</div>
+<div class="section" id="i-added-a-module-using-the-setup-file-and-the-make-fails-why">
+<h2><a class="toc-backref" href="#id14">I added a module using the Setup file and the make fails; why?</a><a class="headerlink" href="#i-added-a-module-using-the-setup-file-and-the-make-fails-why" title="Permalink to this headline">¶</a></h2>
+<p>Setup must end in a newline, if there is no newline there, the build process
+fails.  (Fixing this requires some ugly shell script hackery, and this bug is so
+minor that it doesn&#8217;t seem worth the effort.)</p>
+</div>
+<div class="section" id="how-do-i-debug-an-extension">
+<h2><a class="toc-backref" href="#id15">How do I debug an extension?</a><a class="headerlink" href="#how-do-i-debug-an-extension" title="Permalink to this headline">¶</a></h2>
+<p>When using GDB with dynamically loaded extensions, you can&#8217;t set a breakpoint in
+your extension until your extension is loaded.</p>
+<p>In your <tt class="docutils literal"><span class="pre">.gdbinit</span></tt> file (or interactively), add the command:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">br</span> <span class="n">_PyImport_LoadDynamicModule</span>
+</pre></div>
+</div>
+<p>Then, when you run GDB:</p>
+<div class="highlight-c"><pre>$ gdb /local/bin/python
+gdb) run myscript.py
+gdb) continue # repeat until your extension is loaded
+gdb) finish   # so that your extension is loaded
+gdb) br myfunction.c:50
+gdb) continue</pre>
+</div>
+</div>
+<div class="section" id="i-want-to-compile-a-python-module-on-my-linux-system-but-some-files-are-missing-why">
+<h2><a class="toc-backref" href="#id16">I want to compile a Python module on my Linux system, but some files are missing. Why?</a><a class="headerlink" href="#i-want-to-compile-a-python-module-on-my-linux-system-but-some-files-are-missing-why" title="Permalink to this headline">¶</a></h2>
+<p>Most packaged versions of Python don&#8217;t include the
+<tt class="file docutils literal"><span class="pre">/usr/lib/python2.</span><em><span class="pre">x</span></em><span class="pre">/config/</span></tt> directory, which contains various files
+required for compiling Python extensions.</p>
+<p>For Red Hat, install the python-devel RPM to get the necessary files.</p>
+<p>For Debian, run <tt class="docutils literal"><span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">python-dev</span></tt>.</p>
+</div>
+<div class="section" id="what-does-systemerror-pyimport-fixupextension-module-yourmodule-not-loaded-mean">
+<h2><a class="toc-backref" href="#id17">What does &#8220;SystemError: _PyImport_FixupExtension: module yourmodule not loaded&#8221; mean?</a><a class="headerlink" href="#what-does-systemerror-pyimport-fixupextension-module-yourmodule-not-loaded-mean" title="Permalink to this headline">¶</a></h2>
+<p>This means that you have created an extension module named &#8220;yourmodule&#8221;, but
+your module init function does not initialize with that name.</p>
+<p>Every module init function will have a line similar to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">module</span> <span class="o">=</span> <span class="n">Py_InitModule</span><span class="p">(</span><span class="s">&quot;yourmodule&quot;</span><span class="p">,</span> <span class="n">yourmodule_functions</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>If the string passed to this function is not the same name as your extension
+module, the <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><tt class="xref py py-exc docutils literal"><span class="pre">SystemError</span></tt></a> exception will be raised.</p>
+</div>
+<div class="section" id="how-do-i-tell-incomplete-input-from-invalid-input">
+<h2><a class="toc-backref" href="#id18">How do I tell &#8220;incomplete input&#8221; from &#8220;invalid input&#8221;?</a><a class="headerlink" href="#how-do-i-tell-incomplete-input-from-invalid-input" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you want to emulate the Python interactive interpreter&#8217;s behavior,
+where it gives you a continuation prompt when the input is incomplete (e.g. you
+typed the start of an &#8220;if&#8221; statement or you didn&#8217;t close your parentheses or
+triple string quotes), but it gives you a syntax error message immediately when
+the input is invalid.</p>
+<p>In Python you can use the <a class="reference internal" href="../library/codeop.html#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><tt class="xref py py-mod docutils literal"><span class="pre">codeop</span></tt></a> module, which approximates the parser&#8217;s
+behavior sufficiently.  IDLE uses this, for example.</p>
+<p>The easiest way to do it in C is to call <a class="reference internal" href="../c-api/veryhigh.html#PyRun_InteractiveLoop" title="PyRun_InteractiveLoop"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_InteractiveLoop()</span></tt></a> (perhaps
+in a separate thread) and let the Python interpreter handle the input for
+you. You can also set the <tt class="xref c c-func docutils literal"><span class="pre">PyOS_ReadlineFunctionPointer()</span></tt> to point at your
+custom input function. See <tt class="docutils literal"><span class="pre">Modules/readline.c</span></tt> and <tt class="docutils literal"><span class="pre">Parser/myreadline.c</span></tt>
+for more hints.</p>
+<p>However sometimes you have to run the embedded Python interpreter in the same
+thread as your rest application and you can&#8217;t allow the
+<a class="reference internal" href="../c-api/veryhigh.html#PyRun_InteractiveLoop" title="PyRun_InteractiveLoop"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_InteractiveLoop()</span></tt></a> to stop while waiting for user input.  The one
+solution then is to call <tt class="xref c c-func docutils literal"><span class="pre">PyParser_ParseString()</span></tt> and test for <tt class="docutils literal"><span class="pre">e.error</span></tt>
+equal to <tt class="docutils literal"><span class="pre">E_EOF</span></tt>, which means the input is incomplete).  Here&#8217;s a sample code
+fragment, untested, inspired by code from Alex Farber:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cp">#include &lt;Python.h&gt;</span>
+<span class="cp">#include &lt;node.h&gt;</span>
+<span class="cp">#include &lt;errcode.h&gt;</span>
+<span class="cp">#include &lt;grammar.h&gt;</span>
+<span class="cp">#include &lt;parsetok.h&gt;</span>
+<span class="cp">#include &lt;compile.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">testcomplete</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">code</span><span class="p">)</span>
+  <span class="cm">/* code should end in \n */</span>
+  <span class="cm">/* return -1 for error, 0 for incomplete, 1 for complete */</span>
+<span class="p">{</span>
+  <span class="n">node</span> <span class="o">*</span><span class="n">n</span><span class="p">;</span>
+  <span class="n">perrdetail</span> <span class="n">e</span><span class="p">;</span>
+
+  <span class="n">n</span> <span class="o">=</span> <span class="n">PyParser_ParseString</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">_PyParser_Grammar</span><span class="p">,</span>
+                           <span class="n">Py_file_input</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">error</span> <span class="o">==</span> <span class="n">E_EOF</span><span class="p">)</span>
+      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">PyNode_Free</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Another solution is trying to compile the received string with
+<a class="reference internal" href="../c-api/veryhigh.html#Py_CompileString" title="Py_CompileString"><tt class="xref c c-func docutils literal"><span class="pre">Py_CompileString()</span></tt></a>. If it compiles without errors, try to execute the
+returned code object by calling <a class="reference internal" href="../c-api/veryhigh.html#PyEval_EvalCode" title="PyEval_EvalCode"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_EvalCode()</span></tt></a>. Otherwise save the
+input for later. If the compilation fails, find out if it&#8217;s an error or just
+more input is required - by extracting the message string from the exception
+tuple and comparing it to the string &#8220;unexpected EOF while parsing&#8221;.  Here is a
+complete example using the GNU readline library (you may want to ignore
+<strong>SIGINT</strong> while calling readline()):</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;readline.h&gt;</span>
+
+<span class="cp">#include &lt;Python.h&gt;</span>
+<span class="cp">#include &lt;object.h&gt;</span>
+<span class="cp">#include &lt;compile.h&gt;</span>
+<span class="cp">#include &lt;eval.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                          <span class="cm">/* lengths of line, code */</span>
+  <span class="kt">char</span> <span class="n">ps1</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;&gt;&gt;&gt; &quot;</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">ps2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;... &quot;</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">prompt</span> <span class="o">=</span> <span class="n">ps1</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">line</span><span class="p">,</span> <span class="o">*</span><span class="n">code</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+  <span class="n">PyObject</span> <span class="o">*</span><span class="n">src</span><span class="p">,</span> <span class="o">*</span><span class="n">glb</span><span class="p">,</span> <span class="o">*</span><span class="n">loc</span><span class="p">;</span>
+  <span class="n">PyObject</span> <span class="o">*</span><span class="n">exc</span><span class="p">,</span> <span class="o">*</span><span class="n">val</span><span class="p">,</span> <span class="o">*</span><span class="n">trb</span><span class="p">,</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="o">*</span><span class="n">dum</span><span class="p">;</span>
+
+  <span class="n">Py_Initialize</span> <span class="p">();</span>
+  <span class="n">loc</span> <span class="o">=</span> <span class="n">PyDict_New</span> <span class="p">();</span>
+  <span class="n">glb</span> <span class="o">=</span> <span class="n">PyDict_New</span> <span class="p">();</span>
+  <span class="n">PyDict_SetItemString</span> <span class="p">(</span><span class="n">glb</span><span class="p">,</span> <span class="s">&quot;__builtins__&quot;</span><span class="p">,</span> <span class="n">PyEval_GetBuiltins</span> <span class="p">());</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">readline</span> <span class="p">(</span><span class="n">prompt</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">==</span> <span class="n">line</span><span class="p">)</span>                          <span class="cm">/* CTRL-D pressed */</span>
+    <span class="p">{</span>
+      <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="n">i</span> <span class="o">=</span> <span class="n">strlen</span> <span class="p">(</span><span class="n">line</span><span class="p">);</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">add_history</span> <span class="p">(</span><span class="n">line</span><span class="p">);</span>                    <span class="cm">/* save non-empty lines */</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">==</span> <span class="n">code</span><span class="p">)</span>                        <span class="cm">/* nothing in code yet */</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="k">else</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">strlen</span> <span class="p">(</span><span class="n">code</span><span class="p">);</span>
+
+      <span class="n">code</span> <span class="o">=</span> <span class="n">realloc</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">==</span> <span class="n">code</span><span class="p">)</span>                        <span class="cm">/* out of memory */</span>
+        <span class="n">exit</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span>                              <span class="cm">/* code was empty, so */</span>
+        <span class="n">code</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>                        <span class="cm">/* keep strncat happy */</span>
+
+      <span class="n">strncat</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>                 <span class="cm">/* append line to code */</span>
+      <span class="n">code</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>                      <span class="cm">/* append &#39;\n&#39; to code */</span>
+      <span class="n">code</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+      <span class="n">src</span> <span class="o">=</span> <span class="n">Py_CompileString</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="s">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">Py_single_input</span><span class="p">);</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">!=</span> <span class="n">src</span><span class="p">)</span>                         <span class="cm">/* compiled just fine - */</span>
+      <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ps1</span>  <span class="o">==</span> <span class="n">prompt</span> <span class="o">||</span>                  <span class="cm">/* &quot;&gt;&gt;&gt; &quot; or */</span>
+            <span class="sc">&#39;\n&#39;</span> <span class="o">==</span> <span class="n">code</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>           <span class="cm">/* &quot;... &quot; and double &#39;\n&#39; */</span>
+        <span class="p">{</span>                                               <span class="cm">/* so execute it */</span>
+          <span class="n">dum</span> <span class="o">=</span> <span class="n">PyEval_EvalCode</span> <span class="p">((</span><span class="n">PyCodeObject</span> <span class="o">*</span><span class="p">)</span><span class="n">src</span><span class="p">,</span> <span class="n">glb</span><span class="p">,</span> <span class="n">loc</span><span class="p">);</span>
+          <span class="n">Py_XDECREF</span> <span class="p">(</span><span class="n">dum</span><span class="p">);</span>
+          <span class="n">Py_XDECREF</span> <span class="p">(</span><span class="n">src</span><span class="p">);</span>
+          <span class="n">free</span> <span class="p">(</span><span class="n">code</span><span class="p">);</span>
+          <span class="n">code</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">PyErr_Occurred</span> <span class="p">())</span>
+            <span class="n">PyErr_Print</span> <span class="p">();</span>
+          <span class="n">prompt</span> <span class="o">=</span> <span class="n">ps1</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>                                        <span class="cm">/* syntax error or E_EOF? */</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">PyErr_ExceptionMatches</span> <span class="p">(</span><span class="n">PyExc_SyntaxError</span><span class="p">))</span>
+      <span class="p">{</span>
+        <span class="n">PyErr_Fetch</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">exc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">val</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">trb</span><span class="p">);</span>        <span class="cm">/* clears exception! */</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">PyArg_ParseTuple</span> <span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="s">&quot;sO&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+            <span class="o">!</span><span class="n">strcmp</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s">&quot;unexpected EOF while parsing&quot;</span><span class="p">))</span> <span class="cm">/* E_EOF */</span>
+        <span class="p">{</span>
+          <span class="n">Py_XDECREF</span> <span class="p">(</span><span class="n">exc</span><span class="p">);</span>
+          <span class="n">Py_XDECREF</span> <span class="p">(</span><span class="n">val</span><span class="p">);</span>
+          <span class="n">Py_XDECREF</span> <span class="p">(</span><span class="n">trb</span><span class="p">);</span>
+          <span class="n">prompt</span> <span class="o">=</span> <span class="n">ps2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>                                   <span class="cm">/* some other syntax error */</span>
+        <span class="p">{</span>
+          <span class="n">PyErr_Restore</span> <span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">trb</span><span class="p">);</span>
+          <span class="n">PyErr_Print</span> <span class="p">();</span>
+          <span class="n">free</span> <span class="p">(</span><span class="n">code</span><span class="p">);</span>
+          <span class="n">code</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+          <span class="n">prompt</span> <span class="o">=</span> <span class="n">ps1</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">else</span>                                     <span class="cm">/* some non-syntax error */</span>
+      <span class="p">{</span>
+        <span class="n">PyErr_Print</span> <span class="p">();</span>
+        <span class="n">free</span> <span class="p">(</span><span class="n">code</span><span class="p">);</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="n">ps1</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">free</span> <span class="p">(</span><span class="n">line</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">Py_XDECREF</span><span class="p">(</span><span class="n">glb</span><span class="p">);</span>
+  <span class="n">Py_XDECREF</span><span class="p">(</span><span class="n">loc</span><span class="p">);</span>
+  <span class="n">Py_Finalize</span><span class="p">();</span>
+  <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-do-i-find-undefined-g-symbols-builtin-new-or-pure-virtual">
+<h2><a class="toc-backref" href="#id19">How do I find undefined g++ symbols __builtin_new or __pure_virtual?</a><a class="headerlink" href="#how-do-i-find-undefined-g-symbols-builtin-new-or-pure-virtual" title="Permalink to this headline">¶</a></h2>
+<p>To dynamically load g++ extension modules, you must recompile Python, relink it
+using g++ (change LINKCC in the Python Modules Makefile), and link your
+extension module using g++ (e.g., <tt class="docutils literal"><span class="pre">g++</span> <span class="pre">-shared</span> <span class="pre">-o</span> <span class="pre">mymodule.so</span> <span class="pre">mymodule.o</span></tt>).</p>
+</div>
+<div class="section" id="can-i-create-an-object-class-with-some-methods-implemented-in-c-and-others-in-python-e-g-through-inheritance">
+<h2><a class="toc-backref" href="#id20">Can I create an object class with some methods implemented in C and others in Python (e.g. through inheritance)?</a><a class="headerlink" href="#can-i-create-an-object-class-with-some-methods-implemented-in-c-and-others-in-python-e-g-through-inheritance" title="Permalink to this headline">¶</a></h2>
+<p>In Python 2.2, you can inherit from built-in classes such as <a class="reference internal" href="../library/functions.html#int" title="int"><tt class="xref py py-class docutils literal"><span class="pre">int</span></tt></a>,
+<a class="reference internal" href="../library/functions.html#list" title="list"><tt class="xref py py-class docutils literal"><span class="pre">list</span></tt></a>, <a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt></a>, etc.</p>
+<p>The Boost Python Library (BPL, <a class="reference external" href="http://www.boost.org/libs/python/doc/index.html">http://www.boost.org/libs/python/doc/index.html</a>)
+provides a way of doing this from C++ (i.e. you can inherit from an extension
+class written in C++ using the BPL).</p>
+</div>
+<div class="section" id="when-importing-module-x-why-do-i-get-undefined-symbol-pyunicodeucs2">
+<h2><a class="toc-backref" href="#id21">When importing module X, why do I get &#8220;undefined symbol: PyUnicodeUCS2*&#8221;?</a><a class="headerlink" href="#when-importing-module-x-why-do-i-get-undefined-symbol-pyunicodeucs2" title="Permalink to this headline">¶</a></h2>
+<p>You are using a version of Python that uses a 4-byte representation for Unicode
+characters, but some C extension module you are importing was compiled using a
+Python that uses a 2-byte representation for Unicode characters (the default).</p>
+<p>If instead the name of the undefined symbol starts with <tt class="docutils literal"><span class="pre">PyUnicodeUCS4</span></tt>, the
+problem is the reverse: Python was built using 2-byte Unicode characters, and
+the extension module was compiled using a Python with 4-byte Unicode characters.</p>
+<p>This can easily occur when using pre-built extension packages.  RedHat Linux
+7.x, in particular, provided a &#8220;python2&#8221; binary that is compiled with 4-byte
+Unicode.  This only causes the link failure if the extension uses any of the
+<tt class="docutils literal"><span class="pre">PyUnicode_*()</span></tt> functions.  It is also a problem if an extension uses any of
+the Unicode-related format specifiers for <a class="reference internal" href="../c-api/arg.html#Py_BuildValue" title="Py_BuildValue"><tt class="xref c c-func docutils literal"><span class="pre">Py_BuildValue()</span></tt></a> (or similar) or
+parameter specifications for <a class="reference internal" href="../c-api/arg.html#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a>.</p>
+<p>You can check the size of the Unicode character a Python interpreter is using by
+checking the value of sys.maxunicode:</p>
+<div class="highlight-c"><pre>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; if sys.maxunicode &gt; 65535:
+...     print 'UCS4 build'
+... else:
+...     print 'UCS2 build'</pre>
+</div>
+<p>The only way to solve this problem is to use extension modules compiled with a
+Python binary built using the same size for Unicode characters.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Extending/Embedding FAQ</a><ul>
+<li><a class="reference internal" href="#can-i-create-my-own-functions-in-c">Can I create my own functions in C?</a></li>
+<li><a class="reference internal" href="#id1">Can I create my own functions in C++?</a></li>
+<li><a class="reference internal" href="#writing-c-is-hard-are-there-any-alternatives">Writing C is hard; are there any alternatives?</a></li>
+<li><a class="reference internal" href="#how-can-i-execute-arbitrary-python-statements-from-c">How can I execute arbitrary Python statements from C?</a></li>
+<li><a class="reference internal" href="#how-can-i-evaluate-an-arbitrary-python-expression-from-c">How can I evaluate an arbitrary Python expression from C?</a></li>
+<li><a class="reference internal" href="#how-do-i-extract-c-values-from-a-python-object">How do I extract C values from a Python object?</a></li>
+<li><a class="reference internal" href="#how-do-i-use-py-buildvalue-to-create-a-tuple-of-arbitrary-length">How do I use Py_BuildValue() to create a tuple of arbitrary length?</a></li>
+<li><a class="reference internal" href="#how-do-i-call-an-object-s-method-from-c">How do I call an object&#8217;s method from C?</a></li>
+<li><a class="reference internal" href="#how-do-i-catch-the-output-from-pyerr-print-or-anything-that-prints-to-stdout-stderr">How do I catch the output from PyErr_Print() (or anything that prints to stdout/stderr)?</a></li>
+<li><a class="reference internal" href="#how-do-i-access-a-module-written-in-python-from-c">How do I access a module written in Python from C?</a></li>
+<li><a class="reference internal" href="#how-do-i-interface-to-c-objects-from-python">How do I interface to C++ objects from Python?</a></li>
+<li><a class="reference internal" href="#i-added-a-module-using-the-setup-file-and-the-make-fails-why">I added a module using the Setup file and the make fails; why?</a></li>
+<li><a class="reference internal" href="#how-do-i-debug-an-extension">How do I debug an extension?</a></li>
+<li><a class="reference internal" href="#i-want-to-compile-a-python-module-on-my-linux-system-but-some-files-are-missing-why">I want to compile a Python module on my Linux system, but some files are missing. Why?</a></li>
+<li><a class="reference internal" href="#what-does-systemerror-pyimport-fixupextension-module-yourmodule-not-loaded-mean">What does &#8220;SystemError: _PyImport_FixupExtension: module yourmodule not loaded&#8221; mean?</a></li>
+<li><a class="reference internal" href="#how-do-i-tell-incomplete-input-from-invalid-input">How do I tell &#8220;incomplete input&#8221; from &#8220;invalid input&#8221;?</a></li>
+<li><a class="reference internal" href="#how-do-i-find-undefined-g-symbols-builtin-new-or-pure-virtual">How do I find undefined g++ symbols __builtin_new or __pure_virtual?</a></li>
+<li><a class="reference internal" href="#can-i-create-an-object-class-with-some-methods-implemented-in-c-and-others-in-python-e-g-through-inheritance">Can I create an object class with some methods implemented in C and others in Python (e.g. through inheritance)?</a></li>
+<li><a class="reference internal" href="#when-importing-module-x-why-do-i-get-undefined-symbol-pyunicodeucs2">When importing module X, why do I get &#8220;undefined symbol: PyUnicodeUCS2*&#8221;?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="library.html"
+                        title="previous chapter">Library and Extension FAQ</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="windows.html"
+                        title="next chapter">Python on Windows FAQ</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/faq/extending.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows.html" title="Python on Windows FAQ"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="library.html" title="Library and Extension FAQ"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python Frequently Asked Questions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.10. traceback — Print or retrieve a stack traceback &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="27. Python Runtime Services" href="python.html" />
+    <link rel="next" title="27.11. __future__ — Future statement definitions" href="__future__.html" />
+    <link rel="prev" title="27.9. atexit — Exit handlers" href="atexit.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="__future__.html" title="27.11. __future__ — Future statement definitions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="atexit.html" title="27.9. atexit — Exit handlers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" accesskey="U">27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-traceback">
+<span id="traceback-print-or-retrieve-a-stack-traceback"></span><h1>27.10. <a class="reference internal" href="#module-traceback" title="traceback: Print or retrieve a stack traceback."><tt class="xref py py-mod docutils literal"><span class="pre">traceback</span></tt></a> &#8212; Print or retrieve a stack traceback<a class="headerlink" href="#module-traceback" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a standard interface to extract, format and print stack
+traces of Python programs.  It exactly mimics the behavior of the Python
+interpreter when it prints a stack trace.  This is useful when you want to print
+stack traces under program control, such as in a &#8220;wrapper&#8221; around the
+interpreter.</p>
+<p id="index-0">The module uses traceback objects &#8212; this is the object type that is stored in
+the variables <a class="reference internal" href="sys.html#sys.exc_traceback" title="sys.exc_traceback"><tt class="xref py py-data docutils literal"><span class="pre">sys.exc_traceback</span></tt></a> (deprecated) and <a class="reference internal" href="sys.html#sys.last_traceback" title="sys.last_traceback"><tt class="xref py py-data docutils literal"><span class="pre">sys.last_traceback</span></tt></a> and
+returned as the third item from <a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></tt></a>.</p>
+<p>The module defines the following functions:</p>
+<dl class="function">
+<dt id="traceback.print_tb">
+<tt class="descclassname">traceback.</tt><tt class="descname">print_tb</tt><big>(</big><em>traceback</em><span class="optional">[</span>, <em>limit</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.print_tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print up to <em>limit</em> stack trace entries from <em>traceback</em>.  If <em>limit</em> is omitted
+or <tt class="xref docutils literal"><span class="pre">None</span></tt>, all entries are printed. If <em>file</em> is omitted or <tt class="xref docutils literal"><span class="pre">None</span></tt>, the
+output goes to <tt class="docutils literal"><span class="pre">sys.stderr</span></tt>; otherwise it should be an open file or file-like
+object to receive the output.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.print_exception">
+<tt class="descclassname">traceback.</tt><tt class="descname">print_exception</tt><big>(</big><em>type</em>, <em>value</em>, <em>traceback</em><span class="optional">[</span>, <em>limit</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.print_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print exception information and up to <em>limit</em> stack trace entries from
+<em>traceback</em> to <em>file</em>. This differs from <a class="reference internal" href="#traceback.print_tb" title="traceback.print_tb"><tt class="xref py py-func docutils literal"><span class="pre">print_tb()</span></tt></a> in the following ways:
+(1) if <em>traceback</em> is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, it prints a header <tt class="docutils literal"><span class="pre">Traceback</span> <span class="pre">(most</span> <span class="pre">recent</span>
+<span class="pre">call</span> <span class="pre">last):</span></tt>; (2) it prints the exception <em>type</em> and <em>value</em> after the stack
+trace; (3) if <em>type</em> is <a class="reference internal" href="exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a> and <em>value</em> has the appropriate
+format, it prints the line where the syntax error occurred with a caret
+indicating the approximate position of the error.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.print_exc">
+<tt class="descclassname">traceback.</tt><tt class="descname">print_exc</tt><big>(</big><span class="optional">[</span><em>limit</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.print_exc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a shorthand for <tt class="docutils literal"><span class="pre">print_exception(sys.exc_type,</span> <span class="pre">sys.exc_value,</span>
+<span class="pre">sys.exc_traceback,</span> <span class="pre">limit,</span> <span class="pre">file)</span></tt>.  (In fact, it uses <a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></tt></a> to
+retrieve the same information in a thread-safe way instead of using the
+deprecated variables.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.format_exc">
+<tt class="descclassname">traceback.</tt><tt class="descname">format_exc</tt><big>(</big><span class="optional">[</span><em>limit</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.format_exc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is like <tt class="docutils literal"><span class="pre">print_exc(limit)</span></tt> but returns a string instead of printing to a
+file.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.print_last">
+<tt class="descclassname">traceback.</tt><tt class="descname">print_last</tt><big>(</big><span class="optional">[</span><em>limit</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.print_last" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a shorthand for <tt class="docutils literal"><span class="pre">print_exception(sys.last_type,</span> <span class="pre">sys.last_value,</span>
+<span class="pre">sys.last_traceback,</span> <span class="pre">limit,</span> <span class="pre">file)</span></tt>.  In general it will work only after
+an exception has reached an interactive prompt (see <a class="reference internal" href="sys.html#sys.last_type" title="sys.last_type"><tt class="xref py py-data docutils literal"><span class="pre">sys.last_type</span></tt></a>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.print_stack">
+<tt class="descclassname">traceback.</tt><tt class="descname">print_stack</tt><big>(</big><span class="optional">[</span><em>f</em><span class="optional">[</span>, <em>limit</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.print_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function prints a stack trace from its invocation point.  The optional <em>f</em>
+argument can be used to specify an alternate stack frame to start.  The optional
+<em>limit</em> and <em>file</em> arguments have the same meaning as for
+<a class="reference internal" href="#traceback.print_exception" title="traceback.print_exception"><tt class="xref py py-func docutils literal"><span class="pre">print_exception()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.extract_tb">
+<tt class="descclassname">traceback.</tt><tt class="descname">extract_tb</tt><big>(</big><em>traceback</em><span class="optional">[</span>, <em>limit</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.extract_tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of up to <em>limit</em> &#8220;pre-processed&#8221; stack trace entries extracted
+from the traceback object <em>traceback</em>.  It is useful for alternate formatting of
+stack traces.  If <em>limit</em> is omitted or <tt class="xref docutils literal"><span class="pre">None</span></tt>, all entries are extracted.  A
+&#8220;pre-processed&#8221; stack trace entry is a quadruple (<em>filename</em>, <em>line number</em>,
+<em>function name</em>, <em>text</em>) representing the information that is usually printed
+for a stack trace.  The <em>text</em> is a string with leading and trailing whitespace
+stripped; if the source is not available it is <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.extract_stack">
+<tt class="descclassname">traceback.</tt><tt class="descname">extract_stack</tt><big>(</big><span class="optional">[</span><em>f</em><span class="optional">[</span>, <em>limit</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.extract_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the raw traceback from the current stack frame.  The return value has
+the same format as for <a class="reference internal" href="#traceback.extract_tb" title="traceback.extract_tb"><tt class="xref py py-func docutils literal"><span class="pre">extract_tb()</span></tt></a>.  The optional <em>f</em> and <em>limit</em>
+arguments have the same meaning as for <a class="reference internal" href="#traceback.print_stack" title="traceback.print_stack"><tt class="xref py py-func docutils literal"><span class="pre">print_stack()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.format_list">
+<tt class="descclassname">traceback.</tt><tt class="descname">format_list</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#traceback.format_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of tuples as returned by <a class="reference internal" href="#traceback.extract_tb" title="traceback.extract_tb"><tt class="xref py py-func docutils literal"><span class="pre">extract_tb()</span></tt></a> or
+<a class="reference internal" href="#traceback.extract_stack" title="traceback.extract_stack"><tt class="xref py py-func docutils literal"><span class="pre">extract_stack()</span></tt></a>, return a list of strings ready for printing.  Each string
+in the resulting list corresponds to the item with the same index in the
+argument list.  Each string ends in a newline; the strings may contain internal
+newlines as well, for those items whose source text line is not <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.format_exception_only">
+<tt class="descclassname">traceback.</tt><tt class="descname">format_exception_only</tt><big>(</big><em>type</em>, <em>value</em><big>)</big><a class="headerlink" href="#traceback.format_exception_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the exception part of a traceback.  The arguments are the exception type
+and value such as given by <tt class="docutils literal"><span class="pre">sys.last_type</span></tt> and <tt class="docutils literal"><span class="pre">sys.last_value</span></tt>.  The return
+value is a list of strings, each ending in a newline.  Normally, the list
+contains a single string; however, for <a class="reference internal" href="exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a> exceptions, it
+contains several lines that (when printed) display detailed information about
+where the syntax error occurred.  The message indicating which exception
+occurred is the always last string in the list.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.format_exception">
+<tt class="descclassname">traceback.</tt><tt class="descname">format_exception</tt><big>(</big><em>type</em>, <em>value</em>, <em>tb</em><span class="optional">[</span>, <em>limit</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.format_exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a stack trace and the exception information.  The arguments  have the
+same meaning as the corresponding arguments to <a class="reference internal" href="#traceback.print_exception" title="traceback.print_exception"><tt class="xref py py-func docutils literal"><span class="pre">print_exception()</span></tt></a>.  The
+return value is a list of strings, each ending in a newline and some containing
+internal newlines.  When these lines are concatenated and printed, exactly the
+same text is printed as does <a class="reference internal" href="#traceback.print_exception" title="traceback.print_exception"><tt class="xref py py-func docutils literal"><span class="pre">print_exception()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.format_tb">
+<tt class="descclassname">traceback.</tt><tt class="descname">format_tb</tt><big>(</big><em>tb</em><span class="optional">[</span>, <em>limit</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.format_tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>A shorthand for <tt class="docutils literal"><span class="pre">format_list(extract_tb(tb,</span> <span class="pre">limit))</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.format_stack">
+<tt class="descclassname">traceback.</tt><tt class="descname">format_stack</tt><big>(</big><span class="optional">[</span><em>f</em><span class="optional">[</span>, <em>limit</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#traceback.format_stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>A shorthand for <tt class="docutils literal"><span class="pre">format_list(extract_stack(f,</span> <span class="pre">limit))</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="traceback.tb_lineno">
+<tt class="descclassname">traceback.</tt><tt class="descname">tb_lineno</tt><big>(</big><em>tb</em><big>)</big><a class="headerlink" href="#traceback.tb_lineno" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns the current line number set in the traceback object.  This
+function was necessary because in versions of Python prior to 2.3 when the
+<a class="reference internal" href="../using/cmdline.html#cmdoption-O"><em class="xref std std-option">-O</em></a> flag was passed to Python the <tt class="docutils literal"><span class="pre">tb.tb_lineno</span></tt> was not updated
+correctly.  This function has no use in versions past 2.3.</p>
+</dd></dl>
+
+<div class="section" id="traceback-examples">
+<span id="traceback-example"></span><h2>27.10.1. Traceback Examples<a class="headerlink" href="#traceback-examples" title="Permalink to this headline">¶</a></h2>
+<p>This simple example implements a basic read-eval-print loop, similar to (but
+less useful than) the standard Python interactive interpreter loop.  For a more
+complete implementation of the interpreter loop, refer to the <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><tt class="xref py py-mod docutils literal"><span class="pre">code</span></tt></a>
+module.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">traceback</span>
+
+<span class="k">def</span> <span class="nf">run_user_code</span><span class="p">(</span><span class="n">envdir</span><span class="p">):</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt; &quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">exec</span> <span class="n">source</span> <span class="ow">in</span> <span class="n">envdir</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Exception in user code:&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="mi">60</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;-&#39;</span><span class="o">*</span><span class="mi">60</span>
+
+<span class="n">envdir</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">run_user_code</span><span class="p">(</span><span class="n">envdir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following example demonstrates the different ways to print and format the
+exception and traceback:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">traceback</span>
+
+<span class="k">def</span> <span class="nf">lumberjack</span><span class="p">():</span>
+    <span class="n">bright_side_of_death</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">bright_side_of_death</span><span class="p">():</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">lumberjack</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;*** print_tb:&quot;</span>
+    <span class="n">traceback</span><span class="o">.</span><span class="n">print_tb</span><span class="p">(</span><span class="n">exc_traceback</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;*** print_exception:&quot;</span>
+    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exception</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="p">,</span>
+                              <span class="n">limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;*** print_exc:&quot;</span>
+    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;*** format_exc, first and last line:&quot;</span>
+    <span class="n">formatted_lines</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="k">print</span> <span class="n">formatted_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span> <span class="n">formatted_lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&quot;*** format_exception:&quot;</span>
+    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception</span><span class="p">(</span><span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span>
+                                          <span class="n">exc_traceback</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&quot;*** extract_tb:&quot;</span>
+    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">extract_tb</span><span class="p">(</span><span class="n">exc_traceback</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&quot;*** format_tb:&quot;</span>
+    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_tb</span><span class="p">(</span><span class="n">exc_traceback</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">&quot;*** tb_lineno:&quot;</span><span class="p">,</span> <span class="n">exc_traceback</span><span class="o">.</span><span class="n">tb_lineno</span>
+</pre></div>
+</div>
+<p>The output for the example would look similar to this:</p>
+<div class="highlight-python"><pre>*** print_tb:
+  File "&lt;doctest...&gt;", line 10, in &lt;module&gt;
+    lumberjack()
+*** print_exception:
+Traceback (most recent call last):
+  File "&lt;doctest...&gt;", line 10, in &lt;module&gt;
+    lumberjack()
+  File "&lt;doctest...&gt;", line 4, in lumberjack
+    bright_side_of_death()
+IndexError: tuple index out of range
+*** print_exc:
+Traceback (most recent call last):
+  File "&lt;doctest...&gt;", line 10, in &lt;module&gt;
+    lumberjack()
+  File "&lt;doctest...&gt;", line 4, in lumberjack
+    bright_side_of_death()
+IndexError: tuple index out of range
+*** format_exc, first and last line:
+Traceback (most recent call last):
+IndexError: tuple index out of range
+*** format_exception:
+['Traceback (most recent call last):\n',
+ '  File "&lt;doctest...&gt;", line 10, in &lt;module&gt;\n    lumberjack()\n',
+ '  File "&lt;doctest...&gt;", line 4, in lumberjack\n    bright_side_of_death()\n',
+ '  File "&lt;doctest...&gt;", line 7, in bright_side_of_death\n    return tuple()[0]\n',
+ 'IndexError: tuple index out of range\n']
+*** extract_tb:
+[('&lt;doctest...&gt;', 10, '&lt;module&gt;', 'lumberjack()'),
+ ('&lt;doctest...&gt;', 4, 'lumberjack', 'bright_side_of_death()'),
+ ('&lt;doctest...&gt;', 7, 'bright_side_of_death', 'return tuple()[0]')]
+*** format_tb:
+['  File "&lt;doctest...&gt;", line 10, in &lt;module&gt;\n    lumberjack()\n',
+ '  File "&lt;doctest...&gt;", line 4, in lumberjack\n    bright_side_of_death()\n',
+ '  File "&lt;doctest...&gt;", line 7, in bright_side_of_death\n    return tuple()[0]\n']
+*** tb_lineno: 10</pre>
+</div>
+<p>The following example shows the different ways to print and format the stack:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">traceback</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">another_function</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">lumberstack</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">lumberstack</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="n">traceback</span><span class="o">.</span><span class="n">print_stack</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">extract_stack</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="nb">repr</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_stack</span><span class="p">())</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">another_function</span><span class="p">()</span>
+<span class="go">  File &quot;&lt;doctest&gt;&quot;, line 10, in &lt;module&gt;</span>
+<span class="go">    another_function()</span>
+<span class="go">  File &quot;&lt;doctest&gt;&quot;, line 3, in another_function</span>
+<span class="go">    lumberstack()</span>
+<span class="go">  File &quot;&lt;doctest&gt;&quot;, line 6, in lumberstack</span>
+<span class="go">    traceback.print_stack()</span>
+<span class="go">[(&#39;&lt;doctest&gt;&#39;, 10, &#39;&lt;module&gt;&#39;, &#39;another_function()&#39;),</span>
+<span class="go"> (&#39;&lt;doctest&gt;&#39;, 3, &#39;another_function&#39;, &#39;lumberstack()&#39;),</span>
+<span class="go"> (&#39;&lt;doctest&gt;&#39;, 7, &#39;lumberstack&#39;, &#39;print repr(traceback.extract_stack())&#39;)]</span>
+<span class="go">[&#39;  File &quot;&lt;doctest&gt;&quot;, line 10, in &lt;module&gt;\n    another_function()\n&#39;,</span>
+<span class="go"> &#39;  File &quot;&lt;doctest&gt;&quot;, line 3, in another_function\n    lumberstack()\n&#39;,</span>
+<span class="go"> &#39;  File &quot;&lt;doctest&gt;&quot;, line 8, in lumberstack\n    print repr(traceback.format_stack())\n&#39;]</span>
+</pre></div>
+</div>
+<p>This last example demonstrates the final few formatting functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">traceback</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traceback</span><span class="o">.</span><span class="n">format_list</span><span class="p">([(</span><span class="s">&#39;spam.py&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s">&#39;&lt;module&gt;&#39;</span><span class="p">,</span> <span class="s">&#39;spam.eggs()&#39;</span><span class="p">),</span>
+<span class="gp">... </span>                       <span class="p">(</span><span class="s">&#39;eggs.py&#39;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="s">&#39;eggs&#39;</span><span class="p">,</span> <span class="s">&#39;return &quot;bacon&quot;&#39;</span><span class="p">)])</span>
+<span class="go">[&#39;  File &quot;spam.py&quot;, line 3, in &lt;module&gt;\n    spam.eggs()\n&#39;,</span>
+<span class="go"> &#39;  File &quot;eggs.py&quot;, line 42, in eggs\n    return &quot;bacon&quot;\n&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">an_error</span> <span class="o">=</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&#39;tuple index out of range&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exception_only</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">an_error</span><span class="p">),</span> <span class="n">an_error</span><span class="p">)</span>
+<span class="go">[&#39;IndexError: tuple index out of range\n&#39;]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">27.10. <tt class="docutils literal"><span class="pre">traceback</span></tt> &#8212; Print or retrieve a stack traceback</a><ul>
+<li><a class="reference internal" href="#traceback-examples">27.10.1. Traceback Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="atexit.html"
+                        title="previous chapter">27.9. <tt class="docutils literal docutils literal docutils literal"><span class="pre">atexit</span></tt> &#8212; Exit handlers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="__future__.html"
+                        title="next chapter">27.11. <tt class="docutils literal docutils literal docutils literal"><span class="pre">__future__</span></tt> &#8212; Future statement definitions</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/traceback.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="__future__.html" title="27.11. __future__ — Future statement definitions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="atexit.html" title="27.9. atexit — Exit handlers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" >27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

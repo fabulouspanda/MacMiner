@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>10.8. fnmatch — Unix filename pattern matching &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="10. File and Directory Access" href="filesys.html" />
+    <link rel="next" title="10.9. linecache — Random access to text lines" href="linecache.html" />
+    <link rel="prev" title="10.7. glob — Unix style pathname pattern expansion" href="glob.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="linecache.html" title="10.9. linecache — Random access to text lines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="glob.html" title="10.7. glob — Unix style pathname pattern expansion"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="filesys.html" accesskey="U">10. File and Directory Access</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-fnmatch">
+<span id="fnmatch-unix-filename-pattern-matching"></span><h1>10.8. <a class="reference internal" href="#module-fnmatch" title="fnmatch: Unix shell style filename pattern matching."><tt class="xref py py-mod docutils literal"><span class="pre">fnmatch</span></tt></a> &#8212; Unix filename pattern matching<a class="headerlink" href="#module-fnmatch" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><p id="index-1"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/fnmatch.py">Lib/fnmatch.py</a></p>
+<hr class="docutils" />
+<p>This module provides support for Unix shell-style wildcards, which are <em>not</em> the
+same as regular expressions (which are documented in the <a class="reference internal" href="re.html#module-re" title="re: Regular expression operations."><tt class="xref py py-mod docutils literal"><span class="pre">re</span></tt></a> module).  The
+special characters used in shell-style wildcards are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Pattern</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">*</span></tt></td>
+<td>matches everything</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">?</span></tt></td>
+<td>matches any single character</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">[seq]</span></tt></td>
+<td>matches any character in <em>seq</em></td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">[!seq]</span></tt></td>
+<td>matches any character not in <em>seq</em></td>
+</tr>
+</tbody>
+</table>
+<p>For a literal match, wrap the meta-characters in brackets.
+For example, <tt class="docutils literal"><span class="pre">'[?]'</span></tt> matches the character <tt class="docutils literal"><span class="pre">'?'</span></tt>.</p>
+<p id="index-2">Note that the filename separator (<tt class="docutils literal"><span class="pre">'/'</span></tt> on Unix) is <em>not</em> special to this
+module.  See module <a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><tt class="xref py py-mod docutils literal"><span class="pre">glob</span></tt></a> for pathname expansion (<a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><tt class="xref py py-mod docutils literal"><span class="pre">glob</span></tt></a> uses
+<a class="reference internal" href="#module-fnmatch" title="fnmatch: Unix shell style filename pattern matching."><tt class="xref py py-func docutils literal"><span class="pre">fnmatch()</span></tt></a> to match pathname segments).  Similarly, filenames starting with
+a period are not special for this module, and are matched by the <tt class="docutils literal"><span class="pre">*</span></tt> and <tt class="docutils literal"><span class="pre">?</span></tt>
+patterns.</p>
+<dl class="function">
+<dt id="fnmatch.fnmatch">
+<tt class="descclassname">fnmatch.</tt><tt class="descname">fnmatch</tt><big>(</big><em>filename</em>, <em>pattern</em><big>)</big><a class="headerlink" href="#fnmatch.fnmatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether the <em>filename</em> string matches the <em>pattern</em> string, returning
+<a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> or <a class="reference internal" href="constants.html#False" title="False"><tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt></a>.  If the operating system is case-insensitive,
+then both parameters will be normalized to all lower- or upper-case before
+the comparison is performed.  <a class="reference internal" href="#fnmatch.fnmatchcase" title="fnmatch.fnmatchcase"><tt class="xref py py-func docutils literal"><span class="pre">fnmatchcase()</span></tt></a> can be used to perform a
+case-sensitive comparison, regardless of whether that&#8217;s standard for the
+operating system.</p>
+<p>This example will print all file names in the current directory with the
+extension <tt class="docutils literal"><span class="pre">.txt</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">fnmatch</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;*.txt&#39;</span><span class="p">):</span>
+        <span class="k">print</span> <span class="nb">file</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fnmatch.fnmatchcase">
+<tt class="descclassname">fnmatch.</tt><tt class="descname">fnmatchcase</tt><big>(</big><em>filename</em>, <em>pattern</em><big>)</big><a class="headerlink" href="#fnmatch.fnmatchcase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether <em>filename</em> matches <em>pattern</em>, returning <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> or
+<a class="reference internal" href="constants.html#False" title="False"><tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt></a>; the comparison is case-sensitive.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fnmatch.filter">
+<tt class="descclassname">fnmatch.</tt><tt class="descname">filter</tt><big>(</big><em>names</em>, <em>pattern</em><big>)</big><a class="headerlink" href="#fnmatch.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the subset of the list of <em>names</em> that match <em>pattern</em>. It is the same as
+<tt class="docutils literal"><span class="pre">[n</span> <span class="pre">for</span> <span class="pre">n</span> <span class="pre">in</span> <span class="pre">names</span> <span class="pre">if</span> <span class="pre">fnmatch(n,</span> <span class="pre">pattern)]</span></tt>, but implemented more efficiently.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fnmatch.translate">
+<tt class="descclassname">fnmatch.</tt><tt class="descname">translate</tt><big>(</big><em>pattern</em><big>)</big><a class="headerlink" href="#fnmatch.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the shell-style <em>pattern</em> converted to a regular expression.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fnmatch</span><span class="o">,</span> <span class="nn">re</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s">&#39;*.txt&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span>
+<span class="go">&#39;.*\\.txt$&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reobj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reobj</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&#39;foobar.txt&#39;</span><span class="p">)</span>
+<span class="go">&lt;_sre.SRE_Match object at 0x...&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><tt class="xref py py-mod docutils literal"><span class="pre">glob</span></tt></a></dt>
+<dd>Unix shell-style path expansion.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="glob.html"
+                        title="previous chapter">10.7. <tt class="docutils literal"><span class="pre">glob</span></tt> &#8212; Unix style pathname pattern expansion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="linecache.html"
+                        title="next chapter">10.9. <tt class="docutils literal"><span class="pre">linecache</span></tt> &#8212; Random access to text lines</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/fnmatch.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="linecache.html" title="10.9. linecache — Random access to text lines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="glob.html" title="10.7. glob — Unix style pathname pattern expansion"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="filesys.html" >10. File and Directory Access</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

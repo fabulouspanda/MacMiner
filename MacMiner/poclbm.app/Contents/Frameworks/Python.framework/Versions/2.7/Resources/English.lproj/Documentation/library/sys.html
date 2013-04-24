@@ -1,0 +1,1367 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.1. sys — System-specific parameters and functions &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="27. Python Runtime Services" href="python.html" />
+    <link rel="next" title="27.2. sysconfig — Provide access to Python’s configuration information" href="sysconfig.html" />
+    <link rel="prev" title="27. Python Runtime Services" href="python.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sysconfig.html" title="27.2. sysconfig — Provide access to Python’s configuration information"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="27. Python Runtime Services"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" accesskey="U">27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-sys">
+<span id="sys-system-specific-parameters-and-functions"></span><h1>27.1. <a class="reference internal" href="#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a> &#8212; System-specific parameters and functions<a class="headerlink" href="#module-sys" title="Permalink to this headline">¶</a></h1>
+<p>This module provides access to some variables used or maintained by the
+interpreter and to functions that interact strongly with the interpreter. It is
+always available.</p>
+<dl class="data">
+<dt id="sys.argv">
+<tt class="descclassname">sys.</tt><tt class="descname">argv</tt><a class="headerlink" href="#sys.argv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of command line arguments passed to a Python script. <tt class="docutils literal"><span class="pre">argv[0]</span></tt> is the
+script name (it is operating system dependent whether this is a full pathname or
+not).  If the command was executed using the <a class="reference internal" href="../using/cmdline.html#cmdoption-c"><em class="xref std std-option">-c</em></a> command line option to
+the interpreter, <tt class="docutils literal"><span class="pre">argv[0]</span></tt> is set to the string <tt class="docutils literal"><span class="pre">'-c'</span></tt>.  If no script name
+was passed to the Python interpreter, <tt class="docutils literal"><span class="pre">argv[0]</span></tt> is the empty string.</p>
+<p>To loop over the standard input, or the list of files given on the
+command line, see the <a class="reference internal" href="fileinput.html#module-fileinput" title="fileinput: Loop over standard input or a list of files."><tt class="xref py py-mod docutils literal"><span class="pre">fileinput</span></tt></a> module.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.byteorder">
+<tt class="descclassname">sys.</tt><tt class="descname">byteorder</tt><a class="headerlink" href="#sys.byteorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>An indicator of the native byte order.  This will have the value <tt class="docutils literal"><span class="pre">'big'</span></tt> on
+big-endian (most-significant byte first) platforms, and <tt class="docutils literal"><span class="pre">'little'</span></tt> on
+little-endian (least-significant byte first) platforms.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.builtin_module_names">
+<tt class="descclassname">sys.</tt><tt class="descname">builtin_module_names</tt><a class="headerlink" href="#sys.builtin_module_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tuple of strings giving the names of all modules that are compiled into this
+Python interpreter.  (This information is not available in any other way &#8212;
+<tt class="docutils literal"><span class="pre">modules.keys()</span></tt> only lists the imported modules.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.call_tracing">
+<tt class="descclassname">sys.</tt><tt class="descname">call_tracing</tt><big>(</big><em>func</em>, <em>args</em><big>)</big><a class="headerlink" href="#sys.call_tracing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call <tt class="docutils literal"><span class="pre">func(*args)</span></tt>, while tracing is enabled.  The tracing state is saved,
+and restored afterwards.  This is intended to be called from a debugger from
+a checkpoint, to recursively debug some other code.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.copyright">
+<tt class="descclassname">sys.</tt><tt class="descname">copyright</tt><a class="headerlink" href="#sys.copyright" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string containing the copyright pertaining to the Python interpreter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._clear_type_cache">
+<tt class="descclassname">sys.</tt><tt class="descname">_clear_type_cache</tt><big>(</big><big>)</big><a class="headerlink" href="#sys._clear_type_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the internal type cache. The type cache is used to speed up attribute
+and method lookups. Use the function <em>only</em> to drop unnecessary references
+during reference leak debugging.</p>
+<p>This function should be used for internal and specialized purposes only.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._current_frames">
+<tt class="descclassname">sys.</tt><tt class="descname">_current_frames</tt><big>(</big><big>)</big><a class="headerlink" href="#sys._current_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary mapping each thread&#8217;s identifier to the topmost stack frame
+currently active in that thread at the time the function is called. Note that
+functions in the <a class="reference internal" href="traceback.html#module-traceback" title="traceback: Print or retrieve a stack traceback."><tt class="xref py py-mod docutils literal"><span class="pre">traceback</span></tt></a> module can build the call stack given such a
+frame.</p>
+<p>This is most useful for debugging deadlock:  this function does not require the
+deadlocked threads&#8217; cooperation, and such threads&#8217; call stacks are frozen for as
+long as they remain deadlocked.  The frame returned for a non-deadlocked thread
+may bear no relationship to that thread&#8217;s current activity by the time calling
+code examines the frame.</p>
+<p>This function should be used for internal and specialized purposes only.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.dllhandle">
+<tt class="descclassname">sys.</tt><tt class="descname">dllhandle</tt><a class="headerlink" href="#sys.dllhandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer specifying the handle of the Python DLL. Availability: Windows.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.displayhook">
+<tt class="descclassname">sys.</tt><tt class="descname">displayhook</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#sys.displayhook" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <em>value</em> is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, this function prints it to <tt class="docutils literal"><span class="pre">sys.stdout</span></tt>, and saves
+it in <tt class="docutils literal"><span class="pre">__builtin__._</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">sys.displayhook</span></tt> is called on the result of evaluating an <a class="reference internal" href="../glossary.html#term-expression"><em class="xref std std-term">expression</em></a>
+entered in an interactive Python session.  The display of these values can be
+customized by assigning another one-argument function to <tt class="docutils literal"><span class="pre">sys.displayhook</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.dont_write_bytecode">
+<tt class="descclassname">sys.</tt><tt class="descname">dont_write_bytecode</tt><a class="headerlink" href="#sys.dont_write_bytecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this is true, Python won&#8217;t try to write <tt class="docutils literal"><span class="pre">.pyc</span></tt> or <tt class="docutils literal"><span class="pre">.pyo</span></tt> files on the
+import of source modules.  This value is initially set to <tt class="xref docutils literal"><span class="pre">True</span></tt> or
+<tt class="xref docutils literal"><span class="pre">False</span></tt> depending on the <a class="reference internal" href="../using/cmdline.html#cmdoption-B"><em class="xref std std-option">-B</em></a> command line option and the
+<span class="target" id="index-0"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONDONTWRITEBYTECODE"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONDONTWRITEBYTECODE</span></tt></a> environment variable, but you can set it
+yourself to control bytecode file generation.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.excepthook">
+<tt class="descclassname">sys.</tt><tt class="descname">excepthook</tt><big>(</big><em>type</em>, <em>value</em>, <em>traceback</em><big>)</big><a class="headerlink" href="#sys.excepthook" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function prints out a given traceback and exception to <tt class="docutils literal"><span class="pre">sys.stderr</span></tt>.</p>
+<p>When an exception is raised and uncaught, the interpreter calls
+<tt class="docutils literal"><span class="pre">sys.excepthook</span></tt> with three arguments, the exception class, exception
+instance, and a traceback object.  In an interactive session this happens just
+before control is returned to the prompt; in a Python program this happens just
+before the program exits.  The handling of such top-level exceptions can be
+customized by assigning another three-argument function to <tt class="docutils literal"><span class="pre">sys.excepthook</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.__displayhook__">
+<tt class="descclassname">sys.</tt><tt class="descname">__displayhook__</tt><a class="headerlink" href="#sys.__displayhook__" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.__excepthook__">
+<tt class="descclassname">sys.</tt><tt class="descname">__excepthook__</tt><a class="headerlink" href="#sys.__excepthook__" title="Permalink to this definition">¶</a></dt>
+<dd><p>These objects contain the original values of <tt class="docutils literal"><span class="pre">displayhook</span></tt> and <tt class="docutils literal"><span class="pre">excepthook</span></tt>
+at the start of the program.  They are saved so that <tt class="docutils literal"><span class="pre">displayhook</span></tt> and
+<tt class="docutils literal"><span class="pre">excepthook</span></tt> can be restored in case they happen to get replaced with broken
+objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.exc_info">
+<tt class="descclassname">sys.</tt><tt class="descname">exc_info</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.exc_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a tuple of three values that give information about the
+exception that is currently being handled.  The information returned is specific
+both to the current thread and to the current stack frame.  If the current stack
+frame is not handling an exception, the information is taken from the calling
+stack frame, or its caller, and so on until a stack frame is found that is
+handling an exception.  Here, &#8220;handling an exception&#8221; is defined as &#8220;executing
+or having executed an except clause.&#8221;  For any stack frame, only information
+about the most recently handled exception is accessible.</p>
+<p id="index-1">If no exception is being handled anywhere on the stack, a tuple containing three
+<tt class="xref docutils literal"><span class="pre">None</span></tt> values is returned.  Otherwise, the values returned are <tt class="docutils literal"><span class="pre">(type,</span> <span class="pre">value,</span>
+<span class="pre">traceback)</span></tt>.  Their meaning is: <em>type</em> gets the exception type of the exception
+being handled (a class object); <em>value</em> gets the exception parameter (its
+<em class="dfn">associated value</em> or the second argument to <a class="reference internal" href="../reference/simple_stmts.html#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a>, which is
+always a class instance if the exception type is a class object); <em>traceback</em>
+gets a traceback object (see the Reference Manual) which encapsulates the call
+stack at the point where the exception originally occurred.</p>
+<p>If <a class="reference internal" href="#sys.exc_clear" title="sys.exc_clear"><tt class="xref py py-func docutils literal"><span class="pre">exc_clear()</span></tt></a> is called, this function will return three <tt class="xref docutils literal"><span class="pre">None</span></tt> values
+until either another exception is raised in the current thread or the execution
+stack returns to a frame where another exception is being handled.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Assigning the <em>traceback</em> return value to a local variable in a function that is
+handling an exception will cause a circular reference.  This will prevent
+anything referenced by a local variable in the same function or by the traceback
+from being garbage collected.  Since most functions don&#8217;t need access to the
+traceback, the best solution is to use something like <tt class="docutils literal"><span class="pre">exctype,</span> <span class="pre">value</span> <span class="pre">=</span>
+<span class="pre">sys.exc_info()[:2]</span></tt> to extract only the exception type and value.  If you do
+need the traceback, make sure to delete it after use (best done with a
+<a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> statement) or to call <a class="reference internal" href="#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">exc_info()</span></tt></a> in
+a function that does not itself handle an exception.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Beginning with Python 2.2, such cycles are automatically reclaimed when garbage
+collection is enabled and they become unreachable, but it remains more efficient
+to avoid creating cycles.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.exc_clear">
+<tt class="descclassname">sys.</tt><tt class="descname">exc_clear</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.exc_clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function clears all information relating to the current or last exception
+that occurred in the current thread.  After calling this function,
+<a class="reference internal" href="#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">exc_info()</span></tt></a> will return three <tt class="xref docutils literal"><span class="pre">None</span></tt> values until another exception is
+raised in the current thread or the execution stack returns to a frame where
+another exception is being handled.</p>
+<p>This function is only needed in only a few obscure situations.  These include
+logging and error handling systems that report information on the last or
+current exception.  This function can also be used to try to free resources and
+trigger object finalization, though no guarantee is made as to what objects will
+be freed, if any.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.exc_type">
+<tt class="descclassname">sys.</tt><tt class="descname">exc_type</tt><a class="headerlink" href="#sys.exc_type" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.exc_value">
+<tt class="descclassname">sys.</tt><tt class="descname">exc_value</tt><a class="headerlink" href="#sys.exc_value" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.exc_traceback">
+<tt class="descclassname">sys.</tt><tt class="descname">exc_traceback</tt><a class="headerlink" href="#sys.exc_traceback" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 1.5: </span>Use <a class="reference internal" href="#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">exc_info()</span></tt></a> instead.</p>
+<p>Since they are global variables, they are not specific to the current thread, so
+their use is not safe in a multi-threaded program.  When no exception is being
+handled, <tt class="docutils literal"><span class="pre">exc_type</span></tt> is set to <tt class="xref docutils literal"><span class="pre">None</span></tt> and the other two are undefined.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.exec_prefix">
+<tt class="descclassname">sys.</tt><tt class="descname">exec_prefix</tt><a class="headerlink" href="#sys.exec_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string giving the site-specific directory prefix where the platform-dependent
+Python files are installed; by default, this is also <tt class="docutils literal"><span class="pre">'/usr/local'</span></tt>.  This can
+be set at build time with the <tt class="docutils literal"><span class="pre">--exec-prefix</span></tt> argument to the
+<strong class="program">configure</strong> script.  Specifically, all configuration files (e.g. the
+<tt class="file docutils literal"><span class="pre">pyconfig.h</span></tt> header file) are installed in the directory
+<tt class="file docutils literal"><em><span class="pre">exec_prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/config</span></tt>, and shared library modules are
+installed in <tt class="file docutils literal"><em><span class="pre">exec_prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/lib-dynload</span></tt>, where <em>X.Y</em>
+is the version number of Python, for example <tt class="docutils literal"><span class="pre">2.7</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.executable">
+<tt class="descclassname">sys.</tt><tt class="descname">executable</tt><a class="headerlink" href="#sys.executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string giving the absolute path of the executable binary for the Python
+interpreter, on systems where this makes sense. If Python is unable to retrieve
+the real path to its executable, <a class="reference internal" href="#sys.executable" title="sys.executable"><tt class="xref py py-data docutils literal"><span class="pre">sys.executable</span></tt></a> will be an empty string
+or <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.exit">
+<tt class="descclassname">sys.</tt><tt class="descname">exit</tt><big>(</big><span class="optional">[</span><em>arg</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#sys.exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exit from Python.  This is implemented by raising the <a class="reference internal" href="exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a>
+exception, so cleanup actions specified by finally clauses of <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a>
+statements are honored, and it is possible to intercept the exit attempt at
+an outer level.</p>
+<p>The optional argument <em>arg</em> can be an integer giving the exit status
+(defaulting to zero), or another type of object.  If it is an integer, zero
+is considered &#8220;successful termination&#8221; and any nonzero value is considered
+&#8220;abnormal termination&#8221; by shells and the like.  Most systems require it to be
+in the range 0-127, and produce undefined results otherwise.  Some systems
+have a convention for assigning specific meanings to specific exit codes, but
+these are generally underdeveloped; Unix programs generally use 2 for command
+line syntax errors and 1 for all other kind of errors.  If another type of
+object is passed, <tt class="xref docutils literal"><span class="pre">None</span></tt> is equivalent to passing zero, and any other
+object is printed to <a class="reference internal" href="#sys.stderr" title="sys.stderr"><tt class="xref py py-data docutils literal"><span class="pre">stderr</span></tt></a> and results in an exit code of 1.  In
+particular, <tt class="docutils literal"><span class="pre">sys.exit(&quot;some</span> <span class="pre">error</span> <span class="pre">message&quot;)</span></tt> is a quick way to exit a
+program when an error occurs.</p>
+<p>Since <a class="reference internal" href="constants.html#exit" title="exit"><tt class="xref py py-func docutils literal"><span class="pre">exit()</span></tt></a> ultimately &#8220;only&#8221; raises an exception, it will only exit
+the process when called from the main thread, and the exception is not
+intercepted.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.exitfunc">
+<tt class="descclassname">sys.</tt><tt class="descname">exitfunc</tt><a class="headerlink" href="#sys.exitfunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This value is not actually defined by the module, but can be set by the user (or
+by a program) to specify a clean-up action at program exit.  When set, it should
+be a parameterless function.  This function will be called when the interpreter
+exits.  Only one function may be installed in this way; to allow multiple
+functions which will be called at termination, use the <a class="reference internal" href="atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> module.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The exit function is not called when the program is killed by a signal, when a
+Python fatal internal error is detected, or when <tt class="docutils literal"><span class="pre">os._exit()</span></tt> is called.</p>
+</div>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.4: </span>Use <a class="reference internal" href="atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.flags">
+<tt class="descclassname">sys.</tt><tt class="descname">flags</tt><a class="headerlink" href="#sys.flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>The struct sequence <em>flags</em> exposes the status of command line flags. The
+attributes are read only.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">attribute</th>
+<th class="head">flag</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">debug</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-d"><em class="xref std std-option">-d</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">py3k_warning</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-3"><em class="xref std std-option">-3</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">division_warning</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-Q"><em class="xref std std-option">-Q</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">division_new</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-Q"><em class="xref std std-option">-Qnew</em></a></td>
+</tr>
+<tr><td><a class="reference internal" href="inspect.html#module-inspect" title="inspect: Extract information and source code from live objects."><tt class="xref py py-const docutils literal"><span class="pre">inspect</span></tt></a></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-i"><em class="xref std std-option">-i</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">interactive</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-i"><em class="xref std std-option">-i</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">optimize</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-O"><em class="xref std std-option">-O</em></a> or <a class="reference internal" href="../using/cmdline.html#cmdoption-OO"><em class="xref std std-option">-OO</em></a></td>
+</tr>
+<tr><td><a class="reference internal" href="#sys.dont_write_bytecode" title="sys.dont_write_bytecode"><tt class="xref py py-const docutils literal"><span class="pre">dont_write_bytecode</span></tt></a></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-B"><em class="xref std std-option">-B</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">no_user_site</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-s"><em class="xref std std-option">-s</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">no_site</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-S"><em class="xref std std-option">-S</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">ignore_environment</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-E"><em class="xref std std-option">-E</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">tabcheck</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-t"><em class="xref std std-option">-t</em></a> or <a class="reference internal" href="../using/cmdline.html#cmdoption-t"><em class="xref std std-option">-tt</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">verbose</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-v"><em class="xref std std-option">-v</em></a></td>
+</tr>
+<tr><td><a class="reference internal" href="functions.html#unicode" title="unicode"><tt class="xref py py-const docutils literal"><span class="pre">unicode</span></tt></a></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-U"><em class="xref std std-option">-U</em></a></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">bytes_warning</span></tt></td>
+<td><em class="xref std std-option">-b</em></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">hash_randomization</span></tt></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-R"><em class="xref std std-option">-R</em></a></td>
+</tr>
+</tbody>
+</table>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.3: </span>The <tt class="docutils literal"><span class="pre">hash_randomization</span></tt> attribute.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.float_info">
+<tt class="descclassname">sys.</tt><tt class="descname">float_info</tt><a class="headerlink" href="#sys.float_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A structseq holding information about the float type. It contains low level
+information about the precision and internal representation.  The values
+correspond to the various floating-point constants defined in the standard
+header file <tt class="file docutils literal"><span class="pre">float.h</span></tt> for the &#8216;C&#8217; programming language; see section
+5.2.4.2.2 of the 1999 ISO/IEC C standard <a class="reference internal" href="#c99">[C99]</a>, &#8216;Characteristics of
+floating types&#8217;, for details.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="18%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">attribute</th>
+<th class="head">float.h macro</th>
+<th class="head">explanation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">epsilon</span></tt></td>
+<td>DBL_EPSILON</td>
+<td>difference between 1 and the least value greater
+than 1 that is representable as a float</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">dig</span></tt></td>
+<td>DBL_DIG</td>
+<td>maximum number of decimal digits that can be
+faithfully represented in a float;  see below</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">mant_dig</span></tt></td>
+<td>DBL_MANT_DIG</td>
+<td>float precision: the number of base-<tt class="docutils literal"><span class="pre">radix</span></tt>
+digits in the significand of a float</td>
+</tr>
+<tr><td><a class="reference internal" href="functions.html#max" title="max"><tt class="xref py py-const docutils literal"><span class="pre">max</span></tt></a></td>
+<td>DBL_MAX</td>
+<td>maximum representable finite float</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">max_exp</span></tt></td>
+<td>DBL_MAX_EXP</td>
+<td>maximum integer e such that <tt class="docutils literal"><span class="pre">radix**(e-1)</span></tt> is
+a representable finite float</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">max_10_exp</span></tt></td>
+<td>DBL_MAX_10_EXP</td>
+<td>maximum integer e such that <tt class="docutils literal"><span class="pre">10**e</span></tt> is in the
+range of representable finite floats</td>
+</tr>
+<tr><td><a class="reference internal" href="functions.html#min" title="min"><tt class="xref py py-const docutils literal"><span class="pre">min</span></tt></a></td>
+<td>DBL_MIN</td>
+<td>minimum positive normalized float</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">min_exp</span></tt></td>
+<td>DBL_MIN_EXP</td>
+<td>minimum integer e such that <tt class="docutils literal"><span class="pre">radix**(e-1)</span></tt> is
+a normalized float</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">min_10_exp</span></tt></td>
+<td>DBL_MIN_10_EXP</td>
+<td>minimum integer e such that <tt class="docutils literal"><span class="pre">10**e</span></tt> is a
+normalized float</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">radix</span></tt></td>
+<td>FLT_RADIX</td>
+<td>radix of exponent representation</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">rounds</span></tt></td>
+<td>FLT_ROUNDS</td>
+<td>integer constant representing the rounding mode
+used for arithmetic operations.  This reflects
+the value of the system FLT_ROUNDS macro at
+interpreter startup time.  See section 5.2.4.2.2
+of the C99 standard for an explanation of the
+possible values and their meanings.</td>
+</tr>
+</tbody>
+</table>
+<p>The attribute <tt class="xref py py-attr docutils literal"><span class="pre">sys.float_info.dig</span></tt> needs further explanation.  If
+<tt class="docutils literal"><span class="pre">s</span></tt> is any string representing a decimal number with at most
+<tt class="xref py py-attr docutils literal"><span class="pre">sys.float_info.dig</span></tt> significant digits, then converting <tt class="docutils literal"><span class="pre">s</span></tt> to a
+float and back again will recover a string representing the same decimal
+value:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">dig</span>
+<span class="go">15</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">&#39;3.14159265358979&#39;</span>    <span class="c"># decimal string with 15 significant digits</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s">&#39;.15g&#39;</span><span class="p">)</span>  <span class="c"># convert to float and back -&gt; same value</span>
+<span class="go">&#39;3.14159265358979&#39;</span>
+</pre></div>
+</div>
+<p>But for strings with more than <tt class="xref py py-attr docutils literal"><span class="pre">sys.float_info.dig</span></tt> significant digits,
+this isn&#8217;t always true:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">&#39;9876543211234567&#39;</span>    <span class="c"># 16 significant digits is too many!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s">&#39;.16g&#39;</span><span class="p">)</span>  <span class="c"># conversion changes value</span>
+<span class="go">&#39;9876543211234568&#39;</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.float_repr_style">
+<tt class="descclassname">sys.</tt><tt class="descname">float_repr_style</tt><a class="headerlink" href="#sys.float_repr_style" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string indicating how the <a class="reference internal" href="repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> function behaves for
+floats.  If the string has value <tt class="docutils literal"><span class="pre">'short'</span></tt> then for a finite
+float <tt class="docutils literal"><span class="pre">x</span></tt>, <tt class="docutils literal"><span class="pre">repr(x)</span></tt> aims to produce a short string with the
+property that <tt class="docutils literal"><span class="pre">float(repr(x))</span> <span class="pre">==</span> <span class="pre">x</span></tt>.  This is the usual behaviour
+in Python 2.7 and later.  Otherwise, <tt class="docutils literal"><span class="pre">float_repr_style</span></tt> has value
+<tt class="docutils literal"><span class="pre">'legacy'</span></tt> and <tt class="docutils literal"><span class="pre">repr(x)</span></tt> behaves in the same way as it did in
+versions of Python prior to 2.7.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getcheckinterval">
+<tt class="descclassname">sys.</tt><tt class="descname">getcheckinterval</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getcheckinterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the interpreter&#8217;s &#8220;check interval&#8221;; see <a class="reference internal" href="#sys.setcheckinterval" title="sys.setcheckinterval"><tt class="xref py py-func docutils literal"><span class="pre">setcheckinterval()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getdefaultencoding">
+<tt class="descclassname">sys.</tt><tt class="descname">getdefaultencoding</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getdefaultencoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the current default string encoding used by the Unicode
+implementation.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getdlopenflags">
+<tt class="descclassname">sys.</tt><tt class="descname">getdlopenflags</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getdlopenflags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current value of the flags that are used for <tt class="xref c c-func docutils literal"><span class="pre">dlopen()</span></tt> calls.
+The flag constants are defined in the <a class="reference internal" href="dl.html#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">dl</span></tt></a> and <tt class="xref py py-mod docutils literal"><span class="pre">DLFCN</span></tt> modules.
+Availability: Unix.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getfilesystemencoding">
+<tt class="descclassname">sys.</tt><tt class="descname">getfilesystemencoding</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getfilesystemencoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of the encoding used to convert Unicode filenames into system
+file names, or <tt class="xref docutils literal"><span class="pre">None</span></tt> if the system default encoding is used. The result value
+depends on the operating system:</p>
+<ul class="simple">
+<li>On Mac OS X, the encoding is <tt class="docutils literal"><span class="pre">'utf-8'</span></tt>.</li>
+<li>On Unix, the encoding is the user&#8217;s preference according to the result of
+nl_langinfo(CODESET), or <tt class="xref docutils literal"><span class="pre">None</span></tt> if the <tt class="docutils literal"><span class="pre">nl_langinfo(CODESET)</span></tt>
+failed.</li>
+<li>On Windows NT+, file names are Unicode natively, so no conversion is
+performed. <a class="reference internal" href="#sys.getfilesystemencoding" title="sys.getfilesystemencoding"><tt class="xref py py-func docutils literal"><span class="pre">getfilesystemencoding()</span></tt></a> still returns <tt class="docutils literal"><span class="pre">'mbcs'</span></tt>, as
+this is the encoding that applications should use when they explicitly
+want to convert Unicode strings to byte strings that are equivalent when
+used as file names.</li>
+<li>On Windows 9x, the encoding is <tt class="docutils literal"><span class="pre">'mbcs'</span></tt>.</li>
+</ul>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getrefcount">
+<tt class="descclassname">sys.</tt><tt class="descname">getrefcount</tt><big>(</big><em>object</em><big>)</big><a class="headerlink" href="#sys.getrefcount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the reference count of the <em>object</em>.  The count returned is generally one
+higher than you might expect, because it includes the (temporary) reference as
+an argument to <a class="reference internal" href="#sys.getrefcount" title="sys.getrefcount"><tt class="xref py py-func docutils literal"><span class="pre">getrefcount()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getrecursionlimit">
+<tt class="descclassname">sys.</tt><tt class="descname">getrecursionlimit</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getrecursionlimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current value of the recursion limit, the maximum depth of the Python
+interpreter stack.  This limit prevents infinite recursion from causing an
+overflow of the C stack and crashing Python.  It can be set by
+<a class="reference internal" href="#sys.setrecursionlimit" title="sys.setrecursionlimit"><tt class="xref py py-func docutils literal"><span class="pre">setrecursionlimit()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getsizeof">
+<tt class="descclassname">sys.</tt><tt class="descname">getsizeof</tt><big>(</big><em>object</em><span class="optional">[</span>, <em>default</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#sys.getsizeof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size of an object in bytes. The object can be any type of
+object. All built-in objects will return correct results, but this
+does not have to hold true for third-party extensions as it is implementation
+specific.</p>
+<p>If given, <em>default</em> will be returned if the object does not provide means to
+retrieve the size.  Otherwise a <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> will be raised.</p>
+<p><a class="reference internal" href="#sys.getsizeof" title="sys.getsizeof"><tt class="xref py py-func docutils literal"><span class="pre">getsizeof()</span></tt></a> calls the object&#8217;s <tt class="docutils literal"><span class="pre">__sizeof__</span></tt> method and adds an
+additional garbage collector overhead if the object is managed by the garbage
+collector.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._getframe">
+<tt class="descclassname">sys.</tt><tt class="descname">_getframe</tt><big>(</big><span class="optional">[</span><em>depth</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#sys._getframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a frame object from the call stack.  If optional integer <em>depth</em> is
+given, return the frame object that many calls below the top of the stack.  If
+that is deeper than the call stack, <a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> is raised.  The default
+for <em>depth</em> is zero, returning the frame at the top of the call stack.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> This function should be used for internal and specialized purposes only.
+It is not guaranteed to exist in all implementations of Python.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getprofile">
+<tt class="descclassname">sys.</tt><tt class="descname">getprofile</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getprofile" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">Get the profiler function as set by <a class="reference internal" href="#sys.setprofile" title="sys.setprofile"><tt class="xref py py-func docutils literal"><span class="pre">setprofile()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.gettrace">
+<tt class="descclassname">sys.</tt><tt class="descname">gettrace</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.gettrace" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-3">Get the trace function as set by <a class="reference internal" href="#sys.settrace" title="sys.settrace"><tt class="xref py py-func docutils literal"><span class="pre">settrace()</span></tt></a>.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> The <a class="reference internal" href="#sys.gettrace" title="sys.gettrace"><tt class="xref py py-func docutils literal"><span class="pre">gettrace()</span></tt></a> function is intended only for implementing debuggers,
+profilers, coverage tools and the like.  Its behavior is part of the
+implementation platform, rather than part of the language definition, and
+thus may not be available in all Python implementations.</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getwindowsversion">
+<tt class="descclassname">sys.</tt><tt class="descname">getwindowsversion</tt><big>(</big><big>)</big><a class="headerlink" href="#sys.getwindowsversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a named tuple describing the Windows version
+currently running.  The named elements are <em>major</em>, <em>minor</em>,
+<em>build</em>, <em>platform</em>, <em>service_pack</em>, <em>service_pack_minor</em>,
+<em>service_pack_major</em>, <em>suite_mask</em>, and <em>product_type</em>.
+<em>service_pack</em> contains a string while all other values are
+integers. The components can also be accessed by name, so
+<tt class="docutils literal"><span class="pre">sys.getwindowsversion()[0]</span></tt> is equivalent to
+<tt class="docutils literal"><span class="pre">sys.getwindowsversion().major</span></tt>. For compatibility with prior
+versions, only the first 5 elements are retrievable by indexing.</p>
+<p><em>platform</em> may be one of the following values:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="62%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Constant</th>
+<th class="head">Platform</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">0</span> <span class="pre">(VER_PLATFORM_WIN32s)</span></tt></td>
+<td>Win32s on Windows 3.1</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">1</span> <span class="pre">(VER_PLATFORM_WIN32_WINDOWS)</span></tt></td>
+<td>Windows 95/98/ME</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">2</span> <span class="pre">(VER_PLATFORM_WIN32_NT)</span></tt></td>
+<td>Windows NT/2000/XP/x64</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">3</span> <span class="pre">(VER_PLATFORM_WIN32_CE)</span></tt></td>
+<td>Windows CE</td>
+</tr>
+</tbody>
+</table>
+<p><em>product_type</em> may be one of the following values:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Constant</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">1</span> <span class="pre">(VER_NT_WORKSTATION)</span></tt></td>
+<td>The system is a workstation.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">2</span> <span class="pre">(VER_NT_DOMAIN_CONTROLLER)</span></tt></td>
+<td>The system is a domain
+controller.</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">3</span> <span class="pre">(VER_NT_SERVER)</span></tt></td>
+<td>The system is a server, but not
+a domain controller.</td>
+</tr>
+</tbody>
+</table>
+<p>This function wraps the Win32 <tt class="xref c c-func docutils literal"><span class="pre">GetVersionEx()</span></tt> function; see the
+Microsoft documentation on <tt class="xref c c-func docutils literal"><span class="pre">OSVERSIONINFOEX()</span></tt> for more information
+about these fields.</p>
+<p>Availability: Windows.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>Changed to a named tuple and added <em>service_pack_minor</em>,
+<em>service_pack_major</em>, <em>suite_mask</em>, and <em>product_type</em>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.hexversion">
+<tt class="descclassname">sys.</tt><tt class="descname">hexversion</tt><a class="headerlink" href="#sys.hexversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version number encoded as a single integer.  This is guaranteed to increase
+with each version, including proper support for non-production releases.  For
+example, to test that the Python interpreter is at least version 1.5.2, use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">hexversion</span> <span class="o">&gt;=</span> <span class="mh">0x010502F0</span><span class="p">:</span>
+    <span class="c"># use some advanced feature</span>
+    <span class="o">...</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># use an alternative implementation or warn the user</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>This is called <tt class="docutils literal"><span class="pre">hexversion</span></tt> since it only really looks meaningful when viewed
+as the result of passing it to the built-in <a class="reference internal" href="functions.html#hex" title="hex"><tt class="xref py py-func docutils literal"><span class="pre">hex()</span></tt></a> function.  The
+<tt class="docutils literal"><span class="pre">version_info</span></tt> value may be used for a more human-friendly encoding of the
+same information.</p>
+<p>The <tt class="docutils literal"><span class="pre">hexversion</span></tt> is a 32-bit number with the following layout:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Bits (big endian order)</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">1-8</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">PY_MAJOR_VERSION</span></tt>  (the <tt class="docutils literal"><span class="pre">2</span></tt> in
+<tt class="docutils literal"><span class="pre">2.1.0a3</span></tt>)</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">9-16</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">PY_MINOR_VERSION</span></tt>  (the <tt class="docutils literal"><span class="pre">1</span></tt> in
+<tt class="docutils literal"><span class="pre">2.1.0a3</span></tt>)</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">17-24</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">PY_MICRO_VERSION</span></tt>  (the <tt class="docutils literal"><span class="pre">0</span></tt> in
+<tt class="docutils literal"><span class="pre">2.1.0a3</span></tt>)</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">25-28</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">PY_RELEASE_LEVEL</span></tt>  (<tt class="docutils literal"><span class="pre">0xA</span></tt> for alpha,
+<tt class="docutils literal"><span class="pre">0xB</span></tt> for beta, <tt class="docutils literal"><span class="pre">0xC</span></tt> for release
+candidate and <tt class="docutils literal"><span class="pre">0xF</span></tt> for final)</td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">29-32</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">PY_RELEASE_SERIAL</span></tt>  (the <tt class="docutils literal"><span class="pre">3</span></tt> in
+<tt class="docutils literal"><span class="pre">2.1.0a3</span></tt>, zero for final releases)</td>
+</tr>
+</tbody>
+</table>
+<p>Thus <tt class="docutils literal"><span class="pre">2.1.0a3</span></tt> is hexversion <tt class="docutils literal"><span class="pre">0x020100a3</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.2.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.long_info">
+<tt class="descclassname">sys.</tt><tt class="descname">long_info</tt><a class="headerlink" href="#sys.long_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A struct sequence that holds information about Python&#8217;s
+internal representation of integers.  The attributes are read only.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Attribute</th>
+<th class="head">Explanation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">bits_per_digit</span></tt></td>
+<td>number of bits held in each digit.  Python
+integers are stored internally in base
+<tt class="docutils literal"><span class="pre">2**long_info.bits_per_digit</span></tt></td>
+</tr>
+<tr><td><tt class="xref py py-const docutils literal"><span class="pre">sizeof_digit</span></tt></td>
+<td>size in bytes of the C type used to
+represent a digit</td>
+</tr>
+</tbody>
+</table>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.last_type">
+<tt class="descclassname">sys.</tt><tt class="descname">last_type</tt><a class="headerlink" href="#sys.last_type" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.last_value">
+<tt class="descclassname">sys.</tt><tt class="descname">last_value</tt><a class="headerlink" href="#sys.last_value" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.last_traceback">
+<tt class="descclassname">sys.</tt><tt class="descname">last_traceback</tt><a class="headerlink" href="#sys.last_traceback" title="Permalink to this definition">¶</a></dt>
+<dd><p>These three variables are not always defined; they are set when an exception is
+not handled and the interpreter prints an error message and a stack traceback.
+Their intended use is to allow an interactive user to import a debugger module
+and engage in post-mortem debugging without having to re-execute the command
+that caused the error.  (Typical use is <tt class="docutils literal"><span class="pre">import</span> <span class="pre">pdb;</span> <span class="pre">pdb.pm()</span></tt> to enter the
+post-mortem debugger; see chapter <a class="reference internal" href="pdb.html#debugger"><em>pdb &#8212; The Python Debugger</em></a> for
+more information.)</p>
+<p>The meaning of the variables is the same as that of the return values from
+<a class="reference internal" href="#sys.exc_info" title="sys.exc_info"><tt class="xref py py-func docutils literal"><span class="pre">exc_info()</span></tt></a> above.  (Since there is only one interactive thread,
+thread-safety is not a concern for these variables, unlike for <tt class="docutils literal"><span class="pre">exc_type</span></tt>
+etc.)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.maxint">
+<tt class="descclassname">sys.</tt><tt class="descname">maxint</tt><a class="headerlink" href="#sys.maxint" title="Permalink to this definition">¶</a></dt>
+<dd><p>The largest positive integer supported by Python&#8217;s regular integer type.  This
+is at least 2**31-1.  The largest negative integer is <tt class="docutils literal"><span class="pre">-maxint-1</span></tt> &#8212; the
+asymmetry results from the use of 2&#8217;s complement binary arithmetic.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.maxsize">
+<tt class="descclassname">sys.</tt><tt class="descname">maxsize</tt><a class="headerlink" href="#sys.maxsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>The largest positive integer supported by the platform&#8217;s Py_ssize_t type,
+and thus the maximum size lists, strings, dicts, and many other containers
+can have.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.maxunicode">
+<tt class="descclassname">sys.</tt><tt class="descname">maxunicode</tt><a class="headerlink" href="#sys.maxunicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>An integer giving the largest supported code point for a Unicode character.  The
+value of this depends on the configuration option that specifies whether Unicode
+characters are stored as UCS-2 or UCS-4.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.meta_path">
+<tt class="descclassname">sys.</tt><tt class="descname">meta_path</tt><a class="headerlink" href="#sys.meta_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of <a class="reference internal" href="../glossary.html#term-finder"><em class="xref std std-term">finder</em></a> objects that have their <tt class="xref py py-meth docutils literal"><span class="pre">find_module()</span></tt>
+methods called to see if one of the objects can find the module to be
+imported. The <tt class="xref py py-meth docutils literal"><span class="pre">find_module()</span></tt> method is called at least with the
+absolute name of the module being imported. If the module to be imported is
+contained in package then the parent package&#8217;s <tt class="xref py py-attr docutils literal"><span class="pre">__path__</span></tt> attribute
+is passed in as a second argument. The method returns <tt class="xref docutils literal"><span class="pre">None</span></tt> if
+the module cannot be found, else returns a <a class="reference internal" href="../glossary.html#term-loader"><em class="xref std std-term">loader</em></a>.</p>
+<p><a class="reference internal" href="#sys.meta_path" title="sys.meta_path"><tt class="xref py py-data docutils literal"><span class="pre">sys.meta_path</span></tt></a> is searched before any implicit default finders or
+<a class="reference internal" href="#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+<p>See <span class="target" id="index-4"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a> for the original specification.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.modules">
+<tt class="descclassname">sys.</tt><tt class="descname">modules</tt><a class="headerlink" href="#sys.modules" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-5">This is a dictionary that maps module names to modules which have already been
+loaded.  This can be manipulated to force reloading of modules and other tricks.
+Note that removing a module from this dictionary is <em>not</em> the same as calling
+<a class="reference internal" href="functions.html#reload" title="reload"><tt class="xref py py-func docutils literal"><span class="pre">reload()</span></tt></a> on the corresponding module object.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.path">
+<tt class="descclassname">sys.</tt><tt class="descname">path</tt><a class="headerlink" href="#sys.path" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-6">A list of strings that specifies the search path for modules. Initialized from
+the environment variable <span class="target" id="index-7"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONPATH"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt></a>, plus an installation-dependent
+default.</p>
+<p>As initialized upon program startup, the first item of this list, <tt class="docutils literal"><span class="pre">path[0]</span></tt>,
+is the directory containing the script that was used to invoke the Python
+interpreter.  If the script directory is not available (e.g.  if the interpreter
+is invoked interactively or if the script is read from standard input),
+<tt class="docutils literal"><span class="pre">path[0]</span></tt> is the empty string, which directs Python to search modules in the
+current directory first.  Notice that the script directory is inserted <em>before</em>
+the entries inserted as a result of <span class="target" id="index-8"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONPATH"><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt></a>.</p>
+<p>A program is free to modify this list for its own purposes.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3: </span>Unicode strings are no longer ignored.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Module <a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><tt class="xref py py-mod docutils literal"><span class="pre">site</span></tt></a> This describes how to use .pth files to extend
+<a class="reference internal" href="#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.path_hooks">
+<tt class="descclassname">sys.</tt><tt class="descname">path_hooks</tt><a class="headerlink" href="#sys.path_hooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of callables that take a path argument to try to create a
+<a class="reference internal" href="../glossary.html#term-finder"><em class="xref std std-term">finder</em></a> for the path. If a finder can be created, it is to be
+returned by the callable, else raise <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a>.</p>
+<p>Originally specified in <span class="target" id="index-9"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.path_importer_cache">
+<tt class="descclassname">sys.</tt><tt class="descname">path_importer_cache</tt><a class="headerlink" href="#sys.path_importer_cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary acting as a cache for <a class="reference internal" href="../glossary.html#term-finder"><em class="xref std std-term">finder</em></a> objects. The keys are
+paths that have been passed to <a class="reference internal" href="#sys.path_hooks" title="sys.path_hooks"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_hooks</span></tt></a> and the values are
+the finders that are found. If a path is a valid file system path but no
+explicit finder is found on <a class="reference internal" href="#sys.path_hooks" title="sys.path_hooks"><tt class="xref py py-data docutils literal"><span class="pre">sys.path_hooks</span></tt></a> then <tt class="xref docutils literal"><span class="pre">None</span></tt> is
+stored to represent the implicit default finder should be used. If the path
+is not an existing path then <a class="reference internal" href="imp.html#imp.NullImporter" title="imp.NullImporter"><tt class="xref py py-class docutils literal"><span class="pre">imp.NullImporter</span></tt></a> is set.</p>
+<p>Originally specified in <span class="target" id="index-10"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.platform">
+<tt class="descclassname">sys.</tt><tt class="descname">platform</tt><a class="headerlink" href="#sys.platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>This string contains a platform identifier that can be used to append
+platform-specific components to <a class="reference internal" href="#sys.path" title="sys.path"><tt class="xref py py-data docutils literal"><span class="pre">sys.path</span></tt></a>, for instance.</p>
+<p>For most Unix systems, this is the lowercased OS name as returned by <tt class="docutils literal"><span class="pre">uname</span>
+<span class="pre">-s</span></tt> with the first part of the version as returned by <tt class="docutils literal"><span class="pre">uname</span> <span class="pre">-r</span></tt> appended,
+e.g. <tt class="docutils literal"><span class="pre">'sunos5'</span></tt>, <em>at the time when Python was built</em>.  Unless you want to
+test for a specific system version, it is therefore recommended to use the
+following idiom:</p>
+<div class="highlight-python"><pre>if sys.platform.startswith('freebsd'):
+    # FreeBSD-specific code here...
+elif sys.platform.startswith('linux'):
+    # Linux-specific code here...</pre>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7.3: </span>Since lots of code check for <tt class="docutils literal"><span class="pre">sys.platform</span> <span class="pre">==</span> <span class="pre">'linux2'</span></tt>, and there is
+no essential change between Linux 2.x and 3.x, <tt class="docutils literal"><span class="pre">sys.platform</span></tt> is always
+set to <tt class="docutils literal"><span class="pre">'linux2'</span></tt>, even on Linux 3.x.  In Python 3.3 and later, the
+value will always be set to <tt class="docutils literal"><span class="pre">'linux'</span></tt>, so it is recommended to always
+use the <tt class="docutils literal"><span class="pre">startswith</span></tt> idiom presented above.</p>
+<p>For other systems, the values are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">System</th>
+<th class="head"><a class="reference internal" href="platform.html#module-platform" title="platform: Retrieves as much platform identifying data as possible."><tt class="xref py py-data docutils literal"><span class="pre">platform</span></tt></a> value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Linux (2.x <em>and</em> 3.x)</td>
+<td><tt class="docutils literal"><span class="pre">'linux2'</span></tt></td>
+</tr>
+<tr><td>Windows</td>
+<td><tt class="docutils literal"><span class="pre">'win32'</span></tt></td>
+</tr>
+<tr><td>Windows/Cygwin</td>
+<td><tt class="docutils literal"><span class="pre">'cygwin'</span></tt></td>
+</tr>
+<tr><td>Mac OS X</td>
+<td><tt class="docutils literal"><span class="pre">'darwin'</span></tt></td>
+</tr>
+<tr><td>OS/2</td>
+<td><tt class="docutils literal"><span class="pre">'os2'</span></tt></td>
+</tr>
+<tr><td>OS/2 EMX</td>
+<td><tt class="docutils literal"><span class="pre">'os2emx'</span></tt></td>
+</tr>
+<tr><td>RiscOS</td>
+<td><tt class="docutils literal"><span class="pre">'riscos'</span></tt></td>
+</tr>
+<tr><td>AtheOS</td>
+<td><tt class="docutils literal"><span class="pre">'atheos'</span></tt></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p><a class="reference internal" href="os.html#os.name" title="os.name"><tt class="xref py py-attr docutils literal"><span class="pre">os.name</span></tt></a> has a coarser granularity.  <a class="reference internal" href="os.html#os.uname" title="os.uname"><tt class="xref py py-func docutils literal"><span class="pre">os.uname()</span></tt></a> gives
+system-dependent version information.</p>
+<p class="last">The <a class="reference internal" href="platform.html#module-platform" title="platform: Retrieves as much platform identifying data as possible."><tt class="xref py py-mod docutils literal"><span class="pre">platform</span></tt></a> module provides detailed checks for the
+system&#8217;s identity.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.prefix">
+<tt class="descclassname">sys.</tt><tt class="descname">prefix</tt><a class="headerlink" href="#sys.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string giving the site-specific directory prefix where the platform
+independent Python files are installed; by default, this is the string
+<tt class="docutils literal"><span class="pre">'/usr/local'</span></tt>.  This can be set at build time with the <tt class="docutils literal"><span class="pre">--prefix</span></tt>
+argument to the <strong class="program">configure</strong> script.  The main collection of Python
+library modules is installed in the directory <tt class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">`</span></tt>
+while the platform independent header files (all except <tt class="file docutils literal"><span class="pre">pyconfig.h</span></tt>) are
+stored in <tt class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/include/python</span><em><span class="pre">X.Y</span></em></tt>, where <em>X.Y</em> is the version
+number of Python, for example <tt class="docutils literal"><span class="pre">2.7</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.ps1">
+<tt class="descclassname">sys.</tt><tt class="descname">ps1</tt><a class="headerlink" href="#sys.ps1" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.ps2">
+<tt class="descclassname">sys.</tt><tt class="descname">ps2</tt><a class="headerlink" href="#sys.ps2" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-11">Strings specifying the primary and secondary prompt of the interpreter.  These
+are only defined if the interpreter is in interactive mode.  Their initial
+values in this case are <tt class="docutils literal"><span class="pre">'&gt;&gt;&gt;</span> <span class="pre">'</span></tt> and <tt class="docutils literal"><span class="pre">'...</span> <span class="pre">'</span></tt>.  If a non-string object is
+assigned to either variable, its <a class="reference internal" href="functions.html#str" title="str"><tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt></a> is re-evaluated each time the
+interpreter prepares to read a new interactive command; this can be used to
+implement a dynamic prompt.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.py3kwarning">
+<tt class="descclassname">sys.</tt><tt class="descname">py3kwarning</tt><a class="headerlink" href="#sys.py3kwarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bool containing the status of the Python 3 warning flag. It&#8217;s <tt class="xref docutils literal"><span class="pre">True</span></tt>
+when Python is started with the -3 option.  (This should be considered
+read-only; setting it to a different value doesn&#8217;t have an effect on
+Python 3 warnings.)</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setcheckinterval">
+<tt class="descclassname">sys.</tt><tt class="descname">setcheckinterval</tt><big>(</big><em>interval</em><big>)</big><a class="headerlink" href="#sys.setcheckinterval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the interpreter&#8217;s &#8220;check interval&#8221;.  This integer value determines how often
+the interpreter checks for periodic things such as thread switches and signal
+handlers.  The default is <tt class="docutils literal"><span class="pre">100</span></tt>, meaning the check is performed every 100
+Python virtual instructions. Setting it to a larger value may increase
+performance for programs using threads.  Setting it to a value <tt class="docutils literal"><span class="pre">&lt;=</span></tt> 0 checks
+every virtual instruction, maximizing responsiveness as well as overhead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setdefaultencoding">
+<tt class="descclassname">sys.</tt><tt class="descname">setdefaultencoding</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#sys.setdefaultencoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current default string encoding used by the Unicode implementation.  If
+<em>name</em> does not match any available encoding, <a class="reference internal" href="exceptions.html#exceptions.LookupError" title="exceptions.LookupError"><tt class="xref py py-exc docutils literal"><span class="pre">LookupError</span></tt></a> is raised.
+This function is only intended to be used by the <a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><tt class="xref py py-mod docutils literal"><span class="pre">site</span></tt></a> module
+implementation and, where needed, by <tt class="xref py py-mod docutils literal"><span class="pre">sitecustomize</span></tt>.  Once used by the
+<a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><tt class="xref py py-mod docutils literal"><span class="pre">site</span></tt></a> module, it is removed from the <a class="reference internal" href="#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a> module&#8217;s namespace.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setdlopenflags">
+<tt class="descclassname">sys.</tt><tt class="descname">setdlopenflags</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#sys.setdlopenflags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the flags used by the interpreter for <tt class="xref c c-func docutils literal"><span class="pre">dlopen()</span></tt> calls, such as when
+the interpreter loads extension modules.  Among other things, this will enable a
+lazy resolving of symbols when importing a module, if called as
+<tt class="docutils literal"><span class="pre">sys.setdlopenflags(0)</span></tt>.  To share symbols across extension modules, call as
+<tt class="docutils literal"><span class="pre">sys.setdlopenflags(dl.RTLD_NOW</span> <span class="pre">|</span> <span class="pre">dl.RTLD_GLOBAL)</span></tt>.  Symbolic names for the
+flag modules can be either found in the <a class="reference internal" href="dl.html#module-dl" title="dl: Call C functions in shared objects. (deprecated) (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">dl</span></tt></a> module, or in the <tt class="xref py py-mod docutils literal"><span class="pre">DLFCN</span></tt>
+module. If <tt class="xref py py-mod docutils literal"><span class="pre">DLFCN</span></tt> is not available, it can be generated from
+<tt class="file docutils literal"><span class="pre">/usr/include/dlfcn.h</span></tt> using the <strong class="program">h2py</strong> script. Availability:
+Unix.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setprofile">
+<tt class="descclassname">sys.</tt><tt class="descname">setprofile</tt><big>(</big><em>profilefunc</em><big>)</big><a class="headerlink" href="#sys.setprofile" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-12">Set the system&#8217;s profile function, which allows you to implement a Python source
+code profiler in Python.  See chapter <a class="reference internal" href="profile.html#profile"><em>The Python Profilers</em></a> for more information on the
+Python profiler.  The system&#8217;s profile function is called similarly to the
+system&#8217;s trace function (see <a class="reference internal" href="#sys.settrace" title="sys.settrace"><tt class="xref py py-func docutils literal"><span class="pre">settrace()</span></tt></a>), but it isn&#8217;t called for each
+executed line of code (only on call and return, but the return event is reported
+even when an exception has been set).  The function is thread-specific, but
+there is no way for the profiler to know about context switches between threads,
+so it does not make sense to use this in the presence of multiple threads. Also,
+its return value is not used, so it can simply return <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setrecursionlimit">
+<tt class="descclassname">sys.</tt><tt class="descname">setrecursionlimit</tt><big>(</big><em>limit</em><big>)</big><a class="headerlink" href="#sys.setrecursionlimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the maximum depth of the Python interpreter stack to <em>limit</em>.  This limit
+prevents infinite recursion from causing an overflow of the C stack and crashing
+Python.</p>
+<p>The highest possible limit is platform-dependent.  A user may need to set the
+limit higher when she has a program that requires deep recursion and a platform
+that supports a higher limit.  This should be done with care, because a too-high
+limit can lead to a crash.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.settrace">
+<tt class="descclassname">sys.</tt><tt class="descname">settrace</tt><big>(</big><em>tracefunc</em><big>)</big><a class="headerlink" href="#sys.settrace" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-13">Set the system&#8217;s trace function, which allows you to implement a Python
+source code debugger in Python.  The function is thread-specific; for a
+debugger to support multiple threads, it must be registered using
+<a class="reference internal" href="#sys.settrace" title="sys.settrace"><tt class="xref py py-func docutils literal"><span class="pre">settrace()</span></tt></a> for each thread being debugged.</p>
+<p>Trace functions should have three arguments: <em>frame</em>, <em>event</em>, and
+<em>arg</em>. <em>frame</em> is the current stack frame.  <em>event</em> is a string: <tt class="docutils literal"><span class="pre">'call'</span></tt>,
+<tt class="docutils literal"><span class="pre">'line'</span></tt>, <tt class="docutils literal"><span class="pre">'return'</span></tt>, <tt class="docutils literal"><span class="pre">'exception'</span></tt>, <tt class="docutils literal"><span class="pre">'c_call'</span></tt>, <tt class="docutils literal"><span class="pre">'c_return'</span></tt>, or
+<tt class="docutils literal"><span class="pre">'c_exception'</span></tt>. <em>arg</em> depends on the event type.</p>
+<p>The trace function is invoked (with <em>event</em> set to <tt class="docutils literal"><span class="pre">'call'</span></tt>) whenever a new
+local scope is entered; it should return a reference to a local trace
+function to be used that scope, or <tt class="xref docutils literal"><span class="pre">None</span></tt> if the scope shouldn&#8217;t be traced.</p>
+<p>The local trace function should return a reference to itself (or to another
+function for further tracing in that scope), or <tt class="xref docutils literal"><span class="pre">None</span></tt> to turn off tracing
+in that scope.</p>
+<p>The events have the following meaning:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">'call'</span></tt></dt>
+<dd>A function is called (or some other code block entered).  The
+global trace function is called; <em>arg</em> is <tt class="xref docutils literal"><span class="pre">None</span></tt>; the return value
+specifies the local trace function.</dd>
+<dt><tt class="docutils literal"><span class="pre">'line'</span></tt></dt>
+<dd>The interpreter is about to execute a new line of code or re-execute the
+condition of a loop.  The local trace function is called; <em>arg</em> is
+<tt class="xref docutils literal"><span class="pre">None</span></tt>; the return value specifies the new local trace function.  See
+<tt class="file docutils literal"><span class="pre">Objects/lnotab_notes.txt</span></tt> for a detailed explanation of how this
+works.</dd>
+<dt><tt class="docutils literal"><span class="pre">'return'</span></tt></dt>
+<dd>A function (or other code block) is about to return.  The local trace
+function is called; <em>arg</em> is the value that will be returned, or <tt class="xref docutils literal"><span class="pre">None</span></tt>
+if the event is caused by an exception being raised.  The trace function&#8217;s
+return value is ignored.</dd>
+<dt><tt class="docutils literal"><span class="pre">'exception'</span></tt></dt>
+<dd>An exception has occurred.  The local trace function is called; <em>arg</em> is a
+tuple <tt class="docutils literal"><span class="pre">(exception,</span> <span class="pre">value,</span> <span class="pre">traceback)</span></tt>; the return value specifies the
+new local trace function.</dd>
+<dt><tt class="docutils literal"><span class="pre">'c_call'</span></tt></dt>
+<dd>A C function is about to be called.  This may be an extension function or
+a built-in.  <em>arg</em> is the C function object.</dd>
+<dt><tt class="docutils literal"><span class="pre">'c_return'</span></tt></dt>
+<dd>A C function has returned. <em>arg</em> is the C function object.</dd>
+<dt><tt class="docutils literal"><span class="pre">'c_exception'</span></tt></dt>
+<dd>A C function has raised an exception.  <em>arg</em> is the C function object.</dd>
+</dl>
+<p>Note that as an exception is propagated down the chain of callers, an
+<tt class="docutils literal"><span class="pre">'exception'</span></tt> event is generated at each level.</p>
+<p>For more information on code and frame objects, refer to <a class="reference internal" href="../reference/datamodel.html#types"><em>The standard type hierarchy</em></a>.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> The <a class="reference internal" href="#sys.settrace" title="sys.settrace"><tt class="xref py py-func docutils literal"><span class="pre">settrace()</span></tt></a> function is intended only for implementing debuggers,
+profilers, coverage tools and the like.  Its behavior is part of the
+implementation platform, rather than part of the language definition, and
+thus may not be available in all Python implementations.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.settscdump">
+<tt class="descclassname">sys.</tt><tt class="descname">settscdump</tt><big>(</big><em>on_flag</em><big>)</big><a class="headerlink" href="#sys.settscdump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activate dumping of VM measurements using the Pentium timestamp counter, if
+<em>on_flag</em> is true. Deactivate these dumps if <em>on_flag</em> is off. The function is
+available only if Python was compiled with <tt class="docutils literal"><span class="pre">--with-tsc</span></tt>. To understand
+the output of this dump, read <tt class="file docutils literal"><span class="pre">Python/ceval.c</span></tt> in the Python sources.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> This function is intimately bound to CPython implementation details and
+thus not likely to be implemented elsewhere.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.stdin">
+<tt class="descclassname">sys.</tt><tt class="descname">stdin</tt><a class="headerlink" href="#sys.stdin" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.stdout">
+<tt class="descclassname">sys.</tt><tt class="descname">stdout</tt><a class="headerlink" href="#sys.stdout" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.stderr">
+<tt class="descclassname">sys.</tt><tt class="descname">stderr</tt><a class="headerlink" href="#sys.stderr" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-14">File objects corresponding to the interpreter&#8217;s standard input, output and error
+streams.  <tt class="docutils literal"><span class="pre">stdin</span></tt> is used for all interpreter input except for scripts but
+including calls to <a class="reference internal" href="functions.html#input" title="input"><tt class="xref py py-func docutils literal"><span class="pre">input()</span></tt></a> and <a class="reference internal" href="functions.html#raw_input" title="raw_input"><tt class="xref py py-func docutils literal"><span class="pre">raw_input()</span></tt></a>.  <tt class="docutils literal"><span class="pre">stdout</span></tt> is used for
+the output of <a class="reference internal" href="../reference/simple_stmts.html#print"><tt class="xref std std-keyword docutils literal"><span class="pre">print</span></tt></a> and <a class="reference internal" href="../glossary.html#term-expression"><em class="xref std std-term">expression</em></a> statements and for the
+prompts of <a class="reference internal" href="functions.html#input" title="input"><tt class="xref py py-func docutils literal"><span class="pre">input()</span></tt></a> and <a class="reference internal" href="functions.html#raw_input" title="raw_input"><tt class="xref py py-func docutils literal"><span class="pre">raw_input()</span></tt></a>. The interpreter&#8217;s own prompts
+and (almost all of) its error messages go to <tt class="docutils literal"><span class="pre">stderr</span></tt>.  <tt class="docutils literal"><span class="pre">stdout</span></tt> and
+<tt class="docutils literal"><span class="pre">stderr</span></tt> needn&#8217;t be built-in file objects: any object is acceptable as long
+as it has a <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> method that takes a string argument.  (Changing these
+objects doesn&#8217;t affect the standard I/O streams of processes executed by
+<a class="reference internal" href="os.html#os.popen" title="os.popen"><tt class="xref py py-func docutils literal"><span class="pre">os.popen()</span></tt></a>, <a class="reference internal" href="os.html#os.system" title="os.system"><tt class="xref py py-func docutils literal"><span class="pre">os.system()</span></tt></a> or the <tt class="xref py py-func docutils literal"><span class="pre">exec*()</span></tt> family of functions in
+the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module.)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.__stdin__">
+<tt class="descclassname">sys.</tt><tt class="descname">__stdin__</tt><a class="headerlink" href="#sys.__stdin__" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.__stdout__">
+<tt class="descclassname">sys.</tt><tt class="descname">__stdout__</tt><a class="headerlink" href="#sys.__stdout__" title="Permalink to this definition">¶</a></dt>
+<dt id="sys.__stderr__">
+<tt class="descclassname">sys.</tt><tt class="descname">__stderr__</tt><a class="headerlink" href="#sys.__stderr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>These objects contain the original values of <tt class="docutils literal"><span class="pre">stdin</span></tt>, <tt class="docutils literal"><span class="pre">stderr</span></tt> and
+<tt class="docutils literal"><span class="pre">stdout</span></tt> at the start of the program.  They are used during finalization,
+and could be useful to print to the actual standard stream no matter if the
+<tt class="docutils literal"><span class="pre">sys.std*</span></tt> object has been redirected.</p>
+<p>It can also be used to restore the actual files to known working file objects
+in case they have been overwritten with a broken object.  However, the
+preferred way to do this is to explicitly save the previous stream before
+replacing it, and restore the saved object.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.subversion">
+<tt class="descclassname">sys.</tt><tt class="descname">subversion</tt><a class="headerlink" href="#sys.subversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A triple (repo, branch, version) representing the Subversion information of the
+Python interpreter. <em>repo</em> is the name of the repository, <tt class="docutils literal"><span class="pre">'CPython'</span></tt>.
+<em>branch</em> is a string of one of the forms <tt class="docutils literal"><span class="pre">'trunk'</span></tt>, <tt class="docutils literal"><span class="pre">'branches/name'</span></tt> or
+<tt class="docutils literal"><span class="pre">'tags/name'</span></tt>. <em>version</em> is the output of <tt class="docutils literal"><span class="pre">svnversion</span></tt>, if the interpreter
+was built from a Subversion checkout; it contains the revision number (range)
+and possibly a trailing &#8216;M&#8217; if there were local modifications. If the tree was
+exported (or svnversion was not available), it is the revision of
+<tt class="docutils literal"><span class="pre">Include/patchlevel.h</span></tt> if the branch is a tag. Otherwise, it is <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Python is now <a class="reference external" href="http://docs.python.org/devguide/">developed</a> using
+Mercurial.  In recent Python 2.7 bugfix releases, <a class="reference internal" href="#sys.subversion" title="sys.subversion"><tt class="xref py py-data docutils literal"><span class="pre">subversion</span></tt></a>
+therefore contains placeholder information.  It is removed in Python
+3.3.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.tracebacklimit">
+<tt class="descclassname">sys.</tt><tt class="descname">tracebacklimit</tt><a class="headerlink" href="#sys.tracebacklimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>When this variable is set to an integer value, it determines the maximum number
+of levels of traceback information printed when an unhandled exception occurs.
+The default is <tt class="docutils literal"><span class="pre">1000</span></tt>.  When set to <tt class="docutils literal"><span class="pre">0</span></tt> or less, all traceback information
+is suppressed and only the exception type and value are printed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.version">
+<tt class="descclassname">sys.</tt><tt class="descname">version</tt><a class="headerlink" href="#sys.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>A string containing the version number of the Python interpreter plus additional
+information on the build number and compiler used.  This string is displayed
+when the interactive interpreter is started.  Do not extract version information
+out of it, rather, use <a class="reference internal" href="#sys.version_info" title="sys.version_info"><tt class="xref py py-data docutils literal"><span class="pre">version_info</span></tt></a> and the functions provided by the
+<a class="reference internal" href="platform.html#module-platform" title="platform: Retrieves as much platform identifying data as possible."><tt class="xref py py-mod docutils literal"><span class="pre">platform</span></tt></a> module.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.api_version">
+<tt class="descclassname">sys.</tt><tt class="descname">api_version</tt><a class="headerlink" href="#sys.api_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The C API version for this interpreter.  Programmers may find this useful when
+debugging version conflicts between Python and extension modules.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.version_info">
+<tt class="descclassname">sys.</tt><tt class="descname">version_info</tt><a class="headerlink" href="#sys.version_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tuple containing the five components of the version number: <em>major</em>, <em>minor</em>,
+<em>micro</em>, <em>releaselevel</em>, and <em>serial</em>.  All values except <em>releaselevel</em> are
+integers; the release level is <tt class="docutils literal"><span class="pre">'alpha'</span></tt>, <tt class="docutils literal"><span class="pre">'beta'</span></tt>, <tt class="docutils literal"><span class="pre">'candidate'</span></tt>, or
+<tt class="docutils literal"><span class="pre">'final'</span></tt>.  The <tt class="docutils literal"><span class="pre">version_info</span></tt> value corresponding to the Python version 2.0
+is <tt class="docutils literal"><span class="pre">(2,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">'final',</span> <span class="pre">0)</span></tt>.  The components can also be accessed by name,
+so <tt class="docutils literal"><span class="pre">sys.version_info[0]</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">sys.version_info.major</span></tt>
+and so on.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7: </span>Added named component attributes</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.warnoptions">
+<tt class="descclassname">sys.</tt><tt class="descname">warnoptions</tt><a class="headerlink" href="#sys.warnoptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an implementation detail of the warnings framework; do not modify this
+value.  Refer to the <a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><tt class="xref py py-mod docutils literal"><span class="pre">warnings</span></tt></a> module for more information on the warnings
+framework.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.winver">
+<tt class="descclassname">sys.</tt><tt class="descname">winver</tt><a class="headerlink" href="#sys.winver" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version number used to form registry keys on Windows platforms. This is
+stored as string resource 1000 in the Python DLL.  The value is normally the
+first three characters of <a class="reference internal" href="#sys.version" title="sys.version"><tt class="xref py py-const docutils literal"><span class="pre">version</span></tt></a>.  It is provided in the <a class="reference internal" href="#module-sys" title="sys: Access system-specific parameters and functions."><tt class="xref py py-mod docutils literal"><span class="pre">sys</span></tt></a>
+module for informational purposes; modifying this value has no effect on the
+registry keys used by Python. Availability: Windows.</p>
+</dd></dl>
+
+<p class="rubric">Citations</p>
+<table class="docutils citation" frame="void" id="c99" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[C99]</a></td><td>ISO/IEC 9899:1999.  &#8220;Programming languages &#8211; C.&#8221;  A public draft of this standard is available at <a class="reference external" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf</a> .</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="python.html"
+                        title="previous chapter">27. Python Runtime Services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sysconfig.html"
+                        title="next chapter">27.2. <tt class="docutils literal docutils literal"><span class="pre">sysconfig</span></tt> &#8212; Provide access to Python&#8217;s configuration information</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/sys.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sysconfig.html" title="27.2. sysconfig — Provide access to Python’s configuration information"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="27. Python Runtime Services"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" >27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

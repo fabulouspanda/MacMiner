@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Class and Instance Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Function Objects" href="function.html" />
+    <link rel="prev" title="Dictionary Objects" href="dict.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="Function Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dict.html" title="Dictionary Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="class-and-instance-objects">
+<span id="classobjects"></span><h1>Class and Instance Objects<a class="headerlink" href="#class-and-instance-objects" title="Permalink to this headline">¶</a></h1>
+<p id="index-0">Note that the class objects described here represent old-style classes, which
+will go away in Python 3. When creating new types for extension modules, you
+will want to work with type objects (section <a class="reference internal" href="type.html#typeobjects"><em>Type Objects</em></a>).</p>
+<dl class="type">
+<dt id="PyClassObject">
+<tt class="descname">PyClassObject</tt><a class="headerlink" href="#PyClassObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>The C structure of the objects used to describe built-in classes.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyClass_Type">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyClass_Type</tt><a class="headerlink" href="#PyClass_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This is the type object for class objects; it is the same object as
+<tt class="docutils literal"><span class="pre">types.ClassType</span></tt> in the Python layer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyClass_Check">
+int <tt class="descname">PyClass_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyClass_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>o</em> is a class object, including instances of types
+derived from the standard class object.  Return false in all other cases.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyClass_IsSubclass">
+int <tt class="descname">PyClass_IsSubclass</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*klass</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*base</em><big>)</big><a class="headerlink" href="#PyClass_IsSubclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>klass</em> is a subclass of <em>base</em>. Return false in all other cases.</p>
+</dd></dl>
+
+<p id="index-2">There are very few functions specific to instance objects.</p>
+<dl class="var">
+<dt id="PyInstance_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyInstance_Type</tt><a class="headerlink" href="#PyInstance_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type object for class instances.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInstance_Check">
+int <tt class="descname">PyInstance_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em><big>)</big><a class="headerlink" href="#PyInstance_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>obj</em> is an instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInstance_New">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyInstance_New</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*class</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*arg</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*kw</em><big>)</big><a class="headerlink" href="#PyInstance_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a new instance of a specific class.  The parameters <em>arg</em> and <em>kw</em> are
+used as the positional and keyword parameters to the object&#8217;s constructor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyInstance_NewRaw">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyInstance_NewRaw</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*class</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*dict</em><big>)</big><a class="headerlink" href="#PyInstance_NewRaw" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a new instance of a specific class without calling its constructor.
+<em>class</em> is the class of new object.  The <em>dict</em> parameter will be used as the
+object&#8217;s <tt class="xref py py-attr docutils literal"><span class="pre">__dict__</span></tt>; if <em>NULL</em>, a new dictionary will be created for the
+instance.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dict.html"
+                        title="previous chapter">Dictionary Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="function.html"
+                        title="next chapter">Function Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/class.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="Function Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dict.html" title="Dictionary Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -115,7 +115,7 @@ except NameError:
 
 if __NUMPY_SETUP__:
     import sys as _sys
-    _sys.stderr.write('Running from numpy source directory.')
+    _sys.stderr.write('Running from numpy source directory.\n')
     del _sys
 else:
     try:
@@ -169,3 +169,9 @@ else:
     __all__.extend(_mat.__all__)
     __all__.extend(lib.__all__)
     __all__.extend(['linalg', 'fft', 'random', 'ctypeslib', 'ma'])
+
+    # Filter annoying Cython warnings that serve no good purpose.
+    import warnings
+    warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+    warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+

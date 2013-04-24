@@ -317,10 +317,14 @@ class TestWarns(unittest.TestCase):
     def test_warn(self):
         def f():
             warnings.warn("yo")
+            return 3
 
         before_filters = sys.modules['warnings'].filters[:]
-        assert_warns(UserWarning, f)
+        assert_equal(assert_warns(UserWarning, f), 3)
         after_filters = sys.modules['warnings'].filters
+
+        assert_raises(AssertionError, assert_no_warnings, f)
+        assert_equal(assert_no_warnings(lambda x: x, 1), 1)
 
         # Check that the warnings state is unchanged
         assert_equal(before_filters, after_filters,
@@ -369,11 +373,14 @@ class TestAssertAllclose(unittest.TestCase):
 
 
 class TestArrayAlmostEqualNulp(unittest.TestCase):
+    @dec.knownfailureif(True, "Github issue #347")
     def test_simple(self):
-        dev = np.random.randn(10)
-        x = np.ones(10)
-        y = x + dev * np.finfo(np.float64).eps
-        assert_array_almost_equal_nulp(x, y, nulp=2 * np.max(dev))
+        np.random.seed(12345)
+        for i in xrange(100):
+            dev = np.random.randn(10)
+            x = np.ones(10)
+            y = x + dev * np.finfo(np.float64).eps
+            assert_array_almost_equal_nulp(x, y, nulp=2 * np.max(dev))
 
     def test_simple2(self):
         x = np.random.randn(10)

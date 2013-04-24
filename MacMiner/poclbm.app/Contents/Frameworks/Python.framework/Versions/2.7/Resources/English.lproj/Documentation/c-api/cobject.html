@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>CObjects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="Cell Objects" href="cell.html" />
+    <link rel="prev" title="Capsules" href="capsule.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cell.html" title="Cell Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="capsule.html" title="Capsules"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cobjects">
+<span id="id1"></span><h1>CObjects<a class="headerlink" href="#cobjects" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning" id="index-0">
+<p class="first admonition-title">Warning</p>
+<p class="last">The CObject API is deprecated as of Python 2.7.  Please switch to the new
+<a class="reference internal" href="capsule.html#capsules"><em>Capsules</em></a> API.</p>
+</div>
+<dl class="type">
+<dt id="PyCObject">
+<tt class="descname">PyCObject</tt><a class="headerlink" href="#PyCObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> represents an opaque value, useful for C
+extension modules who need to pass an opaque value (as a <tt class="xref c c-type docutils literal"><span class="pre">void*</span></tt>
+pointer) through Python code to other C code.  It is often used to make a C
+function pointer defined in one module available to other modules, so the
+regular import mechanism can be used to access C APIs defined in dynamically
+loaded modules.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyCObject_Check">
+int <tt class="descname">PyCObject_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyCObject_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if its argument is a <a class="reference internal" href="#PyCObject" title="PyCObject"><tt class="xref c c-type docutils literal"><span class="pre">PyCObject</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyCObject_FromVoidPtr">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyCObject_FromVoidPtr</tt><big>(</big>void*<em>&nbsp;cobj</em>, void (*destr)(void<em>&nbsp;*)</em><big>)</big><a class="headerlink" href="#PyCObject_FromVoidPtr" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a <a class="reference internal" href="#PyCObject" title="PyCObject"><tt class="xref c c-type docutils literal"><span class="pre">PyCObject</span></tt></a> from the <tt class="docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> <em>cobj</em>.  The <em>destr</em> function
+will be called when the object is reclaimed, unless it is <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyCObject_FromVoidPtrAndDesc">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyCObject_FromVoidPtrAndDesc</tt><big>(</big>void*<em>&nbsp;cobj</em>, void*<em>&nbsp;desc</em>, void (*destr)(void<em>&nbsp;*</em>, void<em>&nbsp;*)</em><big>)</big><a class="headerlink" href="#PyCObject_FromVoidPtrAndDesc" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a <a class="reference internal" href="#PyCObject" title="PyCObject"><tt class="xref c c-type docutils literal"><span class="pre">PyCObject</span></tt></a> from the <tt class="xref c c-type docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> <em>cobj</em>.  The <em>destr</em>
+function will be called when the object is reclaimed. The <em>desc</em> argument can
+be used to pass extra callback data for the destructor function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyCObject_AsVoidPtr">
+void* <tt class="descname">PyCObject_AsVoidPtr</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>*<em>&nbsp;self</em><big>)</big><a class="headerlink" href="#PyCObject_AsVoidPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the object <tt class="xref c c-type docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> that the <a class="reference internal" href="#PyCObject" title="PyCObject"><tt class="xref c c-type docutils literal"><span class="pre">PyCObject</span></tt></a> <em>self</em> was
+created with.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyCObject_GetDesc">
+void* <tt class="descname">PyCObject_GetDesc</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>*<em>&nbsp;self</em><big>)</big><a class="headerlink" href="#PyCObject_GetDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the description <tt class="xref c c-type docutils literal"><span class="pre">void</span> <span class="pre">*</span></tt> that the <a class="reference internal" href="#PyCObject" title="PyCObject"><tt class="xref c c-type docutils literal"><span class="pre">PyCObject</span></tt></a> <em>self</em> was
+created with.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyCObject_SetVoidPtr">
+int <tt class="descname">PyCObject_SetVoidPtr</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>*<em>&nbsp;self</em>, void*<em>&nbsp;cobj</em><big>)</big><a class="headerlink" href="#PyCObject_SetVoidPtr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the void pointer inside <em>self</em> to <em>cobj</em>. The <a class="reference internal" href="#PyCObject" title="PyCObject"><tt class="xref c c-type docutils literal"><span class="pre">PyCObject</span></tt></a> must not
+have an associated destructor. Return true on success, false on failure.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="capsule.html"
+                        title="previous chapter">Capsules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cell.html"
+                        title="next chapter">Cell Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/cobject.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cell.html" title="Cell Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="capsule.html" title="Capsules"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

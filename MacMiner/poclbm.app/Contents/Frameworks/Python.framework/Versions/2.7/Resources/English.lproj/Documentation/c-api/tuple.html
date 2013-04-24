@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tuple Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="List Objects" href="list.html" />
+    <link rel="prev" title="Buffers and Memoryview Objects" href="buffer.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="list.html" title="List Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="buffer.html" title="Buffers and Memoryview Objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tuple-objects">
+<span id="tupleobjects"></span><h1>Tuple Objects<a class="headerlink" href="#tuple-objects" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="PyTupleObject">
+<tt class="descname">PyTupleObject</tt><a class="headerlink" href="#PyTupleObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This subtype of <a class="reference internal" href="structures.html#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> represents a Python tuple object.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyTuple_Type">
+<a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject">PyTypeObject</a> <tt class="descname">PyTuple_Type</tt><a class="headerlink" href="#PyTuple_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This instance of <a class="reference internal" href="type.html#PyTypeObject" title="PyTypeObject"><tt class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></tt></a> represents the Python tuple type; it is
+the same object as <tt class="docutils literal"><span class="pre">tuple</span></tt> and <tt class="docutils literal"><span class="pre">types.TupleType</span></tt> in the Python layer..</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_Check">
+int <tt class="descname">PyTuple_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyTuple_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>p</em> is a tuple object or an instance of a subtype of the tuple
+type.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2: </span>Allowed subtypes to be accepted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_CheckExact">
+int <tt class="descname">PyTuple_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyTuple_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>p</em> is a tuple object, but not an instance of a subtype of the
+tuple type.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_New">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyTuple_New</tt><big>(</big>Py_ssize_t<em>&nbsp;len</em><big>)</big><a class="headerlink" href="#PyTuple_New" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new tuple object of size <em>len</em>, or <em>NULL</em> on failure.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>len</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_Pack">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyTuple_Pack</tt><big>(</big>Py_ssize_t<em>&nbsp;n</em>, ...<big>)</big><a class="headerlink" href="#PyTuple_Pack" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a new tuple object of size <em>n</em>, or <em>NULL</em> on failure. The tuple values
+are initialized to the subsequent <em>n</em> C arguments pointing to Python objects.
+<tt class="docutils literal"><span class="pre">PyTuple_Pack(2,</span> <span class="pre">a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">Py_BuildValue(&quot;(OO)&quot;,</span> <span class="pre">a,</span> <span class="pre">b)</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>n</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_Size">
+Py_ssize_t <tt class="descname">PyTuple_Size</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyTuple_Size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a pointer to a tuple object, and return the size of that tuple.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function returned an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type. This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_GET_SIZE">
+Py_ssize_t <tt class="descname">PyTuple_GET_SIZE</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em><big>)</big><a class="headerlink" href="#PyTuple_GET_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size of the tuple <em>p</em>, which must be non-<em>NULL</em> and point to a tuple;
+no error checking is performed.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function returned an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type. This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_GetItem">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyTuple_GetItem</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, Py_ssize_t<em>&nbsp;pos</em><big>)</big><a class="headerlink" href="#PyTuple_GetItem" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the object at position <em>pos</em> in the tuple pointed to by <em>p</em>.  If <em>pos</em> is
+out of bounds, return <em>NULL</em> and sets an <a class="reference internal" href="../library/exceptions.html#exceptions.IndexError" title="exceptions.IndexError"><tt class="xref py py-exc docutils literal"><span class="pre">IndexError</span></tt></a> exception.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>pos</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_GET_ITEM">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyTuple_GET_ITEM</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, Py_ssize_t<em>&nbsp;pos</em><big>)</big><a class="headerlink" href="#PyTuple_GET_ITEM" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Like <a class="reference internal" href="#PyTuple_GetItem" title="PyTuple_GetItem"><tt class="xref c c-func docutils literal"><span class="pre">PyTuple_GetItem()</span></tt></a>, but does no checking of its arguments.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>pos</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_GetSlice">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyTuple_GetSlice</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, Py_ssize_t<em>&nbsp;low</em>, Py_ssize_t<em>&nbsp;high</em><big>)</big><a class="headerlink" href="#PyTuple_GetSlice" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Take a slice of the tuple pointed to by <em>p</em> from <em>low</em> to <em>high</em> and return it
+as a new tuple.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>low</em> and <em>high</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_SetItem">
+int <tt class="descname">PyTuple_SetItem</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, Py_ssize_t<em>&nbsp;pos</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyTuple_SetItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a reference to object <em>o</em> at position <em>pos</em> of the tuple pointed to by
+<em>p</em>. Return <tt class="docutils literal"><span class="pre">0</span></tt> on success.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function &#8220;steals&#8221; a reference to <em>o</em>.</p>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>pos</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_SET_ITEM">
+void <tt class="descname">PyTuple_SET_ITEM</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*p</em>, Py_ssize_t<em>&nbsp;pos</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyTuple_SET_ITEM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#PyTuple_SetItem" title="PyTuple_SetItem"><tt class="xref c c-func docutils literal"><span class="pre">PyTuple_SetItem()</span></tt></a>, but does no error checking, and should <em>only</em> be
+used to fill in brand new tuples.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function &#8220;steals&#8221; a reference to <em>o</em>.</p>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>pos</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_PyTuple_Resize">
+int <tt class="descname">_PyTuple_Resize</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;**p</em>, Py_ssize_t<em>&nbsp;newsize</em><big>)</big><a class="headerlink" href="#_PyTuple_Resize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can be used to resize a tuple.  <em>newsize</em> will be the new length of the tuple.
+Because tuples are <em>supposed</em> to be immutable, this should only be used if there
+is only one reference to the object.  Do <em>not</em> use this if the tuple may already
+be known to some other part of the code.  The tuple will always grow or shrink
+at the end.  Think of this as destroying the old tuple and creating a new one,
+only more efficiently.  Returns <tt class="docutils literal"><span class="pre">0</span></tt> on success. Client code should never
+assume that the resulting value of <tt class="docutils literal"><span class="pre">*p</span></tt> will be the same as before calling
+this function. If the object referenced by <tt class="docutils literal"><span class="pre">*p</span></tt> is replaced, the original
+<tt class="docutils literal"><span class="pre">*p</span></tt> is destroyed.  On failure, returns <tt class="docutils literal"><span class="pre">-1</span></tt> and sets <tt class="docutils literal"><span class="pre">*p</span></tt> to <em>NULL</em>, and
+raises <a class="reference internal" href="../library/exceptions.html#exceptions.MemoryError" title="exceptions.MemoryError"><tt class="xref py py-exc docutils literal"><span class="pre">MemoryError</span></tt></a> or <a class="reference internal" href="../library/exceptions.html#exceptions.SystemError" title="exceptions.SystemError"><tt class="xref py py-exc docutils literal"><span class="pre">SystemError</span></tt></a>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2: </span>Removed unused third parameter, <em>last_is_sticky</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>newsize</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyTuple_ClearFreeList">
+int <tt class="descname">PyTuple_ClearFreeList</tt><big>(</big><big>)</big><a class="headerlink" href="#PyTuple_ClearFreeList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the free list. Return the total number of freed items.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="buffer.html"
+                        title="previous chapter">Buffers and Memoryview Objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="list.html"
+                        title="next chapter">List Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/tuple.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="list.html" title="List Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="buffer.html" title="Buffers and Memoryview Objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

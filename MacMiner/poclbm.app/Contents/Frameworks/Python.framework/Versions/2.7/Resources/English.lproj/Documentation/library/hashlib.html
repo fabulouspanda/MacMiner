@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>14.1. hashlib — Secure hashes and message digests &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="14. Cryptographic Services" href="crypto.html" />
+    <link rel="next" title="14.2. hmac — Keyed-Hashing for Message Authentication" href="hmac.html" />
+    <link rel="prev" title="14. Cryptographic Services" href="crypto.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hmac.html" title="14.2. hmac — Keyed-Hashing for Message Authentication"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="14. Cryptographic Services"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="crypto.html" accesskey="U">14. Cryptographic Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-hashlib">
+<span id="hashlib-secure-hashes-and-message-digests"></span><h1>14.1. <a class="reference internal" href="#module-hashlib" title="hashlib: Secure hash and message digest algorithms."><tt class="xref py py-mod docutils literal"><span class="pre">hashlib</span></tt></a> &#8212; Secure hashes and message digests<a class="headerlink" href="#module-hashlib" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/hashlib.py">Lib/hashlib.py</a></p>
+<hr class="docutils" />
+<p>This module implements a common interface to many different secure hash and
+message digest algorithms.  Included are the FIPS secure hash algorithms SHA1,
+SHA224, SHA256, SHA384, and SHA512 (defined in FIPS 180-2) as well as RSA&#8217;s MD5
+algorithm (defined in Internet <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc1321.html"><strong>RFC 1321</strong></a>). The terms secure hash and message
+digest are interchangeable.  Older algorithms were called message digests.  The
+modern term is secure hash.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want the adler32 or crc32 hash functions they are available in
+the <a class="reference internal" href="zlib.html#module-zlib" title="zlib: Low-level interface to compression and decompression routines compatible with gzip."><tt class="xref py py-mod docutils literal"><span class="pre">zlib</span></tt></a> module.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Some algorithms have known hash collision weaknesses, see the FAQ at the end.</p>
+</div>
+<p>There is one constructor method named for each type of <em class="dfn">hash</em>.  All return
+a hash object with the same simple interface. For example: use <tt class="xref py py-func docutils literal"><span class="pre">sha1()</span></tt> to
+create a SHA1 hash object. You can now feed this object with arbitrary strings
+using the <tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt> method.  At any point you can ask it for the
+<em class="dfn">digest</em> of the concatenation of the strings fed to it so far using the
+<tt class="xref py py-meth docutils literal"><span class="pre">digest()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">hexdigest()</span></tt> methods.</p>
+<p id="index-2">Constructors for hash algorithms that are always present in this module are
+<a class="reference internal" href="md5.html#module-md5" title="md5: RSA's MD5 message digest algorithm. (deprecated)"><tt class="xref py py-func docutils literal"><span class="pre">md5()</span></tt></a>, <tt class="xref py py-func docutils literal"><span class="pre">sha1()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">sha224()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">sha256()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">sha384()</span></tt>, and
+<tt class="xref py py-func docutils literal"><span class="pre">sha512()</span></tt>.  Additional algorithms may also be available depending upon the
+OpenSSL library that Python uses on your platform.</p>
+<p>For example, to obtain the digest of the string <tt class="docutils literal"><span class="pre">'Nobody</span> <span class="pre">inspects</span> <span class="pre">the</span> <span class="pre">spammish</span>
+<span class="pre">repetition'</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&quot;Nobody inspects&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&quot; the spammish repetition&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+<span class="go">&#39;\xbbd\x9c\x83\xdd\x1e\xa5\xc9\xd9\xde\xc9\xa1\x8d\xf0\xff\xe9&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">digest_size</span>
+<span class="go">16</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">block_size</span>
+<span class="go">64</span>
+</pre></div>
+</div>
+<p>More condensed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha224</span><span class="p">(</span><span class="s">&quot;Nobody inspects the spammish repetition&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+<span class="go">&#39;a4337bc45a8fc544c03f52dc550cd6e1e87021bc896588bd79e901e2&#39;</span>
+</pre></div>
+</div>
+<p>A generic <a class="reference internal" href="new.html#module-new" title="new: Interface to the creation of runtime implementation objects. (deprecated)"><tt class="xref py py-func docutils literal"><span class="pre">new()</span></tt></a> constructor that takes the string name of the desired
+algorithm as its first parameter also exists to allow access to the above listed
+hashes as well as any other algorithms that your OpenSSL library may offer.  The
+named constructors are much faster than <a class="reference internal" href="new.html#module-new" title="new: Interface to the creation of runtime implementation objects. (deprecated)"><tt class="xref py py-func docutils literal"><span class="pre">new()</span></tt></a> and should be preferred.</p>
+<p>Using <a class="reference internal" href="new.html#module-new" title="new: Interface to the creation of runtime implementation objects. (deprecated)"><tt class="xref py py-func docutils literal"><span class="pre">new()</span></tt></a> with an algorithm provided by OpenSSL:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s">&#39;ripemd160&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&quot;Nobody inspects the spammish repetition&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+<span class="go">&#39;cc4a5ce1b3df48aec5d22d1f16b894a0b894eccc&#39;</span>
+</pre></div>
+</div>
+<p>This module provides the following constant attribute:</p>
+<dl class="data">
+<dt id="hashlib.hashlib.algorithms">
+<tt class="descclassname">hashlib.</tt><tt class="descname">algorithms</tt><a class="headerlink" href="#hashlib.hashlib.algorithms" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tuple providing the names of the hash algorithms guaranteed to be
+supported by this module.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.7.</span></p>
+</dd></dl>
+
+<p>The following values are provided as constant attributes of the hash objects
+returned by the constructors:</p>
+<dl class="data">
+<dt id="hashlib.hash.digest_size">
+<tt class="descclassname">hash.</tt><tt class="descname">digest_size</tt><a class="headerlink" href="#hashlib.hash.digest_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the resulting hash in bytes.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="hashlib.hash.block_size">
+<tt class="descclassname">hash.</tt><tt class="descname">block_size</tt><a class="headerlink" href="#hashlib.hash.block_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The internal block size of the hash algorithm in bytes.</p>
+</dd></dl>
+
+<p>A hash object has the following methods:</p>
+<dl class="method">
+<dt id="hashlib.hash.update">
+<tt class="descclassname">hash.</tt><tt class="descname">update</tt><big>(</big><em>arg</em><big>)</big><a class="headerlink" href="#hashlib.hash.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the hash object with the string <em>arg</em>.  Repeated calls are equivalent to
+a single call with the concatenation of all the arguments: <tt class="docutils literal"><span class="pre">m.update(a);</span>
+<span class="pre">m.update(b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">m.update(a+b)</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.7.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hashlib.hash.digest">
+<tt class="descclassname">hash.</tt><tt class="descname">digest</tt><big>(</big><big>)</big><a class="headerlink" href="#hashlib.hash.digest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the digest of the strings passed to the <a class="reference internal" href="#hashlib.hash.update" title="hashlib.hash.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> method so far.
+This is a string of <a class="reference internal" href="#hashlib.hash.digest_size" title="hashlib.hash.digest_size"><tt class="xref py py-attr docutils literal"><span class="pre">digest_size</span></tt></a> bytes which may contain non-ASCII
+characters, including null bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hashlib.hash.hexdigest">
+<tt class="descclassname">hash.</tt><tt class="descname">hexdigest</tt><big>(</big><big>)</big><a class="headerlink" href="#hashlib.hash.hexdigest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#hashlib.hash.digest" title="hashlib.hash.digest"><tt class="xref py py-meth docutils literal"><span class="pre">digest()</span></tt></a> except the digest is returned as a string of double length,
+containing only hexadecimal digits.  This may  be used to exchange the value
+safely in email or other non-binary environments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hashlib.hash.copy">
+<tt class="descclassname">hash.</tt><tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#hashlib.hash.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy (&#8220;clone&#8221;) of the hash object.  This can be used to efficiently
+compute the digests of strings that share a common initial substring.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="hmac.html#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation for Python."><tt class="xref py py-mod docutils literal"><span class="pre">hmac</span></tt></a></dt>
+<dd>A module to generate message authentication codes using hashes.</dd>
+<dt>Module <a class="reference internal" href="base64.html#module-base64" title="base64: RFC 3548: Base16, Base32, Base64 Data Encodings"><tt class="xref py py-mod docutils literal"><span class="pre">base64</span></tt></a></dt>
+<dd>Another way to encode binary hashes for non-binary environments.</dd>
+<dt><a class="reference external" href="http://csrc.nist.gov/publications/fips/fips180-2/fips180-2.pdf">http://csrc.nist.gov/publications/fips/fips180-2/fips180-2.pdf</a></dt>
+<dd>The FIPS 180-2 publication on Secure Hash Algorithms.</dd>
+<dt><a class="reference external" href="http://en.wikipedia.org/wiki/Cryptographic_hash_function#Cryptographic_hash_algorithms">http://en.wikipedia.org/wiki/Cryptographic_hash_function#Cryptographic_hash_algorithms</a></dt>
+<dd>Wikipedia article with information on which algorithms have known issues and
+what that means regarding their use.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="crypto.html"
+                        title="previous chapter">14. Cryptographic Services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hmac.html"
+                        title="next chapter">14.2. <tt class="docutils literal"><span class="pre">hmac</span></tt> &#8212; Keyed-Hashing for Message Authentication</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/hashlib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hmac.html" title="14.2. hmac — Keyed-Hashing for Message Authentication"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="14. Cryptographic Services"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="crypto.html" >14. Cryptographic Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

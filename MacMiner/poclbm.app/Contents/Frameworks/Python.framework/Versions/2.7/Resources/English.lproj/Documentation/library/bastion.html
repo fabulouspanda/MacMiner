@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>29.2. Bastion — Restricting access to objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="29. Restricted Execution" href="restricted.html" />
+    <link rel="next" title="30. Importing Modules" href="modules.html" />
+    <link rel="prev" title="29.1. rexec — Restricted execution framework" href="rexec.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="30. Importing Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rexec.html" title="29.1. rexec — Restricted execution framework"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="restricted.html" accesskey="U">29. Restricted Execution</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-Bastion">
+<span id="bastion-restricting-access-to-objects"></span><h1>29.2. <a class="reference internal" href="#module-Bastion" title="Bastion: Providing restricted access to objects. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">Bastion</span></tt></a> &#8212; Restricting access to objects<a class="headerlink" href="#module-Bastion" title="Permalink to this headline">¶</a></h1>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-Bastion" title="Bastion: Providing restricted access to objects. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">Bastion</span></tt></a> module has been removed in Python 3.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3: </span>Disabled module.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The documentation has been left in place to help in reading old code that uses
+the module.</p>
+</div>
+<p>According to the dictionary, a bastion is &#8220;a fortified area or position&#8221;, or
+&#8220;something that is considered a stronghold.&#8221;  It&#8217;s a suitable name for this
+module, which provides a way to forbid access to certain attributes of an
+object.  It must always be used with the <a class="reference internal" href="rexec.html#module-rexec" title="rexec: Basic restricted execution framework. (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">rexec</span></tt></a> module, in order to allow
+restricted-mode programs access to certain safe attributes of an object, while
+denying access to other, unsafe attributes.</p>
+<dl class="function">
+<dt id="Bastion.Bastion">
+<tt class="descclassname">Bastion.</tt><tt class="descname">Bastion</tt><big>(</big><em>object</em><span class="optional">[</span>, <em>filter</em><span class="optional">[</span>, <em>name</em><span class="optional">[</span>, <em>class</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Bastion.Bastion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Protect the object <em>object</em>, returning a bastion for the object.  Any attempt to
+access one of the object&#8217;s attributes will have to be approved by the <em>filter</em>
+function; if the access is denied an <a class="reference internal" href="exceptions.html#exceptions.AttributeError" title="exceptions.AttributeError"><tt class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></tt></a> exception will be
+raised.</p>
+<p>If present, <em>filter</em> must be a function that accepts a string containing an
+attribute name, and returns true if access to that attribute will be permitted;
+if <em>filter</em> returns false, the access is denied.  The default filter denies
+access to any function beginning with an underscore (<tt class="docutils literal"><span class="pre">'_'</span></tt>).  The bastion&#8217;s
+string representation will be <tt class="docutils literal"><span class="pre">&lt;Bastion</span> <span class="pre">for</span> <span class="pre">name&gt;</span></tt> if a value for <em>name</em> is
+provided; otherwise, <tt class="docutils literal"><span class="pre">repr(object)</span></tt> will be used.</p>
+<p><em>class</em>, if present, should be a subclass of <a class="reference internal" href="#Bastion.BastionClass" title="Bastion.BastionClass"><tt class="xref py py-class docutils literal"><span class="pre">BastionClass</span></tt></a>;  see the
+code in <tt class="file docutils literal"><span class="pre">bastion.py</span></tt> for the details.  Overriding the default
+<a class="reference internal" href="#Bastion.BastionClass" title="Bastion.BastionClass"><tt class="xref py py-class docutils literal"><span class="pre">BastionClass</span></tt></a> will rarely be required.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Bastion.BastionClass">
+<em class="property">class </em><tt class="descclassname">Bastion.</tt><tt class="descname">BastionClass</tt><big>(</big><em>getfunc</em>, <em>name</em><big>)</big><a class="headerlink" href="#Bastion.BastionClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class which actually implements bastion objects.  This is the default class used
+by <a class="reference internal" href="#module-Bastion" title="Bastion: Providing restricted access to objects. (deprecated)"><tt class="xref py py-func docutils literal"><span class="pre">Bastion()</span></tt></a>.  The <em>getfunc</em> parameter is a function which returns the
+value of an attribute which should be exposed to the restricted execution
+environment when called with the name of the attribute as the only parameter.
+<em>name</em> is used to construct the <a class="reference internal" href="repr.html#module-repr" title="repr: Alternate repr() implementation with size limits."><tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt></a> of the <a class="reference internal" href="#Bastion.BastionClass" title="Bastion.BastionClass"><tt class="xref py py-class docutils literal"><span class="pre">BastionClass</span></tt></a>
+instance.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rexec.html"
+                        title="previous chapter">29.1. <tt class="docutils literal"><span class="pre">rexec</span></tt> &#8212; Restricted execution framework</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">30. Importing Modules</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/bastion.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="30. Importing Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rexec.html" title="29.1. rexec — Restricted execution framework"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="restricted.html" >29. Restricted Execution</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -6,6 +6,8 @@ This module implements ``test()`` and ``bench()`` functions for NumPy modules.
 """
 import os
 import sys
+import warnings
+import numpy.testing.utils
 
 def get_package_name(filepath):
     """
@@ -74,36 +76,10 @@ def run_module_suite(file_to_run = None):
     if file_to_run is None:
         f = sys._getframe(1)
         file_to_run = f.f_locals.get('__file__', None)
-        assert file_to_run is not None
+        if file_to_run is None:
+            raise AssertionError
 
     import_nose().run(argv=['',file_to_run])
-
-# contructs NoseTester method docstrings
-def _docmethod(meth, testtype):
-    if not meth.__doc__:
-        return
-
-    test_header = \
-        '''Parameters
-        ----------
-        label : {'fast', 'full', '', attribute identifer}
-            Identifies the %(testtype)ss to run.  This can be a string to
-            pass to the nosetests executable with the '-A' option, or one of
-            several special values.
-            Special values are:
-                'fast' - the default - which corresponds to nosetests -A option
-                         of 'not slow'.
-                'full' - fast (as above) and slow %(testtype)ss as in the
-                         no -A option to nosetests - same as ''
-            None or '' - run all %(testtype)ss
-            attribute_identifier - string passed directly to nosetests as '-A'
-        verbose : integer
-            verbosity value for test outputs, 1-10
-        extra_argv : list
-            List with any extra args to pass to nosetests''' \
-            % {'testtype': testtype}
-
-    meth.__doc__ = meth.__doc__ % {'test_header':test_header}
 
 
 class NoseTester(object):
@@ -128,28 +104,43 @@ class NoseTester(object):
 
     Parameters
     ----------
-    package : module, str or None
+    package : module, str or None, optional
         The package to test. If a string, this should be the full path to
         the package. If None (default), `package` is set to the module from
         which `NoseTester` is initialized.
+    raise_warnings : str or sequence of warnings, optional
+        This specifies which warnings to configure as 'raise' instead
+        of 'warn' during the test execution.  Valid strings are:
+
+          - "develop" : equals ``(DeprecationWarning, RuntimeWarning)``
+          - "release" : equals ``()``, don't raise on any warnings.
+
+        See Notes for more details.
+
+    Notes
+    -----
+    The default for `raise_warnings` is
+    ``(DeprecationWarning, RuntimeWarning)`` for the master branch of NumPy,
+    and ``()`` for maintenance branches and released versions.  The purpose
+    of this switching behavior is to catch as many warnings as possible
+    during development, but not give problems for packaging of released
+    versions.
 
     """
+    # Stuff to exclude from tests. These are from numpy.distutils
+    excludes = ['f2py_ext',
+                'f2py_f90_ext',
+                'gen_ext',
+                'pyrex_ext',
+                'swig_ext']
 
-    def __init__(self, package=None):
-        ''' Test class init
-
-        Parameters
-        ----------
-        package : string or module
-            If string, gives full path to package
-            If None, extract calling module path
-            Default is None
-        '''
+    def __init__(self, package=None, raise_warnings="release"):
         package_name = None
         if package is None:
             f = sys._getframe(1)
             package_path = f.f_locals.get('__file__', None)
-            assert package_path is not None
+            if package_path is None:
+                raise AssertionError
             package_path = os.path.dirname(package_path)
             package_name = f.f_locals.get('__name__', None)
         elif isinstance(package, type(os)):
@@ -160,21 +151,36 @@ class NoseTester(object):
 
         self.package_path = package_path
 
-        # find the package name under test; this name is used to limit coverage
-        # reporting (if enabled)
+        # Find the package name under test; this name is used to limit coverage
+        # reporting (if enabled).
         if package_name is None:
             package_name = get_package_name(package_path)
         self.package_name = package_name
 
+        # Set to "release" in constructor in maintenance branches.
+        self.raise_warnings = raise_warnings
+
     def _test_argv(self, label, verbose, extra_argv):
         ''' Generate argv for nosetest command
 
-        %(test_header)s
+        Parameters
+        ----------
+        label : {'fast', 'full', '', attribute identifier}, optional
+            see ``test`` docstring
+        verbose : int, optional
+            Verbosity value for test outputs, in the range 1-10. Default is 1.
+        extra_argv : list, optional
+            List with any extra arguments to pass to nosetests.
+
+        Returns
+        -------
+        argv : list
+            command line arguments that will be passed to nose
         '''
         argv = [__file__, self.package_path, '-s']
         if label and label != 'full':
             if not isinstance(label, basestring):
-                raise TypeError, 'Selection label should be a string'
+                raise TypeError('Selection label should be a string')
             if label == 'fast':
                 label = 'not slow'
             argv += ['-A', label]
@@ -201,8 +207,17 @@ class NoseTester(object):
         print "Python version %s" % pyversion
         print "nose version %d.%d.%d" % nose.__versioninfo__
 
+    def _get_custom_doctester(self):
+        """ Return instantiated plugin for doctests
 
-    def prepare_test_args(self, label='fast', verbose=1, extra_argv=None, 
+        Allows subclassing of this class to override doctester
+
+        A return value of None means use the nose builtin doctest plugin
+        """
+        from noseclasses import NumpyDoctest
+        return NumpyDoctest()
+
+    def prepare_test_args(self, label='fast', verbose=1, extra_argv=None,
                           doctests=False, coverage=False):
         """
         Run tests for module using nose.
@@ -215,54 +230,56 @@ class NoseTester(object):
         test
 
         """
-
-        # if doctests is in the extra args, remove it and set the doctest
-        # flag so the NumPy doctester is used instead
-        if extra_argv and '--with-doctest' in extra_argv:
-            extra_argv.remove('--with-doctest')
-            doctests = True
-
+        # fail with nice error message if nose is not present
+        import_nose()
+        # compile argv
         argv = self._test_argv(label, verbose, extra_argv)
-        if doctests:
-            argv += ['--with-numpydoctest']
-
+        # bypass tests noted for exclude
+        for ename in self.excludes:
+            argv += ['--exclude', ename]
+        # our way of doing coverage
         if coverage:
             argv+=['--cover-package=%s' % self.package_name, '--with-coverage',
-                   '--cover-tests', '--cover-inclusive', '--cover-erase']
-
-        # bypass these samples under distutils
-        argv += ['--exclude','f2py_ext']
-        argv += ['--exclude','f2py_f90_ext']
-        argv += ['--exclude','gen_ext']
-        argv += ['--exclude','pyrex_ext']
-        argv += ['--exclude','swig_ext']
-
-        nose = import_nose()
-
+                   '--cover-tests', '--cover-erase']
         # construct list of plugins
         import nose.plugins.builtin
-        from noseclasses import NumpyDoctest, KnownFailure
-        plugins = [NumpyDoctest(), KnownFailure()]
+        from noseclasses import KnownFailure, Unplugger
+        plugins = [KnownFailure()]
         plugins += [p() for p in nose.plugins.builtin.plugins]
+        # add doctesting if required
+        doctest_argv = '--with-doctest' in argv
+        if doctests == False and doctest_argv:
+            doctests = True
+        plug = self._get_custom_doctester()
+        if plug is None:
+            # use standard doctesting
+            if doctests and not doctest_argv:
+                argv += ['--with-doctest']
+        else: # custom doctesting
+            if doctest_argv: # in fact the unplugger would take care of this
+                argv.remove('--with-doctest')
+            plugins += [Unplugger('doctest'), plug]
+            if doctests:
+                argv += ['--with-' + plug.name]
         return argv, plugins
 
-    def test(self, label='fast', verbose=1, extra_argv=None, doctests=False,
-             coverage=False):
+    def test(self, label='fast', verbose=1, extra_argv=None,
+            doctests=False, coverage=False,
+            raise_warnings=None):
         """
         Run tests for module using nose.
 
         Parameters
         ----------
         label : {'fast', 'full', '', attribute identifier}, optional
-            Identifies the tests to run. This can be a string to pass to the
-            nosetests executable with the '-A' option, or one of
-            several special values.
-            Special values are:
-                'fast' - the default - which corresponds to the ``nosetests -A``
-                         option of 'not slow'.
-                'full' - fast (as above) and slow tests as in the
-                         'no -A' option to nosetests - this is the same as ''.
-            None or '' - run all tests.
+            Identifies the tests to run. This can be a string to pass to
+            the nosetests executable with the '-A' option, or one of several
+            special values.  Special values are:
+            * 'fast' - the default - which corresponds to the ``nosetests -A``
+              option of 'not slow'.
+            * 'full' - fast (as above) and slow tests as in the
+              'no -A' option to nosetests - this is the same as ''.
+            * None or '' - run all tests.
             attribute_identifier - string passed directly to nosetests as '-A'.
         verbose : int, optional
             Verbosity value for test outputs, in the range 1-10. Default is 1.
@@ -274,6 +291,12 @@ class NoseTester(object):
             If True, report coverage of NumPy code. Default is False.
             (This requires the `coverage module:
              <http://nedbatchelder.com/code/modules/coverage.html>`_).
+        raise_warnings : str or sequence of warnings, optional
+            This specifies which warnings to configure as 'raise' instead
+            of 'warn' during the test execution.  Valid strings are:
+
+              - "develop" : equals ``(DeprecationWarning, RuntimeWarning)``
+              - "release" : equals ``()``, don't raise on any warnings.
 
         Returns
         -------
@@ -284,24 +307,23 @@ class NoseTester(object):
         Notes
         -----
         Each NumPy module exposes `test` in its namespace to run all tests for it.
-        For example, to run all tests for numpy.lib::
+        For example, to run all tests for numpy.lib:
 
-          >>> np.lib.test()
+        >>> np.lib.test() #doctest: +SKIP
 
         Examples
         --------
-        >>> result = np.lib.test()
+        >>> result = np.lib.test() #doctest: +SKIP
         Running unit tests for numpy.lib
         ...
         Ran 976 tests in 3.933s
 
         OK
 
-        >>> result.errors
+        >>> result.errors #doctest: +SKIP
         []
-        >>> result.knownfail
+        >>> result.knownfail #doctest: +SKIP
         []
-
         """
 
         # cap verbosity at 3 because nose becomes *very* verbose beyond that
@@ -321,10 +343,40 @@ class NoseTester(object):
         import doctest
         doctest.master = None
 
-        argv, plugins = self.prepare_test_args(label, verbose, extra_argv,
-                                               doctests, coverage)
-        from noseclasses import NumpyTestProgram
-        t = NumpyTestProgram(argv=argv, exit=False, plugins=plugins)
+        if raise_warnings is None:
+            raise_warnings = self.raise_warnings
+
+        _warn_opts = dict(develop=(DeprecationWarning, RuntimeWarning),
+                          release=())
+        if raise_warnings in _warn_opts.keys():
+            raise_warnings = _warn_opts[raise_warnings]
+
+        # Preserve the state of the warning filters
+        warn_ctx = numpy.testing.utils.WarningManager()
+        warn_ctx.__enter__()
+        # Reset the warning filters to the default state,
+        # so that running the tests is more repeatable.
+        warnings.resetwarnings()
+        # If deprecation warnings are not set to 'error' below,
+        # at least set them to 'warn'.
+        warnings.filterwarnings('always', category=DeprecationWarning)
+        # Force the requested warnings to raise
+        for warningtype in raise_warnings:
+            warnings.filterwarnings('error', category=warningtype)
+        # Filter out annoying import messages.
+        warnings.filterwarnings('ignore', message='Not importing directory')
+        warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+        warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
+        try:
+            from noseclasses import NumpyTestProgram
+
+            argv, plugins = self.prepare_test_args(label,
+                    verbose, extra_argv, doctests, coverage)
+            t = NumpyTestProgram(argv=argv, exit=False, plugins=plugins)
+        finally:
+            warn_ctx.__exit__()
+
         return t.result
 
     def bench(self, label='fast', verbose=1, extra_argv=None):
@@ -334,18 +386,17 @@ class NoseTester(object):
         Parameters
         ----------
         label : {'fast', 'full', '', attribute identifier}, optional
-            Identifies the tests to run. This can be a string to pass to the
-            nosetests executable with the '-A' option, or one of
-            several special values.
-            Special values are:
-                'fast' - the default - which corresponds to the ``nosetests -A``
-                         option of 'not slow'.
-                'full' - fast (as above) and slow tests as in the
-                         'no -A' option to nosetests - this is the same as ''.
-            None or '' - run all tests.
+            Identifies the benchmarks to run. This can be a string to pass to
+            the nosetests executable with the '-A' option, or one of several
+            special values.  Special values are:
+            * 'fast' - the default - which corresponds to the ``nosetests -A``
+              option of 'not slow'.
+            * 'full' - fast (as above) and slow benchmarks as in the
+              'no -A' option to nosetests - this is the same as ''.
+            * None or '' - run all tests.
             attribute_identifier - string passed directly to nosetests as '-A'.
         verbose : int, optional
-            Verbosity value for test outputs, in the range 1-10. Default is 1.
+            Verbosity value for benchmark outputs, in the range 1-10. Default is 1.
         extra_argv : list, optional
             List with any extra arguments to pass to nosetests.
 
@@ -366,7 +417,7 @@ class NoseTester(object):
 
         Examples
         --------
-        >>> success = np.lib.bench()
+        >>> success = np.lib.bench() #doctest: +SKIP
         Running benchmarks for numpy.lib
         ...
         using 562341 items:
@@ -379,7 +430,7 @@ class NoseTester(object):
         ...
         OK
 
-        >>> success
+        >>> success #doctest: +SKIP
         True
 
         """
@@ -390,40 +441,12 @@ class NoseTester(object):
         argv = self._test_argv(label, verbose, extra_argv)
         argv += ['--match', r'(?:^|[\\b_\\.%s-])[Bb]ench' % os.sep]
 
+        # import nose or make informative error
         nose = import_nose()
-        return nose.run(argv=argv)
 
-    # generate method docstrings
-    _docmethod(_test_argv, '(testtype)')
-    _docmethod(test, 'test')
-    _docmethod(bench, 'benchmark')
+        # get plugin to disable doctests
+        from noseclasses import Unplugger
+        add_plugins = [Unplugger('doctest')]
 
+        return nose.run(argv=argv, addplugins=add_plugins)
 
-########################################################################
-# Doctests for NumPy-specific nose/doctest modifications
-
-# try the #random directive on the output line
-def check_random_directive():
-    '''
-    >>> 2+2
-    <BadExample object at 0x084D05AC>  #random: may vary on your system
-    '''
-
-# check the implicit "import numpy as np"
-def check_implicit_np():
-    '''
-    >>> np.array([1,2,3])
-    array([1, 2, 3])
-    '''
-
-# there's some extraneous whitespace around the correct responses
-def check_whitespace_enabled():
-    '''
-    # whitespace after the 3
-    >>> 1+2
-    3
-
-    # whitespace before the 7
-    >>> 3+4
-     7
-    '''

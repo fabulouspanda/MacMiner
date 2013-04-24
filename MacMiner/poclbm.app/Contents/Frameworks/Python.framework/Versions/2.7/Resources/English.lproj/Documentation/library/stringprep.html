@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>7.10. stringprep — Internet String Preparation &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="7. String Services" href="strings.html" />
+    <link rel="next" title="7.11. fpformat — Floating point conversions" href="fpformat.html" />
+    <link rel="prev" title="7.9. unicodedata — Unicode Database" href="unicodedata.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fpformat.html" title="7.11. fpformat — Floating point conversions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unicodedata.html" title="7.9. unicodedata — Unicode Database"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="strings.html" accesskey="U">7. String Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-stringprep">
+<span id="stringprep-internet-string-preparation"></span><h1>7.10. <a class="reference internal" href="#module-stringprep" title="stringprep: String preparation, as per RFC 3453 (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">stringprep</span></tt></a> &#8212; Internet String Preparation<a class="headerlink" href="#module-stringprep" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p>When identifying things (such as host names) in the internet, it is often
+necessary to compare such identifications for &#8220;equality&#8221;. Exactly how this
+comparison is executed may depend on the application domain, e.g. whether it
+should be case-insensitive or not. It may be also necessary to restrict the
+possible identifications, to allow only identifications consisting of
+&#8220;printable&#8221; characters.</p>
+<p><span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc3454.html"><strong>RFC 3454</strong></a> defines a procedure for &#8220;preparing&#8221; Unicode strings in internet
+protocols. Before passing strings onto the wire, they are processed with the
+preparation procedure, after which they have a certain normalized form. The RFC
+defines a set of tables, which can be combined into profiles. Each profile must
+define which tables it uses, and what other optional parts of the <tt class="docutils literal"><span class="pre">stringprep</span></tt>
+procedure are part of the profile. One example of a <tt class="docutils literal"><span class="pre">stringprep</span></tt> profile is
+<tt class="docutils literal"><span class="pre">nameprep</span></tt>, which is used for internationalized domain names.</p>
+<p>The module <a class="reference internal" href="#module-stringprep" title="stringprep: String preparation, as per RFC 3453 (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">stringprep</span></tt></a> only exposes the tables from RFC 3454. As these
+tables would be very large to represent them as dictionaries or lists, the
+module uses the Unicode character database internally. The module source code
+itself was generated using the <tt class="docutils literal"><span class="pre">mkstringprep.py</span></tt> utility.</p>
+<p>As a result, these tables are exposed as functions, not as data structures.
+There are two kinds of tables in the RFC: sets and mappings. For a set,
+<a class="reference internal" href="#module-stringprep" title="stringprep: String preparation, as per RFC 3453 (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">stringprep</span></tt></a> provides the &#8220;characteristic function&#8221;, i.e. a function that
+returns true if the parameter is part of the set. For mappings, it provides the
+mapping function: given the key, it returns the associated value. Below is a
+list of all functions available in the module.</p>
+<dl class="function">
+<dt id="stringprep.in_table_a1">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_a1</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_a1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableA.1 (Unassigned code points in Unicode 3.2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_b1">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_b1</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_b1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableB.1 (Commonly mapped to nothing).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.map_table_b2">
+<tt class="descclassname">stringprep.</tt><tt class="descname">map_table_b2</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.map_table_b2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mapped value for <em>code</em> according to tableB.2 (Mapping for
+case-folding used with NFKC).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.map_table_b3">
+<tt class="descclassname">stringprep.</tt><tt class="descname">map_table_b3</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.map_table_b3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the mapped value for <em>code</em> according to tableB.3 (Mapping for
+case-folding used with no normalization).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c11">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c11</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c11" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.1.1  (ASCII space characters).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c12">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c12</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.1.2  (Non-ASCII space characters).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c11_c12">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c11_c12</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c11_c12" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.1  (Space characters, union of C.1.1 and
+C.1.2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c21">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c21</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c21" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.2.1  (ASCII control characters).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c22">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c22</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c22" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.2.2  (Non-ASCII control characters).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c21_c22">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c21_c22</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c21_c22" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.2  (Control characters, union of C.2.1 and
+C.2.2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c3">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c3</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.3  (Private use).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c4">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c4</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.4  (Non-character code points).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c5">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c5</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.5  (Surrogate codes).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c6">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c6</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.6  (Inappropriate for plain text).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c7">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c7</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.7  (Inappropriate for canonical
+representation).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c8">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c8</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c8" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.8  (Change display properties or are
+deprecated).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_c9">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_c9</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_c9" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableC.9  (Tagging characters).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_d1">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_d1</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_d1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableD.1  (Characters with bidirectional property
+&#8220;R&#8221; or &#8220;AL&#8221;).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="stringprep.in_table_d2">
+<tt class="descclassname">stringprep.</tt><tt class="descname">in_table_d2</tt><big>(</big><em>code</em><big>)</big><a class="headerlink" href="#stringprep.in_table_d2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine whether <em>code</em> is in tableD.2  (Characters with bidirectional property
+&#8220;L&#8221;).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unicodedata.html"
+                        title="previous chapter">7.9. <tt class="docutils literal docutils literal"><span class="pre">unicodedata</span></tt> &#8212; Unicode Database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fpformat.html"
+                        title="next chapter">7.11. <tt class="docutils literal docutils literal docutils literal"><span class="pre">fpformat</span></tt> &#8212; Floating point conversions</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/stringprep.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fpformat.html" title="7.11. fpformat — Floating point conversions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unicodedata.html" title="7.9. unicodedata — Unicode Database"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="strings.html" >7. String Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

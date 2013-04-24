@@ -1,0 +1,222 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.1. posix — The most common POSIX system calls &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="next" title="35.2. pwd — The password database" href="pwd.html" />
+    <link rel="prev" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pwd.html" title="35.2. pwd — The password database"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="35. Unix Specific Services"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" accesskey="U">35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-posix">
+<span id="posix-the-most-common-posix-system-calls"></span><h1>35.1. <a class="reference internal" href="#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a> &#8212; The most common POSIX system calls<a class="headerlink" href="#module-posix" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Unix</p>
+<p>This module provides access to operating system functionality that is
+standardized by the C Standard and the POSIX standard (a thinly disguised Unix
+interface).</p>
+<p id="index-0"><strong>Do not import this module directly.</strong>  Instead, import the module <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a>,
+which provides a <em>portable</em> version of this interface.  On Unix, the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a>
+module provides a superset of the <a class="reference internal" href="#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a> interface.  On non-Unix operating
+systems the <a class="reference internal" href="#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a> module is not available, but a subset is always
+available through the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> interface.  Once <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> is imported, there is
+<em>no</em> performance penalty in using it instead of <a class="reference internal" href="#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a>.  In addition,
+<a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> provides some additional functionality, such as automatically calling
+<tt class="xref py py-func docutils literal"><span class="pre">putenv()</span></tt> when an entry in <tt class="docutils literal"><span class="pre">os.environ</span></tt> is changed.</p>
+<p>Errors are reported as exceptions; the usual exceptions are given for type
+errors, while errors reported by the system calls raise <a class="reference internal" href="exceptions.html#exceptions.OSError" title="exceptions.OSError"><tt class="xref py py-exc docutils literal"><span class="pre">OSError</span></tt></a>.</p>
+<div class="section" id="large-file-support">
+<span id="posix-large-files"></span><h2>35.1.1. Large File Support<a class="headerlink" href="#large-file-support" title="Permalink to this headline">¶</a></h2>
+<p id="index-1">Several operating systems (including AIX, HP-UX, Irix and Solaris) provide
+support for files that are larger than 2 GB from a C programming model where
+<tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> and <tt class="xref c c-type docutils literal"><span class="pre">long</span></tt> are 32-bit values. This is typically accomplished
+by defining the relevant size and offset types as 64-bit values. Such files are
+sometimes referred to as <em class="dfn">large files</em>.</p>
+<p>Large file support is enabled in Python when the size of an <tt class="xref c c-type docutils literal"><span class="pre">off_t</span></tt> is
+larger than a <tt class="xref c c-type docutils literal"><span class="pre">long</span></tt> and the <tt class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt> type is available and is
+at least as large as an <tt class="xref c c-type docutils literal"><span class="pre">off_t</span></tt>. Python longs are then used to represent
+file sizes, offsets and other values that can exceed the range of a Python int.
+It may be necessary to configure and compile Python with certain compiler flags
+to enable this mode. For example, it is enabled by default with recent versions
+of Irix, but with Solaris 2.6 and 2.7 you need to do something like:</p>
+<div class="highlight-python"><pre>CFLAGS="`getconf LFS_CFLAGS`" OPT="-g -O2 $CFLAGS" \
+        ./configure</pre>
+</div>
+<p>On large-file-capable Linux systems, this might work:</p>
+<div class="highlight-python"><pre>CFLAGS='-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64' OPT="-g -O2 $CFLAGS" \
+        ./configure</pre>
+</div>
+</div>
+<div class="section" id="notable-module-contents">
+<span id="posix-contents"></span><h2>35.1.2. Notable Module Contents<a class="headerlink" href="#notable-module-contents" title="Permalink to this headline">¶</a></h2>
+<p>In addition to many functions described in the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module documentation,
+<a class="reference internal" href="#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a> defines the following data item:</p>
+<dl class="data">
+<dt id="posix.environ">
+<tt class="descclassname">posix.</tt><tt class="descname">environ</tt><a class="headerlink" href="#posix.environ" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary representing the string environment at the time the interpreter
+was started.  For example, <tt class="docutils literal"><span class="pre">environ['HOME']</span></tt> is the pathname of your home
+directory, equivalent to <tt class="docutils literal"><span class="pre">getenv(&quot;HOME&quot;)</span></tt> in C.</p>
+<p>Modifying this dictionary does not affect the string environment passed on by
+<tt class="xref py py-func docutils literal"><span class="pre">execv()</span></tt>, <tt class="xref py py-func docutils literal"><span class="pre">popen()</span></tt> or <tt class="xref py py-func docutils literal"><span class="pre">system()</span></tt>; if you need to change the
+environment, pass <tt class="docutils literal"><span class="pre">environ</span></tt> to <tt class="xref py py-func docutils literal"><span class="pre">execve()</span></tt> or add variable assignments and
+export statements to the command string for <tt class="xref py py-func docutils literal"><span class="pre">system()</span></tt> or <tt class="xref py py-func docutils literal"><span class="pre">popen()</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module provides an alternate implementation of <tt class="docutils literal"><span class="pre">environ</span></tt> which
+updates the environment on modification.  Note also that updating <tt class="docutils literal"><span class="pre">os.environ</span></tt>
+will render this dictionary obsolete.  Use of the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><tt class="xref py py-mod docutils literal"><span class="pre">os</span></tt></a> module version of
+this is recommended over direct access to the <a class="reference internal" href="#module-posix" title="posix: The most common POSIX system calls (normally used via module os). (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">posix</span></tt></a> module.</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">35.1. <tt class="docutils literal"><span class="pre">posix</span></tt> &#8212; The most common POSIX system calls</a><ul>
+<li><a class="reference internal" href="#large-file-support">35.1.1. Large File Support</a></li>
+<li><a class="reference internal" href="#notable-module-contents">35.1.2. Notable Module Contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unix.html"
+                        title="previous chapter">35. Unix Specific Services</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pwd.html"
+                        title="next chapter">35.2. <tt class="docutils literal"><span class="pre">pwd</span></tt> &#8212; The password database</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/posix.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pwd.html" title="35.2. pwd — The password database"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="35. Unix Specific Services"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" >35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

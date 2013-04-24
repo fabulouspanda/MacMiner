@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.1.6. email.charset: Representing character sets &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="18.1. email — An email and MIME handling package" href="email.html" />
+    <link rel="next" title="18.1.7. email.encoders: Encoders" href="email.encoders.html" />
+    <link rel="prev" title="18.1.5. email.header: Internationalized headers" href="email.header.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.encoders.html" title="18.1.7. email.encoders: Encoders"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="email.header.html" title="18.1.5. email.header: Internationalized headers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li>
+          <li><a href="email.html" accesskey="U">18.1. <tt class="docutils literal docutils literal docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-email.charset">
+<span id="email-charset-representing-character-sets"></span><h1>18.1.6. <a class="reference internal" href="#module-email.charset" title="email.charset: Character Sets"><tt class="xref py py-mod docutils literal"><span class="pre">email.charset</span></tt></a>: Representing character sets<a class="headerlink" href="#module-email.charset" title="Permalink to this headline">¶</a></h1>
+<p>This module provides a class <a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> for representing character sets
+and character set conversions in email messages, as well as a character set
+registry and several convenience methods for manipulating this registry.
+Instances of <a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> are used in several other modules within the
+<a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package.</p>
+<p>Import this class from the <a class="reference internal" href="#module-email.charset" title="email.charset: Character Sets"><tt class="xref py py-mod docutils literal"><span class="pre">email.charset</span></tt></a> module.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.2.</span></p>
+<dl class="class">
+<dt id="email.charset.Charset">
+<em class="property">class </em><tt class="descclassname">email.charset.</tt><tt class="descname">Charset</tt><big>(</big><span class="optional">[</span><em>input_charset</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.charset.Charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Map character sets to their email properties.</p>
+<p>This class provides information about the requirements imposed on email for a
+specific character set.  It also provides convenience routines for converting
+between character sets, given the availability of the applicable codecs.  Given
+a character set, it will do its best to provide information on how to use that
+character set in an email message in an RFC-compliant way.</p>
+<p>Certain character sets must be encoded with quoted-printable or base64 when used
+in email headers or bodies.  Certain character sets must be converted outright,
+and are not allowed in email.</p>
+<p>Optional <em>input_charset</em> is as described below; it is always coerced to lower
+case.  After being alias normalized it is also used as a lookup into the
+registry of character sets to find out the header encoding, body encoding, and
+output conversion codec to be used for the character set.  For example, if
+<em>input_charset</em> is <tt class="docutils literal"><span class="pre">iso-8859-1</span></tt>, then headers and bodies will be encoded using
+quoted-printable and no output conversion codec is necessary.  If
+<em>input_charset</em> is <tt class="docutils literal"><span class="pre">euc-jp</span></tt>, then headers will be encoded with base64, bodies
+will not be encoded, but output text will be converted from the <tt class="docutils literal"><span class="pre">euc-jp</span></tt>
+character set to the <tt class="docutils literal"><span class="pre">iso-2022-jp</span></tt> character set.</p>
+<p><a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> instances have the following data attributes:</p>
+<dl class="attribute">
+<dt id="email.charset.Charset.input_charset">
+<tt class="descname">input_charset</tt><a class="headerlink" href="#email.charset.Charset.input_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial character set specified.  Common aliases are converted to
+their <em>official</em> email names (e.g. <tt class="docutils literal"><span class="pre">latin_1</span></tt> is converted to
+<tt class="docutils literal"><span class="pre">iso-8859-1</span></tt>).  Defaults to 7-bit <tt class="docutils literal"><span class="pre">us-ascii</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="email.charset.Charset.header_encoding">
+<tt class="descname">header_encoding</tt><a class="headerlink" href="#email.charset.Charset.header_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the character set must be encoded before it can be used in an email
+header, this attribute will be set to <tt class="docutils literal"><span class="pre">Charset.QP</span></tt> (for
+quoted-printable), <tt class="docutils literal"><span class="pre">Charset.BASE64</span></tt> (for base64 encoding), or
+<tt class="docutils literal"><span class="pre">Charset.SHORTEST</span></tt> for the shortest of QP or BASE64 encoding. Otherwise,
+it will be <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="email.charset.Charset.body_encoding">
+<tt class="descname">body_encoding</tt><a class="headerlink" href="#email.charset.Charset.body_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <em>header_encoding</em>, but describes the encoding for the mail
+message&#8217;s body, which indeed may be different than the header encoding.
+<tt class="docutils literal"><span class="pre">Charset.SHORTEST</span></tt> is not allowed for <em>body_encoding</em>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="email.charset.Charset.output_charset">
+<tt class="descname">output_charset</tt><a class="headerlink" href="#email.charset.Charset.output_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some character sets must be converted before they can be used in email headers
+or bodies.  If the <em>input_charset</em> is one of them, this attribute will
+contain the name of the character set output will be converted to.  Otherwise, it will
+be <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="email.charset.Charset.input_codec">
+<tt class="descname">input_codec</tt><a class="headerlink" href="#email.charset.Charset.input_codec" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the Python codec used to convert the <em>input_charset</em> to
+Unicode.  If no conversion codec is necessary, this attribute will be
+<tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="email.charset.Charset.output_codec">
+<tt class="descname">output_codec</tt><a class="headerlink" href="#email.charset.Charset.output_codec" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the Python codec used to convert Unicode to the
+<em>output_charset</em>.  If no conversion codec is necessary, this attribute
+will have the same value as the <em>input_codec</em>.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> instances also have the following methods:</p>
+<dl class="method">
+<dt id="email.charset.Charset.get_body_encoding">
+<tt class="descname">get_body_encoding</tt><big>(</big><big>)</big><a class="headerlink" href="#email.charset.Charset.get_body_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the content transfer encoding used for body encoding.</p>
+<p>This is either the string <tt class="docutils literal"><span class="pre">quoted-printable</span></tt> or <tt class="docutils literal"><span class="pre">base64</span></tt> depending on
+the encoding used, or it is a function, in which case you should call the
+function with a single argument, the Message object being encoded.  The
+function should then set the <em class="mailheader">Content-Transfer-Encoding</em>
+header itself to whatever is appropriate.</p>
+<p>Returns the string <tt class="docutils literal"><span class="pre">quoted-printable</span></tt> if <em>body_encoding</em> is <tt class="docutils literal"><span class="pre">QP</span></tt>,
+returns the string <tt class="docutils literal"><span class="pre">base64</span></tt> if <em>body_encoding</em> is <tt class="docutils literal"><span class="pre">BASE64</span></tt>, and
+returns the string <tt class="docutils literal"><span class="pre">7bit</span></tt> otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.convert">
+<tt class="descname">convert</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#email.charset.Charset.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the string <em>s</em> from the <em>input_codec</em> to the <em>output_codec</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.to_splittable">
+<tt class="descname">to_splittable</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#email.charset.Charset.to_splittable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a possibly multibyte string to a safely splittable format. <em>s</em> is
+the string to split.</p>
+<p>Uses the <em>input_codec</em> to try and convert the string to Unicode, so it can
+be safely split on character boundaries (even for multibyte characters).</p>
+<p>Returns the string as-is if it isn&#8217;t known how to convert <em>s</em> to Unicode
+with the <em>input_charset</em>.</p>
+<p>Characters that could not be converted to Unicode will be replaced with
+the Unicode replacement character <tt class="docutils literal"><span class="pre">'U+FFFD'</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.from_splittable">
+<tt class="descname">from_splittable</tt><big>(</big><em>ustr</em><span class="optional">[</span>, <em>to_output</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.charset.Charset.from_splittable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a splittable string back into an encoded string.  <em>ustr</em> is a
+Unicode string to &#8220;unsplit&#8221;.</p>
+<p>This method uses the proper codec to try and convert the string from
+Unicode back into an encoded format.  Return the string as-is if it is not
+Unicode, or if it could not be converted from Unicode.</p>
+<p>Characters that could not be converted from Unicode will be replaced with
+an appropriate character (usually <tt class="docutils literal"><span class="pre">'?'</span></tt>).</p>
+<p>If <em>to_output</em> is <tt class="xref docutils literal"><span class="pre">True</span></tt> (the default), uses <em>output_codec</em> to convert
+to an encoded format.  If <em>to_output</em> is <tt class="xref docutils literal"><span class="pre">False</span></tt>, it uses <em>input_codec</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.get_output_charset">
+<tt class="descname">get_output_charset</tt><big>(</big><big>)</big><a class="headerlink" href="#email.charset.Charset.get_output_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the output character set.</p>
+<p>This is the <em>output_charset</em> attribute if that is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, otherwise
+it is <em>input_charset</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.encoded_header_len">
+<tt class="descname">encoded_header_len</tt><big>(</big><big>)</big><a class="headerlink" href="#email.charset.Charset.encoded_header_len" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the length of the encoded header string, properly calculating for
+quoted-printable or base64 encoding.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.header_encode">
+<tt class="descname">header_encode</tt><big>(</big><em>s</em><span class="optional">[</span>, <em>convert</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.charset.Charset.header_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Header-encode the string <em>s</em>.</p>
+<p>If <em>convert</em> is <tt class="xref docutils literal"><span class="pre">True</span></tt>, the string will be converted from the input
+charset to the output charset automatically.  This is not useful for
+multibyte character sets, which have line length issues (multibyte
+characters must be split on a character, not a byte boundary); use the
+higher-level <a class="reference internal" href="email.header.html#email.header.Header" title="email.header.Header"><tt class="xref py py-class docutils literal"><span class="pre">Header</span></tt></a> class to deal with these issues
+(see <a class="reference internal" href="email.header.html#module-email.header" title="email.header: Representing non-ASCII headers"><tt class="xref py py-mod docutils literal"><span class="pre">email.header</span></tt></a>).  <em>convert</em> defaults to <tt class="xref docutils literal"><span class="pre">False</span></tt>.</p>
+<p>The type of encoding (base64 or quoted-printable) will be based on the
+<em>header_encoding</em> attribute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.body_encode">
+<tt class="descname">body_encode</tt><big>(</big><em>s</em><span class="optional">[</span>, <em>convert</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.charset.Charset.body_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Body-encode the string <em>s</em>.</p>
+<p>If <em>convert</em> is <tt class="xref docutils literal"><span class="pre">True</span></tt> (the default), the string will be converted from
+the input charset to output charset automatically. Unlike
+<a class="reference internal" href="#email.charset.Charset.header_encode" title="email.charset.Charset.header_encode"><tt class="xref py py-meth docutils literal"><span class="pre">header_encode()</span></tt></a>, there are no issues with byte boundaries and
+multibyte charsets in email bodies, so this is usually pretty safe.</p>
+<p>The type of encoding (base64 or quoted-printable) will be based on the
+<em>body_encoding</em> attribute.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> class also provides a number of methods to support
+standard operations and built-in functions.</p>
+<dl class="method">
+<dt id="email.charset.Charset.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#email.charset.Charset.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <em>input_charset</em> as a string coerced to lower
+case. <a class="reference internal" href="../reference/datamodel.html#object.__repr__" title="object.__repr__"><tt class="xref py py-meth docutils literal"><span class="pre">__repr__()</span></tt></a> is an alias for <a class="reference internal" href="#email.charset.Charset.__str__" title="email.charset.Charset.__str__"><tt class="xref py py-meth docutils literal"><span class="pre">__str__()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.__eq__">
+<tt class="descname">__eq__</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#email.charset.Charset.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method allows you to compare two <a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> instances for
+equality.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.charset.Charset.__ne__">
+<tt class="descname">__ne__</tt><big>(</big><em>other</em><big>)</big><a class="headerlink" href="#email.charset.Charset.__ne__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method allows you to compare two <a class="reference internal" href="#email.charset.Charset" title="email.charset.Charset"><tt class="xref py py-class docutils literal"><span class="pre">Charset</span></tt></a> instances for
+inequality.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-email.charset" title="email.charset: Character Sets"><tt class="xref py py-mod docutils literal"><span class="pre">email.charset</span></tt></a> module also provides the following functions for adding
+new entries to the global character set, alias, and codec registries:</p>
+<dl class="function">
+<dt id="email.charset.add_charset">
+<tt class="descclassname">email.charset.</tt><tt class="descname">add_charset</tt><big>(</big><em>charset</em><span class="optional">[</span>, <em>header_enc</em><span class="optional">[</span>, <em>body_enc</em><span class="optional">[</span>, <em>output_charset</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.charset.add_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add character properties to the global registry.</p>
+<p><em>charset</em> is the input character set, and must be the canonical name of a
+character set.</p>
+<p>Optional <em>header_enc</em> and <em>body_enc</em> is either <tt class="docutils literal"><span class="pre">Charset.QP</span></tt> for
+quoted-printable, <tt class="docutils literal"><span class="pre">Charset.BASE64</span></tt> for base64 encoding,
+<tt class="docutils literal"><span class="pre">Charset.SHORTEST</span></tt> for the shortest of quoted-printable or base64 encoding,
+or <tt class="xref docutils literal"><span class="pre">None</span></tt> for no encoding.  <tt class="docutils literal"><span class="pre">SHORTEST</span></tt> is only valid for
+<em>header_enc</em>. The default is <tt class="xref docutils literal"><span class="pre">None</span></tt> for no encoding.</p>
+<p>Optional <em>output_charset</em> is the character set that the output should be in.
+Conversions will proceed from input charset, to Unicode, to the output charset
+when the method <a class="reference internal" href="#email.charset.Charset.convert" title="email.charset.Charset.convert"><tt class="xref py py-meth docutils literal"><span class="pre">Charset.convert()</span></tt></a> is called.  The default is to output in
+the same character set as the input.</p>
+<p>Both <em>input_charset</em> and <em>output_charset</em> must have Unicode codec entries in the
+module&#8217;s character set-to-codec mapping; use <a class="reference internal" href="#email.charset.add_codec" title="email.charset.add_codec"><tt class="xref py py-func docutils literal"><span class="pre">add_codec()</span></tt></a> to add codecs the
+module does not know about.  See the <a class="reference internal" href="codecs.html#module-codecs" title="codecs: Encode and decode data and streams."><tt class="xref py py-mod docutils literal"><span class="pre">codecs</span></tt></a> module&#8217;s documentation for
+more information.</p>
+<p>The global character set registry is kept in the module global dictionary
+<tt class="docutils literal"><span class="pre">CHARSETS</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="email.charset.add_alias">
+<tt class="descclassname">email.charset.</tt><tt class="descname">add_alias</tt><big>(</big><em>alias</em>, <em>canonical</em><big>)</big><a class="headerlink" href="#email.charset.add_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a character set alias.  <em>alias</em> is the alias name, e.g. <tt class="docutils literal"><span class="pre">latin-1</span></tt>.
+<em>canonical</em> is the character set&#8217;s canonical name, e.g. <tt class="docutils literal"><span class="pre">iso-8859-1</span></tt>.</p>
+<p>The global charset alias registry is kept in the module global dictionary
+<tt class="docutils literal"><span class="pre">ALIASES</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="email.charset.add_codec">
+<tt class="descclassname">email.charset.</tt><tt class="descname">add_codec</tt><big>(</big><em>charset</em>, <em>codecname</em><big>)</big><a class="headerlink" href="#email.charset.add_codec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a codec that map characters in the given character set to and from Unicode.</p>
+<p><em>charset</em> is the canonical name of a character set. <em>codecname</em> is the name of a
+Python codec, as appropriate for the second argument to the <a class="reference internal" href="functions.html#unicode" title="unicode"><tt class="xref py py-func docutils literal"><span class="pre">unicode()</span></tt></a>
+built-in, or to the <tt class="xref py py-meth docutils literal"><span class="pre">encode()</span></tt> method of a Unicode string.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="email.header.html"
+                        title="previous chapter">18.1.5. <tt class="docutils literal"><span class="pre">email.header</span></tt>: Internationalized headers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="email.encoders.html"
+                        title="next chapter">18.1.7. <tt class="docutils literal"><span class="pre">email.encoders</span></tt>: Encoders</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/email.charset.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.encoders.html" title="18.1.7. email.encoders: Encoders"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="email.header.html" title="18.1.5. email.header: Internationalized headers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li>
+          <li><a href="email.html" >18.1. <tt class="docutils literal docutils literal docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

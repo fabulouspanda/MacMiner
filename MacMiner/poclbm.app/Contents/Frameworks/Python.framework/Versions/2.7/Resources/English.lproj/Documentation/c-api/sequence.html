@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sequence Protocol &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Abstract Objects Layer" href="abstract.html" />
+    <link rel="next" title="Mapping Protocol" href="mapping.html" />
+    <link rel="prev" title="Number Protocol" href="number.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mapping.html" title="Mapping Protocol"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="number.html" title="Number Protocol"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="abstract.html" accesskey="U">Abstract Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sequence-protocol">
+<span id="sequence"></span><h1>Sequence Protocol<a class="headerlink" href="#sequence-protocol" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="PySequence_Check">
+int <tt class="descname">PySequence_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">1</span></tt> if the object provides sequence protocol, and <tt class="docutils literal"><span class="pre">0</span></tt> otherwise.
+This function always succeeds.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Size">
+Py_ssize_t <tt class="descname">PySequence_Size</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_Size" title="Permalink to this definition">¶</a></dt>
+<dt id="PySequence_Length">
+Py_ssize_t <tt class="descname">PySequence_Length</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_Length" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">Returns the number of objects in sequence <em>o</em> on success, and <tt class="docutils literal"><span class="pre">-1</span></tt> on failure.
+For objects that do not provide sequence protocol, this is equivalent to the
+Python expression <tt class="docutils literal"><span class="pre">len(o)</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>These functions returned an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Concat">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_Concat</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o1</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o2</em><big>)</big><a class="headerlink" href="#PySequence_Concat" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the concatenation of <em>o1</em> and <em>o2</em> on success, and <em>NULL</em> on failure.
+This is the equivalent of the Python expression <tt class="docutils literal"><span class="pre">o1</span> <span class="pre">+</span> <span class="pre">o2</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Repeat">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_Repeat</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;count</em><big>)</big><a class="headerlink" href="#PySequence_Repeat" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the result of repeating sequence object <em>o</em> <em>count</em> times, or <em>NULL</em> on
+failure.  This is the equivalent of the Python expression <tt class="docutils literal"><span class="pre">o</span> <span class="pre">*</span> <span class="pre">count</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>count</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_InPlaceConcat">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_InPlaceConcat</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o1</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o2</em><big>)</big><a class="headerlink" href="#PySequence_InPlaceConcat" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the concatenation of <em>o1</em> and <em>o2</em> on success, and <em>NULL</em> on failure.
+The operation is done <em>in-place</em> when <em>o1</em> supports it.  This is the equivalent
+of the Python expression <tt class="docutils literal"><span class="pre">o1</span> <span class="pre">+=</span> <span class="pre">o2</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_InPlaceRepeat">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_InPlaceRepeat</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;count</em><big>)</big><a class="headerlink" href="#PySequence_InPlaceRepeat" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the result of repeating sequence object <em>o</em> <em>count</em> times, or <em>NULL</em> on
+failure.  The operation is done <em>in-place</em> when <em>o</em> supports it.  This is the
+equivalent of the Python expression <tt class="docutils literal"><span class="pre">o</span> <span class="pre">*=</span> <span class="pre">count</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>count</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_GetItem">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_GetItem</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i</em><big>)</big><a class="headerlink" href="#PySequence_GetItem" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the <em>i</em>th element of <em>o</em>, or <em>NULL</em> on failure. This is the equivalent of
+the Python expression <tt class="docutils literal"><span class="pre">o[i]</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_GetSlice">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_GetSlice</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i1</em>, Py_ssize_t<em>&nbsp;i2</em><big>)</big><a class="headerlink" href="#PySequence_GetSlice" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the slice of sequence object <em>o</em> between <em>i1</em> and <em>i2</em>, or <em>NULL</em> on
+failure. This is the equivalent of the Python expression <tt class="docutils literal"><span class="pre">o[i1:i2]</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i1</em> and <em>i2</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_SetItem">
+int <tt class="descname">PySequence_SetItem</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*v</em><big>)</big><a class="headerlink" href="#PySequence_SetItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign object <em>v</em> to the <em>i</em>th element of <em>o</em>.  Returns <tt class="docutils literal"><span class="pre">-1</span></tt> on failure.  This
+is the equivalent of the Python statement <tt class="docutils literal"><span class="pre">o[i]</span> <span class="pre">=</span> <span class="pre">v</span></tt>.  This function <em>does
+not</em> steal a reference to <em>v</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_DelItem">
+int <tt class="descname">PySequence_DelItem</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i</em><big>)</big><a class="headerlink" href="#PySequence_DelItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the <em>i</em>th element of object <em>o</em>.  Returns <tt class="docutils literal"><span class="pre">-1</span></tt> on failure.  This is the
+equivalent of the Python statement <tt class="docutils literal"><span class="pre">del</span> <span class="pre">o[i]</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_SetSlice">
+int <tt class="descname">PySequence_SetSlice</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i1</em>, Py_ssize_t<em>&nbsp;i2</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*v</em><big>)</big><a class="headerlink" href="#PySequence_SetSlice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign the sequence object <em>v</em> to the slice in sequence object <em>o</em> from <em>i1</em> to
+<em>i2</em>.  This is the equivalent of the Python statement <tt class="docutils literal"><span class="pre">o[i1:i2]</span> <span class="pre">=</span> <span class="pre">v</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i1</em> and <em>i2</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_DelSlice">
+int <tt class="descname">PySequence_DelSlice</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i1</em>, Py_ssize_t<em>&nbsp;i2</em><big>)</big><a class="headerlink" href="#PySequence_DelSlice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the slice in sequence object <em>o</em> from <em>i1</em> to <em>i2</em>.  Returns <tt class="docutils literal"><span class="pre">-1</span></tt> on
+failure.  This is the equivalent of the Python statement <tt class="docutils literal"><span class="pre">del</span> <span class="pre">o[i1:i2]</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i1</em> and <em>i2</em>. This might
+require changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Count">
+Py_ssize_t <tt class="descname">PySequence_Count</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*value</em><big>)</big><a class="headerlink" href="#PySequence_Count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of occurrences of <em>value</em> in <em>o</em>, that is, return the number
+of keys for which <tt class="docutils literal"><span class="pre">o[key]</span> <span class="pre">==</span> <span class="pre">value</span></tt>.  On failure, return <tt class="docutils literal"><span class="pre">-1</span></tt>.  This is
+equivalent to the Python expression <tt class="docutils literal"><span class="pre">o.count(value)</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function returned an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type. This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Contains">
+int <tt class="descname">PySequence_Contains</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*value</em><big>)</big><a class="headerlink" href="#PySequence_Contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if <em>o</em> contains <em>value</em>.  If an item in <em>o</em> is equal to <em>value</em>,
+return <tt class="docutils literal"><span class="pre">1</span></tt>, otherwise return <tt class="docutils literal"><span class="pre">0</span></tt>. On error, return <tt class="docutils literal"><span class="pre">-1</span></tt>.  This is
+equivalent to the Python expression <tt class="docutils literal"><span class="pre">value</span> <span class="pre">in</span> <span class="pre">o</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Index">
+Py_ssize_t <tt class="descname">PySequence_Index</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*value</em><big>)</big><a class="headerlink" href="#PySequence_Index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the first index <em>i</em> for which <tt class="docutils literal"><span class="pre">o[i]</span> <span class="pre">==</span> <span class="pre">value</span></tt>.  On error, return
+<tt class="docutils literal"><span class="pre">-1</span></tt>.    This is equivalent to the Python expression <tt class="docutils literal"><span class="pre">o.index(value)</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function returned an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type. This might require changes
+in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_List">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_List</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_List" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a list object with the same contents as the arbitrary sequence <em>o</em>.  The
+returned list is guaranteed to be new.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Tuple">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_Tuple</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_Tuple" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p id="index-1">Return a tuple object with the same contents as the arbitrary sequence <em>o</em> or
+<em>NULL</em> on failure.  If <em>o</em> is a tuple, a new reference will be returned,
+otherwise a tuple will be constructed with the appropriate contents.  This is
+equivalent to the Python expression <tt class="docutils literal"><span class="pre">tuple(o)</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Fast">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_Fast</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, const char<em>&nbsp;*m</em><big>)</big><a class="headerlink" href="#PySequence_Fast" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Returns the sequence <em>o</em> as a tuple, unless it is already a tuple or list, in
+which case <em>o</em> is returned.  Use <a class="reference internal" href="#PySequence_Fast_GET_ITEM" title="PySequence_Fast_GET_ITEM"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Fast_GET_ITEM()</span></tt></a> to access the
+members of the result.  Returns <em>NULL</em> on failure.  If the object is not a
+sequence, raises <a class="reference internal" href="../library/exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a> with <em>m</em> as the message text.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Fast_GET_ITEM">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_Fast_GET_ITEM</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i</em><big>)</big><a class="headerlink" href="#PySequence_Fast_GET_ITEM" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>Return the <em>i</em>th element of <em>o</em>, assuming that <em>o</em> was returned by
+<a class="reference internal" href="#PySequence_Fast" title="PySequence_Fast"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Fast()</span></tt></a>, <em>o</em> is not <em>NULL</em>, and that <em>i</em> is within bounds.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Fast_ITEMS">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>** <tt class="descname">PySequence_Fast_ITEMS</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_Fast_ITEMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the underlying array of PyObject pointers.  Assumes that <em>o</em> was returned
+by <a class="reference internal" href="#PySequence_Fast" title="PySequence_Fast"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Fast()</span></tt></a> and <em>o</em> is not <em>NULL</em>.</p>
+<p>Note, if a list gets resized, the reallocation may relocate the items array.
+So, only use the underlying array pointer in contexts where the sequence
+cannot change.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_ITEM">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PySequence_ITEM</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, Py_ssize_t<em>&nbsp;i</em><big>)</big><a class="headerlink" href="#PySequence_ITEM" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the <em>i</em>th element of <em>o</em> or <em>NULL</em> on failure. Macro form of
+<a class="reference internal" href="#PySequence_GetItem" title="PySequence_GetItem"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_GetItem()</span></tt></a> but without checking that
+<a class="reference internal" href="#PySequence_Check" title="PySequence_Check"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Check()</span></tt></a> on <em>o</em> is true and without adjustment for negative
+indices.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>i</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PySequence_Fast_GET_SIZE">
+Py_ssize_t <tt class="descname">PySequence_Fast_GET_SIZE</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PySequence_Fast_GET_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the length of <em>o</em>, assuming that <em>o</em> was returned by
+<a class="reference internal" href="#PySequence_Fast" title="PySequence_Fast"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Fast()</span></tt></a> and that <em>o</em> is not <em>NULL</em>.  The size can also be
+gotten by calling <a class="reference internal" href="#PySequence_Size" title="PySequence_Size"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Size()</span></tt></a> on <em>o</em>, but
+<a class="reference internal" href="#PySequence_Fast_GET_SIZE" title="PySequence_Fast_GET_SIZE"><tt class="xref c c-func docutils literal"><span class="pre">PySequence_Fast_GET_SIZE()</span></tt></a> is faster because it can assume <em>o</em> is a list
+or tuple.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="number.html"
+                        title="previous chapter">Number Protocol</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mapping.html"
+                        title="next chapter">Mapping Protocol</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/sequence.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mapping.html" title="Mapping Protocol"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="number.html" title="Number Protocol"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="abstract.html" >Abstract Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

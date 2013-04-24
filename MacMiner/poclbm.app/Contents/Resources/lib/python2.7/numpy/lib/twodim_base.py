@@ -9,7 +9,7 @@ __all__ = ['diag','diagflat','eye','fliplr','flipud','rot90','tri','triu',
 
 from numpy.core.numeric import asanyarray, equal, subtract, arange, \
      zeros, greater_equal, multiply, ones, asarray, alltrue, where, \
-     empty
+     empty, diagonal
 
 def fliplr(m):
     """
@@ -221,6 +221,11 @@ def diag(v, k=0):
     """
     Extract a diagonal or construct a diagonal array.
 
+    See the more detailed documentation for ``numpy.diagonal`` if you use this
+    function to extract a diagonal and wish to write to the resulting array;
+    whether it returns a copy or a view depends on what version of numpy you
+    are using.
+
     Parameters
     ----------
     v : array_like
@@ -278,16 +283,7 @@ def diag(v, k=0):
         res[:n-k].flat[i::n+1] = v
         return res
     elif len(s) == 2:
-        if k >= s[1]:
-            return empty(0, dtype=v.dtype)
-        if v.flags.f_contiguous:
-            # faster slicing
-            v, k, s = v.T, -k, s[::-1]
-        if k >= 0:
-            i = k
-        else:
-            i = (-k) * s[1]
-        return v[:s[1]-k].flat[i::s[1]+1]
+        return v.diagonal(k)
     else:
         raise ValueError("Input must be 1- or 2-d.")
 
@@ -369,7 +365,7 @@ def tri(N, M=None, k=0, dtype=float):
 
     Returns
     -------
-    T : ndarray of shape (N, M)
+    tri : ndarray of shape (N, M)
         Array with its lower triangle filled with ones and zero elsewhere;
         in other words ``T[i,j] == 1`` for ``i <= j + k``, 0 otherwise.
 
@@ -407,7 +403,7 @@ def tril(m, k=0):
 
     Returns
     -------
-    L : ndarray, shape (M, N)
+    tril : ndarray, shape (M, N)
         Lower triangle of `m`, of same shape and data-type as `m`.
 
     See Also
@@ -424,7 +420,7 @@ def tril(m, k=0):
 
     """
     m = asanyarray(m)
-    out = multiply(tri(m.shape[0], m.shape[1], k=k, dtype=int),m)
+    out = multiply(tri(m.shape[0], m.shape[1], k=k, dtype=m.dtype),m)
     return out
 
 def triu(m, k=0):
@@ -450,7 +446,7 @@ def triu(m, k=0):
 
     """
     m = asanyarray(m)
-    out = multiply((1 - tri(m.shape[0], m.shape[1], k - 1, int)), m)
+    out = multiply((1 - tri(m.shape[0], m.shape[1], k - 1, dtype=m.dtype)), m)
     return out
 
 # borrowed from John Hunter and matplotlib
@@ -801,9 +797,10 @@ def triu_indices(n, k=0):
 
     Returns
     -------
-    inds : tuple of arrays
+    inds : tuple, shape(2) of ndarrays, shape(`n`)
         The indices for the triangle. The returned tuple contains two arrays,
-        each with the indices along one dimension of the array.
+        each with the indices along one dimension of the array.  Can be used
+        to slice a ndarray of shape(`n`, `n`).
 
     See also
     --------
@@ -863,17 +860,21 @@ def triu_indices(n, k=0):
 
 def triu_indices_from(arr, k=0):
     """
-    Return the indices for the upper-triangle of an (n, n) array.
+    Return the indices for the upper-triangle of a (N, N) array.
 
     See `triu_indices` for full details.
 
     Parameters
     ----------
-    arr : array_like
-        The indices will be valid for square arrays whose dimensions are
-        the same as arr.
+    arr : ndarray, shape(N, N)
+        The indices will be valid for square arrays.
     k : int, optional
-      Diagonal offset (see `triu` for details).
+        Diagonal offset (see `triu` for details).
+
+    Returns
+    -------
+    triu_indices_from : tuple, shape(2) of ndarray, shape(N)
+        Indices for the upper-triangle of `arr`.
 
     See Also
     --------
@@ -887,4 +888,3 @@ def triu_indices_from(arr, k=0):
     if not (arr.ndim == 2 and arr.shape[0] == arr.shape[1]):
         raise ValueError("input array must be 2-d and square")
     return triu_indices(arr.shape[0],k)
-

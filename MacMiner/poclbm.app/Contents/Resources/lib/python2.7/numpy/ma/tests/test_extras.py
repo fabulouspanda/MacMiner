@@ -630,7 +630,17 @@ class TestPolynomial(TestCase):
         (c, r, k, s, d) = np.polyfit(x[1:-1], y[1:-1, :], 3, full=True)
         for (a, a_) in zip((C, R, K, S, D), (c, r, k, s, d)):
             assert_almost_equal(a, a_)
-
+        #
+        w =  np.random.rand(10) + 1
+        wo = w.copy()
+        xs = x[1:-1]
+        ys = y[1:-1]
+        ws = w[1:-1]
+        (C, R, K, S, D) = polyfit(x, y, 3, full=True, w=w)
+        (c, r, k, s, d) = np.polyfit(xs, ys, 3, full=True, w=ws)
+        assert_equal(w, wo)
+        for (a, a_) in zip((C, R, K, S, D), (c, r, k, s, d)):
+            assert_almost_equal(a, a_)
 
 
 class TestArraySetOps(TestCase):
@@ -770,13 +780,13 @@ class TestArraySetOps(TestCase):
         a = array([1, 2, 3])
         b = array([6, 5, 4])
         test = setxor1d(a, b)
-        assert(isinstance(test, MaskedArray))
+        assert_(isinstance(test, MaskedArray))
         assert_equal(test, [1, 2, 3, 4, 5, 6])
         #
         a = array([1, 8, 2, 3], mask=[0, 1, 0, 0])
         b = array([6, 5, 4, 8], mask=[0, 0, 0, 1])
         test = setxor1d(a, b)
-        assert(isinstance(test, MaskedArray))
+        assert_(isinstance(test, MaskedArray))
         assert_equal(test, [1, 2, 3, 4, 5, 6])
         #
         assert_array_equal([], setxor1d([], []))

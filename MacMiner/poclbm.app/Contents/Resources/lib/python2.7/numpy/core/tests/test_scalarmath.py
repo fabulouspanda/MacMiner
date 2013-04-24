@@ -13,7 +13,7 @@ class TestTypes(TestCase):
     def test_types(self, level=1):
         for atype in types:
             a = atype(1)
-            assert a == 1, "error with %r: got %r" % (atype,a)
+            assert_(a == 1, "error with %r: got %r" % (atype,a))
 
     def test_type_add(self, level=1):
         # list of types
@@ -44,10 +44,10 @@ class TestTypes(TestCase):
 
 class TestPower(TestCase):
     def test_small_types(self):
-        for t in [np.int8, np.int16]:
+        for t in [np.int8, np.int16, np.float16]:
             a = t(3)
             b = a ** 4
-            assert b == 81, "error with %r: got %r" % (t,b)
+            assert_(b == 81, "error with %r: got %r" % (t,b))
 
     def test_large_types(self):
         for t in [np.int32, np.int64, np.float32, np.float64, np.longdouble]:
@@ -55,9 +55,45 @@ class TestPower(TestCase):
             b = a ** 4
             msg = "error with %r: got %r" % (t,b)
             if np.issubdtype(t, np.integer):
-                assert b == 6765201, msg
+                assert_(b == 6765201, msg)
             else:
                 assert_almost_equal(b, 6765201, err_msg=msg)
+    def test_mixed_types(self):
+        typelist = [np.int8,np.int16,np.float16,
+                    np.float32,np.float64,np.int8,
+                    np.int16,np.int32,np.int64]
+        for t1 in typelist:
+            for t2 in typelist:
+                a = t1(3)
+                b = t2(2)
+                result = a**b
+                msg = ("error with %r and %r:"
+                       "got %r, expected %r") % (t1, t2, result, 9)
+                if np.issubdtype(np.dtype(result), np.integer):
+                    assert_(result == 9, msg)
+                else:
+                    assert_almost_equal(result, 9, err_msg=msg)
+
+class TestComplexDivision(TestCase):
+    def test_zero_division(self):
+        err = np.seterr(all="ignore")
+        try:
+            for t in [np.complex64, np.complex128]:
+                a = t(0.0)
+                b = t(1.0)
+                assert_(np.isinf(b/a))
+                b = t(complex(np.inf, np.inf))
+                assert_(np.isinf(b/a))
+                b = t(complex(np.inf, np.nan))
+                assert_(np.isinf(b/a))
+                b = t(complex(np.nan, np.inf))
+                assert_(np.isinf(b/a))
+                b = t(complex(np.nan, np.nan))
+                assert_(np.isnan(b/a))
+                b = t(0.)
+                assert_(np.isnan(b/a))
+        finally:
+            np.seterr(**err)
 
 
 class TestConversion(TestCase):
@@ -81,7 +117,7 @@ class TestConversion(TestCase):
 #            assert_equal( val, val2 )
 
 
-class TestRepr:
+class TestRepr(object):
     def _test_type_repr(self, t):
         finfo=np.finfo(t)
         last_fraction_bit_idx = finfo.nexp + finfo.nmant

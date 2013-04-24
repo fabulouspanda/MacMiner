@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11.11. bsddb — Interface to Berkeley DB library &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="11. Data Persistence" href="persistence.html" />
+    <link rel="next" title="11.12. dumbdbm — Portable DBM implementation" href="dumbdbm.html" />
+    <link rel="prev" title="11.10. dbhash — DBM-style interface to the BSD database library" href="dbhash.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dumbdbm.html" title="11.12. dumbdbm — Portable DBM implementation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dbhash.html" title="11.10. dbhash — DBM-style interface to the BSD database library"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="persistence.html" accesskey="U">11. Data Persistence</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-bsddb">
+<span id="bsddb-interface-to-berkeley-db-library"></span><h1>11.11. <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> &#8212; Interface to Berkeley DB library<a class="headerlink" href="#module-bsddb" title="Permalink to this headline">¶</a></h1>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> module has been removed in Python 3.</p>
+<p>The <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> module provides an interface to the Berkeley DB library.  Users
+can create hash, btree or record based library files using the appropriate open
+call. Bsddb objects behave generally like dictionaries.  Keys and values must be
+strings, however, so to use other objects as keys or to store other kinds of
+objects the user must serialize them somehow, typically using
+<a class="reference internal" href="marshal.html#marshal.dumps" title="marshal.dumps"><tt class="xref py py-func docutils literal"><span class="pre">marshal.dumps()</span></tt></a> or  <a class="reference internal" href="pickle.html#pickle.dumps" title="pickle.dumps"><tt class="xref py py-func docutils literal"><span class="pre">pickle.dumps()</span></tt></a>.</p>
+<p>The <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> module requires a Berkeley DB library version from 4.0 thru
+4.7.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://www.jcea.es/programacion/pybsddb.htm">http://www.jcea.es/programacion/pybsddb.htm</a></dt>
+<dd>The website with documentation for the <tt class="xref py py-mod docutils literal"><span class="pre">bsddb.db</span></tt> Python Berkeley DB
+interface that closely mirrors the object oriented interface provided in
+Berkeley DB 4.x itself.</dd>
+<dt><a class="reference external" href="http://www.oracle.com/database/berkeley-db/">http://www.oracle.com/database/berkeley-db/</a></dt>
+<dd>The Berkeley DB library.</dd>
+</dl>
+</div>
+<p>A more modern DB, DBEnv and DBSequence object interface is available in the
+<tt class="xref py py-mod docutils literal"><span class="pre">bsddb.db</span></tt> module which closely matches the Berkeley DB C API documented at
+the above URLs.  Additional features provided by the <tt class="xref py py-mod docutils literal"><span class="pre">bsddb.db</span></tt> API include
+fine tuning, transactions, logging, and multiprocess concurrent database access.</p>
+<p>The following is a description of the legacy <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> interface compatible
+with the old Python bsddb module.  Starting in Python 2.5 this interface should
+be safe for multithreaded access.  The <tt class="xref py py-mod docutils literal"><span class="pre">bsddb.db</span></tt> API is recommended for
+threading users as it provides better control.</p>
+<p>The <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> module defines the following functions that create objects that
+access the appropriate type of Berkeley DB file.  The first two arguments of
+each function are the same.  For ease of portability, only the first two
+arguments should be used in most instances.</p>
+<dl class="function">
+<dt id="bsddb.hashopen">
+<tt class="descclassname">bsddb.</tt><tt class="descname">hashopen</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>flag</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>pgsize</em><span class="optional">[</span>, <em>ffactor</em><span class="optional">[</span>, <em>nelem</em><span class="optional">[</span>, <em>cachesize</em><span class="optional">[</span>, <em>lorder</em><span class="optional">[</span>, <em>hflags</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#bsddb.hashopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the hash format file named <em>filename</em>.  Files never intended to be
+preserved on disk may be created by passing <tt class="xref docutils literal"><span class="pre">None</span></tt> as the  <em>filename</em>.  The
+optional <em>flag</em> identifies the mode used to open the file.  It may be <tt class="docutils literal"><span class="pre">'r'</span></tt>
+(read only), <tt class="docutils literal"><span class="pre">'w'</span></tt> (read-write) , <tt class="docutils literal"><span class="pre">'c'</span></tt> (read-write - create if necessary;
+the default) or <tt class="docutils literal"><span class="pre">'n'</span></tt> (read-write - truncate to zero length).  The other
+arguments are rarely used and are just passed to the low-level <tt class="xref c c-func docutils literal"><span class="pre">dbopen()</span></tt>
+function.  Consult the Berkeley DB documentation for their use and
+interpretation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bsddb.btopen">
+<tt class="descclassname">bsddb.</tt><tt class="descname">btopen</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>flag</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>btflags</em><span class="optional">[</span>, <em>cachesize</em><span class="optional">[</span>, <em>maxkeypage</em><span class="optional">[</span>, <em>minkeypage</em><span class="optional">[</span>, <em>pgsize</em><span class="optional">[</span>, <em>lorder</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#bsddb.btopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the btree format file named <em>filename</em>.  Files never intended  to be
+preserved on disk may be created by passing <tt class="xref docutils literal"><span class="pre">None</span></tt> as the  <em>filename</em>.  The
+optional <em>flag</em> identifies the mode used to open the file.  It may be <tt class="docutils literal"><span class="pre">'r'</span></tt>
+(read only), <tt class="docutils literal"><span class="pre">'w'</span></tt> (read-write), <tt class="docutils literal"><span class="pre">'c'</span></tt> (read-write - create if necessary;
+the default) or <tt class="docutils literal"><span class="pre">'n'</span></tt> (read-write - truncate to zero length).  The other
+arguments are rarely used and are just passed to the low-level dbopen function.
+Consult the Berkeley DB documentation for their use and interpretation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bsddb.rnopen">
+<tt class="descclassname">bsddb.</tt><tt class="descname">rnopen</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>flag</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>rnflags</em><span class="optional">[</span>, <em>cachesize</em><span class="optional">[</span>, <em>pgsize</em><span class="optional">[</span>, <em>lorder</em><span class="optional">[</span>, <em>rlen</em><span class="optional">[</span>, <em>delim</em><span class="optional">[</span>, <em>source</em><span class="optional">[</span>, <em>pad</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#bsddb.rnopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a DB record format file named <em>filename</em>.  Files never intended  to be
+preserved on disk may be created by passing <tt class="xref docutils literal"><span class="pre">None</span></tt> as the  <em>filename</em>.  The
+optional <em>flag</em> identifies the mode used to open the file.  It may be <tt class="docutils literal"><span class="pre">'r'</span></tt>
+(read only), <tt class="docutils literal"><span class="pre">'w'</span></tt> (read-write), <tt class="docutils literal"><span class="pre">'c'</span></tt> (read-write - create if necessary;
+the default) or <tt class="docutils literal"><span class="pre">'n'</span></tt> (read-write - truncate to zero length).  The other
+arguments are rarely used and are just passed to the low-level dbopen function.
+Consult the Berkeley DB documentation for their use and interpretation.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Beginning in 2.3 some Unix versions of Python may have a <tt class="xref py py-mod docutils literal"><span class="pre">bsddb185</span></tt> module.
+This is present <em>only</em> to allow backwards compatibility with systems which ship
+with the old Berkeley DB 1.85 database library.  The <tt class="xref py py-mod docutils literal"><span class="pre">bsddb185</span></tt> module
+should never be used directly in new code. The module has been removed in
+Python 3.  If you find you still need it look in PyPI.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="dbhash.html#module-dbhash" title="dbhash: DBM-style interface to the BSD database library."><tt class="xref py py-mod docutils literal"><span class="pre">dbhash</span></tt></a></dt>
+<dd>DBM-style interface to the <a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a></dd>
+</dl>
+</div>
+<div class="section" id="hash-btree-and-record-objects">
+<span id="bsddb-objects"></span><h2>11.11.1. Hash, BTree and Record Objects<a class="headerlink" href="#hash-btree-and-record-objects" title="Permalink to this headline">¶</a></h2>
+<p>Once instantiated, hash, btree and record objects support the same methods as
+dictionaries.  In addition, they support the methods listed below.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3.1: </span>Added dictionary methods.</p>
+<dl class="method">
+<dt id="bsddb.bsddbobject.close">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the underlying file.  The object can no longer be accessed.  Since there
+is no open <a class="reference internal" href="functions.html#open" title="open"><tt class="xref py py-meth docutils literal"><span class="pre">open()</span></tt></a> method for these objects, to open the file again a new
+<a class="reference internal" href="#module-bsddb" title="bsddb: Interface to Berkeley DB database library"><tt class="xref py py-mod docutils literal"><span class="pre">bsddb</span></tt></a> module open function must be called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.keys">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">keys</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of keys contained in the DB file.  The order of the list is
+unspecified and should not be relied on.  In particular, the order of the list
+returned is different for different file formats.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.has_key">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">has_key</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.has_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">1</span></tt> if the DB file contains the argument as a key.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.set_location">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">set_location</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.set_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cursor to the item indicated by <em>key</em> and return a tuple containing the
+key and its value.  For binary tree databases (opened using <a class="reference internal" href="#bsddb.btopen" title="bsddb.btopen"><tt class="xref py py-func docutils literal"><span class="pre">btopen()</span></tt></a>), if
+<em>key</em> does not actually exist in the database, the cursor will point to the next
+item in sorted order and return that key and value.  For other databases,
+<a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><tt class="xref py py-exc docutils literal"><span class="pre">KeyError</span></tt></a> will be raised if <em>key</em> is not found in the database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.first">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">first</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cursor to the first item in the DB file and return it.  The order of
+keys in the file is unspecified, except in the case of B-Tree databases. This
+method raises <tt class="xref py py-exc docutils literal"><span class="pre">bsddb.error</span></tt> if the database is empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.next">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cursor to the next item in the DB file and return it.  The order of
+keys in the file is unspecified, except in the case of B-Tree databases.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.previous">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">previous</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.previous" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cursor to the previous item in the DB file and return it.  The order of
+keys in the file is unspecified, except in the case of B-Tree databases.  This
+is not supported on hashtable databases (those opened with <a class="reference internal" href="#bsddb.hashopen" title="bsddb.hashopen"><tt class="xref py py-func docutils literal"><span class="pre">hashopen()</span></tt></a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.last">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">last</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the cursor to the last item in the DB file and return it.  The order of keys
+in the file is unspecified.  This is not supported on hashtable databases (those
+opened with <a class="reference internal" href="#bsddb.hashopen" title="bsddb.hashopen"><tt class="xref py py-func docutils literal"><span class="pre">hashopen()</span></tt></a>). This method raises <tt class="xref py py-exc docutils literal"><span class="pre">bsddb.error</span></tt> if the
+database is empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bsddb.bsddbobject.sync">
+<tt class="descclassname">bsddbobject.</tt><tt class="descname">sync</tt><big>(</big><big>)</big><a class="headerlink" href="#bsddb.bsddbobject.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Synchronize the database on disk.</p>
+</dd></dl>
+
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">bsddb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span> <span class="o">=</span> <span class="n">bsddb</span><span class="o">.</span><span class="n">btopen</span><span class="p">(</span><span class="s">&#39;spam.db&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span> <span class="n">db</span><span class="p">[</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">&#39;</span><span class="o">%</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s">&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="p">[</span><span class="s">&#39;3&#39;</span><span class="p">]</span>
+<span class="go">&#39;9&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="go">(&#39;0&#39;, &#39;0&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<span class="go">(&#39;1&#39;, &#39;1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">last</span><span class="p">()</span>
+<span class="go">(&#39;9&#39;, &#39;81&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">)</span>
+<span class="go">(&#39;2&#39;, &#39;4&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">previous</span><span class="p">()</span>
+<span class="go">(&#39;1&#39;, &#39;1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">db</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+<span class="go">0 0</span>
+<span class="go">1 1</span>
+<span class="go">2 4</span>
+<span class="go">3 9</span>
+<span class="go">4 16</span>
+<span class="go">5 25</span>
+<span class="go">6 36</span>
+<span class="go">7 49</span>
+<span class="go">8 64</span>
+<span class="go">9 81</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;8&#39;</span> <span class="ow">in</span> <span class="n">db</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">11.11. <tt class="docutils literal"><span class="pre">bsddb</span></tt> &#8212; Interface to Berkeley DB library</a><ul>
+<li><a class="reference internal" href="#hash-btree-and-record-objects">11.11.1. Hash, BTree and Record Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dbhash.html"
+                        title="previous chapter">11.10. <tt class="docutils literal"><span class="pre">dbhash</span></tt> &#8212; DBM-style interface to the BSD database library</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="dumbdbm.html"
+                        title="next chapter">11.12. <tt class="docutils literal"><span class="pre">dumbdbm</span></tt> &#8212; Portable DBM implementation</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/bsddb.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="dumbdbm.html" title="11.12. dumbdbm — Portable DBM implementation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dbhash.html" title="11.10. dbhash — DBM-style interface to the BSD database library"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="persistence.html" >11. Data Persistence</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

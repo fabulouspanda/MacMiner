@@ -18,9 +18,13 @@ _when_to_num = {'end':0, 'begin':1,
                 'finish':0}
 
 def _convert_when(when):
+    #Test to see if when has already been converted to ndarray
+    #This will happen if one function calls another, for example ppmt
+    if isinstance(when, np.ndarray):
+        return when
     try:
         return _when_to_num[when]
-    except KeyError:
+    except (KeyError, TypeError):
         return [_when_to_num[x] for x in when]
 
 
@@ -236,8 +240,8 @@ def nper(rate, pmt, pv, fv=0, when='end'):
     If you only had $150/month to pay towards the loan, how long would it take
     to pay-off a loan of $8,000 at 7% annual interest?
 
-    >>> np.nper(0.07/12, -150, 8000)
-    64.073348770661852
+    >>> print round(np.nper(0.07/12, -150, 8000), 5)
+    64.07335
 
     So, over 64 months would be required to pay off the loan.
 
@@ -277,7 +281,7 @@ def nper(rate, pmt, pv, fv=0, when='end'):
 
 def ipmt(rate, per, nper, pv, fv=0.0, when='end'):
     """
-    Not implemented. Compute the payment portion for loan interest.
+    Compute the interest portion of a payment.
 
     Parameters
     ----------
@@ -314,14 +318,73 @@ def ipmt(rate, per, nper, pv, fv=0.0, when='end'):
 
     ``pmt = ppmt + ipmt``
 
+    Examples
+    --------
+    What is the amortization schedule for a 1 year loan of $2500 at
+    8.24% interest per year compounded monthly?
+
+    >>> principal = 2500.00
+
+    The 'per' variable represents the periods of the loan.  Remember that
+    financial equations start the period count at 1!
+
+    >>> per = np.arange(1*12) + 1
+    >>> ipmt = np.ipmt(0.0824/12, per, 1*12, principal)
+    >>> ppmt = np.ppmt(0.0824/12, per, 1*12, principal)
+
+    Each element of the sum of the 'ipmt' and 'ppmt' arrays should equal
+    'pmt'.
+
+    >>> pmt = np.pmt(0.0824/12, 1*12, principal)
+    >>> np.allclose(ipmt + ppmt, pmt)
+    True
+
+    >>> fmt = '{0:2d} {1:8.2f} {2:8.2f} {3:8.2f}'
+    >>> for payment in per:
+    ...     index = payment - 1
+    ...     principal = principal + ppmt[index]
+    ...     print fmt.format(payment, ppmt[index], ipmt[index], principal)
+     1  -200.58   -17.17  2299.42
+     2  -201.96   -15.79  2097.46
+     3  -203.35   -14.40  1894.11
+     4  -204.74   -13.01  1689.37
+     5  -206.15   -11.60  1483.22
+     6  -207.56   -10.18  1275.66
+     7  -208.99    -8.76  1066.67
+     8  -210.42    -7.32   856.25
+     9  -211.87    -5.88   644.38
+    10  -213.32    -4.42   431.05
+    11  -214.79    -2.96   216.26
+    12  -216.26    -1.49    -0.00
+
+    >>> interestpd = np.sum(ipmt)
+    >>> np.round(interestpd, 2)
+    -112.98
+
     """
-    total = pmt(rate, nper, pv, fv, when)
-    # Now, compute the nth step in the amortization
-    raise NotImplementedError
+    when = _convert_when(when)
+    rate, per, nper, pv, fv, when = np.broadcast_arrays(rate, per, nper, pv, fv, when)
+    total_pmt = pmt(rate, nper, pv, fv, when)
+    ipmt = _rbl(rate, per, total_pmt, pv, when)*rate
+    try:
+        ipmt = np.where(when == 1, ipmt/(1 + rate), ipmt)
+        ipmt = np.where(np.logical_and(when == 1, per == 1), 0.0, ipmt)
+    except IndexError:
+        pass
+    return ipmt
+
+def _rbl(rate, per, pmt, pv, when):
+    """
+    This function is here to simply have a different name for the 'fv'
+    function to not interfere with the 'fv' keyword argument within the 'ipmt'
+    function.  It is the 'remaining balance on loan' which might be useful as
+    it's own function, but is easily calculated with the 'fv' function.
+    """
+    return fv(rate, (per - 1), pmt, pv, when)
 
 def ppmt(rate, per, nper, pv, fv=0.0, when='end'):
     """
-    Not implemented. Compute the payment against loan principal.
+    Compute the payment against loan principal.
 
     Parameters
     ----------
@@ -563,8 +626,8 @@ def irr(values):
 
     Examples
     --------
-    >>> np.irr([-100, 39, 59, 55, 20])
-    0.2809484211599611
+    >>> print round(np.irr([-100, 39, 59, 55, 20]), 5)
+    0.28095
 
     (Compare with the Example given for numpy.lib.financial.npv)
 
@@ -656,3 +719,7 @@ def mirr(values, finance_rate, reinvest_rate):
     denom = np.abs(npv(finance_rate, values*neg))*(1 + finance_rate)
     return (numer/denom)**(1.0/(n - 1))*(1 + reinvest_rate) - 1
 
+if __name__ == '__main__':
+    import doctest
+    import numpy as np
+    doctest.testmod(verbose=True)

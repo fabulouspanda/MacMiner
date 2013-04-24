@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>13.4. netrc — netrc file processing &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="13. File Formats" href="fileformats.html" />
+    <link rel="next" title="13.5. xdrlib — Encode and decode XDR data" href="xdrlib.html" />
+    <link rel="prev" title="13.3. robotparser — Parser for robots.txt" href="robotparser.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xdrlib.html" title="13.5. xdrlib — Encode and decode XDR data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="robotparser.html" title="13.3. robotparser — Parser for robots.txt"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="fileformats.html" accesskey="U">13. File Formats</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-netrc">
+<span id="netrc-netrc-file-processing"></span><h1>13.4. <a class="reference internal" href="#module-netrc" title="netrc: Loading of .netrc files."><tt class="xref py py-mod docutils literal"><span class="pre">netrc</span></tt></a> &#8212; netrc file processing<a class="headerlink" href="#module-netrc" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.2.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/netrc.py">Lib/netrc.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-netrc" title="netrc: Loading of .netrc files."><tt class="xref py py-class docutils literal"><span class="pre">netrc</span></tt></a> class parses and encapsulates the netrc file format used by
+the Unix <strong class="program">ftp</strong> program and other FTP clients.</p>
+<dl class="class">
+<dt id="netrc.netrc">
+<em class="property">class </em><tt class="descclassname">netrc.</tt><tt class="descname">netrc</tt><big>(</big><span class="optional">[</span><em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#netrc.netrc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#module-netrc" title="netrc: Loading of .netrc files."><tt class="xref py py-class docutils literal"><span class="pre">netrc</span></tt></a> instance or subclass instance encapsulates data from  a netrc
+file.  The initialization argument, if present, specifies the file to parse.  If
+no argument is given, the file <tt class="file docutils literal"><span class="pre">.netrc</span></tt> in the user&#8217;s home directory will
+be read.  Parse errors will raise <a class="reference internal" href="#netrc.NetrcParseError" title="netrc.NetrcParseError"><tt class="xref py py-exc docutils literal"><span class="pre">NetrcParseError</span></tt></a> with diagnostic
+information including the file name, line number, and terminating token.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="netrc.NetrcParseError">
+<em class="property">exception </em><tt class="descclassname">netrc.</tt><tt class="descname">NetrcParseError</tt><a class="headerlink" href="#netrc.NetrcParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised by the <a class="reference internal" href="#module-netrc" title="netrc: Loading of .netrc files."><tt class="xref py py-class docutils literal"><span class="pre">netrc</span></tt></a> class when syntactical errors are
+encountered in source text.  Instances of this exception provide three
+interesting attributes:  <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> is a textual explanation of the error,
+<tt class="xref py py-attr docutils literal"><span class="pre">filename</span></tt> is the name of the source file, and <tt class="xref py py-attr docutils literal"><span class="pre">lineno</span></tt> gives the
+line number on which the error was found.</p>
+</dd></dl>
+
+<div class="section" id="netrc-objects">
+<span id="id1"></span><h2>13.4.1. netrc Objects<a class="headerlink" href="#netrc-objects" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="#module-netrc" title="netrc: Loading of .netrc files."><tt class="xref py py-class docutils literal"><span class="pre">netrc</span></tt></a> instance has the following methods:</p>
+<dl class="method">
+<dt id="netrc.netrc.authenticators">
+<tt class="descclassname">netrc.</tt><tt class="descname">authenticators</tt><big>(</big><em>host</em><big>)</big><a class="headerlink" href="#netrc.netrc.authenticators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a 3-tuple <tt class="docutils literal"><span class="pre">(login,</span> <span class="pre">account,</span> <span class="pre">password)</span></tt> of authenticators for <em>host</em>.
+If the netrc file did not contain an entry for the given host, return the tuple
+associated with the &#8216;default&#8217; entry.  If neither matching host nor default entry
+is available, return <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="netrc.netrc.__repr__">
+<tt class="descclassname">netrc.</tt><tt class="descname">__repr__</tt><big>(</big><big>)</big><a class="headerlink" href="#netrc.netrc.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump the class data as a string in the format of a netrc file. (This discards
+comments and may reorder the entries.)</p>
+</dd></dl>
+
+<p>Instances of <a class="reference internal" href="#module-netrc" title="netrc: Loading of .netrc files."><tt class="xref py py-class docutils literal"><span class="pre">netrc</span></tt></a> have public instance variables:</p>
+<dl class="attribute">
+<dt id="netrc.netrc.hosts">
+<tt class="descclassname">netrc.</tt><tt class="descname">hosts</tt><a class="headerlink" href="#netrc.netrc.hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary mapping host names to <tt class="docutils literal"><span class="pre">(login,</span> <span class="pre">account,</span> <span class="pre">password)</span></tt> tuples.  The
+&#8216;default&#8217; entry, if any, is represented as a pseudo-host by that name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="netrc.netrc.macros">
+<tt class="descclassname">netrc.</tt><tt class="descname">macros</tt><a class="headerlink" href="#netrc.netrc.macros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary mapping macro names to string lists.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Passwords are limited to a subset of the ASCII character set. Versions of
+this module prior to 2.3 were extremely limited.  Starting with 2.3, all
+ASCII punctuation is allowed in passwords.  However, note that whitespace and
+non-printable characters are not allowed in passwords.  This is a limitation
+of the way the .netrc file is parsed and may be removed in the future.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">13.4. <tt class="docutils literal"><span class="pre">netrc</span></tt> &#8212; netrc file processing</a><ul>
+<li><a class="reference internal" href="#netrc-objects">13.4.1. netrc Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="robotparser.html"
+                        title="previous chapter">13.3. <tt class="docutils literal docutils literal"><span class="pre">robotparser</span></tt> &#8212;  Parser for robots.txt</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xdrlib.html"
+                        title="next chapter">13.5. <tt class="docutils literal"><span class="pre">xdrlib</span></tt> &#8212; Encode and decode XDR data</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/netrc.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xdrlib.html" title="13.5. xdrlib — Encode and decode XDR data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="robotparser.html" title="13.3. robotparser — Parser for robots.txt"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="fileformats.html" >13. File Formats</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

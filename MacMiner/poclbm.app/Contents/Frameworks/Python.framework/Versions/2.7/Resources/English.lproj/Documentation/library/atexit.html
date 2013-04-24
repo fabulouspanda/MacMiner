@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.9. atexit — Exit handlers &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="27. Python Runtime Services" href="python.html" />
+    <link rel="next" title="27.10. traceback — Print or retrieve a stack traceback" href="traceback.html" />
+    <link rel="prev" title="27.8. abc — Abstract Base Classes" href="abc.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="traceback.html" title="27.10. traceback — Print or retrieve a stack traceback"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="abc.html" title="27.8. abc — Abstract Base Classes"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" accesskey="U">27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-atexit">
+<span id="atexit-exit-handlers"></span><h1>27.9. <a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> &#8212; Exit handlers<a class="headerlink" href="#module-atexit" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/atexit.py">Lib/atexit.py</a></p>
+<hr class="docutils" />
+<p>The <a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> module defines a single function to register cleanup
+functions.  Functions thus registered are automatically executed upon normal
+interpreter termination.  The order in which the functions are called is not
+defined; if you have cleanup operations that depend on each other, you should
+wrap them in a function and register that one.  This keeps <a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> simple.</p>
+<p>Note: the functions registered via this module are not called when the program
+is killed by a signal not handled by Python, when a Python fatal internal error
+is detected, or when <a class="reference internal" href="os.html#os._exit" title="os._exit"><tt class="xref py py-func docutils literal"><span class="pre">os._exit()</span></tt></a> is called.</p>
+<p id="index-0">This is an alternate interface to the functionality provided by the
+<a class="reference internal" href="sys.html#sys.exitfunc" title="sys.exitfunc"><tt class="xref py py-func docutils literal"><span class="pre">sys.exitfunc()</span></tt></a> variable.</p>
+<p>Note: This module is unlikely to work correctly when used with other code that
+sets <tt class="docutils literal"><span class="pre">sys.exitfunc</span></tt>.  In particular, other core Python modules are free to use
+<a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> without the programmer&#8217;s knowledge.  Authors who use
+<tt class="docutils literal"><span class="pre">sys.exitfunc</span></tt> should convert their code to use <a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> instead.  The
+simplest way to convert code that sets <tt class="docutils literal"><span class="pre">sys.exitfunc</span></tt> is to import
+<a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> and register the function that had been bound to <tt class="docutils literal"><span class="pre">sys.exitfunc</span></tt>.</p>
+<dl class="function">
+<dt id="atexit.register">
+<tt class="descclassname">atexit.</tt><tt class="descname">register</tt><big>(</big><em>func</em><span class="optional">[</span>, <em>*args</em><span class="optional">[</span>, <em>**kargs</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#atexit.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register <em>func</em> as a function to be executed at termination.  Any optional
+arguments that are to be passed to <em>func</em> must be passed as arguments to
+<a class="reference internal" href="#atexit.register" title="atexit.register"><tt class="xref py py-func docutils literal"><span class="pre">register()</span></tt></a>.  It is possible to register the same function and arguments
+more than once.</p>
+<p>At normal program termination (for instance, if <a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><tt class="xref py py-func docutils literal"><span class="pre">sys.exit()</span></tt></a> is called or
+the main module&#8217;s execution completes), all functions registered are called in
+last in, first out order.  The assumption is that lower level modules will
+normally be imported before higher level modules and thus must be cleaned up
+later.</p>
+<p>If an exception is raised during execution of the exit handlers, a traceback is
+printed (unless <a class="reference internal" href="exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a> is raised) and the exception information is
+saved.  After all exit handlers have had a chance to run the last exception to
+be raised is re-raised.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>This function now returns <em>func</em>, which makes it possible to use it as a
+decorator.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">readline</span></tt></a></dt>
+<dd>Useful example of <a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> to read and write <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">readline</span></tt></a> history files.</dd>
+</dl>
+</div>
+<div class="section" id="atexit-example">
+<span id="id1"></span><h2>27.9.1. <a class="reference internal" href="#module-atexit" title="atexit: Register and execute cleanup functions."><tt class="xref py py-mod docutils literal"><span class="pre">atexit</span></tt></a> Example<a class="headerlink" href="#atexit-example" title="Permalink to this headline">¶</a></h2>
+<p>The following simple example demonstrates how a module can initialize a counter
+from a file when it is imported and save the counter&#8217;s updated value
+automatically when the program terminates without relying on the application
+making an explicit call into this module at termination.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="n">_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;counter&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+    <span class="n">_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">incrcounter</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">_count</span>
+    <span class="n">_count</span> <span class="o">=</span> <span class="n">_count</span> <span class="o">+</span> <span class="n">n</span>
+
+<span class="k">def</span> <span class="nf">savecounter</span><span class="p">():</span>
+    <span class="nb">open</span><span class="p">(</span><span class="s">&quot;counter&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">_count</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">atexit</span>
+<span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">savecounter</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Positional and keyword arguments may also be passed to <a class="reference internal" href="#atexit.register" title="atexit.register"><tt class="xref py py-func docutils literal"><span class="pre">register()</span></tt></a> to be
+passed along to the registered function when it is called:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">goodbye</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">adjective</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;Goodbye, </span><span class="si">%s</span><span class="s">, it was </span><span class="si">%s</span><span class="s"> to meet you.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">adjective</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">atexit</span>
+<span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">goodbye</span><span class="p">,</span> <span class="s">&#39;Donny&#39;</span><span class="p">,</span> <span class="s">&#39;nice&#39;</span><span class="p">)</span>
+
+<span class="c"># or:</span>
+<span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">goodbye</span><span class="p">,</span> <span class="n">adjective</span><span class="o">=</span><span class="s">&#39;nice&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Donny&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Usage as a <a class="reference internal" href="../glossary.html#term-decorator"><em class="xref std std-term">decorator</em></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">atexit</span>
+
+<span class="nd">@atexit.register</span>
+<span class="k">def</span> <span class="nf">goodbye</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&quot;You are now leaving the Python sector.&quot;</span>
+</pre></div>
+</div>
+<p>This only works with functions that can be called without arguments.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">27.9. <tt class="docutils literal"><span class="pre">atexit</span></tt> &#8212; Exit handlers</a><ul>
+<li><a class="reference internal" href="#atexit-example">27.9.1. <tt class="docutils literal"><span class="pre">atexit</span></tt> Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="abc.html"
+                        title="previous chapter">27.8. <tt class="docutils literal docutils literal"><span class="pre">abc</span></tt> &#8212; Abstract Base Classes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="traceback.html"
+                        title="next chapter">27.10. <tt class="docutils literal docutils literal"><span class="pre">traceback</span></tt> &#8212; Print or retrieve a stack traceback</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/atexit.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="traceback.html" title="27.10. traceback — Print or retrieve a stack traceback"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="abc.html" title="27.8. abc — Abstract Base Classes"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="python.html" >27. Python Runtime Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

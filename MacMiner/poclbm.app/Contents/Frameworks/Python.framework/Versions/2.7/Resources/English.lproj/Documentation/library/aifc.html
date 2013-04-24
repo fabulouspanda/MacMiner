@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>21.3. aifc — Read and write AIFF and AIFC files &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="21. Multimedia Services" href="mm.html" />
+    <link rel="next" title="21.4. sunau — Read and write Sun AU files" href="sunau.html" />
+    <link rel="prev" title="21.2. imageop — Manipulate raw image data" href="imageop.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sunau.html" title="21.4. sunau — Read and write Sun AU files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imageop.html" title="21.2. imageop — Manipulate raw image data"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="mm.html" accesskey="U">21. Multimedia Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-aifc">
+<span id="aifc-read-and-write-aiff-and-aifc-files"></span><h1>21.3. <a class="reference internal" href="#module-aifc" title="aifc: Read and write audio files in AIFF or AIFC format."><tt class="xref py py-mod docutils literal"><span class="pre">aifc</span></tt></a> &#8212; Read and write AIFF and AIFC files<a class="headerlink" href="#module-aifc" title="Permalink to this headline">¶</a></h1>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/aifc.py">Lib/aifc.py</a></p>
+<hr class="docutils" />
+<p>This module provides support for reading and writing AIFF and AIFF-C files.
+AIFF is Audio Interchange File Format, a format for storing digital audio
+samples in a file.  AIFF-C is a newer version of the format that includes the
+ability to compress the audio data.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Some operations may only work under IRIX; these will raise <a class="reference internal" href="exceptions.html#exceptions.ImportError" title="exceptions.ImportError"><tt class="xref py py-exc docutils literal"><span class="pre">ImportError</span></tt></a>
+when attempting to import the <tt class="xref py py-mod docutils literal"><span class="pre">cl</span></tt> module, which is only available on
+IRIX.</p>
+</div>
+<p>Audio files have a number of parameters that describe the audio data. The
+sampling rate or frame rate is the number of times per second the sound is
+sampled.  The number of channels indicate if the audio is mono, stereo, or
+quadro.  Each frame consists of one sample per channel.  The sample size is the
+size in bytes of each sample.  Thus a frame consists of
+<em>nchannels</em>**samplesize* bytes, and a second&#8217;s worth of audio consists of
+<em>nchannels</em>**samplesize***framerate* bytes.</p>
+<p>For example, CD quality audio has a sample size of two bytes (16 bits), uses two
+channels (stereo) and has a frame rate of 44,100 frames/second.  This gives a
+frame size of 4 bytes (2*2), and a second&#8217;s worth occupies 2*2*44100 bytes
+(176,400 bytes).</p>
+<p>Module <a class="reference internal" href="#module-aifc" title="aifc: Read and write audio files in AIFF or AIFC format."><tt class="xref py py-mod docutils literal"><span class="pre">aifc</span></tt></a> defines the following function:</p>
+<dl class="function">
+<dt id="aifc.open">
+<tt class="descclassname">aifc.</tt><tt class="descname">open</tt><big>(</big><em>file</em><span class="optional">[</span>, <em>mode</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#aifc.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open an AIFF or AIFF-C file and return an object instance with methods that are
+described below.  The argument <em>file</em> is either a string naming a file or a file
+object.  <em>mode</em> must be <tt class="docutils literal"><span class="pre">'r'</span></tt> or <tt class="docutils literal"><span class="pre">'rb'</span></tt> when the file must be opened for
+reading, or <tt class="docutils literal"><span class="pre">'w'</span></tt>  or <tt class="docutils literal"><span class="pre">'wb'</span></tt> when the file must be opened for writing.  If
+omitted, <tt class="docutils literal"><span class="pre">file.mode</span></tt> is used if it exists, otherwise <tt class="docutils literal"><span class="pre">'rb'</span></tt> is used.  When
+used for writing, the file object should be seekable, unless you know ahead of
+time how many samples you are going to write in total and use
+<tt class="xref py py-meth docutils literal"><span class="pre">writeframesraw()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">setnframes()</span></tt>.</p>
+</dd></dl>
+
+<p>Objects returned by <a class="reference internal" href="#aifc.open" title="aifc.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> when a file is opened for reading have the
+following methods:</p>
+<dl class="method">
+<dt id="aifc.aifc.getnchannels">
+<tt class="descclassname">aifc.</tt><tt class="descname">getnchannels</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getnchannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of audio channels (1 for mono, 2 for stereo).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getsampwidth">
+<tt class="descclassname">aifc.</tt><tt class="descname">getsampwidth</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getsampwidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the size in bytes of individual samples.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getframerate">
+<tt class="descclassname">aifc.</tt><tt class="descname">getframerate</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getframerate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sampling rate (number of audio frames per second).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getnframes">
+<tt class="descclassname">aifc.</tt><tt class="descname">getnframes</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getnframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of audio frames in the file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getcomptype">
+<tt class="descclassname">aifc.</tt><tt class="descname">getcomptype</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getcomptype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a four-character string describing the type of compression used in the
+audio file.  For AIFF files, the returned value is <tt class="docutils literal"><span class="pre">'NONE'</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getcompname">
+<tt class="descclassname">aifc.</tt><tt class="descname">getcompname</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getcompname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a human-readable description of the type of compression used in the audio
+file.  For AIFF files, the returned value is <tt class="docutils literal"><span class="pre">'not</span> <span class="pre">compressed'</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getparams">
+<tt class="descclassname">aifc.</tt><tt class="descname">getparams</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getparams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple consisting of all of the above values in the above order.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getmarkers">
+<tt class="descclassname">aifc.</tt><tt class="descname">getmarkers</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.getmarkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of markers in the audio file.  A marker consists of a tuple of
+three elements.  The first is the mark ID (an integer), the second is the mark
+position in frames from the beginning of the data (an integer), the third is the
+name of the mark (a string).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.getmark">
+<tt class="descclassname">aifc.</tt><tt class="descname">getmark</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#aifc.aifc.getmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tuple as described in <a class="reference internal" href="#aifc.aifc.getmarkers" title="aifc.aifc.getmarkers"><tt class="xref py py-meth docutils literal"><span class="pre">getmarkers()</span></tt></a> for the mark with the given
+<em>id</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.readframes">
+<tt class="descclassname">aifc.</tt><tt class="descname">readframes</tt><big>(</big><em>nframes</em><big>)</big><a class="headerlink" href="#aifc.aifc.readframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and return the next <em>nframes</em> frames from the audio file.  The returned
+data is a string containing for each frame the uncompressed samples of all
+channels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.rewind">
+<tt class="descclassname">aifc.</tt><tt class="descname">rewind</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.rewind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rewind the read pointer.  The next <a class="reference internal" href="#aifc.aifc.readframes" title="aifc.aifc.readframes"><tt class="xref py py-meth docutils literal"><span class="pre">readframes()</span></tt></a> will start from the
+beginning.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setpos">
+<tt class="descclassname">aifc.</tt><tt class="descname">setpos</tt><big>(</big><em>pos</em><big>)</big><a class="headerlink" href="#aifc.aifc.setpos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Seek to the specified frame number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.tell">
+<tt class="descclassname">aifc.</tt><tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.tell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current frame number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.close">
+<tt class="descclassname">aifc.</tt><tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the AIFF file.  After calling this method, the object can no longer be
+used.</p>
+</dd></dl>
+
+<p>Objects returned by <a class="reference internal" href="#aifc.open" title="aifc.open"><tt class="xref py py-func docutils literal"><span class="pre">open()</span></tt></a> when a file is opened for writing have all the
+above methods, except for <tt class="xref py py-meth docutils literal"><span class="pre">readframes()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">setpos()</span></tt>.  In addition
+the following methods exist.  The <tt class="xref py py-meth docutils literal"><span class="pre">get*()</span></tt> methods can only be called after
+the corresponding <tt class="xref py py-meth docutils literal"><span class="pre">set*()</span></tt> methods have been called.  Before the first
+<tt class="xref py py-meth docutils literal"><span class="pre">writeframes()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">writeframesraw()</span></tt>, all parameters except for the
+number of frames must be filled in.</p>
+<dl class="method">
+<dt id="aifc.aifc.aiff">
+<tt class="descclassname">aifc.</tt><tt class="descname">aiff</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.aiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AIFF file.  The default is that an AIFF-C file is created, unless the
+name of the file ends in <tt class="docutils literal"><span class="pre">'.aiff'</span></tt> in which case the default is an AIFF file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.aifc">
+<tt class="descclassname">aifc.</tt><tt class="descname">aifc</tt><big>(</big><big>)</big><a class="headerlink" href="#aifc.aifc.aifc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AIFF-C file.  The default is that an AIFF-C file is created, unless
+the name of the file ends in <tt class="docutils literal"><span class="pre">'.aiff'</span></tt> in which case the default is an AIFF
+file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setnchannels">
+<tt class="descclassname">aifc.</tt><tt class="descname">setnchannels</tt><big>(</big><em>nchannels</em><big>)</big><a class="headerlink" href="#aifc.aifc.setnchannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the number of channels in the audio file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setsampwidth">
+<tt class="descclassname">aifc.</tt><tt class="descname">setsampwidth</tt><big>(</big><em>width</em><big>)</big><a class="headerlink" href="#aifc.aifc.setsampwidth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the size in bytes of audio samples.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setframerate">
+<tt class="descclassname">aifc.</tt><tt class="descname">setframerate</tt><big>(</big><em>rate</em><big>)</big><a class="headerlink" href="#aifc.aifc.setframerate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the sampling frequency in frames per second.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setnframes">
+<tt class="descclassname">aifc.</tt><tt class="descname">setnframes</tt><big>(</big><em>nframes</em><big>)</big><a class="headerlink" href="#aifc.aifc.setnframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the number of frames that are to be written to the audio file. If this
+parameter is not set, or not set correctly, the file needs to support seeking.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setcomptype">
+<tt class="descclassname">aifc.</tt><tt class="descname">setcomptype</tt><big>(</big><em>type</em>, <em>name</em><big>)</big><a class="headerlink" href="#aifc.aifc.setcomptype" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">Specify the compression type.  If not specified, the audio data will not be
+compressed.  In AIFF files, compression is not possible.  The name parameter
+should be a human-readable description of the compression type, the type
+parameter should be a four-character string.  Currently the following
+compression types are supported: NONE, ULAW, ALAW, G722.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setparams">
+<tt class="descclassname">aifc.</tt><tt class="descname">setparams</tt><big>(</big><em>nchannels</em>, <em>sampwidth</em>, <em>framerate</em>, <em>comptype</em>, <em>compname</em><big>)</big><a class="headerlink" href="#aifc.aifc.setparams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set all the above parameters at once.  The argument is a tuple consisting of the
+various parameters.  This means that it is possible to use the result of a
+<a class="reference internal" href="#aifc.aifc.getparams" title="aifc.aifc.getparams"><tt class="xref py py-meth docutils literal"><span class="pre">getparams()</span></tt></a> call as argument to <a class="reference internal" href="#aifc.aifc.setparams" title="aifc.aifc.setparams"><tt class="xref py py-meth docutils literal"><span class="pre">setparams()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.setmark">
+<tt class="descclassname">aifc.</tt><tt class="descname">setmark</tt><big>(</big><em>id</em>, <em>pos</em>, <em>name</em><big>)</big><a class="headerlink" href="#aifc.aifc.setmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a mark with the given id (larger than 0), and the given name at the given
+position.  This method can be called at any time before <a class="reference internal" href="#aifc.aifc.close" title="aifc.aifc.close"><tt class="xref py py-meth docutils literal"><span class="pre">close()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descclassname">aifc.</tt><tt class="descname">tell</tt><big>(</big><big>)</big></dt>
+<dd><p>Return the current write position in the output file.  Useful in combination
+with <a class="reference internal" href="#aifc.aifc.setmark" title="aifc.aifc.setmark"><tt class="xref py py-meth docutils literal"><span class="pre">setmark()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.writeframes">
+<tt class="descclassname">aifc.</tt><tt class="descname">writeframes</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#aifc.aifc.writeframes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write data to the output file.  This method can only be called after the audio
+file parameters have been set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="aifc.aifc.writeframesraw">
+<tt class="descclassname">aifc.</tt><tt class="descname">writeframesraw</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#aifc.aifc.writeframesraw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#aifc.aifc.writeframes" title="aifc.aifc.writeframes"><tt class="xref py py-meth docutils literal"><span class="pre">writeframes()</span></tt></a>, except that the header of the audio file is not
+updated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descclassname">aifc.</tt><tt class="descname">close</tt><big>(</big><big>)</big></dt>
+<dd><p>Close the AIFF file.  The header of the file is updated to reflect the actual
+size of the audio data. After calling this method, the object can no longer be
+used.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imageop.html"
+                        title="previous chapter">21.2. <tt class="docutils literal"><span class="pre">imageop</span></tt> &#8212; Manipulate raw image data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sunau.html"
+                        title="next chapter">21.4. <tt class="docutils literal"><span class="pre">sunau</span></tt> &#8212; Read and write Sun AU files</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/aifc.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sunau.html" title="21.4. sunau — Read and write Sun AU files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imageop.html" title="21.2. imageop — Manipulate raw image data"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="mm.html" >21. Multimedia Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

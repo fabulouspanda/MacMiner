@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.1.2. email.parser: Parsing email messages &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="18.1. email — An email and MIME handling package" href="email.html" />
+    <link rel="next" title="18.1.3. email.generator: Generating MIME documents" href="email.generator.html" />
+    <link rel="prev" title="18.1.1. email.message: Representing an email message" href="email.message.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.generator.html" title="18.1.3. email.generator: Generating MIME documents"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="email.message.html" title="18.1.1. email.message: Representing an email message"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li>
+          <li><a href="email.html" accesskey="U">18.1. <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-email.parser">
+<span id="email-parser-parsing-email-messages"></span><h1>18.1.2. <a class="reference internal" href="#module-email.parser" title="email.parser: Parse flat text email messages to produce a message object structure."><tt class="xref py py-mod docutils literal"><span class="pre">email.parser</span></tt></a>: Parsing email messages<a class="headerlink" href="#module-email.parser" title="Permalink to this headline">¶</a></h1>
+<p>Message object structures can be created in one of two ways: they can be created
+from whole cloth by instantiating <a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt></a> objects and
+stringing them together via <tt class="xref py py-meth docutils literal"><span class="pre">attach()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">set_payload()</span></tt> calls, or they
+can be created by parsing a flat text representation of the email message.</p>
+<p>The <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package provides a standard parser that understands most email
+document structures, including MIME documents.  You can pass the parser a string
+or a file object, and the parser will return to you the root
+<a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt></a> instance of the object structure.  For simple,
+non-MIME messages the payload of this root object will likely be a string
+containing the text of the message.  For MIME messages, the root object will
+return <tt class="xref docutils literal"><span class="pre">True</span></tt> from its <tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt> method, and the subparts can be
+accessed via the <tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">walk()</span></tt> methods.</p>
+<p>There are actually two parser interfaces available for use, the classic
+<a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> API and the incremental <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> API.  The classic
+<a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> API is fine if you have the entire text of the message in memory
+as a string, or if the entire message lives in a file on the file system.
+<a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> is more appropriate for when you&#8217;re reading the message from
+a stream which might block waiting for more input (e.g. reading an email message
+from a socket).  The <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> can consume and parse the message
+incrementally, and only returns the root object when you close the parser <a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<p>Note that the parser can be extended in limited ways, and of course you can
+implement your own parser completely from scratch.  There is no magical
+connection between the <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package&#8217;s bundled parser and the
+<a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt></a> class, so your custom parser can create message
+object trees any way it finds necessary.</p>
+<div class="section" id="feedparser-api">
+<h2>18.1.2.1. FeedParser API<a class="headerlink" href="#feedparser-api" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p>The <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a>, imported from the <tt class="xref py py-mod docutils literal"><span class="pre">email.feedparser</span></tt> module,
+provides an API that is conducive to incremental parsing of email messages, such
+as would be necessary when reading the text of an email message from a source
+that can block (e.g. a socket).  The <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> can of course be used
+to parse an email message fully contained in a string or a file, but the classic
+<a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> API may be more convenient for such use cases.  The semantics
+and results of the two parser APIs are identical.</p>
+<p>The <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a>&#8216;s API is simple; you create an instance, feed it a bunch
+of text until there&#8217;s no more to feed it, then close the parser to retrieve the
+root message object.  The <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> is extremely accurate when parsing
+standards-compliant messages, and it does a very good job of parsing
+non-compliant messages, providing information about how a message was deemed
+broken.  It will populate a message object&#8217;s <em>defects</em> attribute with a list of
+any problems it found in a message.  See the <a class="reference internal" href="email.errors.html#module-email.errors" title="email.errors: The exception classes used by the email package."><tt class="xref py py-mod docutils literal"><span class="pre">email.errors</span></tt></a> module for the
+list of defects that it can find.</p>
+<p>Here is the API for the <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a>:</p>
+<dl class="class">
+<dt id="email.parser.FeedParser">
+<em class="property">class </em><tt class="descclassname">email.parser.</tt><tt class="descname">FeedParser</tt><big>(</big><span class="optional">[</span><em>_factory</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.parser.FeedParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> instance.  Optional <em>_factory</em> is a no-argument
+callable that will be called whenever a new message object is needed.  It
+defaults to the <a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">email.message.Message</span></tt></a> class.</p>
+<dl class="method">
+<dt id="email.parser.FeedParser.feed">
+<tt class="descname">feed</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#email.parser.FeedParser.feed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Feed the <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> some more data.  <em>data</em> should be a string
+containing one or more lines.  The lines can be partial and the
+<a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> will stitch such partial lines together properly.  The
+lines in the string can have any of the common three line endings,
+carriage return, newline, or carriage return and newline (they can even be
+mixed).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.parser.FeedParser.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#email.parser.FeedParser.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closing a <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a> completes the parsing of all previously fed
+data, and returns the root message object.  It is undefined what happens
+if you feed more data to a closed <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="parser-class-api">
+<h2>18.1.2.2. Parser class API<a class="headerlink" href="#parser-class-api" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> class, imported from the <a class="reference internal" href="#module-email.parser" title="email.parser: Parse flat text email messages to produce a message object structure."><tt class="xref py py-mod docutils literal"><span class="pre">email.parser</span></tt></a> module,
+provides an API that can be used to parse a message when the complete contents
+of the message are available in a string or file.  The <a class="reference internal" href="#module-email.parser" title="email.parser: Parse flat text email messages to produce a message object structure."><tt class="xref py py-mod docutils literal"><span class="pre">email.parser</span></tt></a>
+module also provides a second class, called <tt class="xref py py-class docutils literal"><span class="pre">HeaderParser</span></tt> which can be
+used if you&#8217;re only interested in the headers of the message.
+<tt class="xref py py-class docutils literal"><span class="pre">HeaderParser</span></tt> can be much faster in these situations, since it does not
+attempt to parse the message body, instead setting the payload to the raw body
+as a string. <tt class="xref py py-class docutils literal"><span class="pre">HeaderParser</span></tt> has the same API as the <a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a>
+class.</p>
+<dl class="class">
+<dt id="email.parser.Parser">
+<em class="property">class </em><tt class="descclassname">email.parser.</tt><tt class="descname">Parser</tt><big>(</big><span class="optional">[</span><em>_class</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.parser.Parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>The constructor for the <a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> class takes an optional argument
+<em>_class</em>.  This must be a callable factory (such as a function or a class), and
+it is used whenever a sub-message object needs to be created.  It defaults to
+<a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt></a> (see <a class="reference internal" href="email.message.html#module-email.message" title="email.message: The base class representing email messages."><tt class="xref py py-mod docutils literal"><span class="pre">email.message</span></tt></a>).  The factory will
+be called without arguments.</p>
+<p>The optional <em>strict</em> flag is ignored.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.4: </span>Because the <a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> class is a backward compatible API wrapper
+around the new-in-Python 2.4 <a class="reference internal" href="#email.parser.FeedParser" title="email.parser.FeedParser"><tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt></a>, <em>all</em> parsing is
+effectively non-strict.  You should simply stop passing a <em>strict</em> flag to
+the <a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> constructor.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.2: </span>The <em>strict</em> flag was added.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4: </span>The <em>strict</em> flag was deprecated.</p>
+<p>The other public <a class="reference internal" href="#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a> methods are:</p>
+<dl class="method">
+<dt id="email.parser.Parser.parse">
+<tt class="descname">parse</tt><big>(</big><em>fp</em><span class="optional">[</span>, <em>headersonly</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.parser.Parser.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read all the data from the file-like object <em>fp</em>, parse the resulting
+text, and return the root message object.  <em>fp</em> must support both the
+<a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-meth docutils literal"><span class="pre">readline()</span></tt></a> and the <tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt> methods on file-like objects.</p>
+<p>The text contained in <em>fp</em> must be formatted as a block of <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a>
+style headers and header continuation lines, optionally preceded by a
+envelope header.  The header block is terminated either by the end of the
+data or by a blank line.  Following the header block is the body of the
+message (which may contain MIME-encoded subparts).</p>
+<p>Optional <em>headersonly</em> is a flag specifying whether to stop parsing after
+reading the headers or not.  The default is <tt class="xref docutils literal"><span class="pre">False</span></tt>, meaning it parses
+the entire contents of the file.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.2: </span>The <em>headersonly</em> flag was added.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="email.parser.Parser.parsestr">
+<tt class="descname">parsestr</tt><big>(</big><em>text</em><span class="optional">[</span>, <em>headersonly</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.parser.Parser.parsestr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to the <a class="reference internal" href="#email.parser.Parser.parse" title="email.parser.Parser.parse"><tt class="xref py py-meth docutils literal"><span class="pre">parse()</span></tt></a> method, except it takes a string object
+instead of a file-like object.  Calling this method on a string is exactly
+equivalent to wrapping <em>text</em> in a <a class="reference internal" href="stringio.html#module-StringIO" title="StringIO: Read and write strings as if they were files."><tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt></a> instance first and
+calling <a class="reference internal" href="#email.parser.Parser.parse" title="email.parser.Parser.parse"><tt class="xref py py-meth docutils literal"><span class="pre">parse()</span></tt></a>.</p>
+<p>Optional <em>headersonly</em> is as with the <a class="reference internal" href="#email.parser.Parser.parse" title="email.parser.Parser.parse"><tt class="xref py py-meth docutils literal"><span class="pre">parse()</span></tt></a> method.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.2: </span>The <em>headersonly</em> flag was added.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>Since creating a message object structure from a string or a file object is such
+a common task, two functions are provided as a convenience.  They are available
+in the top-level <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package namespace.</p>
+<dl class="function">
+<dt id="email.message_from_string">
+<tt class="descclassname">email.</tt><tt class="descname">message_from_string</tt><big>(</big><em>s</em><span class="optional">[</span>, <em>_class</em><span class="optional">[</span>, <em>strict</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.message_from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a message object structure from a string.  This is exactly equivalent to
+<tt class="docutils literal"><span class="pre">Parser().parsestr(s)</span></tt>.  Optional <em>_class</em> and <em>strict</em> are interpreted as
+with the <tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> class constructor.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.2: </span>The <em>strict</em> flag was added.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="email.message_from_file">
+<tt class="descclassname">email.</tt><tt class="descname">message_from_file</tt><big>(</big><em>fp</em><span class="optional">[</span>, <em>_class</em><span class="optional">[</span>, <em>strict</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#email.message_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a message object structure tree from an open file object.  This is
+exactly equivalent to <tt class="docutils literal"><span class="pre">Parser().parse(fp)</span></tt>.  Optional <em>_class</em> and <em>strict</em>
+are interpreted as with the <tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> class constructor.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.2: </span>The <em>strict</em> flag was added.</p>
+</dd></dl>
+
+<p>Here&#8217;s an example of how you might use this at an interactive Python prompt:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">email</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="n">email</span><span class="o">.</span><span class="n">message_from_string</span><span class="p">(</span><span class="n">myString</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="additional-notes">
+<h2>18.1.2.3. Additional notes<a class="headerlink" href="#additional-notes" title="Permalink to this headline">¶</a></h2>
+<p>Here are some notes on the parsing semantics:</p>
+<ul class="simple">
+<li>Most non-<em class="mimetype">multipart</em> type messages are parsed as a single message
+object with a string payload.  These objects will return <tt class="xref docutils literal"><span class="pre">False</span></tt> for
+<tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt>.  Their <tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt> method will return a string
+object.</li>
+<li>All <em class="mimetype">multipart</em> type messages will be parsed as a container message
+object with a list of sub-message objects for their payload.  The outer
+container message will return <tt class="xref docutils literal"><span class="pre">True</span></tt> for <tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt> and their
+<tt class="xref py py-meth docutils literal"><span class="pre">get_payload()</span></tt> method will return the list of <a class="reference internal" href="email.message.html#email.message.Message" title="email.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt></a>
+subparts.</li>
+<li>Most messages with a content type of <em class="mimetype">message/*</em> (e.g.
+<em class="mimetype">message/delivery-status</em> and <em class="mimetype">message/rfc822</em>) will also be
+parsed as container object containing a list payload of length 1.  Their
+<tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt> method will return <tt class="xref docutils literal"><span class="pre">True</span></tt>.  The single element in the
+list payload will be a sub-message object.</li>
+<li>Some non-standards compliant messages may not be internally consistent about
+their <em class="mimetype">multipart</em>-edness.  Such messages may have a
+<em class="mailheader">Content-Type</em> header of type <em class="mimetype">multipart</em>, but their
+<tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt> method may return <tt class="xref docutils literal"><span class="pre">False</span></tt>.  If such messages were parsed
+with the <tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt>, they will have an instance of the
+<tt class="xref py py-class docutils literal"><span class="pre">MultipartInvariantViolationDefect</span></tt> class in their <em>defects</em> attribute
+list.  See <a class="reference internal" href="email.errors.html#module-email.errors" title="email.errors: The exception classes used by the email package."><tt class="xref py py-mod docutils literal"><span class="pre">email.errors</span></tt></a> for details.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>As of email package version 3.0, introduced in Python 2.4, the classic
+<tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt> was re-implemented in terms of the <tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt>, so the
+semantics and results are identical between the two parsers.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.1.2. <tt class="docutils literal"><span class="pre">email.parser</span></tt>: Parsing email messages</a><ul>
+<li><a class="reference internal" href="#feedparser-api">18.1.2.1. FeedParser API</a></li>
+<li><a class="reference internal" href="#parser-class-api">18.1.2.2. Parser class API</a></li>
+<li><a class="reference internal" href="#additional-notes">18.1.2.3. Additional notes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="email.message.html"
+                        title="previous chapter">18.1.1. <tt class="docutils literal docutils literal docutils literal"><span class="pre">email.message</span></tt>: Representing an email message</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="email.generator.html"
+                        title="next chapter">18.1.3. <tt class="docutils literal docutils literal docutils literal"><span class="pre">email.generator</span></tt>: Generating MIME documents</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/email.parser.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.generator.html" title="18.1.3. email.generator: Generating MIME documents"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="email.message.html" title="18.1.1. email.message: Representing an email message"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li>
+          <li><a href="email.html" >18.1. <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

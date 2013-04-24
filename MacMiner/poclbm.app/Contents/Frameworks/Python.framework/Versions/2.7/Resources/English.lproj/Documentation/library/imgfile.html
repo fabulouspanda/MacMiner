@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>38.11. imgfile — Support for SGI imglib files &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="38. SGI IRIX Specific Services" href="sgi.html" />
+    <link rel="next" title="38.12. jpeg — Read and write JPEG files" href="jpeg.html" />
+    <link rel="prev" title="38.8. gl — Graphics Library interface" href="gl.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jpeg.html" title="38.12. jpeg — Read and write JPEG files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="gl.html" title="38.8. gl — Graphics Library interface"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="sgi.html" accesskey="U">38. SGI IRIX Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-imgfile">
+<span id="imgfile-support-for-sgi-imglib-files"></span><h1>38.11. <a class="reference internal" href="#module-imgfile" title="imgfile: Support for SGI imglib files. (deprecated) (IRIX)"><tt class="xref py py-mod docutils literal"><span class="pre">imgfile</span></tt></a> &#8212; Support for SGI imglib files<a class="headerlink" href="#module-imgfile" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>IRIX</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>The <a class="reference internal" href="#module-imgfile" title="imgfile: Support for SGI imglib files. (deprecated) (IRIX)"><tt class="xref py py-mod docutils literal"><span class="pre">imgfile</span></tt></a> module has been removed in Python 3.</p>
+<p>The <a class="reference internal" href="#module-imgfile" title="imgfile: Support for SGI imglib files. (deprecated) (IRIX)"><tt class="xref py py-mod docutils literal"><span class="pre">imgfile</span></tt></a> module allows Python programs to access SGI imglib image
+files (also known as <tt class="file docutils literal"><span class="pre">.rgb</span></tt> files).  The module is far from complete, but
+is provided anyway since the functionality that there is enough in some cases.
+Currently, colormap files are not supported.</p>
+<p>The module defines the following variables and functions:</p>
+<dl class="exception">
+<dt id="imgfile.error">
+<em class="property">exception </em><tt class="descclassname">imgfile.</tt><tt class="descname">error</tt><a class="headerlink" href="#imgfile.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception is raised on all errors, such as unsupported file type, etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imgfile.getsizes">
+<tt class="descclassname">imgfile.</tt><tt class="descname">getsizes</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#imgfile.getsizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a tuple <tt class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></tt> where <em>x</em> and <em>y</em> are the size of
+the image in pixels and <em>z</em> is the number of bytes per pixel. Only 3 byte RGB
+pixels and 1 byte greyscale pixels are currently supported.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imgfile.read">
+<tt class="descclassname">imgfile.</tt><tt class="descname">read</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#imgfile.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function reads and decodes the image on the specified file, and returns it
+as a Python string. The string has either 1 byte greyscale pixels or 4 byte RGBA
+pixels. The bottom left pixel is the first in the string. This format is
+suitable to pass to <tt class="xref py py-func docutils literal"><span class="pre">gl.lrectwrite()</span></tt>, for instance.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imgfile.readscaled">
+<tt class="descclassname">imgfile.</tt><tt class="descname">readscaled</tt><big>(</big><em>file</em>, <em>x</em>, <em>y</em>, <em>filter</em><span class="optional">[</span>, <em>blur</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#imgfile.readscaled" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is identical to read but it returns an image that is scaled to the
+given <em>x</em> and <em>y</em> sizes. If the <em>filter</em> and <em>blur</em> parameters are omitted
+scaling is done by simply dropping or duplicating pixels, so the result will be
+less than perfect, especially for computer-generated images.</p>
+<p>Alternatively, you can specify a filter to use to smooth the image after
+scaling. The filter forms supported are <tt class="docutils literal"><span class="pre">'impulse'</span></tt>, <tt class="docutils literal"><span class="pre">'box'</span></tt>,
+<tt class="docutils literal"><span class="pre">'triangle'</span></tt>, <tt class="docutils literal"><span class="pre">'quadratic'</span></tt> and <tt class="docutils literal"><span class="pre">'gaussian'</span></tt>. If a filter is specified
+<em>blur</em> is an optional parameter specifying the blurriness of the filter. It
+defaults to <tt class="docutils literal"><span class="pre">1.0</span></tt>.</p>
+<p><a class="reference internal" href="#imgfile.readscaled" title="imgfile.readscaled"><tt class="xref py py-func docutils literal"><span class="pre">readscaled()</span></tt></a> makes no attempt to keep the aspect ratio correct, so that is
+the users&#8217; responsibility.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imgfile.ttob">
+<tt class="descclassname">imgfile.</tt><tt class="descname">ttob</tt><big>(</big><em>flag</em><big>)</big><a class="headerlink" href="#imgfile.ttob" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function sets a global flag which defines whether the scan lines of the
+image are read or written from bottom to top (flag is zero, compatible with SGI
+GL) or from top to bottom(flag is one, compatible with X).  The default is zero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="imgfile.write">
+<tt class="descclassname">imgfile.</tt><tt class="descname">write</tt><big>(</big><em>file</em>, <em>data</em>, <em>x</em>, <em>y</em>, <em>z</em><big>)</big><a class="headerlink" href="#imgfile.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function writes the RGB or greyscale data in <em>data</em> to image file <em>file</em>.
+<em>x</em> and <em>y</em> give the size of the image, <em>z</em> is 1 for 1 byte greyscale images or
+3 for RGB images (which are stored as 4 byte values of which only the lower
+three bytes are used). These are the formats returned by <tt class="xref py py-func docutils literal"><span class="pre">gl.lrectread()</span></tt>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="gl.html"
+                        title="previous chapter">38.8. <tt class="docutils literal docutils literal docutils literal"><span class="pre">gl</span></tt> &#8212; <em>Graphics Library</em> interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jpeg.html"
+                        title="next chapter">38.12. <tt class="docutils literal"><span class="pre">jpeg</span></tt> &#8212; Read and write JPEG files</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/imgfile.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="jpeg.html" title="38.12. jpeg — Read and write JPEG files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="gl.html" title="38.8. gl — Graphics Library interface"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="sgi.html" >38. SGI IRIX Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

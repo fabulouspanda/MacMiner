@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>14.2. hmac — Keyed-Hashing for Message Authentication &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="14. Cryptographic Services" href="crypto.html" />
+    <link rel="next" title="14.3. md5 — MD5 message digest algorithm" href="md5.html" />
+    <link rel="prev" title="14.1. hashlib — Secure hashes and message digests" href="hashlib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="md5.html" title="14.3. md5 — MD5 message digest algorithm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hashlib.html" title="14.1. hashlib — Secure hashes and message digests"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="crypto.html" accesskey="U">14. Cryptographic Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-hmac">
+<span id="hmac-keyed-hashing-for-message-authentication"></span><h1>14.2. <a class="reference internal" href="#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation for Python."><tt class="xref py py-mod docutils literal"><span class="pre">hmac</span></tt></a> &#8212; Keyed-Hashing for Message Authentication<a class="headerlink" href="#module-hmac" title="Permalink to this headline">¶</a></h1>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<p><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/hmac.py">Lib/hmac.py</a></p>
+<hr class="docutils" />
+<p>This module implements the HMAC algorithm as described by <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2104.html"><strong>RFC 2104</strong></a>.</p>
+<dl class="function">
+<dt id="hmac.new">
+<tt class="descclassname">hmac.</tt><tt class="descname">new</tt><big>(</big><em>key</em><span class="optional">[</span>, <em>msg</em><span class="optional">[</span>, <em>digestmod</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#hmac.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new hmac object.  If <em>msg</em> is present, the method call <tt class="docutils literal"><span class="pre">update(msg)</span></tt>
+is made. <em>digestmod</em> is the digest constructor or module for the HMAC object to
+use. It defaults to  the <tt class="xref py py-func docutils literal"><span class="pre">hashlib.md5()</span></tt> constructor.</p>
+</dd></dl>
+
+<p>An HMAC object has the following methods:</p>
+<dl class="method">
+<dt id="hmac.HMAC.update">
+<tt class="descclassname">HMAC.</tt><tt class="descname">update</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#hmac.HMAC.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the hmac object with the string <em>msg</em>.  Repeated calls are equivalent to
+a single call with the concatenation of all the arguments: <tt class="docutils literal"><span class="pre">m.update(a);</span>
+<span class="pre">m.update(b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">m.update(a</span> <span class="pre">+</span> <span class="pre">b)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hmac.HMAC.digest">
+<tt class="descclassname">HMAC.</tt><tt class="descname">digest</tt><big>(</big><big>)</big><a class="headerlink" href="#hmac.HMAC.digest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the digest of the strings passed to the <a class="reference internal" href="#hmac.HMAC.update" title="hmac.HMAC.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> method so far.
+This string will be the same length as the <em>digest_size</em> of the digest given to
+the constructor.  It may contain non-ASCII characters, including NUL bytes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hmac.HMAC.hexdigest">
+<tt class="descclassname">HMAC.</tt><tt class="descname">hexdigest</tt><big>(</big><big>)</big><a class="headerlink" href="#hmac.HMAC.hexdigest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#hmac.HMAC.digest" title="hmac.HMAC.digest"><tt class="xref py py-meth docutils literal"><span class="pre">digest()</span></tt></a> except the digest is returned as a string twice the length
+containing only hexadecimal digits.  This may be used to exchange the value
+safely in email or other non-binary environments.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hmac.HMAC.copy">
+<tt class="descclassname">HMAC.</tt><tt class="descname">copy</tt><big>(</big><big>)</big><a class="headerlink" href="#hmac.HMAC.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy (&#8220;clone&#8221;) of the hmac object.  This can be used to efficiently
+compute the digests of strings that share a common initial substring.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="hashlib.html#module-hashlib" title="hashlib: Secure hash and message digest algorithms."><tt class="xref py py-mod docutils literal"><span class="pre">hashlib</span></tt></a></dt>
+<dd>The Python module providing secure hash functions.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hashlib.html"
+                        title="previous chapter">14.1. <tt class="docutils literal docutils literal docutils literal"><span class="pre">hashlib</span></tt> &#8212; Secure hashes and message digests</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="md5.html"
+                        title="next chapter">14.3. <tt class="docutils literal"><span class="pre">md5</span></tt> &#8212; MD5 message digest algorithm</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/hmac.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="md5.html" title="14.3. md5 — MD5 message digest algorithm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hashlib.html" title="14.1. hashlib — Secure hashes and message digests"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="crypto.html" >14. Cryptographic Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -7,28 +7,6 @@ def _reset_sys_path():
 _reset_sys_path()
 
 
-def _update_path():
-    import os, sys
-    resources = os.environ['RESOURCEPATH']
-    sys.path.append(os.path.join(
-        resources, 'lib', 'python%d.%d'%(sys.version_info[:2]), 'lib-dynload'))
-    sys.path.append(os.path.join(
-        resources, 'lib', 'python%d.%d'%(sys.version_info[:2])))
-
-_update_path()
-
-
-""" Add Apple's additional packages to sys.path """
-def add_system_python_extras():
-    import site, sys
-
-    ver = '%s.%s'%(sys.version_info[:2])
-
-    site.addsitedir('/System/Library/Frameworks/Python.framework/Versions/%s/Extras/lib/python'%(ver,))
-
-add_system_python_extras()
-
-
 """
 sys.argv emulation
 

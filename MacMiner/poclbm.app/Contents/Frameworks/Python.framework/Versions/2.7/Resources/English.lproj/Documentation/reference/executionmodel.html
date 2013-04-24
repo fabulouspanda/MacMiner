@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Execution model &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="The Python Language Reference" href="index.html" />
+    <link rel="next" title="5. Expressions" href="expressions.html" />
+    <link rel="prev" title="3. Data model" href="datamodel.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="expressions.html" title="5. Expressions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="datamodel.html" title="3. Data model"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">The Python Language Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="execution-model">
+<span id="execmodel"></span><h1>4. Execution model<a class="headerlink" href="#execution-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="naming-and-binding">
+<span id="naming"></span><span id="index-0"></span><h2>4.1. Naming and binding<a class="headerlink" href="#naming-and-binding" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="index-1"></span><p id="index-2"><em class="dfn">Names</em> refer to objects.  Names are introduced by name binding operations.
+Each occurrence of a name in the program text refers to the <em class="dfn">binding</em> of
+that name established in the innermost function block containing the use.</p>
+<p id="index-3">A <em class="dfn">block</em> is a piece of Python program text that is executed as a unit.
+The following are blocks: a module, a function body, and a class definition.
+Each command typed interactively is a block.  A script file (a file given as
+standard input to the interpreter or specified on the interpreter command line
+the first argument) is a code block.  A script command (a command specified on
+the interpreter command line with the &#8216;<strong>-c</strong>&#8216; option) is a code block.  The
+file read by the built-in function <a class="reference internal" href="../library/functions.html#execfile" title="execfile"><tt class="xref py py-func docutils literal"><span class="pre">execfile()</span></tt></a> is a code block.  The string
+argument passed to the built-in function <a class="reference internal" href="../library/functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a> and to the <a class="reference internal" href="simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a>
+statement is a code block. The expression read and evaluated by the built-in
+function <a class="reference internal" href="../library/functions.html#input" title="input"><tt class="xref py py-func docutils literal"><span class="pre">input()</span></tt></a> is a code block.</p>
+<p id="index-4">A code block is executed in an <em class="dfn">execution frame</em>.  A frame contains some
+administrative information (used for debugging) and determines where and how
+execution continues after the code block&#8217;s execution has completed.</p>
+<p id="index-5">A <em class="dfn">scope</em> defines the visibility of a name within a block.  If a local
+variable is defined in a block, its scope includes that block.  If the
+definition occurs in a function block, the scope extends to any blocks contained
+within the defining one, unless a contained block introduces a different binding
+for the name.  The scope of names defined in a class block is limited to the
+class block; it does not extend to the code blocks of methods &#8211; this includes
+generator expressions since they are implemented using a function scope.  This
+means that the following will fail:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">A</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">42</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+<p id="index-6">When a name is used in a code block, it is resolved using the nearest enclosing
+scope.  The set of all such scopes visible to a code block is called the block&#8217;s
+<em class="dfn">environment</em>.</p>
+<p id="index-7">If a name is bound in a block, it is a local variable of that block. If a name
+is bound at the module level, it is a global variable.  (The variables of the
+module code block are local and global.)  If a variable is used in a code block
+but not defined there, it is a <em class="dfn">free variable</em>.</p>
+<p id="index-8">When a name is not found at all, a <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a> exception is raised.  If the
+name refers to a local variable that has not been bound, a
+<a class="reference internal" href="../library/exceptions.html#exceptions.UnboundLocalError" title="exceptions.UnboundLocalError"><tt class="xref py py-exc docutils literal"><span class="pre">UnboundLocalError</span></tt></a> exception is raised.  <a class="reference internal" href="../library/exceptions.html#exceptions.UnboundLocalError" title="exceptions.UnboundLocalError"><tt class="xref py py-exc docutils literal"><span class="pre">UnboundLocalError</span></tt></a> is a
+subclass of <a class="reference internal" href="../library/exceptions.html#exceptions.NameError" title="exceptions.NameError"><tt class="xref py py-exc docutils literal"><span class="pre">NameError</span></tt></a>.</p>
+<p id="index-9">The following constructs bind names: formal parameters to functions,
+<a class="reference internal" href="simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statements, class and function definitions (these bind the
+class or function name in the defining block), and targets that are identifiers
+if occurring in an assignment, <a class="reference internal" href="compound_stmts.html#for"><tt class="xref std std-keyword docutils literal"><span class="pre">for</span></tt></a> loop header, in the second
+position of an <a class="reference internal" href="compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> clause header or after <a class="reference internal" href="compound_stmts.html#as"><tt class="xref std std-keyword docutils literal"><span class="pre">as</span></tt></a> in a
+<a class="reference internal" href="compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement.  The <a class="reference internal" href="simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> statement
+of the form <tt class="docutils literal"><span class="pre">from</span> <span class="pre">...</span> <span class="pre">import</span> <span class="pre">*</span></tt> binds all names defined in the imported
+module, except those beginning with an underscore.  This form may only be used
+at the module level.</p>
+<p>A target occurring in a <a class="reference internal" href="simple_stmts.html#del"><tt class="xref std std-keyword docutils literal"><span class="pre">del</span></tt></a> statement is also considered bound for
+this purpose (though the actual semantics are to unbind the name).  It is
+illegal to unbind a name that is referenced by an enclosing scope; the compiler
+will report a <a class="reference internal" href="../library/exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a>.</p>
+<p>Each assignment or import statement occurs within a block defined by a class or
+function definition or at the module level (the top-level code block).</p>
+<p>If a name binding operation occurs anywhere within a code block, all uses of the
+name within the block are treated as references to the current block.  This can
+lead to errors when a name is used within a block before it is bound. This rule
+is subtle.  Python lacks declarations and allows name binding operations to
+occur anywhere within a code block.  The local variables of a code block can be
+determined by scanning the entire text of the block for name binding operations.</p>
+<p>If the global statement occurs within a block, all uses of the name specified in
+the statement refer to the binding of that name in the top-level namespace.
+Names are resolved in the top-level namespace by searching the global namespace,
+i.e. the namespace of the module containing the code block, and the builtins
+namespace, the namespace of the module <a class="reference internal" href="../library/__builtin__.html#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a>.  The global namespace
+is searched first.  If the name is not found there, the builtins namespace is
+searched.  The global statement must precede all uses of the name.</p>
+<p id="index-10">The builtins namespace associated with the execution of a code block is actually
+found by looking up the name <tt class="docutils literal"><span class="pre">__builtins__</span></tt> in its global namespace; this
+should be a dictionary or a module (in the latter case the module&#8217;s dictionary
+is used).  By default, when in the <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module, <tt class="docutils literal"><span class="pre">__builtins__</span></tt> is
+the built-in module <a class="reference internal" href="../library/__builtin__.html#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a> (note: no &#8216;s&#8217;); when in any other module,
+<tt class="docutils literal"><span class="pre">__builtins__</span></tt> is an alias for the dictionary of the <a class="reference internal" href="../library/__builtin__.html#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a> module
+itself.  <tt class="docutils literal"><span class="pre">__builtins__</span></tt> can be set to a user-created dictionary to create a
+weak form of restricted execution.</p>
+<div class="impl-detail compound">
+<p><strong>CPython implementation detail:</strong> Users should not touch <tt class="docutils literal"><span class="pre">__builtins__</span></tt>; it is strictly an implementation
+detail.  Users wanting to override values in the builtins namespace should
+<a class="reference internal" href="simple_stmts.html#import"><tt class="xref std std-keyword docutils literal"><span class="pre">import</span></tt></a> the <a class="reference internal" href="../library/__builtin__.html#module-__builtin__" title="__builtin__: The module that provides the built-in namespace."><tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt></a> (no &#8216;s&#8217;) module and modify its
+attributes appropriately.</p>
+</div>
+<p id="index-11">The namespace for a module is automatically created the first time a module is
+imported.  The main module for a script is always called <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a>.</p>
+<p>The <a class="reference internal" href="simple_stmts.html#global"><tt class="xref std std-keyword docutils literal"><span class="pre">global</span></tt></a> statement has the same scope as a name binding operation
+in the same block.  If the nearest enclosing scope for a free variable contains
+a global statement, the free variable is treated as a global.</p>
+<p>A class definition is an executable statement that may use and define names.
+These references follow the normal rules for name resolution. The namespace of
+the class definition becomes the attribute dictionary of the class.  Names
+defined at the class scope are not visible in methods.</p>
+<div class="section" id="interaction-with-dynamic-features">
+<span id="dynamic-features"></span><h3>4.1.1. Interaction with dynamic features<a class="headerlink" href="#interaction-with-dynamic-features" title="Permalink to this headline">¶</a></h3>
+<p>There are several cases where Python statements are illegal when used in
+conjunction with nested scopes that contain free variables.</p>
+<p>If a variable is referenced in an enclosing scope, it is illegal to delete the
+name.  An error will be reported at compile time.</p>
+<p>If the wild card form of import &#8212; <tt class="docutils literal"><span class="pre">import</span> <span class="pre">*</span></tt> &#8212; is used in a function and
+the function contains or is a nested block with free variables, the compiler
+will raise a <a class="reference internal" href="../library/exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a>.</p>
+<p>If <a class="reference internal" href="simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> is used in a function and the function contains or is a
+nested block with free variables, the compiler will raise a <a class="reference internal" href="../library/exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a>
+unless the exec explicitly specifies the local namespace for the
+<a class="reference internal" href="simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a>.  (In other words, <tt class="docutils literal"><span class="pre">exec</span> <span class="pre">obj</span></tt> would be illegal, but <tt class="docutils literal"><span class="pre">exec</span> <span class="pre">obj</span>
+<span class="pre">in</span> <span class="pre">ns</span></tt> would be legal.)</p>
+<p>The <a class="reference internal" href="../library/functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a>, <a class="reference internal" href="../library/functions.html#execfile" title="execfile"><tt class="xref py py-func docutils literal"><span class="pre">execfile()</span></tt></a>, and <a class="reference internal" href="../library/functions.html#input" title="input"><tt class="xref py py-func docutils literal"><span class="pre">input()</span></tt></a> functions and the
+<a class="reference internal" href="simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement do not have access to the full environment for
+resolving names.  Names may be resolved in the local and global namespaces of
+the caller.  Free variables are not resolved in the nearest enclosing namespace,
+but in the global namespace. <a class="footnote-reference" href="#id3" id="id1">[1]</a> The <a class="reference internal" href="simple_stmts.html#exec"><tt class="xref std std-keyword docutils literal"><span class="pre">exec</span></tt></a> statement and the
+<a class="reference internal" href="../library/functions.html#eval" title="eval"><tt class="xref py py-func docutils literal"><span class="pre">eval()</span></tt></a> and <a class="reference internal" href="../library/functions.html#execfile" title="execfile"><tt class="xref py py-func docutils literal"><span class="pre">execfile()</span></tt></a> functions have optional arguments to override
+the global and local namespace.  If only one namespace is specified, it is used
+for both.</p>
+</div>
+</div>
+<div class="section" id="exceptions">
+<span id="id2"></span><h2>4.2. Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="index-12"></span><p id="index-13">Exceptions are a means of breaking out of the normal flow of control of a code
+block in order to handle errors or other exceptional conditions.  An exception
+is <em>raised</em> at the point where the error is detected; it may be <em>handled</em> by the
+surrounding code block or by any code block that directly or indirectly invoked
+the code block where the error occurred.</p>
+<p>The Python interpreter raises an exception when it detects a run-time error
+(such as division by zero).  A Python program can also explicitly raise an
+exception with the <a class="reference internal" href="simple_stmts.html#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> statement. Exception handlers are specified
+with the <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ... <a class="reference internal" href="compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> statement.  The <a class="reference internal" href="compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a>
+clause of such a statement can be used to specify cleanup code which does not
+handle the exception, but is executed whether an exception occurred or not in
+the preceding code.</p>
+<p id="index-14">Python uses the &#8220;termination&#8221; model of error handling: an exception handler can
+find out what happened and continue execution at an outer level, but it cannot
+repair the cause of the error and retry the failing operation (except by
+re-entering the offending piece of code from the top).</p>
+<p id="index-15">When an exception is not handled at all, the interpreter terminates execution of
+the program, or returns to its interactive main loop.  In either case, it prints
+a stack backtrace, except when the exception is  <a class="reference internal" href="../library/exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a>.</p>
+<p>Exceptions are identified by class instances.  The <a class="reference internal" href="compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> clause is
+selected depending on the class of the instance: it must reference the class of
+the instance or a base class thereof.  The instance can be received by the
+handler and can carry additional information about the exceptional condition.</p>
+<p>Exceptions can also be identified by strings, in which case the
+<a class="reference internal" href="compound_stmts.html#except"><tt class="xref std std-keyword docutils literal"><span class="pre">except</span></tt></a> clause is selected by object identity.  An arbitrary value can
+be raised along with the identifying string which can be passed to the handler.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Messages to exceptions are not part of the Python API.  Their contents may
+change from one version of Python to the next without warning and should not be
+relied on by code which will run under multiple versions of the interpreter.</p>
+</div>
+<p>See also the description of the <a class="reference internal" href="compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> statement in section <a class="reference internal" href="compound_stmts.html#try"><em>The try statement</em></a>
+and <a class="reference internal" href="simple_stmts.html#raise"><tt class="xref std std-keyword docutils literal"><span class="pre">raise</span></tt></a> statement in section <a class="reference internal" href="simple_stmts.html#raise"><em>The raise statement</em></a>.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>This limitation occurs because the code that is executed by these operations is
+not available at the time the module is compiled.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">4. Execution model</a><ul>
+<li><a class="reference internal" href="#naming-and-binding">4.1. Naming and binding</a><ul>
+<li><a class="reference internal" href="#interaction-with-dynamic-features">4.1.1. Interaction with dynamic features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exceptions">4.2. Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="datamodel.html"
+                        title="previous chapter">3. Data model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="expressions.html"
+                        title="next chapter">5. Expressions</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/reference/executionmodel.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="expressions.html" title="5. Expressions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="datamodel.html" title="3. Data model"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Language Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

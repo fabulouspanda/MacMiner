@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.1.8. email.errors: Exception and Defect classes &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="18.1. email — An email and MIME handling package" href="email.html" />
+    <link rel="next" title="18.1.9. email.utils: Miscellaneous utilities" href="email.util.html" />
+    <link rel="prev" title="18.1.7. email.encoders: Encoders" href="email.encoders.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.util.html" title="18.1.9. email.utils: Miscellaneous utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="email.encoders.html" title="18.1.7. email.encoders: Encoders"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li>
+          <li><a href="email.html" accesskey="U">18.1. <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-email.errors">
+<span id="email-errors-exception-and-defect-classes"></span><h1>18.1.8. <a class="reference internal" href="#module-email.errors" title="email.errors: The exception classes used by the email package."><tt class="xref py py-mod docutils literal"><span class="pre">email.errors</span></tt></a>: Exception and Defect classes<a class="headerlink" href="#module-email.errors" title="Permalink to this headline">¶</a></h1>
+<p>The following exception classes are defined in the <a class="reference internal" href="#module-email.errors" title="email.errors: The exception classes used by the email package."><tt class="xref py py-mod docutils literal"><span class="pre">email.errors</span></tt></a> module:</p>
+<dl class="exception">
+<dt id="email.errors.MessageError">
+<em class="property">exception </em><tt class="descclassname">email.errors.</tt><tt class="descname">MessageError</tt><a class="headerlink" href="#email.errors.MessageError" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the base class for all exceptions that the <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages, including MIME documents."><tt class="xref py py-mod docutils literal"><span class="pre">email</span></tt></a> package can
+raise.  It is derived from the standard <a class="reference internal" href="exceptions.html#exceptions.Exception" title="exceptions.Exception"><tt class="xref py py-exc docutils literal"><span class="pre">Exception</span></tt></a> class and defines no
+additional methods.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="email.errors.MessageParseError">
+<em class="property">exception </em><tt class="descclassname">email.errors.</tt><tt class="descname">MessageParseError</tt><a class="headerlink" href="#email.errors.MessageParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the base class for exceptions raised by the <a class="reference internal" href="email.parser.html#email.parser.Parser" title="email.parser.Parser"><tt class="xref py py-class docutils literal"><span class="pre">Parser</span></tt></a>
+class.  It is derived from <a class="reference internal" href="#email.errors.MessageError" title="email.errors.MessageError"><tt class="xref py py-exc docutils literal"><span class="pre">MessageError</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="email.errors.HeaderParseError">
+<em class="property">exception </em><tt class="descclassname">email.errors.</tt><tt class="descname">HeaderParseError</tt><a class="headerlink" href="#email.errors.HeaderParseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised under some error conditions when parsing the <span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a> headers of a
+message, this class is derived from <a class="reference internal" href="#email.errors.MessageParseError" title="email.errors.MessageParseError"><tt class="xref py py-exc docutils literal"><span class="pre">MessageParseError</span></tt></a>. It can be raised
+from the <tt class="xref py py-meth docutils literal"><span class="pre">Parser.parse()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">Parser.parsestr()</span></tt> methods.</p>
+<p>Situations where it can be raised include finding an envelope header after the
+first <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a> header of the message, finding a continuation line before the
+first <span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a> header is found, or finding a line in the headers which is
+neither a header or a continuation line.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="email.errors.BoundaryError">
+<em class="property">exception </em><tt class="descclassname">email.errors.</tt><tt class="descname">BoundaryError</tt><a class="headerlink" href="#email.errors.BoundaryError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised under some error conditions when parsing the <span class="target" id="index-3"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc2822.html"><strong>RFC 2822</strong></a> headers of a
+message, this class is derived from <a class="reference internal" href="#email.errors.MessageParseError" title="email.errors.MessageParseError"><tt class="xref py py-exc docutils literal"><span class="pre">MessageParseError</span></tt></a>. It can be raised
+from the <tt class="xref py py-meth docutils literal"><span class="pre">Parser.parse()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">Parser.parsestr()</span></tt> methods.</p>
+<p>Situations where it can be raised include not being able to find the starting or
+terminating boundary in a <em class="mimetype">multipart/*</em> message when strict parsing
+is used.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="email.errors.MultipartConversionError">
+<em class="property">exception </em><tt class="descclassname">email.errors.</tt><tt class="descname">MultipartConversionError</tt><a class="headerlink" href="#email.errors.MultipartConversionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when a payload is added to a <tt class="xref py py-class docutils literal"><span class="pre">Message</span></tt> object using
+<tt class="xref py py-meth docutils literal"><span class="pre">add_payload()</span></tt>, but the payload is already a scalar and the message&#8217;s
+<em class="mailheader">Content-Type</em> main type is not either <em class="mimetype">multipart</em> or
+missing.  <a class="reference internal" href="#email.errors.MultipartConversionError" title="email.errors.MultipartConversionError"><tt class="xref py py-exc docutils literal"><span class="pre">MultipartConversionError</span></tt></a> multiply inherits from
+<a class="reference internal" href="#email.errors.MessageError" title="email.errors.MessageError"><tt class="xref py py-exc docutils literal"><span class="pre">MessageError</span></tt></a> and the built-in <a class="reference internal" href="exceptions.html#exceptions.TypeError" title="exceptions.TypeError"><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></a>.</p>
+<p>Since <tt class="xref py py-meth docutils literal"><span class="pre">Message.add_payload()</span></tt> is deprecated, this exception is rarely raised
+in practice.  However the exception may also be raised if the <tt class="xref py py-meth docutils literal"><span class="pre">attach()</span></tt>
+method is called on an instance of a class derived from
+<a class="reference internal" href="email.mime.html#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><tt class="xref py py-class docutils literal"><span class="pre">MIMENonMultipart</span></tt></a> (e.g.
+<a class="reference internal" href="email.mime.html#email.mime.image.MIMEImage" title="email.mime.image.MIMEImage"><tt class="xref py py-class docutils literal"><span class="pre">MIMEImage</span></tt></a>).</p>
+</dd></dl>
+
+<p>Here&#8217;s the list of the defects that the <tt class="xref py py-class docutils literal"><span class="pre">FeedParser</span></tt>
+can find while parsing messages.  Note that the defects are added to the message
+where the problem was found, so for example, if a message nested inside a
+<em class="mimetype">multipart/alternative</em> had a malformed header, that nested message
+object would have a defect, but the containing messages would not.</p>
+<p>All defect classes are subclassed from <tt class="xref py py-class docutils literal"><span class="pre">email.errors.MessageDefect</span></tt>, but
+this class is <em>not</em> an exception!</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4: </span>All the defect classes were added.</p>
+<ul class="simple">
+<li><tt class="xref py py-class docutils literal"><span class="pre">NoBoundaryInMultipartDefect</span></tt> &#8211; A message claimed to be a multipart,
+but had no <em class="mimetype">boundary</em> parameter.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">StartBoundaryNotFoundDefect</span></tt> &#8211; The start boundary claimed in the
+<em class="mailheader">Content-Type</em> header was never found.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">FirstHeaderLineIsContinuationDefect</span></tt> &#8211; The message had a continuation
+line as its first header line.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">MisplacedEnvelopeHeaderDefect</span></tt> - A &#8220;Unix From&#8221; header was found in the
+middle of a header block.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">MalformedHeaderDefect</span></tt> &#8211; A header was found that was missing a colon,
+or was otherwise malformed.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">MultipartInvariantViolationDefect</span></tt> &#8211; A message claimed to be a
+<em class="mimetype">multipart</em>, but no subparts were found.  Note that when a message has
+this defect, its <tt class="xref py py-meth docutils literal"><span class="pre">is_multipart()</span></tt> method may return false even though its
+content type claims to be <em class="mimetype">multipart</em>.</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="email.encoders.html"
+                        title="previous chapter">18.1.7. <tt class="docutils literal docutils literal docutils literal"><span class="pre">email.encoders</span></tt>: Encoders</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="email.util.html"
+                        title="next chapter">18.1.9. <tt class="docutils literal"><span class="pre">email.utils</span></tt>: Miscellaneous utilities</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/email.errors.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="email.util.html" title="18.1.9. email.utils: Miscellaneous utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="email.encoders.html" title="18.1.7. email.encoders: Encoders"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="netdata.html" >18. Internet Data Handling</a> &raquo;</li>
+          <li><a href="email.html" >18.1. <tt class="docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">email</span></tt> &#8212; An email and MIME handling package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

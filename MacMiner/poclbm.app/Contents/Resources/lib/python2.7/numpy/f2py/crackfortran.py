@@ -399,7 +399,7 @@ def readfortrancode(ffile,dowithline=show,istop=1):
                 ll=l
             cont=(r is not None)
         else:
-            raise ValueError,"Flag sourcecodeform must be either 'fix' or 'free': %s"%`sourcecodeform`
+            raise ValueError("Flag sourcecodeform must be either 'fix' or 'free': %s"%`sourcecodeform`)
         filepositiontext='Line #%d in %s:"%s"\n\t' % (fin.filelineno()-1,currentfilename,l1)
         m=includeline.match(origfinalline)
         if m:
@@ -1977,16 +1977,19 @@ def _selected_int_kind_func(r):
     if m<=2**128: return 16
     return -1
 
-def _selected_real_kind_func(p,r=0,radix=0):
+def _selected_real_kind_func(p, r=0, radix=0):
     #XXX: This should be processor dependent
-    if p<7: return 4
-    if p<16: return 8
+    # This is only good for 0 <= p <= 20
+    if p < 7: return 4
+    if p < 16: return 8
     if platform.machine().lower().startswith('power'):
-        if p<=20:
+        if p <= 20:
             return 16
     else:
-        if p<19:
+        if p < 19:
             return 10
+        elif p <= 20:
+            return 16
     return -1
 
 def get_parameters(vars, global_params={}):

@@ -1,0 +1,491 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Very High Level Layer &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Python/C API Reference Manual" href="index.html" />
+    <link rel="next" title="Reference Counting" href="refcounting.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="refcounting.html" title="Reference Counting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" accesskey="U">Python/C API Reference Manual</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-very-high-level-layer">
+<span id="veryhigh"></span><h1>The Very High Level Layer<a class="headerlink" href="#the-very-high-level-layer" title="Permalink to this headline">¶</a></h1>
+<p>The functions in this chapter will let you execute Python source code given in a
+file or a buffer, but they will not let you interact in a more detailed way with
+the interpreter.</p>
+<p>Several of these functions accept a start symbol from the grammar as a
+parameter.  The available start symbols are <tt class="xref py py-const docutils literal"><span class="pre">Py_eval_input</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">Py_file_input</span></tt>, and <tt class="xref py py-const docutils literal"><span class="pre">Py_single_input</span></tt>.  These are described
+following the functions which accept them as parameters.</p>
+<p>Note also that several of these functions take <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt> parameters.  One
+particular issue which needs to be handled carefully is that the <tt class="xref c c-type docutils literal"><span class="pre">FILE</span></tt>
+structure for different C libraries can be different and incompatible.  Under
+Windows (at least), it is possible for dynamically linked extensions to actually
+use different libraries, so care should be taken that <tt class="xref c c-type docutils literal"><span class="pre">FILE*</span></tt> parameters
+are only passed to these functions if it is certain that they were created by
+the same library that the Python runtime is using.</p>
+<dl class="function">
+<dt id="Py_Main">
+int <tt class="descname">Py_Main</tt><big>(</big>int<em>&nbsp;argc</em>, char<em>&nbsp;**argv</em><big>)</big><a class="headerlink" href="#Py_Main" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main program for the standard interpreter.  This is made available for
+programs which embed Python.  The <em>argc</em> and <em>argv</em> parameters should be
+prepared exactly as those which are passed to a C program&#8217;s <tt class="xref c c-func docutils literal"><span class="pre">main()</span></tt>
+function.  It is important to note that the argument list may be modified (but
+the contents of the strings pointed to by the argument list are not). The return
+value will be <tt class="docutils literal"><span class="pre">0</span></tt> if the interpreter exits normally (ie, without an
+exception), <tt class="docutils literal"><span class="pre">1</span></tt> if the interpreter exits due to an exception, or <tt class="docutils literal"><span class="pre">2</span></tt>
+if the parameter list does not represent a valid Python command line.</p>
+<p>Note that if an otherwise unhandled <a class="reference internal" href="../library/exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a> is raised, this
+function will not return <tt class="docutils literal"><span class="pre">1</span></tt>, but exit the process, as long as
+<tt class="docutils literal"><span class="pre">Py_InspectFlag</span></tt> is not set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_AnyFile">
+int <tt class="descname">PyRun_AnyFile</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em><big>)</big><a class="headerlink" href="#PyRun_AnyFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_AnyFileExFlags" title="PyRun_AnyFileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_AnyFileExFlags()</span></tt></a> below, leaving
+<em>closeit</em> set to <tt class="docutils literal"><span class="pre">0</span></tt> and <em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_AnyFileFlags">
+int <tt class="descname">PyRun_AnyFileFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_AnyFileFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_AnyFileExFlags" title="PyRun_AnyFileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_AnyFileExFlags()</span></tt></a> below, leaving
+the <em>closeit</em> argument set to <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_AnyFileEx">
+int <tt class="descname">PyRun_AnyFileEx</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;closeit</em><big>)</big><a class="headerlink" href="#PyRun_AnyFileEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_AnyFileExFlags" title="PyRun_AnyFileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_AnyFileExFlags()</span></tt></a> below, leaving
+the <em>flags</em> argument set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_AnyFileExFlags">
+int <tt class="descname">PyRun_AnyFileExFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;closeit</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_AnyFileExFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <em>fp</em> refers to a file associated with an interactive device (console or
+terminal input or Unix pseudo-terminal), return the value of
+<a class="reference internal" href="#PyRun_InteractiveLoop" title="PyRun_InteractiveLoop"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_InteractiveLoop()</span></tt></a>, otherwise return the result of
+<a class="reference internal" href="#PyRun_SimpleFile" title="PyRun_SimpleFile"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleFile()</span></tt></a>.  If <em>filename</em> is <em>NULL</em>, this function uses
+<tt class="docutils literal"><span class="pre">&quot;???&quot;</span></tt> as the filename.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_SimpleString">
+int <tt class="descname">PyRun_SimpleString</tt><big>(</big>const char<em>&nbsp;*command</em><big>)</big><a class="headerlink" href="#PyRun_SimpleString" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_SimpleStringFlags" title="PyRun_SimpleStringFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleStringFlags()</span></tt></a> below,
+leaving the <em>PyCompilerFlags*</em> argument set to NULL.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_SimpleStringFlags">
+int <tt class="descname">PyRun_SimpleStringFlags</tt><big>(</big>const char<em>&nbsp;*command</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_SimpleStringFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the Python source code from <em>command</em> in the <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> module
+according to the <em>flags</em> argument. If <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><tt class="xref py py-mod docutils literal"><span class="pre">__main__</span></tt></a> does not already exist, it
+is created.  Returns <tt class="docutils literal"><span class="pre">0</span></tt> on success or <tt class="docutils literal"><span class="pre">-1</span></tt> if an exception was raised.  If
+there was an error, there is no way to get the exception information. For the
+meaning of <em>flags</em>, see below.</p>
+<p>Note that if an otherwise unhandled <a class="reference internal" href="../library/exceptions.html#exceptions.SystemExit" title="exceptions.SystemExit"><tt class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></tt></a> is raised, this
+function will not return <tt class="docutils literal"><span class="pre">-1</span></tt>, but exit the process, as long as
+<tt class="docutils literal"><span class="pre">Py_InspectFlag</span></tt> is not set.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_SimpleFile">
+int <tt class="descname">PyRun_SimpleFile</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em><big>)</big><a class="headerlink" href="#PyRun_SimpleFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_SimpleFileExFlags" title="PyRun_SimpleFileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleFileExFlags()</span></tt></a> below,
+leaving <em>closeit</em> set to <tt class="docutils literal"><span class="pre">0</span></tt> and <em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_SimpleFileFlags">
+int <tt class="descname">PyRun_SimpleFileFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_SimpleFileFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_SimpleFileExFlags" title="PyRun_SimpleFileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleFileExFlags()</span></tt></a> below,
+leaving <em>closeit</em> set to <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_SimpleFileEx">
+int <tt class="descname">PyRun_SimpleFileEx</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;closeit</em><big>)</big><a class="headerlink" href="#PyRun_SimpleFileEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_SimpleFileExFlags" title="PyRun_SimpleFileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleFileExFlags()</span></tt></a> below,
+leaving <em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_SimpleFileExFlags">
+int <tt class="descname">PyRun_SimpleFileExFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;closeit</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_SimpleFileExFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference internal" href="#PyRun_SimpleStringFlags" title="PyRun_SimpleStringFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleStringFlags()</span></tt></a>, but the Python source code is read
+from <em>fp</em> instead of an in-memory string. <em>filename</em> should be the name of the
+file.  If <em>closeit</em> is true, the file is closed before PyRun_SimpleFileExFlags
+returns.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_InteractiveOne">
+int <tt class="descname">PyRun_InteractiveOne</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em><big>)</big><a class="headerlink" href="#PyRun_InteractiveOne" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_InteractiveOneFlags" title="PyRun_InteractiveOneFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_InteractiveOneFlags()</span></tt></a> below,
+leaving <em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_InteractiveOneFlags">
+int <tt class="descname">PyRun_InteractiveOneFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_InteractiveOneFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and execute a single statement from a file associated with an
+interactive device according to the <em>flags</em> argument.  The user will be
+prompted using <tt class="docutils literal"><span class="pre">sys.ps1</span></tt> and <tt class="docutils literal"><span class="pre">sys.ps2</span></tt>.  Returns <tt class="docutils literal"><span class="pre">0</span></tt> when the input was
+executed successfully, <tt class="docutils literal"><span class="pre">-1</span></tt> if there was an exception, or an error code
+from the <tt class="file docutils literal"><span class="pre">errcode.h</span></tt> include file distributed as part of Python if
+there was a parse error.  (Note that <tt class="file docutils literal"><span class="pre">errcode.h</span></tt> is not included by
+<tt class="file docutils literal"><span class="pre">Python.h</span></tt>, so must be included specifically if needed.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_InteractiveLoop">
+int <tt class="descname">PyRun_InteractiveLoop</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em><big>)</big><a class="headerlink" href="#PyRun_InteractiveLoop" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyRun_InteractiveLoopFlags" title="PyRun_InteractiveLoopFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_InteractiveLoopFlags()</span></tt></a> below,
+leaving <em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_InteractiveLoopFlags">
+int <tt class="descname">PyRun_InteractiveLoopFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_InteractiveLoopFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read and execute statements from a file associated with an interactive device
+until EOF is reached.  The user will be prompted using <tt class="docutils literal"><span class="pre">sys.ps1</span></tt> and
+<tt class="docutils literal"><span class="pre">sys.ps2</span></tt>.  Returns <tt class="docutils literal"><span class="pre">0</span></tt> at EOF.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyParser_SimpleParseString">
+struct _node* <tt class="descname">PyParser_SimpleParseString</tt><big>(</big>const char<em>&nbsp;*str</em>, int<em>&nbsp;start</em><big>)</big><a class="headerlink" href="#PyParser_SimpleParseString" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to
+<a class="reference internal" href="#PyParser_SimpleParseStringFlagsFilename" title="PyParser_SimpleParseStringFlagsFilename"><tt class="xref c c-func docutils literal"><span class="pre">PyParser_SimpleParseStringFlagsFilename()</span></tt></a> below, leaving  <em>filename</em> set
+to <em>NULL</em> and <em>flags</em> set to <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyParser_SimpleParseStringFlags">
+struct _node* <tt class="descname">PyParser_SimpleParseStringFlags</tt><big>(</big>const char<em>&nbsp;*str</em>, int<em>&nbsp;start</em>, int<em>&nbsp;flags</em><big>)</big><a class="headerlink" href="#PyParser_SimpleParseStringFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to
+<a class="reference internal" href="#PyParser_SimpleParseStringFlagsFilename" title="PyParser_SimpleParseStringFlagsFilename"><tt class="xref c c-func docutils literal"><span class="pre">PyParser_SimpleParseStringFlagsFilename()</span></tt></a> below, leaving  <em>filename</em> set
+to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyParser_SimpleParseStringFlagsFilename">
+struct _node* <tt class="descname">PyParser_SimpleParseStringFlagsFilename</tt><big>(</big>const char<em>&nbsp;*str</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, int<em>&nbsp;flags</em><big>)</big><a class="headerlink" href="#PyParser_SimpleParseStringFlagsFilename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse Python source code from <em>str</em> using the start token <em>start</em> according to
+the <em>flags</em> argument.  The result can be used to create a code object which can
+be evaluated efficiently. This is useful if a code fragment must be evaluated
+many times.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyParser_SimpleParseFile">
+struct _node* <tt class="descname">PyParser_SimpleParseFile</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em><big>)</big><a class="headerlink" href="#PyParser_SimpleParseFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a simplified interface to <a class="reference internal" href="#PyParser_SimpleParseFileFlags" title="PyParser_SimpleParseFileFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyParser_SimpleParseFileFlags()</span></tt></a> below,
+leaving <em>flags</em> set to <tt class="docutils literal"><span class="pre">0</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyParser_SimpleParseFileFlags">
+struct _node* <tt class="descname">PyParser_SimpleParseFileFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, int<em>&nbsp;flags</em><big>)</big><a class="headerlink" href="#PyParser_SimpleParseFileFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to <a class="reference internal" href="#PyParser_SimpleParseStringFlagsFilename" title="PyParser_SimpleParseStringFlagsFilename"><tt class="xref c c-func docutils literal"><span class="pre">PyParser_SimpleParseStringFlagsFilename()</span></tt></a>, but the Python
+source code is read from <em>fp</em> instead of an in-memory string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_String">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyRun_String</tt><big>(</big>const char<em>&nbsp;*str</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em><big>)</big><a class="headerlink" href="#PyRun_String" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>This is a simplified interface to <a class="reference internal" href="#PyRun_StringFlags" title="PyRun_StringFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_StringFlags()</span></tt></a> below, leaving
+<em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_StringFlags">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyRun_StringFlags</tt><big>(</big>const char<em>&nbsp;*str</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_StringFlags" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Execute Python source code from <em>str</em> in the context specified by the
+dictionaries <em>globals</em> and <em>locals</em> with the compiler flags specified by
+<em>flags</em>.  The parameter <em>start</em> specifies the start token that should be used to
+parse the source code.</p>
+<p>Returns the result of executing the code as a Python object, or <em>NULL</em> if an
+exception was raised.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_File">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyRun_File</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em><big>)</big><a class="headerlink" href="#PyRun_File" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>This is a simplified interface to <a class="reference internal" href="#PyRun_FileExFlags" title="PyRun_FileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_FileExFlags()</span></tt></a> below, leaving
+<em>closeit</em> set to <tt class="docutils literal"><span class="pre">0</span></tt> and <em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_FileEx">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyRun_FileEx</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em>, int<em>&nbsp;closeit</em><big>)</big><a class="headerlink" href="#PyRun_FileEx" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>This is a simplified interface to <a class="reference internal" href="#PyRun_FileExFlags" title="PyRun_FileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_FileExFlags()</span></tt></a> below, leaving
+<em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_FileFlags">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyRun_FileFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_FileFlags" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>This is a simplified interface to <a class="reference internal" href="#PyRun_FileExFlags" title="PyRun_FileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_FileExFlags()</span></tt></a> below, leaving
+<em>closeit</em> set to <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyRun_FileExFlags">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyRun_FileExFlags</tt><big>(</big>FILE<em>&nbsp;*fp</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em>, int<em>&nbsp;closeit</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#PyRun_FileExFlags" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Similar to <a class="reference internal" href="#PyRun_StringFlags" title="PyRun_StringFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_StringFlags()</span></tt></a>, but the Python source code is read from
+<em>fp</em> instead of an in-memory string. <em>filename</em> should be the name of the file.
+If <em>closeit</em> is true, the file is closed before <a class="reference internal" href="#PyRun_FileExFlags" title="PyRun_FileExFlags"><tt class="xref c c-func docutils literal"><span class="pre">PyRun_FileExFlags()</span></tt></a>
+returns.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_CompileString">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">Py_CompileString</tt><big>(</big>const char<em>&nbsp;*str</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em><big>)</big><a class="headerlink" href="#Py_CompileString" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>This is a simplified interface to <a class="reference internal" href="#Py_CompileStringFlags" title="Py_CompileStringFlags"><tt class="xref c c-func docutils literal"><span class="pre">Py_CompileStringFlags()</span></tt></a> below, leaving
+<em>flags</em> set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_CompileStringFlags">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">Py_CompileStringFlags</tt><big>(</big>const char<em>&nbsp;*str</em>, const char<em>&nbsp;*filename</em>, int<em>&nbsp;start</em>, <a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*flags</em><big>)</big><a class="headerlink" href="#Py_CompileStringFlags" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Parse and compile the Python source code in <em>str</em>, returning the resulting code
+object.  The start token is given by <em>start</em>; this can be used to constrain the
+code which can be compiled and should be <tt class="xref py py-const docutils literal"><span class="pre">Py_eval_input</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">Py_file_input</span></tt>, or <tt class="xref py py-const docutils literal"><span class="pre">Py_single_input</span></tt>.  The filename specified by
+<em>filename</em> is used to construct the code object and may appear in tracebacks or
+<a class="reference internal" href="../library/exceptions.html#exceptions.SyntaxError" title="exceptions.SyntaxError"><tt class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></tt></a> exception messages.  This returns <em>NULL</em> if the code cannot
+be parsed or compiled.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_EvalCode">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyEval_EvalCode</tt><big>(</big><a class="reference internal" href="code.html#PyCodeObject" title="PyCodeObject">PyCodeObject</a><em>&nbsp;*co</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em><big>)</big><a class="headerlink" href="#PyEval_EvalCode" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>This is a simplified interface to <a class="reference internal" href="#PyEval_EvalCodeEx" title="PyEval_EvalCodeEx"><tt class="xref c c-func docutils literal"><span class="pre">PyEval_EvalCodeEx()</span></tt></a>, with just
+the code object, and the dictionaries of global and local variables.
+The other arguments are set to <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_EvalCodeEx">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyEval_EvalCodeEx</tt><big>(</big><a class="reference internal" href="code.html#PyCodeObject" title="PyCodeObject">PyCodeObject</a><em>&nbsp;*co</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*globals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*locals</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;**args</em>, int<em>&nbsp;argcount</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;**kws</em>, int<em>&nbsp;kwcount</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;**defs</em>, int<em>&nbsp;defcount</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*closure</em><big>)</big><a class="headerlink" href="#PyEval_EvalCodeEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate a precompiled code object, given a particular environment for its
+evaluation.  This environment consists of dictionaries of global and local
+variables, arrays of arguments, keywords and defaults, and a closure tuple of
+cells.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_EvalFrame">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyEval_EvalFrame</tt><big>(</big>PyFrameObject<em>&nbsp;*f</em><big>)</big><a class="headerlink" href="#PyEval_EvalFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate an execution frame.  This is a simplified interface to
+PyEval_EvalFrameEx, for backward compatibility.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_EvalFrameEx">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyEval_EvalFrameEx</tt><big>(</big>PyFrameObject<em>&nbsp;*f</em>, int<em>&nbsp;throwflag</em><big>)</big><a class="headerlink" href="#PyEval_EvalFrameEx" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main, unvarnished function of Python interpretation.  It is
+literally 2000 lines long.  The code object associated with the execution
+frame <em>f</em> is executed, interpreting bytecode and executing calls as needed.
+The additional <em>throwflag</em> parameter can mostly be ignored - if true, then
+it causes an exception to immediately be thrown; this is used for the
+<tt class="xref py py-meth docutils literal"><span class="pre">throw()</span></tt> methods of generator objects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyEval_MergeCompilerFlags">
+int <tt class="descname">PyEval_MergeCompilerFlags</tt><big>(</big><a class="reference internal" href="#PyCompilerFlags" title="PyCompilerFlags">PyCompilerFlags</a><em>&nbsp;*cf</em><big>)</big><a class="headerlink" href="#PyEval_MergeCompilerFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function changes the flags of the current evaluation frame, and returns
+true on success, false on failure.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="Py_eval_input">
+int <tt class="descname">Py_eval_input</tt><a class="headerlink" href="#Py_eval_input" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">The start symbol from the Python grammar for isolated expressions; for use with
+<a class="reference internal" href="#Py_CompileString" title="Py_CompileString"><tt class="xref c c-func docutils literal"><span class="pre">Py_CompileString()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="Py_file_input">
+int <tt class="descname">Py_file_input</tt><a class="headerlink" href="#Py_file_input" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">The start symbol from the Python grammar for sequences of statements as read
+from a file or other source; for use with <a class="reference internal" href="#Py_CompileString" title="Py_CompileString"><tt class="xref c c-func docutils literal"><span class="pre">Py_CompileString()</span></tt></a>.  This is
+the symbol to use when compiling arbitrarily long Python source code.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="Py_single_input">
+int <tt class="descname">Py_single_input</tt><a class="headerlink" href="#Py_single_input" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-2">The start symbol from the Python grammar for a single statement; for use with
+<a class="reference internal" href="#Py_CompileString" title="Py_CompileString"><tt class="xref c c-func docutils literal"><span class="pre">Py_CompileString()</span></tt></a>. This is the symbol used for the interactive
+interpreter loop.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="PyCompilerFlags">
+struct <tt class="descname">PyCompilerFlags</tt><a class="headerlink" href="#PyCompilerFlags" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the structure used to hold compiler flags.  In cases where code is only
+being compiled, it is passed as <tt class="docutils literal"><span class="pre">int</span> <span class="pre">flags</span></tt>, and in cases where code is being
+executed, it is passed as <tt class="docutils literal"><span class="pre">PyCompilerFlags</span> <span class="pre">*flags</span></tt>.  In this case, <tt class="docutils literal"><span class="pre">from</span>
+<span class="pre">__future__</span> <span class="pre">import</span></tt> can modify <em>flags</em>.</p>
+<p>Whenever <tt class="docutils literal"><span class="pre">PyCompilerFlags</span> <span class="pre">*flags</span></tt> is <em>NULL</em>, <tt class="xref py py-attr docutils literal"><span class="pre">cf_flags</span></tt> is treated as
+equal to <tt class="docutils literal"><span class="pre">0</span></tt>, and any modification due to <tt class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span></tt> is
+discarded.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">struct</span> <span class="n">PyCompilerFlags</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">cf_flags</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="var">
+<dt id="CO_FUTURE_DIVISION">
+int <tt class="descname">CO_FUTURE_DIVISION</tt><a class="headerlink" href="#CO_FUTURE_DIVISION" title="Permalink to this definition">¶</a></dt>
+<dd><p>This bit can be set in <em>flags</em> to cause division operator <tt class="docutils literal"><span class="pre">/</span></tt> to be
+interpreted as &#8220;true division&#8221; according to <span class="target" id="index-3"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0238"><strong>PEP 238</strong></a>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="refcounting.html"
+                        title="next chapter">Reference Counting</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/veryhigh.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="refcounting.html" title="Reference Counting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

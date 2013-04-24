@@ -1,0 +1,254 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.7. termios — POSIX style tty control &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="next" title="35.8. tty — Terminal control functions" href="tty.html" />
+    <link rel="prev" title="35.6. dl — Call C functions in shared objects" href="dl.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tty.html" title="35.8. tty — Terminal control functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dl.html" title="35.6. dl — Call C functions in shared objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" accesskey="U">35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-termios">
+<span id="termios-posix-style-tty-control"></span><h1>35.7. <a class="reference internal" href="#module-termios" title="termios: POSIX style tty control. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">termios</span></tt></a> &#8212; POSIX style tty control<a class="headerlink" href="#module-termios" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Unix</p>
+<p id="index-0">This module provides an interface to the POSIX calls for tty I/O control.  For a
+complete description of these calls, see the POSIX or Unix manual pages.  It is
+only available for those Unix versions that support POSIX <em>termios</em> style tty
+I/O control (and then only if configured at installation time).</p>
+<p>All functions in this module take a file descriptor <em>fd</em> as their first
+argument.  This can be an integer file descriptor, such as returned by
+<tt class="docutils literal"><span class="pre">sys.stdin.fileno()</span></tt>, or a file object, such as <tt class="docutils literal"><span class="pre">sys.stdin</span></tt> itself.</p>
+<p>This module also defines all the constants needed to work with the functions
+provided here; these have the same name as their counterparts in C.  Please
+refer to your system documentation for more information on using these terminal
+control interfaces.</p>
+<p>The module defines the following functions:</p>
+<dl class="function">
+<dt id="termios.tcgetattr">
+<tt class="descclassname">termios.</tt><tt class="descname">tcgetattr</tt><big>(</big><em>fd</em><big>)</big><a class="headerlink" href="#termios.tcgetattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list containing the tty attributes for file descriptor <em>fd</em>, as
+follows: <tt class="docutils literal"><span class="pre">[iflag,</span> <span class="pre">oflag,</span> <span class="pre">cflag,</span> <span class="pre">lflag,</span> <span class="pre">ispeed,</span> <span class="pre">ospeed,</span> <span class="pre">cc]</span></tt> where <em>cc</em> is a
+list of the tty special characters (each a string of length 1, except the
+items with indices <tt class="xref py py-const docutils literal"><span class="pre">VMIN</span></tt> and <tt class="xref py py-const docutils literal"><span class="pre">VTIME</span></tt>, which are integers when
+these fields are defined).  The interpretation of the flags and the speeds as
+well as the indexing in the <em>cc</em> array must be done using the symbolic
+constants defined in the <a class="reference internal" href="#module-termios" title="termios: POSIX style tty control. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">termios</span></tt></a> module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="termios.tcsetattr">
+<tt class="descclassname">termios.</tt><tt class="descname">tcsetattr</tt><big>(</big><em>fd</em>, <em>when</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#termios.tcsetattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the tty attributes for file descriptor <em>fd</em> from the <em>attributes</em>, which is
+a list like the one returned by <a class="reference internal" href="#termios.tcgetattr" title="termios.tcgetattr"><tt class="xref py py-func docutils literal"><span class="pre">tcgetattr()</span></tt></a>.  The <em>when</em> argument
+determines when the attributes are changed: <tt class="xref py py-const docutils literal"><span class="pre">TCSANOW</span></tt> to change
+immediately, <tt class="xref py py-const docutils literal"><span class="pre">TCSADRAIN</span></tt> to change after transmitting all queued output,
+or <tt class="xref py py-const docutils literal"><span class="pre">TCSAFLUSH</span></tt> to change after transmitting all queued output and
+discarding all queued input.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="termios.tcsendbreak">
+<tt class="descclassname">termios.</tt><tt class="descname">tcsendbreak</tt><big>(</big><em>fd</em>, <em>duration</em><big>)</big><a class="headerlink" href="#termios.tcsendbreak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a break on file descriptor <em>fd</em>.  A zero <em>duration</em> sends a break for 0.25
+&#8211;0.5 seconds; a nonzero <em>duration</em> has a system dependent meaning.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="termios.tcdrain">
+<tt class="descclassname">termios.</tt><tt class="descname">tcdrain</tt><big>(</big><em>fd</em><big>)</big><a class="headerlink" href="#termios.tcdrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until all output written to file descriptor <em>fd</em> has been transmitted.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="termios.tcflush">
+<tt class="descclassname">termios.</tt><tt class="descname">tcflush</tt><big>(</big><em>fd</em>, <em>queue</em><big>)</big><a class="headerlink" href="#termios.tcflush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discard queued data on file descriptor <em>fd</em>.  The <em>queue</em> selector specifies
+which queue: <tt class="xref py py-const docutils literal"><span class="pre">TCIFLUSH</span></tt> for the input queue, <tt class="xref py py-const docutils literal"><span class="pre">TCOFLUSH</span></tt> for the
+output queue, or <tt class="xref py py-const docutils literal"><span class="pre">TCIOFLUSH</span></tt> for both queues.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="termios.tcflow">
+<tt class="descclassname">termios.</tt><tt class="descname">tcflow</tt><big>(</big><em>fd</em>, <em>action</em><big>)</big><a class="headerlink" href="#termios.tcflow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suspend or resume input or output on file descriptor <em>fd</em>.  The <em>action</em>
+argument can be <tt class="xref py py-const docutils literal"><span class="pre">TCOOFF</span></tt> to suspend output, <tt class="xref py py-const docutils literal"><span class="pre">TCOON</span></tt> to restart
+output, <tt class="xref py py-const docutils literal"><span class="pre">TCIOFF</span></tt> to suspend input, or <tt class="xref py py-const docutils literal"><span class="pre">TCION</span></tt> to restart input.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="tty.html#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">tty</span></tt></a></dt>
+<dd>Convenience functions for common terminal control operations.</dd>
+</dl>
+</div>
+<div class="section" id="example">
+<h2>35.7.1. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p id="termios-example">Here&#8217;s a function that prompts for a password with echoing turned off.  Note the
+technique using a separate <a class="reference internal" href="#termios.tcgetattr" title="termios.tcgetattr"><tt class="xref py py-func docutils literal"><span class="pre">tcgetattr()</span></tt></a> call and a <a class="reference internal" href="../reference/compound_stmts.html#try"><tt class="xref std std-keyword docutils literal"><span class="pre">try</span></tt></a> ...
+<a class="reference internal" href="../reference/compound_stmts.html#finally"><tt class="xref std std-keyword docutils literal"><span class="pre">finally</span></tt></a> statement to ensure that the old tty attributes are restored
+exactly no matter what happens:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">getpass</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s">&quot;Password: &quot;</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">termios</span><span class="o">,</span> <span class="nn">sys</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">new</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">termios</span><span class="o">.</span><span class="n">ECHO</span>          <span class="c"># lflags</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSADRAIN</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSADRAIN</span><span class="p">,</span> <span class="n">old</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">passwd</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">35.7. <tt class="docutils literal"><span class="pre">termios</span></tt> &#8212; POSIX style tty control</a><ul>
+<li><a class="reference internal" href="#example">35.7.1. Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dl.html"
+                        title="previous chapter">35.6. <tt class="docutils literal docutils literal docutils literal"><span class="pre">dl</span></tt> &#8212; Call C functions in shared objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tty.html"
+                        title="next chapter">35.8. <tt class="docutils literal docutils literal"><span class="pre">tty</span></tt> &#8212; Terminal control functions</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/termios.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tty.html" title="35.8. tty — Terminal control functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dl.html" title="35.6. dl — Call C functions in shared objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" >35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

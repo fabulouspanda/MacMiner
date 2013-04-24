@@ -31,7 +31,7 @@ __all__ = ['Configuration', 'get_numpy_include_dirs', 'default_config_dict',
            'is_sequence', 'is_string', 'as_list', 'gpaths', 'get_language',
            'quote_args', 'get_build_architecture', 'get_info', 'get_pkg_info']
 
-class InstallableLib:
+class InstallableLib(object):
     """
     Container to hold information on an installable library.
 
@@ -361,6 +361,7 @@ def msvc_runtime_library():
                '1310' : 'msvcr71',    # MSVC 7.1
                '1400' : 'msvcr80',    # MSVC 8
                '1500' : 'msvcr90',    # MSVC 9 (VS 2008)
+               '1600' : 'msvcr100',   # MSVC 10 (aka 2010)
               }.get(msc_ver, None)
     else:
         lib = None
@@ -1403,6 +1404,8 @@ class Configuration(object):
         extra_objects:
         extra_compile_args:
         extra_link_args:
+        extra_f77_compile_args:
+        extra_f90_compile_args:
         export_symbols:
         swig_opts:
         depends:
@@ -1497,6 +1500,8 @@ class Configuration(object):
                 * macros
                 * include_dirs
                 * extra_compiler_args
+                * extra_f77_compiler_args
+                * extra_f90_compiler_args
                 * f2py_options
                 * language
 
@@ -1548,6 +1553,8 @@ class Configuration(object):
                 * macros
                 * include_dirs
                 * extra_compiler_args
+                * extra_f77_compiler_args
+                * extra_f90_compiler_args
                 * f2py_options
                 * language
 

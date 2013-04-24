@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>10.6. tempfile — Generate temporary files and directories &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="10. File and Directory Access" href="filesys.html" />
+    <link rel="next" title="10.7. glob — Unix style pathname pattern expansion" href="glob.html" />
+    <link rel="prev" title="10.5. filecmp — File and Directory Comparisons" href="filecmp.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glob.html" title="10.7. glob — Unix style pathname pattern expansion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filecmp.html" title="10.5. filecmp — File and Directory Comparisons"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="filesys.html" accesskey="U">10. File and Directory Access</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-tempfile">
+<span id="tempfile-generate-temporary-files-and-directories"></span><h1>10.6. <a class="reference internal" href="#module-tempfile" title="tempfile: Generate temporary files and directories."><tt class="xref py py-mod docutils literal"><span class="pre">tempfile</span></tt></a> &#8212; Generate temporary files and directories<a class="headerlink" href="#module-tempfile" title="Permalink to this headline">¶</a></h1>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/tempfile.py">Lib/tempfile.py</a></p>
+<hr class="docutils" />
+<p>This module generates temporary files and directories.  It works on all
+supported platforms.</p>
+<p>In version 2.3 of Python, this module was overhauled for enhanced security.  It
+now provides three new functions, <a class="reference internal" href="#tempfile.NamedTemporaryFile" title="tempfile.NamedTemporaryFile"><tt class="xref py py-func docutils literal"><span class="pre">NamedTemporaryFile()</span></tt></a>, <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a>,
+and <a class="reference internal" href="#tempfile.mkdtemp" title="tempfile.mkdtemp"><tt class="xref py py-func docutils literal"><span class="pre">mkdtemp()</span></tt></a>, which should eliminate all remaining need to use the
+insecure <a class="reference internal" href="#tempfile.mktemp" title="tempfile.mktemp"><tt class="xref py py-func docutils literal"><span class="pre">mktemp()</span></tt></a> function.  Temporary file names created by this module
+no longer contain the process ID; instead a string of six random characters is
+used.</p>
+<p>Also, all the user-callable functions now take additional arguments which
+allow direct control over the location and name of temporary files.  It is
+no longer necessary to use the global <em>tempdir</em> and <em>template</em> variables.
+To maintain backward compatibility, the argument order is somewhat odd; it
+is recommended to use keyword arguments for clarity.</p>
+<p>The module defines the following user-callable functions:</p>
+<dl class="function">
+<dt id="tempfile.TemporaryFile">
+<tt class="descclassname">tempfile.</tt><tt class="descname">TemporaryFile</tt><big>(</big><span class="optional">[</span><em>mode='w+b'</em><span class="optional">[</span>, <em>bufsize=-1</em><span class="optional">[</span>, <em>suffix=''</em><span class="optional">[</span>, <em>prefix='tmp'</em><span class="optional">[</span>, <em>dir=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#tempfile.TemporaryFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a file-like object that can be used as a temporary storage area.
+The file is created using <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a>. It will be destroyed as soon
+as it is closed (including an implicit close when the object is garbage
+collected).  Under Unix, the directory entry for the file is removed
+immediately after the file is created.  Other platforms do not support
+this; your code should not rely on a temporary file created using this
+function having or not having a visible name in the file system.</p>
+<p>The <em>mode</em> parameter defaults to <tt class="docutils literal"><span class="pre">'w+b'</span></tt> so that the file created can
+be read and written without being closed.  Binary mode is used so that it
+behaves consistently on all platforms without regard for the data that is
+stored.  <em>bufsize</em> defaults to <tt class="docutils literal"><span class="pre">-1</span></tt>, meaning that the operating system
+default is used.</p>
+<p>The <em>dir</em>, <em>prefix</em> and <em>suffix</em> parameters are passed to <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a>.</p>
+<p>The returned object is a true file object on POSIX platforms.  On other
+platforms, it is a file-like object whose <tt class="xref py py-attr docutils literal"><span class="pre">file</span></tt> attribute is the
+underlying true file object. This file-like object can be used in a
+<a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement, just like a normal file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.NamedTemporaryFile">
+<tt class="descclassname">tempfile.</tt><tt class="descname">NamedTemporaryFile</tt><big>(</big><span class="optional">[</span><em>mode='w+b'</em><span class="optional">[</span>, <em>bufsize=-1</em><span class="optional">[</span>, <em>suffix=''</em><span class="optional">[</span>, <em>prefix='tmp'</em><span class="optional">[</span>, <em>dir=None</em><span class="optional">[</span>, <em>delete=True</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#tempfile.NamedTemporaryFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function operates exactly as <a class="reference internal" href="#tempfile.TemporaryFile" title="tempfile.TemporaryFile"><tt class="xref py py-func docutils literal"><span class="pre">TemporaryFile()</span></tt></a> does, except that
+the file is guaranteed to have a visible name in the file system (on
+Unix, the directory entry is not unlinked).  That name can be retrieved
+from the <tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt> attribute of the file object.  Whether the name can be
+used to open the file a second time, while the named temporary file is
+still open, varies across platforms (it can be so used on Unix; it cannot
+on Windows NT or later).  If <em>delete</em> is true (the default), the file is
+deleted as soon as it is closed.</p>
+<p>The returned object is always a file-like object whose <tt class="xref py py-attr docutils literal"><span class="pre">file</span></tt>
+attribute is the underlying true file object. This file-like object can
+be used in a <a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement, just like a normal file.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6: </span>The <em>delete</em> parameter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.SpooledTemporaryFile">
+<tt class="descclassname">tempfile.</tt><tt class="descname">SpooledTemporaryFile</tt><big>(</big><span class="optional">[</span><em>max_size=0</em><span class="optional">[</span>, <em>mode='w+b'</em><span class="optional">[</span>, <em>bufsize=-1</em><span class="optional">[</span>, <em>suffix=''</em><span class="optional">[</span>, <em>prefix='tmp'</em><span class="optional">[</span>, <em>dir=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#tempfile.SpooledTemporaryFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function operates exactly as <a class="reference internal" href="#tempfile.TemporaryFile" title="tempfile.TemporaryFile"><tt class="xref py py-func docutils literal"><span class="pre">TemporaryFile()</span></tt></a> does, except that
+data is spooled in memory until the file size exceeds <em>max_size</em>, or
+until the file&#8217;s <tt class="xref py py-func docutils literal"><span class="pre">fileno()</span></tt> method is called, at which point the
+contents are written to disk and operation proceeds as with
+<a class="reference internal" href="#tempfile.TemporaryFile" title="tempfile.TemporaryFile"><tt class="xref py py-func docutils literal"><span class="pre">TemporaryFile()</span></tt></a>.  Also, it&#8217;s <tt class="docutils literal"><span class="pre">truncate</span></tt> method does not
+accept a <tt class="docutils literal"><span class="pre">size</span></tt> argument.</p>
+<p>The resulting file has one additional method, <tt class="xref py py-func docutils literal"><span class="pre">rollover()</span></tt>, which
+causes the file to roll over to an on-disk file regardless of its size.</p>
+<p>The returned object is a file-like object whose <tt class="xref py py-attr docutils literal"><span class="pre">_file</span></tt> attribute
+is either a <a class="reference internal" href="stringio.html#module-StringIO" title="StringIO: Read and write strings as if they were files."><tt class="xref py py-class docutils literal"><span class="pre">StringIO</span></tt></a> object or a true file object, depending on
+whether <tt class="xref py py-func docutils literal"><span class="pre">rollover()</span></tt> has been called. This file-like object can be
+used in a <a class="reference internal" href="../reference/compound_stmts.html#with"><tt class="xref std std-keyword docutils literal"><span class="pre">with</span></tt></a> statement, just like a normal file.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.mkstemp">
+<tt class="descclassname">tempfile.</tt><tt class="descname">mkstemp</tt><big>(</big><span class="optional">[</span><em>suffix=''</em><span class="optional">[</span>, <em>prefix='tmp'</em><span class="optional">[</span>, <em>dir=None</em><span class="optional">[</span>, <em>text=False</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#tempfile.mkstemp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a temporary file in the most secure manner possible.  There are
+no race conditions in the file&#8217;s creation, assuming that the platform
+properly implements the <a class="reference internal" href="os.html#os.O_EXCL" title="os.O_EXCL"><tt class="xref py py-const docutils literal"><span class="pre">os.O_EXCL</span></tt></a> flag for <a class="reference internal" href="os.html#os.open" title="os.open"><tt class="xref py py-func docutils literal"><span class="pre">os.open()</span></tt></a>.  The
+file is readable and writable only by the creating user ID.  If the
+platform uses permission bits to indicate whether a file is executable,
+the file is executable by no one.  The file descriptor is not inherited
+by child processes.</p>
+<p>Unlike <a class="reference internal" href="#tempfile.TemporaryFile" title="tempfile.TemporaryFile"><tt class="xref py py-func docutils literal"><span class="pre">TemporaryFile()</span></tt></a>, the user of <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a> is responsible
+for deleting the temporary file when done with it.</p>
+<p>If <em>suffix</em> is specified, the file name will end with that suffix,
+otherwise there will be no suffix.  <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a> does not put a dot
+between the file name and the suffix; if you need one, put it at the
+beginning of <em>suffix</em>.</p>
+<p>If <em>prefix</em> is specified, the file name will begin with that prefix;
+otherwise, a default prefix is used.</p>
+<p>If <em>dir</em> is specified, the file will be created in that directory;
+otherwise, a default directory is used.  The default directory is chosen
+from a platform-dependent list, but the user of the application can
+control the directory location by setting the <em>TMPDIR</em>, <em>TEMP</em> or <em>TMP</em>
+environment variables.  There is thus no guarantee that the generated
+filename will have any nice properties, such as not requiring quoting
+when passed to external commands via <tt class="docutils literal"><span class="pre">os.popen()</span></tt>.</p>
+<p>If <em>text</em> is specified, it indicates whether to open the file in binary
+mode (the default) or text mode.  On some platforms, this makes no
+difference.</p>
+<p><a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a> returns a tuple containing an OS-level handle to an open
+file (as would be returned by <a class="reference internal" href="os.html#os.open" title="os.open"><tt class="xref py py-func docutils literal"><span class="pre">os.open()</span></tt></a>) and the absolute pathname
+of that file, in that order.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.mkdtemp">
+<tt class="descclassname">tempfile.</tt><tt class="descname">mkdtemp</tt><big>(</big><span class="optional">[</span><em>suffix=''</em><span class="optional">[</span>, <em>prefix='tmp'</em><span class="optional">[</span>, <em>dir=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#tempfile.mkdtemp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a temporary directory in the most secure manner possible. There
+are no race conditions in the directory&#8217;s creation.  The directory is
+readable, writable, and searchable only by the creating user ID.</p>
+<p>The user of <a class="reference internal" href="#tempfile.mkdtemp" title="tempfile.mkdtemp"><tt class="xref py py-func docutils literal"><span class="pre">mkdtemp()</span></tt></a> is responsible for deleting the temporary
+directory and its contents when done with it.</p>
+<p>The <em>prefix</em>, <em>suffix</em>, and <em>dir</em> arguments are the same as for
+<a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a>.</p>
+<p><a class="reference internal" href="#tempfile.mkdtemp" title="tempfile.mkdtemp"><tt class="xref py py-func docutils literal"><span class="pre">mkdtemp()</span></tt></a> returns the absolute pathname of the new directory.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.mktemp">
+<tt class="descclassname">tempfile.</tt><tt class="descname">mktemp</tt><big>(</big><span class="optional">[</span><em>suffix=''</em><span class="optional">[</span>, <em>prefix='tmp'</em><span class="optional">[</span>, <em>dir=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#tempfile.mktemp" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.3: </span>Use <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a> instead.</p>
+<p>Return an absolute pathname of a file that did not exist at the time the
+call is made.  The <em>prefix</em>, <em>suffix</em>, and <em>dir</em> arguments are the same
+as for <a class="reference internal" href="#tempfile.mkstemp" title="tempfile.mkstemp"><tt class="xref py py-func docutils literal"><span class="pre">mkstemp()</span></tt></a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Use of this function may introduce a security hole in your program.  By
+the time you get around to doing anything with the file name it returns,
+someone else may have beaten you to the punch.  <a class="reference internal" href="#tempfile.mktemp" title="tempfile.mktemp"><tt class="xref py py-func docutils literal"><span class="pre">mktemp()</span></tt></a> usage can
+be replaced easily with <a class="reference internal" href="#tempfile.NamedTemporaryFile" title="tempfile.NamedTemporaryFile"><tt class="xref py py-func docutils literal"><span class="pre">NamedTemporaryFile()</span></tt></a>, passing it the
+<tt class="docutils literal"><span class="pre">delete=False</span></tt> parameter:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span>
+<span class="go">&lt;open file &#39;&lt;fdopen&gt;&#39;, mode &#39;w+b&#39; at 0x384698&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">name</span>
+<span class="go">&#39;/var/folders/5q/5qTPn6xq2RaWqk+1Ytw3-U+++TI/-Tmp-/tmpG7V1Y0&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<p>The module uses two global variables that tell it how to construct a
+temporary name.  They are initialized at the first call to any of the
+functions above.  The caller may change them, but this is discouraged; use
+the appropriate function arguments, instead.</p>
+<dl class="data">
+<dt id="tempfile.tempdir">
+<tt class="descclassname">tempfile.</tt><tt class="descname">tempdir</tt><a class="headerlink" href="#tempfile.tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>When set to a value other than <tt class="xref docutils literal"><span class="pre">None</span></tt>, this variable defines the
+default value for the <em>dir</em> argument to all the functions defined in this
+module.</p>
+<p>If <tt class="docutils literal"><span class="pre">tempdir</span></tt> is unset or <tt class="xref docutils literal"><span class="pre">None</span></tt> at any call to any of the above
+functions, Python searches a standard list of directories and sets
+<em>tempdir</em> to the first one which the calling user can create files in.
+The list is:</p>
+<ol class="arabic simple">
+<li>The directory named by the <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">TMPDIR</span></tt> environment variable.</li>
+<li>The directory named by the <span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">TEMP</span></tt> environment variable.</li>
+<li>The directory named by the <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">TMP</span></tt> environment variable.</li>
+<li>A platform-specific location:<ul>
+<li>On RiscOS, the directory named by the <span class="target" id="index-4"></span><tt class="xref std std-envvar docutils literal"><span class="pre">Wimp$ScrapDir</span></tt> environment
+variable.</li>
+<li>On Windows, the directories <tt class="file docutils literal"><span class="pre">C:\TEMP</span></tt>, <tt class="file docutils literal"><span class="pre">C:\TMP</span></tt>,
+<tt class="file docutils literal"><span class="pre">\TEMP</span></tt>, and <tt class="file docutils literal"><span class="pre">\TMP</span></tt>, in that order.</li>
+<li>On all other platforms, the directories <tt class="file docutils literal"><span class="pre">/tmp</span></tt>, <tt class="file docutils literal"><span class="pre">/var/tmp</span></tt>, and
+<tt class="file docutils literal"><span class="pre">/usr/tmp</span></tt>, in that order.</li>
+</ul>
+</li>
+<li>As a last resort, the current working directory.</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.gettempdir">
+<tt class="descclassname">tempfile.</tt><tt class="descname">gettempdir</tt><big>(</big><big>)</big><a class="headerlink" href="#tempfile.gettempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the directory currently selected to create temporary files in. If
+<a class="reference internal" href="#tempfile.tempdir" title="tempfile.tempdir"><tt class="xref py py-data docutils literal"><span class="pre">tempdir</span></tt></a> is not <tt class="xref docutils literal"><span class="pre">None</span></tt>, this simply returns its contents; otherwise,
+the search described above is performed, and the result returned.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="tempfile.template">
+<tt class="descclassname">tempfile.</tt><tt class="descname">template</tt><a class="headerlink" href="#tempfile.template" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.0: </span>Use <a class="reference internal" href="#tempfile.gettempprefix" title="tempfile.gettempprefix"><tt class="xref py py-func docutils literal"><span class="pre">gettempprefix()</span></tt></a> instead.</p>
+<p>When set to a value other than <tt class="xref docutils literal"><span class="pre">None</span></tt>, this variable defines the prefix of the
+final component of the filenames returned by <a class="reference internal" href="#tempfile.mktemp" title="tempfile.mktemp"><tt class="xref py py-func docutils literal"><span class="pre">mktemp()</span></tt></a>.  A string of six
+random letters and digits is appended to the prefix to make the filename unique.
+The default prefix is <tt class="file docutils literal"><span class="pre">tmp</span></tt>.</p>
+<p>Older versions of this module used to require that <tt class="docutils literal"><span class="pre">template</span></tt> be set to
+<tt class="xref docutils literal"><span class="pre">None</span></tt> after a call to <a class="reference internal" href="os.html#os.fork" title="os.fork"><tt class="xref py py-func docutils literal"><span class="pre">os.fork()</span></tt></a>; this has not been necessary since
+version 1.5.2.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tempfile.gettempprefix">
+<tt class="descclassname">tempfile.</tt><tt class="descname">gettempprefix</tt><big>(</big><big>)</big><a class="headerlink" href="#tempfile.gettempprefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the filename prefix used to create temporary files.  This does not
+contain the directory component.  Using this function is preferred over reading
+the <em>template</em> variable directly.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.5.2.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="filecmp.html"
+                        title="previous chapter">10.5. <tt class="docutils literal docutils literal docutils literal"><span class="pre">filecmp</span></tt> &#8212; File and Directory Comparisons</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glob.html"
+                        title="next chapter">10.7. <tt class="docutils literal docutils literal docutils literal"><span class="pre">glob</span></tt> &#8212; Unix style pathname pattern expansion</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/tempfile.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glob.html" title="10.7. glob — Unix style pathname pattern expansion"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filecmp.html" title="10.5. filecmp — File and Directory Comparisons"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="filesys.html" >10. File and Directory Access</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

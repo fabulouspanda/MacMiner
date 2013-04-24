@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Type Objects &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="next" title="The None Object" href="none.html" />
+    <link rel="prev" title="Concrete Objects Layer" href="concrete.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="none.html" title="The None Object"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="concrete.html" title="Concrete Objects Layer"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" accesskey="U">Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="type-objects">
+<span id="typeobjects"></span><h1>Type Objects<a class="headerlink" href="#type-objects" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="PyTypeObject">
+<tt class="descname">PyTypeObject</tt><a class="headerlink" href="#PyTypeObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>The C structure of the objects used to describe built-in types.</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="PyType_Type">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyType_Type</tt><a class="headerlink" href="#PyType_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">This is the type object for type objects; it is the same object as <tt class="docutils literal"><span class="pre">type</span></tt> and
+<tt class="docutils literal"><span class="pre">types.TypeType</span></tt> in the Python layer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_Check">
+int <tt class="descname">PyType_Check</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyType_Check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>o</em> is a type object, including instances of types
+derived from the standard type object.  Return false in all other cases.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_CheckExact">
+int <tt class="descname">PyType_CheckExact</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyType_CheckExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the object <em>o</em> is a type object, but not a subtype of the
+standard type object.  Return false in all other cases.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_ClearCache">
+unsigned int <tt class="descname">PyType_ClearCache</tt><big>(</big><big>)</big><a class="headerlink" href="#PyType_ClearCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the internal lookup cache. Return the current version tag.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_Modified">
+void <tt class="descname">PyType_Modified</tt><big>(</big><a class="reference internal" href="#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em><big>)</big><a class="headerlink" href="#PyType_Modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalidate the internal lookup cache for the type and all of its
+subtypes.  This function must be called after any manual
+modification of the attributes or base classes of the type.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_HasFeature">
+int <tt class="descname">PyType_HasFeature</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, int<em>&nbsp;feature</em><big>)</big><a class="headerlink" href="#PyType_HasFeature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the type object <em>o</em> sets the feature <em>feature</em>.  Type features
+are denoted by single bit flags.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_IS_GC">
+int <tt class="descname">PyType_IS_GC</tt><big>(</big><a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><big>)</big><a class="headerlink" href="#PyType_IS_GC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if the type object includes support for the cycle detector; this
+tests the type flag <a class="reference internal" href="typeobj.html#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><tt class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_IsSubtype">
+int <tt class="descname">PyType_IsSubtype</tt><big>(</big><a class="reference internal" href="#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*a</em>, <a class="reference internal" href="#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*b</em><big>)</big><a class="headerlink" href="#PyType_IsSubtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return true if <em>a</em> is a subtype of <em>b</em>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_GenericAlloc">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyType_GenericAlloc</tt><big>(</big><a class="reference internal" href="#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, Py_ssize_t<em>&nbsp;nitems</em><big>)</big><a class="headerlink" href="#PyType_GenericAlloc" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>This function used an <tt class="xref c c-type docutils literal"><span class="pre">int</span></tt> type for <em>nitems</em>. This might require
+changes in your code for properly supporting 64-bit systems.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_GenericNew">
+<a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a>* <tt class="descname">PyType_GenericNew</tt><big>(</big><a class="reference internal" href="#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*args</em>, <a class="reference internal" href="structures.html#PyObject" title="PyObject">PyObject</a><em>&nbsp;*kwds</em><big>)</big><a class="headerlink" href="#PyType_GenericNew" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="PyType_Ready">
+int <tt class="descname">PyType_Ready</tt><big>(</big><a class="reference internal" href="#PyTypeObject" title="PyTypeObject">PyTypeObject</a><em>&nbsp;*type</em><big>)</big><a class="headerlink" href="#PyType_Ready" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finalize a type object.  This should be called on all type objects to finish
+their initialization.  This function is responsible for adding inherited slots
+from a type&#8217;s base class.  Return <tt class="docutils literal"><span class="pre">0</span></tt> on success, or return <tt class="docutils literal"><span class="pre">-1</span></tt> and sets an
+exception on error.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="concrete.html"
+                        title="previous chapter">Concrete Objects Layer</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="none.html"
+                        title="next chapter">The None Object</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/type.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="none.html" title="The None Object"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="concrete.html" title="Concrete Objects Layer"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="concrete.html" >Concrete Objects Layer</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

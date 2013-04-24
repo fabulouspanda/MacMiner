@@ -1,0 +1,521 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>20.11. nntplib — NNTP protocol client &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="next" title="20.12. smtplib — SMTP protocol client" href="smtplib.html" />
+    <link rel="prev" title="20.10. imaplib — IMAP4 protocol client" href="imaplib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smtplib.html" title="20.12. smtplib — SMTP protocol client"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imaplib.html" title="20.10. imaplib — IMAP4 protocol client"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" accesskey="U">20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nntplib">
+<span id="nntplib-nntp-protocol-client"></span><h1>20.11. <a class="reference internal" href="#module-nntplib" title="nntplib: NNTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">nntplib</span></tt></a> &#8212; NNTP protocol client<a class="headerlink" href="#module-nntplib" title="Permalink to this headline">¶</a></h1>
+<p id="index-0"><strong>Source code:</strong> <a class="reference external" href="http://hg.python.org/cpython/file/2.7/Lib/nntplib.py">Lib/nntplib.py</a></p>
+<hr class="docutils" />
+<p>This module defines the class <a class="reference internal" href="#nntplib.NNTP" title="nntplib.NNTP"><tt class="xref py py-class docutils literal"><span class="pre">NNTP</span></tt></a> which implements the client side of
+the NNTP protocol.  It can be used to implement a news reader or poster, or
+automated news processors.  For more information on NNTP (Network News Transfer
+Protocol), see Internet <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc977.html"><strong>RFC 977</strong></a>.</p>
+<p>Here are two small examples of how it can be used.  To list some statistics
+about a newsgroup and print the subjects of the last 10 articles:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">NNTP</span><span class="p">(</span><span class="s">&#39;news.gmane.org&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s">&#39;gmane.comp.python.committers&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;Group&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s">&#39;has&#39;</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="s">&#39;articles, range&#39;</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="s">&#39;to&#39;</span><span class="p">,</span> <span class="n">last</span>
+<span class="go">Group gmane.comp.python.committers has 1071 articles, range 1 to 1071</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span><span class="p">,</span> <span class="n">subs</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">xhdr</span><span class="p">(</span><span class="s">&#39;subject&#39;</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="s">&#39;-&#39;</span> <span class="o">+</span> <span class="n">last</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">subs</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]:</span> <span class="k">print</span> <span class="nb">id</span><span class="p">,</span> <span class="n">sub</span>
+<span class="gp">...</span>
+<span class="go">1062 Re: Mercurial Status?</span>
+<span class="go">1063 Re: [python-committers]  (Windows) buildbots on 3.x</span>
+<span class="go">1064 Re: Mercurial Status?</span>
+<span class="go">1065 Re: Mercurial Status?</span>
+<span class="go">1066 Python 2.6.6 status</span>
+<span class="go">1067 Commit Privileges for Ask Solem</span>
+<span class="go">1068 Re: Commit Privileges for Ask Solem</span>
+<span class="go">1069 Re: Commit Privileges for Ask Solem</span>
+<span class="go">1070 Re: Commit Privileges for Ask Solem</span>
+<span class="go">1071 2.6.6 rc 2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+<span class="go">&#39;205 Bye!&#39;</span>
+</pre></div>
+</div>
+<p>To post an article from a file (this assumes that the article has valid
+headers, and that you have right to post on the particular newsgroup):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">NNTP</span><span class="p">(</span><span class="s">&#39;news.gmane.org&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;articlefile&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="go">&#39;240 Article posted successfully.&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+<span class="go">&#39;205 Bye!&#39;</span>
+</pre></div>
+</div>
+<p>The module itself defines the following items:</p>
+<dl class="class">
+<dt id="nntplib.NNTP">
+<em class="property">class </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTP</tt><big>(</big><em>host[, port [, user[, password [, readermode] [, usenetrc]]]]</em><big>)</big><a class="headerlink" href="#nntplib.NNTP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new instance of the <a class="reference internal" href="#nntplib.NNTP" title="nntplib.NNTP"><tt class="xref py py-class docutils literal"><span class="pre">NNTP</span></tt></a> class, representing a connection
+to the NNTP server running on host <em>host</em>, listening at port <em>port</em>.  The
+default <em>port</em> is 119.  If the optional <em>user</em> and <em>password</em> are provided,
+or if suitable credentials are present in <tt class="file docutils literal"><span class="pre">/.netrc</span></tt> and the optional
+flag <em>usenetrc</em> is true (the default), the <tt class="docutils literal"><span class="pre">AUTHINFO</span> <span class="pre">USER</span></tt> and <tt class="docutils literal"><span class="pre">AUTHINFO</span>
+<span class="pre">PASS</span></tt> commands are used to identify and authenticate the user to the server.
+If the optional flag <em>readermode</em> is true, then a <tt class="docutils literal"><span class="pre">mode</span> <span class="pre">reader</span></tt> command is
+sent before authentication is performed.  Reader mode is sometimes necessary
+if you are connecting to an NNTP server on the local machine and intend to
+call reader-specific commands, such as <tt class="docutils literal"><span class="pre">group</span></tt>.  If you get unexpected
+<a class="reference internal" href="#nntplib.NNTPPermanentError" title="nntplib.NNTPPermanentError"><tt class="xref py py-exc docutils literal"><span class="pre">NNTPPermanentError</span></tt></a>s, you might need to set <em>readermode</em>.
+<em>readermode</em> defaults to <tt class="xref docutils literal"><span class="pre">None</span></tt>. <em>usenetrc</em> defaults to <tt class="xref docutils literal"><span class="pre">True</span></tt>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4: </span><em>usenetrc</em> argument added.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nntplib.NNTPError">
+<em class="property">exception </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTPError</tt><a class="headerlink" href="#nntplib.NNTPError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Derived from the standard exception <a class="reference internal" href="exceptions.html#exceptions.Exception" title="exceptions.Exception"><tt class="xref py py-exc docutils literal"><span class="pre">Exception</span></tt></a>, this is the base class for
+all exceptions raised by the <a class="reference internal" href="#module-nntplib" title="nntplib: NNTP protocol client (requires sockets)."><tt class="xref py py-mod docutils literal"><span class="pre">nntplib</span></tt></a> module.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nntplib.NNTPReplyError">
+<em class="property">exception </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTPReplyError</tt><a class="headerlink" href="#nntplib.NNTPReplyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when an unexpected reply is received from the server.  For
+backwards compatibility, the exception <tt class="docutils literal"><span class="pre">error_reply</span></tt> is equivalent to this
+class.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nntplib.NNTPTemporaryError">
+<em class="property">exception </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTPTemporaryError</tt><a class="headerlink" href="#nntplib.NNTPTemporaryError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when an error code in the range 400&#8211;499 is received.  For
+backwards compatibility, the exception <tt class="docutils literal"><span class="pre">error_temp</span></tt> is equivalent to this
+class.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nntplib.NNTPPermanentError">
+<em class="property">exception </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTPPermanentError</tt><a class="headerlink" href="#nntplib.NNTPPermanentError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when an error code in the range 500&#8211;599 is received.  For
+backwards compatibility, the exception <tt class="docutils literal"><span class="pre">error_perm</span></tt> is equivalent to this
+class.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nntplib.NNTPProtocolError">
+<em class="property">exception </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTPProtocolError</tt><a class="headerlink" href="#nntplib.NNTPProtocolError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when a reply is received from the server that does not begin
+with a digit in the range 1&#8211;5.  For backwards compatibility, the exception
+<tt class="docutils literal"><span class="pre">error_proto</span></tt> is equivalent to this class.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="nntplib.NNTPDataError">
+<em class="property">exception </em><tt class="descclassname">nntplib.</tt><tt class="descname">NNTPDataError</tt><a class="headerlink" href="#nntplib.NNTPDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception raised when there is some error in the response data.  For backwards
+compatibility, the exception <tt class="docutils literal"><span class="pre">error_data</span></tt> is equivalent to this class.</p>
+</dd></dl>
+
+<div class="section" id="nntp-objects">
+<span id="id1"></span><h2>20.11.1. NNTP Objects<a class="headerlink" href="#nntp-objects" title="Permalink to this headline">¶</a></h2>
+<p>NNTP instances have the following methods.  The <em>response</em> that is returned as
+the first item in the return tuple of almost all methods is the server&#8217;s
+response: a string beginning with a three-digit code. If the server&#8217;s response
+indicates an error, the method raises one of the above exceptions.</p>
+<dl class="method">
+<dt id="nntplib.NNTP.getwelcome">
+<tt class="descclassname">NNTP.</tt><tt class="descname">getwelcome</tt><big>(</big><big>)</big><a class="headerlink" href="#nntplib.NNTP.getwelcome" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the welcome message sent by the server in reply to the initial
+connection.  (This message sometimes contains disclaimers or help information
+that may be relevant to the user.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.set_debuglevel">
+<tt class="descclassname">NNTP.</tt><tt class="descname">set_debuglevel</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.set_debuglevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the instance&#8217;s debugging level.  This controls the amount of debugging
+output printed.  The default, <tt class="docutils literal"><span class="pre">0</span></tt>, produces no debugging output.  A value of
+<tt class="docutils literal"><span class="pre">1</span></tt> produces a moderate amount of debugging output, generally a single line
+per request or response.  A value of <tt class="docutils literal"><span class="pre">2</span></tt> or higher produces the maximum amount
+of debugging output, logging each line sent and received on the connection
+(including message text).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.newgroups">
+<tt class="descclassname">NNTP.</tt><tt class="descname">newgroups</tt><big>(</big><em>date</em>, <em>time</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.newgroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">NEWGROUPS</span></tt> command.  The <em>date</em> argument should be a string of the
+form <tt class="docutils literal"><span class="pre">'yymmdd'</span></tt> indicating the date, and <em>time</em> should be a string of the form
+<tt class="docutils literal"><span class="pre">'hhmmss'</span></tt> indicating the time.  Return a pair <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">groups)</span></tt> where
+<em>groups</em> is a list of group names that are new since the given date and time. If
+the <em>file</em> parameter is supplied, then the output of the  <tt class="docutils literal"><span class="pre">NEWGROUPS</span></tt> command
+is stored in a file.  If <em>file</em> is a string,  then the method will open a file
+object with that name, write to it  then close it.  If <em>file</em> is a file object,
+then it will start calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store the lines of the command
+output. If <em>file</em> is supplied, then the returned <em>list</em> is an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.newnews">
+<tt class="descclassname">NNTP.</tt><tt class="descname">newnews</tt><big>(</big><em>group</em>, <em>date</em>, <em>time</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.newnews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">NEWNEWS</span></tt> command.  Here, <em>group</em> is a group name or <tt class="docutils literal"><span class="pre">'*'</span></tt>, and
+<em>date</em> and <em>time</em> have the same meaning as for <a class="reference internal" href="#nntplib.NNTP.newgroups" title="nntplib.NNTP.newgroups"><tt class="xref py py-meth docutils literal"><span class="pre">newgroups()</span></tt></a>.  Return a pair
+<tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">articles)</span></tt> where <em>articles</em> is a list of message ids. If the
+<em>file</em> parameter is supplied, then the output of the  <tt class="docutils literal"><span class="pre">NEWNEWS</span></tt> command is
+stored in a file.  If <em>file</em> is a string,  then the method will open a file
+object with that name, write to it  then close it.  If <em>file</em> is a file object,
+then it will start calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store the lines of the command
+output. If <em>file</em> is supplied, then the returned <em>list</em> is an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.list">
+<tt class="descclassname">NNTP.</tt><tt class="descname">list</tt><big>(</big><span class="optional">[</span><em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">LIST</span></tt> command.  Return a pair <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">list)</span></tt> where <em>list</em> is a
+list of tuples.  Each tuple has the form <tt class="docutils literal"><span class="pre">(group,</span> <span class="pre">last,</span> <span class="pre">first,</span> <span class="pre">flag)</span></tt>, where
+<em>group</em> is a group name, <em>last</em> and <em>first</em> are the last and first article
+numbers (as strings), and <em>flag</em> is <tt class="docutils literal"><span class="pre">'y'</span></tt> if posting is allowed, <tt class="docutils literal"><span class="pre">'n'</span></tt> if
+not, and <tt class="docutils literal"><span class="pre">'m'</span></tt> if the newsgroup is moderated.  (Note the ordering: <em>last</em>,
+<em>first</em>.) If the <em>file</em> parameter is supplied, then the output of the  <tt class="docutils literal"><span class="pre">LIST</span></tt>
+command is stored in a file.  If <em>file</em> is a string,  then the method will open
+a file object with that name, write to it  then close it.  If <em>file</em> is a file
+object, then it will start calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store the lines of the
+command output. If <em>file</em> is supplied, then the returned <em>list</em> is an empty
+list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.descriptions">
+<tt class="descclassname">NNTP.</tt><tt class="descname">descriptions</tt><big>(</big><em>grouppattern</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.descriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">LIST</span> <span class="pre">NEWSGROUPS</span></tt> command, where <em>grouppattern</em> is a wildmat string as
+specified in RFC2980 (it&#8217;s essentially the same as DOS or UNIX shell wildcard
+strings).  Return a pair <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">list)</span></tt>, where <em>list</em> is a list of tuples
+containing <tt class="docutils literal"><span class="pre">(name,</span> <span class="pre">title)</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.description">
+<tt class="descclassname">NNTP.</tt><tt class="descname">description</tt><big>(</big><em>group</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a description for a single group <em>group</em>.  If more than one group matches
+(if &#8216;group&#8217; is a real wildmat string), return the first match.   If no group
+matches, return an empty string.</p>
+<p>This elides the response code from the server.  If the response code is needed,
+use <a class="reference internal" href="#nntplib.NNTP.descriptions" title="nntplib.NNTP.descriptions"><tt class="xref py py-meth docutils literal"><span class="pre">descriptions()</span></tt></a>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.group">
+<tt class="descclassname">NNTP.</tt><tt class="descname">group</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">GROUP</span></tt> command, where <em>name</em> is the group name. Return a tuple
+<tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">count,</span> <span class="pre">first,</span> <span class="pre">last,</span> <span class="pre">name)</span></tt> where <em>count</em> is the (estimated) number
+of articles in the group, <em>first</em> is the first article number in the group,
+<em>last</em> is the last article number in the group, and <em>name</em> is the group name.
+The numbers are returned as strings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.help">
+<tt class="descclassname">NNTP.</tt><tt class="descname">help</tt><big>(</big><span class="optional">[</span><em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">HELP</span></tt> command.  Return a pair <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">list)</span></tt> where <em>list</em> is a
+list of help strings. If the <em>file</em> parameter is supplied, then the output of
+the  <tt class="docutils literal"><span class="pre">HELP</span></tt> command is stored in a file.  If <em>file</em> is a string,  then the
+method will open a file object with that name, write to it  then close it.  If
+<em>file</em> is a file object, then it will start calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store
+the lines of the command output. If <em>file</em> is supplied, then the returned <em>list</em>
+is an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.stat">
+<tt class="descclassname">NNTP.</tt><tt class="descname">stat</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">STAT</span></tt> command, where <em>id</em> is the message id (enclosed in <tt class="docutils literal"><span class="pre">'&lt;'</span></tt> and
+<tt class="docutils literal"><span class="pre">'&gt;'</span></tt>) or an article number (as a string). Return a triple <tt class="docutils literal"><span class="pre">(response,</span>
+<span class="pre">number,</span> <span class="pre">id)</span></tt> where <em>number</em> is the article number (as a string) and <em>id</em> is the
+message id  (enclosed in <tt class="docutils literal"><span class="pre">'&lt;'</span></tt> and <tt class="docutils literal"><span class="pre">'&gt;'</span></tt>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.next">
+<tt class="descclassname">NNTP.</tt><tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#nntplib.NNTP.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">NEXT</span></tt> command.  Return as for <a class="reference internal" href="stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><tt class="xref py py-meth docutils literal"><span class="pre">stat()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.last">
+<tt class="descclassname">NNTP.</tt><tt class="descname">last</tt><big>(</big><big>)</big><a class="headerlink" href="#nntplib.NNTP.last" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">LAST</span></tt> command.  Return as for <a class="reference internal" href="stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><tt class="xref py py-meth docutils literal"><span class="pre">stat()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.head">
+<tt class="descclassname">NNTP.</tt><tt class="descname">head</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">HEAD</span></tt> command, where <em>id</em> has the same meaning as for <a class="reference internal" href="stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><tt class="xref py py-meth docutils literal"><span class="pre">stat()</span></tt></a>.
+Return a tuple <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">number,</span> <span class="pre">id,</span> <span class="pre">list)</span></tt> where the first three are the
+same as for <a class="reference internal" href="stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><tt class="xref py py-meth docutils literal"><span class="pre">stat()</span></tt></a>, and <em>list</em> is a list of the article&#8217;s headers (an
+uninterpreted list of lines, without trailing newlines).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.body">
+<tt class="descclassname">NNTP.</tt><tt class="descname">body</tt><big>(</big><em>id</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">BODY</span></tt> command, where <em>id</em> has the same meaning as for <a class="reference internal" href="stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><tt class="xref py py-meth docutils literal"><span class="pre">stat()</span></tt></a>.
+If the <em>file</em> parameter is supplied, then the body is stored in a file.  If
+<em>file</em> is a string, then the method will open a file object with that name,
+write to it then close it. If <em>file</em> is a file object, then it will start
+calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store the lines of the body. Return as for
+<a class="reference internal" href="#nntplib.NNTP.head" title="nntplib.NNTP.head"><tt class="xref py py-meth docutils literal"><span class="pre">head()</span></tt></a>.  If <em>file</em> is supplied, then the returned <em>list</em> is an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.article">
+<tt class="descclassname">NNTP.</tt><tt class="descname">article</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.article" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an <tt class="docutils literal"><span class="pre">ARTICLE</span></tt> command, where <em>id</em> has the same meaning as for
+<a class="reference internal" href="stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><tt class="xref py py-meth docutils literal"><span class="pre">stat()</span></tt></a>.  Return as for <a class="reference internal" href="#nntplib.NNTP.head" title="nntplib.NNTP.head"><tt class="xref py py-meth docutils literal"><span class="pre">head()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.slave">
+<tt class="descclassname">NNTP.</tt><tt class="descname">slave</tt><big>(</big><big>)</big><a class="headerlink" href="#nntplib.NNTP.slave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">SLAVE</span></tt> command.  Return the server&#8217;s <em>response</em>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.xhdr">
+<tt class="descclassname">NNTP.</tt><tt class="descname">xhdr</tt><big>(</big><em>header</em>, <em>string</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.xhdr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an <tt class="docutils literal"><span class="pre">XHDR</span></tt> command.  This command is not defined in the RFC but is a
+common extension.  The <em>header</em> argument is a header keyword, e.g.
+<tt class="docutils literal"><span class="pre">'subject'</span></tt>.  The <em>string</em> argument should have the form <tt class="docutils literal"><span class="pre">'first-last'</span></tt>
+where <em>first</em> and <em>last</em> are the first and last article numbers to search.
+Return a pair <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">list)</span></tt>, where <em>list</em> is a list of pairs <tt class="docutils literal"><span class="pre">(id,</span>
+<span class="pre">text)</span></tt>, where <em>id</em> is an article number (as a string) and <em>text</em> is the text of
+the requested header for that article. If the <em>file</em> parameter is supplied, then
+the output of the  <tt class="docutils literal"><span class="pre">XHDR</span></tt> command is stored in a file.  If <em>file</em> is a string,
+then the method will open a file object with that name, write to it  then close
+it.  If <em>file</em> is a file object, then it will start calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it
+to store the lines of the command output. If <em>file</em> is supplied, then the
+returned <em>list</em> is an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.post">
+<tt class="descclassname">NNTP.</tt><tt class="descname">post</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post an article using the <tt class="docutils literal"><span class="pre">POST</span></tt> command.  The <em>file</em> argument is an open file
+object which is read until EOF using its <a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python. (Unix)"><tt class="xref py py-meth docutils literal"><span class="pre">readline()</span></tt></a> method.  It should be
+a well-formed news article, including the required headers.  The <a class="reference internal" href="#nntplib.NNTP.post" title="nntplib.NNTP.post"><tt class="xref py py-meth docutils literal"><span class="pre">post()</span></tt></a>
+method automatically escapes lines beginning with <tt class="docutils literal"><span class="pre">.</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.ihave">
+<tt class="descclassname">NNTP.</tt><tt class="descname">ihave</tt><big>(</big><em>id</em>, <em>file</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.ihave" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an <tt class="docutils literal"><span class="pre">IHAVE</span></tt> command. <em>id</em> is a message id (enclosed in  <tt class="docutils literal"><span class="pre">'&lt;'</span></tt> and
+<tt class="docutils literal"><span class="pre">'&gt;'</span></tt>). If the response is not an error, treat <em>file</em> exactly as for the
+<a class="reference internal" href="#nntplib.NNTP.post" title="nntplib.NNTP.post"><tt class="xref py py-meth docutils literal"><span class="pre">post()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.date">
+<tt class="descclassname">NNTP.</tt><tt class="descname">date</tt><big>(</big><big>)</big><a class="headerlink" href="#nntplib.NNTP.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a triple <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">date,</span> <span class="pre">time)</span></tt>, containing the current date and time
+in a form suitable for the <a class="reference internal" href="#nntplib.NNTP.newnews" title="nntplib.NNTP.newnews"><tt class="xref py py-meth docutils literal"><span class="pre">newnews()</span></tt></a> and <a class="reference internal" href="#nntplib.NNTP.newgroups" title="nntplib.NNTP.newgroups"><tt class="xref py py-meth docutils literal"><span class="pre">newgroups()</span></tt></a> methods. This
+is an optional NNTP extension, and may not be supported by all servers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.xgtitle">
+<tt class="descclassname">NNTP.</tt><tt class="descname">xgtitle</tt><big>(</big><em>name</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.xgtitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an <tt class="docutils literal"><span class="pre">XGTITLE</span></tt> command, returning a pair <tt class="docutils literal"><span class="pre">(response,</span> <span class="pre">list)</span></tt>, where
+<em>list</em> is a list of tuples containing <tt class="docutils literal"><span class="pre">(name,</span> <span class="pre">title)</span></tt>. If the <em>file</em> parameter
+is supplied, then the output of the  <tt class="docutils literal"><span class="pre">XGTITLE</span></tt> command is stored in a file.
+If <em>file</em> is a string,  then the method will open a file object with that name,
+write to it  then close it.  If <em>file</em> is a file object, then it will start
+calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store the lines of the command output. If <em>file</em>
+is supplied, then the returned <em>list</em> is an empty list. This is an optional NNTP
+extension, and may not be supported by all servers.</p>
+<p>RFC2980 says &#8220;It is suggested that this extension be deprecated&#8221;.  Use
+<a class="reference internal" href="#nntplib.NNTP.descriptions" title="nntplib.NNTP.descriptions"><tt class="xref py py-meth docutils literal"><span class="pre">descriptions()</span></tt></a> or <a class="reference internal" href="#nntplib.NNTP.description" title="nntplib.NNTP.description"><tt class="xref py py-meth docutils literal"><span class="pre">description()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.xover">
+<tt class="descclassname">NNTP.</tt><tt class="descname">xover</tt><big>(</big><em>start</em>, <em>end</em><span class="optional">[</span>, <em>file</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#nntplib.NNTP.xover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pair <tt class="docutils literal"><span class="pre">(resp,</span> <span class="pre">list)</span></tt>.  <em>list</em> is a list of tuples, one for each
+article in the range delimited by the <em>start</em> and <em>end</em> article numbers.  Each
+tuple is of the form <tt class="docutils literal"><span class="pre">(article</span> <span class="pre">number,</span> <span class="pre">subject,</span> <span class="pre">poster,</span> <span class="pre">date,</span> <span class="pre">id,</span> <span class="pre">references,</span>
+<span class="pre">size,</span> <span class="pre">lines)</span></tt>. If the <em>file</em> parameter is supplied, then the output of the
+<tt class="docutils literal"><span class="pre">XOVER</span></tt> command is stored in a file.  If <em>file</em> is a string,  then the method
+will open a file object with that name, write to it  then close it.  If <em>file</em>
+is a file object, then it will start calling <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt> on it to store the
+lines of the command output. If <em>file</em> is supplied, then the returned <em>list</em> is
+an empty list. This is an optional NNTP extension, and may not be supported by
+all servers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.xpath">
+<tt class="descclassname">NNTP.</tt><tt class="descname">xpath</tt><big>(</big><em>id</em><big>)</big><a class="headerlink" href="#nntplib.NNTP.xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a pair <tt class="docutils literal"><span class="pre">(resp,</span> <span class="pre">path)</span></tt>, where <em>path</em> is the directory path to the
+article with message ID <em>id</em>.  This is an optional NNTP extension, and may not
+be supported by all servers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="nntplib.NNTP.quit">
+<tt class="descclassname">NNTP.</tt><tt class="descname">quit</tt><big>(</big><big>)</big><a class="headerlink" href="#nntplib.NNTP.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a <tt class="docutils literal"><span class="pre">QUIT</span></tt> command and close the connection.  Once this method has been
+called, no other methods of the NNTP object should be called.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">20.11. <tt class="docutils literal"><span class="pre">nntplib</span></tt> &#8212; NNTP protocol client</a><ul>
+<li><a class="reference internal" href="#nntp-objects">20.11.1. NNTP Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imaplib.html"
+                        title="previous chapter">20.10. <tt class="docutils literal docutils literal"><span class="pre">imaplib</span></tt> &#8212; IMAP4 protocol client</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="smtplib.html"
+                        title="next chapter">20.12. <tt class="docutils literal"><span class="pre">smtplib</span></tt> &#8212; SMTP protocol client</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/nntplib.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smtplib.html" title="20.12. smtplib — SMTP protocol client"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imaplib.html" title="20.10. imaplib — IMAP4 protocol client"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="internet.html" >20. Internet Protocols and Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

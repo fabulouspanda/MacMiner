@@ -1,0 +1,1070 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>19.15. xml.parsers.expat — Fast XML parsing using Expat &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="19. Structured Markup Processing Tools" href="markup.html" />
+    <link rel="next" title="20. Internet Protocols and Support" href="internet.html" />
+    <link rel="prev" title="19.14. xml.sax.xmlreader — Interface for XML parsers" href="xml.sax.reader.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="internet.html" title="20. Internet Protocols and Support"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.reader.html" title="19.14. xml.sax.xmlreader — Interface for XML parsers"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" accesskey="U">19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-xml.parsers.expat">
+<span id="xml-parsers-expat-fast-xml-parsing-using-expat"></span><h1>19.15. <a class="reference internal" href="#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a> &#8212; Fast XML parsing using Expat<a class="headerlink" href="#module-xml.parsers.expat" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The <tt class="xref py py-mod docutils literal"><span class="pre">pyexpat</span></tt> module is not secure against maliciously
+constructed data.  If you need to parse untrusted or unauthenticated data see
+<a class="reference internal" href="xml.html#xml-vulnerabilities"><em>XML vulnerabilities</em></a>.</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0.</span></p>
+<p id="index-0">The <a class="reference internal" href="#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a> module is a Python interface to the Expat
+non-validating XML parser. The module provides a single extension type,
+<tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt>, that represents the current state of an XML parser.  After
+an <tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> object has been created, various attributes of the object
+can be set to handler functions.  When an XML document is then fed to the
+parser, the handler functions are called for the character data and markup in
+the XML document.</p>
+<p id="index-1">This module uses the <tt class="xref py py-mod docutils literal"><span class="pre">pyexpat</span></tt> module to provide access to the Expat
+parser.  Direct use of the <tt class="xref py py-mod docutils literal"><span class="pre">pyexpat</span></tt> module is deprecated.</p>
+<p>This module provides one exception and one type object:</p>
+<dl class="exception">
+<dt id="xml.parsers.expat.ExpatError">
+<em class="property">exception </em><tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">ExpatError</tt><a class="headerlink" href="#xml.parsers.expat.ExpatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>The exception raised when Expat reports an error.  See section
+<a class="reference internal" href="#expaterror-objects"><em>ExpatError Exceptions</em></a> for more information on interpreting Expat errors.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="xml.parsers.expat.error">
+<em class="property">exception </em><tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">error</tt><a class="headerlink" href="#xml.parsers.expat.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <a class="reference internal" href="#xml.parsers.expat.ExpatError" title="xml.parsers.expat.ExpatError"><tt class="xref py py-exc docutils literal"><span class="pre">ExpatError</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="xml.parsers.expat.XMLParserType">
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XMLParserType</tt><a class="headerlink" href="#xml.parsers.expat.XMLParserType" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of the return values from the <a class="reference internal" href="#xml.parsers.expat.ParserCreate" title="xml.parsers.expat.ParserCreate"><tt class="xref py py-func docutils literal"><span class="pre">ParserCreate()</span></tt></a> function.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a> module contains two functions:</p>
+<dl class="function">
+<dt id="xml.parsers.expat.ErrorString">
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">ErrorString</tt><big>(</big><em>errno</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.ErrorString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an explanatory string for a given error number <em>errno</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="xml.parsers.expat.ParserCreate">
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">ParserCreate</tt><big>(</big><span class="optional">[</span><em>encoding</em><span class="optional">[</span>, <em>namespace_separator</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.parsers.expat.ParserCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and returns a new <tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> object.   <em>encoding</em>, if specified,
+must be a string naming the encoding  used by the XML data.  Expat doesn&#8217;t
+support as many encodings as Python does, and its repertoire of encodings can&#8217;t
+be extended; it supports UTF-8, UTF-16, ISO-8859-1 (Latin1), and ASCII.  If
+<em>encoding</em> <a class="footnote-reference" href="#id3" id="id1">[1]</a> is given it will override the implicit or explicit encoding of the
+document.</p>
+<p>Expat can optionally do XML namespace processing for you, enabled by providing a
+value for <em>namespace_separator</em>.  The value must be a one-character string; a
+<a class="reference internal" href="exceptions.html#exceptions.ValueError" title="exceptions.ValueError"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt></a> will be raised if the string has an illegal length (<tt class="xref docutils literal"><span class="pre">None</span></tt>
+is considered the same as omission).  When namespace processing is enabled,
+element type names and attribute names that belong to a namespace will be
+expanded.  The element name passed to the element handlers
+<tt class="xref py py-attr docutils literal"><span class="pre">StartElementHandler</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">EndElementHandler</span></tt> will be the
+concatenation of the namespace URI, the namespace separator character, and the
+local part of the name.  If the namespace separator is a zero byte (<tt class="docutils literal"><span class="pre">chr(0)</span></tt>)
+then the namespace URI and the local part will be concatenated without any
+separator.</p>
+<p>For example, if <em>namespace_separator</em> is set to a space character (<tt class="docutils literal"><span class="pre">'</span> <span class="pre">'</span></tt>) and
+the following document is parsed:</p>
+<div class="highlight-python"><pre>&lt;?xml version="1.0"?&gt;
+&lt;root xmlns    = "http://default-namespace.org/"
+      xmlns:py = "http://www.python.org/ns/"&gt;
+  &lt;py:elem1 /&gt;
+  &lt;elem2 xmlns="" /&gt;
+&lt;/root&gt;</pre>
+</div>
+<p><tt class="xref py py-attr docutils literal"><span class="pre">StartElementHandler</span></tt> will receive the following strings for each
+element:</p>
+<div class="highlight-python"><pre>http://default-namespace.org/ root
+http://www.python.org/ns/ elem1
+elem2</pre>
+</div>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://www.libexpat.org/">The Expat XML Parser</a></dt>
+<dd>Home page of the Expat project.</dd>
+</dl>
+</div>
+<div class="section" id="xmlparser-objects">
+<span id="id2"></span><h2>19.15.1. XMLParser Objects<a class="headerlink" href="#xmlparser-objects" title="Permalink to this headline">¶</a></h2>
+<p><tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> objects have the following methods:</p>
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.Parse">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">Parse</tt><big>(</big><em>data</em><span class="optional">[</span>, <em>isfinal</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.Parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the contents of the string <em>data</em>, calling the appropriate handler
+functions to process the parsed data.  <em>isfinal</em> must be true on the final call
+to this method.  <em>data</em> can be the empty string at any time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.ParseFile">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ParseFile</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.ParseFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse XML data reading from the object <em>file</em>.  <em>file</em> only needs to provide
+the <tt class="docutils literal"><span class="pre">read(nbytes)</span></tt> method, returning the empty string when there&#8217;s no more
+data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.SetBase">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">SetBase</tt><big>(</big><em>base</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.SetBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the base to be used for resolving relative URIs in system identifiers in
+declarations.  Resolving relative identifiers is left to the application: this
+value will be passed through as the <em>base</em> argument to the
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.ExternalEntityRefHandler" title="xml.parsers.expat.xmlparser.ExternalEntityRefHandler"><tt class="xref py py-func docutils literal"><span class="pre">ExternalEntityRefHandler()</span></tt></a>, <a class="reference internal" href="#xml.parsers.expat.xmlparser.NotationDeclHandler" title="xml.parsers.expat.xmlparser.NotationDeclHandler"><tt class="xref py py-func docutils literal"><span class="pre">NotationDeclHandler()</span></tt></a>, and
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.UnparsedEntityDeclHandler" title="xml.parsers.expat.xmlparser.UnparsedEntityDeclHandler"><tt class="xref py py-func docutils literal"><span class="pre">UnparsedEntityDeclHandler()</span></tt></a> functions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.GetBase">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">GetBase</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.GetBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string containing the base set by a previous call to <a class="reference internal" href="#xml.parsers.expat.xmlparser.SetBase" title="xml.parsers.expat.xmlparser.SetBase"><tt class="xref py py-meth docutils literal"><span class="pre">SetBase()</span></tt></a>,
+or <tt class="xref docutils literal"><span class="pre">None</span></tt> if  <a class="reference internal" href="#xml.parsers.expat.xmlparser.SetBase" title="xml.parsers.expat.xmlparser.SetBase"><tt class="xref py py-meth docutils literal"><span class="pre">SetBase()</span></tt></a> hasn&#8217;t been called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.GetInputContext">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">GetInputContext</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.GetInputContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the input data that generated the current event as a string. The data is
+in the encoding of the entity which contains the text. When called while an
+event handler is not active, the return value is <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.ExternalEntityParserCreate">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ExternalEntityParserCreate</tt><big>(</big><em>context</em><span class="optional">[</span>, <em>encoding</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.ExternalEntityParserCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a &#8220;child&#8221; parser which can be used to parse an external parsed entity
+referred to by content parsed by the parent parser.  The <em>context</em> parameter
+should be the string passed to the <a class="reference internal" href="#xml.parsers.expat.xmlparser.ExternalEntityRefHandler" title="xml.parsers.expat.xmlparser.ExternalEntityRefHandler"><tt class="xref py py-meth docutils literal"><span class="pre">ExternalEntityRefHandler()</span></tt></a> handler
+function, described below. The child parser is created with the
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.ordered_attributes" title="xml.parsers.expat.xmlparser.ordered_attributes"><tt class="xref py py-attr docutils literal"><span class="pre">ordered_attributes</span></tt></a>, <a class="reference internal" href="#xml.parsers.expat.xmlparser.returns_unicode" title="xml.parsers.expat.xmlparser.returns_unicode"><tt class="xref py py-attr docutils literal"><span class="pre">returns_unicode</span></tt></a> and
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.specified_attributes" title="xml.parsers.expat.xmlparser.specified_attributes"><tt class="xref py py-attr docutils literal"><span class="pre">specified_attributes</span></tt></a> set to the values of this parser.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.SetParamEntityParsing">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">SetParamEntityParsing</tt><big>(</big><em>flag</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.SetParamEntityParsing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control parsing of parameter entities (including the external DTD subset).
+Possible <em>flag</em> values are <tt class="xref py py-const docutils literal"><span class="pre">XML_PARAM_ENTITY_PARSING_NEVER</span></tt>,
+<tt class="xref py py-const docutils literal"><span class="pre">XML_PARAM_ENTITY_PARSING_UNLESS_STANDALONE</span></tt> and
+<tt class="xref py py-const docutils literal"><span class="pre">XML_PARAM_ENTITY_PARSING_ALWAYS</span></tt>.  Return true if setting the flag
+was successful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.UseForeignDTD">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">UseForeignDTD</tt><big>(</big><span class="optional">[</span><em>flag</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.UseForeignDTD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calling this with a true value for <em>flag</em> (the default) will cause Expat to call
+the <a class="reference internal" href="#xml.parsers.expat.xmlparser.ExternalEntityRefHandler" title="xml.parsers.expat.xmlparser.ExternalEntityRefHandler"><tt class="xref py py-attr docutils literal"><span class="pre">ExternalEntityRefHandler</span></tt></a> with <a class="reference internal" href="constants.html#None" title="None"><tt class="xref py py-const xref docutils literal"><span class="pre">None</span></tt></a> for all arguments to
+allow an alternate DTD to be loaded.  If the document does not contain a
+document type declaration, the <a class="reference internal" href="#xml.parsers.expat.xmlparser.ExternalEntityRefHandler" title="xml.parsers.expat.xmlparser.ExternalEntityRefHandler"><tt class="xref py py-attr docutils literal"><span class="pre">ExternalEntityRefHandler</span></tt></a> will still be
+called, but the <a class="reference internal" href="#xml.parsers.expat.xmlparser.StartDoctypeDeclHandler" title="xml.parsers.expat.xmlparser.StartDoctypeDeclHandler"><tt class="xref py py-attr docutils literal"><span class="pre">StartDoctypeDeclHandler</span></tt></a> and
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.EndDoctypeDeclHandler" title="xml.parsers.expat.xmlparser.EndDoctypeDeclHandler"><tt class="xref py py-attr docutils literal"><span class="pre">EndDoctypeDeclHandler</span></tt></a> will not be called.</p>
+<p>Passing a false value for <em>flag</em> will cancel a previous call that passed a true
+value, but otherwise has no effect.</p>
+<p>This method can only be called before the <a class="reference internal" href="#xml.parsers.expat.xmlparser.Parse" title="xml.parsers.expat.xmlparser.Parse"><tt class="xref py py-meth docutils literal"><span class="pre">Parse()</span></tt></a> or <a class="reference internal" href="#xml.parsers.expat.xmlparser.ParseFile" title="xml.parsers.expat.xmlparser.ParseFile"><tt class="xref py py-meth docutils literal"><span class="pre">ParseFile()</span></tt></a>
+methods are called; calling it after either of those have been called causes
+<a class="reference internal" href="#xml.parsers.expat.ExpatError" title="xml.parsers.expat.ExpatError"><tt class="xref py py-exc docutils literal"><span class="pre">ExpatError</span></tt></a> to be raised with the <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><tt class="xref py py-attr docutils literal"><span class="pre">code</span></tt></a> attribute set to
+<tt class="xref py py-const docutils literal"><span class="pre">errors.XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<p><tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> objects have the following attributes:</p>
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.buffer_size">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">buffer_size</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.buffer_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the buffer used when <a class="reference internal" href="#xml.parsers.expat.xmlparser.buffer_text" title="xml.parsers.expat.xmlparser.buffer_text"><tt class="xref py py-attr docutils literal"><span class="pre">buffer_text</span></tt></a> is true.
+A new buffer size can be set by assigning a new integer value
+to this attribute.
+When the size is changed, the buffer will be flushed.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>The buffer size can now be changed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.buffer_text">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">buffer_text</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.buffer_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setting this to true causes the <tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> object to buffer textual
+content returned by Expat to avoid multiple calls to the
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.CharacterDataHandler" title="xml.parsers.expat.xmlparser.CharacterDataHandler"><tt class="xref py py-meth docutils literal"><span class="pre">CharacterDataHandler()</span></tt></a> callback whenever possible.  This can improve
+performance substantially since Expat normally breaks character data into chunks
+at every line ending.  This attribute is false by default, and may be changed at
+any time.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.buffer_used">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">buffer_used</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.buffer_used" title="Permalink to this definition">¶</a></dt>
+<dd><p>If <a class="reference internal" href="#xml.parsers.expat.xmlparser.buffer_text" title="xml.parsers.expat.xmlparser.buffer_text"><tt class="xref py py-attr docutils literal"><span class="pre">buffer_text</span></tt></a> is enabled, the number of bytes stored in the buffer.
+These bytes represent UTF-8 encoded text.  This attribute has no meaningful
+interpretation when <a class="reference internal" href="#xml.parsers.expat.xmlparser.buffer_text" title="xml.parsers.expat.xmlparser.buffer_text"><tt class="xref py py-attr docutils literal"><span class="pre">buffer_text</span></tt></a> is false.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.ordered_attributes">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ordered_attributes</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.ordered_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setting this attribute to a non-zero integer causes the attributes to be
+reported as a list rather than a dictionary.  The attributes are presented in
+the order found in the document text.  For each attribute, two list entries are
+presented: the attribute name and the attribute value.  (Older versions of this
+module also used this format.)  By default, this attribute is false; it may be
+changed at any time.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.returns_unicode">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">returns_unicode</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.returns_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this attribute is set to a non-zero integer, the handler functions will be
+passed Unicode strings.  If <a class="reference internal" href="#xml.parsers.expat.xmlparser.returns_unicode" title="xml.parsers.expat.xmlparser.returns_unicode"><tt class="xref py py-attr docutils literal"><span class="pre">returns_unicode</span></tt></a> is <a class="reference internal" href="constants.html#False" title="False"><tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt></a>, 8-bit
+strings containing UTF-8 encoded data will be passed to the handlers.  This is
+<a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> by default when Python is built with Unicode support.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 1.6: </span>Can be changed at any time to affect the result type.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.specified_attributes">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">specified_attributes</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.specified_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to a non-zero integer, the parser will report only those attributes which
+were specified in the document instance and not those which were derived from
+attribute declarations.  Applications which set this need to be especially
+careful to use what additional information is available from the declarations as
+needed to comply with the standards for the behavior of XML processors.  By
+default, this attribute is false; it may be changed at any time.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<p>The following attributes contain values relating to the most recent error
+encountered by an <tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> object, and will only have correct values
+once a call to <tt class="xref py py-meth docutils literal"><span class="pre">Parse()</span></tt> or <tt class="xref py py-meth docutils literal"><span class="pre">ParseFile()</span></tt> has raised a
+<a class="reference internal" href="#xml.parsers.expat.ExpatError" title="xml.parsers.expat.ExpatError"><tt class="xref py py-exc docutils literal"><span class="pre">xml.parsers.expat.ExpatError</span></tt></a> exception.</p>
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.ErrorByteIndex">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ErrorByteIndex</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.ErrorByteIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Byte index at which an error occurred.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.ErrorCode">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ErrorCode</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.ErrorCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numeric code specifying the problem.  This value can be passed to the
+<a class="reference internal" href="#xml.parsers.expat.ErrorString" title="xml.parsers.expat.ErrorString"><tt class="xref py py-func docutils literal"><span class="pre">ErrorString()</span></tt></a> function, or compared to one of the constants defined in the
+<tt class="docutils literal"><span class="pre">errors</span></tt> object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.ErrorColumnNumber">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ErrorColumnNumber</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.ErrorColumnNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Column number at which an error occurred.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.ErrorLineNumber">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ErrorLineNumber</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.ErrorLineNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line number at which an error occurred.</p>
+</dd></dl>
+
+<p>The following attributes contain values relating to the current parse location
+in an <tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> object.  During a callback reporting a parse event they
+indicate the location of the first of the sequence of characters that generated
+the event.  When called outside of a callback, the position indicated will be
+just past the last parse event (regardless of whether there was an associated
+callback).</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.CurrentByteIndex">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">CurrentByteIndex</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.CurrentByteIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current byte index in the parser input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.CurrentColumnNumber">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">CurrentColumnNumber</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.CurrentColumnNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current column number in the parser input.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.xmlparser.CurrentLineNumber">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">CurrentLineNumber</tt><a class="headerlink" href="#xml.parsers.expat.xmlparser.CurrentLineNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current line number in the parser input.</p>
+</dd></dl>
+
+<p>Here is the list of handlers that can be set.  To set a handler on an
+<tt class="xref py py-class docutils literal"><span class="pre">xmlparser</span></tt> object <em>o</em>, use <tt class="docutils literal"><span class="pre">o.handlername</span> <span class="pre">=</span> <span class="pre">func</span></tt>.  <em>handlername</em> must
+be taken from the following list, and <em>func</em> must be a callable object accepting
+the correct number of arguments.  The arguments are all strings, unless
+otherwise stated.</p>
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.XmlDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">XmlDeclHandler</tt><big>(</big><em>version</em>, <em>encoding</em>, <em>standalone</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.XmlDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the XML declaration is parsed.  The XML declaration is the
+(optional) declaration of the applicable version of the XML recommendation, the
+encoding of the document text, and an optional &#8220;standalone&#8221; declaration.
+<em>version</em> and <em>encoding</em> will be strings of the type dictated by the
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.returns_unicode" title="xml.parsers.expat.xmlparser.returns_unicode"><tt class="xref py py-attr docutils literal"><span class="pre">returns_unicode</span></tt></a> attribute, and <em>standalone</em> will be <tt class="docutils literal"><span class="pre">1</span></tt> if the
+document is declared standalone, <tt class="docutils literal"><span class="pre">0</span></tt> if it is declared not to be standalone,
+or <tt class="docutils literal"><span class="pre">-1</span></tt> if the standalone clause was omitted. This is only available with
+Expat version 1.95.0 or newer.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.StartDoctypeDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">StartDoctypeDeclHandler</tt><big>(</big><em>doctypeName</em>, <em>systemId</em>, <em>publicId</em>, <em>has_internal_subset</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.StartDoctypeDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when Expat begins parsing the document type declaration (<tt class="docutils literal"><span class="pre">&lt;!DOCTYPE</span>
+<span class="pre">...</span></tt>).  The <em>doctypeName</em> is provided exactly as presented.  The <em>systemId</em> and
+<em>publicId</em> parameters give the system and public identifiers if specified, or
+<tt class="xref docutils literal"><span class="pre">None</span></tt> if omitted.  <em>has_internal_subset</em> will be true if the document
+contains and internal document declaration subset. This requires Expat version
+1.2 or newer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.EndDoctypeDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">EndDoctypeDeclHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.EndDoctypeDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when Expat is done parsing the document type declaration. This requires
+Expat version 1.2 or newer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.ElementDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ElementDeclHandler</tt><big>(</big><em>name</em>, <em>model</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.ElementDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called once for each element type declaration.  <em>name</em> is the name of the
+element type, and <em>model</em> is a representation of the content model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.AttlistDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">AttlistDeclHandler</tt><big>(</big><em>elname</em>, <em>attname</em>, <em>type</em>, <em>default</em>, <em>required</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.AttlistDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for each declared attribute for an element type.  If an attribute list
+declaration declares three attributes, this handler is called three times, once
+for each attribute.  <em>elname</em> is the name of the element to which the
+declaration applies and <em>attname</em> is the name of the attribute declared.  The
+attribute type is a string passed as <em>type</em>; the possible values are
+<tt class="docutils literal"><span class="pre">'CDATA'</span></tt>, <tt class="docutils literal"><span class="pre">'ID'</span></tt>, <tt class="docutils literal"><span class="pre">'IDREF'</span></tt>, ... <em>default</em> gives the default value for
+the attribute used when the attribute is not specified by the document instance,
+or <tt class="xref docutils literal"><span class="pre">None</span></tt> if there is no default value (<tt class="docutils literal"><span class="pre">#IMPLIED</span></tt> values).  If the
+attribute is required to be given in the document instance, <em>required</em> will be
+true. This requires Expat version 1.95.0 or newer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.StartElementHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">StartElementHandler</tt><big>(</big><em>name</em>, <em>attributes</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.StartElementHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for the start of every element.  <em>name</em> is a string containing the
+element name, and <em>attributes</em> is a dictionary mapping attribute names to their
+values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.EndElementHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">EndElementHandler</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.EndElementHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for the end of every element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.ProcessingInstructionHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ProcessingInstructionHandler</tt><big>(</big><em>target</em>, <em>data</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.ProcessingInstructionHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for every processing instruction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.CharacterDataHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">CharacterDataHandler</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.CharacterDataHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for character data.  This will be called for normal character data, CDATA
+marked content, and ignorable whitespace.  Applications which must distinguish
+these cases can use the <a class="reference internal" href="#xml.parsers.expat.xmlparser.StartCdataSectionHandler" title="xml.parsers.expat.xmlparser.StartCdataSectionHandler"><tt class="xref py py-attr docutils literal"><span class="pre">StartCdataSectionHandler</span></tt></a>,
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.EndCdataSectionHandler" title="xml.parsers.expat.xmlparser.EndCdataSectionHandler"><tt class="xref py py-attr docutils literal"><span class="pre">EndCdataSectionHandler</span></tt></a>, and <a class="reference internal" href="#xml.parsers.expat.xmlparser.ElementDeclHandler" title="xml.parsers.expat.xmlparser.ElementDeclHandler"><tt class="xref py py-attr docutils literal"><span class="pre">ElementDeclHandler</span></tt></a> callbacks to
+collect the required information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.UnparsedEntityDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">UnparsedEntityDeclHandler</tt><big>(</big><em>entityName</em>, <em>base</em>, <em>systemId</em>, <em>publicId</em>, <em>notationName</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.UnparsedEntityDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for unparsed (NDATA) entity declarations.  This is only present for
+version 1.2 of the Expat library; for more recent versions, use
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.EntityDeclHandler" title="xml.parsers.expat.xmlparser.EntityDeclHandler"><tt class="xref py py-attr docutils literal"><span class="pre">EntityDeclHandler</span></tt></a> instead.  (The underlying function in the Expat
+library has been declared obsolete.)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.EntityDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">EntityDeclHandler</tt><big>(</big><em>entityName</em>, <em>is_parameter_entity</em>, <em>value</em>, <em>base</em>, <em>systemId</em>, <em>publicId</em>, <em>notationName</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.EntityDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for all entity declarations.  For parameter and internal entities,
+<em>value</em> will be a string giving the declared contents of the entity; this will
+be <tt class="xref docutils literal"><span class="pre">None</span></tt> for external entities.  The <em>notationName</em> parameter will be
+<tt class="xref docutils literal"><span class="pre">None</span></tt> for parsed entities, and the name of the notation for unparsed
+entities. <em>is_parameter_entity</em> will be true if the entity is a parameter entity
+or false for general entities (most applications only need to be concerned with
+general entities). This is only available starting with version 1.95.0 of the
+Expat library.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.NotationDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">NotationDeclHandler</tt><big>(</big><em>notationName</em>, <em>base</em>, <em>systemId</em>, <em>publicId</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.NotationDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for notation declarations.  <em>notationName</em>, <em>base</em>, and <em>systemId</em>, and
+<em>publicId</em> are strings if given.  If the public identifier is omitted,
+<em>publicId</em> will be <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.StartNamespaceDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">StartNamespaceDeclHandler</tt><big>(</big><em>prefix</em>, <em>uri</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.StartNamespaceDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when an element contains a namespace declaration.  Namespace declarations
+are processed before the <a class="reference internal" href="#xml.parsers.expat.xmlparser.StartElementHandler" title="xml.parsers.expat.xmlparser.StartElementHandler"><tt class="xref py py-attr docutils literal"><span class="pre">StartElementHandler</span></tt></a> is called for the element
+on which declarations are placed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.EndNamespaceDeclHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">EndNamespaceDeclHandler</tt><big>(</big><em>prefix</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.EndNamespaceDeclHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when the closing tag is reached for an element  that contained a
+namespace declaration.  This is called once for each namespace declaration on
+the element in the reverse of the order for which the
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.StartNamespaceDeclHandler" title="xml.parsers.expat.xmlparser.StartNamespaceDeclHandler"><tt class="xref py py-attr docutils literal"><span class="pre">StartNamespaceDeclHandler</span></tt></a> was called to indicate the start of each
+namespace declaration&#8217;s scope.  Calls to this handler are made after the
+corresponding <a class="reference internal" href="#xml.parsers.expat.xmlparser.EndElementHandler" title="xml.parsers.expat.xmlparser.EndElementHandler"><tt class="xref py py-attr docutils literal"><span class="pre">EndElementHandler</span></tt></a> for the end of the element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.CommentHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">CommentHandler</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.CommentHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for comments.  <em>data</em> is the text of the comment, excluding the leading
+<tt class="docutils literal"><span class="pre">'&lt;!-</span></tt><tt class="docutils literal"><span class="pre">-'</span></tt> and trailing <tt class="docutils literal"><span class="pre">'-</span></tt><tt class="docutils literal"><span class="pre">-&gt;'</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.StartCdataSectionHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">StartCdataSectionHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.StartCdataSectionHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the start of a CDATA section.  This and <a class="reference internal" href="#xml.parsers.expat.xmlparser.EndCdataSectionHandler" title="xml.parsers.expat.xmlparser.EndCdataSectionHandler"><tt class="xref py py-attr docutils literal"><span class="pre">EndCdataSectionHandler</span></tt></a>
+are needed to be able to identify the syntactical start and end for CDATA
+sections.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.EndCdataSectionHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">EndCdataSectionHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.EndCdataSectionHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called at the end of a CDATA section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.DefaultHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">DefaultHandler</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.DefaultHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for any characters in the XML document for which no applicable handler
+has been specified.  This means characters that are part of a construct which
+could be reported, but for which no handler has been supplied.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.DefaultHandlerExpand">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">DefaultHandlerExpand</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.DefaultHandlerExpand" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the same as the <a class="reference internal" href="#xml.parsers.expat.xmlparser.DefaultHandler" title="xml.parsers.expat.xmlparser.DefaultHandler"><tt class="xref py py-func docutils literal"><span class="pre">DefaultHandler()</span></tt></a>,  but doesn&#8217;t inhibit expansion
+of internal entities. The entity reference will not be passed to the default
+handler.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.NotStandaloneHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">NotStandaloneHandler</tt><big>(</big><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.NotStandaloneHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called if the XML document hasn&#8217;t been declared as being a standalone document.
+This happens when there is an external subset or a reference to a parameter
+entity, but the XML declaration does not set standalone to <tt class="docutils literal"><span class="pre">yes</span></tt> in an XML
+declaration.  If this handler returns <tt class="docutils literal"><span class="pre">0</span></tt>, then the parser will raise an
+<tt class="xref py py-const docutils literal"><span class="pre">XML_ERROR_NOT_STANDALONE</span></tt> error.  If this handler is not set, no
+exception is raised by the parser for this condition.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xml.parsers.expat.xmlparser.ExternalEntityRefHandler">
+<tt class="descclassname">xmlparser.</tt><tt class="descname">ExternalEntityRefHandler</tt><big>(</big><em>context</em>, <em>base</em>, <em>systemId</em>, <em>publicId</em><big>)</big><a class="headerlink" href="#xml.parsers.expat.xmlparser.ExternalEntityRefHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called for references to external entities.  <em>base</em> is the current base, as set
+by a previous call to <a class="reference internal" href="#xml.parsers.expat.xmlparser.SetBase" title="xml.parsers.expat.xmlparser.SetBase"><tt class="xref py py-meth docutils literal"><span class="pre">SetBase()</span></tt></a>.  The public and system identifiers,
+<em>systemId</em> and <em>publicId</em>, are strings if given; if the public identifier is not
+given, <em>publicId</em> will be <tt class="xref docutils literal"><span class="pre">None</span></tt>.  The <em>context</em> value is opaque and should
+only be used as described below.</p>
+<p>For external entities to be parsed, this handler must be implemented. It is
+responsible for creating the sub-parser using
+<tt class="docutils literal"><span class="pre">ExternalEntityParserCreate(context)</span></tt>, initializing it with the appropriate
+callbacks, and parsing the entity.  This handler should return an integer; if it
+returns <tt class="docutils literal"><span class="pre">0</span></tt>, the parser will raise an
+<tt class="xref py py-const docutils literal"><span class="pre">XML_ERROR_EXTERNAL_ENTITY_HANDLING</span></tt> error, otherwise parsing will
+continue.</p>
+<p>If this handler is not provided, external entities are reported by the
+<a class="reference internal" href="#xml.parsers.expat.xmlparser.DefaultHandler" title="xml.parsers.expat.xmlparser.DefaultHandler"><tt class="xref py py-attr docutils literal"><span class="pre">DefaultHandler</span></tt></a> callback, if provided.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="expaterror-exceptions">
+<span id="expaterror-objects"></span><h2>19.15.2. ExpatError Exceptions<a class="headerlink" href="#expaterror-exceptions" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#xml.parsers.expat.ExpatError" title="xml.parsers.expat.ExpatError"><tt class="xref py py-exc docutils literal"><span class="pre">ExpatError</span></tt></a> exceptions have a number of interesting attributes:</p>
+<dl class="attribute">
+<dt id="xml.parsers.expat.ExpatError.code">
+<tt class="descclassname">ExpatError.</tt><tt class="descname">code</tt><a class="headerlink" href="#xml.parsers.expat.ExpatError.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expat&#8217;s internal error number for the specific error.  This will match one of
+the constants defined in the <tt class="docutils literal"><span class="pre">errors</span></tt> object from this module.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.ExpatError.lineno">
+<tt class="descclassname">ExpatError.</tt><tt class="descname">lineno</tt><a class="headerlink" href="#xml.parsers.expat.ExpatError.lineno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line number on which the error was detected.  The first line is numbered <tt class="docutils literal"><span class="pre">1</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="xml.parsers.expat.ExpatError.offset">
+<tt class="descclassname">ExpatError.</tt><tt class="descname">offset</tt><a class="headerlink" href="#xml.parsers.expat.ExpatError.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Character offset into the line where the error occurred.  The first column is
+numbered <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.1.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<span id="expat-example"></span><h2>19.15.3. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>The following program defines three handlers that just print out their
+arguments.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">xml.parsers.expat</span>
+
+<span class="c"># 3 handler functions</span>
+<span class="k">def</span> <span class="nf">start_element</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;Start element:&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">attrs</span>
+<span class="k">def</span> <span class="nf">end_element</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;End element:&#39;</span><span class="p">,</span> <span class="n">name</span>
+<span class="k">def</span> <span class="nf">char_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;Character data:&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">parsers</span><span class="o">.</span><span class="n">expat</span><span class="o">.</span><span class="n">ParserCreate</span><span class="p">()</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">StartElementHandler</span> <span class="o">=</span> <span class="n">start_element</span>
+<span class="n">p</span><span class="o">.</span><span class="n">EndElementHandler</span> <span class="o">=</span> <span class="n">end_element</span>
+<span class="n">p</span><span class="o">.</span><span class="n">CharacterDataHandler</span> <span class="o">=</span> <span class="n">char_data</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="s">&quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="s">&lt;parent id=&quot;top&quot;&gt;&lt;child1 name=&quot;paul&quot;&gt;Text goes here&lt;/child1&gt;</span>
+<span class="s">&lt;child2 name=&quot;fred&quot;&gt;More text&lt;/child2&gt;</span>
+<span class="s">&lt;/parent&gt;&quot;&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output from this program is:</p>
+<div class="highlight-python"><pre>Start element: parent {'id': 'top'}
+Start element: child1 {'name': 'paul'}
+Character data: 'Text goes here'
+End element: child1
+Character data: '\n'
+Start element: child2 {'name': 'fred'}
+Character data: 'More text'
+End element: child2
+Character data: '\n'
+End element: parent</pre>
+</div>
+</div>
+<div class="section" id="content-model-descriptions">
+<span id="expat-content-models"></span><h2>19.15.4. Content Model Descriptions<a class="headerlink" href="#content-model-descriptions" title="Permalink to this headline">¶</a></h2>
+<p>Content modules are described using nested tuples.  Each tuple contains four
+values: the type, the quantifier, the name, and a tuple of children.  Children
+are simply additional content module descriptions.</p>
+<p>The values of the first two fields are constants defined in the <tt class="docutils literal"><span class="pre">model</span></tt> object
+of the <a class="reference internal" href="#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a> module.  These constants can be collected in two
+groups: the model type group and the quantifier group.</p>
+<p>The constants in the model type group are:</p>
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CTYPE_ANY</tt></dt>
+<dd><p>The element named by the model name was declared to have a content model of
+<tt class="docutils literal"><span class="pre">ANY</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CTYPE_CHOICE</tt></dt>
+<dd><p>The named element allows a choice from a number of options; this is used for
+content models such as <tt class="docutils literal"><span class="pre">(A</span> <span class="pre">|</span> <span class="pre">B</span> <span class="pre">|</span> <span class="pre">C)</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CTYPE_EMPTY</tt></dt>
+<dd><p>Elements which are declared to be <tt class="docutils literal"><span class="pre">EMPTY</span></tt> have this model type.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CTYPE_MIXED</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CTYPE_NAME</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CTYPE_SEQ</tt></dt>
+<dd><p>Models which represent a series of models which follow one after the other are
+indicated with this model type.  This is used for models such as <tt class="docutils literal"><span class="pre">(A,</span> <span class="pre">B,</span> <span class="pre">C)</span></tt>.</p>
+</dd></dl>
+
+<p>The constants in the quantifier group are:</p>
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CQUANT_NONE</tt></dt>
+<dd><p>No modifier is given, so it can appear exactly once, as for <tt class="docutils literal"><span class="pre">A</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CQUANT_OPT</tt></dt>
+<dd><p>The model is optional: it can appear once or not at all, as for <tt class="docutils literal"><span class="pre">A?</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CQUANT_PLUS</tt></dt>
+<dd><p>The model must occur one or more times (like <tt class="docutils literal"><span class="pre">A+</span></tt>).</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_CQUANT_REP</tt></dt>
+<dd><p>The model must occur zero or more times, as for <tt class="docutils literal"><span class="pre">A*</span></tt>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="expat-error-constants">
+<span id="expat-errors"></span><h2>19.15.5. Expat error constants<a class="headerlink" href="#expat-error-constants" title="Permalink to this headline">¶</a></h2>
+<p>The following constants are provided in the <tt class="docutils literal"><span class="pre">errors</span></tt> object of the
+<a class="reference internal" href="#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a> module.  These constants are useful in interpreting
+some of the attributes of the <a class="reference internal" href="#xml.parsers.expat.ExpatError" title="xml.parsers.expat.ExpatError"><tt class="xref py py-exc docutils literal"><span class="pre">ExpatError</span></tt></a> exception objects raised when an
+error has occurred.</p>
+<p>The <tt class="docutils literal"><span class="pre">errors</span></tt> object has the following attributes:</p>
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_ASYNC_ENTITY</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF</tt></dt>
+<dd><p>An entity reference in an attribute value referred to an external entity instead
+of an internal entity.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_BAD_CHAR_REF</tt></dt>
+<dd><p>A character reference referred to a character which is illegal in XML (for
+example, character <tt class="docutils literal"><span class="pre">0</span></tt>, or &#8216;<tt class="docutils literal"><span class="pre">&amp;#0;</span></tt>&#8216;).</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_BINARY_ENTITY_REF</tt></dt>
+<dd><p>An entity reference referred to an entity which was declared with a notation, so
+cannot be parsed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_DUPLICATE_ATTRIBUTE</tt></dt>
+<dd><p>An attribute was used more than once in a start tag.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_INCORRECT_ENCODING</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_INVALID_TOKEN</tt></dt>
+<dd><p>Raised when an input byte could not properly be assigned to a character; for
+example, a NUL byte (value <tt class="docutils literal"><span class="pre">0</span></tt>) in a UTF-8 input stream.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_JUNK_AFTER_DOC_ELEMENT</tt></dt>
+<dd><p>Something other than whitespace occurred after the document element.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_MISPLACED_XML_PI</tt></dt>
+<dd><p>An XML declaration was found somewhere other than the start of the input data.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_NO_ELEMENTS</tt></dt>
+<dd><p>The document contains no elements (XML requires all documents to contain exactly
+one top-level element)..</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_NO_MEMORY</tt></dt>
+<dd><p>Expat was not able to allocate memory internally.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_PARAM_ENTITY_REF</tt></dt>
+<dd><p>A parameter entity reference was found where it was not allowed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_PARTIAL_CHAR</tt></dt>
+<dd><p>An incomplete character was found in the input.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_RECURSIVE_ENTITY_REF</tt></dt>
+<dd><p>An entity reference contained another reference to the same entity; possibly via
+a different name, and possibly indirectly.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_SYNTAX</tt></dt>
+<dd><p>Some unspecified syntax error was encountered.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_TAG_MISMATCH</tt></dt>
+<dd><p>An end tag did not match the innermost open start tag.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNCLOSED_TOKEN</tt></dt>
+<dd><p>Some token (such as a start tag) was not closed before the end of the stream or
+the next token was encountered.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNDEFINED_ENTITY</tt></dt>
+<dd><p>A reference was made to a entity which was not defined.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNKNOWN_ENCODING</tt></dt>
+<dd><p>The document encoding is not supported by Expat.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNCLOSED_CDATA_SECTION</tt></dt>
+<dd><p>A CDATA marked section was not closed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_EXTERNAL_ENTITY_HANDLING</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_NOT_STANDALONE</tt></dt>
+<dd><p>The parser determined that the document was not &#8220;standalone&#8221; though it declared
+itself to be in the XML declaration, and the <tt class="xref py py-attr docutils literal"><span class="pre">NotStandaloneHandler</span></tt> was
+set and returned <tt class="docutils literal"><span class="pre">0</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNEXPECTED_STATE</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_ENTITY_DECLARED_IN_PE</tt></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_FEATURE_REQUIRES_XML_DTD</tt></dt>
+<dd><p>An operation was requested that requires DTD support to be compiled in, but
+Expat was configured without DTD support.  This should never be reported by a
+standard build of the <a class="reference internal" href="#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><tt class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></tt></a> module.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_CANT_CHANGE_FEATURE_ONCE_PARSING</tt></dt>
+<dd><p>A behavioral change was requested after parsing started that can only be changed
+before parsing has started.  This is (currently) only raised by
+<tt class="xref py py-meth docutils literal"><span class="pre">UseForeignDTD()</span></tt>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNBOUND_PREFIX</tt></dt>
+<dd><p>An undeclared prefix was found when namespace processing was enabled.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_UNDECLARING_PREFIX</tt></dt>
+<dd><p>The document attempted to remove the namespace declaration associated with a
+prefix.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_INCOMPLETE_PE</tt></dt>
+<dd><p>A parameter entity contained incomplete markup.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_XML_DECL</tt></dt>
+<dd><p>The document contained no document element at all.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_TEXT_DECL</tt></dt>
+<dd><p>There was an error parsing a text declaration in an external entity.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_PUBLICID</tt></dt>
+<dd><p>Characters were found in the public id that are not allowed.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_SUSPENDED</tt></dt>
+<dd><p>The requested operation was made on a suspended parser, but isn&#8217;t allowed.  This
+includes attempts to provide additional input or to stop the parser.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_NOT_SUSPENDED</tt></dt>
+<dd><p>An attempt to resume the parser was made when the parser had not been suspended.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_ABORTED</tt></dt>
+<dd><p>This should not be reported to Python applications.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_FINISHED</tt></dt>
+<dd><p>The requested operation was made on a parser which was finished parsing input,
+but isn&#8217;t allowed.  This includes attempts to provide additional input or to
+stop the parser.</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<tt class="descclassname">xml.parsers.expat.</tt><tt class="descname">XML_ERROR_SUSPEND_PE</tt></dt>
+<dd></dd></dl>
+
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td>The encoding string included in XML output should conform to the
+appropriate standards. For example, &#8220;UTF-8&#8221; is valid, but &#8220;UTF8&#8221; is
+not. See <a class="reference external" href="http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-EncodingDecl">http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-EncodingDecl</a>
+and <a class="reference external" href="http://www.iana.org/assignments/character-sets">http://www.iana.org/assignments/character-sets</a> .</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">19.15. <tt class="docutils literal"><span class="pre">xml.parsers.expat</span></tt> &#8212; Fast XML parsing using Expat</a><ul>
+<li><a class="reference internal" href="#xmlparser-objects">19.15.1. XMLParser Objects</a></li>
+<li><a class="reference internal" href="#expaterror-exceptions">19.15.2. ExpatError Exceptions</a></li>
+<li><a class="reference internal" href="#example">19.15.3. Example</a></li>
+<li><a class="reference internal" href="#content-model-descriptions">19.15.4. Content Model Descriptions</a></li>
+<li><a class="reference internal" href="#expat-error-constants">19.15.5. Expat error constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xml.sax.reader.html"
+                        title="previous chapter">19.14. <tt class="docutils literal"><span class="pre">xml.sax.xmlreader</span></tt> &#8212; Interface for XML parsers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="internet.html"
+                        title="next chapter">20. Internet Protocols and Support</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/pyexpat.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="internet.html" title="20. Internet Protocols and Support"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.reader.html" title="19.14. xml.sax.xmlreader — Interface for XML parsers"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="markup.html" >19. Structured Markup Processing Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>37.3. aepack — Conversion between Python variables and AppleEvent data containers &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="37. MacPython OSA Modules" href="macosa.html" />
+    <link rel="next" title="37.4. aetypes — AppleEvent objects" href="aetypes.html" />
+    <link rel="prev" title="37.2. aetools — OSA client support" href="aetools.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aetypes.html" title="37.4. aetypes — AppleEvent objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aetools.html" title="37.2. aetools — OSA client support"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="macosa.html" accesskey="U">37. MacPython OSA Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-aepack">
+<span id="aepack-conversion-between-python-variables-and-appleevent-data-containers"></span><h1>37.3. <a class="reference internal" href="#module-aepack" title="aepack: Conversion between Python variables and AppleEvent data containers. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aepack</span></tt></a> &#8212; Conversion between Python variables and AppleEvent data containers<a class="headerlink" href="#module-aepack" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Mac</p>
+<p>The <a class="reference internal" href="#module-aepack" title="aepack: Conversion between Python variables and AppleEvent data containers. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aepack</span></tt></a> module defines functions for converting (packing) Python
+variables to AppleEvent descriptors and back (unpacking). Within Python the
+AppleEvent descriptor is handled by Python objects of built-in type
+<tt class="xref py py-class docutils literal"><span class="pre">AEDesc</span></tt>, defined in module <a class="reference internal" href="carbon.html#module-Carbon.AE" title="Carbon.AE: Interface to the Apple Events toolbox. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">Carbon.AE</span></tt></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This module has been removed in Python 3.x.</p>
+</div>
+<p>The <a class="reference internal" href="#module-aepack" title="aepack: Conversion between Python variables and AppleEvent data containers. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aepack</span></tt></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="aepack.pack">
+<tt class="descclassname">aepack.</tt><tt class="descname">pack</tt><big>(</big><em>x</em><span class="optional">[</span>, <em>forcetype</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#aepack.pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an <tt class="xref py py-class docutils literal"><span class="pre">AEDesc</span></tt> object  containing a conversion of Python value x. If
+<em>forcetype</em> is provided it specifies the descriptor type of the result.
+Otherwise, a default mapping of Python types to Apple Event descriptor types is
+used, as follows:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Python type</th>
+<th class="head">descriptor type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">FSSpec</span></tt></td>
+<td>typeFSS</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">FSRef</span></tt></td>
+<td>typeFSRef</td>
+</tr>
+<tr><td><tt class="xref py py-class docutils literal"><span class="pre">Alias</span></tt></td>
+<td>typeAlias</td>
+</tr>
+<tr><td>integer</td>
+<td>typeLong (32 bit integer)</td>
+</tr>
+<tr><td>float</td>
+<td>typeFloat (64 bit floating point)</td>
+</tr>
+<tr><td>string</td>
+<td>typeText</td>
+</tr>
+<tr><td>unicode</td>
+<td>typeUnicodeText</td>
+</tr>
+<tr><td>list</td>
+<td>typeAEList</td>
+</tr>
+<tr><td>dictionary</td>
+<td>typeAERecord</td>
+</tr>
+<tr><td>instance</td>
+<td><em>see below</em></td>
+</tr>
+</tbody>
+</table>
+<p>If <em>x</em> is a Python instance then this function attempts to call an
+<tt class="xref py py-meth docutils literal"><span class="pre">__aepack__()</span></tt> method.  This method should return an <tt class="xref py py-class docutils literal"><span class="pre">AEDesc</span></tt> object.</p>
+<p>If the conversion <em>x</em> is not defined above, this function returns the Python
+string representation of a value (the repr() function) encoded as a text
+descriptor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="aepack.unpack">
+<tt class="descclassname">aepack.</tt><tt class="descname">unpack</tt><big>(</big><em>x</em><span class="optional">[</span>, <em>formodulename</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#aepack.unpack" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>x</em> must be an object of type <tt class="xref py py-class docutils literal"><span class="pre">AEDesc</span></tt>. This function returns a Python
+object representation of the data in the Apple Event descriptor <em>x</em>. Simple
+AppleEvent data types (integer, text, float) are returned as their obvious
+Python counterparts. Apple Event lists are returned as Python lists, and the
+list elements are recursively unpacked.  Object references (ex. <tt class="docutils literal"><span class="pre">line</span> <span class="pre">3</span> <span class="pre">of</span>
+<span class="pre">document</span> <span class="pre">1</span></tt>) are returned as instances of <a class="reference internal" href="aetypes.html#aetypes.ObjectSpecifier" title="aetypes.ObjectSpecifier"><tt class="xref py py-class docutils literal"><span class="pre">aetypes.ObjectSpecifier</span></tt></a>,
+unless <tt class="docutils literal"><span class="pre">formodulename</span></tt> is specified.  AppleEvent descriptors with descriptor
+type typeFSS are returned as <tt class="xref py py-class docutils literal"><span class="pre">FSSpec</span></tt> objects.  AppleEvent record
+descriptors are returned as Python dictionaries, with 4-character string keys
+and elements recursively unpacked.</p>
+<p>The optional <tt class="docutils literal"><span class="pre">formodulename</span></tt> argument is used by the stub packages generated
+by <a class="reference internal" href="gensuitemodule.html#module-gensuitemodule" title="gensuitemodule: Create a stub package from an OSA dictionary (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">gensuitemodule</span></tt></a>, and ensures that the OSA classes for object specifiers
+are looked up in the correct module. This ensures that if, say, the Finder
+returns an object specifier for a window you get an instance of
+<tt class="docutils literal"><span class="pre">Finder.Window</span></tt> and not a generic <tt class="docutils literal"><span class="pre">aetypes.Window</span></tt>. The former knows about
+all the properties and elements a window has in the Finder, while the latter
+knows no such things.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="carbon.html#module-Carbon.AE" title="Carbon.AE: Interface to the Apple Events toolbox. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">Carbon.AE</span></tt></a></dt>
+<dd>Built-in access to Apple Event Manager routines.</dd>
+<dt>Module <a class="reference internal" href="aetypes.html#module-aetypes" title="aetypes: Python representation of the Apple Event Object Model. (deprecated) (Mac)"><tt class="xref py py-mod docutils literal"><span class="pre">aetypes</span></tt></a></dt>
+<dd>Python definitions of codes for Apple Event descriptor types.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="aetools.html"
+                        title="previous chapter">37.2. <tt class="docutils literal"><span class="pre">aetools</span></tt> &#8212; OSA client support</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="aetypes.html"
+                        title="next chapter">37.4. <tt class="docutils literal"><span class="pre">aetypes</span></tt> &#8212; AppleEvent objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/aepack.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="aetypes.html" title="37.4. aetypes — AppleEvent objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aetools.html" title="37.2. aetools — OSA client support"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="macosa.html" >37. MacPython OSA Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

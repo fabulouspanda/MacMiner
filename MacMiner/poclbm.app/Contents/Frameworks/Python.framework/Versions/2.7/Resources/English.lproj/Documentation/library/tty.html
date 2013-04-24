@@ -1,0 +1,181 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.8. tty — Terminal control functions &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="35. Unix Specific Services" href="unix.html" />
+    <link rel="next" title="35.9. pty — Pseudo-terminal utilities" href="pty.html" />
+    <link rel="prev" title="35.7. termios — POSIX style tty control" href="termios.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pty.html" title="35.9. pty — Pseudo-terminal utilities"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="35.7. termios — POSIX style tty control"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" accesskey="U">35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-tty">
+<span id="tty-terminal-control-functions"></span><h1>35.8. <a class="reference internal" href="#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">tty</span></tt></a> &#8212; Terminal control functions<a class="headerlink" href="#module-tty" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Unix</p>
+<p>The <a class="reference internal" href="#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">tty</span></tt></a> module defines functions for putting the tty into cbreak and raw
+modes.</p>
+<p>Because it requires the <a class="reference internal" href="termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">termios</span></tt></a> module, it will work only on Unix.</p>
+<p>The <a class="reference internal" href="#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">tty</span></tt></a> module defines the following functions:</p>
+<dl class="function">
+<dt id="tty.setraw">
+<tt class="descclassname">tty.</tt><tt class="descname">setraw</tt><big>(</big><em>fd</em><span class="optional">[</span>, <em>when</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#tty.setraw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the mode of the file descriptor <em>fd</em> to raw. If <em>when</em> is omitted, it
+defaults to <tt class="xref py py-const docutils literal"><span class="pre">termios.TCSAFLUSH</span></tt>, and is passed to
+<a class="reference internal" href="termios.html#termios.tcsetattr" title="termios.tcsetattr"><tt class="xref py py-func docutils literal"><span class="pre">termios.tcsetattr()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tty.setcbreak">
+<tt class="descclassname">tty.</tt><tt class="descname">setcbreak</tt><big>(</big><em>fd</em><span class="optional">[</span>, <em>when</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#tty.setcbreak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the mode of file descriptor <em>fd</em> to cbreak. If <em>when</em> is omitted, it
+defaults to <tt class="xref py py-const docutils literal"><span class="pre">termios.TCSAFLUSH</span></tt>, and is passed to
+<a class="reference internal" href="termios.html#termios.tcsetattr" title="termios.tcsetattr"><tt class="xref py py-func docutils literal"><span class="pre">termios.tcsetattr()</span></tt></a>.</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">termios</span></tt></a></dt>
+<dd>Low-level terminal control interface.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="termios.html"
+                        title="previous chapter">35.7. <tt class="docutils literal docutils literal docutils literal"><span class="pre">termios</span></tt> &#8212; POSIX style tty control</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pty.html"
+                        title="next chapter">35.9. <tt class="docutils literal docutils literal docutils literal"><span class="pre">pty</span></tt> &#8212; Pseudo-terminal utilities</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/tty.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pty.html" title="35.9. pty — Pseudo-terminal utilities"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="35.7. termios — POSIX style tty control"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="unix.html" >35. Unix Specific Services</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

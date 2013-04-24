@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11.8. dbm — Simple “database” interface &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="11. Data Persistence" href="persistence.html" />
+    <link rel="next" title="11.9. gdbm — GNU’s reinterpretation of dbm" href="gdbm.html" />
+    <link rel="prev" title="11.7. whichdb — Guess which DBM module created a database" href="whichdb.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gdbm.html" title="11.9. gdbm — GNU’s reinterpretation of dbm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="whichdb.html" title="11.7. whichdb — Guess which DBM module created a database"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="persistence.html" accesskey="U">11. Data Persistence</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-dbm">
+<span id="dbm-simple-database-interface"></span><h1>11.8. <a class="reference internal" href="#module-dbm" title="dbm: The standard &quot;database&quot; interface, based on ndbm. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">dbm</span></tt></a> &#8212; Simple &#8220;database&#8221; interface<a class="headerlink" href="#module-dbm" title="Permalink to this headline">¶</a></h1>
+<p><em>Platforms: </em>Unix</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <a class="reference internal" href="#module-dbm" title="dbm: The standard &quot;database&quot; interface, based on ndbm. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">dbm</span></tt></a> module has been renamed to <tt class="xref py py-mod docutils literal"><span class="pre">dbm.ndbm</span></tt> in Python 3.  The
+<a class="reference internal" href="../glossary.html#term-to3"><em class="xref std std-term">2to3</em></a> tool will automatically adapt imports when converting your
+sources to Python 3.</p>
+</div>
+<p>The <a class="reference internal" href="#module-dbm" title="dbm: The standard &quot;database&quot; interface, based on ndbm. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">dbm</span></tt></a> module provides an interface to the Unix &#8220;(n)dbm&#8221; library.  Dbm
+objects behave like mappings (dictionaries), except that keys and values are
+always strings. Printing a dbm object doesn&#8217;t print the keys and values, and the
+<tt class="xref py py-meth docutils literal"><span class="pre">items()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">values()</span></tt> methods are not supported.</p>
+<p>This module can be used with the &#8220;classic&#8221; ndbm interface, the BSD DB
+compatibility interface, or the GNU GDBM compatibility interface. On Unix, the
+<strong class="program">configure</strong> script will attempt to locate the appropriate header file
+to simplify building this module.</p>
+<p>The module defines the following:</p>
+<dl class="exception">
+<dt id="dbm.error">
+<em class="property">exception </em><tt class="descclassname">dbm.</tt><tt class="descname">error</tt><a class="headerlink" href="#dbm.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised on dbm-specific errors, such as I/O errors. <a class="reference internal" href="exceptions.html#exceptions.KeyError" title="exceptions.KeyError"><tt class="xref py py-exc docutils literal"><span class="pre">KeyError</span></tt></a> is raised for
+general mapping errors like specifying an incorrect key.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="dbm.library">
+<tt class="descclassname">dbm.</tt><tt class="descname">library</tt><a class="headerlink" href="#dbm.library" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the <tt class="docutils literal"><span class="pre">ndbm</span></tt> implementation library used.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dbm.open">
+<tt class="descclassname">dbm.</tt><tt class="descname">open</tt><big>(</big><em>filename</em><span class="optional">[</span>, <em>flag</em><span class="optional">[</span>, <em>mode</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#dbm.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a dbm database and return a dbm object.  The <em>filename</em> argument is the
+name of the database file (without the <tt class="file docutils literal"><span class="pre">.dir</span></tt> or <tt class="file docutils literal"><span class="pre">.pag</span></tt> extensions;
+note that the BSD DB implementation of the interface will append the extension
+<tt class="file docutils literal"><span class="pre">.db</span></tt> and only create one file).</p>
+<p>The optional <em>flag</em> argument must be one of these values:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Value</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">'r'</span></tt></td>
+<td>Open existing database for reading only
+(default)</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'w'</span></tt></td>
+<td>Open existing database for reading and
+writing</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'c'</span></tt></td>
+<td>Open database for reading and writing,
+creating it if it doesn&#8217;t exist</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">'n'</span></tt></td>
+<td>Always create a new, empty database, open
+for reading and writing</td>
+</tr>
+</tbody>
+</table>
+<p>The optional <em>mode</em> argument is the Unix mode of the file, used only when the
+database has to be created.  It defaults to octal <tt class="docutils literal"><span class="pre">0666</span></tt> (and will be
+modified by the prevailing umask).</p>
+</dd></dl>
+
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="anydbm.html#module-anydbm" title="anydbm: Generic interface to DBM-style database modules."><tt class="xref py py-mod docutils literal"><span class="pre">anydbm</span></tt></a></dt>
+<dd>Generic interface to <tt class="docutils literal"><span class="pre">dbm</span></tt>-style databases.</dd>
+<dt>Module <a class="reference internal" href="gdbm.html#module-gdbm" title="gdbm: GNU's reinterpretation of dbm. (Unix)"><tt class="xref py py-mod docutils literal"><span class="pre">gdbm</span></tt></a></dt>
+<dd>Similar interface to the GNU GDBM library.</dd>
+<dt>Module <a class="reference internal" href="whichdb.html#module-whichdb" title="whichdb: Guess which DBM-style module created a given database."><tt class="xref py py-mod docutils literal"><span class="pre">whichdb</span></tt></a></dt>
+<dd>Utility module used to determine the type of an existing database.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="whichdb.html"
+                        title="previous chapter">11.7. <tt class="docutils literal docutils literal"><span class="pre">whichdb</span></tt> &#8212; Guess which DBM module created a database</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="gdbm.html"
+                        title="next chapter">11.9. <tt class="docutils literal docutils literal"><span class="pre">gdbm</span></tt> &#8212; GNU&#8217;s reinterpretation of dbm</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/dbm.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="gdbm.html" title="11.9. gdbm — GNU’s reinterpretation of dbm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="whichdb.html" title="11.7. whichdb — Guess which DBM module created a database"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="persistence.html" >11. Data Persistence</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

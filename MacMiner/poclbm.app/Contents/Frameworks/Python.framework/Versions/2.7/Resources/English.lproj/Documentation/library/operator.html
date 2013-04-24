@@ -1,0 +1,989 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9.9. operator — Standard operators as functions &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="9. Numeric and Mathematical Modules" href="numeric.html" />
+    <link rel="next" title="10. File and Directory Access" href="filesys.html" />
+    <link rel="prev" title="9.8. functools — Higher-order functions and operations on callable objects" href="functools.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filesys.html" title="10. File and Directory Access"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="functools.html" title="9.8. functools — Higher-order functions and operations on callable objects"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" accesskey="U">9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-operator">
+<span id="operator-standard-operators-as-functions"></span><h1>9.9. <a class="reference internal" href="#module-operator" title="operator: Functions corresponding to the standard operators."><tt class="xref py py-mod docutils literal"><span class="pre">operator</span></tt></a> &#8212; Standard operators as functions<a class="headerlink" href="#module-operator" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference internal" href="#module-operator" title="operator: Functions corresponding to the standard operators."><tt class="xref py py-mod docutils literal"><span class="pre">operator</span></tt></a> module exports a set of efficient functions corresponding to
+the intrinsic operators of Python.  For example, <tt class="docutils literal"><span class="pre">operator.add(x,</span> <span class="pre">y)</span></tt> is
+equivalent to the expression <tt class="docutils literal"><span class="pre">x+y</span></tt>.  The function names are those used for
+special class methods; variants without leading and trailing <tt class="docutils literal"><span class="pre">__</span></tt> are also
+provided for convenience.</p>
+<p>The functions fall into categories that perform object comparisons, logical
+operations, mathematical operations, sequence operations, and abstract type
+tests.</p>
+<p>The object comparison functions are useful for all objects, and are named after
+the rich comparison operators they support:</p>
+<dl class="function">
+<dt id="operator.lt">
+<tt class="descclassname">operator.</tt><tt class="descname">lt</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.lt" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.le">
+<tt class="descclassname">operator.</tt><tt class="descname">le</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.le" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.eq">
+<tt class="descclassname">operator.</tt><tt class="descname">eq</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.eq" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.ne">
+<tt class="descclassname">operator.</tt><tt class="descname">ne</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ne" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.ge">
+<tt class="descclassname">operator.</tt><tt class="descname">ge</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ge" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.gt">
+<tt class="descclassname">operator.</tt><tt class="descname">gt</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.gt" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__lt__">
+<tt class="descclassname">operator.</tt><tt class="descname">__lt__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__lt__" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__le__">
+<tt class="descclassname">operator.</tt><tt class="descname">__le__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__le__" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__eq__">
+<tt class="descclassname">operator.</tt><tt class="descname">__eq__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__eq__" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ne__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ne__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ne__" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ge__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ge__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ge__" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__gt__">
+<tt class="descclassname">operator.</tt><tt class="descname">__gt__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__gt__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform &#8220;rich comparisons&#8221; between <em>a</em> and <em>b</em>. Specifically, <tt class="docutils literal"><span class="pre">lt(a,</span> <span class="pre">b)</span></tt> is
+equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">b</span></tt>, <tt class="docutils literal"><span class="pre">le(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">b</span></tt>, <tt class="docutils literal"><span class="pre">eq(a,</span>
+<span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">==</span> <span class="pre">b</span></tt>, <tt class="docutils literal"><span class="pre">ne(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">!=</span> <span class="pre">b</span></tt>,
+<tt class="docutils literal"><span class="pre">gt(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">b</span></tt> and <tt class="docutils literal"><span class="pre">ge(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span>
+<span class="pre">&gt;=</span> <span class="pre">b</span></tt>.  Note that unlike the built-in <a class="reference internal" href="functions.html#cmp" title="cmp"><tt class="xref py py-func docutils literal"><span class="pre">cmp()</span></tt></a>, these functions can
+return any value, which may or may not be interpretable as a Boolean value.
+See <a class="reference internal" href="../reference/expressions.html#comparisons"><em>Comparisons</em></a> for more information about rich comparisons.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<p>The logical operations are also generally applicable to all objects, and support
+truth tests, identity tests, and boolean operations:</p>
+<dl class="function">
+<dt id="operator.not_">
+<tt class="descclassname">operator.</tt><tt class="descname">not_</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.not_" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__not__">
+<tt class="descclassname">operator.</tt><tt class="descname">__not__</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.__not__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the outcome of <a class="reference internal" href="../reference/expressions.html#not"><tt class="xref std std-keyword docutils literal"><span class="pre">not</span></tt></a> <em>obj</em>.  (Note that there is no
+<a class="reference internal" href="#operator.__not__" title="operator.__not__"><tt class="xref py py-meth docutils literal"><span class="pre">__not__()</span></tt></a> method for object instances; only the interpreter core defines
+this operation.  The result is affected by the <a class="reference internal" href="../reference/datamodel.html#object.__nonzero__" title="object.__nonzero__"><tt class="xref py py-meth docutils literal"><span class="pre">__nonzero__()</span></tt></a> and
+<a class="reference internal" href="../reference/datamodel.html#object.__len__" title="object.__len__"><tt class="xref py py-meth docutils literal"><span class="pre">__len__()</span></tt></a> methods.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.truth">
+<tt class="descclassname">operator.</tt><tt class="descname">truth</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.truth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <a class="reference internal" href="constants.html#True" title="True"><tt class="xref py py-const xref docutils literal"><span class="pre">True</span></tt></a> if <em>obj</em> is true, and <a class="reference internal" href="constants.html#False" title="False"><tt class="xref py py-const xref docutils literal"><span class="pre">False</span></tt></a> otherwise.  This is
+equivalent to using the <a class="reference internal" href="functions.html#bool" title="bool"><tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt></a> constructor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.is_">
+<tt class="descclassname">operator.</tt><tt class="descname">is_</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.is_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">is</span> <span class="pre">b</span></tt>.  Tests object identity.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.is_not">
+<tt class="descclassname">operator.</tt><tt class="descname">is_not</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.is_not" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">b</span></tt>.  Tests object identity.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<p>The mathematical and bitwise operations are the most numerous:</p>
+<dl class="function">
+<dt id="operator.abs">
+<tt class="descclassname">operator.</tt><tt class="descname">abs</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.abs" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__abs__">
+<tt class="descclassname">operator.</tt><tt class="descname">__abs__</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.__abs__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the absolute value of <em>obj</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.add">
+<tt class="descclassname">operator.</tt><tt class="descname">add</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.add" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__add__">
+<tt class="descclassname">operator.</tt><tt class="descname">__add__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></tt>, for <em>a</em> and <em>b</em> numbers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.and_">
+<tt class="descclassname">operator.</tt><tt class="descname">and_</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.and_" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__and__">
+<tt class="descclassname">operator.</tt><tt class="descname">__and__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__and__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bitwise and of <em>a</em> and <em>b</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.div">
+<tt class="descclassname">operator.</tt><tt class="descname">div</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.div" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__div__">
+<tt class="descclassname">operator.</tt><tt class="descname">__div__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__div__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">/</span> <span class="pre">b</span></tt> when <tt class="docutils literal"><span class="pre">__future__.division</span></tt> is not in effect.  This is
+also known as &#8220;classic&#8221; division.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.floordiv">
+<tt class="descclassname">operator.</tt><tt class="descname">floordiv</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.floordiv" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__floordiv__">
+<tt class="descclassname">operator.</tt><tt class="descname">__floordiv__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__floordiv__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">//</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.index">
+<tt class="descclassname">operator.</tt><tt class="descname">index</tt><big>(</big><em>a</em><big>)</big><a class="headerlink" href="#operator.index" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__index__">
+<tt class="descclassname">operator.</tt><tt class="descname">__index__</tt><big>(</big><em>a</em><big>)</big><a class="headerlink" href="#operator.__index__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>a</em> converted to an integer.  Equivalent to <tt class="docutils literal"><span class="pre">a.__index__()</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.inv">
+<tt class="descclassname">operator.</tt><tt class="descname">inv</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.inv" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.invert">
+<tt class="descclassname">operator.</tt><tt class="descname">invert</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.invert" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__inv__">
+<tt class="descclassname">operator.</tt><tt class="descname">__inv__</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.__inv__" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__invert__">
+<tt class="descclassname">operator.</tt><tt class="descname">__invert__</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.__invert__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bitwise inverse of the number <em>obj</em>.  This is equivalent to <tt class="docutils literal"><span class="pre">~obj</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0: </span>The names <a class="reference internal" href="#operator.invert" title="operator.invert"><tt class="xref py py-func docutils literal"><span class="pre">invert()</span></tt></a> and <a class="reference internal" href="#operator.__invert__" title="operator.__invert__"><tt class="xref py py-func docutils literal"><span class="pre">__invert__()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.lshift">
+<tt class="descclassname">operator.</tt><tt class="descname">lshift</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.lshift" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__lshift__">
+<tt class="descclassname">operator.</tt><tt class="descname">__lshift__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__lshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>a</em> shifted left by <em>b</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.mod">
+<tt class="descclassname">operator.</tt><tt class="descname">mod</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.mod" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__mod__">
+<tt class="descclassname">operator.</tt><tt class="descname">__mod__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__mod__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">b</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.mul">
+<tt class="descclassname">operator.</tt><tt class="descname">mul</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.mul" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__mul__">
+<tt class="descclassname">operator.</tt><tt class="descname">__mul__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span></tt>, for <em>a</em> and <em>b</em> numbers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.neg">
+<tt class="descclassname">operator.</tt><tt class="descname">neg</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.neg" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__neg__">
+<tt class="descclassname">operator.</tt><tt class="descname">__neg__</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.__neg__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>obj</em> negated (<tt class="docutils literal"><span class="pre">-obj</span></tt>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.or_">
+<tt class="descclassname">operator.</tt><tt class="descname">or_</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.or_" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__or__">
+<tt class="descclassname">operator.</tt><tt class="descname">__or__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__or__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bitwise or of <em>a</em> and <em>b</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.pos">
+<tt class="descclassname">operator.</tt><tt class="descname">pos</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.pos" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__pos__">
+<tt class="descclassname">operator.</tt><tt class="descname">__pos__</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.__pos__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>obj</em> positive (<tt class="docutils literal"><span class="pre">+obj</span></tt>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.pow">
+<tt class="descclassname">operator.</tt><tt class="descname">pow</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.pow" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__pow__">
+<tt class="descclassname">operator.</tt><tt class="descname">__pow__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__pow__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">**</span> <span class="pre">b</span></tt>, for <em>a</em> and <em>b</em> numbers.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.rshift">
+<tt class="descclassname">operator.</tt><tt class="descname">rshift</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.rshift" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__rshift__">
+<tt class="descclassname">operator.</tt><tt class="descname">__rshift__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__rshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <em>a</em> shifted right by <em>b</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.sub">
+<tt class="descclassname">operator.</tt><tt class="descname">sub</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.sub" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__sub__">
+<tt class="descclassname">operator.</tt><tt class="descname">__sub__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">-</span> <span class="pre">b</span></tt>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.truediv">
+<tt class="descclassname">operator.</tt><tt class="descname">truediv</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.truediv" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__truediv__">
+<tt class="descclassname">operator.</tt><tt class="descname">__truediv__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__truediv__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">/</span> <span class="pre">b</span></tt> when <tt class="docutils literal"><span class="pre">__future__.division</span></tt> is in effect.  This is also
+known as &#8220;true&#8221; division.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.xor">
+<tt class="descclassname">operator.</tt><tt class="descname">xor</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.xor" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__xor__">
+<tt class="descclassname">operator.</tt><tt class="descname">__xor__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__xor__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the bitwise exclusive or of <em>a</em> and <em>b</em>.</p>
+</dd></dl>
+
+<p>Operations which work with sequences (some of them with mappings too) include:</p>
+<dl class="function">
+<dt id="operator.concat">
+<tt class="descclassname">operator.</tt><tt class="descname">concat</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.concat" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__concat__">
+<tt class="descclassname">operator.</tt><tt class="descname">__concat__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__concat__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></tt> for <em>a</em> and <em>b</em> sequences.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.contains">
+<tt class="descclassname">operator.</tt><tt class="descname">contains</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.contains" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__contains__">
+<tt class="descclassname">operator.</tt><tt class="descname">__contains__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__contains__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the outcome of the test <tt class="docutils literal"><span class="pre">b</span> <span class="pre">in</span> <span class="pre">a</span></tt>. Note the reversed operands.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.0: </span>The name <a class="reference internal" href="#operator.__contains__" title="operator.__contains__"><tt class="xref py py-func docutils literal"><span class="pre">__contains__()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.countOf">
+<tt class="descclassname">operator.</tt><tt class="descname">countOf</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.countOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of occurrences of <em>b</em> in <em>a</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.delitem">
+<tt class="descclassname">operator.</tt><tt class="descname">delitem</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.delitem" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__delitem__">
+<tt class="descclassname">operator.</tt><tt class="descname">__delitem__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__delitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the value of <em>a</em> at index <em>b</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.delslice">
+<tt class="descclassname">operator.</tt><tt class="descname">delslice</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#operator.delslice" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__delslice__">
+<tt class="descclassname">operator.</tt><tt class="descname">__delslice__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#operator.__delslice__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the slice of <em>a</em> from index <em>b</em> to index <em>c-1</em>.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>This function is removed in Python 3.x.  Use <a class="reference internal" href="#operator.delitem" title="operator.delitem"><tt class="xref py py-func docutils literal"><span class="pre">delitem()</span></tt></a> with a slice
+index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.getitem">
+<tt class="descclassname">operator.</tt><tt class="descname">getitem</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.getitem" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__getitem__">
+<tt class="descclassname">operator.</tt><tt class="descname">__getitem__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value of <em>a</em> at index <em>b</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.getslice">
+<tt class="descclassname">operator.</tt><tt class="descname">getslice</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#operator.getslice" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__getslice__">
+<tt class="descclassname">operator.</tt><tt class="descname">__getslice__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#operator.__getslice__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the slice of <em>a</em> from index <em>b</em> to index <em>c-1</em>.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>This function is removed in Python 3.x.  Use <a class="reference internal" href="#operator.getitem" title="operator.getitem"><tt class="xref py py-func docutils literal"><span class="pre">getitem()</span></tt></a> with a slice
+index.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.indexOf">
+<tt class="descclassname">operator.</tt><tt class="descname">indexOf</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.indexOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the index of the first of occurrence of <em>b</em> in <em>a</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.repeat">
+<tt class="descclassname">operator.</tt><tt class="descname">repeat</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.repeat" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__repeat__">
+<tt class="descclassname">operator.</tt><tt class="descname">__repeat__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__repeat__" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <a class="reference internal" href="#operator.__mul__" title="operator.__mul__"><tt class="xref py py-func docutils literal"><span class="pre">__mul__()</span></tt></a> instead.</p>
+<p>Return <tt class="docutils literal"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span></tt> where <em>a</em> is a sequence and <em>b</em> is an integer.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.sequenceIncludes">
+<tt class="descclassname">operator.</tt><tt class="descname">sequenceIncludes</tt><big>(</big><em>...</em><big>)</big><a class="headerlink" href="#operator.sequenceIncludes" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.0: </span>Use <a class="reference internal" href="#operator.contains" title="operator.contains"><tt class="xref py py-func docutils literal"><span class="pre">contains()</span></tt></a> instead.</p>
+<p>Alias for <a class="reference internal" href="#operator.contains" title="operator.contains"><tt class="xref py py-func docutils literal"><span class="pre">contains()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.setitem">
+<tt class="descclassname">operator.</tt><tt class="descname">setitem</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#operator.setitem" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__setitem__">
+<tt class="descclassname">operator.</tt><tt class="descname">__setitem__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em><big>)</big><a class="headerlink" href="#operator.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the value of <em>a</em> at index <em>b</em> to <em>c</em>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.setslice">
+<tt class="descclassname">operator.</tt><tt class="descname">setslice</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>v</em><big>)</big><a class="headerlink" href="#operator.setslice" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__setslice__">
+<tt class="descclassname">operator.</tt><tt class="descname">__setslice__</tt><big>(</big><em>a</em>, <em>b</em>, <em>c</em>, <em>v</em><big>)</big><a class="headerlink" href="#operator.__setslice__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the slice of <em>a</em> from index <em>b</em> to index <em>c-1</em> to the sequence <em>v</em>.</p>
+<p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.6: </span>This function is removed in Python 3.x.  Use <a class="reference internal" href="#operator.setitem" title="operator.setitem"><tt class="xref py py-func docutils literal"><span class="pre">setitem()</span></tt></a> with a slice
+index.</p>
+</dd></dl>
+
+<p>Example use of operator functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Elementwise multiplication</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span><span class="p">(</span><span class="n">mul</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
+<span class="go">[0, 20, 60, 120]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Dot product</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">mul</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]))</span>
+<span class="go">200</span>
+</pre></div>
+</div>
+<p>Many operations have an &#8220;in-place&#8221; version.  The following functions provide a
+more primitive access to in-place operators than the usual syntax does; for
+example, the <a class="reference internal" href="../glossary.html#term-statement"><em class="xref std std-term">statement</em></a> <tt class="docutils literal"><span class="pre">x</span> <span class="pre">+=</span> <span class="pre">y</span></tt> is equivalent to
+<tt class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">operator.iadd(x,</span> <span class="pre">y)</span></tt>.  Another way to put it is to say that
+<tt class="docutils literal"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">operator.iadd(x,</span> <span class="pre">y)</span></tt> is equivalent to the compound statement
+<tt class="docutils literal"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">x;</span> <span class="pre">z</span> <span class="pre">+=</span> <span class="pre">y</span></tt>.</p>
+<dl class="function">
+<dt id="operator.iadd">
+<tt class="descclassname">operator.</tt><tt class="descname">iadd</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.iadd" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__iadd__">
+<tt class="descclassname">operator.</tt><tt class="descname">__iadd__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__iadd__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">iadd(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.iand">
+<tt class="descclassname">operator.</tt><tt class="descname">iand</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.iand" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__iand__">
+<tt class="descclassname">operator.</tt><tt class="descname">__iand__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__iand__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">iand(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&amp;=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.iconcat">
+<tt class="descclassname">operator.</tt><tt class="descname">iconcat</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.iconcat" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__iconcat__">
+<tt class="descclassname">operator.</tt><tt class="descname">__iconcat__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__iconcat__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">iconcat(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">+=</span> <span class="pre">b</span></tt> for <em>a</em> and <em>b</em> sequences.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.idiv">
+<tt class="descclassname">operator.</tt><tt class="descname">idiv</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.idiv" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__idiv__">
+<tt class="descclassname">operator.</tt><tt class="descname">__idiv__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__idiv__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">idiv(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">/=</span> <span class="pre">b</span></tt> when <tt class="docutils literal"><span class="pre">__future__.division</span></tt> is
+not in effect.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.ifloordiv">
+<tt class="descclassname">operator.</tt><tt class="descname">ifloordiv</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ifloordiv" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ifloordiv__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ifloordiv__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ifloordiv__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ifloordiv(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">//=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.ilshift">
+<tt class="descclassname">operator.</tt><tt class="descname">ilshift</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ilshift" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ilshift__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ilshift__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ilshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ilshift(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;&lt;=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.imod">
+<tt class="descclassname">operator.</tt><tt class="descname">imod</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.imod" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__imod__">
+<tt class="descclassname">operator.</tt><tt class="descname">__imod__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__imod__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">imod(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">%=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.imul">
+<tt class="descclassname">operator.</tt><tt class="descname">imul</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.imul" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__imul__">
+<tt class="descclassname">operator.</tt><tt class="descname">__imul__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__imul__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">imul(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">*=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.ior">
+<tt class="descclassname">operator.</tt><tt class="descname">ior</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ior" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ior__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ior__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ior__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ior(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">|=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.ipow">
+<tt class="descclassname">operator.</tt><tt class="descname">ipow</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ipow" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ipow__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ipow__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ipow__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ipow(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">**=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.irepeat">
+<tt class="descclassname">operator.</tt><tt class="descname">irepeat</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.irepeat" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__irepeat__">
+<tt class="descclassname">operator.</tt><tt class="descname">__irepeat__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__irepeat__" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <a class="reference internal" href="#operator.__imul__" title="operator.__imul__"><tt class="xref py py-func docutils literal"><span class="pre">__imul__()</span></tt></a> instead.</p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">irepeat(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">*=</span> <span class="pre">b</span></tt> where <em>a</em> is a sequence and
+<em>b</em> is an integer.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.irshift">
+<tt class="descclassname">operator.</tt><tt class="descname">irshift</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.irshift" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__irshift__">
+<tt class="descclassname">operator.</tt><tt class="descname">__irshift__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__irshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">irshift(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;&gt;=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.isub">
+<tt class="descclassname">operator.</tt><tt class="descname">isub</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.isub" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__isub__">
+<tt class="descclassname">operator.</tt><tt class="descname">__isub__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__isub__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">isub(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">-=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.itruediv">
+<tt class="descclassname">operator.</tt><tt class="descname">itruediv</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.itruediv" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__itruediv__">
+<tt class="descclassname">operator.</tt><tt class="descname">__itruediv__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__itruediv__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">itruediv(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">/=</span> <span class="pre">b</span></tt> when <tt class="docutils literal"><span class="pre">__future__.division</span></tt>
+is in effect.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.ixor">
+<tt class="descclassname">operator.</tt><tt class="descname">ixor</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.ixor" title="Permalink to this definition">¶</a></dt>
+<dt id="operator.__ixor__">
+<tt class="descclassname">operator.</tt><tt class="descname">__ixor__</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#operator.__ixor__" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">ixor(a,</span> <span class="pre">b)</span></tt> is equivalent to <tt class="docutils literal"><span class="pre">a</span> <span class="pre">^=</span> <span class="pre">b</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.5.</span></p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-operator" title="operator: Functions corresponding to the standard operators."><tt class="xref py py-mod docutils literal"><span class="pre">operator</span></tt></a> module also defines a few predicates to test the type of
+objects; however, these are not all reliable.  It is preferable to test
+abstract base classes instead (see <a class="reference internal" href="collections.html#module-collections" title="collections: High-performance datatypes"><tt class="xref py py-mod docutils literal"><span class="pre">collections</span></tt></a> and
+<a class="reference internal" href="numbers.html#module-numbers" title="numbers: Numeric abstract base classes (Complex, Real, Integral, etc.)."><tt class="xref py py-mod docutils literal"><span class="pre">numbers</span></tt></a> for details).</p>
+<dl class="function">
+<dt id="operator.isCallable">
+<tt class="descclassname">operator.</tt><tt class="descname">isCallable</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.isCallable" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.0: </span>Use <tt class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">collections.Callable)</span></tt> instead.</p>
+<p>Returns true if the object <em>obj</em> can be called like a function, otherwise it
+returns false.  True is returned for functions, bound and unbound methods, class
+objects, and instance objects which support the <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><tt class="xref py py-meth docutils literal"><span class="pre">__call__()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.isMappingType">
+<tt class="descclassname">operator.</tt><tt class="descname">isMappingType</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.isMappingType" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <tt class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">collections.Mapping)</span></tt> instead.</p>
+<p>Returns true if the object <em>obj</em> supports the mapping interface. This is true for
+dictionaries and all instance objects defining <a class="reference internal" href="#operator.__getitem__" title="operator.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.isNumberType">
+<tt class="descclassname">operator.</tt><tt class="descname">isNumberType</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.isNumberType" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <tt class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">numbers.Number)</span></tt> instead.</p>
+<p>Returns true if the object <em>obj</em> represents a number.  This is true for all
+numeric types implemented in C.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.isSequenceType">
+<tt class="descclassname">operator.</tt><tt class="descname">isSequenceType</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#operator.isSequenceType" title="Permalink to this definition">¶</a></dt>
+<dd><p class="deprecated">
+<span class="versionmodified">Deprecated since version 2.7: </span>Use <tt class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">collections.Sequence)</span></tt> instead.</p>
+<p>Returns true if the object <em>obj</em> supports the sequence protocol. This returns true
+for all objects which define sequence methods in C, and for all instance objects
+defining <a class="reference internal" href="#operator.__getitem__" title="operator.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></tt></a>.</p>
+</dd></dl>
+
+<p>The <a class="reference internal" href="#module-operator" title="operator: Functions corresponding to the standard operators."><tt class="xref py py-mod docutils literal"><span class="pre">operator</span></tt></a> module also defines tools for generalized attribute and item
+lookups.  These are useful for making fast field extractors as arguments for
+<a class="reference internal" href="functions.html#map" title="map"><tt class="xref py py-func docutils literal"><span class="pre">map()</span></tt></a>, <a class="reference internal" href="functions.html#sorted" title="sorted"><tt class="xref py py-func docutils literal"><span class="pre">sorted()</span></tt></a>, <a class="reference internal" href="itertools.html#itertools.groupby" title="itertools.groupby"><tt class="xref py py-meth docutils literal"><span class="pre">itertools.groupby()</span></tt></a>, or other functions that
+expect a function argument.</p>
+<dl class="function">
+<dt id="operator.attrgetter">
+<tt class="descclassname">operator.</tt><tt class="descname">attrgetter</tt><big>(</big><em>attr</em><span class="optional">[</span>, <em>args...</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#operator.attrgetter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a callable object that fetches <em>attr</em> from its operand. If more than one
+attribute is requested, returns a tuple of attributes. After,
+<tt class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">attrgetter('name')</span></tt>, the call <tt class="docutils literal"><span class="pre">f(b)</span></tt> returns <tt class="docutils literal"><span class="pre">b.name</span></tt>.  After,
+<tt class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">attrgetter('name',</span> <span class="pre">'date')</span></tt>, the call <tt class="docutils literal"><span class="pre">f(b)</span></tt> returns <tt class="docutils literal"><span class="pre">(b.name,</span>
+<span class="pre">b.date)</span></tt>.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">attrgetter</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">attr</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">resolve_attr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">resolve_att</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">g</span>
+
+<span class="k">def</span> <span class="nf">resolve_attr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">attr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span>
+</pre></div>
+</div>
+<p>The attribute names can also contain dots; after <tt class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">attrgetter('date.month')</span></tt>,
+the call <tt class="docutils literal"><span class="pre">f(b)</span></tt> returns <tt class="docutils literal"><span class="pre">b.date.month</span></tt>.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>Added support for multiple attributes.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.6: </span>Added support for dotted attributes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.itemgetter">
+<tt class="descclassname">operator.</tt><tt class="descname">itemgetter</tt><big>(</big><em>item</em><span class="optional">[</span>, <em>args...</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#operator.itemgetter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a callable object that fetches <em>item</em> from its operand using the
+operand&#8217;s <a class="reference internal" href="#operator.__getitem__" title="operator.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></tt></a> method.  If multiple items are specified,
+returns a tuple of lookup values.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">itemgetter</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">g</span>
+</pre></div>
+</div>
+<p>The items can be any type accepted by the operand&#8217;s <a class="reference internal" href="#operator.__getitem__" title="operator.__getitem__"><tt class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></tt></a>
+method.  Dictionaries accept any hashable value.  Lists, tuples, and
+strings accept an index or a slice:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="s">&#39;ABCDEFG&#39;</span><span class="p">)</span>
+<span class="go">&#39;B&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">)(</span><span class="s">&#39;ABCDEFG&#39;</span><span class="p">)</span>
+<span class="go">(&#39;B&#39;, &#39;D&#39;, &#39;F&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">itemgetter</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="bp">None</span><span class="p">))(</span><span class="s">&#39;ABCDEFG&#39;</span><span class="p">)</span>
+<span class="go">&#39;CDEFG&#39;</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5: </span>Added support for multiple item extraction.</p>
+<p>Example of using <a class="reference internal" href="#operator.itemgetter" title="operator.itemgetter"><tt class="xref py py-func docutils literal"><span class="pre">itemgetter()</span></tt></a> to retrieve specific fields from a
+tuple record:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inventory</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;apple&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;banana&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;pear&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">getcount</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span><span class="p">(</span><span class="n">getcount</span><span class="p">,</span> <span class="n">inventory</span><span class="p">)</span>
+<span class="go">[3, 2, 5, 1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">inventory</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">getcount</span><span class="p">)</span>
+<span class="go">[(&#39;orange&#39;, 1), (&#39;banana&#39;, 2), (&#39;apple&#39;, 3), (&#39;pear&#39;, 5)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="operator.methodcaller">
+<tt class="descclassname">operator.</tt><tt class="descname">methodcaller</tt><big>(</big><em>name</em><span class="optional">[</span>, <em>args...</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#operator.methodcaller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a callable object that calls the method <em>name</em> on its operand.  If
+additional arguments and/or keyword arguments are given, they will be given
+to the method as well.  After <tt class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">methodcaller('name')</span></tt>, the call <tt class="docutils literal"><span class="pre">f(b)</span></tt>
+returns <tt class="docutils literal"><span class="pre">b.name()</span></tt>.  After <tt class="docutils literal"><span class="pre">f</span> <span class="pre">=</span> <span class="pre">methodcaller('name',</span> <span class="pre">'foo',</span> <span class="pre">bar=1)</span></tt>, the
+call <tt class="docutils literal"><span class="pre">f(b)</span></tt> returns <tt class="docutils literal"><span class="pre">b.name('foo',</span> <span class="pre">bar=1)</span></tt>.  Equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">methodcaller</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">caller</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">caller</span>
+</pre></div>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.6.</span></p>
+</dd></dl>
+
+<div class="section" id="mapping-operators-to-functions">
+<span id="operator-map"></span><h2>9.9.1. Mapping Operators to Functions<a class="headerlink" href="#mapping-operators-to-functions" title="Permalink to this headline">¶</a></h2>
+<p>This table shows how abstract operations correspond to operator symbols in the
+Python syntax and the functions in the <a class="reference internal" href="#module-operator" title="operator: Functions corresponding to the standard operators."><tt class="xref py py-mod docutils literal"><span class="pre">operator</span></tt></a> module.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="29%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Operation</th>
+<th class="head">Syntax</th>
+<th class="head">Function</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Addition</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">add(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Concatenation</td>
+<td><tt class="docutils literal"><span class="pre">seq1</span> <span class="pre">+</span> <span class="pre">seq2</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">concat(seq1,</span> <span class="pre">seq2)</span></tt></td>
+</tr>
+<tr><td>Containment Test</td>
+<td><tt class="docutils literal"><span class="pre">obj</span> <span class="pre">in</span> <span class="pre">seq</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">contains(seq,</span> <span class="pre">obj)</span></tt></td>
+</tr>
+<tr><td>Division</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">/</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">div(a,</span> <span class="pre">b)</span></tt> (without
+<tt class="docutils literal"><span class="pre">__future__.division</span></tt>)</td>
+</tr>
+<tr><td>Division</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">/</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">truediv(a,</span> <span class="pre">b)</span></tt> (with
+<tt class="docutils literal"><span class="pre">__future__.division</span></tt>)</td>
+</tr>
+<tr><td>Division</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">//</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">floordiv(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Bitwise And</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&amp;</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">and_(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Bitwise Exclusive Or</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">^</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">xor(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Bitwise Inversion</td>
+<td><tt class="docutils literal"><span class="pre">~</span> <span class="pre">a</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">invert(a)</span></tt></td>
+</tr>
+<tr><td>Bitwise Or</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">or_(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Exponentiation</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">**</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">pow(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Identity</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">is</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">is_(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Identity</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">is_not(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Indexed Assignment</td>
+<td><tt class="docutils literal"><span class="pre">obj[k]</span> <span class="pre">=</span> <span class="pre">v</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">setitem(obj,</span> <span class="pre">k,</span> <span class="pre">v)</span></tt></td>
+</tr>
+<tr><td>Indexed Deletion</td>
+<td><tt class="docutils literal"><span class="pre">del</span> <span class="pre">obj[k]</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">delitem(obj,</span> <span class="pre">k)</span></tt></td>
+</tr>
+<tr><td>Indexing</td>
+<td><tt class="docutils literal"><span class="pre">obj[k]</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">getitem(obj,</span> <span class="pre">k)</span></tt></td>
+</tr>
+<tr><td>Left Shift</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;&lt;</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">lshift(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Modulo</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">mod(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Multiplication</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">mul(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Negation (Arithmetic)</td>
+<td><tt class="docutils literal"><span class="pre">-</span> <span class="pre">a</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">neg(a)</span></tt></td>
+</tr>
+<tr><td>Negation (Logical)</td>
+<td><tt class="docutils literal"><span class="pre">not</span> <span class="pre">a</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">not_(a)</span></tt></td>
+</tr>
+<tr><td>Positive</td>
+<td><tt class="docutils literal"><span class="pre">+</span> <span class="pre">a</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">pos(a)</span></tt></td>
+</tr>
+<tr><td>Right Shift</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;&gt;</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">rshift(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Sequence Repetition</td>
+<td><tt class="docutils literal"><span class="pre">seq</span> <span class="pre">*</span> <span class="pre">i</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">repeat(seq,</span> <span class="pre">i)</span></tt></td>
+</tr>
+<tr><td>Slice Assignment</td>
+<td><tt class="docutils literal"><span class="pre">seq[i:j]</span> <span class="pre">=</span> <span class="pre">values</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">setitem(seq,</span> <span class="pre">slice(i,</span> <span class="pre">j),</span> <span class="pre">values)</span></tt></td>
+</tr>
+<tr><td>Slice Deletion</td>
+<td><tt class="docutils literal"><span class="pre">del</span> <span class="pre">seq[i:j]</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">delitem(seq,</span> <span class="pre">slice(i,</span> <span class="pre">j))</span></tt></td>
+</tr>
+<tr><td>Slicing</td>
+<td><tt class="docutils literal"><span class="pre">seq[i:j]</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">getitem(seq,</span> <span class="pre">slice(i,</span> <span class="pre">j))</span></tt></td>
+</tr>
+<tr><td>String Formatting</td>
+<td><tt class="docutils literal"><span class="pre">s</span> <span class="pre">%</span> <span class="pre">obj</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">mod(s,</span> <span class="pre">obj)</span></tt></td>
+</tr>
+<tr><td>Subtraction</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">-</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">sub(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Truth Test</td>
+<td><tt class="docutils literal"><span class="pre">obj</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">truth(obj)</span></tt></td>
+</tr>
+<tr><td>Ordering</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">lt(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Ordering</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">le(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Equality</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">==</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">eq(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Difference</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">!=</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">ne(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Ordering</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;=</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">ge(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+<tr><td>Ordering</td>
+<td><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">b</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">gt(a,</span> <span class="pre">b)</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9.9. <tt class="docutils literal"><span class="pre">operator</span></tt> &#8212; Standard operators as functions</a><ul>
+<li><a class="reference internal" href="#mapping-operators-to-functions">9.9.1. Mapping Operators to Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="functools.html"
+                        title="previous chapter">9.8. <tt class="docutils literal docutils literal docutils literal"><span class="pre">functools</span></tt> &#8212; Higher-order functions and operations on callable objects</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="filesys.html"
+                        title="next chapter">10. File and Directory Access</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/library/operator.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="filesys.html" title="10. File and Directory Access"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="functools.html" title="9.8. functools — Higher-order functions and operations on callable objects"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >The Python Standard Library</a> &raquo;</li>
+          <li><a href="numeric.html" >9. Numeric and Mathematical Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

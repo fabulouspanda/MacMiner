@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Common Object Structures &mdash; Python v2.7.4 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python v2.7.4 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python v2.7.4 documentation" href="../index.html" />
+    <link rel="up" title="Object Implementation Support" href="objimpl.html" />
+    <link rel="next" title="Type Objects" href="typeobj.html" />
+    <link rel="prev" title="Allocating Objects on the Heap" href="allocation.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+ 
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="typeobj.html" title="Type Objects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="allocation.html" title="Allocating Objects on the Heap"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="objimpl.html" accesskey="U">Object Implementation Support</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="common-object-structures">
+<span id="common-structs"></span><h1>Common Object Structures<a class="headerlink" href="#common-object-structures" title="Permalink to this headline">¶</a></h1>
+<p>There are a large number of structures which are used in the definition of
+object types for Python.  This section describes these structures and how they
+are used.</p>
+<p>All Python objects ultimately share a small number of fields at the beginning
+of the object&#8217;s representation in memory.  These are represented by the
+<a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> and <a class="reference internal" href="#PyVarObject" title="PyVarObject"><tt class="xref c c-type docutils literal"><span class="pre">PyVarObject</span></tt></a> types, which are defined, in turn,
+by the expansions of some macros also used, whether directly or indirectly, in
+the definition of all other Python objects.</p>
+<dl class="type">
+<dt id="PyObject">
+<tt class="descname">PyObject</tt><a class="headerlink" href="#PyObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>All object types are extensions of this type.  This is a type which
+contains the information Python needs to treat a pointer to an object as an
+object.  In a normal &#8220;release&#8221; build, it contains only the object&#8217;s
+reference count and a pointer to the corresponding type object.  It
+corresponds to the fields defined by the expansion of the <tt class="docutils literal"><span class="pre">PyObject_HEAD</span></tt>
+macro.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="PyVarObject">
+<tt class="descname">PyVarObject</tt><a class="headerlink" href="#PyVarObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an extension of <a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> that adds the <tt class="xref py py-attr docutils literal"><span class="pre">ob_size</span></tt>
+field.  This is only used for objects that have some notion of <em>length</em>.
+This type does not often appear in the Python/C API.  It corresponds to the
+fields defined by the expansion of the <tt class="docutils literal"><span class="pre">PyObject_VAR_HEAD</span></tt> macro.</p>
+</dd></dl>
+
+<p>These macros are used in the definition of <a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> and
+<a class="reference internal" href="#PyVarObject" title="PyVarObject"><tt class="xref c c-type docutils literal"><span class="pre">PyVarObject</span></tt></a>:</p>
+<dl class="macro">
+<dt id="PyObject_HEAD">
+<tt class="descname">PyObject_HEAD</tt><a class="headerlink" href="#PyObject_HEAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro which expands to the declarations of the fields of the
+<a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> type; it is used when declaring new types which represent
+objects without a varying length.  The specific fields it expands to depend
+on the definition of <tt class="xref c c-macro docutils literal"><span class="pre">Py_TRACE_REFS</span></tt>.  By default, that macro is
+not defined, and <a class="reference internal" href="#PyObject_HEAD" title="PyObject_HEAD"><tt class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></tt></a> expands to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">Py_ssize_t</span> <span class="n">ob_refcnt</span><span class="p">;</span>
+<span class="n">PyTypeObject</span> <span class="o">*</span><span class="n">ob_type</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>When <tt class="xref c c-macro docutils literal"><span class="pre">Py_TRACE_REFS</span></tt> is defined, it expands to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">PyObject</span> <span class="o">*</span><span class="n">_ob_next</span><span class="p">,</span> <span class="o">*</span><span class="n">_ob_prev</span><span class="p">;</span>
+<span class="n">Py_ssize_t</span> <span class="n">ob_refcnt</span><span class="p">;</span>
+<span class="n">PyTypeObject</span> <span class="o">*</span><span class="n">ob_type</span><span class="p">;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="macro">
+<dt id="PyObject_VAR_HEAD">
+<tt class="descname">PyObject_VAR_HEAD</tt><a class="headerlink" href="#PyObject_VAR_HEAD" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro which expands to the declarations of the fields of the
+<a class="reference internal" href="#PyVarObject" title="PyVarObject"><tt class="xref c c-type docutils literal"><span class="pre">PyVarObject</span></tt></a> type; it is used when declaring new types which
+represent objects with a length that varies from instance to instance.
+This macro always expands to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">PyObject_HEAD</span>
+<span class="n">Py_ssize_t</span> <span class="n">ob_size</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Note that <a class="reference internal" href="#PyObject_HEAD" title="PyObject_HEAD"><tt class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></tt></a> is part of the expansion, and that its own
+expansion varies depending on the definition of <tt class="xref c c-macro docutils literal"><span class="pre">Py_TRACE_REFS</span></tt>.</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="PyObject_HEAD_INIT">
+<tt class="descname">PyObject_HEAD_INIT</tt><big>(</big>type<big>)</big><a class="headerlink" href="#PyObject_HEAD_INIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro which expands to initialization values for a new
+<a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject</span></tt></a> type.  This macro expands to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">_PyObject_EXTRA_INIT</span>
+<span class="mi">1</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="macro">
+<dt id="PyVarObject_HEAD_INIT">
+<tt class="descname">PyVarObject_HEAD_INIT</tt><big>(</big>type, size<big>)</big><a class="headerlink" href="#PyVarObject_HEAD_INIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a macro which expands to initialization values for a new
+<a class="reference internal" href="#PyVarObject" title="PyVarObject"><tt class="xref c c-type docutils literal"><span class="pre">PyVarObject</span></tt></a> type, including the <tt class="xref py py-attr docutils literal"><span class="pre">ob_size</span></tt> field.
+This macro expands to:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">_PyObject_EXTRA_INIT</span>
+<span class="mi">1</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="type">
+<dt id="PyCFunction">
+<tt class="descname">PyCFunction</tt><a class="headerlink" href="#PyCFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of the functions used to implement most Python callables in C.
+Functions of this type take two <a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a> parameters and return
+one such value.  If the return value is <em>NULL</em>, an exception shall have
+been set.  If not <em>NULL</em>, the return value is interpreted as the return
+value of the function as exposed in Python.  The function must return a new
+reference.</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="PyMethodDef">
+<tt class="descname">PyMethodDef</tt><a class="headerlink" href="#PyMethodDef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure used to describe a method of an extension type.  This structure has
+four fields:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="21%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Field</th>
+<th class="head">C Type</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">ml_name</span></tt></td>
+<td>char *</td>
+<td>name of the method</td>
+</tr>
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">ml_meth</span></tt></td>
+<td>PyCFunction</td>
+<td>pointer to the C
+implementation</td>
+</tr>
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">ml_flags</span></tt></td>
+<td>int</td>
+<td>flag bits indicating how the
+call should be constructed</td>
+</tr>
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">ml_doc</span></tt></td>
+<td>char *</td>
+<td>points to the contents of the
+docstring</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">ml_meth</span></tt> is a C function pointer.  The functions may be of different
+types, but they always return <a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a>.  If the function is not of
+the <a class="reference internal" href="#PyCFunction" title="PyCFunction"><tt class="xref c c-type docutils literal"><span class="pre">PyCFunction</span></tt></a>, the compiler will require a cast in the method table.
+Even though <a class="reference internal" href="#PyCFunction" title="PyCFunction"><tt class="xref c c-type docutils literal"><span class="pre">PyCFunction</span></tt></a> defines the first parameter as
+<a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a>, it is common that the method implementation uses a the
+specific C type of the <em>self</em> object.</p>
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">ml_flags</span></tt> field is a bitfield which can include the following flags.
+The individual flags indicate either a calling convention or a binding
+convention.  Of the calling convention flags, only <a class="reference internal" href="#METH_VARARGS" title="METH_VARARGS"><tt class="xref py py-const docutils literal"><span class="pre">METH_VARARGS</span></tt></a> and
+<a class="reference internal" href="#METH_KEYWORDS" title="METH_KEYWORDS"><tt class="xref py py-const docutils literal"><span class="pre">METH_KEYWORDS</span></tt></a> can be combined (but note that <a class="reference internal" href="#METH_KEYWORDS" title="METH_KEYWORDS"><tt class="xref py py-const docutils literal"><span class="pre">METH_KEYWORDS</span></tt></a>
+alone is equivalent to <tt class="docutils literal"><span class="pre">METH_VARARGS</span> <span class="pre">|</span> <span class="pre">METH_KEYWORDS</span></tt>). Any of the calling
+convention flags can be combined with a binding flag.</p>
+<dl class="data">
+<dt id="METH_VARARGS">
+<tt class="descname">METH_VARARGS</tt><a class="headerlink" href="#METH_VARARGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the typical calling convention, where the methods have the type
+<a class="reference internal" href="#PyCFunction" title="PyCFunction"><tt class="xref c c-type docutils literal"><span class="pre">PyCFunction</span></tt></a>. The function expects two <a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a> values.
+The first one is the <em>self</em> object for methods; for module functions, it is
+the module object.  The second parameter (often called <em>args</em>) is a tuple
+object representing all arguments.  This parameter is typically processed
+using <a class="reference internal" href="arg.html#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a> or <a class="reference internal" href="arg.html#PyArg_UnpackTuple" title="PyArg_UnpackTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_UnpackTuple()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="METH_KEYWORDS">
+<tt class="descname">METH_KEYWORDS</tt><a class="headerlink" href="#METH_KEYWORDS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Methods with these flags must be of type <tt class="xref c c-type docutils literal"><span class="pre">PyCFunctionWithKeywords</span></tt>.
+The function expects three parameters: <em>self</em>, <em>args</em>, and a dictionary of
+all the keyword arguments.  The flag is typically combined with
+<a class="reference internal" href="#METH_VARARGS" title="METH_VARARGS"><tt class="xref py py-const docutils literal"><span class="pre">METH_VARARGS</span></tt></a>, and the parameters are typically processed using
+<a class="reference internal" href="arg.html#PyArg_ParseTupleAndKeywords" title="PyArg_ParseTupleAndKeywords"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTupleAndKeywords()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="METH_NOARGS">
+<tt class="descname">METH_NOARGS</tt><a class="headerlink" href="#METH_NOARGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Methods without parameters don&#8217;t need to check whether arguments are given if
+they are listed with the <a class="reference internal" href="#METH_NOARGS" title="METH_NOARGS"><tt class="xref py py-const docutils literal"><span class="pre">METH_NOARGS</span></tt></a> flag.  They need to be of type
+<a class="reference internal" href="#PyCFunction" title="PyCFunction"><tt class="xref c c-type docutils literal"><span class="pre">PyCFunction</span></tt></a>.  The first parameter is typically named <tt class="docutils literal"><span class="pre">self</span></tt> and
+will hold a reference to the module or object instance.  In all cases the
+second parameter will be <em>NULL</em>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="METH_O">
+<tt class="descname">METH_O</tt><a class="headerlink" href="#METH_O" title="Permalink to this definition">¶</a></dt>
+<dd><p>Methods with a single object argument can be listed with the <a class="reference internal" href="#METH_O" title="METH_O"><tt class="xref py py-const docutils literal"><span class="pre">METH_O</span></tt></a>
+flag, instead of invoking <a class="reference internal" href="arg.html#PyArg_ParseTuple" title="PyArg_ParseTuple"><tt class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></tt></a> with a <tt class="docutils literal"><span class="pre">&quot;O&quot;</span></tt> argument.
+They have the type <a class="reference internal" href="#PyCFunction" title="PyCFunction"><tt class="xref c c-type docutils literal"><span class="pre">PyCFunction</span></tt></a>, with the <em>self</em> parameter, and a
+<a class="reference internal" href="#PyObject" title="PyObject"><tt class="xref c c-type docutils literal"><span class="pre">PyObject*</span></tt></a> parameter representing the single argument.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="METH_OLDARGS">
+<tt class="descname">METH_OLDARGS</tt><a class="headerlink" href="#METH_OLDARGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This calling convention is deprecated.  The method must be of type
+<a class="reference internal" href="#PyCFunction" title="PyCFunction"><tt class="xref c c-type docutils literal"><span class="pre">PyCFunction</span></tt></a>.  The second argument is <em>NULL</em> if no arguments are
+given, a single object if exactly one argument is given, and a tuple of
+objects if more than one argument is given.  There is no way for a function
+using this convention to distinguish between a call with multiple arguments
+and a call with a tuple as the only argument.</p>
+</dd></dl>
+
+<p>These two constants are not used to indicate the calling convention but the
+binding when use with methods of classes.  These may not be used for functions
+defined for modules.  At most one of these flags may be set for any given
+method.</p>
+<dl class="data">
+<dt id="METH_CLASS">
+<tt class="descname">METH_CLASS</tt><a class="headerlink" href="#METH_CLASS" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-0">The method will be passed the type object as the first parameter rather
+than an instance of the type.  This is used to create <em>class methods</em>,
+similar to what is created when using the <a class="reference internal" href="../library/functions.html#classmethod" title="classmethod"><tt class="xref py py-func docutils literal"><span class="pre">classmethod()</span></tt></a> built-in
+function.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<dl class="data">
+<dt id="METH_STATIC">
+<tt class="descname">METH_STATIC</tt><a class="headerlink" href="#METH_STATIC" title="Permalink to this definition">¶</a></dt>
+<dd><p id="index-1">The method will be passed <em>NULL</em> as the first parameter rather than an
+instance of the type.  This is used to create <em>static methods</em>, similar to
+what is created when using the <a class="reference internal" href="../library/functions.html#staticmethod" title="staticmethod"><tt class="xref py py-func docutils literal"><span class="pre">staticmethod()</span></tt></a> built-in function.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.3.</span></p>
+</dd></dl>
+
+<p>One other constant controls whether a method is loaded in place of another
+definition with the same method name.</p>
+<dl class="data">
+<dt id="METH_COEXIST">
+<tt class="descname">METH_COEXIST</tt><a class="headerlink" href="#METH_COEXIST" title="Permalink to this definition">¶</a></dt>
+<dd><p>The method will be loaded in place of existing definitions.  Without
+<em>METH_COEXIST</em>, the default is to skip repeated definitions.  Since slot
+wrappers are loaded before the method table, the existence of a
+<em>sq_contains</em> slot, for example, would generate a wrapped method named
+<a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><tt class="xref py py-meth docutils literal"><span class="pre">__contains__()</span></tt></a> and preclude the loading of a corresponding
+PyCFunction with the same name.  With the flag defined, the PyCFunction
+will be loaded in place of the wrapper object and will co-exist with the
+slot.  This is helpful because calls to PyCFunctions are optimized more
+than wrapper object calls.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 2.4.</span></p>
+</dd></dl>
+
+<dl class="type">
+<dt id="PyMemberDef">
+<tt class="descname">PyMemberDef</tt><a class="headerlink" href="#PyMemberDef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Structure which describes an attribute of a type which corresponds to a C
+struct member.  Its fields are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="21%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Field</th>
+<th class="head">C Type</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt></td>
+<td>char *</td>
+<td>name of the member</td>
+</tr>
+<tr><td><a class="reference internal" href="../library/functions.html#type" title="type"><tt class="xref py py-attr docutils literal"><span class="pre">type</span></tt></a></td>
+<td>int</td>
+<td>the type of the member in the
+C struct</td>
+</tr>
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">offset</span></tt></td>
+<td>Py_ssize_t</td>
+<td>the offset in bytes that the
+member is located on the
+type&#8217;s object struct</td>
+</tr>
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">flags</span></tt></td>
+<td>int</td>
+<td>flag bits indicating if the
+field should be read-only or
+writable</td>
+</tr>
+<tr><td><tt class="xref py py-attr docutils literal"><span class="pre">doc</span></tt></td>
+<td>char *</td>
+<td>points to the contents of the
+docstring</td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="../library/functions.html#type" title="type"><tt class="xref py py-attr docutils literal"><span class="pre">type</span></tt></a> can be one of many <tt class="docutils literal"><span class="pre">T_</span></tt> macros corresponding to various C
+types.  When the member is accessed in Python, it will be converted to the
+equivalent Python type.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Macro name</th>
+<th class="head">C type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>T_SHORT</td>
+<td>short</td>
+</tr>
+<tr><td>T_INT</td>
+<td>int</td>
+</tr>
+<tr><td>T_LONG</td>
+<td>long</td>
+</tr>
+<tr><td>T_FLOAT</td>
+<td>float</td>
+</tr>
+<tr><td>T_DOUBLE</td>
+<td>double</td>
+</tr>
+<tr><td>T_STRING</td>
+<td>char *</td>
+</tr>
+<tr><td>T_OBJECT</td>
+<td>PyObject *</td>
+</tr>
+<tr><td>T_OBJECT_EX</td>
+<td>PyObject *</td>
+</tr>
+<tr><td>T_CHAR</td>
+<td>char</td>
+</tr>
+<tr><td>T_BYTE</td>
+<td>char</td>
+</tr>
+<tr><td>T_UBYTE</td>
+<td>unsigned char</td>
+</tr>
+<tr><td>T_UINT</td>
+<td>unsigned int</td>
+</tr>
+<tr><td>T_USHORT</td>
+<td>unsigned short</td>
+</tr>
+<tr><td>T_ULONG</td>
+<td>unsigned long</td>
+</tr>
+<tr><td>T_BOOL</td>
+<td>char</td>
+</tr>
+<tr><td>T_LONGLONG</td>
+<td>long long</td>
+</tr>
+<tr><td>T_ULONGLONG</td>
+<td>unsigned long long</td>
+</tr>
+<tr><td>T_PYSSIZET</td>
+<td>Py_ssize_t</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT</span></tt> and <tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT_EX</span></tt> differ in that
+<tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT</span></tt> returns <tt class="xref docutils literal"><span class="pre">None</span></tt> if the member is <em>NULL</em> and
+<tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT_EX</span></tt> raises an <a class="reference internal" href="../library/exceptions.html#exceptions.AttributeError" title="exceptions.AttributeError"><tt class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></tt></a>.  Try to use
+<tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT_EX</span></tt> over <tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT</span></tt> because <tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT_EX</span></tt>
+handles use of the <a class="reference internal" href="../reference/simple_stmts.html#del"><tt class="xref std std-keyword docutils literal"><span class="pre">del</span></tt></a> statement on that attribute more correctly
+than <tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT</span></tt>.</p>
+<p><tt class="xref py py-attr docutils literal"><span class="pre">flags</span></tt> can be 0 for write and read access or <tt class="xref c c-macro docutils literal"><span class="pre">READONLY</span></tt> for
+read-only access.  Using <tt class="xref c c-macro docutils literal"><span class="pre">T_STRING</span></tt> for <a class="reference internal" href="../library/functions.html#type" title="type"><tt class="xref py py-attr docutils literal"><span class="pre">type</span></tt></a> implies
+<tt class="xref c c-macro docutils literal"><span class="pre">READONLY</span></tt>.  Only <tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT</span></tt> and <tt class="xref c c-macro docutils literal"><span class="pre">T_OBJECT_EX</span></tt>
+members can be deleted.  (They are set to <em>NULL</em>).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Py_FindMethod">
+<a class="reference internal" href="#PyObject" title="PyObject">PyObject</a>* <tt class="descname">Py_FindMethod</tt><big>(</big><a class="reference internal" href="#PyMethodDef" title="PyMethodDef">PyMethodDef</a><em>&nbsp;table[]</em>, <a class="reference internal" href="#PyObject" title="PyObject">PyObject</a><em>&nbsp;*ob</em>, char<em>&nbsp;*name</em><big>)</big><a class="headerlink" href="#Py_FindMethod" title="Permalink to this definition">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Return a bound method object for an extension type implemented in C.  This
+can be useful in the implementation of a <tt class="xref py py-attr docutils literal"><span class="pre">tp_getattro</span></tt> or
+<tt class="xref py py-attr docutils literal"><span class="pre">tp_getattr</span></tt> handler that does not use the
+<a class="reference internal" href="object.html#PyObject_GenericGetAttr" title="PyObject_GenericGetAttr"><tt class="xref c c-func docutils literal"><span class="pre">PyObject_GenericGetAttr()</span></tt></a> function.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="allocation.html"
+                        title="previous chapter">Allocating Objects on the Heap</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="typeobj.html"
+                        title="next chapter">Type Objects</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/c-api/structures.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="typeobj.html" title="Type Objects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="allocation.html" title="Allocating Objects on the Heap"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="http://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <a href="../index.html">Python v2.7.4 documentation</a> &raquo;
+        </li>
+
+          <li><a href="index.html" >Python/C API Reference Manual</a> &raquo;</li>
+          <li><a href="objimpl.html" >Object Implementation Support</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2013, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="http://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Apr 06, 2013.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+
+  </body>
+</html>

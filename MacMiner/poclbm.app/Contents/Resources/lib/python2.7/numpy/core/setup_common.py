@@ -29,7 +29,7 @@ C_ABI_VERSION = 0x01000009
 # without breaking binary compatibility.  In this case, only the C_API_VERSION
 # (*not* C_ABI_VERSION) would be increased.  Whenever binary compatibility is
 # broken, both C_API_VERSION and C_ABI_VERSION should be increased.
-C_API_VERSION = 0x00000006
+C_API_VERSION = 0x00000007
 
 class MismatchCAPIWarning(Warning):
     pass
@@ -176,7 +176,7 @@ def pyod(filename):
     def _pyod2():
         out = []
 
-        fid = open(filename, 'r')
+        fid = open(filename, 'rb')
         try:
             yo = [int(oct(int(binascii.b2a_hex(o), 16))) for o in fid.read()]
             for i in range(0, len(yo), 16):
