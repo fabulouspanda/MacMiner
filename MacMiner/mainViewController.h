@@ -25,6 +25,8 @@
     
     NSButton *popoverTriggerButton;
     NSPopover *popover;
+    
+    NSButton *rememberButton;
 }
 
 @property (nonatomic, strong) IBOutlet NSView *mainView;
@@ -40,6 +42,8 @@
 
 @property (nonatomic, strong) IBOutlet NSButton *popoverTriggerButton;
 @property (nonatomic, strong) IBOutlet NSPopover *popover;
+
+@property (nonatomic, strong) IBOutlet NSButton *rememberButton;
 
 - (void)launchstart:(id)sender;
 //- (void)alertDidEnd:(NSAlert *)pipAlert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;

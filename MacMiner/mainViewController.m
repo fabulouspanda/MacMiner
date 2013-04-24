@@ -16,7 +16,7 @@
 
 @implementation mainViewController
 
-@synthesize mainView, poolView, userView, passView, optionsView, vectorView, outputView, startButton, statLabel, popoverTriggerButton, popover;
+@synthesize mainView, poolView, userView, passView, optionsView, vectorView, outputView, startButton, statLabel, popoverTriggerButton, popover, rememberButton;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -33,6 +33,7 @@
 
         outputView.delegate = self;
         statLabel.delegate = self;
+        
 /*
 
         
@@ -219,6 +220,23 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         // kick off the process asynchronously
         //        [searchTask setLaunchPath: @"/sbin/ping"];
         [searchTask startProcess];
+        
+        
+        if (rememberButton.state == NSOnState) {
+            
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        // saving an NSString
+        [prefs setObject:userView.stringValue forKey:@"userValue"];
+        [prefs setObject:passView.stringValue forKey:@"passValue"];
+        [prefs setObject:poolView.stringValue forKey:@"poolValue"];
+        [prefs setObject:optionsView.stringValue forKey:@"optionsValue"];
+        
+        // This is suggested to synch prefs, but is not needed (I didn't put it in my tut)
+        [prefs synchronize];
+        }
+        
+        
     }
 }
 
@@ -317,6 +335,28 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
      NSRunAlertPanel(@"Error",@"Sorry, Moriarity's 'locate' database is missing or empty.  In a terminal, as root run '/usr/libexec/locate.updatedb' and try Moriarity again.", @"OK",NULL,NULL);
      [NSApp terminate:nil];
      }*/
+    
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    // getting an NSString
+    NSString *poolString = [prefs stringForKey:@"poolValue"];
+    NSString *userString = [prefs stringForKey:@"userValue"];
+    NSString *passString = [prefs stringForKey:@"passValue"];
+    NSString *optionsString = [prefs stringForKey:@"optionsValue"];
+
+    if (poolString != nil) {
+    [poolView setStringValue:poolString];
+    }
+    if (userString != nil) {
+    [userView setStringValue:userString];
+    }
+    if (passString != nil) {
+    [passView setStringValue:passString];
+    }
+    if (optionsString != nil) {
+    [optionsView setStringValue:optionsString];
+    }
 }
 
 
