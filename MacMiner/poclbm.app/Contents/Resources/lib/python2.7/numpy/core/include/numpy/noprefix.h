@@ -1,18 +1,11 @@
 #ifndef NPY_NOPREFIX_H
 #define NPY_NOPREFIX_H
 
-/*
- * You can directly include noprefix.h as a backward
- * compatibility measure
- */
+/* You can directly include noprefix.h as a backward
+compatibility measure*/
 #ifndef NPY_NO_PREFIX
 #include "ndarrayobject.h"
-#include "npy_interrupt.h"
 #endif
-
-#define SIGSETJMP   NPY_SIGSETJMP
-#define SIGLONGJMP  NPY_SIGLONGJMP
-#define SIGJMP_BUF  NPY_SIGJMP_BUF
 
 #define MAX_DIMS NPY_MAXDIMS
 
@@ -72,7 +65,7 @@
 #define LONGLONG_FMT NPY_LONGLONG_FMT
 #define ULONGLONG_FMT NPY_ULONGLONG_FMT
 #define LONGLONG_SUFFIX NPY_LONGLONG_SUFFIX
-#define ULONGLONG_SUFFIX NPY_ULONGLONG_SUFFIX
+#define ULONGLONG_SUFFIX NPY_ULONGLONG_SUFFIX(x)
 
 #define MAX_INT8 127
 #define MIN_INT8 -128
@@ -129,6 +122,7 @@
 #define BITSOF_DATETIME   NPY_BITSOF_DATETIME
 #define BITSOF_TIMEDELTA   NPY_BITSOF_TIMEDELTA
 
+#define PyArray_UCS4 npy_ucs4
 #define _pya_malloc PyArray_malloc
 #define _pya_free PyArray_free
 #define _pya_realloc PyArray_realloc

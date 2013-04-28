@@ -1,10 +1,10 @@
-import sys
 from tempfile import NamedTemporaryFile, mktemp
 import os
+import warnings
 
 from numpy import memmap
-from numpy import arange, allclose, asarray
-from numpy.testing import *
+from numpy import arange, allclose
+from numpy.testing import TestCase, assert_, assert_array_equal
 
 class TestMemmap(TestCase):
     def setUp(self):
@@ -43,8 +43,8 @@ class TestMemmap(TestCase):
         mode = "w+"
         fp = memmap(self.tmpfp, dtype=self.dtype, mode=mode,
                     shape=self.shape, offset=offset)
-        self.assertEqual(offset, fp.offset)
-        self.assertEqual(mode, fp.mode)
+        self.assertEquals(offset, fp.offset)
+        self.assertEquals(mode, fp.mode)
         del fp
 
     def test_filename(self):
@@ -53,9 +53,9 @@ class TestMemmap(TestCase):
                        shape=self.shape)
         abspath = os.path.abspath(tmpname)
         fp[:] = self.data[:]
-        self.assertEqual(abspath, fp.filename)
+        self.assertEquals(abspath, fp.filename)
         b = fp[:1]
-        self.assertEqual(abspath, b.filename)
+        self.assertEquals(abspath, b.filename)
         del b
         del fp
         os.unlink(tmpname)
@@ -63,57 +63,29 @@ class TestMemmap(TestCase):
     def test_filename_fileobj(self):
         fp = memmap(self.tmpfp, dtype=self.dtype, mode="w+",
                     shape=self.shape)
-        self.assertEqual(fp.filename, self.tmpfp.name)
+        self.assertEquals(fp.filename, self.tmpfp.name)
 
-    @dec.knownfailureif(sys.platform=='gnu0', "This test is known to fail on hurd")
     def test_flush(self):
         fp = memmap(self.tmpfp, dtype=self.dtype, mode='w+',
                     shape=self.shape)
         fp[:] = self.data[:]
-        assert_equal(fp[0], self.data[0])
         fp.flush()
 
     def test_del(self):
         # Make sure a view does not delete the underlying mmap
         fp_base = memmap(self.tmpfp, dtype=self.dtype, mode='w+',
                     shape=self.shape)
-        fp_base[0] = 5
-        fp_view = fp_base[0:1]
-        assert_equal(fp_view[0], 5)
-        del fp_view
-        # Should still be able to access and assign values after
-        # deleting the view
-        assert_equal(fp_base[0], 5)
-        fp_base[0] = 6
-        assert_equal(fp_base[0], 6)
-
-    def test_arithmetic_drops_references(self):
-        fp = memmap(self.tmpfp, dtype=self.dtype, mode='w+',
-                    shape=self.shape)
-        tmp = (fp + 10)
-        if isinstance(tmp, memmap):
-            assert tmp._mmap is not fp._mmap
-
-    def test_indexing_drops_references(self):
-        fp = memmap(self.tmpfp, dtype=self.dtype, mode='w+',
-                    shape=self.shape)
-        tmp = fp[[(1, 2), (2, 3)]]
-        if isinstance(tmp, memmap):
-            assert tmp._mmap is not fp._mmap
-
-    def test_slicing_keeps_references(self):
-        fp = memmap(self.tmpfp, dtype=self.dtype, mode='w+',
-                    shape=self.shape)
-        assert fp[:2, :2]._mmap is fp._mmap
-
-    def test_view(self):
-        fp = memmap(self.tmpfp, dtype=self.dtype, shape=self.shape)
-        new1 = fp.view()
-        new2 = new1.view()
-        assert(new1.base is fp)
-        assert(new2.base is fp)
-        new_array = asarray(fp)
-        assert(new_array.base is fp)
+        fp_view = fp_base[:]
+        class ViewCloseError(Exception):
+            pass
+        _close = memmap._close
+        def replace_close(self):
+            raise ViewCloseError('View should not call _close on memmap')
+        try:
+            memmap._close = replace_close
+            del fp_view
+        finally:
+            memmap._close = _close
 
 if __name__ == "__main__":
     run_module_suite()

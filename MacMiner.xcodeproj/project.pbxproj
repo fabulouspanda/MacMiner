@@ -25,6 +25,7 @@
 		84296C2C171CA469006DA9D5 /* imine.icns in Resources */ = {isa = PBXBuildFile; fileRef = 84296C2B171CA469006DA9D5 /* imine.icns */; };
 		84296C2E171F5419006DA9D5 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 84296C2D171F5419006DA9D5 /* icon.icns */; };
 		84296C30171F5870006DA9D5 /* macminer.iconset in Resources */ = {isa = PBXBuildFile; fileRef = 84296C2F171F5870006DA9D5 /* macminer.iconset */; };
+		8454C56C172D81140065C351 /* preferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8454C56B172D81130065C351 /* preferencesViewController.m */; };
 		8458D7AD17209F57006BDF96 /* poclbm.app in Resources */ = {isa = PBXBuildFile; fileRef = 8458D7AC17209F57006BDF96 /* poclbm.app */; };
 		8458D7AF1720B108006BDF96 /* poclbm.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 8458D7AE1720B108006BDF96 /* poclbm.entitlements */; };
 /* End PBXBuildFile section */
@@ -70,6 +71,8 @@
 		84296C2D171F5419006DA9D5 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		84296C2F171F5870006DA9D5 /* macminer.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; path = macminer.iconset; sourceTree = "<group>"; };
 		84296C31171F5FAE006DA9D5 /* MacMiner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MacMiner.entitlements; sourceTree = "<group>"; };
+		8454C56A172D81130065C351 /* preferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = preferencesViewController.h; sourceTree = "<group>"; };
+		8454C56B172D81130065C351 /* preferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = preferencesViewController.m; sourceTree = "<group>"; };
 		8458D7AC17209F57006BDF96 /* poclbm.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = poclbm.app; sourceTree = "<group>"; };
 		8458D7AE1720B108006BDF96 /* poclbm.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = poclbm.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,6 +149,8 @@
 				8410F32C170B2AF9001191E3 /* NSFileManager+DirectoryLocations.h */,
 				8410F32D170B2AF9001191E3 /* NSFileManager+DirectoryLocations.m */,
 				8410F304170AF5AD001191E3 /* MainMenu.xib */,
+				8454C56A172D81130065C351 /* preferencesViewController.h */,
+				8454C56B172D81130065C351 /* preferencesViewController.m */,
 				8410F326170AF640001191E3 /* mainViewController.h */,
 				8410F327170AF640001191E3 /* mainViewController.m */,
 				8410F329170B2152001191E3 /* TaskWrapper.h */,
@@ -308,6 +313,7 @@
 				8410F328170AF640001191E3 /* mainViewController.m in Sources */,
 				8410F32B170B2152001191E3 /* TaskWrapper.m in Sources */,
 				8410F32E170B2AF9001191E3 /* NSFileManager+DirectoryLocations.m in Sources */,
+				8454C56C172D81140065C351 /* preferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -428,8 +434,6 @@
 		8410F321170AF5AE001191E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = MacMiner/MacMiner.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -441,6 +445,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/MacMiner/bfgminer/lib\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -450,8 +455,6 @@
 		8410F322170AF5AE001191E3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = MacMiner/MacMiner.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -463,6 +466,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/MacMiner/bfgminer/lib\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

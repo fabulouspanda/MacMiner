@@ -2,6 +2,7 @@
 #define __NPY_HALFFLOAT_H__
 
 #include <Python.h>
+#include <numpy/ndarraytypes.h>
 #include <numpy/npy_math.h>
 
 #ifdef __cplusplus
@@ -50,8 +51,6 @@ npy_half npy_half_nextafter(npy_half x, npy_half y);
 #define NPY_HALF_PINF   (0x7c00u)
 #define NPY_HALF_NINF   (0xfc00u)
 #define NPY_HALF_NAN    (0x7e00u)
-
-#define NPY_MAX_HALF    (0x7bffu)
 
 /*
  * Bit-level conversions

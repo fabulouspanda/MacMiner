@@ -533,7 +533,7 @@ def average(a, axis=None, weights=None, returned=False):
                     d = add.reduce(w, axis, dtype=float)
                     del w, r
                 else:
-                    raise ValueError('average: weights wrong shape.')
+                    raise ValueError, 'average: weights wrong shape.'
         else:
             if weights is None:
                 n = add.reduce(a, axis, dtype=float)
@@ -556,7 +556,7 @@ def average(a, axis=None, weights=None, returned=False):
                     n = add.reduce(a * w, axis, dtype=float)
                     d = add.reduce(w, axis, dtype=float)
                 else:
-                    raise ValueError('average: weights wrong shape.')
+                    raise ValueError, 'average: weights wrong shape.'
                 del w
     if n is masked or d is masked:
         return masked
@@ -718,7 +718,7 @@ def compress_rowcols(x, axis=None):
     """
     x = asarray(x)
     if x.ndim != 2:
-        raise NotImplementedError("compress2d works for 2D arrays only.")
+        raise NotImplementedError, "compress2d works for 2D arrays only."
     m = getmask(x)
     # Nothing is masked: return x
     if m is nomask or not m.any():
@@ -842,7 +842,7 @@ def mask_rowcols(a, axis=None):
     """
     a = asarray(a)
     if a.ndim != 2:
-        raise NotImplementedError("compress2d works for 2D arrays only.")
+        raise NotImplementedError, "compress2d works for 2D arrays only."
     m = getmask(a)
     # Nothing is masked: return a
     if m is nomask or not m.any():
@@ -1090,7 +1090,7 @@ def intersect1d(ar1, ar2, assume_unique=False):
         # Might be faster than unique( intersect1d( ar1, ar2 ) )?
         aux = ma.concatenate((unique(ar1), unique(ar2)))
     aux.sort()
-    return aux[:-1][aux[1:] == aux[:-1]]
+    return aux[aux[1:] == aux[:-1]]
 
 
 def setxor1d(ar1, ar2, assume_unique=False):
@@ -1429,7 +1429,7 @@ class MAxisConcatenator(AxisConcatenator):
 
     def __getitem__(self, key):
         if isinstance(key, str):
-            raise MAError("Unavailable for masked array.")
+            raise MAError, "Unavailable for masked array."
         if type(key) is not tuple:
             key = (key,)
         objs = []
@@ -1459,7 +1459,7 @@ class MAxisConcatenator(AxisConcatenator):
                     self.axis = int(key[k])
                     continue
                 except (ValueError, TypeError):
-                    raise ValueError("Unknown special directive")
+                    raise ValueError, "Unknown special directive"
             elif type(key[k]) in np.ScalarType:
                 newobj = asarray([key[k]])
                 scalars.append(k)
@@ -1706,7 +1706,7 @@ def notmasked_contiguous(a, axis=None):
     a = asarray(a)
     nd = a.ndim
     if nd > 2:
-        raise NotImplementedError("Currently limited to atmost 2D array.")
+        raise NotImplementedError, "Currently limited to atmost 2D array."
     if axis is None or nd == 1:
         return flatnotmasked_contiguous(a)
     #
@@ -1845,39 +1845,50 @@ def vander(x, n=None):
 vander.__doc__ = ma.doc_note(np.vander.__doc__, vander.__doc__)
 
 
-def polyfit(x, y, deg, rcond=None, full=False, w=None, cov=False):
+def polyfit(x, y, deg, rcond=None, full=False):
     """
     Any masked values in x is propagated in y, and vice-versa.
     """
+    order = int(deg) + 1
     x = asarray(x)
+    mx = getmask(x)
     y = asarray(y)
-
-    m = getmask(x)
     if y.ndim == 1:
-        m = mask_or(m, getmask(y))
+        m = mask_or(mx, getmask(y))
     elif y.ndim == 2:
-        my = getmask(mask_rows(y))
+        y = mask_rows(y)
+        my = getmask(y)
         if my is not nomask:
-            m = mask_or(m, my[:, 0])
-    else:
-        raise TypeError("Expected a 1D or 2D array for y!")
-
-    if w is not None:
-        w = asarray(w)
-        if w.ndim != 1:
-            raise TypeError, "expected a 1-d array for weights"
-        if w.shape[0] != y.shape[0] :
-            raise TypeError, "expected w and y to have the same length"
-        m = mask_or(m, getmask(w))
-
-    if m is not nomask:
-        if w is not None:
-            w = ~m*w
+            m = mask_or(mx, my[:, 0])
         else:
-            w = ~m
-
-    return np.polyfit(x, y, deg, rcond, full, w, cov)
-
+            m = mx
+    else:
+        raise TypeError, "Expected a 1D or 2D array for y!"
+    if m is not nomask:
+        x[m] = y[m] = masked
+    # Set rcond
+    if rcond is None :
+        rcond = len(x) * np.finfo(x.dtype).eps
+    # Scale x to improve condition number
+    scale = abs(x).max()
+    if scale != 0 :
+        x = x / scale
+    # solve least squares equation for powers of x
+    v = vander(x, order)
+    c, resids, rank, s = lstsq(v, y.filled(0), rcond)
+    # warn on rank reduction, which indicates an ill conditioned matrix
+    if rank != order and not full:
+        warnings.warn("Polyfit may be poorly conditioned", np.RankWarning)
+    # scale returned coefficients
+    if scale != 0 :
+        if c.ndim == 1 :
+            c /= np.vander([scale], order)[0]
+        else :
+            c /= np.vander([scale], order).T
+    if full :
+        return c, resids, rank, s, rcond
+    else :
+        return c
 polyfit.__doc__ = ma.doc_note(np.polyfit.__doc__, polyfit.__doc__)
 
 ################################################################################

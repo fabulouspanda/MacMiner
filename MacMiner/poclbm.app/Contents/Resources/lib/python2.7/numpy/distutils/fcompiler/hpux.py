@@ -9,17 +9,17 @@ class HPUXFCompiler(FCompiler):
     version_pattern =  r'HP F90 (?P<version>[^\s*,]*)'
 
     executables = {
-        'version_cmd'  : ["f90", "+version"],
+        'version_cmd'  : ["<F90>", "+version"],
         'compiler_f77' : ["f90"],
         'compiler_fix' : ["f90"],
         'compiler_f90' : ["f90"],
-        'linker_so'    : ["ld", "-b"],
+        'linker_so'    : None,
         'archiver'     : ["ar", "-cr"],
         'ranlib'       : ["ranlib"]
         }
     module_dir_switch = None #XXX: fix me
     module_include_switch = None #XXX: fix me
-    pic_flags = ['+Z']
+    pic_flags = ['+pic=long']
     def get_flags(self):
         return self.pic_flags + ['+ppu', '+DD64']
     def get_flags_opt(self):

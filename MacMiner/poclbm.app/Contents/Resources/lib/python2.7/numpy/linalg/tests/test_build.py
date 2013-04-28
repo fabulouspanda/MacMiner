@@ -8,13 +8,12 @@ from numpy.testing import TestCase, dec
 
 from numpy.compat import asbytes_nested
 
-class FindDependenciesLdd(object):
+class FindDependenciesLdd:
     def __init__(self):
         self.cmd = ['ldd']
 
         try:
-            p = Popen(self.cmd, stdout=PIPE, stderr=PIPE)
-            stdout, stderr = p.communicate()
+            st = call(self.cmd, stdout=PIPE, stderr=PIPE)
         except OSError:
             raise RuntimeError("command %s cannot be run" % self.cmd)
 

@@ -10,11 +10,11 @@ import re
 import warnings
 import numpy.core.numeric as NX
 
-from numpy.core import isscalar, abs, finfo, atleast_1d, hstack, dot
+from numpy.core import isscalar, abs, finfo, atleast_1d, hstack
 from numpy.lib.twodim_base import diag, vander
 from numpy.lib.function_base import trim_zeros, sort_complex
 from numpy.lib.type_check import iscomplex, real, imag
-from numpy.linalg import eigvals, lstsq, inv
+from numpy.linalg import eigvals, lstsq
 
 class RankWarning(UserWarning):
     """
@@ -93,12 +93,12 @@ def poly(seq_of_zeros):
 
     >>> np.poly((0, 0, 0)) # Multiple root example
     array([1, 0, 0, 0])
-
+    
     The line above represents z**3 + 0*z**2 + 0*z + 0.
 
     >>> np.poly((-1./2, 0, 1./2))
     array([ 1.  ,  0.  , -0.25,  0.  ])
-
+    
     The line above represents z**3 - z/4
 
     >>> np.poly((np.random.random(1.)[0], 0, np.random.random(1.)[0]))
@@ -125,7 +125,7 @@ def poly(seq_of_zeros):
     elif len(sh) == 1:
         pass
     else:
-        raise ValueError("input must be 1d or square 2d array.")
+        raise ValueError, "input must be 1d or square 2d array."
 
     if len(seq_of_zeros) == 0:
         return 1.0
@@ -198,7 +198,7 @@ def roots(p):
     # If input is scalar, this makes it an array
     p = atleast_1d(p)
     if len(p.shape) != 1:
-        raise ValueError("Input must be a rank-1 array.")
+        raise ValueError,"Input must be a rank-1 array."
 
     # find non-zero array entries
     non_zero = NX.nonzero(NX.ravel(p))[0]
@@ -299,15 +299,15 @@ def polyint(p, m=1, k=None):
     """
     m = int(m)
     if m < 0:
-        raise ValueError("Order of integral must be positive (see polyder)")
+        raise ValueError, "Order of integral must be positive (see polyder)"
     if k is None:
         k = NX.zeros(m, float)
     k = atleast_1d(k)
     if len(k) == 1 and m > 1:
         k = k[0]*NX.ones(m, float)
     if len(k) < m:
-        raise ValueError(
-              "k must be a scalar or a rank-1 array of length 1 or >m.")
+        raise ValueError, \
+              "k must be a scalar or a rank-1 array of length 1 or >m."
 
     truepoly = isinstance(p, poly1d)
     p = NX.asarray(p)
@@ -377,7 +377,7 @@ def polyder(p, m=1):
     """
     m = int(m)
     if m < 0:
-        raise ValueError("Order of derivative must be positive (see polyint)")
+        raise ValueError, "Order of derivative must be positive (see polyint)"
 
     truepoly = isinstance(p, poly1d)
     p = NX.asarray(p)
@@ -391,7 +391,7 @@ def polyder(p, m=1):
         val = poly1d(val)
     return val
 
-def polyfit(x, y, deg, rcond=None, full=False, w=None, cov=False):
+def polyfit(x, y, deg, rcond=None, full=False):
     """
     Least squares polynomial fit.
 
@@ -419,11 +419,6 @@ def polyfit(x, y, deg, rcond=None, full=False, w=None, cov=False):
         False (the default) just the coefficients are returned, when True
         diagnostic information from the singular value decomposition is also
         returned.
-    w : array_like, shape (M,), optional
-        weights to apply to the y-coordinates of the sample points.
-    cov : bool, optional
-        Return the estimate and the covariance matrix of the estimate
-        If full is True, then cov is not returned.
 
     Returns
     -------
@@ -435,12 +430,6 @@ def polyfit(x, y, deg, rcond=None, full=False, w=None, cov=False):
         Residuals of the least-squares fit, the effective rank of the scaled
         Vandermonde coefficient matrix, its singular values, and the specified
         value of `rcond`. For more details, see `linalg.lstsq`.
-
-    V : ndaray, shape (M,M) or (M,M,K) : present only if `full` = False and `cov`=True
-        The covariance matrix of the polynomial coefficient estimates.  The diagonal
-        of this matrix are the variance estimates for each coefficient.  If y is a 2-d
-        array, then the covariance matrix for the `k`-th data set are in ``V[:,:,k]``
-
 
     Warns
     -----
@@ -542,64 +531,46 @@ def polyfit(x, y, deg, rcond=None, full=False, w=None, cov=False):
 
     # check arguments.
     if deg < 0 :
-        raise ValueError("expected deg >= 0")
+        raise ValueError, "expected deg >= 0"
     if x.ndim != 1:
-        raise TypeError("expected 1D vector for x")
+        raise TypeError, "expected 1D vector for x"
     if x.size == 0:
-        raise TypeError("expected non-empty vector for x")
+        raise TypeError, "expected non-empty vector for x"
     if y.ndim < 1 or y.ndim > 2 :
-        raise TypeError("expected 1D or 2D array for y")
+        raise TypeError, "expected 1D or 2D array for y"
     if x.shape[0] != y.shape[0] :
-        raise TypeError("expected x and y to have same length")
+        raise TypeError, "expected x and y to have same length"
 
     # set rcond
     if rcond is None :
         rcond = len(x)*finfo(x.dtype).eps
 
-    # set up least squares equation for powers of x
-    lhs = vander(x, order)
-    rhs = y
+    # scale x to improve condition number
+    scale = abs(x).max()
+    if scale != 0 :
+        x /= scale
 
-    # apply weighting
-    if w is not None:
-        w = NX.asarray(w) + 0.0
-        if w.ndim != 1:
-            raise TypeError, "expected a 1-d array for weights"
-        if w.shape[0] != y.shape[0] :
-            raise TypeError, "expected w and y to have the same length"
-        lhs *= w[:, NX.newaxis]
-        if rhs.ndim == 2:
-            rhs *= w[:, NX.newaxis]
-        else:
-            rhs *= w
-
-    # scale lhs to improve condition number and solve
-    scale = NX.sqrt((lhs*lhs).sum(axis=0))
-    lhs /= scale
-    c, resids, rank, s = lstsq(lhs, rhs, rcond)
-    c = (c.T/scale).T  # broadcast scale coefficients
+    # solve least squares equation for powers of x
+    v = vander(x, order)
+    c, resids, rank, s = lstsq(v, y, rcond)
 
     # warn on rank reduction, which indicates an ill conditioned matrix
     if rank != order and not full:
         msg = "Polyfit may be poorly conditioned"
         warnings.warn(msg, RankWarning)
 
+    # scale returned coefficients
+    if scale != 0 :
+        if c.ndim == 1 :
+            c /= vander([scale], order)[0]
+        else :
+            c /= vander([scale], order).T
+
     if full :
         return c, resids, rank, s, rcond
-    elif cov :
-        Vbase = inv(dot(lhs.T,lhs))
-        Vbase /= NX.outer(scale, scale)
-        # Some literature ignores the extra -2.0 factor in the denominator, but
-        #  it is included here because the covariance of Multivariate Student-T
-        #  (which is implied by a Bayesian uncertainty analysis) includes it.
-        #  Plus, it gives a slightly more conservative estimate of uncertainty.
-        fac = resids / (len(x) - order - 2.0)
-        if y.ndim == 1:
-            return c, Vbase * fac
-        else:
-            return c, Vbase[:,:,NX.newaxis] * fac
     else :
         return c
+
 
 
 def polyval(p, x):
@@ -969,7 +940,7 @@ class poly1d(object):
     array([-1.+1.41421356j, -1.-1.41421356j])
     >>> p(p.r)
     array([ -4.44089210e-16+0.j,  -4.44089210e-16+0.j])
-
+    
     These numbers in the previous line represent (0, 0) to machine precision
 
     Show the coefficients:
@@ -1039,7 +1010,7 @@ class poly1d(object):
             c_or_r = poly(c_or_r)
         c_or_r = atleast_1d(c_or_r)
         if len(c_or_r.shape) > 1:
-            raise ValueError("Polynomial must be 1d only.")
+            raise ValueError, "Polynomial must be 1d only."
         c_or_r = trim_zeros(c_or_r, trim='f')
         if len(c_or_r) == 0:
             c_or_r = NX.array([0.])
@@ -1154,7 +1125,7 @@ class poly1d(object):
 
     def __pow__(self, val):
         if not isscalar(val) or int(val) != val or val < 0:
-            raise ValueError("Power to non-negative integers only.")
+            raise ValueError, "Power to non-negative integers only."
         res = [1]
         for _ in range(val):
             res = polymul(self.coeffs, res)
@@ -1193,7 +1164,7 @@ class poly1d(object):
         return NX.any(self.coeffs != other.coeffs)
 
     def __setattr__(self, key, val):
-        raise ValueError("Attributes cannot be changed this way.")
+        raise ValueError, "Attributes cannot be changed this way."
 
     def __getattr__(self, key):
         if key in ['r', 'roots']:
@@ -1219,7 +1190,7 @@ class poly1d(object):
     def __setitem__(self, key, val):
         ind = self.order - key
         if key < 0:
-            raise ValueError("Does not support negative powers.")
+            raise ValueError, "Does not support negative powers."
         if key > self.order:
             zr = NX.zeros(key-self.order, self.coeffs.dtype)
             self.__dict__['coeffs'] = NX.concatenate((zr, self.coeffs))

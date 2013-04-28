@@ -44,7 +44,7 @@ def ediff1d(ary, to_end=None, to_begin=None):
 
     Returns
     -------
-    ediff1d : ndarray
+    ed : ndarray
         The differences. Loosely, this is ``ary.flat[1:] - ary.flat[:-1]``.
 
     See Also
@@ -112,8 +112,8 @@ def unique(ar, return_index=False, return_inverse=False):
     unique : ndarray
         The sorted unique values.
     unique_indices : ndarray, optional
-        The indices of the first occurrences of the unique values in the
-        (flattened) original array. Only provided if `return_index` is True.
+        The indices of the unique values in the (flattened) original array.
+        Only provided if `return_index` is True.
     unique_inverse : ndarray, optional
         The indices to reconstruct the (flattened) original array from the
         unique array. Only provided if `return_inverse` is True.
@@ -174,10 +174,7 @@ def unique(ar, return_index=False, return_inverse=False):
             return ar
 
     if return_inverse or return_index:
-        if return_index:
-            perm = ar.argsort(kind='mergesort')
-        else:
-            perm = ar.argsort()
+        perm = ar.argsort()
         aux = ar[perm]
         flag = np.concatenate(([True], aux[1:] != aux[:-1]))
         if return_inverse:
@@ -212,7 +209,7 @@ def intersect1d(ar1, ar2, assume_unique=False):
 
     Returns
     -------
-    intersect1d : ndarray
+    out : ndarray
         Sorted 1D array of common and unique elements.
 
     See Also
@@ -232,7 +229,7 @@ def intersect1d(ar1, ar2, assume_unique=False):
         ar2 = unique(ar2)
     aux = np.concatenate( (ar1, ar2) )
     aux.sort()
-    return aux[:-1][aux[1:] == aux[:-1]]
+    return aux[aux[1:] == aux[:-1]]
 
 def setxor1d(ar1, ar2, assume_unique=False):
     """
@@ -251,7 +248,7 @@ def setxor1d(ar1, ar2, assume_unique=False):
 
     Returns
     -------
-    setxor1d : ndarray
+    xor : ndarray
         Sorted 1D array of unique values that are in only one of the input
         arrays.
 
@@ -280,14 +277,14 @@ def setxor1d(ar1, ar2, assume_unique=False):
 
 def in1d(ar1, ar2, assume_unique=False):
     """
-    Test whether each element of a 1-D array is also present in a second array.
+    Test whether each element of a 1D array is also present in a second array.
 
     Returns a boolean array the same length as `ar1` that is True
     where an element of `ar1` is in `ar2` and False otherwise.
 
     Parameters
     ----------
-    ar1 : (M,) array_like
+    ar1 : array_like, shape (M,)
         Input array.
     ar2 : array_like
         The values against which to test each value of `ar1`.
@@ -297,8 +294,8 @@ def in1d(ar1, ar2, assume_unique=False):
 
     Returns
     -------
-    in1d : (M,) ndarray, bool
-        The values `ar1[in1d]` are in `ar2`.
+    mask : ndarray of bools, shape(M,)
+        The values `ar1[mask]` are in `ar2`.
 
     See Also
     --------
@@ -308,7 +305,7 @@ def in1d(ar1, ar2, assume_unique=False):
     Notes
     -----
     `in1d` can be considered as an element-wise function version of the
-    python keyword `in`, for 1-D sequences. ``in1d(a, b)`` is roughly
+    python keyword `in`, for 1D sequences. ``in1d(a, b)`` is roughly
     equivalent to ``np.array([item in b for item in a])``.
 
     .. versionadded:: 1.4.0
@@ -324,18 +321,6 @@ def in1d(ar1, ar2, assume_unique=False):
     array([0, 2, 0])
 
     """
-    # Ravel both arrays, behavior for the first array could be different
-    ar1 = np.asarray(ar1).ravel()
-    ar2 = np.asarray(ar2).ravel()
-
-    # This code is significantly faster when the condition is satisfied.
-    if len(ar2) < 10 * len(ar1) ** 0.145:
-        mask = np.zeros(len(ar1), dtype=np.bool)
-        for a in ar2:
-            mask |= (ar1 == a)
-        return mask
-
-    # Otherwise use sorting
     if not assume_unique:
         ar1, rev_idx = np.unique(ar1, return_inverse=True)
         ar2 = np.unique(ar2)
@@ -369,7 +354,7 @@ def union1d(ar1, ar2):
 
     Returns
     -------
-    union1d : ndarray
+    union : ndarray
         Unique, sorted union of the input arrays.
 
     See Also
@@ -403,7 +388,7 @@ def setdiff1d(ar1, ar2, assume_unique=False):
 
     Returns
     -------
-    setdiff1d : ndarray
+    difference : ndarray
         Sorted 1D array of values in `ar1` that are not in `ar2`.
 
     See Also

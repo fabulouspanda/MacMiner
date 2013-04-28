@@ -224,10 +224,7 @@ class TestHistogram2d(TestCase):
 
     def test_empty(self):
         a, edge1, edge2 = histogram2d([],[], bins=([0,1],[0,1]))
-        assert_array_max_ulp(a, array([[ 0.]]))
-
-        a, edge1, edge2 = histogram2d([], [], bins=4)
-        assert_array_max_ulp(a, np.zeros((4, 4)))
+        assert_array_max_ulp(a, array([ 0., 0.]))
 
 
 class TestTri(TestCase):
@@ -237,18 +234,6 @@ class TestTri(TestCase):
                      [1,1,1]])
         assert_array_equal(tri(3),out)
         assert_array_equal(tri(3,dtype=bool),out.astype(bool))
-
-
-def test_tril_triu():
-    for dtype in np.typecodes['AllFloat'] + np.typecodes['AllInteger']:
-        a = np.ones((2, 2), dtype=dtype)
-        b = np.tril(a)
-        c = np.triu(a)
-        assert_array_equal(b, [[1, 0], [1, 1]])
-        assert_array_equal(c, b.T)
-        # should return the same dtype as the original array
-        assert_equal(b.dtype, a.dtype)
-        assert_equal(c.dtype, a.dtype)
 
 
 def test_mask_indices():
@@ -292,7 +277,7 @@ def test_tril_indices():
            [-10, -10, -10, -10]]) )
 
 
-class TestTriuIndices(object):
+class TestTriuIndices:
     def test_triu_indices(self):
         iu1 = triu_indices(4)
         iu2 = triu_indices(4, 2)
@@ -323,14 +308,14 @@ class TestTriuIndices(object):
                        [ 13,  14,  15,  -1]]) )
 
 
-class TestTrilIndicesFrom(object):
+class TestTrilIndicesFrom:
     def test_exceptions(self):
         assert_raises(ValueError, tril_indices_from, np.ones((2,)))
         assert_raises(ValueError, tril_indices_from, np.ones((2,2,2)))
         assert_raises(ValueError, tril_indices_from, np.ones((2,3)))
 
 
-class TestTriuIndicesFrom(object):
+class TestTriuIndicesFrom:
     def test_exceptions(self):
         assert_raises(ValueError, triu_indices_from, np.ones((2,)))
         assert_raises(ValueError, triu_indices_from, np.ones((2,2,2)))

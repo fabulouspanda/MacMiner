@@ -43,18 +43,61 @@ class IntelFCompiler(BaseIntelFCompiler):
     module_dir_switch = '-module ' # Don't remove ending space!
     module_include_switch = '-I'
 
+    def get_flags(self):
+        v = self.get_version()
+        if v >= '10.0':
+            # Use -fPIC instead of -KPIC.
+            pic_flags = ['-fPIC']
+        else:
+            pic_flags = ['-KPIC']
+        opt = pic_flags + ["-cm"]
+        return opt
+
     def get_flags_free(self):
         return ["-FR"]
 
-    def get_flags(self):
-        return ['-fPIC']
-
     def get_flags_opt(self):
-        #return ['-i8 -xhost -openmp -fp-model strict']
-        return ['-xhost -openmp -fp-model strict']
+        return ['-O1']
 
     def get_flags_arch(self):
-        return []
+        v = self.get_version()
+        opt = []
+        if cpu.has_fdiv_bug():
+            opt.append('-fdiv_check')
+        if cpu.has_f00f_bug():
+            opt.append('-0f_check')
+        if cpu.is_PentiumPro() or cpu.is_PentiumII() or cpu.is_PentiumIII():
+            opt.extend(['-tpp6'])
+        elif cpu.is_PentiumM():
+            opt.extend(['-tpp7','-xB'])
+        elif cpu.is_Pentium():
+            opt.append('-tpp5')
+        elif cpu.is_PentiumIV() or cpu.is_Xeon():
+            opt.extend(['-tpp7','-xW'])
+        if v and v <= '7.1':
+            if cpu.has_mmx() and (cpu.is_PentiumII() or cpu.is_PentiumIII()):
+                opt.append('-xM')
+        elif v and v >= '8.0':
+            if cpu.is_PentiumIII():
+                opt.append('-xK')
+                if cpu.has_sse3():
+                    opt.extend(['-xP'])
+            elif cpu.is_PentiumIV():
+                opt.append('-xW')
+                if cpu.has_sse2():
+                    opt.append('-xN')
+            elif cpu.is_PentiumM():
+                opt.extend(['-xB'])
+            if (cpu.is_Xeon() or cpu.is_Core2() or cpu.is_Core2Extreme()) and cpu.getNCPUs()==2:
+                opt.extend(['-xT'])
+            if cpu.has_sse3() and (cpu.is_PentiumIV() or cpu.is_CoreDuo() or cpu.is_CoreSolo()):
+                opt.extend(['-xP'])
+
+        if cpu.has_sse2():
+            opt.append('-arch SSE2')
+        elif cpu.has_sse():
+            opt.append('-arch SSE')
+        return opt
 
     def get_flags_linker_so(self):
         opt = FCompiler.get_flags_linker_so(self)
@@ -101,7 +144,7 @@ class IntelEM64TFCompiler(IntelFCompiler):
 
     executables = {
         'version_cmd'  : None,
-        'compiler_f77' : [None, "-FI"],
+        'compiler_f77' : [None, "-FI", "-w90", "-w95"],
         'compiler_fix' : [None, "-FI"],
         'compiler_f90' : [None],
         'linker_so'    : ['<F90>', "-shared"],
@@ -109,15 +152,11 @@ class IntelEM64TFCompiler(IntelFCompiler):
         'ranlib'       : ["ranlib"]
         }
 
-    def get_flags(self):
-        return ['-fPIC']
-
-    def get_flags_opt(self):
-        #return ['-i8 -xhost -openmp -fp-model strict']
-        return ['-xhost -openmp -fp-model strict']
-
     def get_flags_arch(self):
-        return []
+        opt = []
+        if cpu.is_PentiumIV() or cpu.is_Xeon():
+            opt.extend(['-tpp7', '-xW'])
+        return opt
 
 # Is there no difference in the version string between the above compilers
 # and the Visual compilers?

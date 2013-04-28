@@ -33,9 +33,15 @@ Exported symbols include:
     int_, uint,
     longlong, ulonglong,
 
+
     single, csingle,
     float_, complex_,
     longfloat, clongfloat,
+
+
+    datetime_, timedelta_,  (these inherit from timeinteger which inherits
+    from signedinteger)
+
 
    As part of the type-hierarchy:    xx -- is bit-width
 
@@ -85,13 +91,9 @@ Exported symbols include:
 __all__ = ['sctypeDict', 'sctypeNA', 'typeDict', 'typeNA', 'sctypes',
            'ScalarType', 'obj2sctype', 'cast', 'nbytes', 'sctype2char',
            'maximum_sctype', 'issctype', 'typecodes', 'find_common_type',
-           'issubdtype', 'datetime_data','datetime_as_string',
-           'busday_offset', 'busday_count', 'is_busday', 'busdaycalendar',
-           ]
+           'issubdtype']
 
-from numpy.core.multiarray import typeinfo, ndarray, array, \
-                      empty, dtype, datetime_data, datetime_as_string, \
-                      busday_offset, busday_count, is_busday, busdaycalendar
+from numpy.core.multiarray import typeinfo, ndarray, array, empty, dtype
 import types as _types
 import sys
 
@@ -255,10 +257,6 @@ def bitname(obj):
         char = 'O'
         base = 'object'
         bits = 0
-    elif name=='datetime64':
-        char = 'M'
-    elif name=='timedelta64':
-        char = 'm'
 
     if sys.version_info[0] >= 3:
         if name=='bytes_':
@@ -399,7 +397,9 @@ def _set_up_aliases():
                   ('longcomplex', 'clongdouble'),
                   ('bool_', 'bool'),
                   ('unicode_', 'unicode'),
-                  ('object_', 'object')]
+                  ('object_', 'object'),
+                  ('timedelta_', 'timedelta'),
+                  ('datetime_', 'datetime')]
     if sys.version_info[0] >= 3:
         type_pairs.extend([('bytes_', 'string'),
                            ('str_', 'unicode'),
@@ -842,7 +842,7 @@ def sctype2char(sctype):
     """
     sctype = obj2sctype(sctype)
     if sctype is None:
-        raise ValueError("unrecognized type")
+        raise ValueError, "unrecognized type"
     return _sctype2char_dict[sctype]
 
 # Create dictionary of casting functions that wrap sequences

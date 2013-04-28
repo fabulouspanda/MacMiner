@@ -22,9 +22,6 @@ from numpy.ma.testutils import *
 import numpy.ma as ma
 from numpy.ma import masked, nomask
 
-import warnings
-from numpy.testing.utils import WarningManager
-
 from numpy.ma.mrecords import MaskedRecords, mrecarray, fromarrays, \
                               fromtextfile, fromrecords, addfield
 
@@ -51,7 +48,7 @@ class TestMRecords(TestCase):
         mbase = base.view(mrecarray)
         assert_equal(mbase.recordmask, base.recordmask)
         assert_equal_records(mbase._mask, base._mask)
-        assert_(isinstance(mbase._data, recarray))
+        assert isinstance(mbase._data, recarray)
         assert_equal_records(mbase._data, base._data.view(recarray))
         for field in ('a','b','c'):
             assert_equal(base[field], mbase[field])
@@ -67,7 +64,7 @@ class TestMRecords(TestCase):
             assert_equal(base[field], mbase[field])
         # as elements .......
         mbase_first = mbase[0]
-        assert_(isinstance(mbase_first, mrecarray))
+        assert isinstance(mbase_first, mrecarray)
         assert_equal(mbase_first.dtype, mbase.dtype)
         assert_equal(mbase_first.tolist(), (1,1.1,asbytes('one')))
         # Used to be mask, now it's recordmask
@@ -75,17 +72,17 @@ class TestMRecords(TestCase):
         assert_equal(mbase_first._mask.item(), (False, False, False))
         assert_equal(mbase_first['a'], mbase['a'][0])
         mbase_last = mbase[-1]
-        assert_(isinstance(mbase_last, mrecarray))
+        assert isinstance(mbase_last, mrecarray)
         assert_equal(mbase_last.dtype, mbase.dtype)
         assert_equal(mbase_last.tolist(), (None,None,None))
         # Used to be mask, now it's recordmask
         assert_equal(mbase_last.recordmask, True)
         assert_equal(mbase_last._mask.item(), (True, True, True))
         assert_equal(mbase_last['a'], mbase['a'][-1])
-        assert_((mbase_last['a'] is masked))
+        assert (mbase_last['a'] is masked)
         # as slice ..........
         mbase_sl = mbase[:2]
-        assert_(isinstance(mbase_sl, mrecarray))
+        assert isinstance(mbase_sl, mrecarray)
         assert_equal(mbase_sl.dtype, mbase.dtype)
         # Used to be mask, now it's recordmask
         assert_equal(mbase_sl.recordmask, [0,1])
@@ -139,15 +136,11 @@ class TestMRecords(TestCase):
         rdata = data.view(MaskedRecords)
         val = ma.array([10,20,30], mask=[1,0,0])
         #
-        warn_ctx = WarningManager()
-        warn_ctx.__enter__()
-        try:
-            warnings.simplefilter("ignore")
-            rdata['num'] = val
-            assert_equal(rdata.num, val)
-            assert_equal(rdata.num.mask, [1,0,0])
-        finally:
-            warn_ctx.__exit__()
+        import warnings
+        warnings.simplefilter("ignore")
+        rdata['num'] = val
+        assert_equal(rdata.num, val)
+        assert_equal(rdata.num.mask, [1,0,0])
 
     def test_set_fields_mask(self):
         "Tests setting the mask of a field."

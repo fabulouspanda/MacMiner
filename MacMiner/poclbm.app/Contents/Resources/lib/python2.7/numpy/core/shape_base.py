@@ -12,7 +12,7 @@ def atleast_1d(*arys):
 
     Parameters
     ----------
-    arys1, arys2, ... : array_like
+    array1, array2, ... : array_like
         One or more input arrays.
 
     Returns
@@ -61,7 +61,7 @@ def atleast_2d(*arys):
 
     Parameters
     ----------
-    arys1, arys2, ... : array_like
+    array1, array2, ... : array_like
         One or more array-like sequences.  Non-array inputs are converted
         to arrays.  Arrays that already have two or more dimensions are
         preserved.
@@ -113,7 +113,7 @@ def atleast_3d(*arys):
 
     Parameters
     ----------
-    arys1, arys2, ... : array_like
+    array1, array2, ... : array_like
         One or more array-like sequences.  Non-array inputs are converted to
         arrays.  Arrays that already have three or more dimensions are
         preserved.
@@ -199,10 +199,10 @@ def vstack(tup):
     concatenate : Join a sequence of arrays together.
     vsplit : Split array into a list of multiple sub-arrays vertically.
 
+
     Notes
     -----
-    Equivalent to ``np.concatenate(tup, axis=0)`` if `tup` contains arrays that
-    are at least 2-dimensional.
+    Equivalent to ``np.concatenate(tup, axis=0)``
 
     Examples
     --------
@@ -267,10 +267,5 @@ def hstack(tup):
            [3, 4]])
 
     """
-    arrs = map(atleast_1d,tup)
-    # As a special case, dimension 0 of 1-dimensional arrays is "horizontal"
-    if arrs[0].ndim == 1:
-        return _nx.concatenate(arrs, 0)
-    else:
-        return _nx.concatenate(arrs, 1)
+    return _nx.concatenate(map(atleast_1d,tup),1)
 

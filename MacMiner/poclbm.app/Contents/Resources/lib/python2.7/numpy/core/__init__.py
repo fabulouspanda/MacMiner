@@ -7,9 +7,8 @@ import umath
 import _internal # for freeze programs
 import numerictypes as nt
 multiarray.set_typeDict(nt.sctypeDict)
-import numeric
+import _sort
 from numeric import *
-import fromnumeric
 from fromnumeric import *
 import defchararray as char
 import records as rec
@@ -17,13 +16,9 @@ from records import *
 from memmap import *
 from defchararray import chararray
 import scalarmath
-import function_base
 from function_base import *
-import machar
 from machar import *
-import getlimits
 from getlimits import *
-import shape_base
 from shape_base import *
 del nt
 
@@ -45,29 +40,3 @@ __all__ += shape_base.__all__
 from numpy.testing import Tester
 test = Tester().test
 bench = Tester().bench
-
-# Make it possible so that ufuncs can be pickled
-#  Here are the loading and unloading functions
-# The name numpy.core._ufunc_reconstruct must be
-#   available for unpickling to work.
-def _ufunc_reconstruct(module, name):
-    mod = __import__(module)
-    return getattr(mod, name)
-
-def _ufunc_reduce(func):
-    from pickle import whichmodule
-    name = func.__name__
-    return _ufunc_reconstruct, (whichmodule(func,name), name)
-
-
-import sys
-if sys.version_info[0] < 3:
-    import copy_reg as copyreg
-else:
-    import copyreg
-
-copyreg.pickle(ufunc, _ufunc_reduce, _ufunc_reconstruct)
-# Unclutter namespace (must keep _ufunc_reconstruct for unpickling)
-del copyreg
-del sys
-del _ufunc_reduce

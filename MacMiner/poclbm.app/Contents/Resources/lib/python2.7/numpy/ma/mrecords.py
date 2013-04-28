@@ -197,7 +197,7 @@ class MaskedRecords(MaskedArray, object):
         try:
             res = fielddict[attr][:2]
         except (TypeError, KeyError):
-            raise AttributeError("record array has no attribute %s" % attr)
+            raise AttributeError, "record array has no attribute %s" % attr
         # So far, so good...
         _localdict = ndarray.__getattribute__(self, '__dict__')
         _data = ndarray.view(self, _localdict['_baseclass'])
@@ -269,7 +269,7 @@ class MaskedRecords(MaskedArray, object):
         try:
             res = fielddict[attr][:2]
         except (TypeError, KeyError):
-            raise AttributeError("record array has no attribute %s" % attr)
+            raise AttributeError, "record array has no attribute %s" % attr
         #
         if val is masked:
             _fill_value = _localdict['_fill_value']
@@ -589,7 +589,7 @@ on the first line. An exception is raised if the file is 3D or more.
     if len(arr.shape) == 2 :
         arr = arr[0]
     elif len(arr.shape) > 2:
-        raise ValueError("The array should be 2D at most!")
+        raise ValueError, "The array should be 2D at most!"
     # Start the conversion loop .......
     for f in arr:
         try:
@@ -619,12 +619,11 @@ def openfile(fname):
     try:
         f = open(fname)
     except IOError:
-        raise IOError("No such file: '%s'" % fname)
+        raise IOError, "No such file: '%s'" % fname
     if f.readline()[:2] != "\\x":
         f.seek(0, 0)
         return f
-    f.close()
-    raise NotImplementedError("Wow, binary file")
+    raise NotImplementedError, "Wow, binary file"
 
 
 def fromtextfile(fname, delimitor=None, commentchar='#', missingchar='',
@@ -653,7 +652,6 @@ def fromtextfile(fname, delimitor=None, commentchar='#', missingchar='',
     Ultra simple: the varnames are in the header, one line"""
     # Try to open the file ......................
     f = openfile(fname)
-
     # Get the first non-empty line as the varnames
     while True:
         line = f.readline()
@@ -663,13 +661,10 @@ def fromtextfile(fname, delimitor=None, commentchar='#', missingchar='',
             break
     if varnames is None:
         varnames = _varnames
-
     # Get the data ..............................
     _variables = masked_array([line.strip().split(delimitor) for line in f
                                   if line[0] != commentchar and len(line) > 1])
     (_, nfields) = _variables.shape
-    f.close()
-
     # Try to guess the dtype ....................
     if vartypes is None:
         vartypes = _guessvartypes(_variables[0])
@@ -680,17 +675,14 @@ def fromtextfile(fname, delimitor=None, commentchar='#', missingchar='',
             msg += " Reverting to default."
             warnings.warn(msg % (len(vartypes), nfields))
             vartypes = _guessvartypes(_variables[0])
-
     # Construct the descriptor ..................
     mdescr = [(n, f) for (n, f) in zip(varnames, vartypes)]
     mfillv = [ma.default_fill_value(f) for f in vartypes]
-
     # Get the data and the mask .................
     # We just need a list of masked_arrays. It's easier to create it like that:
     _mask = (_variables.T == missingchar)
     _datalist = [masked_array(a, mask=m, dtype=t, fill_value=f)
                  for (a, m, t, f) in zip(_variables.T, _mask, vartypes, mfillv)]
-
     return fromarrays(_datalist, dtype=mdescr)
 
 #....................................................................

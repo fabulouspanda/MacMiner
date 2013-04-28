@@ -13,45 +13,32 @@ if sys.version_info[0] >= 3:
     import io
     bytes = bytes
     unicode = str
-
-    def asunicode(s):
-        if isinstance(s, bytes):
-            return s.decode('latin1')
-        return str(s)
-
+    asunicode = str
     def asbytes(s):
         if isinstance(s, bytes):
             return s
-        return str(s).encode('latin1')
-
+        return s.encode('latin1')
     def asstr(s):
-        if isinstance(s, bytes):
-            return s.decode('latin1')
-        return str(s)
-
+        if isinstance(s, str):
+            return s
+        return s.decode('latin1')
     def isfileobj(f):
         return isinstance(f, (io.FileIO, io.BufferedReader))
-
     def open_latin1(filename, mode='r'):
         return open(filename, mode=mode, encoding='iso-8859-1')
-
     strchar = 'U'
-
 else:
     bytes = str
     unicode = unicode
     asbytes = str
     asstr = str
     strchar = 'S'
-
     def isfileobj(f):
         return isinstance(f, file)
-
     def asunicode(s):
         if isinstance(s, unicode):
             return s
-        return str(s).decode('ascii')
-
+        return s.decode('ascii')
     def open_latin1(filename, mode='r'):
         return open(filename, mode=mode)
 

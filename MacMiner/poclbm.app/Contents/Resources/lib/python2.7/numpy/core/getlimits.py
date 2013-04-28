@@ -104,7 +104,7 @@ class finfo(object):
             dtypes.append(newdtype)
             dtype = newdtype
         if not issubclass(dtype, numeric.inexact):
-            raise ValueError("data type %r not inexact" % (dtype))
+            raise ValueError, "data type %r not inexact" % (dtype)
         obj = cls._finfo_cache.get(dtype,None)
         if obj is not None:
             return obj
@@ -140,7 +140,7 @@ class finfo(object):
             fmt = '%12.5e'
             precname = 'half'
         else:
-            raise ValueError(repr(dtype))
+            raise ValueError, repr(dtype)
 
         machar = MachAr(lambda v:array([v], dtype),
                         lambda v:_frz(v.astype(itype))[0],
@@ -180,16 +180,8 @@ nexp  =%(nexp)6s   min=        -max
 ---------------------------------------------------------------------
 ''' % self.__dict__
 
-    def __repr__(self):
-        c = self.__class__.__name__
-        d = self.__dict__.copy()
-        d['klass'] = c
-        return ("%(klass)s(resolution=%(resolution)s, min=-%(_str_max)s," \
-               + " max=%(_str_max)s, dtype=%(dtype)s)") \
-                % d
 
-
-class iinfo(object):
+class iinfo:
     """
     iinfo(type)
 
@@ -288,9 +280,6 @@ max = %(max)s
 ---------------------------------------------------------------------
 ''' % {'dtype': self.dtype, 'min': self.min, 'max': self.max}
 
-    def __repr__(self):
-        return "%s(min=%s, max=%s, dtype=%s)" % (self.__class__.__name__,
-                                    self.min, self.max, self.dtype)
 
 if __name__ == '__main__':
     f = finfo(ntypes.single)

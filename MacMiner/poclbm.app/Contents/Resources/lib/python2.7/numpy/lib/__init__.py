@@ -18,7 +18,6 @@ from npyio import *
 from financial import *
 import math
 from arrayterator import *
-from arraypad import *
 
 __all__ = ['emath','math']
 __all__ += type_check.__all__
@@ -28,7 +27,6 @@ __all__ += shape_base.__all__
 __all__ += stride_tricks.__all__
 __all__ += twodim_base.__all__
 __all__ += ufunclike.__all__
-__all__ += arraypad.__all__
 __all__ += polynomial.__all__
 __all__ += utils.__all__
 __all__ += arraysetops.__all__

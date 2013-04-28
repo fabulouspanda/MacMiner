@@ -71,8 +71,7 @@ class TestEinSum(TestCase):
 
     def test_einsum_views(self):
         # pass-through
-        a = np.arange(6)
-        a.shape = (2,3)
+        a = np.arange(6).reshape(2,3)
 
         b = np.einsum("...", a)
         assert_(b.base is a)
@@ -89,8 +88,7 @@ class TestEinSum(TestCase):
         assert_equal(b, a)
 
         # transpose
-        a = np.arange(6)
-        a.shape = (2,3)
+        a = np.arange(6).reshape(2,3)
 
         b = np.einsum("ji", a)
         assert_(b.base is a)
@@ -101,8 +99,7 @@ class TestEinSum(TestCase):
         assert_equal(b, a.T)
 
         # diagonal
-        a = np.arange(9)
-        a.shape = (3,3)
+        a = np.arange(9).reshape(3,3)
 
         b = np.einsum("ii->i", a)
         assert_(b.base is a)
@@ -113,8 +110,7 @@ class TestEinSum(TestCase):
         assert_equal(b, [a[i,i] for i in range(3)])
 
         # diagonal with various ways of broadcasting an additional dimension
-        a = np.arange(27)
-        a.shape = (3,3,3)
+        a = np.arange(27).reshape(3,3,3)
 
         b = np.einsum("...ii->...i", a)
         assert_(b.base is a)
@@ -177,8 +173,7 @@ class TestEinSum(TestCase):
                          for x in a.transpose(1,0,2)])
 
         # triple diagonal
-        a = np.arange(27)
-        a.shape = (3,3,3)
+        a = np.arange(27).reshape(3,3,3)
 
         b = np.einsum("iii->i", a)
         assert_(b.base is a)
@@ -189,8 +184,7 @@ class TestEinSum(TestCase):
         assert_equal(b, [a[i,i,i] for i in range(3)])
 
         # swap axes
-        a = np.arange(24)
-        a.shape = (2,3,4)
+        a = np.arange(24).reshape(2,3,4)
 
         b = np.einsum("ijk->jik", a)
         assert_(b.base is a)
@@ -480,7 +474,7 @@ class TestEinSum(TestCase):
 
     def test_einsum_misc(self):
         # This call used to crash because of a bug in
-        # PyArray_AssignZero
+        # PyArray_FillWithZero
         a = np.ones((1,2))
         b = np.ones((2,2,1))
         assert_equal(np.einsum('ij...,j...->i...',a,b), [[[2],[2]]])
@@ -490,15 +484,6 @@ class TestEinSum(TestCase):
         b = np.ones((5, 12, 11), np.int64)
         assert_equal(np.einsum('ijklm,ijn,ijn->',a,b,b),
                         np.einsum('ijklm,ijn->',a,b))
-
-        # Issue #2027, was a problem in the contiguous 3-argument
-        # inner loop implementation
-        a = np.arange(1, 3)
-        b = np.arange(1, 5).reshape(2, 2)
-        c = np.arange(1, 9).reshape(4, 2)
-        assert_equal(np.einsum('x,yx,zx->xzy', a, b, c),
-                    [[[1,  3], [3,  9], [5, 15], [7, 21]],
-                    [[8, 16], [16, 32], [24, 48], [32, 64]]])
 
 if __name__ == "__main__":
     run_module_suite()

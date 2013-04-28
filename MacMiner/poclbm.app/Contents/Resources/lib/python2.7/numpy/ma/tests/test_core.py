@@ -18,7 +18,6 @@ import numpy.ma.core
 from numpy.ma.core import *
 
 from numpy.compat import asbytes, asbytes_nested
-from numpy.testing.utils import WarningManager
 
 pi = np.pi
 
@@ -385,16 +384,6 @@ class TestMaskedArray(TestCase):
         assert_equal(a_pickled, a)
         self.assertTrue(isinstance(a_pickled._data, np.matrix))
 
-    def test_pickling_maskedconstant(self):
-        "Test pickling MaskedConstant"
-
-        import cPickle
-        mc = np.ma.masked
-        mc_pickled = cPickle.loads(mc.dumps())
-        assert_equal(mc_pickled._baseclass, mc._baseclass)
-        assert_equal(mc_pickled._mask, mc._mask)
-        assert_equal(mc_pickled._data, mc._data)
-
     def test_pickling_wstructured(self):
         "Tests pickling w/ structured array"
         import cPickle
@@ -437,13 +426,9 @@ class TestMaskedArray(TestCase):
         assert_equal(1.0, float(array([[1]])))
         self.assertRaises(TypeError, float, array([1, 1]))
         #
-        warn_ctx = WarningManager()
-        warn_ctx.__enter__()
-        try:
-            warnings.simplefilter('ignore', UserWarning)
-            assert_(np.isnan(float(array([1], mask=[1]))))
-        finally:
-            warn_ctx.__exit__()
+        warnings.simplefilter('ignore', UserWarning)
+        assert_(np.isnan(float(array([1], mask=[1]))))
+        warnings.simplefilter('default', UserWarning)
         #
         a = array([1, 2, 3], mask=[1, 0, 0])
         self.assertRaises(TypeError, lambda:float(a))
@@ -611,14 +596,14 @@ class TestMaskedArray(TestCase):
         ndtype = [('a', int), ('b', int)]
         a = np.array([(1, 2,)], dtype=ndtype)[0]
         f = mvoid(a)
-        assert_(isinstance(f, mvoid))
+        assert(isinstance(f, mvoid))
         #
         a = masked_array([(1, 2)], mask=[(1, 0)], dtype=ndtype)[0]
-        assert_(isinstance(a, mvoid))
+        assert(isinstance(a, mvoid))
         #
         a = masked_array([(1, 2), (1, 2)], mask=[(1, 0), (0, 0)], dtype=ndtype)
         f = mvoid(a._data[0], a._mask[0])
-        assert_(isinstance(f, mvoid))
+        assert(isinstance(f, mvoid))
 
     def test_mvoid_getitem(self):
         "Test mvoid.__getitem__"
@@ -767,8 +752,8 @@ class TestMaskedArrayArithmetic(TestCase):
     def test_masked_singleton_equality(self):
         "Tests (in)equality on masked snigleton"
         a = array([1, 2, 3], mask=[1, 1, 0])
-        assert_((a[0] == 0) is masked)
-        assert_((a[0] != 0) is masked)
+        assert((a[0] == 0) is masked)
+        assert((a[0] != 0) is masked)
         assert_equal((a[-1] == 0), False)
         assert_equal((a[-1] != 0), True)
 
@@ -821,8 +806,6 @@ class TestMaskedArrayArithmetic(TestCase):
         assert_equal(np.arctan(z), arctan(zm))
         assert_equal(np.arctan2(x, y), arctan2(xm, ym))
         assert_equal(np.absolute(x), absolute(xm))
-        assert_equal(np.angle(x + 1j*y), angle(xm + 1j*ym))
-        assert_equal(np.angle(x + 1j*y, deg=True), angle(xm + 1j*ym, deg=True))
         assert_equal(np.equal(x, y), equal(xm, ym))
         assert_equal(np.not_equal(x, y), not_equal(xm, ym))
         assert_equal(np.less(x, y), less(xm, ym))
@@ -1048,7 +1031,7 @@ class TestMaskedArrayArithmetic(TestCase):
     def test_noshrinking(self):
         "Check that we don't shrink a mask when not wanted"
         # Binary operations
-        a = masked_array([1., 2., 3.], mask=[False, False, False], shrink=False)
+        a = masked_array([1, 2, 3], mask=[False, False, False], shrink=False)
         b = a + 1
         assert_equal(b.mask, [0, 0, 0])
         # In place binary operation
@@ -1119,13 +1102,13 @@ class TestMaskedArrayArithmetic(TestCase):
             output.fill(-9999)
             result = npfunc(xm, axis=0, out=output)
             # ... the result should be the given output
-            assert_(result is output)
+            self.assertTrue(result is output)
             assert_equal(result, xmmeth(axis=0, out=output))
             #
             output = empty(4, dtype=int)
             result = xmmeth(axis=0, out=output)
-            assert_(result is output)
-            assert_(output[0] is masked)
+            self.assertTrue(result is output)
+            self.assertTrue(output[0] is masked)
 
 
     def test_eq_on_structured(self):
@@ -1537,7 +1520,7 @@ class TestFillingValues(TestCase):
         b['a'] = a['a']
         b['a'].set_fill_value(a['a'].fill_value)
         f = b._fill_value[()]
-        assert_(np.isnan(f[0]))
+        assert(np.isnan(f[0]))
         assert_equal(f[-1], default_fill_value(1.))
 
     def test_fillvalue_as_arguments(self):
@@ -1663,7 +1646,7 @@ class TestMaskedArrayInPlaceArithmetics(TestCase):
         """Test of inplace additions"""
         (x, y, xm) = self.intdata
         m = xm.mask
-        a = arange(10, dtype=np.int16)
+        a = arange(10, dtype=float)
         a[-1] = masked
         x += a
         xm += a
@@ -1717,9 +1700,9 @@ class TestMaskedArrayInPlaceArithmetics(TestCase):
         x = arange(10) * 2
         xm = arange(10) * 2
         xm[2] = masked
-        x //= 2
+        x /= 2
         assert_equal(x, y)
-        xm //= 2
+        xm /= 2
         assert_equal(xm, y)
 
     def test_inplace_division_scalar_float(self):
@@ -2051,7 +2034,7 @@ class TestMaskedArrayMethods(TestCase):
 
     def test_allany_oddities(self):
         "Some fun with all and any"
-        store = empty((), dtype=bool)
+        store = empty(1, dtype=bool)
         full = array([1, 2, 3], mask=True)
         #
         self.assertTrue(full.all() is masked)
@@ -2060,7 +2043,7 @@ class TestMaskedArrayMethods(TestCase):
         self.assertTrue(store._mask, True)
         self.assertTrue(store is not masked)
         #
-        store = empty((), dtype=bool)
+        store = empty(1, dtype=bool)
         self.assertTrue(full.any() is masked)
         full.any(out=store)
         self.assertTrue(not store)
@@ -2506,12 +2489,12 @@ class TestMaskedArrayMethods(TestCase):
         # w/o mask: each entry is a np.void whose elements are standard Python
         for entry in a:
             for item in entry.tolist():
-                assert_(not isinstance(item, np.generic))
+                assert(not isinstance(item, np.generic))
         # w/ mask: each entry is a ma.void whose elements should be standard Python
         a.mask[0] = (0, 1)
         for entry in a:
             for item in entry.tolist():
-                assert_(not isinstance(item, np.generic))
+                assert(not isinstance(item, np.generic))
 
 
     def test_toflex(self):

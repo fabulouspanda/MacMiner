@@ -5,19 +5,7 @@ from numpy.core import *
 from numpy.compat import asbytes
 
 # Guess the UCS length for this python interpreter
-if sys.version_info[:2] >= (3, 3):
-    # Python 3.3 uses a flexible string representation
-    ucs4 = False
-    def buffer_length(arr):
-        if isinstance(arr, unicode):
-            arr = str(arr)
-            return (sys.getsizeof(arr+"a") - sys.getsizeof(arr)) * len(arr)
-        v = memoryview(arr)
-        if v.shape is None:
-            return len(v) * v.itemsize
-        else:
-            return prod(v.shape) * v.itemsize
-elif sys.version_info[0] >= 3:
+if sys.version_info[0] >= 3:
     import array as _array
     ucs4 = (_array.array('u').itemsize == 4)
     def buffer_length(arr):
@@ -38,12 +26,10 @@ else:
             return len(arr.data)
         return len(buffer(arr))
 
-# In both cases below we need to make sure that the byte swapped value (as
-# UCS4) is still a valid unicode:
 # Value that can be represented in UCS2 interpreters
-ucs2_value = u'\u0900'
+ucs2_value = u'\uFFFF'
 # Value that cannot be represented in UCS2 interpreters (but can in UCS4)
-ucs4_value = u'\U00100900'
+ucs4_value = u'\U0010FFFF'
 
 
 ############################################################

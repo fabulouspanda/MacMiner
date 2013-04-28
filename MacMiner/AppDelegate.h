@@ -7,8 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TaskWrapper.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    TaskWrapper *searchTask;
+}
 
 @property (assign) IBOutlet NSWindow *window;
 
@@ -17,5 +20,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (IBAction)saveAction:(id)sender;
+
+- (IBAction)preferenceToggle:(id)sender;
 
 @end

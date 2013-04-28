@@ -33,8 +33,7 @@ def _lookup(table, key, required_bits):
     for bits, typecode in lst:
         if bits >= required_bits:
             return typecode
-    raise PrecisionError(key + " of " + str(required_bits) +
-            " bits not available on this system")
+    raise PrecisionError, key+" of "+str(required_bits)+" bits not available on this system"
 
 Character = 'c'
 

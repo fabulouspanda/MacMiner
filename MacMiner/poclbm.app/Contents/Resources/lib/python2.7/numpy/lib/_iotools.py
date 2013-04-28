@@ -42,7 +42,7 @@ def _to_filehandle(fname, flag='r', return_opened=False):
     """
     Returns the filehandle corresponding to a string or a file.
     If the string ends in '.gz', the file is automatically unzipped.
-
+    
     Parameters
     ----------
     fname : string, filehandle
@@ -142,7 +142,7 @@ def flatten_dtype(ndtype, flatten_base=False):
 
 
 
-class LineSplitter(object):
+class LineSplitter:
     """
     Object to split a string at a given delimiter or at given places.
 
@@ -203,17 +203,13 @@ class LineSplitter(object):
             self._handyman = _handyman
     #
     def _delimited_splitter(self, line):
-        if self.comments is not None:
-            line = line.split(self.comments)[0]
-        line = line.strip(asbytes(" \r\n"))
+        line = line.split(self.comments)[0].strip(asbytes(" \r\n"))
         if not line:
             return []
         return line.split(self.delimiter)
     #
     def _fixedwidth_splitter(self, line):
-        if self.comments is not None:
-            line = line.split(self.comments)[0]
-        line = line.strip(asbytes("\r\n"))
+        line = line.split(self.comments)[0].strip(asbytes("\r\n"))
         if not line:
             return []
         fixed = self.delimiter
@@ -221,8 +217,7 @@ class LineSplitter(object):
         return [line[s] for s in slices]
     #
     def _variablewidth_splitter(self, line):
-        if self.comments is not None:
-            line = line.split(self.comments)[0]
+        line = line.split(self.comments)[0]
         if not line:
             return []
         slices = self.delimiter
@@ -233,7 +228,7 @@ class LineSplitter(object):
 
 
 
-class NameValidator(object):
+class NameValidator:
     """
     Object to validate a list of strings to use as field names.
 
@@ -453,7 +448,7 @@ class ConversionWarning(UserWarning):
 
 
 
-class StringConverter(object):
+class StringConverter:
     """
     Factory class for function transforming a string into another object (int,
     float).
@@ -508,35 +503,20 @@ class StringConverter(object):
     (_defaulttype, _defaultfunc, _defaultfill) = zip(*_mapper)
     #
     @classmethod
-    def _getdtype(cls, val):
-        """Returns the dtype of the input variable."""
-        return np.array(val).dtype
-    #
-    @classmethod
     def _getsubdtype(cls, val):
         """Returns the type of the dtype of the input variable."""
         return np.array(val).dtype.type
-    #
-    # This is a bit annoying. We want to return the "general" type in most cases
-    # (ie. "string" rather than "S10"), but we want to return the specific type
-    # for datetime64 (ie. "datetime64[us]" rather than "datetime64").
-    @classmethod
-    def _dtypeortype(cls, dtype):
-        """Returns dtype for datetime64 and type of dtype otherwise."""
-        if dtype.type == np.datetime64:
-            return dtype
-        return dtype.type
     #
     @classmethod
     def upgrade_mapper(cls, func, default=None):
         """
     Upgrade the mapper of a StringConverter by adding a new function and its
     corresponding default.
-
-    The input function (or sequence of functions) and its associated default
+    
+    The input function (or sequence of functions) and its associated default 
     value (if any) is inserted in penultimate position of the mapper.
     The corresponding type is estimated from the dtype of the default value.
-
+    
     Parameters
     ----------
     func : var
@@ -581,12 +561,12 @@ class StringConverter(object):
             self.func = str2bool
             self._status = 0
             self.default = default or False
-            dtype = np.dtype('bool')
+            ttype = np.bool
         else:
             # Is the input a np.dtype ?
             try:
                 self.func = None
-                dtype = np.dtype(dtype_or_func)
+                ttype = np.dtype(dtype_or_func).type
             except TypeError:
                 # dtype_or_func must be a function, then
                 if not hasattr(dtype_or_func, '__call__'):
@@ -601,11 +581,11 @@ class StringConverter(object):
                         default = self.func(asbytes('0'))
                     except ValueError:
                         default = None
-                dtype = self._getdtype(default)
+                ttype = self._getsubdtype(default)
             # Set the status according to the dtype
             _status = -1
             for (i, (deftype, func, default_def)) in enumerate(self._mapper):
-                if np.issubdtype(dtype.type, deftype):
+                if np.issubdtype(ttype, deftype):
                     _status = i
                     if default is None:
                         self.default = default_def
@@ -623,9 +603,9 @@ class StringConverter(object):
             # If the status is 1 (int), change the function to
             # something more robust.
             if self.func == self._mapper[1][1]:
-                if issubclass(dtype.type, np.uint64):
+                if issubclass(ttype, np.uint64):
                     self.func = np.uint64
-                elif issubclass(dtype.type, np.int64):
+                elif issubclass(ttype, np.int64):
                     self.func = np.int64
                 else:
                     self.func = lambda x : int(float(x))
@@ -638,7 +618,7 @@ class StringConverter(object):
             self.missing_values = set(list(missing_values) + [asbytes('')])
         #
         self._callingfunction = self._strict_call
-        self.type = self._dtypeortype(dtype)
+        self.type = ttype
         self._checked = False
         self._initial_default = default
     #
@@ -767,13 +747,13 @@ class StringConverter(object):
         # Don't reset the default to None if we can avoid it
         if default is not None:
             self.default = default
-            self.type = self._dtypeortype(self._getdtype(default))
+            self.type = self._getsubdtype(default)
         else:
             try:
                 tester = func(testing_value or asbytes('1'))
             except (TypeError, ValueError):
                 tester = None
-            self.type = self._dtypeortype(self._getdtype(tester))
+            self.type = self._getsubdtype(tester)
         # Add the missing values to the existing set
         if missing_values is not None:
             if _is_bytes_like(missing_values):
@@ -861,3 +841,4 @@ def easy_dtype(ndtype, names=None, defaultfmt="f%i", **validationargs):
             else:
                 ndtype.names = validate(ndtype.names, defaultfmt=defaultfmt)
     return ndtype
+

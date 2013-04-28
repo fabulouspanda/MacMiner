@@ -201,6 +201,68 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         // displays what the user wants to search on
         
 //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs synchronize];
+        // getting an NSString
+        NSString *minerString = [prefs stringForKey:@"whichMiner"];
+        
+        if ([minerString isEqual: @"bfgminer"]) {
+            NSString *oString = @"-o";
+            NSString *poolString = [oString stringByAppendingString:poolView.stringValue];
+            NSString *uString = @"-u";
+            NSString *userString = [uString stringByAppendingString:userView.stringValue];
+            NSString *pString = @"-p";
+            NSString *passString = [pString stringByAppendingString:passView.stringValue];
+            
+            NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
+            NSString *poclbmPath = [bundlePath stringByDeletingLastPathComponent];
+            
+            if (optionsView.stringValue == nil) {
+            [optionsView setStringValue:@"-q"];
+            }
+            NSString *optionsString = optionsView.stringValue;
+            
+            
+            
+            
+            
+            poclbmPath = [poclbmPath stringByAppendingString:@"/Resources/bfgminer/bin/bfgminer"];
+        NSString *launchPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
+        NSString *bfgPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
+            //        NSLog(poclbmPath);
+            [self.outputView setString:@""];
+            NSString *startingText = @"Starting…";
+            self.statLabel.stringValue = startingText;
+            //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
+            //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
+            searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:launchPath, bfgPath, optionsString, poolString, userString, passString, nil]];
+            // kick off the process asynchronously
+            //        [searchTask setLaunchPath: @"/sbin/ping"];
+            [searchTask startProcess];
+            
+            
+            if (rememberButton.state == NSOnState) {
+                
+                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                
+                // saving an NSString
+                [prefs setObject:userView.stringValue forKey:@"userValue"];
+                [prefs setObject:passView.stringValue forKey:@"passValue"];
+                [prefs setObject:poolView.stringValue forKey:@"poolValue"];
+                [prefs setObject:optionsView.stringValue forKey:@"optionsValue"];
+                
+                // This is suggested to synch prefs, but is not needed (I didn't put it in my tut)
+                [prefs synchronize];
+            }
+            
+            
+        }
+        
+        else {
+        
+        
         NSString *userplus = [userView.stringValue stringByAppendingString:@":"];
         NSString *userpass = [userplus stringByAppendingString:passView.stringValue];
         NSString *userpassplus = [userpass stringByAppendingString:@"@"];
@@ -238,12 +300,23 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         
         
     }
+  
+  }
+  
 }
 
 // This callback is implemented as part of conforming to the ProcessController protocol.
 // It will be called whenever there is output from the TaskWrapper.
 - (void)appendOutput:(NSString *)output
 {
+    NSString *bfgOutput = @"5s:";
+    if ([output rangeOfString:bfgOutput].location != NSNotFound) {
+
+        // Substring found...
+        self.statLabel.stringValue = output;
+    }
+    else {
+    
     NSString *poolString = @"MH/s)] [Rej:";
     NSRange result = [output rangeOfString:poolString];
     if (result.length >0){
@@ -268,6 +341,7 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
     // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
     // of a text storage update to starve the app of events
     [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
+}
 }
 
 // This routine is called after adding new results to the text view's backing store.

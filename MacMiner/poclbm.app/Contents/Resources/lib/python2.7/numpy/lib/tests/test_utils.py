@@ -9,7 +9,7 @@ def test_lookfor():
     utils.lookfor('eigenvalue', module='numpy', output=out,
                   import_modules=False)
     out = out.getvalue()
-    assert_('numpy.linalg.eig' in out)
+    assert 'numpy.linalg.eig' in out
 
 
 @deprecate
@@ -25,14 +25,14 @@ def old_func3(self, x):
 new_func3 = deprecate(old_func3, old_name="old_func3", new_name="new_func3")
 
 def test_deprecate_decorator():
-    assert_('deprecated' in old_func.__doc__)
+    assert 'deprecated' in old_func.__doc__
 
 def test_deprecate_decorator_message():
-    assert_('Rather use new_func2' in old_func2.__doc__)
+    assert 'Rather use new_func2' in old_func2.__doc__
 
 def test_deprecate_fn():
-    assert_('old_func3' in new_func3.__doc__)
-    assert_('new_func3' in new_func3.__doc__)
+    assert 'old_func3' in new_func3.__doc__
+    assert 'new_func3' in new_func3.__doc__
 
 if __name__ == "__main__":
     run_module_suite()

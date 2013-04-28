@@ -116,91 +116,6 @@ class TestRandomDist(TestCase):
                          [ 0.4575674820298663 ,  0.7781880808593471 ]])
         np.testing.assert_array_almost_equal(actual, desired, decimal=15)
 
-    def test_choice_uniform_replace(self):
-        np.random.seed(self.seed)
-        actual = np.random.choice(4, 4)
-        desired = np.array([2, 3, 2, 3])
-        np.testing.assert_array_equal(actual, desired)
-
-    def test_choice_nonuniform_replace(self):
-        np.random.seed(self.seed)
-        actual = np.random.choice(4, 4, p=[0.4, 0.4, 0.1, 0.1])
-        desired = np.array([1, 1, 2, 2])
-        np.testing.assert_array_equal(actual, desired)
-
-    def test_choice_uniform_noreplace(self):
-        np.random.seed(self.seed)
-        actual = np.random.choice(4, 3, replace=False)
-        desired = np.array([0, 1, 3])
-        np.testing.assert_array_equal(actual, desired)
-
-    def test_choice_nonuniform_noreplace(self):
-        np.random.seed(self.seed)
-        actual = np.random.choice(4, 3, replace=False,
-                                  p=[0.1, 0.3, 0.5, 0.1])
-        desired = np.array([2, 3, 1])
-        np.testing.assert_array_equal(actual, desired)
-
-    def test_choice_noninteger(self):
-        np.random.seed(self.seed)
-        actual = np.random.choice(['a', 'b', 'c', 'd'], 4)
-        desired = np.array(['c', 'd', 'c', 'd'])
-        np.testing.assert_array_equal(actual, desired)
-
-    def test_choice_exceptions(self):
-        sample = np.random.choice
-        assert_raises(ValueError, sample, -1, 3)
-        if hasattr(3., '__index__'):
-            assert_raises(ValueError, sample, 3., 3)
-        else:
-            assert_raises(ValueError, sample, object(), 3)
-        assert_raises(ValueError, sample, [[1,2],[3,4]], 3)
-        assert_raises(ValueError, sample, [], 3)
-        assert_raises(ValueError, sample, [1,2,3,4], 3,
-                                          p=[[0.25,0.25],[0.25,0.25]])
-        assert_raises(ValueError, sample, [1,2], 3, p=[0.4,0.4,0.2])
-        assert_raises(ValueError, sample, [1,2], 3, p=[1.1,-0.1])
-        assert_raises(ValueError, sample, [1,2], 3, p=[0.4,0.4])
-        assert_raises(ValueError, sample, [1,2,3], 4, replace=False)
-        assert_raises(ValueError, sample, [1,2,3], 2, replace=False,
-                                          p=[1,0,0])
-
-    def test_choice_return_shape(self):
-        p = [0.1,0.9]
-        # Check scalar
-        assert_(np.isscalar(np.random.choice(2, replace=True)))
-        assert_(np.isscalar(np.random.choice(2, replace=False)))
-        assert_(np.isscalar(np.random.choice(2, replace=True, p=p)))
-        assert_(np.isscalar(np.random.choice(2, replace=False, p=p)))
-        assert_(np.isscalar(np.random.choice([1,2], replace=True)))
-        assert_(np.random.choice([None], replace=True) is None)
-        a = np.array([1, 2])
-        arr = np.empty(1, dtype=object)
-        arr[0] = a
-        assert_(np.random.choice(arr, replace=True) is a)
-
-        # Check 0-d array
-        s = tuple()
-        assert_(not np.isscalar(np.random.choice(2, s, replace=True)))
-        assert_(not np.isscalar(np.random.choice(2, s, replace=False)))
-        assert_(not np.isscalar(np.random.choice(2, s, replace=True, p=p)))
-        assert_(not np.isscalar(np.random.choice(2, s, replace=False, p=p)))
-        assert_(not np.isscalar(np.random.choice([1,2], s, replace=True)))
-        assert_(np.random.choice([None], s, replace=True).ndim == 0)
-        a = np.array([1, 2])
-        arr = np.empty(1, dtype=object)
-        arr[0] = a
-        assert_(np.random.choice(arr, s, replace=True).item() is a)
-
-        # Check multi dimensional array
-        s = (2,3)
-        p = [0.1, 0.1, 0.1, 0.1, 0.4, 0.2]
-        assert_(np.random.choice(6, s, replace=True).shape, s)
-        assert_(np.random.choice(6, s, replace=False).shape, s)
-        assert_(np.random.choice(6, s, replace=True, p=p).shape, s)
-        assert_(np.random.choice(6, s, replace=False, p=p).shape, s)
-        assert_(np.random.choice(np.arange(6), s, replace=True).shape, s)
-
     def test_bytes(self):
         np.random.seed(self.seed)
         actual = np.random.bytes(10)
@@ -208,17 +123,12 @@ class TestRandomDist(TestCase):
         np.testing.assert_equal(actual, desired)
 
     def test_shuffle(self):
-        # Test lists, arrays, and multidimensional versions of both:
-        for conv in [lambda x: x,
-                     np.asarray,
-                     lambda x: [(i, i) for i in x],
-                     lambda x: np.asarray([(i, i) for i in x])]:
-            np.random.seed(self.seed)
-            alist = conv([1,2,3,4,5,6,7,8,9,0])
-            np.random.shuffle(alist)
-            actual = alist
-            desired = conv([0, 1, 9, 6, 2, 4, 5, 8, 7, 3])
-            np.testing.assert_array_equal(actual, desired)
+        np.random.seed(self.seed)
+        alist = [1,2,3,4,5,6,7,8,9,0]
+        np.random.shuffle(alist)
+        actual = alist
+        desired = [0, 1, 9, 6, 2, 4, 5, 8, 7, 3]
+        np.testing.assert_array_equal(actual, desired)
 
     def test_beta(self):
         np.random.seed(self.seed)
@@ -400,13 +310,7 @@ class TestRandomDist(TestCase):
         desired = np.array([[  2.46852460439034849e+03,   1.41286880810518346e+03],
                          [  5.28287797029485181e+07,   6.57720981047328785e+07],
                          [  1.40840323350391515e+02,   1.98390255135251704e+05]])
-        # For some reason on 32-bit x86 Ubuntu 12.10 the [1, 0] entry in this
-        # matrix differs by 24 nulps. Discussion:
-        #   http://mail.scipy.org/pipermail/numpy-discussion/2012-September/063801.html
-        # Consensus is that this is probably some gcc quirk that affects
-        # rounding but not in any important way, so we just use a looser
-        # tolerance on this test:
-        np.testing.assert_array_almost_equal_nulp(actual, desired, nulp=30)
+        np.testing.assert_array_almost_equal(actual, desired, decimal=15)
 
     def test_poisson(self):
         np.random.seed(self.seed)

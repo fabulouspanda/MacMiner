@@ -8,62 +8,31 @@ from numpy.lib.arraysetops import *
 
 import warnings
 
-class TestSetOps(TestCase):
-
-
+class TestAso(TestCase):
     def test_unique( self ):
+        a = np.array( [5, 7, 1, 2, 1, 5, 7] )
 
-        def check_all(a, b, i1, i2, dt):
-            msg = "check values failed for type '%s'" % dt
-            v = unique(a)
-            assert_array_equal(v, b, msg)
+        ec = np.array( [1, 2, 5, 7] )
+        c = unique( a )
+        assert_array_equal( c, ec )
 
-            msg = "check indexes failed for type '%s'" % dt
-            v, j = unique(a, 1, 0)
-            assert_array_equal(v, b, msg)
-            assert_array_equal(j, i1, msg)
+        vals, indices = unique( a, return_index=True )
 
-            msg = "check reverse indexes failed for type '%s'" % dt
-            v, j = unique(a, 0, 1)
-            assert_array_equal(v, b, msg)
-            assert_array_equal(j, i2, msg)
 
-            msg = "check with all indexes failed for type '%s'" % dt
-            v, j1, j2 = unique(a, 1, 1)
-            assert_array_equal(v, b, msg)
-            assert_array_equal(j1, i1, msg)
-            assert_array_equal(j2, i2, msg)
+        ed = np.array( [2, 3, 0, 1] )
+        assert_array_equal(vals, ec)
+        assert_array_equal(indices, ed)
 
-        a = [5, 7, 1, 2, 1, 5, 7]*10
-        b = [1, 2, 5, 7]
-        i1 = [2, 3, 0, 1]
-        i2 = [2, 3, 0, 1, 0, 2, 3]*10
+        vals, ind0, ind1 = unique( a, return_index=True,
+                                     return_inverse=True )
 
-        # test for numeric arrays
-        types = []
-        types.extend(np.typecodes['AllInteger'])
-        types.extend(np.typecodes['AllFloat'])
-        types.append('datetime64[D]')
-        types.append('timedelta64[D]')
-        for dt in types:
-            aa = np.array(a, dt)
-            bb = np.array(b, dt)
-            check_all(aa, bb, i1, i2, dt)
 
-        # test for object arrays
-        dt = 'O'
-        aa = np.empty(len(a), dt)
-        aa[:] = a
-        bb = np.empty(len(b), dt)
-        bb[:] = b
-        check_all(aa, bb, i1, i2, dt)
+        ee = np.array( [2, 3, 0, 1, 0, 2, 3] )
+        assert_array_equal(vals, ec)
+        assert_array_equal(ind0, ed)
+        assert_array_equal(ind1, ee)
 
-        # test for structured arrays
-        dt = [('', 'i'), ('', 'i')]
-        aa = np.array(zip(a,a), dt)
-        bb = np.array(zip(b,b), dt)
-        check_all(aa, bb, i1, i2, dt)
-
+        assert_array_equal([], unique([]))
 
     def test_intersect1d( self ):
         # unique inputs
@@ -121,60 +90,63 @@ class TestSetOps(TestCase):
         assert_array_equal([1],ediff1d(two_elem))
 
     def test_in1d(self):
-        # we use two different sizes for the b array here to test the
-        # two different paths in in1d().
-        for mult in (1, 10):
-            # One check without np.array, to make sure lists are handled correct
-            a = [5, 7, 1, 2]
-            b = [2, 4, 3, 1, 5] * mult
-            ec = np.array([True, False, True, True])
-            c = in1d(a, b, assume_unique=True)
-            assert_array_equal(c, ec)
+        a = np.array( [5, 7, 1, 2] )
+        b = np.array( [2, 4, 3, 1, 5] )
 
-            a[0] = 8
-            ec = np.array([False, False, True, True])
-            c = in1d(a, b, assume_unique=True)
-            assert_array_equal(c, ec)
+        ec = np.array( [True, False, True, True] )
+        c = in1d( a, b, assume_unique=True )
+        assert_array_equal( c, ec )
 
-            a[0], a[3] = 4, 8
-            ec = np.array([True, False, True, False])
-            c = in1d(a, b, assume_unique=True)
-            assert_array_equal(c, ec)
+        a[0] = 8
+        ec = np.array( [False, False, True, True] )
+        c = in1d( a, b, assume_unique=True )
+        assert_array_equal( c, ec )
 
-            a = np.array([5, 4, 5, 3, 4, 4, 3, 4, 3, 5, 2, 1, 5, 5])
-            b = [2, 3, 4] * mult
-            ec = [False, True, False, True, True, True, True, True, True, False,
-                  True, False, False, False]
-            c = in1d(a, b)
-            assert_array_equal(c, ec)
+        a[0], a[3] = 4, 8
+        ec = np.array( [True, False, True, False] )
+        c = in1d( a, b, assume_unique=True )
+        assert_array_equal( c, ec )
 
-            b = b + [5, 5, 4] * mult
-            ec = [True, True, True, True, True, True, True, True, True, True,
-                  True, False, True, True]
-            c = in1d(a, b)
-            assert_array_equal(c, ec)
+        a = np.array([5,4,5,3,4,4,3,4,3,5,2,1,5,5])
+        b = [2,3,4]
 
-            a = np.array([5, 7, 1, 2])
-            b = np.array([2, 4, 3, 1, 5] * mult)
-            ec = np.array([True, False, True, True])
-            c = in1d(a, b)
-            assert_array_equal(c, ec)
+        ec = [False, True, False, True, True, True, True, True, True, False,
+              True, False, False, False]
+        c = in1d(a, b)
+        assert_array_equal(c, ec)
 
-            a = np.array([5, 7, 1, 1, 2])
-            b = np.array([2, 4, 3, 3, 1, 5] * mult)
-            ec = np.array([True, False, True, True, True])
-            c = in1d(a, b)
-            assert_array_equal(c, ec)
+        b = b + [5, 5, 4]
 
-            a = np.array([5, 5])
-            b = np.array([2, 2] * mult)
-            ec = np.array([False, False])
-            c = in1d(a, b)
-            assert_array_equal(c, ec)
+        ec = [True, True, True, True, True, True, True, True, True, True,
+              True, False, True, True]
+        c = in1d(a, b)
+        assert_array_equal(c, ec)
+
+        a = np.array([5, 7, 1, 2])
+        b = np.array([2, 4, 3, 1, 5])
+
+        ec = np.array([True, False, True, True])
+        c = in1d(a, b)
+        assert_array_equal(c, ec)
+
+        a = np.array([5, 7, 1, 1, 2])
+        b = np.array([2, 4, 3, 3, 1, 5])
+
+        ec = np.array([True, False, True, True, True])
+        c = in1d(a, b)
+        assert_array_equal(c, ec)
 
         a = np.array([5])
         b = np.array([2])
+
         ec = np.array([False])
+        c = in1d(a, b)
+        assert_array_equal(c, ec)
+
+        a = np.array([5, 5])
+        b = np.array([2, 2])
+
+        ec = np.array([False, False])
         c = in1d(a, b)
         assert_array_equal(c, ec)
 
@@ -188,19 +160,6 @@ class TestSetOps(TestCase):
         c = in1d(a, b)
 
         assert_array_equal(c, ec)
-
-    def test_in1d_ravel(self):
-        # Test that in1d ravels its input arrays. This is not documented
-        # behavior however. The test is to ensure consistentency.
-        a = np.arange(6).reshape(2,3)
-        b = np.arange(3,9).reshape(3,2)
-        long_b = np.arange(3, 63).reshape(30,2)
-        ec = np.array([False, False, False, True, True, True])
-
-        assert_array_equal(in1d(a, b, assume_unique=True), ec)
-        assert_array_equal(in1d(a, b, assume_unique=False), ec)
-        assert_array_equal(in1d(a, long_b, assume_unique=True), ec)
-        assert_array_equal(in1d(a, long_b, assume_unique=False), ec)
 
     def test_union1d( self ):
         a = np.array( [5, 4, 7, 1, 2] )

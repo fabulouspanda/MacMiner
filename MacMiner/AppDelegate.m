@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 
+
 @implementation AppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -134,25 +135,34 @@
     }
 }
 
+- (IBAction)preferenceToggle:(id)sender {
+
+}
+
+
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     // Save changes in the application's managed object context before the application terminates.
     
     if (!_managedObjectContext) {
+           [searchTask stopProcess];
         return NSTerminateNow;
     }
     
     if (![[self managedObjectContext] commitEditing]) {
+           [searchTask stopProcess];
         NSLog(@"%@:%@ unable to commit editing to terminate", [self class], NSStringFromSelector(_cmd));
         return NSTerminateCancel;
     }
     
     if (![[self managedObjectContext] hasChanges]) {
+           [searchTask stopProcess];
         return NSTerminateNow;
     }
     
     NSError *error = nil;
     if (![[self managedObjectContext] save:&error]) {
+           [searchTask stopProcess];
 
         // Customize this code block to include application-specific recovery steps.              
         BOOL result = [sender presentError:error];
@@ -176,7 +186,7 @@
             return NSTerminateCancel;
         }
     }
-
+   [searchTask stopProcess];
     return NSTerminateNow;
 }
 

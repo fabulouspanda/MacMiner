@@ -90,17 +90,6 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
 
         build_import_library()
 
-        # Check for custom msvc runtime library on Windows. Build if it doesn't exist.
-        msvcr_success = build_msvcr_library()
-        msvcr_dbg_success = build_msvcr_library(debug=True)
-        if msvcr_success or msvcr_dbg_success:
-            # add preprocessor statement for using customized msvcr lib
-            self.define_macro('NPY_MINGW_USE_CUSTOM_MSVCR')
-
-        # Define the MSVC version as hint for MinGW
-        msvcr_version = '0x%03i0' % int(msvc_runtime_library().lstrip('msvcr'))
-        self.define_macro('__MSVCRT_VERSION__', msvcr_version)
-
         # **changes: eric jones 4/11/01
         # 2. increased optimization and turned off all warnings
         # 3. also added --driver-name g++
@@ -115,7 +104,7 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
         # bad consequences, like using Py_ModuleInit4 instead of
         # Py_ModuleInit4_64, etc... So we add it here
         if get_build_architecture() == 'AMD64':
-            if self.gcc_version < "4.0":
+            if self.gcc_version < "4.":
                 self.set_executables(
                     compiler='gcc -g -DDEBUG -DMS_WIN64 -mno-cygwin -O0 -Wall',
                     compiler_so='gcc -g -DDEBUG -DMS_WIN64 -mno-cygwin -O0 -Wall -Wstrict-prototypes',
@@ -135,7 +124,7 @@ class Mingw32CCompiler(distutils.cygwinccompiler.CygwinCCompiler):
                                      linker_exe='g++ -mno-cygwin',
                                      linker_so='%s -mno-cygwin -mdll -static %s'
                                      % (self.linker, entry_point))
-            elif self.gcc_version < "4.0":
+            elif self.gcc_version < "4.":
                 self.set_executables(compiler='gcc -mno-cygwin -O2 -Wall',
                                      compiler_so='gcc -mno-cygwin -O2 -Wall -Wstrict-prototypes',
                                      linker_exe='g++ -mno-cygwin',
@@ -250,7 +239,6 @@ def find_python_dll():
     # - in system32,
     # - ortherwise (Sxs), I don't know how to get it.
     lib_dirs = []
-    lib_dirs.append(sys.prefix)
     lib_dirs.append(os.path.join(sys.prefix, 'lib'))
     try:
         lib_dirs.append(os.path.join(os.environ['SYSTEMROOT'], 'system32'))
@@ -275,14 +263,15 @@ def generate_def(dll, dfile):
     The .def file will be overwritten"""
     dump = dump_table(dll)
     for i in range(len(dump)):
-        if _START.match(dump[i].decode()):
+        if _START.match(dump[i]):
             break
-    else:
+
+    if i == len(dump):
         raise ValueError("Symbol table not found")
 
     syms = []
     for j in range(i+1, len(dump)):
-        m = _TABLE.match(dump[j].decode())
+        m = _TABLE.match(dump[j])
         if m:
             syms.append((int(m.group(1).strip()), m.group(2)))
         else:
@@ -300,77 +289,6 @@ def generate_def(dll, dfile):
         #d.write('@%d    %s\n' % (s[0], s[1]))
         d.write('%s\n' % s[1])
     d.close()
-
-def find_dll(dll_name):
-
-    arch = {'AMD64' : 'amd64',
-            'Intel' : 'x86'}[get_build_architecture()]
-
-    def _find_dll_in_winsxs(dll_name):
-        # Walk through the WinSxS directory to find the dll.
-        winsxs_path = os.path.join(os.environ['WINDIR'], 'winsxs')
-        if not os.path.exists(winsxs_path):
-            return None
-        for root, dirs, files in os.walk(winsxs_path):
-            if dll_name in files and arch in root:
-                return os.path.join(root, dll_name)
-        return None
-
-    def _find_dll_in_path(dll_name):
-        # First, look in the Python directory, then scan PATH for
-        # the given dll name.
-        for path in [sys.prefix] + os.environ['PATH'].split(';'):
-            filepath = os.path.join(path, dll_name)
-            if os.path.exists(filepath):
-                return os.path.abspath(filepath)
-
-    return _find_dll_in_winsxs(dll_name) or _find_dll_in_path(dll_name)
-
-def build_msvcr_library(debug=False):
-    if os.name != 'nt':
-        return False
-
-    msvcr_name = msvc_runtime_library()
-
-    # Skip using a custom library for versions < MSVC 8.0
-    if int(msvcr_name.lstrip('msvcr')) < 80:
-        log.debug('Skip building msvcr library: custom functionality not present')
-        return False
-
-    if debug:
-        msvcr_name += 'd'
-
-    # Skip if custom library already exists
-    out_name = "lib%s.a" % msvcr_name
-    out_file = os.path.join(sys.prefix, 'libs', out_name)
-    if os.path.isfile(out_file):
-        log.debug('Skip building msvcr library: "%s" exists' % (out_file))
-        return True
-
-    # Find the msvcr dll
-    msvcr_dll_name = msvcr_name + '.dll'
-    dll_file = find_dll(msvcr_dll_name)
-    if not dll_file:
-        log.warn('Cannot build msvcr library: "%s" not found' % msvcr_dll_name)
-        return False
-
-    def_name = "lib%s.def" % msvcr_name
-    def_file = os.path.join(sys.prefix, 'libs', def_name)
-
-    log.info('Building msvcr library: "%s" (from %s)' \
-             % (out_file, dll_file))
-
-    # Generate a symbol definition file from the msvcr dll
-    generate_def(dll_file, def_file)
-
-    # Create a custom mingw library for the given symbol definitions
-    cmd = ['dlltool', '-d', def_file, '-l', out_file]
-    retcode = subprocess.call(cmd)
-
-    # Clean up symbol definitions
-    os.remove(def_file)
-
-    return (not retcode)
 
 def build_import_library():
     if os.name != 'nt':
@@ -437,7 +355,7 @@ def _build_import_library_x86():
         log.warn('Failed to build import library for gcc. Linking will fail.')
     #if not success:
     #    msg = "Couldn't find import library, and failed to build it."
-    #    raise DistutilsPlatformError(msg)
+    #    raise DistutilsPlatformError, msg
     return
 
 #=====================================
@@ -461,16 +379,13 @@ _MSVCRVER_TO_FULLVER = {}
 if sys.platform == 'win32':
     try:
         import msvcrt
+        if hasattr(msvcrt, "CRT_ASSEMBLY_VERSION"):
+            _MSVCRVER_TO_FULLVER['90'] = msvcrt.CRT_ASSEMBLY_VERSION
+        else:
+            _MSVCRVER_TO_FULLVER['90'] = "9.0.21022.8"
         # I took one version in my SxS directory: no idea if it is the good
         # one, and we can't retrieve it from python
         _MSVCRVER_TO_FULLVER['80'] = "8.0.50727.42"
-        _MSVCRVER_TO_FULLVER['90'] = "9.0.21022.8"
-        # Value from msvcrt.CRT_ASSEMBLY_VERSION under Python 3.3.0 on Windows XP:
-        _MSVCRVER_TO_FULLVER['100'] = "10.0.30319.460"
-        if hasattr(msvcrt, "CRT_ASSEMBLY_VERSION"):
-            major, minor, rest = msvcrt.CRT_ASSEMBLY_VERSION.split(".",2)
-            _MSVCRVER_TO_FULLVER[major + minor] = msvcrt.CRT_ASSEMBLY_VERSION
-            del major, minor, rest
     except ImportError:
         # If we are here, means python was not built with MSVC. Not sure what to do
         # in that case: manifest building will fail, but it should not be used in
@@ -536,10 +451,7 @@ def check_embedded_msvcr_match_linked(msver):
     # embedding
     msvcv = msvc_runtime_library()
     if msvcv:
-        assert msvcv.startswith("msvcr"), msvcv
-        # Dealing with something like "mscvr90" or "mscvr100", the last
-        # last digit is the minor release, want int("9") or int("10"):
-        maj = int(msvcv[5:-1])
+        maj = int(msvcv[5:6])
         if not maj == int(msver):
             raise ValueError(
                   "Discrepancy between linked msvcr " \

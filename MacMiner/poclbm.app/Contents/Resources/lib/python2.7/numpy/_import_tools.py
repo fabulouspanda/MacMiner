@@ -3,7 +3,7 @@ import sys
 
 __all__ = ['PackageLoader']
 
-class PackageLoader(object):
+class PackageLoader:
     def __init__(self, verbose=False, infunc=False):
         """ Manages loading packages.
         """

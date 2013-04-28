@@ -3,11 +3,12 @@
 __all__ = ['iscomplexobj','isrealobj','imag','iscomplex',
            'isreal','nan_to_num','real','real_if_close',
            'typename','asfarray','mintypecode','asscalar',
-           'common_type']
+           'common_type', 'datetime_data']
 
 import numpy.core.numeric as _nx
 from numpy.core.numeric import asarray, asanyarray, array, isnan, \
                 obj2sctype, zeros
+from numpy.core.multiarray import METADATA_DTSTR
 from ufunclike import isneginf, isposinf
 
 _typecodes_by_elsize = 'GDFgdfQqLlIiHhBb?'
@@ -233,10 +234,11 @@ def isreal(x):
 
 def iscomplexobj(x):
     """
-    Check for a complex type or an array of complex numbers.
+    Return True if x is a complex type or an array of complex numbers.
 
-    The type of the input is checked, not the value. Even if the input
-    has an imaginary part equal to zero, `iscomplexobj` evaluates to True.
+    The type of the input is checked, not the value. So even if the input
+    has an imaginary part equal to zero, `iscomplexobj` evaluates to True
+    if the data type is complex.
 
     Parameters
     ----------
@@ -245,9 +247,8 @@ def iscomplexobj(x):
 
     Returns
     -------
-    iscomplexobj : bool
-        The return value, True if `x` is of a complex type or has at least
-        one complex element.
+    y : bool
+        The return value, True if `x` is of a complex type.
 
     See Also
     --------
@@ -599,4 +600,49 @@ def common_type(*arrays):
         return array_type[1][precision]
     else:
         return array_type[0][precision]
+
+def datetime_data(dtype):
+    """Return (unit, numerator, denominator, events) from a datetime dtype
+    """
+    try:
+        import ctypes
+    except ImportError:
+        raise RuntimeError, "Cannot access date-time internals without ctypes installed"
+
+    if dtype.kind not in ['m','M']:
+        raise ValueError, "Not a date-time dtype"
+
+    obj = dtype.metadata[METADATA_DTSTR]
+    class DATETIMEMETA(ctypes.Structure):
+        _fields_ = [('base', ctypes.c_int),
+                    ('num', ctypes.c_int),
+                    ('den', ctypes.c_int),
+                    ('events', ctypes.c_int)]
+
+    import sys
+    if sys.version_info[:2] >= (3, 0):
+        func = ctypes.pythonapi.PyCapsule_GetPointer
+        func.argtypes = [ctypes.py_object, ctypes.c_char_p]
+        func.restype = ctypes.c_void_p
+        result = func(ctypes.py_object(obj), ctypes.c_char_p(None))
+    else:
+        func = ctypes.pythonapi.PyCObject_AsVoidPtr
+        func.argtypes = [ctypes.py_object]
+        func.restype = ctypes.c_void_p
+        result = func(ctypes.py_object(obj))
+    result = ctypes.cast(ctypes.c_void_p(result), ctypes.POINTER(DATETIMEMETA))
+
+    struct = result[0]
+    base = struct.base
+
+    # FIXME: This needs to be kept consistent with enum in ndarrayobject.h
+    from numpy.core.multiarray import DATETIMEUNITS
+    obj = ctypes.py_object(DATETIMEUNITS)
+    if sys.version_info[:2] >= (2,7):
+        result = func(obj, ctypes.c_char_p(None))
+    else:
+        result = func(obj)
+    _unitnum2name = ctypes.cast(ctypes.c_void_p(result), ctypes.POINTER(ctypes.c_char_p))
+
+    return (_unitnum2name[base], struct.num, struct.den, struct.events)
 

@@ -129,9 +129,9 @@ def skipif(skip_condition, msg=None):
 
         def get_msg(func,msg=None):
             """Skip message with information about function being skipped."""
-            if msg is None:
+            if msg is None: 
                 out = 'Test skipped due to test condition'
-            else:
+            else: 
                 out = '\n'+msg
 
             return "Skipping test: %s%s" % (func.__name__,out)
@@ -158,7 +158,7 @@ def skipif(skip_condition, msg=None):
             skipper = skipper_gen
         else:
             skipper = skipper_func
-
+            
         return nose.tools.make_decorator(f)(skipper)
 
     return skip_decorator
@@ -210,7 +210,7 @@ def knownfailureif(fail_condition, msg=None):
         from noseclasses import KnownFailureTest
         def knownfailer(*args, **kwargs):
             if fail_val():
-                raise KnownFailureTest(msg)
+                raise KnownFailureTest, msg
             else:
                 return f(*args, **kwargs)
         return nose.tools.make_decorator(f)(knownfailer)

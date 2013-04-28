@@ -1,24 +1,22 @@
+import numpy as np
+import numpy.ma as ma
+from numpy.ma.testutils import (TestCase, assert_equal, assert_array_equal,
+    assert_raises, run_module_suite)
+from numpy.testing import assert_warns, assert_
+
 import sys
+
 import gzip
 import os
 import threading
+
 from tempfile import mkstemp, NamedTemporaryFile
 import time
 from datetime import datetime
-import warnings
-import gc
-from numpy.testing.utils import WarningManager
 
-import numpy as np
-import numpy.ma as ma
 from numpy.lib._iotools import ConverterError, ConverterLockError, \
                                ConversionWarning
 from numpy.compat import asbytes, asbytes_nested, bytes
-
-from nose import SkipTest
-from numpy.ma.testutils import (TestCase, assert_equal, assert_array_equal,
-    assert_raises, run_module_suite)
-from numpy.testing import assert_warns, assert_, build_err_msg
 
 if sys.version_info[0] >= 3:
     from io import BytesIO
@@ -167,52 +165,6 @@ class TestSavezLoad(RoundtripTest, TestCase):
         if errors:
             raise AssertionError(errors)
 
-    def test_not_closing_opened_fid(self):
-        # Test that issue #2178 is fixed:
-        # verify could seek on 'loaded' file
-
-        fd, tmp = mkstemp(suffix='.npz')
-        os.close(fd)
-        try:
-            fp = open(tmp, 'wb')
-            np.savez(fp, data='LOVELY LOAD')
-            fp.close()
-
-            fp = open(tmp, 'rb', 10000)
-            fp.seek(0)
-            assert_(not fp.closed)
-            _ = np.load(fp)['data']
-            assert_(not fp.closed)        # must not get closed by .load(opened fp)
-            fp.seek(0)
-            assert_(not fp.closed)
-
-        finally:
-            fp.close()
-            os.remove(tmp)
-
-    def test_closing_fid(self):
-        # Test that issue #1517 (too many opened files) remains closed
-        # It might be a "week" test since failed to get triggered on
-        # e.g. Debian sid of 2012 Jul 05 but was reported to
-        # trigger the failure on Ubuntu 10.04:
-        # http://projects.scipy.org/numpy/ticket/1517#comment:2
-        fd, tmp = mkstemp(suffix='.npz')
-        os.close(fd)
-
-        try:
-            fp = open(tmp, 'wb')
-            np.savez(fp, data='LOVELY LOAD')
-            fp.close()
-
-            for i in range(1, 1025):
-                try:
-                    np.load(tmp)["data"]
-                except Exception, e:
-                    raise AssertionError("Failed to load data from a file: %s" % e)
-        finally:
-            os.remove(tmp)
-
-
 class TestSaveTxt(TestCase):
     def test_array(self):
         a = np.array([[1, 2], [3, 4]], float)
@@ -275,41 +227,6 @@ class TestSaveTxt(TestCase):
         lines = c.readlines()
         assert_equal(lines, asbytes_nested(['01 : 2.0\n', '03 : 4.0\n']))
 
-    def test_header_footer(self):
-        """
-        Test the functionality of the header and footer keyword argument.
-        """
-        c = StringIO()
-        a = np.array([(1, 2), (3, 4)], dtype=np.int)
-        test_header_footer = 'Test header / footer'
-        # Test the header keyword argument
-        np.savetxt(c, a, fmt='%1d', header=test_header_footer)
-        c.seek(0)
-        assert_equal(c.read(),
-                asbytes('# ' + test_header_footer +'\n1 2\n3 4\n' ))
-        # Test the footer keyword argument
-        c = StringIO()
-        np.savetxt(c, a, fmt='%1d', footer=test_header_footer)
-        c.seek(0)
-        assert_equal(c.read(),
-                asbytes('1 2\n3 4\n# ' + test_header_footer + '\n'))
-        # Test the commentstr keyword argument used on the header
-        c = StringIO()
-        commentstr = '% '
-        np.savetxt(c, a, fmt='%1d', header=test_header_footer,
-                comments=commentstr)
-        c.seek(0)
-        assert_equal(c.read(),
-                asbytes(commentstr + test_header_footer + '\n' + '1 2\n3 4\n'))
-        # Test the commentstr keyword argument used on the footer
-        c = StringIO()
-        commentstr = '% '
-        np.savetxt(c, a, fmt='%1d', footer=test_header_footer,
-                comments=commentstr)
-        c.seek(0)
-        assert_equal(c.read(),
-                asbytes('1 2\n3 4\n' + commentstr + test_header_footer + '\n'))
-
     def test_file_roundtrip(self):
         f, name = mkstemp()
         os.close(f)
@@ -320,58 +237,6 @@ class TestSaveTxt(TestCase):
             assert_array_equal(a, b)
         finally:
             os.unlink(name)
-
-    def test_complex_arrays(self):
-        ncols = 2
-        nrows = 2
-        a = np.zeros((ncols, nrows), dtype=np.complex128)
-        re = np.pi
-        im = np.e
-        a[:] = re + 1.0j * im
-        # One format only
-        c = StringIO()
-        np.savetxt(c, a, fmt=' %+.3e')
-        c.seek(0)
-        lines = c.readlines()
-        _assert_floatstr_lines_equal(lines, asbytes_nested([
-            ' ( +3.142e+00+ +2.718e+00j)  ( +3.142e+00+ +2.718e+00j)\n',
-            ' ( +3.142e+00+ +2.718e+00j)  ( +3.142e+00+ +2.718e+00j)\n']))
-        # One format for each real and imaginary part
-        c = StringIO()
-        np.savetxt(c, a, fmt='  %+.3e' * 2 * ncols)
-        c.seek(0)
-        lines = c.readlines()
-        _assert_floatstr_lines_equal(lines, asbytes_nested([
-            '  +3.142e+00  +2.718e+00  +3.142e+00  +2.718e+00\n',
-            '  +3.142e+00  +2.718e+00  +3.142e+00  +2.718e+00\n']))
-        # One format for each complex number
-        c = StringIO()
-        np.savetxt(c, a, fmt=['(%.3e%+.3ej)'] * ncols)
-        c.seek(0)
-        lines = c.readlines()
-        _assert_floatstr_lines_equal(lines, asbytes_nested([
-            '(3.142e+00+2.718e+00j) (3.142e+00+2.718e+00j)\n',
-            '(3.142e+00+2.718e+00j) (3.142e+00+2.718e+00j)\n']))
-
-
-def _assert_floatstr_lines_equal(actual_lines, expected_lines):
-    """A string comparison function that also works on Windows + Python 2.5.
-
-    This is necessary because Python 2.5 on Windows inserts an extra 0 in
-    the exponent of the string representation of floating point numbers.
-
-    Only used in TestSaveTxt.test_complex_arrays, no attempt made to make this
-    more generic.
-
-    Once Python 2.5 compatibility is dropped, simply use `assert_equal` instead
-    of this function.
-    """
-    for actual, expected in zip(actual_lines, expected_lines):
-        if actual != expected:
-            expected_win25 = expected.replace("e+00", "e+000")
-            if actual != expected_win25:
-                msg = build_err_msg([actual, expected], '', verbose=True)
-                raise AssertionError(msg)
 
 
 class TestLoadTxt(TestCase):
@@ -527,19 +392,12 @@ class TestLoadTxt(TestCase):
         assert_array_equal(x, a)
 
     def test_empty_file(self):
-        warn_ctx = WarningManager()
-        warn_ctx.__enter__()
-        try:
-            warnings.filterwarnings("ignore",
-                    message="loadtxt: Empty input file:")
-            c = StringIO()
-            x = np.loadtxt(c)
-            assert_equal(x.shape, (0,))
-            x = np.loadtxt(c, dtype=np.int64)
-            assert_equal(x.shape, (0,))
-            assert_(x.dtype == np.int64)
-        finally:
-            warn_ctx.__exit__()
+        c = StringIO()
+        x = np.loadtxt(c)
+        assert_equal(x.shape, (0,))
+        x = np.loadtxt(c, dtype=np.int64)
+        assert_equal(x.shape, (0,))
+        assert_(x.dtype == np.int64)
 
 
     def test_unused_converter(self):
@@ -651,18 +509,9 @@ class TestLoadTxt(TestCase):
         e.seek(0)
         x = np.loadtxt(e, dtype=int, delimiter=',', ndmin=0)
         assert_(x.shape == (3,))
-
-        # Test ndmin kw with empty file.
-        warn_ctx = WarningManager()
-        warn_ctx.__enter__()
-        try:
-            warnings.filterwarnings("ignore",
-                    message="loadtxt: Empty input file:")
-            f = StringIO()
-            assert_(np.loadtxt(f, ndmin=2).shape == (0, 1,))
-            assert_(np.loadtxt(f, ndmin=1).shape == (0,))
-        finally:
-            warn_ctx.__exit__()
+        f = StringIO()
+        assert_(np.loadtxt(f, ndmin=2).shape == (0, 1,))
+        assert_(np.loadtxt(f, ndmin=1).shape == (0,))
 
     def test_generator_source(self):
         def count():
@@ -789,29 +638,26 @@ class TestFromTxt(TestCase):
         assert_equal(test, ctrl)
 
     def test_skip_footer_with_invalid(self):
-        warn_ctx = WarningManager()
-        warn_ctx.__enter__()
-        try:
-            basestr = '1 1\n2 2\n3 3\n4 4\n5  \n6  \n7  \n'
-            warnings.filterwarnings("ignore")
-            # Footer too small to get rid of all invalid values
-            assert_raises(ValueError, np.genfromtxt,
-                          StringIO(basestr), skip_footer=1)
-    #        except ValueError:
-    #            pass
-            a = np.genfromtxt(StringIO(basestr), skip_footer=1, invalid_raise=False)
-            assert_equal(a, np.array([[1., 1.], [2., 2.], [3., 3.], [4., 4.]]))
-            #
-            a = np.genfromtxt(StringIO(basestr), skip_footer=3)
-            assert_equal(a, np.array([[1., 1.], [2., 2.], [3., 3.], [4., 4.]]))
-            #
-            basestr = '1 1\n2  \n3 3\n4 4\n5  \n6 6\n7 7\n'
-            a = np.genfromtxt(StringIO(basestr), skip_footer=1, invalid_raise=False)
-            assert_equal(a, np.array([[1., 1.], [3., 3.], [4., 4.], [6., 6.]]))
-            a = np.genfromtxt(StringIO(basestr), skip_footer=3, invalid_raise=False)
-            assert_equal(a, np.array([[1., 1.], [3., 3.], [4., 4.]]))
-        finally:
-            warn_ctx.__exit__()
+        import warnings
+        basestr = '1 1\n2 2\n3 3\n4 4\n5  \n6  \n7  \n'
+        warnings.filterwarnings("ignore")
+        # Footer too small to get rid of all invalid values
+        assert_raises(ValueError, np.genfromtxt,
+                      StringIO(basestr), skip_footer=1)
+#        except ValueError:
+#            pass
+        a = np.genfromtxt(StringIO(basestr), skip_footer=1, invalid_raise=False)
+        assert_equal(a, np.array([[1., 1.], [2., 2.], [3., 3.], [4., 4.]]))
+        #
+        a = np.genfromtxt(StringIO(basestr), skip_footer=3)
+        assert_equal(a, np.array([[1., 1.], [2., 2.], [3., 3.], [4., 4.]]))
+        #
+        basestr = '1 1\n2  \n3 3\n4 4\n5  \n6 6\n7 7\n'
+        a = np.genfromtxt(StringIO(basestr), skip_footer=1, invalid_raise=False)
+        assert_equal(a, np.array([[1., 1.], [3., 3.], [4., 4.], [6., 6.]]))
+        a = np.genfromtxt(StringIO(basestr), skip_footer=3, invalid_raise=False)
+        assert_equal(a, np.array([[1., 1.], [3., 3.], [4., 4.]]))
+        warnings.resetwarnings()
 
 
     def test_header(self):
@@ -931,15 +777,6 @@ M   33  21.99
                            dtype=[('date', np.object_), ('stid', float)])
         assert_equal(test, control)
 
-    def test_converters_cornercases2(self):
-        "Test the conversion to datetime64."
-        converter = {'date': lambda s: np.datetime64(strptime(s, '%Y-%m-%d %H:%M:%SZ'))}
-        data = StringIO('2009-02-03 12:00:00Z, 72214.0')
-        test = np.ndfromtxt(data, delimiter=',', dtype=None,
-                            names=['date', 'stid'], converters=converter)
-        control = np.array((datetime(2009, 02, 03), 72214.),
-                           dtype=[('date', 'datetime64[us]'), ('stid', float)])
-        assert_equal(test, control)
 
     def test_unused_converter(self):
         "Test whether unused converters are forgotten"
@@ -1114,17 +951,12 @@ M   33  21.99
                              usecols=('a', 'c'), **kwargs)
         assert_equal(test, ctrl)
 
+
     def test_empty_file(self):
-        "Test that an empty file raises the proper warning."
-        warn_ctx = WarningManager()
-        warn_ctx.__enter__()
-        try:
-            warnings.filterwarnings("ignore", message="genfromtxt: Empty input file:")
-            data = StringIO()
-            test = np.genfromtxt(data)
-            assert_equal(test, np.array([]))
-        finally:
-            warn_ctx.__exit__()
+        "Test that an empty file raises the proper exception"
+        data = StringIO()
+        assert_raises(IOError, np.ndfromtxt, data)
+
 
     def test_fancy_dtype_alt(self):
         "Check that a nested dtype isn't MIA"
@@ -1427,6 +1259,8 @@ M   33  21.99
                              usecols=("A", "C", "E"), names=True)
         assert_equal(test.dtype.names, ctrl_names)
 
+
+
     def test_fixed_width_names(self):
         "Test fix-width w/ names"
         data = "    A    B   C\n    0    1 2.3\n   45   67   9."
@@ -1450,14 +1284,6 @@ M   33  21.99
         test = np.ndfromtxt(StringIO(data), **kwargs)
         assert_equal(test, ctrl)
 
-    def test_comments_is_none(self):
-        # Github issue 329 (None was previously being converted to 'None').
-        test = np.genfromtxt(StringIO("test1,testNonetherestofthedata"),
-                             dtype=None, comments=None, delimiter=',')
-        assert_equal(test[1], asbytes('testNonetherestofthedata'))
-        test = np.genfromtxt(StringIO("test1, testNonetherestofthedata"),
-                             dtype=None, comments=None, delimiter=',')
-        assert_equal(test[1], asbytes(' testNonetherestofthedata'))
 
     def test_recfromtxt(self):
         #
@@ -1477,6 +1303,7 @@ M   33  21.99
         assert_equal(test, control)
         assert_equal(test.mask, control.mask)
         assert_equal(test.A, [0, 2])
+
 
     def test_recfromcsv(self):
         #
@@ -1504,28 +1331,25 @@ M   33  21.99
         self.assertTrue(isinstance(test, np.recarray))
         assert_equal(test, control)
 
-    def test_gft_using_filename(self):
+    def test_gft_filename(self):
         # Test that we can load data from a filename as well as a file object
-        wanted = np.arange(6).reshape((2,3))
-        if sys.version_info[0] >= 3:
-            # python 3k is known to fail for '\r'
-            linesep = ('\n', '\r\n')
-        else:
-            linesep = ('\n', '\r\n', '\r')
+        data = '0 1 2\n3 4 5'
+        exp_res = np.arange(6).reshape((2,3))
+        assert_array_equal(np.genfromtxt(StringIO(data)), exp_res)
+        f, name = mkstemp()
+        # Thanks to another windows brokeness, we can't use
+        # NamedTemporaryFile: a file created from this function cannot be
+        # reopened by another open call. So we first put the string
+        # of the test reference array, write it to a securely opened file,
+        # which is then read from by the loadtxt function
+        try:
+            os.write(f, asbytes(data))
+            assert_array_equal(np.genfromtxt(name), exp_res)
+        finally:
+            os.close(f)
+            os.unlink(name)
 
-        for sep in linesep:
-            data = '0 1 2' + sep + '3 4 5'
-            f, name = mkstemp()
-            # We can't use NamedTemporaryFile on windows, because we cannot
-            # reopen the file.
-            try:
-                os.write(f, asbytes(data))
-                assert_array_equal(np.genfromtxt(name), wanted)
-            finally:
-                os.close(f)
-                os.unlink(name)
-
-    def test_gft_using_generator(self):
+    def test_gft_generator_source(self):
         def count():
             for i in range(10):
                 yield asbytes("%d" % i)
@@ -1589,36 +1413,21 @@ def test_npzfile_dict():
 
     z = np.load(s)
 
-    assert_('x' in z)
-    assert_('y' in z)
-    assert_('x' in z.keys())
-    assert_('y' in z.keys())
+    assert 'x' in z
+    assert 'y' in z
+    assert 'x' in z.keys()
+    assert 'y' in z.keys()
 
     for f, a in z.iteritems():
-        assert_(f in ['x', 'y'])
+        assert f in ['x', 'y']
         assert_equal(a.shape, (3, 3))
 
-    assert_(len(z.items()) == 2)
+    assert len(z.items()) == 2
 
     for f in z:
-        assert_(f in ['x', 'y'])
+        assert f in ['x', 'y']
 
-    assert_('x' in list(z.iterkeys()))
-
-def test_load_refcount():
-    # Check that objects returned by np.load are directly freed based on
-    # their refcount, rather than needing the gc to collect them.
-
-    f = StringIO()
-    np.savez(f, [1, 2, 3])
-    f.seek(0)
-
-    gc.collect()
-    n_before = len(gc.get_objects())
-    np.load(f)
-    n_after = len(gc.get_objects())
-
-    assert_equal(n_before, n_after)
+    assert 'x' in list(z.iterkeys())
 
 if __name__ == "__main__":
     run_module_suite()

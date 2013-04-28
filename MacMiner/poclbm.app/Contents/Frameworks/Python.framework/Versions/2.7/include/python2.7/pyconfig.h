@@ -1,5 +1,5 @@
 /* pyconfig.h.  Generated from pyconfig.h.in by configure.  */
-/* pyconfig.h.in.  Generated from configure.ac by autoheader.  */
+/* pyconfig.h.in.  Generated from configure.in by autoheader.  */
 
 
 #ifndef Py_PYCONFIG_H
@@ -69,7 +69,7 @@
 #define HAVE_ATANH 1
 
 /* Define if GCC supports __attribute__((format(PyArg_ParseTuple, 2, 3))) */
-/* #undef HAVE_ATTRIBUTE_FORMAT_PARSETUPLE */
+#define HAVE_ATTRIBUTE_FORMAT_PARSETUPLE 1
 
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 /* #undef HAVE_BIND_TEXTDOMAIN_CODESET */
@@ -98,14 +98,11 @@
 /* define to 1 if your sem_getvalue is broken. */
 #define HAVE_BROKEN_SEM_GETVALUE 1
 
-/* Define if `unsetenv` does not return an int. */
-/* #undef HAVE_BROKEN_UNSETENV */
-
 /* Define this if you have the type _Bool. */
 #define HAVE_C99_BOOL 1
 
-/* Define to 1 if you have the 'chflags' function. */
-#define HAVE_CHFLAGS 1
+/* Define to 1 if you have the `chflags' function. */
+/* #undef HAVE_CHFLAGS */
 
 /* Define to 1 if you have the `chown' function. */
 #define HAVE_CHOWN 1
@@ -162,10 +159,10 @@
 /* Define to 1 if you have the device macros. */
 #define HAVE_DEVICE_MACROS 1
 
-/* Define to 1 if you have the /dev/ptc device file. */
+/* Define if we have /dev/ptc. */
 /* #undef HAVE_DEV_PTC */
 
-/* Define to 1 if you have the /dev/ptmx device file. */
+/* Define if we have /dev/ptmx. */
 #define HAVE_DEV_PTMX 1
 
 /* Define to 1 if you have the <direct.h> header file. */
@@ -371,12 +368,6 @@
 /* Define to 1 if you have the `initgroups' function. */
 #define HAVE_INITGROUPS 1
 
-/* Define if your compiler provides int32_t. */
-#define HAVE_INT32_T 1
-
-/* Define if your compiler provides int64_t. */
-#define HAVE_INT64_T 1
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
@@ -401,8 +392,8 @@
    Solaris and Linux, the necessary defines are already defined.) */
 /* #undef HAVE_LARGEFILE_SUPPORT */
 
-/* Define to 1 if you have the 'lchflags' function. */
-#define HAVE_LCHFLAGS 1
+/* Define to 1 if you have the `lchflags' function. */
+/* #undef HAVE_LCHFLAGS */
 
 /* Define to 1 if you have the `lchmod' function. */
 #define HAVE_LCHMOD 1
@@ -525,7 +516,7 @@
 #define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the `pthread_init' function. */
-/* #undef HAVE_PTHREAD_INIT */
+#define HAVE_PTHREAD_INIT 1
 
 /* Define to 1 if you have the `pthread_sigmask' function. */
 #define HAVE_PTHREAD_SIGMASK 1
@@ -546,7 +537,7 @@
 #define HAVE_RL_CALLBACK 1
 
 /* Define if you can turn off readline's signal handling. */
-/* #undef HAVE_RL_CATCH_SIGNAL */
+#define HAVE_RL_CATCH_SIGNAL 1
 
 /* Define if you have readline 2.2 */
 #define HAVE_RL_COMPLETION_APPEND_CHARACTER 1
@@ -558,7 +549,7 @@
 #define HAVE_RL_COMPLETION_MATCHES 1
 
 /* Define if you have rl_completion_suppress_append */
-/* #undef HAVE_RL_COMPLETION_SUPPRESS_APPEND */
+#define HAVE_RL_COMPLETION_SUPPRESS_APPEND 1
 
 /* Define if you have readline 4.0 */
 #define HAVE_RL_PRE_INPUT_HOOK 1
@@ -694,7 +685,7 @@
 /* #undef HAVE_STROPTS_H */
 
 /* Define to 1 if `st_birthtime' is a member of `struct stat'. */
-#define HAVE_STRUCT_STAT_ST_BIRTHTIME 1
+/* #undef HAVE_STRUCT_STAT_ST_BIRTHTIME */
 
 /* Define to 1 if `st_blksize' is a member of `struct stat'. */
 #define HAVE_STRUCT_STAT_ST_BLKSIZE 1
@@ -853,12 +844,6 @@
 
 /* Define this if you have tcl and TCL_UTF_MAX==6 */
 /* #undef HAVE_UCS4_TCL */
-
-/* Define if your compiler provides uint32_t. */
-#define HAVE_UINT32_T 1
-
-/* Define if your compiler provides uint64_t. */
-#define HAVE_UINT64_T 1
 
 /* Define to 1 if the system has the type `uintptr_t'. */
 #define HAVE_UINTPTR_T 1
@@ -1152,9 +1137,6 @@
 
 /* This must be defined on some systems to enable large file support. */
 #define _LARGEFILE_SOURCE 1
-
-/* This must be defined on AIX systems to enable large file support. */
-/* #undef _LARGE_FILES */
 
 /* Define to 1 if on MINIX. */
 /* #undef _MINIX */

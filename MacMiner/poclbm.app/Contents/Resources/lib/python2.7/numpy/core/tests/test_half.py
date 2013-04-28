@@ -1,10 +1,8 @@
-import platform
-
 import numpy as np
 from numpy import uint16, float16, float32, float64
-from numpy.testing import TestCase, run_module_suite, assert_, assert_equal, \
-    dec
+from numpy.testing import *
 
+import warnings
 
 def assert_raises_fpe(strmatch, callable, *args, **kwargs):
     try:
@@ -223,7 +221,7 @@ class TestHalf(TestCase):
         a = np.zeros((5,), dtype=float16)
         a.fill(1)
         assert_equal(a, np.ones((5,), dtype=float16))
-
+        
         # nonzero and copyswap
         a = np.array([0,0,-1,-1/1e20,0,2.0**-24, 7.629e-6], dtype=float16)
         assert_equal(a.nonzero()[0],
@@ -237,7 +235,7 @@ class TestHalf(TestCase):
         b = np.ones((20,), dtype=float16)
         assert_equal(np.dot(a,b),
                      95)
-
+        
         # argmax
         a = np.array([0, -np.inf, -2, 0.5, 12.55, 7.3, 2.1, 12.4], dtype=float16)
         assert_equal(a.argmax(),
@@ -273,7 +271,7 @@ class TestHalf(TestCase):
         assert_equal(np.nextafter(a_f16[0], hinf), -a_f16[1])
         assert_equal(np.nextafter(a_f16[1:], hinf), a_f16[:-1])
         assert_equal(np.nextafter(a_f16[:-1], -hinf), a_f16[1:])
-
+        
 
     def test_half_ufuncs(self):
         """Test the various ufuncs"""
@@ -304,7 +302,7 @@ class TestHalf(TestCase):
         assert_equal(np.signbit(b), [True,False,False,False,False])
 
         assert_equal(np.copysign(b,a), [2,5,1,4,3])
-
+        
         assert_equal(np.maximum(a,b), [0,5,2,4,3])
         x = np.maximum(b,c)
         assert_(np.isnan(x[3]))
@@ -359,15 +357,15 @@ class TestHalf(TestCase):
         assert_equal(np.power(b32,a16).dtype, float16)
         assert_equal(np.power(b32,b16).dtype, float32)
 
-    @dec.skipif(platform.machine() == "armv5tel", "See gh-413.")
     def test_half_fpe(self):
+        """Test that half raises the correct underflows and overflows"""
         oldsettings = np.seterr(all='raise')
         try:
             sx16 = np.array((1e-4,),dtype=float16)
             bx16 = np.array((1e4,),dtype=float16)
             sy16 = float16(1e-4)
             by16 = float16(1e4)
-
+            
             # Underflow errors
             assert_raises_fpe('underflow', lambda a,b:a*b, sx16, sx16)
             assert_raises_fpe('underflow', lambda a,b:a*b, sx16, sy16)
@@ -426,19 +424,3 @@ class TestHalf(TestCase):
             float16(-2**-14-2**-23)/float16(2)
         finally:
             np.seterr(**oldsettings)
-
-    def test_half_array_interface(self):
-        """Test that half is compatible with __array_interface__"""
-        class Dummy:
-            pass
-
-        a = np.ones((1,), dtype=float16)
-        b = Dummy()
-        b.__array_interface__ = a.__array_interface__
-        c = np.array(b)
-        assert_(c.dtype == float16)
-        assert_equal(a, c)
-
-
-if __name__ == "__main__":
-    run_module_suite()
