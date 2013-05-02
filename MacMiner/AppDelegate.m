@@ -39,7 +39,7 @@
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
-
+/*
 // Returns the persistent store coordinator for the application. This implementation creates and return a coordinator, having added the store for the application to it. (The directory for the store is created, if necessary.)
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
@@ -92,6 +92,7 @@
     
     return _persistentStoreCoordinator;
 }
+ */
 
 // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) 
 - (NSManagedObjectContext *)managedObjectContext
@@ -135,9 +136,7 @@
     }
 }
 
-- (IBAction)preferenceToggle:(id)sender {
 
-}
 
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender

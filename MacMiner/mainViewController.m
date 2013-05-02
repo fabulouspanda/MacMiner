@@ -16,7 +16,7 @@
 
 @implementation mainViewController
 
-@synthesize mainView, poolView, userView, passView, optionsView, vectorView, outputView, startButton, statLabel, popoverTriggerButton, popover, rememberButton;
+@synthesize mainView, poolView, userView, passView, optionsView, outputView, startButton, statLabel, popoverTriggerButton, popover, rememberButton;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -111,30 +111,6 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
 }
 
 
-- (void)launchCheck:(id)sender
-{
-
-
-        // If the task is still sitting around from the last run, release it
-        if (searchTask!=nil) {
-            searchTask = nil;
-        }
-        // Let's allocate memory for and initialize a new TaskWrapper object, passing
-        // in ourselves as the controller for this TaskWrapper object, the path
-        // to the command-line tool, and the contents of the text field that
-        // displays what the user wants to search on
-        //        NSString *userplus = [userView.stringValue stringByAppendingString:@":"];
-        //        NSString *userpass = [userplus stringByAppendingString:passView.stringValue];
-        //        NSString *userpassplus = [userpass stringByAppendingString:@"@"];
-        //        NSString *finalNecessities = [userpassplus stringByAppendingString:poolView.stringValue];
-        
-        searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:@"/usr/local/bin/pip", @"/", @"--version", nil]];
-        // kick off the process asynchronously
-        //        [searchTask setLaunchPath: @"/sbin/ping"];
-        [searchTask startProcess];    
-}
-
-
 
 
 - (void)launchstart:(id)sender
@@ -147,7 +123,7 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         [searchTask stopProcess];
         // Release the memory for this wrapper object
         findRunning=NO;
-
+        self.statLabel.stringValue = nil;
         searchTask=nil;
         return;
     }
@@ -202,7 +178,7 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
         
 //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         
-        
+        /*
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs synchronize];
         // getting an NSString
@@ -216,19 +192,14 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
             NSString *pString = @"-p";
             NSString *passString = [pString stringByAppendingString:passView.stringValue];
             
-            NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-            NSString *poclbmPath = [bundlePath stringByDeletingLastPathComponent];
             
-            if (optionsView.stringValue == nil) {
+            if ([optionsView.stringValue isEqual: @""]) {
             [optionsView setStringValue:@"-q"];
             }
             NSString *optionsString = optionsView.stringValue;
             
             
             
-            
-            
-            poclbmPath = [poclbmPath stringByAppendingString:@"/Resources/bfgminer/bin/bfgminer"];
         NSString *launchPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
         NSString *bfgPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
             //        NSLog(poclbmPath);
@@ -237,7 +208,7 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
             self.statLabel.stringValue = startingText;
             //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
             //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-            searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:launchPath, bfgPath, optionsString, poolString, userString, passString, nil]];
+            searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:launchPath, bfgPath, poolString, userString, passString, optionsString, nil]];
             // kick off the process asynchronously
             //        [searchTask setLaunchPath: @"/sbin/ping"];
             [searchTask startProcess];
@@ -253,14 +224,15 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
                 [prefs setObject:poolView.stringValue forKey:@"poolValue"];
                 [prefs setObject:optionsView.stringValue forKey:@"optionsValue"];
                 
-                // This is suggested to synch prefs, but is not needed (I didn't put it in my tut)
+
                 [prefs synchronize];
             }
             
             
         }
+         */
         
-        else {
+
         
         
         NSString *userplus = [userView.stringValue stringByAppendingString:@":"];
@@ -303,7 +275,7 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
   
   }
   
-}
+
 
 // This callback is implemented as part of conforming to the ProcessController protocol.
 // It will be called whenever there is output from the TaskWrapper.
@@ -361,7 +333,7 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
     findRunning=YES;
     // clear the results
 //    [self.outputView setString:@""];
-    // change the "Sleuth" button to say "Stop"
+    // change the "Start" button to say "Stop"
     [startButton setTitle:@"Stop"];
 }
 
@@ -378,7 +350,10 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
 // If the user closes the search window, let's just quit
 -(BOOL)windowShouldClose:(id)sender
 {
-    [NSApp terminate:nil];
+    [searchTask stopProcess];
+    findRunning = NO;
+    searchTask = nil;
+//    [NSApp terminate:nil];
     return YES;
 }
 
@@ -433,5 +408,16 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
     }
 }
 
+- (IBAction)macMinerToggle:(id)sender {
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    if ([appDelegate.window isVisible]) {
+        [appDelegate.window orderOut:sender];
+    }
+    else
+    {
+        [appDelegate.window orderFront:sender];
+    }
+}
 
 @end

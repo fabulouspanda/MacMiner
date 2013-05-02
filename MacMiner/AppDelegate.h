@@ -21,6 +21,5 @@
 
 - (IBAction)saveAction:(id)sender;
 
-- (IBAction)preferenceToggle:(id)sender;
 
 @end

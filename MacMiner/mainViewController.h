@@ -16,7 +16,6 @@
     NSSecureTextField *passView;
         NSTextField *optionsView;
 
-    NSTextField *vectorView;
     NSTextView *outputView;
     NSButton *startButton;
     BOOL findRunning;
@@ -35,7 +34,6 @@
 @property (nonatomic, strong) IBOutlet NSSecureTextField *passView;
 @property (nonatomic, strong) IBOutlet NSTextField *optionsView;
 
-@property (nonatomic, strong) IBOutlet NSTextField *vectorView;
 @property (nonatomic, strong) IBOutlet NSTextView *outputView;
 @property (nonatomic, strong) IBOutlet NSButton *startButton;
 @property (nonatomic, strong) IBOutlet NSTextField *statLabel;
@@ -50,5 +48,7 @@
 
 
 - (IBAction)start:(id)sender;
+
+- (IBAction)macMinerToggle:(id)sender;
 
 @end

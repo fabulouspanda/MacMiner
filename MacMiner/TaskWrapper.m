@@ -108,7 +108,7 @@
 // We just pass the data along to the controller as an NSString.
 - (void) getData: (NSNotification *)aNotification
 {
-    NSLog(@"getdata");
+//    NSLog(@"getdata");
     //            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     NSData *data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
     // If the length of the data is zero, then the task is basically over - there is nothing
@@ -118,7 +118,7 @@
         // Send the data on to the controller; we can't just use +stringWithUTF8String: here
         // because -[data bytes] is not necessarily a properly terminated string.
         // -initWithData:encoding: on the other hand checks -[data length]
-        NSLog(@"controlappend");
+//        NSLog(@"controlappend");
         [controller appendOutput: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
 //        NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
     } else {
