@@ -15,38 +15,37 @@
 
 @implementation preferencesViewController
 
-@synthesize bfgButton, prefWindow;
+@synthesize updateButton, prefWindow;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-    if (bfgButton.state == NSOnState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *bfgMiner = @"bfgminer";
-        // saving an NSString
-        [prefs setObject:bfgMiner forKey:@"whichMiner"];
-        
-        [prefs synchronize];
+            [prefs synchronize];
+        NSString *updateButtonState = [prefs stringForKey:@"checkUpdates"];
+    if ([updateButtonState isEqual: @"updateCheck"]) {
+        updateButton.state = NSOnState;
     }
-    else {
-        
+    if ([updateButtonState isEqual: @"no"]) {
+        updateButton.state = NSOffState;
     }
+
     return self;
 }
 
-- (IBAction)bfgAction:(id)sender {
-    if (bfgButton.state == NSOnState) {
+- (IBAction)updateAction:(id)sender {
+    if (updateButton.state == NSOffState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *bfgMiner = @"bfgminer";
+        NSString *updateMiner = @"updateCheck";
         // saving an NSString
-        [prefs setObject:bfgMiner forKey:@"whichMiner"];
+        [prefs setObject:updateMiner forKey:@"checkUpdates"];
         
         [prefs synchronize];
     }
     else {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *bfgMiner = @"poclbm";
+        NSString *updateMiner = @"no";
         // saving an NSString
-        [prefs setObject:bfgMiner forKey:@"whichMiner"];
+        [prefs setObject:updateMiner forKey:@"checkUpdates"];
         
         [prefs synchronize];
     }

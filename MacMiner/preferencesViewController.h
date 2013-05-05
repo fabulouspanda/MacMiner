@@ -12,14 +12,14 @@
 
 
 @interface preferencesViewController : NSViewController <NSWindowDelegate>{
-    NSButton *bfgButton;
+    NSButton *updateButton;
     NSWindow *prefWindow;
 }
 
-@property (nonatomic, strong) IBOutlet NSButton *bfgButton;
+@property (nonatomic, strong) IBOutlet NSButton *updateButton;
 @property (nonatomic, strong) IBOutlet NSWindow *prefWindow;
 
-- (IBAction)bfgAction:(id)sender;
+- (IBAction)updateAction:(id)sender;
 - (IBAction)preferenceToggle:(id)sender;
 
 @end
