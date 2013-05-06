@@ -21,5 +21,7 @@
 
 - (IBAction)updateAction:(id)sender;
 - (IBAction)preferenceToggle:(id)sender;
+- (IBAction)clickUpdate:(id)sender;
+
 
 @end

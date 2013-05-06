@@ -64,4 +64,51 @@
     }
 }
 
+
+- (IBAction)clickUpdate:(id)sender {
+NSLog(@"Checking for Updates");
+NSURL *versionNumber = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version1.txt"];
+NSURL *versionURL = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version.txt"];
+
+NSString *currentVersion = [NSString stringWithContentsOfURL:versionNumber encoding:(NSUTF8StringEncoding) error:nil];
+NSString *latestVersion = [NSString stringWithContentsOfURL:versionURL encoding:(NSUTF8StringEncoding) error:nil];
+
+if (currentVersion != latestVersion) {
+    NSLog(@"new version available");
+    NSAlert * myAlert=[[NSAlert alloc] init];
+    [myAlert setMessageText:@"A new version of MacMiner is available"];
+    [myAlert addButtonWithTitle:@"Download"];
+    [myAlert addButtonWithTitle:@"Ignore"];
+    
+    NSURL *macminer = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"];
+    switch ([myAlert runModal]) {
+        case NSAlertFirstButtonReturn:
+            //handle first button
+            
+            [[NSWorkspace sharedWorkspace] openURL:macminer];
+            break;
+        case NSAlertSecondButtonReturn:
+            //handle second button
+            break;
+    }
+}
+if (currentVersion == latestVersion) {
+        NSLog(@"no new version available");
+        NSAlert * myAlert=[[NSAlert alloc] init];
+        [myAlert setMessageText:@"You are up to date"];
+        [myAlert addButtonWithTitle:@"Splendid"];
+        
+        switch ([myAlert runModal]) {
+            case NSAlertFirstButtonReturn:
+                //handle first button
+                
+
+                break;
+
+    }
+    
+}
+
+}
+
 @end
