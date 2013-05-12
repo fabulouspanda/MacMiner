@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "TaskWrapper.h"
 
-@interface mainViewController : NSViewController <TaskWrapperController, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
+@interface mainViewController : NSViewController <NSWindowDelegate, TaskWrapperController, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
     NSView *mainView;
     NSTextField *poolView;
         NSTextField *userView;

@@ -37,6 +37,8 @@
     task = [[NSTask alloc]init];
     
     //    [task setLaunchPath: @"/sbin/ping"];
+
+        [task setStandardInput: [NSPipe pipe]];
     [task setStandardOutput: [NSPipe pipe]];
     [task setStandardError: [task standardOutput]];
     [task setLaunchPath: [arguments objectAtIndex:0]];
