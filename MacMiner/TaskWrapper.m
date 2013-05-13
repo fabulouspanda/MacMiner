@@ -36,15 +36,13 @@
     
     task = [[NSTask alloc]init];
     
-    //    [task setLaunchPath: @"/sbin/ping"];
 
-        [task setStandardInput: [NSPipe pipe]];
+//        [task setStandardInput: [NSPipe pipe]];
     [task setStandardOutput: [NSPipe pipe]];
     [task setStandardError: [task standardOutput]];
     [task setLaunchPath: [arguments objectAtIndex:0]];
     [task setCurrentDirectoryPath: [arguments objectAtIndex:1]];
-    //    NSArray* args = [NSArray arrayWithObjects: @" -c4", @" mebious.mobi", nil];
-    //    [task setArguments: args];
+
     [task setArguments: [arguments subarrayWithRange: NSMakeRange (2, ([arguments count] - 2))]];
     
     //    taskOutputFile = [[self createTmpFile] retain];
@@ -94,7 +92,7 @@
     while ((data = [[[task standardOutput] fileHandleForReading] availableData]) && [data length])
     {
         [controller appendOutput: [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-        NSLog(@"controlappend");
+//        NSLog(@"controlappend");
         /*       NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
          appDelegate.pingReport.string = [appDelegate.pingReport.string stringByAppendingString:dataString];
          NSLog(dataString);*/

@@ -27,6 +27,10 @@
     NSPopover *bfgPopover;
     
     NSButton *bfgRememberButton;
+    
+    NSTextField *speedRead;
+    NSTextField *acceptRead;
+    NSTextField *rejectRead;
 }
 
 @property (nonatomic, strong) IBOutlet NSWindow *bfgWindow;
@@ -44,6 +48,10 @@
 @property (nonatomic, strong) IBOutlet NSPopover *bfgPopover;
 
 @property (nonatomic, strong) IBOutlet NSButton *bfgRememberButton;
+
+@property (nonatomic, strong) IBOutlet NSTextField *speedRead;
+@property (nonatomic, strong) IBOutlet NSTextField *acceptRead;
+@property (nonatomic, strong) IBOutlet NSTextField *rejectRead;
 
 
 - (IBAction)start:(id)sender;

@@ -35,6 +35,8 @@
         NSTextFieldCell *acceptLabel;
             NSTextFieldCell *rejectLabel;
     NSTextFieldCell *tempsLabel;
+    
+    
 }
 
 @property (nonatomic, strong) IBOutlet NSWindow *asicWindow;
@@ -57,6 +59,7 @@
 @property (nonatomic, strong) IBOutlet NSTextFieldCell *acceptLabel;
 @property (nonatomic, strong) IBOutlet NSTextFieldCell *rejecttLabel;
 @property (nonatomic, strong) IBOutlet NSTextFieldCell *tempsLabel;
+
 
 - (IBAction)start:(id)sender;
 

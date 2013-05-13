@@ -11,7 +11,7 @@
 
 @implementation bfgminerViewController
 
-@synthesize bfgPoolView, bfgOutputView, bfgPassView, bfgPopover, bfgPopoverTriggerButton, bfgRememberButton, bfgStartButton, bfgStatLabel, bfgUserView, bfgView, bfgWindow, bfgOptionsView;
+@synthesize bfgPoolView, bfgOutputView, bfgPassView, bfgPopover, bfgPopoverTriggerButton, bfgRememberButton, bfgStartButton, bfgStatLabel, bfgUserView, bfgView, bfgWindow, bfgOptionsView, speedRead, acceptRead, rejectRead;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -100,15 +100,13 @@
             NSString *pString = @"-p";
             NSString *passString = [pString stringByAppendingString:bfgPassView.stringValue];
             
-            
+            /*
             if ([bfgOptionsView.stringValue isEqual: @""]) {
                 [bfgOptionsView setStringValue:@"-q"];
             }
             NSString *optionsString = bfgOptionsView.stringValue;
+            */
             
-            
-            
-            NSString *launchPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
             NSString *bfgPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
             //        NSLog(poclbmPath);
             [self.bfgOutputView setString:@""];
@@ -116,7 +114,21 @@
             self.bfgStatLabel.stringValue = startingText;
             //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
             //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-            bfgTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:launchPath, bfgPath, poolString, userString, passString, optionsString, nil]];
+        
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects:bfgPath, bfgPath, nil];
+        if ([bfgOptionsView.stringValue isNotEqualTo:@""]) {
+            NSArray *deviceItems = [bfgOptionsView.stringValue componentsSeparatedByString:@" "];
+            [launchArray addObjectsFromArray:deviceItems];
+
+        }
+        [launchArray addObject:poolString];
+        [launchArray addObject:userString];
+        [launchArray addObject:passString];
+
+        NSString *testString = [launchArray componentsJoinedByString:@" "];
+        NSLog(testString);
+        
+            bfgTask=[[TaskWrapper alloc] initWithController:self arguments:launchArray];
             // kick off the process asynchronously
             //        [bfgTask setLaunchPath: @"/sbin/ping"];
             [bfgTask startProcess];
@@ -145,24 +157,20 @@
 // It will be called whenever there is output from the TaskWrapper.
 - (void)appendOutput:(NSString *)output
 {
-    NSString *bfgOutput = @"5s:";
-    if ([output rangeOfString:bfgOutput].location != NSNotFound) {
+    NSString *apiOutput = @"5s:";
+    if ([output rangeOfString:apiOutput].location != NSNotFound) {
+        NSString *numberString = [self getDataBetweenFromString:output
+                                                     leftString:@"5s" rightString:@" " leftOffset:0];
+        speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@"5s:" withString:@""];
+        NSString *acceptString = [self getDataBetweenFromString:output
+                                                     leftString:@"A:" rightString:@" " leftOffset:0];
+        acceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        NSString *rejectString = [self getDataBetweenFromString:output
+                                                     leftString:@"R:" rightString:@" " leftOffset:0];
+        rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         
-        // Substring found...
-        self.bfgStatLabel.stringValue = output;
+        
     }
-    else {
-        
-        NSString *poolString = @"MH/s)] [Rej:";
-        NSRange result = [output rangeOfString:poolString];
-        if (result.length >0){
-            output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@" "];
-            NSMutableCharacterSet *_space = [NSMutableCharacterSet characterSetWithCharactersInString:@" "];
-            output = [output stringByTrimmingCharactersInSet:_space];
-            output = [output stringByReplacingOccurrencesOfString:bfgPoolView.stringValue withString:@""];
-            self.bfgStatLabel.stringValue = output;
-        }
-        else
             //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             // add the string (a chunk of the results from locate) to the NSTextView's
             // backing store, in the form of an attributed string
@@ -178,7 +186,22 @@
         // of a text storage update to starve the app of events
         [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
     }
+
+
+- (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
+{
+    NSInteger left, right;
+    NSString *foundData;
+    NSScanner *scanner=[NSScanner scannerWithString:data];
+    [scanner scanUpToString:leftData intoString: nil];
+    left = [scanner scanLocation];
+    [scanner setScanLocation:left + leftPos];
+    [scanner scanUpToString:rightData intoString: nil];
+    right = [scanner scanLocation] + 1;
+    left += leftPos;
+    foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];         return foundData;
 }
+
 
 // This routine is called after adding new results to the text view's backing store.
 // We now need to scroll the NSScrollView in which the NSTextView sits to the part

@@ -66,11 +66,12 @@
 
 
 - (IBAction)start:(id)sender
-{/*
+{
     if (findRunning)
     {
         // change the button's title back for the next search
         [asicStartButton setTitle:@"Start"];
+        [self stopToggling];
         // This stops the task and calls our callback (-processFinished)
         [asicTask stopProcess];
         findRunning=NO;
@@ -103,15 +104,13 @@
         NSString *passString = [pString stringByAppendingString:asicPassView.stringValue];
         
         
-        if ([asicOptionsView.stringValue isEqual: @""]) {
-            [asicOptionsView setStringValue:@"-S /dev/cu.usbserial-FTWILFLM"];
-        }
-        NSString *optionsString = asicOptionsView.stringValue;
-        
-        
+//        if ([asicOptionsView.stringValue isEqual: @""]) {
+//            [asicOptionsView setStringValue:@"-S /dev/cu.usbserial-FTWILFLM"];
+//        }
+//        NSString *optionsString = asicOptionsView.stringValue;
 
-        NSString *launchPath = @"/usr/bin/sudo";
-        NSString *asicPath = @"/Applications/MacMiner.app/Contents/Resources/asicminer/bin/bfgminer";
+
+        NSString *asicPath = @"/Applications/MacMiner.app/Contents/Resources/newminer/bin/bfgminer";
         //        NSLog(poclbmPath);
         [self.asicOutputView setString:@""];
         NSString *startingText = @"Starting…";
@@ -119,9 +118,18 @@
         //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
         //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
 //                NSLog(optionsString);
-        asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:launchPath, asicPath, poolString, userString, passString, optionsString, nil]];
+        
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects:asicPath, asicPath, @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
+        if ([asicOptionsView.stringValue isNotEqualTo:@""]) {
+            NSArray *deviceItems = [asicOptionsView.stringValue componentsSeparatedByString:@" "];
+[launchArray addObjectsFromArray:deviceItems];
+        }
+        [launchArray addObject:poolString];
+        [launchArray addObject:userString];
+        [launchArray addObject:passString];
+        asicTask=[[TaskWrapper alloc] initWithController:self arguments:launchArray];
         // kick off the process asynchronously
-        //        [asicTask setLaunchPath: @"/sbin/ping"];
+
         [asicTask startProcess];
 
 
@@ -143,9 +151,9 @@
         
         
     }
-    */
-
-
+    
+/*
+[[NSFileManager defaultManager] removeItemAtPath: @"/Applications/MacMiner.app/Contents/Resources/startASICMining.sh" error: nil];
 
     NSString *oString = @"-o ";
     NSString *poolString = [oString stringByAppendingString:asicPoolView.stringValue];
@@ -155,9 +163,6 @@
     NSString *passString = [pString stringByAppendingString:asicPassView.stringValue];
     
     
-    if ([asicOptionsView.stringValue isEqual: @""]) {
-        [asicOptionsView setStringValue:@"-S /dev/cu.usbserial-FTWILFLM"];
-    }
     NSString *optionsString = asicOptionsView.stringValue;
     
     
@@ -179,7 +184,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 //    NSString *scriptPath = [[NSBundle mainBundle] pathForResource: @"/Resources/startASICMining.sh" ofType: nil];
 
     [NSTask launchedTaskWithLaunchPath:@"/bin/bash" arguments: [NSArray arrayWithObjects:@"/Applications/MacMiner.app/Contents/Resources/startASICMining.sh", nil]];
-/*
+
     if (asicRememberButton.state == NSOnState) {
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -201,6 +206,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 
 - (void)toggleTimerFired:(NSTimer*)timer
 {
+    /*
             NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
     NSString *apiPath = [bundlePath stringByDeletingLastPathComponent];
     
@@ -211,13 +217,141 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     //    self.asicStatLabel.stringValue = startingText;
     //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
     //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"devs", nil]];
+//    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"devs", nil]];
+    NSTask *apiReadTask = [NSTask new];
+    [apiReadTask setLaunchPath:apiPath];
+    [apiReadTask setArguments:[NSArray arrayWithObjects:apiPath, @"devs", nil]];
+    NSFileManager *filemgr;
+    filemgr = [NSFileManager defaultManager];
+    NSFileHandle *apiHandle = [NSFileHandle fileHandleForWritingAtPath:@"/Applications/Macminer.app/Contents/Resources/apiscratch.txt"];
+    [apiReadTask setStandardOutput:apiHandle];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(readCompleted:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[outputPipe fileHandleForReading]];
+//    [[outputPipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
+    [apiReadTask launch];
+//    [apiReadTask launchedTaskWithLaunchPath:apiPath arguments: [NSArray arrayWithObjects:apiPath, @"devs", nil]];
     // kick off the process asynchronously
     //        [cpuTask setLaunchPath: @"/sbin/ping"];
-    [asicTask startProcess];
+//    [asicTask startProcess];
+    [apiReadTask waitUntilExit];
+    [self readAPI];
+    */
+    NSString *theReturnValue = nil;
+    NSTask *theTask = nil;
+    NSString *theTempFilePath = @"/Applications/Macminer.app/Contents/Resources/apiscratch.txt";
+    char theTP[[theTempFilePath cStringLength]+1];
+    [theTempFilePath getCString : theTP];
+    
+    int theFD = mkstemp(theTP);
+    if (theFD != 0)
+    {
+        theTempFilePath = [NSString stringWithCString : theTP];
+        NSFileHandle *theTempFile = [[NSFileHandle alloc]
+                                     initWithFileDescriptor : theFD closeOnDealloc : YES];
+        
+        theTask = [[NSTask alloc] init];
+        [theTask setLaunchPath : @"/Applications/Macminer.app/Contents/Resources/apiaccess"];
+        [theTask setStandardOutput : theTempFile];
+        [theTask launch];
+        [theTask waitUntilExit];
+        
+        theReturnValue = [NSString stringWithContentsOfFile : theTempFilePath];
+        
+        NSString *apiOutput = @"[MHS av]";
+        if ([theReturnValue rangeOfString:apiOutput].location != NSNotFound) {
+            /*
+            NSString *numberString = [self getDataBetweenFromString:theReturnValue
+                                                         leftString:@"[MHS av] => " rightString:@"[" leftOffset:11];
+            megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+            NSString *acceptString = [self getDataBetweenFromString:theReturnValue
+                                                         leftString:@"Accepted=" rightString:@"," leftOffset:0];
+            acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+            NSString *rejectString = [self getDataBetweenFromString:theReturnValue
+                                                         leftString:@"Rejected=" rightString:@"," leftOffset:0];
+            rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+            NSString *tempsString = [self getDataBetweenFromString:theReturnValue
+                                                        leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+            tempsLabel.stringValue = [tempsString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+            */
+            NSString *pgaZero = [self getDataBetweenFromString:theReturnValue leftString:@"PGA0" rightString:@")" leftOffset:0];
+                        NSString *pgaZeroTemp = [self getDataBetweenFromString:pgaZero leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+            NSString *pgaOne = [self getDataBetweenFromString:theReturnValue leftString:@"PGA1" rightString:@")" leftOffset:0];
+                        NSString *pgaOneTemp = [self getDataBetweenFromString:pgaOne leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+            NSString *pgaTwo = [self getDataBetweenFromString:theReturnValue leftString:@"PGA2" rightString:@")" leftOffset:0];
+                        NSString *pgaTwoTemp = [self getDataBetweenFromString:pgaTwo leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+            NSString *pgaThree = [self getDataBetweenFromString:theReturnValue leftString:@"PGA3" rightString:@")" leftOffset:0];
+                        NSString *pgaThreeTemp = [self getDataBetweenFromString:pgaThree leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+            
+            if ([pgaZeroTemp isNotEqualTo:@""] && [pgaOneTemp isNotEqualTo:@""]) {
+                pgaZeroTemp = [pgaZeroTemp stringByAppendingString:@", "];
+            }
+            if ([pgaTwoTemp isNotEqualTo:@""] && [pgaOneTemp isNotEqualTo:@""]) {
+                pgaOneTemp = [pgaOneTemp stringByAppendingString:@", "];
+            }
+            if ([pgaTwoTemp isNotEqualTo:@""] && [pgaThreeTemp isNotEqualTo:@""]) {
+                pgaTwoTemp = [pgaTwoTemp stringByAppendingString:@", "];
+            }
+            
+            NSArray *pgaTempsArray = [NSArray arrayWithObjects:pgaZeroTemp, pgaOneTemp, pgaTwoTemp, pgaThreeTemp, nil];
+            
+            tempsLabel.stringValue = [pgaTempsArray componentsJoinedByString:@""];
+//            NSLog(@"apioutput");
+        }
+
+        
+        [[NSFileManager defaultManager] removeFileAtPath : theTempFilePath
+                                                 handler : nil];
+    }
 
 }
+/*
+- (void)readAPI {
+//    NSData *data2 = [[bNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+    // If the length of the data is zero, then the task is basically over - there is nothing
+    // more to get from the handle so we may as well shut down.
+    NSString *apiInfo = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource: @"apiscratch" ofType: @"txt"] usedEncoding:nil error:nil];
+    if ([apiInfo length])
+    {
+        // Send the data on to the controller; we can't just use +stringWithUTF8String: here
+        // because -[data bytes] is not necessarily a properly terminated string.
+        // -initWithData:encoding: on the other hand checks -[data length]
+        //        NSLog(@"controlappend");
+//        NSString *apiInfo = [[NSString alloc] initWithData:data2 encoding:NSUTF8StringEncoding];
+        
+        NSString *apiOutput = @"[MHS av]";
+        if ([apiInfo rangeOfString:apiOutput].location != NSNotFound) {
+            NSString *numberString = [self getDataBetweenFromString:apiInfo
+                                                         leftString:@"[MHS av] => " rightString:@"]" leftOffset:11];
+            megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+            NSString *acceptString = [self getDataBetweenFromString:apiInfo
+                                                         leftString:@"Accepted=" rightString:@"," leftOffset:0];
+            acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+            NSString *rejectString = [self getDataBetweenFromString:apiInfo
+                                                         leftString:@"Rejected=" rightString:@"," leftOffset:0];
+            rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+            NSString *tempsString = [self getDataBetweenFromString:apiInfo
+                                                        leftString:@"Temperature=" rightString:@",M" leftOffset:0];
+            tempsLabel.stringValue = [tempsString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+            
+            NSLog(@"apioutput");
+        }
+        
+        //        NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    } else {
+        // We're finished here
+//        [self stopProcess];
+//        NSLog(@"finished");
+    }
+    
+    // we need to schedule the file handle go read more data in the background again.
+//    [[bNotification object] readInBackgroundAndNotify];
 
+    
+
+    
+//    NSLog(@"Read data: %@", [[bNotification userInfo] objectForKey:NSFileHandleNotificationDataItem]);
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:[bNotification object]];
+}
+*/
 - (void)stopToggling
 {
     [toggleTimer invalidate], toggleTimer = nil;  // you don't want dangling pointers...
@@ -230,7 +364,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     [toggleTimer invalidate], toggleTimer = nil;  // you don't want dangling pointers...
     // perform any other needed house-keeping here
 //    [asicStartButton setTitle:@"Start"];
-    
+    /*
     [asicTask stopProcess];
     
     NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
@@ -247,23 +381,24 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     // kick off the process asynchronously
     //        [cpuTask setLaunchPath: @"/sbin/ping"];
     [asicTask startProcess];
+     */
 }
 
 - (void)startToggling
 {
-    if ([asicStartButton.title isEqual: @"Start"]) {
+//    if ([asicStartButton.title isEqual: @"Start"]) {
 
 
 //            [asicStartButton setTitle:@"Stop"];
 //    [self stopToggling:self];
     
-    toggleTimer = [NSTimer scheduledTimerWithTimeInterval:3. target:self selector:@selector(toggleTimerFired:) userInfo:nil repeats:YES];
-    }
+    toggleTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(toggleTimerFired:) userInfo:nil repeats:YES];
+//    }
 
 
 }
-
 /*
+
 - (IBAction)runProcessAsAdministrator:(NSString*)scriptPath
                      withArguments:(NSArray *)arguments
                             output:(NSString **)output
@@ -322,24 +457,22 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 // It will be called whenever there is output from the TaskWrapper.
 - (void)appendOutput:(NSString *)output
 {
-    
-    NSString *apiOutput = @"[MHS av]";
+ 
+    NSString *apiOutput = @"5s:";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
     NSString *numberString = [self getDataBetweenFromString:output
-                                                 leftString:@"[MHS av] => " rightString:@"]" leftOffset:11];
-    megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+                                                 leftString:@"5s" rightString:@" " leftOffset:0];
+    megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@"5s:" withString:@""];
     NSString *acceptString = [self getDataBetweenFromString:output
-                                                 leftString:@"Accepted=" rightString:@"," leftOffset:0];
-    acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+                                                 leftString:@"A:" rightString:@"," leftOffset:0];
+    acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"Rejected=" rightString:@"," leftOffset:0];
-        rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-        NSString *tempsString = [self getDataBetweenFromString:output
-                                                     leftString:@"Temperature=" rightString:@",M" leftOffset:0];
-        tempsLabel.stringValue = [tempsString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
+                                                     leftString:@"R:" rightString:@"," leftOffset:0];
+        rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         
 
     }
+  
 //    megaHashLabel.stringValue = [NSString stringWithFormat:@"%i",[newTextMH intValue]];
     
     
@@ -422,7 +555,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 {
     findRunning=NO;
     // change the button's title back for the next search
-//    [asicStartButton setTitle:@"Start"];
+    [asicStartButton setTitle:@"Start"];
 }
 
 // If the user closes the search window, let's just quit
