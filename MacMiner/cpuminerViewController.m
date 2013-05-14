@@ -158,6 +158,13 @@
             // backing store, in the form of an attributed string
             self.cpuOutputView.string = [self.cpuOutputView.string stringByAppendingString:output];
         
+        if (self.cpuOutputView.string.length >= 1000) {
+            [self.cpuOutputView setEditable:true];
+            [self.cpuOutputView setSelectedRange:NSMakeRange(0,100)];
+            [self.cpuOutputView delete:nil];
+            [self.cpuOutputView setEditable:false];
+        }
+        
         /*    [[appDelegate.pingReport textStorage] appendAttributedString: [[NSAttributedString alloc]
          initWithString: output]];
          */

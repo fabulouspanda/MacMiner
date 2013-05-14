@@ -281,13 +281,6 @@ NSString *path = [[NSFileManager defaultManager] applicationSupportDirectory];
 // It will be called whenever there is output from the TaskWrapper.
 - (void)appendOutput:(NSString *)output
 {
-    NSString *bfgOutput = @"5s:";
-    if ([output rangeOfString:bfgOutput].location != NSNotFound) {
-
-        // Substring found...
-        self.statLabel.stringValue = output;
-    }
-    else {
     
     NSString *poolString = @"MH/s)] [Rej:";
     NSRange result = [output rangeOfString:poolString];
@@ -303,6 +296,13 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
     // add the string (a chunk of the results from locate) to the NSTextView's
     // backing store, in the form of an attributed string
     self.outputView.string = [self.outputView.string stringByAppendingString:output];
+        
+        if (self.outputView.string.length >= 1000) {
+            [self.outputView setEditable:true];
+            [self.outputView setSelectedRange:NSMakeRange(0,100)];
+            [self.outputView delete:nil];
+            [self.outputView setEditable:false];
+        }
     
     /*    [[appDelegate.pingReport textStorage] appendAttributedString: [[NSAttributedString alloc]
      initWithString: output]];
@@ -313,7 +313,7 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
     // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
     // of a text storage update to starve the app of events
     [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
-}
+
 }
 
 // This routine is called after adding new results to the text view's backing store.
@@ -373,18 +373,6 @@ output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCh
 {
     findRunning=NO;
     searchTask=nil;
-    // Lets make sure that there is something valid in the locate database; otherwise,
-    // all searches will come back empty.
-    /*
-     if ([self ensureLocateDBExists]==NO)
-     {
-     // Explain to the user that they need to go update the database as root.
-     // That is, if they want locate to be able to really find *any* file
-     // on their hard drive (perhaps not great for security, but good for usability).
-     NSRunAlertPanel(@"Error",@"Sorry, Moriarity's 'locate' database is missing or empty.  In a terminal, as root run '/usr/libexec/locate.updatedb' and try Moriarity again.", @"OK",NULL,NULL);
-     [NSApp terminate:nil];
-     }*/
-    
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     

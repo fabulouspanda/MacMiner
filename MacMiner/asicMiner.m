@@ -29,6 +29,7 @@
         asicOutputView.delegate = self;
         asicStatLabel.delegate = self;
         asicOptionsView.delegate = self;
+
   
         
     }
@@ -250,11 +251,12 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
         
         theTask = [[NSTask alloc] init];
         [theTask setLaunchPath : @"/Applications/Macminer.app/Contents/Resources/apiaccess"];
+        [theTask setArguments:[NSArray arrayWithObjects:@"devs", nil]];
         [theTask setStandardOutput : theTempFile];
         [theTask launch];
         [theTask waitUntilExit];
-        
-        theReturnValue = [NSString stringWithContentsOfFile : theTempFilePath];
+
+        theReturnValue = [NSString stringWithContentsOfFile : theTempFilePath encoding:NSUTF8StringEncoding error:nil];
         
         NSString *apiOutput = @"[MHS av]";
         if ([theReturnValue rangeOfString:apiOutput].location != NSNotFound) {
@@ -272,14 +274,27 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
                                                         leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
             tempsLabel.stringValue = [tempsString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
             */
+            
+            NSString *pgaZeroTemp = nil;
+            NSString *pgaOneTemp = nil;
+            NSString *pgaTwoTemp = nil;
+            NSString *pgaThreeTemp = nil;
+            
             NSString *pgaZero = [self getDataBetweenFromString:theReturnValue leftString:@"PGA0" rightString:@")" leftOffset:0];
-                        NSString *pgaZeroTemp = [self getDataBetweenFromString:pgaZero leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+                        pgaZeroTemp = [self getDataBetweenFromString:pgaZero leftString:@"[Temperature] => " rightString:@"." leftOffset:0];
+            pgaZeroTemp = [pgaZeroTemp stringByReplacingOccurrencesOfString:@"[Temperature] => " withString:@"Temperature: "];
+        if ([theReturnValue rangeOfString:@"GPU1"].location != NSNotFound) {
             NSString *pgaOne = [self getDataBetweenFromString:theReturnValue leftString:@"PGA1" rightString:@")" leftOffset:0];
-                        NSString *pgaOneTemp = [self getDataBetweenFromString:pgaOne leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+                        pgaOneTemp = [self getDataBetweenFromString:pgaOne leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
+        }
+                    if ([theReturnValue rangeOfString:@"PGA2"].location != NSNotFound) {
             NSString *pgaTwo = [self getDataBetweenFromString:theReturnValue leftString:@"PGA2" rightString:@")" leftOffset:0];
-                        NSString *pgaTwoTemp = [self getDataBetweenFromString:pgaTwo leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+                        pgaTwoTemp = [self getDataBetweenFromString:pgaTwo leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
+                    }
+                    if ([theReturnValue rangeOfString:@"PGA3"].location != NSNotFound) {
             NSString *pgaThree = [self getDataBetweenFromString:theReturnValue leftString:@"PGA3" rightString:@")" leftOffset:0];
-                        NSString *pgaThreeTemp = [self getDataBetweenFromString:pgaThree leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
+                        pgaThreeTemp = [self getDataBetweenFromString:pgaThree leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
+                    }
             
             if ([pgaZeroTemp isNotEqualTo:@""] && [pgaOneTemp isNotEqualTo:@""]) {
                 pgaZeroTemp = [pgaZeroTemp stringByAppendingString:@", "];
@@ -291,15 +306,25 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
                 pgaTwoTemp = [pgaTwoTemp stringByAppendingString:@", "];
             }
             
+//            tempsLabel.stringValue = pgaZeroTemp;
+
+            
             NSArray *pgaTempsArray = [NSArray arrayWithObjects:pgaZeroTemp, pgaOneTemp, pgaTwoTemp, pgaThreeTemp, nil];
             
             tempsLabel.stringValue = [pgaTempsArray componentsJoinedByString:@""];
+            
+//                    tempsLabel.stringValue = [pgaZeroTemp stringByReplacingOccurrencesOfString:@"[Temperature] =>" withString:@""];
+            
 //            NSLog(@"apioutput");
         }
-
-        
+    
+    // Delay execution of my block for 3s.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
         [[NSFileManager defaultManager] removeFileAtPath : theTempFilePath
                                                  handler : nil];
+    });
+        
+
     }
 
 }
@@ -461,13 +486,13 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     NSString *apiOutput = @"5s:";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
     NSString *numberString = [self getDataBetweenFromString:output
-                                                 leftString:@"5s" rightString:@" " leftOffset:0];
-    megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@"5s:" withString:@""];
+                                                 leftString:@"5s" rightString:@"a" leftOffset:3];
+    megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *acceptString = [self getDataBetweenFromString:output
-                                                 leftString:@"A:" rightString:@"," leftOffset:0];
+                                                 leftString:@"A:" rightString:@"R" leftOffset:0];
     acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"R:" rightString:@"," leftOffset:0];
+                                                     leftString:@"R:" rightString:@"S" leftOffset:0];
         rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         
 
@@ -500,7 +525,13 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
             // add the string (a chunk of the results from locate) to the NSTextView's
             // backing store, in the form of an attributed string
             self.asicOutputView.string = [self.asicOutputView.string stringByAppendingString:output];
-        
+    if (self.asicOutputView.string.length >= 1000) {
+        [self.asicOutputView setEditable:true];
+        [self.asicOutputView setSelectedRange:NSMakeRange(0,100)];
+        [self.asicOutputView delete:nil];
+                [self.asicOutputView setEditable:false];
+    }
+
         /*    [[appDelegate.pingReport textStorage] appendAttributedString: [[NSAttributedString alloc]
          initWithString: output]];
          */
@@ -515,6 +546,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
 {
+            if ([leftData isNotEqualTo:nil]) {
     NSInteger left, right;
     NSString *foundData;
     NSScanner *scanner=[NSScanner scannerWithString:data];
@@ -524,7 +556,11 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     [scanner scanUpToString:rightData intoString: nil];
     right = [scanner scanLocation] + 1;
     left += leftPos;
-    foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];         return foundData;
+    foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
+
+    return foundData;
+    }
+    else return nil;
 }
 
 // This routine is called after adding new results to the text view's backing store.

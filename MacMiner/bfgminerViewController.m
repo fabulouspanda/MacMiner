@@ -125,8 +125,8 @@
         [launchArray addObject:userString];
         [launchArray addObject:passString];
 
-        NSString *testString = [launchArray componentsJoinedByString:@" "];
-        NSLog(testString);
+//        NSString *testString = [launchArray componentsJoinedByString:@" "];
+//        NSLog(testString);
         
             bfgTask=[[TaskWrapper alloc] initWithController:self arguments:launchArray];
             // kick off the process asynchronously
@@ -160,13 +160,13 @@
     NSString *apiOutput = @"5s:";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"5s" rightString:@" " leftOffset:0];
-        speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@"5s:" withString:@""];
+                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
+        speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
         NSString *acceptString = [self getDataBetweenFromString:output
-                                                     leftString:@"A:" rightString:@" " leftOffset:0];
+                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
         acceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"R:" rightString:@" " leftOffset:0];
+                                                     leftString:@"R:" rightString:@"S" leftOffset:0];
         rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         
         
@@ -175,7 +175,14 @@
             // add the string (a chunk of the results from locate) to the NSTextView's
             // backing store, in the form of an attributed string
             self.bfgOutputView.string = [self.bfgOutputView.string stringByAppendingString:output];
-        
+    
+    if (self.bfgOutputView.string.length >= 1000) {
+        [self.bfgOutputView setEditable:true];
+        [self.bfgOutputView setSelectedRange:NSMakeRange(0,100)];
+        [self.bfgOutputView delete:nil];
+        [self.bfgOutputView setEditable:false];
+    }
+
         /*    [[appDelegate.pingReport textStorage] appendAttributedString: [[NSAttributedString alloc]
          initWithString: output]];
          */
