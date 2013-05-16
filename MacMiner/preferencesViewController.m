@@ -67,7 +67,7 @@
 
 - (IBAction)clickUpdate:(id)sender {
 NSLog(@"Checking for Updates");
-NSURL *versionNumber = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version101.txt"];
+NSURL *versionNumber = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version102.txt"];
 NSURL *versionURL = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version.txt"];
 
 NSString *currentVersion = [NSString stringWithContentsOfURL:versionNumber encoding:(NSUTF8StringEncoding) error:nil];
