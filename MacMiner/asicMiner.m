@@ -12,7 +12,7 @@
 
 @implementation asicMiner
 
-@synthesize asicPoolView, asicOutputView, asicPassView, asicRememberButton, asicStartButton, asicStatLabel, asicUserView, asicView, asicWindow, asicOptionsView, megaHashLabel, acceptLabel, asicPopover, asicPopoverTriggerButton, rejecttLabel, tempsLabel;
+@synthesize asicOutputView, asicStartButton, asicView, asicWindow, asicOptionsView, megaHashLabel, acceptLabel, rejecttLabel, tempsLabel, asicDebugButton, asicNoGpuButton, asicOptionsWindow, asicQuietButton, asicOptionsButton, asicHashField;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -21,14 +21,6 @@
         // Initialization code here.
         //            NSLog(@"startup");
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        
-        asicPoolView.delegate = self;
-        asicUserView.delegate = self;
-        asicPassView.delegate = self;
-        
-        asicOutputView.delegate = self;
-        asicStatLabel.delegate = self;
-        asicOptionsView.delegate = self;
 
   
         
@@ -49,22 +41,6 @@
  }
  */
 
-- (BOOL)buttonIsPressed
-{
-    return self.asicPopoverTriggerButton.intValue == 1;
-}
-
-- (IBAction)togglePopover:(id)sender
-{
-    if (self.buttonIsPressed) {
-        [self.asicPopover showRelativeToRect:[asicPopoverTriggerButton bounds]
-                                     ofView:asicPopoverTriggerButton
-                              preferredEdge:NSMaxYEdge];
-    } else {
-        [self.asicPopover close];
-    }
-}
-
 
 - (IBAction)start:(id)sender
 {
@@ -74,13 +50,13 @@
         [asicStartButton setTitle:@"Start"];
         [self stopToggling];
         // This stops the task and calls our callback (-processFinished)
-        [asicTask stopProcess];
+        [asicTask stopTask];
         findRunning=NO;
         
         // Release the memory for this wrapper object
         
         asicTask=nil;
-        [asicStatLabel setStringValue:@""];
+
         return;
     }
     else
@@ -90,19 +66,71 @@
         if (asicTask!=nil) {
             asicTask = nil;
         }
-        // Let's allocate memory for and initialize a new TaskWrapper object, passing
-        // in ourselves as the controller for this TaskWrapper object, the path
-        // to the command-line tool, and the contents of the text field that
-        // displays what the user wants to search on
+
+
         
-        //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        NSString *oString = @"-o";
-        NSString *poolString = [oString stringByAppendingString:asicPoolView.stringValue];
-        NSString *uString = @"-u";
-        NSString *userString = [uString stringByAppendingString:asicUserView.stringValue];
-        NSString *pString = @"-p";
-        NSString *passString = [pString stringByAppendingString:asicPassView.stringValue];
+        [prefs synchronize];
+        
+        //        NSString *mainPool = [prefs stringForKey:@"defaultPoolValue"];
+        //        NSString *mainBTCUser = [prefs stringForKey:@"defaultBTCUser"];
+        //        NSString *mainBTCPass = [prefs stringForKey:@"defaultBTCPass"];
+
+        NSString *noGPU = [prefs stringForKey:@"disableGPU"];
+        NSString *debugOutputOn = [prefs stringForKey:@"debugOutput"];
+        NSString *quietOutputOn = [prefs stringForKey:@"quietOutput"];
+        NSString *bonusOptions = [prefs stringForKey:@"asicOptionsValue"];
+
+        //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
+        /*
+         if ([mainBTCUser isNotEqualTo:nil]) {
+         mainPool = [oString stringByAppendingString:mainPool];
+         mainBTCUser = [uString stringByAppendingString:mainBTCUser];
+         mainBTCPass = [pString stringByAppendingString:mainBTCPass];
+         [launchArray addObject:mainPool];
+         [launchArray addObject:mainBTCUser];
+         [launchArray addObject:mainBTCPass];
+         }
+         else if ([autoWasSetup isEqualTo:nil] && [mainBTCUser isEqualTo:nil]) {
+         
+         [launchArray addObject:poolString];
+         [launchArray addObject:userString];
+         [launchArray addObject:passString];
+         
+         }
+         */
+        
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
+        if ([bonusOptions isNotEqualTo:@""]) {
+            NSArray *deviceItems = [bonusOptions componentsSeparatedByString:@" "];
+            [launchArray addObjectsFromArray:deviceItems];
+        }
+        
+
+        if ([noGPU isNotEqualTo:nil]) {
+            [launchArray addObject:noGPU];
+        }
+
+        if ([debugOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:debugOutputOn];
+        }
+        if ([quietOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:quietOutputOn];
+        }
+
+        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        
+        [launchArray addObject:@"-c"];
+        [launchArray addObject:saveBTCConfigFilePath];
+        
+
+
         
         
 //        if ([asicOptionsView.stringValue isEqual: @""]) {
@@ -111,44 +139,27 @@
 //        NSString *optionsString = asicOptionsView.stringValue;
 
 
-        NSString *asicPath = @"/Applications/MacMiner.app/Contents/Resources/newminer/bin/bfgminer";
+        NSString *asicPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
         //        NSLog(poclbmPath);
         [self.asicOutputView setString:@""];
-        NSString *startingText = @"Starting…";
-        self.asicStatLabel.stringValue = startingText;
+
         //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
         //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
 //                NSLog(optionsString);
         
-        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects:asicPath, asicPath, @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
-        if ([asicOptionsView.stringValue isNotEqualTo:@""]) {
-            NSArray *deviceItems = [asicOptionsView.stringValue componentsSeparatedByString:@" "];
-[launchArray addObjectsFromArray:deviceItems];
-        }
-        [launchArray addObject:poolString];
-        [launchArray addObject:userString];
-        [launchArray addObject:passString];
-        asicTask=[[TaskWrapper alloc] initWithController:self arguments:launchArray];
+        
+
+//        asicTask=[[TaskWrapper alloc] initWithController:self arguments:launchArray];
+       asicTask =[[TaskWrapper alloc] initWithCommandPath:asicPath
+                                        arguments:launchArray
+                                      environment:nil
+                                         delegate:self];
         // kick off the process asynchronously
 
-        [asicTask startProcess];
+        [asicTask startTask];
 
 
-        
-        
-        if (asicRememberButton.state == NSOnState) {
-            
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
-            // saving an NSString
-            [prefs setObject:asicUserView.stringValue forKey:@"asicUserValue"];
-            [prefs setObject:asicPassView.stringValue forKey:@"asicPassValue"];
-            [prefs setObject:asicPoolView.stringValue forKey:@"asicPoolValue"];
-            [prefs setObject:asicOptionsView.stringValue forKey:@"asicOptionsValue"];
-            
-            
-            [prefs synchronize];
-        }
+
         
         
     }
@@ -202,7 +213,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     */
     toggleTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(startToggling) userInfo:nil repeats:NO];
 //            [self startToggling];
-
+    
 }
 
 - (void)toggleTimerFired:(NSTimer*)timer
@@ -279,21 +290,26 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
             NSString *pgaOneTemp = nil;
             NSString *pgaTwoTemp = nil;
             NSString *pgaThreeTemp = nil;
-            
+
+            if ([theReturnValue rangeOfString:@"PGA0"].location != NSNotFound) {
             NSString *pgaZero = [self getDataBetweenFromString:theReturnValue leftString:@"PGA0" rightString:@")" leftOffset:0];
                         pgaZeroTemp = [self getDataBetweenFromString:pgaZero leftString:@"[Temperature] => " rightString:@"." leftOffset:0];
             pgaZeroTemp = [pgaZeroTemp stringByReplacingOccurrencesOfString:@"[Temperature] => " withString:@"Temperature: "];
-        if ([theReturnValue rangeOfString:@"GPU1"].location != NSNotFound) {
+            }
+        if ([theReturnValue rangeOfString:@"PGA1"].location != NSNotFound) {
             NSString *pgaOne = [self getDataBetweenFromString:theReturnValue leftString:@"PGA1" rightString:@")" leftOffset:0];
                         pgaOneTemp = [self getDataBetweenFromString:pgaOne leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
+            pgaOne = nil;
         }
                     if ([theReturnValue rangeOfString:@"PGA2"].location != NSNotFound) {
             NSString *pgaTwo = [self getDataBetweenFromString:theReturnValue leftString:@"PGA2" rightString:@")" leftOffset:0];
                         pgaTwoTemp = [self getDataBetweenFromString:pgaTwo leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
+                        pgaTwo = nil;
                     }
                     if ([theReturnValue rangeOfString:@"PGA3"].location != NSNotFound) {
             NSString *pgaThree = [self getDataBetweenFromString:theReturnValue leftString:@"PGA3" rightString:@")" leftOffset:0];
                         pgaThreeTemp = [self getDataBetweenFromString:pgaThree leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
+                        pgaThree = nil;
                     }
             
             if ([pgaZeroTemp isNotEqualTo:@""] && [pgaOneTemp isNotEqualTo:@""]) {
@@ -306,16 +322,19 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
                 pgaTwoTemp = [pgaTwoTemp stringByAppendingString:@", "];
             }
             
-//            tempsLabel.stringValue = pgaZeroTemp;
 
             
             NSArray *pgaTempsArray = [NSArray arrayWithObjects:pgaZeroTemp, pgaOneTemp, pgaTwoTemp, pgaThreeTemp, nil];
             
             tempsLabel.stringValue = [pgaTempsArray componentsJoinedByString:@""];
             
-//                    tempsLabel.stringValue = [pgaZeroTemp stringByReplacingOccurrencesOfString:@"[Temperature] =>" withString:@""];
-            
-//            NSLog(@"apioutput");
+pgaZeroTemp = nil;
+pgaOneTemp = nil;
+pgaTwoTemp = nil;
+pgaThreeTemp = nil;
+            theReturnValue = nil;
+
+
         }
     
     // Delay execution of my block for 3s.
@@ -480,21 +499,49 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 
 // This callback is implemented as part of conforming to the ProcessController protocol.
 // It will be called whenever there is output from the TaskWrapper.
-- (void)appendOutput:(NSString *)output
+- (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
  
+    NSString *unknownMessage = @"Unknown stratum msg";
     NSString *apiOutput = @"5s:";
+    NSString *khOutput = @"kh";
+    NSString *mhOutput = @"Mh";
+    NSString *ghOutput = @"Gh";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
-    NSString *numberString = [self getDataBetweenFromString:output
-                                                 leftString:@"5s" rightString:@"a" leftOffset:3];
-    megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSString *acceptString = [self getDataBetweenFromString:output
-                                                 leftString:@"A:" rightString:@"R" leftOffset:0];
-    acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        NSString *numberString = [self getDataBetweenFromString:output
+                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
+        megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        numberString = nil;
+        NSString *acceptString = [self getDataBetweenFromString:output
+                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
+        acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        acceptString = nil;
         NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"R:" rightString:@"S" leftOffset:0];
+                                                     leftString:@"R:" rightString:@"+" leftOffset:0];
         rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
+        rejectString = nil;
         
+        if ([output rangeOfString:khOutput].location != NSNotFound) {
+            asicHashField.stringValue = @"Kh";
+        }
+        if ([output rangeOfString:mhOutput].location != NSNotFound) {
+            asicHashField.stringValue = @"Mh";
+        }
+        if ([output rangeOfString:ghOutput].location != NSNotFound) {
+            asicHashField.stringValue = @"Gh";
+        }
+        
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+
+        
+        apiOutput = nil;
+        numberString = nil;
+        acceptString = nil;
+        rejectString = nil;
+        output = nil;
 
     }
   
@@ -524,13 +571,37 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
             //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             // add the string (a chunk of the results from locate) to the NSTextView's
             // backing store, in the form of an attributed string
-            self.asicOutputView.string = [self.asicOutputView.string stringByAppendingString:output];
-    if (self.asicOutputView.string.length >= 1000) {
-        [self.asicOutputView setEditable:true];
-        [self.asicOutputView setSelectedRange:NSMakeRange(0,100)];
-        [self.asicOutputView delete:nil];
-                [self.asicOutputView setEditable:false];
+
+    if ([output rangeOfString:unknownMessage].location != NSNotFound) {
+        output = nil;
     }
+    else
+        self.asicOutputView.string = [self.asicOutputView.string stringByAppendingString:output];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *logLength = [prefs objectForKey:@"logLength" ];
+    if (logLength.intValue <= 1) {
+        logLength = @"5000";
+    }
+    
+    if (self.asicOutputView.string.length >= logLength.intValue) {
+        [self.asicOutputView setEditable:true];
+        [self.asicOutputView setSelectedRange:NSMakeRange(0,1000)];
+        [self.asicOutputView delete:nil];
+        [self.asicOutputView setEditable:false];
+    }
+    
+    ghOutput = nil;
+    khOutput = nil;
+    mhOutput = nil;
+    unknownMessage = nil;
+    logLength = nil;
+    prefs = nil;
+    apiOutput = nil;
+
 
         /*    [[appDelegate.pingReport textStorage] appendAttributedString: [[NSAttributedString alloc]
          initWithString: output]];
@@ -559,6 +630,11 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
 
     return foundData;
+                
+                foundData = nil;
+                scanner = nil;
+                leftData = nil;
+                rightData = nil;
     }
     else return nil;
 }
@@ -574,7 +650,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 // A callback that gets called when a TaskWrapper is launched, allowing us to do any setup
 // that is needed from the app side.  This method is implemented as a part of conforming
 // to the ProcessController protocol.
-- (void)processStarted
+- (void)taskWrapperWillStartTask:(TaskWrapper *)taskWrapper
 {
     //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     findRunning=YES;
@@ -587,7 +663,7 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 // A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
 // that is needed from the app side.  This method is implemented as a part of conforming
 // to the ProcessController protocol.
-- (void)processFinished
+- (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
     findRunning=NO;
     // change the button's title back for the next search
@@ -597,11 +673,11 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 // If the user closes the search window, let's just quit
 -(BOOL)windowShouldClose:(id)sender
 {
-    [asicTask stopProcess];
+    [asicTask stopTask];
     findRunning = NO;
     asicTask = nil;
     //    [NSApp terminate:nil];
-    [asicStatLabel setStringValue:@""];
+
     return YES;
     
     NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
@@ -614,8 +690,14 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     //    self.asicStatLabel.stringValue = startingText;
     //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
     //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"quit", nil]];
-    [asicTask startProcess];
+//    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"quit", nil]];
+    NSArray *arrayForQuit = [NSArray arrayWithObject:@"quit"];
+   asicTask =[[TaskWrapper alloc] initWithCommandPath:apiPath
+                                    arguments:arrayForQuit
+                                  environment:nil
+                                     delegate:self];
+    
+    [asicTask startTask];
 }
 
 // Display the release notes, as chosen from the menu item in the Help menu.
@@ -650,20 +732,9 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     // getting an NSString
-    NSString *asicPoolString = [prefs stringForKey:@"asicPoolValue"];
-    NSString *asicUserString = [prefs stringForKey:@"asicUserValue"];
-    NSString *asicPassString = [prefs stringForKey:@"asicPassValue"];
     NSString *asicOptionsString = [prefs stringForKey:@"asicOptionsValue"];
     
-    if (asicPoolString != nil) {
-        [asicPoolView setStringValue:asicPoolString];
-    }
-    if (asicUserString != nil) {
-        [asicUserView setStringValue:asicUserString];
-    }
-    if (asicPassString != nil) {
-        [asicPassView setStringValue:asicPassString];
-    }
+
     if (asicOptionsString != nil) {
         [asicOptionsView setStringValue:asicOptionsString];
     }
@@ -679,6 +750,97 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
         [asicWindow orderFront:sender];
     }
 }
+    
+
+- (IBAction)optionsToggle:(id)sender {
+        
+        if ([asicOptionsWindow isVisible]) {
+            [asicOptionsButton setState:NSOffState];
+            [asicOptionsWindow orderOut:sender];
+        }
+        else
+        {
+            [asicOptionsButton setState:NSOnState];
+            [asicOptionsWindow orderFront:sender];
+            
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs synchronize];
+            
+            
+            NSString *noGPU = [prefs stringForKey:@"disableGPU"];
+            NSString *debugOutputOn = [prefs stringForKey:@"debugOutput"];
+            NSString *quietOutputOn = [prefs stringForKey:@"quietOutput"];
+            NSString *bonusOptions = [prefs stringForKey:@"asicOptionsValue"];
+
+            if ([noGPU isNotEqualTo:nil]) {
+                asicNoGpuButton.state = NSOnState;
+            }
+
+            if ([debugOutputOn isNotEqualTo:nil]) {
+                asicDebugButton.state = NSOnState;
+            }
+            if ([quietOutputOn isNotEqualTo:nil]) {
+                asicQuietButton.state = NSOnState;
+            }
+            
+            if ([bonusOptions isNotEqualTo:nil]) {
+                asicOptionsView.stringValue = bonusOptions;
+            }
+
+            noGPU = nil;
+            debugOutputOn = nil;
+            quietOutputOn = nil;
+            bonusOptions = nil;
+
+            
+            prefs = nil;
+            
+        }
+        
+        
+        
+    }
+    
+    
+- (IBAction)optionsApply:(id)sender {
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+        
+        if (asicNoGpuButton.state == NSOnState) {
+            [prefs setObject:@"-G" forKey:@"disableGPU"];
+        }
+        else {
+            [prefs setObject:nil forKey:@"disableGPU"];
+        }
+
+        if (asicDebugButton.state == NSOnState) {
+            [prefs setObject:@"-D" forKey:@"debugOutput"];
+        }
+        else {
+            [prefs setObject:nil forKey:@"debugOutput"];
+        }
+        if (asicQuietButton.state == NSOnState) {
+            [prefs setObject:@"-q" forKey:@"quietOutput"];
+        }
+        else {
+            [prefs setObject:nil forKey:@"quietOutput"];
+        }
+
+        
+        
+        [prefs setObject:asicOptionsView.stringValue forKey:@"asicOptionsValue"];
+        
+        [prefs synchronize];
+        
+        [asicOptionsButton setState:NSOffState];
+        [asicOptionsWindow orderOut:sender];
+        
+        prefs = nil;
+        
+    }
+
 
 
 @end

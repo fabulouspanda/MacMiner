@@ -1,44 +1,50 @@
-//
-//  TaskWrapper.h
-//  MacMiner
-//
-//  Created by Administrator on 02/04/2013.
-//  Copyright (c) 2013 fabulouspanda. All rights reserved.
-//
-#import <Cocoa/Cocoa.h>
+// Based on Apple's "Moriarity" sample code at
+// <http://developer.apple.com/library/mac/#samplecode/Moriarity/Introduction/Intro.html>
+// See the accompanying LICENSE.txt for Apple's original terms of use.
+
 #import <Foundation/Foundation.h>
+#import "TaskWrapperDelegate.h"
 
-@protocol TaskWrapperController
-
-// Your controller's implementation of this method will be called when output arrives from the NSTask.
-// Output will come from both stdout and stderr, per the TaskWrapper implementation.
-- (void)appendOutput:(NSString *)output;
-
-// This method is a callback which your controller can use to do other initialization when a process
-// is launched.
-- (void)processStarted;
-
-// This method is a callback which your controller can use to do other cleanup when a process
-// is halted.
-- (void)processFinished;
-
-@end
-
-@interface TaskWrapper : NSObject {
-    NSTask          *task;
-    id              <TaskWrapperController>controller;
-    NSArray         *arguments;
+/*!
+ * Wrapper around NSTask, with a delegate that provides hooks to various
+ * points in the lifetime of the task. Evolved from the TaskWrapper class
+ * in Apple's Moriarity sample code.
+ *
+ * There is a delegate method to receive output from the task's stdout
+ * and stderr, but no way to interactively send input via stdin.
+ *
+ * TaskWrapper objects are one-shot, like NSTask. If you need to run
+ * a task more than once, create new TaskWrapper instances.
+ */
+@interface TaskWrapper : NSObject
+{
+	id <TaskWrapperDelegate>_taskDelegate;
+	NSString *_commandPath;
+	NSArray *_commandArguments;
+	NSDictionary *_environment;
+	NSTask *_task;
 }
 
-// This is the designated initializer - pass in your controller and any task arguments.
-// The first argument should be the path to the executable to launch with the NSTask.
-- (id)initWithController:(id <TaskWrapperController>)controller arguments:(NSArray *)args;
+@property (readonly) NSString *commandPath;
 
-// This method launches the process, setting up asynchronous feedback notifications.
-- (void) startProcess;
+/*!
+ * commandPath is the path to the executable to launch. env contains environment variables
+ * you want the command to run with. env can be nil.
+ */
+- (id)initWithCommandPath:(NSString *)commandPath
+				arguments:(NSArray *)args
+			  environment:(NSDictionary *)env
+				 delegate:(id <TaskWrapperDelegate>)aDelegate;
 
-// This method stops the process, stoping asynchronous feedback notifications.
-- (void) stopProcess;
+- (void)startTask;
 
+- (void)stopTask;
+
+/*!
+ * Returns a string consisting of the command path followed by arguments. Doesn't do
+ * any escaping, so you may not be able to paste this into Terminal and run it. But
+ * can be useful for debugging/logging.
+ */
+- (NSString *)expandedCommand;
 
 @end
