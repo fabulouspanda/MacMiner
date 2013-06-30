@@ -9,16 +9,31 @@
 #import "AppDelegate.h"
 
 
+
 @implementation AppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+//    
+//    NSString *bfgDockReading = nil;
+//    
+//    if (bfgDockReading != nil) {
+//
+//    }
+//    
+//    NSImage *myImage = [NSImage imageNamed: @"whiter.png"];
+//    [NSApp setApplicationIconImage: myImage];
+
+
+    
 }
+
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "fabulouspanda.MacMiner" in the user's Application Support directory.
 - (NSURL *)applicationFilesDirectory
@@ -68,7 +83,7 @@
             [[NSApplication sharedApplication] presentError:error];
             return nil;
         }
-    } else {
+    }/*  else {
         if (![properties[NSURLIsDirectoryKey] boolValue]) {
             // Customize and localize this error.
             NSString *failureDescription = [NSString stringWithFormat:@"Expected a folder to store application data, found a file (%@).", [applicationFilesDirectory path]];
@@ -80,7 +95,7 @@
             [[NSApplication sharedApplication] presentError:error];
             return nil;
         }
-    }
+    }*/
     
     NSURL *url = [applicationFilesDirectory URLByAppendingPathComponent:@"MacMiner.storedata"];
     NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
@@ -137,31 +152,30 @@
 }
 
 
-
-
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     // Save changes in the application's managed object context before the application terminates.
     
+ 
     if (!_managedObjectContext) {
-           [searchTask stopProcess];
+//           [searchTask stopProcess];
         return NSTerminateNow;
     }
     
     if (![[self managedObjectContext] commitEditing]) {
-           [searchTask stopProcess];
+//           [searchTask stopProcess];
         NSLog(@"%@:%@ unable to commit editing to terminate", [self class], NSStringFromSelector(_cmd));
         return NSTerminateCancel;
     }
     
     if (![[self managedObjectContext] hasChanges]) {
-           [searchTask stopProcess];
+//           [searchTask stopProcess];
         return NSTerminateNow;
     }
     
     NSError *error = nil;
     if (![[self managedObjectContext] save:&error]) {
-           [searchTask stopProcess];
+//           [searchTask stopProcess];
 
         // Customize this code block to include application-specific recovery steps.              
         BOOL result = [sender presentError:error];
@@ -185,8 +199,11 @@
             return NSTerminateCancel;
         }
     }
-   [searchTask stopProcess];
+//   [searchTask stopProcess];
+  
     return NSTerminateNow;
 }
+
+
 
 @end

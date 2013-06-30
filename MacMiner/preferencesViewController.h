@@ -11,17 +11,23 @@
 
 
 
-@interface preferencesViewController : NSViewController <NSWindowDelegate>{
-    NSButton *updateButton;
+@interface preferencesViewController : NSViewController <NSWindowDelegate, NSTextFieldDelegate>{
+
     NSWindow *prefWindow;
+    
+    NSTextField *charCount;
+    NSButton *scrollButton;
+    NSButton *dockButton;
 }
 
-@property (nonatomic, strong) IBOutlet NSButton *updateButton;
+
 @property (nonatomic, strong) IBOutlet NSWindow *prefWindow;
+@property (nonatomic, strong) IBOutlet NSTextField *charCount;
+@property (nonatomic, strong) IBOutlet NSButton *scrollButton;
+@property (nonatomic, strong) IBOutlet NSButton *dockButton;
 
-- (IBAction)updateAction:(id)sender;
-- (IBAction)preferenceToggle:(id)sender;
-- (IBAction)clickUpdate:(id)sender;
+-(IBAction)preferenceToggle:(id)sender;
 
+-(IBAction)textDidChange:(id)sender;
 
 @end

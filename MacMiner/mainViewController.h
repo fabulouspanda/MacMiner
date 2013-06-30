@@ -8,8 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TaskWrapper.h"
+#import "TaskWrapperDelegate.h"
 
-@interface mainViewController : NSViewController <NSWindowDelegate, TaskWrapperController, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
+@interface mainViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
+    
+    NSWindow *window;
+    
     NSView *mainView;
     NSTextField *poolView;
         NSTextField *userView;
@@ -22,11 +26,15 @@
     TaskWrapper *searchTask;
     NSTextField *statLabel;
     
-    NSButton *popoverTriggerButton;
-    NSPopover *popover;
-    
     NSButton *rememberButton;
+    
+    NSTextField *pocSpeedRead;
+    NSTextField *pocAcceptRead;
+    NSTextField *pocRejectRead;
+    
 }
+
+@property (nonatomic, strong) IBOutlet NSWindow *window;
 
 @property (nonatomic, strong) IBOutlet NSView *mainView;
 @property (nonatomic, strong) IBOutlet NSTextField *poolView;
@@ -38,13 +46,13 @@
 @property (nonatomic, strong) IBOutlet NSButton *startButton;
 @property (nonatomic, strong) IBOutlet NSTextField *statLabel;
 
-@property (nonatomic, strong) IBOutlet NSButton *popoverTriggerButton;
-@property (nonatomic, strong) IBOutlet NSPopover *popover;
 
 @property (nonatomic, strong) IBOutlet NSButton *rememberButton;
 
-- (void)launchstart:(id)sender;
-//- (void)alertDidEnd:(NSAlert *)pipAlert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+@property (nonatomic, strong) IBOutlet NSTextField *pocSpeedRead;
+@property (nonatomic, strong) IBOutlet NSTextField *pocAcceptRead;
+@property (nonatomic, strong) IBOutlet NSTextField *pocRejectRead;
+
 
 
 - (IBAction)start:(id)sender;

@@ -8,58 +8,57 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import "TaskWrapper.h"
+#import "TaskWrapperDelegate.h"
 
 
-@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperController, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
+@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
     NSWindow *asicWindow;
     NSView *asicView;
-    NSTextField *asicPoolView;
-    NSTextField *asicUserView;
-    NSSecureTextField *asicPassView;
+
     NSTextField *asicOptionsView;
     
     NSTextView *asicOutputView;
     NSButton *asicStartButton;
     BOOL findRunning;
     TaskWrapper *asicTask;
-    NSTextField *asicStatLabel;
-    
-    NSButton *asicPopoverTriggerButton;
-    NSPopover *asicPopover;
-    
-    NSButton *asicRememberButton;
     
     NSTimer *toggleTimer;
     
-    NSTextFieldCell *megaHashLabel;
-        NSTextFieldCell *acceptLabel;
-            NSTextFieldCell *rejectLabel;
-    NSTextFieldCell *tempsLabel;
+    NSTextField *megaHashLabel;
+        NSTextField *acceptLabel;
+            NSTextField *rejectLabel;
+    NSTextField *tempsLabel;
+    
+    NSPanel *asicOptionsWindow;
+    NSButton *asicNoGpuButton;
+    NSButton *asicQuietButton;
+    NSButton *asicDebugButton;
+    NSButton *asicOptionsButton;
+    
+    NSTextField *asicHashField;
     
     
 }
 
 @property (nonatomic, strong) IBOutlet NSWindow *asicWindow;
 @property (nonatomic, strong) IBOutlet NSView *asicView;
-@property (nonatomic, strong) IBOutlet NSTextField *asicPoolView;
-@property (nonatomic, strong) IBOutlet NSTextField *asicUserView;
-@property (nonatomic, strong) IBOutlet NSSecureTextField *asicPassView;
+
 @property (nonatomic, strong) IBOutlet NSTextField *asicOptionsView;
 
 @property (nonatomic, strong) IBOutlet NSTextView *asicOutputView;
 @property (nonatomic, strong) IBOutlet NSButton *asicStartButton;
-@property (nonatomic, strong) IBOutlet NSTextField *asicStatLabel;
 
-@property (nonatomic, strong) IBOutlet NSButton *asicPopoverTriggerButton;
-@property (nonatomic, strong) IBOutlet NSPopover *asicPopover;
+@property (nonatomic, strong) IBOutlet NSTextField *megaHashLabel;
+@property (nonatomic, strong) IBOutlet NSTextField *acceptLabel;
+@property (nonatomic, strong) IBOutlet NSTextField *rejecttLabel;
+@property (nonatomic, strong) IBOutlet NSTextField *tempsLabel;
+@property (nonatomic, strong) IBOutlet NSPanel *asicOptionsWindow;
+@property (nonatomic, strong) IBOutlet NSButton *asicNoGpuButton;
+@property (nonatomic, strong) IBOutlet NSButton *asicQuietButton;
+@property (nonatomic, strong) IBOutlet NSButton *asicDebugButton;
+@property (nonatomic, strong) IBOutlet NSButton *asicOptionsButton;
 
-@property (nonatomic, strong) IBOutlet NSButton *asicRememberButton;
-
-@property (nonatomic, strong) IBOutlet NSTextFieldCell *megaHashLabel;
-@property (nonatomic, strong) IBOutlet NSTextFieldCell *acceptLabel;
-@property (nonatomic, strong) IBOutlet NSTextFieldCell *rejecttLabel;
-@property (nonatomic, strong) IBOutlet NSTextFieldCell *tempsLabel;
-
+@property (nonatomic, strong) IBOutlet NSTextField *asicHashField;
 
 - (IBAction)start:(id)sender;
 
@@ -70,6 +69,12 @@
 - (void)startToggling;
 
 - (void)stopToggling;
+
+- (IBAction)optionsApply:(id)sender;
+
+- (IBAction)optionsToggle:(id)sender;
+
+- (void)toggleTimerFired:(NSTimer*)timer;
 
 //- (IBAction)runProcessAsAdministrator:(id)sender;
 

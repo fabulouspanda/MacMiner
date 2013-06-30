@@ -7,7 +7,7 @@
 //
 
 #import "preferencesViewController.h"
-#import "AppDelegate.h"
+
 
 @interface preferencesViewController ()
 
@@ -15,100 +15,131 @@
 
 @implementation preferencesViewController
 
-@synthesize updateButton, prefWindow;
+@synthesize prefWindow, charCount, scrollButton, dockButton;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs synchronize];
-        NSString *updateButtonState = [prefs stringForKey:@"checkUpdates"];
-    if ([updateButtonState isEqual: @"updateCheck"]) {
-        updateButton.state = NSOnState;
-    }
-    if ([updateButtonState isEqual: @"no"]) {
-        updateButton.state = NSOffState;
-    }
 
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    charCount.stringValue = [prefs objectForKey:@"logLength" ];
+    
+    prefs = nil;
     return self;
 }
 
-- (IBAction)updateAction:(id)sender {
-    if (updateButton.state == NSOffState) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *updateMiner = @"updateCheck";
-        // saving an NSString
-        [prefs setObject:updateMiner forKey:@"checkUpdates"];
-        
-        [prefs synchronize];
-    }
-    else {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *updateMiner = @"no";
-        // saving an NSString
-        [prefs setObject:updateMiner forKey:@"checkUpdates"];
-        
-        [prefs synchronize];
-    }
 
-}
+-(IBAction)preferenceToggle:(id)sender {
 
-- (IBAction)preferenceToggle:(id)sender {
-    
     
     if ([prefWindow isVisible]) {
+
         [prefWindow orderOut:sender];
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:charCount.stringValue forKey:@"logLength"];
+        
+        [prefs synchronize];
+        
+        prefs = nil;
+
+        if (dockButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"hide" forKey:@"showDockReading"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (dockButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@" " forKey:@"showDockReading"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (scrollButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"hide" forKey:@"scrollLog"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (scrollButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@" " forKey:@"scrollLog"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        
     }
     else
     {
-        [prefWindow orderFront:sender];
-    }
-}
-
-
-- (IBAction)clickUpdate:(id)sender {
-NSLog(@"Checking for Updates");
-NSURL *versionNumber = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version102.txt"];
-NSURL *versionURL = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/version.txt"];
-
-NSString *currentVersion = [NSString stringWithContentsOfURL:versionNumber encoding:(NSUTF8StringEncoding) error:nil];
-NSString *latestVersion = [NSString stringWithContentsOfURL:versionURL encoding:(NSUTF8StringEncoding) error:nil];
-
-if (currentVersion != latestVersion) {
-    NSLog(@"new version available");
-    NSAlert * myAlert=[[NSAlert alloc] init];
-    [myAlert setMessageText:@"A new version of MacMiner is available"];
-    [myAlert addButtonWithTitle:@"Download"];
-    [myAlert addButtonWithTitle:@"Ignore"];
-    
-    NSURL *macminer = [NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"];
-    switch ([myAlert runModal]) {
-        case NSAlertFirstButtonReturn:
-            //handle first button
-            
-            [[NSWorkspace sharedWorkspace] openURL:macminer];
-            break;
-        case NSAlertSecondButtonReturn:
-            //handle second button
-            break;
-    }
-}
-if (currentVersion == latestVersion) {
-        NSLog(@"no new version available");
-        NSAlert * myAlert=[[NSAlert alloc] init];
-        [myAlert setMessageText:@"You are up to date"];
-        [myAlert addButtonWithTitle:@"Splendid"];
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        switch ([myAlert runModal]) {
-            case NSAlertFirstButtonReturn:
-                //handle first button
-                
+        [prefs synchronize];
+        
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"logLength"]) {
+                        [prefs setObject:@"" forKey:@"logLength"];
+        }
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"scrollLog"]) {
+            [prefs setObject:@"" forKey:@"scrollLog"];
+        }
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"showDockReading"]) {
+            [prefs setObject:@"" forKey:@"showDockReading"];
+        }
+        
+        charCount.stringValue = [prefs objectForKey:@"logLength" ];
+        
+        if ([[prefs objectForKey:@"scrollLog"] isEqual: @"hide"]) {
+                        scrollButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"showDockReading"] isEqual: @"hide"]) {
+            dockButton.state = NSOffState;
+        }
 
-                break;
-
+        prefs = nil;
+        
+        [prefWindow orderFront:sender];
+        
     }
-    
 }
 
+-(IBAction)textDidChange:(id)sender {
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs setObject:charCount.stringValue forKey:@"logLength"];
+    
+    [prefs synchronize];
+    
+    prefs = nil;
 }
+
+- (IBAction)scrollLogOption:(id)sender {
+    if (scrollButton.state == NSOffState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"hide" forKey:@"scrollLog"];
+        
+        [prefs synchronize];
+    }
+    if (scrollButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@" " forKey:@"scrollLog"];
+        
+        [prefs synchronize];
+    }
+}
+
+
 
 @end
