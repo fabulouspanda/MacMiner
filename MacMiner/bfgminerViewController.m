@@ -9,68 +9,123 @@
 #import "bfgminerViewController.h"
 #import "AppDelegate.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 @implementation bfgminerViewController
 
-@synthesize bfgOutputView, bfgRememberButton, bfgStartButton, bfgStatLabel, bfgView, bfgWindow, bfgOptionsView, speedRead, acceptRead, rejectRead, sliderValue, intenseSlider, bfgOptionsWindow, openOptions, workSlider, workSizeLabel, vectorOverride, vectorSlide, debugOutput, disableGPU, dynamicIntensity, useScrypt, quietOutput, workSizeOverride, vectorSizeLabel, intenseSizeLabel, hashRead, bfgLookupGap, bfgShaders, bfgThreadConc;
 
+/*
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:(NSCoder *)aDecoder];
+    if (self) {
+        // Initialization code here.
+        //            NSLog(@"startup");
+        //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        
 
+        
+        
+    }
+    
+
+    
+    return self;
+}
+*/
 - (IBAction)sliderChanged:(id)sender {
     
-    int current = lroundf([workSlider floatValue]);
-    [workSizeLabel setStringValue:[workValues objectAtIndex:current]];
+    int current = lroundf([self.workSlider floatValue]);
+    [self.workSizeLabel setStringValue:[workValues objectAtIndex:current]];
     
 }
 - (IBAction)vectorChanged:(id)sender {
     
-    int current = lroundf([vectorSlide floatValue]);
-    [vectorSizeLabel setStringValue:[vectorValues objectAtIndex:current]];
+    int current = lroundf([self.vectorSlide floatValue]);
+    [self.vectorSizeLabel setStringValue:[vectorValues objectAtIndex:current]];
     
 }
+/*
+ - (void)alertDidEnd:(NSAlert *)startAlert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+ if (returnCode == NSAlertFirstButtonReturn) {
+ NSLog(@"install pip");
+ }
+ if (returnCode == NSAlertSecondButtonReturn) {
+ NSLog(@"quit");
+ }
+ }
+ */
 
+- (IBAction)bfgDisplayHelp:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
+}
 
-- (IBAction)stopBFG:(id)sender {
+- (void)stopBFG {
     // change the button's title back for the next search
-    [bfgStartButton setTitle:@"Start"];
+    [self.bfgStartButton setTitle:@"Start"];
     // This stops the task and calls our callback (-processFinished)
     [bfgTask stopTask];
     searchTaskIsRunning=NO;
-    
+            self.speedRead.tag = 0;
+
     // Release the memory for this wrapper object
     
     bfgTask=nil;
-    [rejectRead setStringValue:@""];
+    [self.rejectRead setStringValue:@""];
     return;
     
-    [[NSApplication sharedApplication] terminate:nil];
+
 }
 
 - (IBAction)start:(id)sender
 {
     if (searchTaskIsRunning)
     {
+                self.bfgStartButton.tag = 1;
         // change the button's title back for the next search
-        [bfgStartButton setTitle:@"Start"];
+        [self.bfgStartButton setTitle:@"Start"];
         // This stops the task and calls our callback (-processFinished)
         [bfgTask stopTask];
         searchTaskIsRunning=NO;
+                self.speedRead.tag = 0;
+
         
         // Release the memory for this wrapper object
         
         bfgTask=nil;
-        [rejectRead setStringValue:@""];
+        [self.rejectRead setStringValue:@""];
         
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+//        appDelegate.bfgReading.stringValue = @"";
+        [appDelegate.bfgReadBack setHidden:YES];
+        [appDelegate.bfgReading setHidden:YES];
 
+        
+        [[NSApp dockTile] display];
+        appDelegate = nil;
         
         return;
     }
     else
     {
-        [bfgStartButton setTitle:@"Stop"];
+        [self.bfgStartButton setTitle:@"Stop"];
         // If the task is still sitting around from the last run, release it
         if (bfgTask!=nil) {
             bfgTask = nil;
         }
+
         
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.bfgReading.stringValue = @"";
+        [appDelegate.bfgReadBack setHidden:NO];
+        [appDelegate.bfgReading setHidden:NO];
+
+        
+        [[NSApp dockTile] display];
 
         
         // Let's allocate memory for and initialize a new TaskWrapper object, passing
@@ -78,14 +133,15 @@
         // to the command-line tool, and the contents of the text field that
         // displays what the user wants to search on
         
+        //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+
+        
         NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
 
         NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         
         
 
-
-            //        NSLog(poclbmPath);
             [self.bfgOutputView setString:@""];
             NSString *startingText = @"Starting…";
             self.bfgStatLabel.stringValue = startingText;
@@ -99,95 +155,90 @@
         
         [prefs synchronize];
         
-//        NSString *mainPool = [prefs stringForKey:@"defaultPoolValue"];
-//        NSString *mainBTCUser = [prefs stringForKey:@"defaultBTCUser"];
-//        NSString *mainBTCPass = [prefs stringForKey:@"defaultBTCPass"];
-        NSString *intensityValue = [prefs stringForKey:@"intenseValue"];
-        NSString *worksizeValue = [prefs stringForKey:@"worksizeValue"];
-        NSString *vectorValue = [prefs stringForKey:@"vectorValue"];
-        NSString *noGPU = [prefs stringForKey:@"disableGPU"];
-        NSString *onScrypt = [prefs stringForKey:@"useScrypt"];
-        NSString *debugOutputOn = [prefs stringForKey:@"debugOutput"];
-        NSString *quietOutputOn = [prefs stringForKey:@"quietOutput"];
-        NSString *bonusOptions = [prefs stringForKey:@"bfgOptionsValue"];
-        NSString *threadConc = [prefs stringForKey:@"bfgThreadConc"];
-        NSString *shaders = [prefs stringForKey:@"bfgShaders"];
-        NSString *lookupGap = [prefs stringForKey:@"bfgLookupGap"];
-//        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
-  /*
-        if ([mainBTCUser isNotEqualTo:nil]) {
-            mainPool = [oString stringByAppendingString:mainPool];
-            mainBTCUser = [uString stringByAppendingString:mainBTCUser];
-            mainBTCPass = [pString stringByAppendingString:mainBTCPass];
-            [launchArray addObject:mainPool];
-            [launchArray addObject:mainBTCUser];
-            [launchArray addObject:mainBTCPass];
-        }
-        else if ([autoWasSetup isEqualTo:nil] && [mainBTCUser isEqualTo:nil]) {
-            
-            [launchArray addObject:poolString];
-            [launchArray addObject:userString];
-            [launchArray addObject:passString];
-            
-        }
-        */
+
+        self.intensityValue = [prefs stringForKey:@"intenseValue"];
+        self.worksizeValue = [prefs stringForKey:@"worksizeValue"];
+        self.vectorValue = [prefs stringForKey:@"vectorValue"];
+        self.noGPU = [prefs stringForKey:@"disableGPU"];
+        self.onScrypt = [prefs stringForKey:@"useScrypt"];
+        self.debugOutputOn = [prefs stringForKey:@"debugOutput"];
+        self.quietOutputOn = [prefs stringForKey:@"quietOutput"];
+        self.bonusOptions = [prefs stringForKey:@"bfgOptionsValue"];
+        self.threadConc = [prefs stringForKey:@"bfgThreadConc"];
+        self.shaders = [prefs stringForKey:@"bfgShaders"];
+        self.lookupGap = [prefs stringForKey:@"bfgLookupGap"];
+        NSString *cpuThreads = [prefs stringForKey:@"bfgCpuThreads"];
+
                         
             [launchArray addObject:@"-T"];
         
-        if ([intensityValue isNotEqualTo:nil]) {
+        if ([self.intensityValue isNotEqualTo:nil]) {
             [launchArray addObject:@"-I"];
-            [launchArray addObject:intensityValue];
+            [launchArray addObject:self.intensityValue];
         }
-        if ([worksizeValue isNotEqualTo:nil]) {
+        if ([self.worksizeValue isNotEqualTo:nil]) {
             [launchArray addObject:@"-w"];
-            [launchArray addObject:worksizeValue];
+            [launchArray addObject:self.worksizeValue];
         }
-        if ([vectorValue isNotEqualTo:nil]) {
+        if ([self.vectorValue isNotEqualTo:nil]) {
             [launchArray addObject:@"-v"];
-            [launchArray addObject:vectorValue];
+            [launchArray addObject:self.vectorValue];
         }
-        if ([noGPU isNotEqualTo:nil]) {
-            [launchArray addObject:noGPU];
+        if (self.noGPU.length >= 1) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
         }
-        if ([onScrypt isNotEqualTo:nil]) {
-            [launchArray addObject:onScrypt];
+        if ([self.onScrypt isNotEqualTo:nil]) {
+            [launchArray addObject:self.onScrypt];
         }
-        if ([debugOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:debugOutputOn];
+        if ([self.debugOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.debugOutputOn];
         }
-        if ([quietOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:quietOutputOn];
+        if ([self.quietOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.quietOutputOn];
         }
-        if (threadConc.length >= 1) {
+        if (self.threadConc.length >= 1) {
             [launchArray addObject:@"--thread-concurrency"];
-            [launchArray addObject:threadConc];
+            [launchArray addObject:self.threadConc];
         }
-        if (shaders.length >= 1) {
+        if (self.shaders.length >= 1) {
             [launchArray addObject:@"--shaders"];
-            [launchArray addObject:shaders];
+            [launchArray addObject:self.shaders];
         }
-        if (lookupGap.length >= 1) {
+        if (self.lookupGap.length >= 1) {
             [launchArray addObject:@"--lookup-gap"];
-            [launchArray addObject:lookupGap];
+            [launchArray addObject:self.lookupGap];
+        }
+        if (cpuThreads.length >= 1) {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:cpuThreads];
+        }
+        else {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:@"0"];
         }
 
-        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        NSString *userpath = [paths objectAtIndex:0];
-        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-        NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
-
+        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        self.userpath = [self.paths objectAtIndex:0];
+        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
+        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
+        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
+        self.userpath = nil;
+        self.userpath2 = nil;
+        self.paths = nil;
+        self.executableName = nil;
+        
             [launchArray addObject:@"-c"];
-        [launchArray addObject:saveBTCConfigFilePath];
+        [launchArray addObject:self.saveBTCConfigFilePath];
 
-        if ([onScrypt isEqualTo:@"--scrypt"]) {
+        if ([self.onScrypt isEqualTo:@"--scrypt"]) {
             [launchArray removeLastObject];
-            [launchArray addObject:saveLTCConfigFilePath];
+            [launchArray addObject:self.saveLTCConfigFilePath];
         }
 
-        if ([bonusOptions isNotEqualTo:nil]) {
-            NSArray *bonusStuff = [bonusOptions componentsSeparatedByString:@" "];
+        if ([self.bonusOptions isNotEqualTo:nil]) {
+            NSArray *bonusStuff = [self.bonusOptions componentsSeparatedByString:@" "];
             if (bonusStuff.count >= 2) {
             [launchArray addObjectsFromArray:bonusStuff];
                 bonusStuff = nil;
@@ -205,14 +256,22 @@
             // kick off the process asynchronously
             [bfgTask startTask];
         
+        NSString *logItString = [launchArray componentsJoinedByString:@"_"];
+        appDelegate.bfgSettingText.stringValue = logItString;
+                appDelegate = nil;
         
-        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveBTCConfigFilePath];
+        self.lookupGap = nil;
+        self.shaders = nil;
+        self.threadConc = nil;
+        
+        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveBTCConfigFilePath];
         if (fileExists) {
-            NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             
 
-            if ([onScrypt length] <= 1) {
+            if ([self.onScrypt length] <= 1) {
                 NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
                 NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -225,23 +284,27 @@
 
                         NSAlert *startAlert = [[NSAlert alloc] init];
                         [startAlert addButtonWithTitle:@"Indeed"];
-                        
-                        [startAlert setMessageText:@"bfgminer has started"];
-                        NSString *infoText = @"The primary pool is set to ";
-                        infoText = [infoText stringByAppendingString:bfgURLValue];
-                        infoText = [infoText stringByAppendingString:@" and the user is set to "];
-                        infoText = [infoText stringByAppendingString:bfgUserValue];
-                        [startAlert setInformativeText:infoText];
-
                 
+                [startAlert setMessageText:@"bfgminer has started"];
+                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                [startAlert setInformativeText:infoText3];
+                
+                infoText3 = nil;
+                infoText2 = nil;
+                infoText = nil;
+                
+                        //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                        //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
                         [startAlert setAlertStyle:NSWarningAlertStyle];
-
+                        //        returnCode: (NSInteger)returnCode
                         
-                        [startAlert beginSheetModalForWindow:bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+                        [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
             }
             
-
-                    if ([onScrypt isEqualTo:@"--scrypt"]) {
+//            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
+                    if ([self.onScrypt isEqualTo:@"--scrypt"]) {
                         NSString *numberString = [self getDataBetweenFromString:ltcConfig
                                                                      leftString:@"url" rightString:@"," leftOffset:8];
                         NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -256,17 +319,26 @@
                         [startAlert addButtonWithTitle:@"Indeed"];
                         
                         [startAlert setMessageText:@"bfgminer has started"];
-                        NSString *infoText = @"The primary pool is set to ";
-                        infoText = [infoText stringByAppendingString:bfgURLValue];
-                        infoText = [infoText stringByAppendingString:@" and the user is set to "];
-                        infoText = [infoText stringByAppendingString:bfgUserValue];
-                        [startAlert setInformativeText:infoText];
+                        NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+                        NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                        NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                        [startAlert setInformativeText:infoText3];
                         
-
+                        infoText3 = nil;
+                        infoText2 = nil;
+                        infoText = nil;
+                        ltcConfig = nil;
+                        btcConfig = nil;
+                        bfgURLValue = nil;
+                        bfgUserValue = nil;
+                    
+                        
+                        //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                        //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
                         [startAlert setAlertStyle:NSWarningAlertStyle];
-
+                        //        returnCode: (NSInteger)returnCode
                         
-                        [startAlert beginSheetModalForWindow:bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+                        [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
                 
             }
             
@@ -280,18 +352,34 @@
         
         launchArray = nil;
 
-        intensityValue = nil;
-        worksizeValue = nil;
-        vectorValue = nil;
-        noGPU = nil;
-        onScrypt = nil;
-        debugOutputOn = nil;
-        quietOutputOn = nil;
-bonusOptions = nil;
+        self.intensityValue = nil;
+        self.worksizeValue = nil;
+        self.vectorValue = nil;
+        self.noGPU = nil;
+        self.onScrypt = nil;
+        self.debugOutputOn = nil;
+        self.quietOutputOn = nil;
+        self.bonusOptions = nil;
         prefs = nil;
         bfgPath = nil;
+        self.saveBTCConfigFilePath = nil;
+        self.saveLTCConfigFilePath = nil;
 
-
+            /*
+            if (bfgRememberButton.state == NSOnState) {
+                
+//                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+                
+                // saving an NSString
+                [prefs setObject:bfgUserView.stringValue forKey:@"bfgUserValue"];
+                [prefs setObject:bfgPassView.stringValue forKey:@"bfgPassValue"];
+                [prefs setObject:bfgPoolView.stringValue forKey:@"bfgPoolValue"];
+//                [prefs setObject:bfgOptionsView.stringValue forKey:@"bfgOptionsValue"];
+                
+                
+                [prefs synchronize];
+            }
+*/
         
     }
     
@@ -302,49 +390,84 @@ bonusOptions = nil;
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
     
-    NSString *unknownMessage = @"Unknown stratum msg";
-    NSString *apiOutput = @"5s:";
-        NSString *khOutput = @"kh";
-            NSString *mhOutput = @"Mh";
-    NSString *ghOutput = @"Gh";
-    if ([output rangeOfString:apiOutput].location != NSNotFound) {
+    if ([self.speedRead.stringValue isNotEqualTo:@"0"]) {
+        self.speedRead.tag = 1;
+    }
+    if ([self.speedRead.stringValue isEqual: @"0"] && self.speedRead.tag == 1) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Mining Stopped"];
+    }
+    
+    if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Authorisation Failed"];
+    }
+    
+    if ([output rangeOfString:@"5s:"].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
                                                      leftString:@"5s" rightString:@"a" leftOffset:3];
-        speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        self.speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
         numberString = nil;
         NSString *acceptString = [self getDataBetweenFromString:output
                                                      leftString:@"A:" rightString:@"R" leftOffset:0];
-        acceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        self.acceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         acceptString = nil;
         NSString *rejectString = [self getDataBetweenFromString:output
                                                      leftString:@"R:" rightString:@"+" leftOffset:0];
-        rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
+        self.rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         rejectString = nil;
         
-            if ([output rangeOfString:khOutput].location != NSNotFound) {
-             hashRead.stringValue = @"Kh";
+            if ([output rangeOfString:@"kh"].location != NSNotFound) {
+             self.hashRead.stringValue = @"Kh";
             }
-        if ([output rangeOfString:mhOutput].location != NSNotFound) {
-            hashRead.stringValue = @"Mh";
+        if ([output rangeOfString:@"Mh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Mh";
         }
-        if ([output rangeOfString:ghOutput].location != NSNotFound) {
-            hashRead.stringValue = @"Gh";
+        if ([output rangeOfString:@"Gh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Gh";
         }
 
         
-    }
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
 
+
+                if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                    [appDelegate.bfgReadBack setHidden:YES];
+            [appDelegate.bfgReading setHidden:YES];
+                    [[NSApp dockTile] display];
+                    appDelegate = nil;
+                }
+        else
+        {
+            
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
+            [appDelegate.bfgReadBack setHidden:NO];
+            [appDelegate.bfgReading setHidden:NO];
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+    }
 //    else
             //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             // add the string (a chunk of the results from locate) to the NSTextView's
             // backing store, in the form of an attributed string
         
         
-    if ([output rangeOfString:unknownMessage].location != NSNotFound) {
+    if ([output rangeOfString:@"Unknown stratum msg"].location != NSNotFound) {
         output = nil;
     }
-    else
-            self.bfgOutputView.string = [self.bfgOutputView.string stringByAppendingString:output];
+    else {
+       
+       NSString *newOutput = [self.bfgOutputView.string stringByAppendingString:output];
+
+            self.bfgOutputView.string = newOutput;
+        
+        newOutput = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -360,6 +483,7 @@ bonusOptions = nil;
         [self.bfgOutputView setSelectedRange:NSMakeRange(0,1000)];
         [self.bfgOutputView delete:nil];
         [self.bfgOutputView setEditable:false];
+        logLength = nil;
     }
 
         
@@ -371,14 +495,12 @@ bonusOptions = nil;
                 if ([[prefs objectForKey:@"scrollLog"] isNotEqualTo:@"hide"]) {
         [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
                 }
-    apiOutput = nil;
-    khOutput = nil;
-    mhOutput = nil;
-    ghOutput = nil;
+        prefs = nil;
+    }
+ 
+
     output = nil;
-    prefs = nil;
-    logLength = nil;
-    unknownMessage = nil;
+
 
     }
 
@@ -419,10 +541,11 @@ bonusOptions = nil;
 {
     //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     searchTaskIsRunning=YES;
+
     // clear the results
     //    [self.outputView setString:@""];
     // change the "Start" button to say "Stop"
-    [bfgStartButton setTitle:@"Stop"];
+    [self.bfgStartButton setTitle:@"Stop"];
 }
 
 // A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
@@ -431,18 +554,42 @@ bonusOptions = nil;
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
     searchTaskIsRunning=NO;
+            self.speedRead.tag = 0;
+
     // change the button's title back for the next search
-    [bfgStartButton setTitle:@"Start"];
+    [self.bfgStartButton setTitle:@"Start"];
+    
+    if (self.bfgStartButton.tag == 0) {
+        
+        [self performSelector:@selector(start:) withObject:nil afterDelay:10.0];
+    
+    NSAlert *restartMessage = [[NSAlert alloc] init];
+    [restartMessage addButtonWithTitle:@"Umm… OK."];
+    
+    [restartMessage setMessageText:@"Settings changed"];
+    
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    NSLog(@"newDateString %@", newDateString);
+    outputFormatter = nil;
+    NSString *restartMessageInfo = [NSString stringWithFormat:@"Your miner was resarted automatically after a sudden stop at %@.", newDateString];
+    [restartMessage setInformativeText:restartMessageInfo];
+    
+    [restartMessage setAlertStyle:NSWarningAlertStyle];
+    //        returnCode: (NSInteger)returnCode
+    
+    [restartMessage beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            restartMessage = nil;
+    }
+
 }
 
 // If the user closes the search window, let's just quit
 -(BOOL)windowShouldClose:(id)sender
 {
-    [bfgTask stopTask];
-    searchTaskIsRunning = NO;
-    bfgTask = nil;
-    //    [NSApp terminate:nil];
-    [bfgStatLabel setStringValue:@""];
+
     return YES;
 }
 
@@ -454,70 +601,45 @@ bonusOptions = nil;
     
     
     searchTaskIsRunning=NO;
+        self.bfgStatLabel.tag = 0;
+            self.speedRead.tag = 0;
     bfgTask=nil;
-
-    
-    
-    workValues = [[NSArray alloc] initWithObjects:@"64",@"128",@"256",@"512",@"1024",nil];
-    
-    [workSlider setNumberOfTickMarks:[workValues count]];
-    [workSlider setMinValue:0];
-    [workSlider setMaxValue:[workValues count]-1];
-    [workSlider setAllowsTickMarkValuesOnly:YES];
-    [workSlider setEnabled:YES];
-    [workSlider setContinuous:YES];
-    
-    [workSizeLabel setStringValue:[workValues objectAtIndex:0]];
-    [workSlider setIntValue:0];
-    
-    vectorValues = [[NSArray alloc] initWithObjects:@"1",@"2",@"4",nil];
-    
-    [vectorSlide setNumberOfTickMarks:[vectorValues count]];
-    [vectorSlide setMinValue:0];
-    [vectorSlide setMaxValue:[vectorValues count]-1];
-    [vectorSlide setAllowsTickMarkValuesOnly:YES];
-    [vectorSlide setEnabled:YES];
-    [vectorSlide setContinuous:YES];
-    
-    [vectorSizeLabel setStringValue:[vectorValues objectAtIndex:0]];
-    [vectorSlide setIntValue:0];
-    
     
     
 }
 
 - (IBAction)bfgMinerToggle:(id)sender {
     
-    if ([bfgWindow isVisible]) {
-        [bfgWindow orderOut:sender];
+    if ([self.bfgWindow isVisible]) {
+        [self.bfgWindow orderOut:sender];
     }
     else
     {
-        [bfgWindow orderFront:sender];
+        [self.bfgWindow orderFront:sender];
     }
 }
 
 - (void)bfgMinerToggled:(id)sender {
     
-    if ([bfgWindow isVisible]) {
-        [bfgWindow orderOut:sender];
+    if ([self.bfgWindow isVisible]) {
+        [self.bfgWindow orderOut:sender];
     }
     else
     {
-        [bfgWindow orderFront:sender];
+        [self.bfgWindow orderFront:sender];
     }
 }
 
 - (IBAction)optionsToggle:(id)sender {
     
-    if ([bfgOptionsWindow isVisible]) {
-                [openOptions setState:NSOffState];
-        [bfgOptionsWindow orderOut:sender];
+    if ([self.bfgOptionsWindow isVisible]) {
+                [self.openOptions setState:NSOffState];
+        [self.bfgOptionsWindow orderOut:sender];
     }
     else
     {
-        [openOptions setState:NSOnState];
-        [bfgOptionsWindow orderFront:sender];
+        [self.openOptions setState:NSOnState];
+        [self.bfgOptionsWindow orderFront:sender];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -535,44 +657,48 @@ bonusOptions = nil;
         NSString *threadConc = [prefs stringForKey:@"bfgThreadConc"];
         NSString *shaders = [prefs stringForKey:@"bfgShaders"];
         NSString *lookupGap = [prefs stringForKey:@"bfgLookupGap"];
+        NSString *cpuThreads = [prefs stringForKey:@"bfgCpuThreads"];
 
-        
+
+        if ([cpuThreads isNotEqualTo:nil]) {
+            self.bfgCpuThreads.stringValue = cpuThreads;
+        }
         if ([intensityValue isNotEqualTo:nil]) {
-            intenseSizeLabel.stringValue = intensityValue;
-            dynamicIntensity.state = NSOffState;
+            self.intenseSizeLabel.stringValue = intensityValue;
+            self.dynamicIntensity.state = NSOffState;
         }
         if ([worksizeValue isNotEqualTo:nil]) {
-            workSizeLabel.stringValue = worksizeValue;
-            workSizeOverride.state = NSOnState;
+            self.workSizeLabel.stringValue = worksizeValue;
+            self.workSizeOverride.state = NSOnState;
         }
         if ([vectorValue isNotEqualTo:nil]) {
-            vectorSizeLabel.stringValue = vectorValue;
-            vectorOverride.state = NSOnState;
+            self.vectorSizeLabel.stringValue = vectorValue;
+            self.vectorOverride.state = NSOnState;
         }
         if ([noGPU isNotEqualTo:nil]) {
-            disableGPU.state = NSOnState;
+            self.disableGPU.state = NSOnState;
         }
         if ([onScrypt isNotEqualTo:nil]) {
-            useScrypt.state = NSOnState;
+            self.useScrypt.state = NSOnState;
         }
         if ([debugOutputOn isNotEqualTo:nil]) {
-            debugOutput.state = NSOnState;
+            self.debugOutput.state = NSOnState;
         }
         if ([quietOutputOn isNotEqualTo:nil]) {
-            quietOutput.state = NSOnState;
+            self.quietOutput.state = NSOnState;
         }
         
         if ([bonusOptions isNotEqualTo:nil]) {
-            bfgOptionsView.stringValue = bonusOptions;
+            self.bfgOptionsView.stringValue = bonusOptions;
             }
         if (threadConc.length >= 1) {
-            bfgThreadConc.stringValue = threadConc;
+            self.bfgThreadConc.stringValue = threadConc;
         }
         if (shaders.length >= 1) {
-            bfgShaders.stringValue = shaders;
+            self.bfgShaders.stringValue = shaders;
         }
         if (lookupGap.length >= 1) {
-            bfgLookupGap.stringValue = lookupGap;
+            self.bfgLookupGap.stringValue = lookupGap;
         }
         
         intensityValue = nil;
@@ -586,6 +712,7 @@ bonusOptions = nil;
         threadConc = nil;
         shaders = nil;
         lookupGap = nil;
+        cpuThreads = nil;
         
         prefs = nil;
         
@@ -599,67 +726,186 @@ bonusOptions = nil;
 - (IBAction)optionsApply:(id)sender {
     
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (dynamicIntensity.state == NSOffState) {
-            [prefs setObject:intenseSizeLabel.stringValue forKey:@"intenseValue"];
+    if (self.bfgCpuThreads.stringValue.length >= 1) {
+        [prefs setObject:self.bfgCpuThreads.stringValue forKey:@"bfgCpuThreads"];
+    }
+    else {
+               [prefs setObject:@"0" forKey:@"bfgCpuThreads"];
+    }
+    if (self.dynamicIntensity.state == NSOffState) {
+            [prefs setObject:self.intenseSizeLabel.stringValue forKey:@"intenseValue"];
     }
     else {
         [prefs setObject:nil forKey:@"intenseValue"];
     }
-    if (workSizeOverride.state == NSOnState) {
-    [prefs setObject:workSizeLabel.stringValue forKey:@"worksizeValue"];
+    if (self.workSizeOverride.state == NSOnState) {
+    [prefs setObject:self.workSizeLabel.stringValue forKey:@"worksizeValue"];
     }
     else    {
         [prefs setObject:nil forKey:@"worksizeValue"];
     }
-    if (vectorOverride.state == NSOnState) {
-    [prefs setObject:vectorSizeLabel.stringValue forKey:@"vectorValue"];
+    if (self.vectorOverride.state == NSOnState) {
+    [prefs setObject:self.vectorSizeLabel.stringValue forKey:@"vectorValue"];
     }
     else {
         [prefs setObject:nil forKey:@"vectorValue"];
     }
-    if (disableGPU.state == NSOnState) {
+    if (self.disableGPU.state == NSOnState) {
         [prefs setObject:@"-G" forKey:@"disableGPU"];
     }
     else {
         [prefs setObject:nil forKey:@"disableGPU"];
     }
-    if (useScrypt.state == NSOnState) {
+    if (self.useScrypt.state == NSOnState) {
         [prefs setObject:@"--scrypt" forKey:@"useScrypt"];
     }
     else {
         [prefs setObject:nil forKey:@"useScrypt"];
     }
-    if (debugOutput.state == NSOnState) {
+    if (self.debugOutput.state == NSOnState) {
         [prefs setObject:@"-D" forKey:@"debugOutput"];
     }
     else {
         [prefs setObject:nil forKey:@"debugOutput"];
     }
-    if (quietOutput.state == NSOnState) {
+    if (self.quietOutput.state == NSOnState) {
         [prefs setObject:@"-q" forKey:@"quietOutput"];
     }
     else {
         [prefs setObject:nil forKey:@"quietOutput"];
     }
-    if (bfgThreadConc.stringValue.length >= 1) {
-        [prefs setObject:bfgThreadConc.stringValue forKey:@"bfgThreadConc"];
+    if (self.bfgThreadConc.stringValue.length >= 1) {
+        [prefs setObject:self.bfgThreadConc.stringValue forKey:@"bfgThreadConc"];
     }
-    if (bfgShaders.stringValue.length >= 1) {
-        [prefs setObject:bfgShaders.stringValue forKey:@"bfgShaders"];
+    else {
+        [prefs setObject:nil forKey:@"bfgThreadConc"];
     }
-    if (bfgLookupGap.stringValue.length >= 1) {
-        [prefs setObject:bfgLookupGap.stringValue forKey:@"bfgLookupGap"];
+    if (self.bfgShaders.stringValue.length >= 1) {
+        [prefs setObject:self.bfgShaders.stringValue forKey:@"bfgShaders"];
+    }
+    else {
+        [prefs setObject:nil forKey:@"bfgShaders"];
+    }
+    if (self.bfgLookupGap.stringValue.length >= 1) {
+        [prefs setObject:self.bfgLookupGap.stringValue forKey:@"bfgLookupGap"];
+    }
+    else {
+        [prefs setObject:nil forKey:@"bfgLookupGap"];
     }
     
-    [prefs setObject:bfgOptionsView.stringValue forKey:@"bfgOptionsValue"];
+    [prefs setObject:self.bfgOptionsView.stringValue forKey:@"bfgOptionsValue"];
     
     [prefs synchronize];
 
-        [openOptions setState:NSOffState];
-        [bfgOptionsWindow orderOut:sender];
+        [self.openOptions setState:NSOffState];
+        [self.bfgOptionsWindow orderOut:sender];
     
     prefs = nil;
 
+}
+
+- (IBAction)setRecommendedBFGValues:(id)sender {
+
+    size_t len = 0;
+    sysctlbyname("hw.model", NULL, &len, NULL, 0);
+    
+    if (len)
+    {
+        char *model = malloc(len*sizeof(char));
+        sysctlbyname("hw.model", model, &len, NULL, 0);
+        NSString *model_ns = [NSString stringWithUTF8String:model];
+        free(model);
+
+//        NSLog(model_ns);
+        
+        if ([model_ns rangeOfString:@"MacPro"].location != NSNotFound) {
+            self.dynamicIntensity.state = NSOffState;
+            self.intenseSizeLabel.stringValue = @"4";
+            self.workSizeOverride.state = NSOffState;
+            self.vectorOverride.state = NSOffState;
+            self.quietOutput.state = NSOnState;
+            self.debugOutput.state = NSOffState;
+        }
+        if ([model_ns rangeOfString:@"MacBook"].location != NSNotFound) {
+
+                    if ([model_ns rangeOfString:@"MacBookPro8,2"].location != NSNotFound || [model_ns rangeOfString:@"MacBookPro8,3"].location != NSNotFound) {
+                        self.dynamicIntensity.state = NSOffState;
+                        self.intenseSizeLabel.stringValue = @"2";
+                        self.workSizeOverride.state = NSOnState;
+                        self.workSizeLabel.stringValue = @"128";
+                        self.vectorOverride.state = NSOffState;
+                        self.quietOutput.state = NSOnState;
+                        self.debugOutput.state = NSOffState;
+                    }
+            else
+            self.dynamicIntensity.state = NSOffState;
+            self.intenseSizeLabel.stringValue = @"2";
+            self.workSizeOverride.state = NSOffState;
+            self.vectorOverride.state = NSOffState;
+            self.quietOutput.state = NSOnState;
+            self.debugOutput.state = NSOffState;
+        }
+        if ([model_ns rangeOfString:@"Mini"].location != NSNotFound) {
+            self.dynamicIntensity.state = NSOffState;
+            self.intenseSizeLabel.stringValue = @"2";
+            self.workSizeOverride.state = NSOffState;
+            self.vectorOverride.state = NSOffState;
+            self.quietOutput.state = NSOnState;
+            self.debugOutput.state = NSOffState;
+        }
+        if ([model_ns rangeOfString:@"iMac"].location != NSNotFound) {
+            
+            if ([model_ns rangeOfString:@"iMac12,1"].location != NSNotFound || [model_ns rangeOfString:@"iMac12,2"].location != NSNotFound) {
+                self.dynamicIntensity.state = NSOffState;
+                self.intenseSizeLabel.stringValue = @"2";
+                self.workSizeOverride.state = NSOnState;
+                self.workSizeLabel.stringValue = @"128";
+                self.vectorOverride.state = NSOffState;
+                self.quietOutput.state = NSOnState;
+                self.debugOutput.state = NSOffState;
+            }
+            else
+            self.dynamicIntensity.state = NSOffState;
+            self.intenseSizeLabel.stringValue = @"2";
+            self.workSizeOverride.state = NSOffState;
+            self.vectorOverride.state = NSOffState;
+            self.quietOutput.state = NSOnState;
+            self.debugOutput.state = NSOffState;
+        }
+        
+        
+        NSAlert *configAlert = [[NSAlert alloc] init];
+        [configAlert addButtonWithTitle:@"I understand"];
+        
+        [configAlert setMessageText:@"Settings changed"];
+        NSString *configInfo = @"Your settings have been set to 'safe' recommended defaults that will allow you to use your computer while mining. Intensity is the key value that affects your mining speed, and needs to be higher for LTC mining. Click apply to save these settings.";
+        [configAlert setInformativeText:configInfo];
+        
+        configInfo = nil;
+        
+        [configAlert setAlertStyle:NSWarningAlertStyle];
+        //        returnCode: (NSInteger)returnCode
+        
+        [configAlert beginSheetModalForWindow:self.bfgOptionsWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+
+    }
+    
+    else{
+    NSAlert *configAlert = [[NSAlert alloc] init];
+    [configAlert addButtonWithTitle:@"I understand"];
+    
+    [configAlert setMessageText:@"Waaaaaah!"];
+    NSString *configInfo = @"I couldn't detect your hardware. Please get in touch with a bug report.";
+    [configAlert setInformativeText:configInfo];
+    
+    configInfo = nil;
+    
+    [configAlert setAlertStyle:NSWarningAlertStyle];
+    //        returnCode: (NSInteger)returnCode
+    
+    [configAlert beginSheetModalForWindow:self.bfgOptionsWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+    }
+    
 }
 
 

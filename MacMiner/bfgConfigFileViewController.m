@@ -14,7 +14,7 @@
 
 @implementation bfgConfigFileViewController
 
-@synthesize configEditWindow, bfgConfigText, cancelConfig, revertConfig, saveConfigFile, btcLTCSegmentedControl;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,12 +32,12 @@
 
 - (IBAction)bfgConfigEditToggled:(id)sender {
     
-    if ([configEditWindow isVisible]) {
-        [configEditWindow orderOut:sender];
+    if ([self.configEditWindow isVisible]) {
+        [self.configEditWindow orderOut:sender];
     }
     else
     {
-        [configEditWindow orderFront:sender];
+        [self.configEditWindow orderFront:sender];
 
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
@@ -46,15 +46,15 @@
         NSString *saveBTCFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
         NSString *saveLTCFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
 
-        if ([btcLTCSegmentedControl isSelectedForSegment:0]) {
+        if ([self.btcLTCSegmentedControl isSelectedForSegment:0]) {
             
 
             NSString *string = [[NSString alloc] initWithContentsOfFile:saveBTCFilePath encoding:NSUTF8StringEncoding error:nil];
-            [bfgConfigText setString:string];
+            [self.bfgConfigText setString:string];
         }
-        if ([btcLTCSegmentedControl isSelectedForSegment:1]) {
+        if ([self.btcLTCSegmentedControl isSelectedForSegment:1]) {
             NSString *string = [[NSString alloc] initWithContentsOfFile:saveLTCFilePath encoding:NSUTF8StringEncoding error:nil];
-            [bfgConfigText setString:string];
+            [self.bfgConfigText setString:string];
         }
         executableName = nil;
         paths = nil;
@@ -73,13 +73,13 @@
     NSString *saveBTCFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
     NSString *saveLTCFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
     
-if ([btcLTCSegmentedControl isSelectedForSegment:0]) {
+if ([self.btcLTCSegmentedControl isSelectedForSegment:0]) {
     NSString *string = [[NSString alloc] initWithContentsOfFile:saveBTCFilePath encoding:NSUTF8StringEncoding error:nil];
-    [bfgConfigText setString:string];
+    [self.bfgConfigText setString:string];
 }
-    if ([btcLTCSegmentedControl isSelectedForSegment:1]) {
+    if ([self.btcLTCSegmentedControl isSelectedForSegment:1]) {
         NSString *string = [[NSString alloc] initWithContentsOfFile:saveLTCFilePath encoding:NSUTF8StringEncoding error:nil];
-        [bfgConfigText setString:string];
+        [self.bfgConfigText setString:string];
     }
     
 executableName = nil;
@@ -98,16 +98,16 @@ saveLTCFilePath = nil;
     NSString *saveBTCFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
     NSString *saveLTCFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
     
-    NSString *bfgFileTextToSave = bfgConfigText.string;
+    NSString *bfgFileTextToSave = self.bfgConfigText.string;
     
-        if ([btcLTCSegmentedControl isSelectedForSegment:0]) {
+        if ([self.btcLTCSegmentedControl isSelectedForSegment:0]) {
     
     [bfgFileTextToSave writeToFile:saveBTCFilePath
                   atomically:YES
                     encoding:NSUTF8StringEncoding
                        error:nil];
         }
-        if ([btcLTCSegmentedControl isSelectedForSegment:1]) {
+        if ([self.btcLTCSegmentedControl isSelectedForSegment:1]) {
             
             [bfgFileTextToSave writeToFile:saveLTCFilePath
                                 atomically:YES
@@ -132,13 +132,13 @@ saveLTCFilePath = nil;
     NSString *saveLTCFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
     
     
-    if ([btcLTCSegmentedControl isSelectedForSegment:0]) {
+    if ([self.btcLTCSegmentedControl isSelectedForSegment:0]) {
         NSString *string = [[NSString alloc] initWithContentsOfFile:saveBTCFilePath encoding:NSUTF8StringEncoding error:nil];
-        [bfgConfigText setString:string];
+        [self.bfgConfigText setString:string];
     }
-        if ([btcLTCSegmentedControl isSelectedForSegment:1]) {
+        if ([self.btcLTCSegmentedControl isSelectedForSegment:1]) {
     NSString *string = [[NSString alloc] initWithContentsOfFile:saveLTCFilePath encoding:NSUTF8StringEncoding error:nil];
-    [bfgConfigText setString:string];
+    [self.bfgConfigText setString:string];
         }
     executableName = nil;
     paths = nil;

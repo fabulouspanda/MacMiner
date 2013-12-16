@@ -9,12 +9,14 @@
 #import "cpuminerViewController.h"
 #import "AppDelegate.h"
 
+#import "smcWrapper.h"
+#import "MachineDefaults.h"
 
 @implementation cpuminerViewController
 
 //io_connect_t conn;
 
-@synthesize cpuOutputView, cpuRememberButton, cpuStartButton, cpuStatLabel, cpuView, cpuWindow, cpuHashLabel, cpuDebugOutput, cpuOptionsWindow, cpuQuietOutput, cpuScrypt, cpuThreads, cpuManualOptions, cpuOptionsButton, tempsLabel;
+
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -26,8 +28,8 @@
         
         
         
-        cpuOutputView.delegate = self;
-        cpuStatLabel.delegate = self;
+        self.cpuOutputView.delegate = self;
+        self.cpuStatLabel.delegate = self;
         
         
     }
@@ -47,6 +49,10 @@
  }
  */
 
+- (IBAction)cpuDisplayHelp:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
+}
 
 
 - (IBAction)start:(id)sender
@@ -54,22 +60,28 @@
     if (findRunning)
     {
         // change the button's title back for the next search
-        [cpuStartButton setTitle:@"Start"];
+        [self.cpuStartButton setTitle:@"Start"];
         // This stops the task and calls our callback (-processFinished)
         [cpuTask stopTask];
         findRunning=NO;
-        [cpuHashLabel setStringValue:@"0"];
+        self.cpuHashLabel.tag = 0;
+        [self.cpuHashLabel setStringValue:@"0"];
         // Release the memory for this wrapper object
         
         cpuTask=nil;
         
-
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = @"";
+        [appDelegate.cpuReadBack setHidden:YES];
+        [appDelegate.cpuReading setHidden:YES];
+        
+        [[NSApp dockTile] display];
         
         return;
     }
     else
     {
-        [cpuStartButton setTitle:@"Stop"];
+        [self.cpuStartButton setTitle:@"Stop"];
         // If the task is still sitting around from the last run, release it
         if (cpuTask!=nil) {
             cpuTask = nil;
@@ -77,7 +89,12 @@
         
         
         
-
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = @"";
+        [appDelegate.cpuReadBack setHidden:NO];
+        [appDelegate.cpuReading setHidden:NO];
+        
+        [[NSApp dockTile] display];
         
         
         
@@ -87,6 +104,13 @@
         // displays what the user wants to search on
         
         
+        
+        
+        /*      if ([bfgOptionsView.stringValue isNotEqualTo:@""]) {
+         NSArray *deviceItems = [bfgOptionsView.stringValue componentsSeparatedByString:@" "];
+         [cpuLaunchArray addObjectsFromArray:deviceItems];
+         
+         } */
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -126,13 +150,30 @@
 
         
         NSString *cpuThreadsV = [prefs stringForKey:@"cpuThreadsValue"];
-
+//        NSString *cpuScryptV = [prefs stringForKey:@"cpuUseScryptValue"];
         NSString *cpuQuietV = [prefs stringForKey:@"cpuQuietOutput"];
         NSString *cpuDebugV = [prefs stringForKey:@"cpuDebugOutput"];
         NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
         
         
-
+        //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
+        /*
+         if ([mainBTCUser isNotEqualTo:nil]) {
+         mainPool = [oString stringByAppendingString:mainPool];
+         mainBTCUser = [uString stringByAppendingString:mainBTCUser];
+         mainBTCPass = [pString stringByAppendingString:mainBTCPass];
+         [cpuLaunchArray addObject:mainPool];
+         [cpuLaunchArray addObject:mainBTCUser];
+         [cpuLaunchArray addObject:mainBTCPass];
+         }
+         else if ([autoWasSetup isEqualTo:nil] && [mainBTCUser isEqualTo:nil]) {
+         
+         [cpuLaunchArray addObject:poolString];
+         [cpuLaunchArray addObject:userString];
+         [cpuLaunchArray addObject:passString];
+         
+         }
+         */
         NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
         
         if ([cpuThreadsV isNotEqualTo:@""]) {
@@ -162,23 +203,26 @@
                 cpuBonusStuff = nil;
             }
         }
-
+        //        NSString *logit = [cpuLaunchArray componentsJoinedByString:@" "];
+        //        NSLog(logit);
         
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
-        cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+        NSString *cpuPath2 = [cpuPath stringByAppendingString:@"/Resources/minerd"];
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
         self.cpuStatLabel.stringValue = startingText;
-
-        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath
+        //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
+        //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
+        //            cpuTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:cpuPath, cpuPath, poolplus, userpass, nil]];
+        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath2
                                                  arguments:cpuLaunchArray
                                                environment:nil
                                                   delegate:self];
         // kick off the process asynchronously
-
+        //        [cpuTask setLaunchPath: @"/sbin/ping"];
         [cpuTask startTask];
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
@@ -202,17 +246,21 @@
                 NSAlert *startAlert = [[NSAlert alloc] init];
                 [startAlert addButtonWithTitle:@"Indeed"];
                 
-                [startAlert setMessageText:@"bfgminer has started"];
-                NSString *infoText = @"The primary pool is set to ";
-                infoText = [infoText stringByAppendingString:bfgURLValue];
-                infoText = [infoText stringByAppendingString:@" and the user is set to "];
-                infoText = [infoText stringByAppendingString:bfgUserValue];
-                [startAlert setInformativeText:infoText];
+                [startAlert setMessageText:@"cpuminer has started"];
+                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
 
+                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                [startAlert setInformativeText:infoText3];
+            infoText = nil;
+            infoText2 = nil;
+            infoText3 = nil;
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
                 [startAlert setAlertStyle:NSWarningAlertStyle];
-
+                //        returnCode: (NSInteger)returnCode
                 
-                [startAlert beginSheetModalForWindow:cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+                [startAlert beginSheetModalForWindow:self.cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
                 
             }
             
@@ -229,33 +277,73 @@
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
     
+    if ([self.cpuHashLabel.stringValue isNotEqualTo:@"0"]) {
+        self.cpuHashLabel.tag = 1;
+    }
+    if ([self.cpuHashLabel.stringValue isEqual: @"0"] && self.cpuHashLabel.tag == 1) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Mining Stopped"];
+    }
+    
     NSString *apiOutput = @"accepted:";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
         
         NSString *numberString = [self getDataBetweenFromString:output
                                                      leftString:@"accepted" rightString:@"," leftOffset:0];
         NSString *step2 = [numberString stringByReplacingOccurrencesOfString:@"a" withString:@"A"];
-        cpuStatLabel.stringValue = [step2 stringByReplacingOccurrencesOfString:@"/" withString:@" of "];
+        self.cpuStatLabel.stringValue = [step2 stringByReplacingOccurrencesOfString:@"/" withString:@" of "];
         
         NSString *rejectString = [self getDataBetweenFromString:output
                                                      leftString:@"," rightString:@"k" leftOffset:1];
-        cpuHashLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        self.cpuHashLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@" " withString:@""];
         
-        //        [self getTemps:(id)nil];
+
         
         apiOutput = nil;
         numberString = nil;
         step2 = nil;
         rejectString = nil;
 
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+        
 
+
+        if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            [appDelegate.cpuReadBack setHidden:YES];
+            [appDelegate.cpuReading setHidden:YES];
+
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+                if ([[prefs objectForKey:@"showDockReading"] isNotEqualTo:@"hide"]) {
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = [self.cpuHashLabel.stringValue stringByAppendingString:@"Kh"];
+                    [appDelegate.cpuReading setHidden:NO];
+                    [appDelegate.cpuReadBack setHidden:NO];
+
+
+        [[NSApp dockTile] display];
+                    appDelegate = nil;
+                }
+        prefs = nil;
     }
     
-    else
+    else {
         
         // add the string (a chunk of the results from locate) to the NSTextView's
         // backing store, in the form of an attributed string
-        self.cpuOutputView.string = [self.cpuOutputView.string stringByAppendingString:output];
+        
+        
+        
+        NSString *newCPUOutput = [self.cpuOutputView.string stringByAppendingString:output];
+        
+    self.cpuOutputView.string = newCPUOutput;
+        
+        newCPUOutput = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -281,9 +369,15 @@
                 if ([[prefs objectForKey:@"scrollLog"] isNotEqualTo:@"hide"]) {
     [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
                 }
+    
+        prefs = nil;
+        logLength = nil;
+        
+    }
+    
     output = nil;
-    prefs = nil;
-    logLength = nil;
+    
+ 
     
 }
 
@@ -327,7 +421,7 @@
     // clear the results
     //    [self.outputView setString:@""];
     // change the "Start" button to say "Stop"
-    [cpuStartButton setTitle:@"Stop"];
+    [self.cpuStartButton setTitle:@"Stop"];
 }
 
 // A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
@@ -336,8 +430,9 @@
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
     findRunning=NO;
+    self.cpuHashLabel.tag = 0;
     // change the button's title back for the next search
-    [cpuStartButton setTitle:@"Start"];
+    [self.cpuStartButton setTitle:@"Start"];
 }
 
 // If the user closes the window, let's just quit
@@ -378,62 +473,62 @@
 - (IBAction)cpuMinerToggle:(id)sender {
     
     
-    if ([cpuWindow isVisible]) {
-        [cpuWindow orderOut:sender];
+    if ([self.cpuWindow isVisible]) {
+        [self.cpuWindow orderOut:sender];
     }
     else
     {
-        [cpuWindow orderFront:sender];
+        [self.cpuWindow orderFront:sender];
     }
 }
 
 - (IBAction)cpuOptionsToggle:(id)sender {
     
-    if ([cpuOptionsWindow isVisible]) {
-        [cpuOptionsButton setState:NSOffState];
-        [cpuOptionsWindow orderOut:sender];
+    if ([self.cpuOptionsWindow isVisible]) {
+        [self.cpuOptionsButton setState:NSOffState];
+        [self.cpuOptionsWindow orderOut:sender];
     }
     else
     {
-        [cpuOptionsButton setState:NSOnState];
-        [cpuOptionsWindow orderFront:sender];
+        [self.cpuOptionsButton setState:NSOnState];
+        [self.cpuOptionsWindow orderFront:sender];
     }
 }
 
 - (IBAction)cpuOptionsApply:(id)sender {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (cpuThreads.stringValue != nil) {
-        [prefs setObject:cpuThreads.stringValue forKey:@"cpuThreadsValue"];
+    if (self.cpuThreads.stringValue != nil) {
+        [prefs setObject:self.cpuThreads.stringValue forKey:@"cpuThreadsValue"];
     }
     else {
         [prefs setObject:nil forKey:@"cpuThreadsValue"];
     }
-    if (cpuScrypt.state == NSOnState) {
+    if (self.cpuScrypt.state == NSOnState) {
         [prefs setObject:@"--scrypt" forKey:@"cpuUseScryptValue"];
     }
     else    {
         [prefs setObject:nil forKey:@"cpuUseScryptValue"];
     }
-    if (cpuQuietOutput.state == NSOnState) {
+    if (self.cpuQuietOutput.state == NSOnState) {
         [prefs setObject:@"-q" forKey:@"cpuQuietOutput"];
     }
     else {
         [prefs setObject:nil forKey:@"cpuQuietOutput"];
     }
-    if (cpuDebugOutput.state == NSOnState) {
+    if (self.cpuDebugOutput.state == NSOnState) {
         [prefs setObject:@"-D" forKey:@"cpuDebugOutput"];
     }
     else {
         [prefs setObject:nil forKey:@"cpuDebugOutput"];
     }
     
-    [prefs setObject:cpuManualOptions.stringValue forKey:@"cpuOptionsValue"];
+    [prefs setObject:self.cpuManualOptions.stringValue forKey:@"cpuOptionsValue"];
     
     [prefs synchronize];
     
-    [cpuOptionsButton setState:NSOffState];
-    [cpuOptionsWindow orderOut:sender];
+    [self.cpuOptionsButton setState:NSOffState];
+    [self.cpuOptionsWindow orderOut:sender];
     
     prefs = nil;
     

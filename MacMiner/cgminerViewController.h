@@ -9,93 +9,73 @@
 #import <Foundation/Foundation.h>
 #import "TaskWrapper.h"
 #import "TaskWrapperDelegate.h"
+#import "taskTwoWrapper.h"
+#import "taskTwoWrapperDelegate.h"
+#import "taskThreeWrapper.h"
+#import "taskThreeWrapperDelegate.h"
 
-@interface cgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
-    NSWindow *cgWindow;
-    NSView *cgView;
+@interface cgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
 
-    NSTextField *cgOptionsView;
     
-    NSTextView *cgOutputView;
-    NSButton *cgStartButton;
     BOOL cgfindRunning;
 	BOOL cgsearchTaskIsRunning;
     TaskWrapper *cgTask;
-    NSTextField *cgStatLabel;
-    
-    NSButton *cgRememberButton;
-    
-    NSTextField *cgspeedRead;
-    NSTextField *cgacceptRead;
-    NSTextField *cgrejectRead;
-    NSTextField *cghashRead;
-    
-    NSPanel *cgOptionsWindow;
-    NSButton *cgopenOptions;
-    NSSlider *cgintenseSlider;
-    NSSlider *cgworkSlider;
-    NSTextField *cgworkSizeLabel;
-    NSTextField *cgvectorSizeLabel;
-    NSTextField *cgintenseSizeLabel;
-    NSArray *cgworkValues;
-    NSArray *cgvectorValues;
-    int cgsliderValue;
-    NSSlider *cgvectorSlide;
-    
-    NSButton *cgdynamicIntensity;
-    NSButton *cgworkSizeOverride;
-    NSButton *cgvectorOverride;
-    NSButton *cgdisableGPU;
-    NSButton *cguseScrypt;
-    NSButton *cgdebugOutput;
-    NSButton *cgquietOutput;
-    
-    NSTextField *cgThreadConc;
-    NSTextField *cgShaders;
-    NSTextField *cgLookupGap;
+    BOOL findTwoRunning;
+    BOOL findThreeRunning;
+    taskTwoWrapper *apiTask;
+    taskThreeWrapper *apiNetworkTask;
 
     
+    NSArray *cgworkValues;
+    NSArray *cgvectorValues;
+     
 }
 
 @property (nonatomic, strong) IBOutlet NSWindow *cgWindow;
-@property (nonatomic, strong) IBOutlet NSView *cgView;
+@property (nonatomic, weak) IBOutlet NSView *cgView;
 
-@property (nonatomic, strong) IBOutlet NSTextField *cgOptionsView;
+@property (nonatomic, weak) IBOutlet NSTextField *cgOptionsView;
 
 @property (nonatomic, strong) IBOutlet NSTextView *cgOutputView;
-@property (nonatomic, strong) IBOutlet NSButton *cgStartButton;
-@property (nonatomic, strong) IBOutlet NSTextField *cgStatLabel;
+@property (nonatomic, weak) IBOutlet NSButton *cgStartButton;
+@property (nonatomic, weak) IBOutlet NSTextField *cgStatLabel;
 
-@property (nonatomic, strong) IBOutlet NSButton *cgRememberButton;
+@property (nonatomic, weak) IBOutlet NSButton *cgPopoverTriggerButton;
+@property (nonatomic, weak) IBOutlet NSPopover *cgPopover;
 
-@property (nonatomic, strong) IBOutlet NSTextField *cgspeedRead;
-@property (nonatomic, strong) IBOutlet NSTextField *cgacceptRead;
-@property (nonatomic, strong) IBOutlet NSTextField *cgrejectRead;
-@property (nonatomic, strong) IBOutlet NSTextField *cghashRead;
+
+
+@property (nonatomic, weak) IBOutlet NSTextField *cgspeedRead;
+@property (nonatomic, weak) IBOutlet NSTextField *cgacceptRead;
+@property (nonatomic, weak) IBOutlet NSTextField *cgrejectRead;
+@property (nonatomic, weak) IBOutlet NSTextField *cghashRead;
 
 @property (nonatomic, strong) IBOutlet NSPanel *cgOptionsWindow;
-@property (nonatomic, strong) IBOutlet NSButton *cgopenOptions;
-@property (nonatomic, strong) IBOutlet NSSlider *cgintenseSlider;
-@property (nonatomic, strong) IBOutlet NSSlider *cgworkSlider;
-@property (nonatomic, strong) IBOutlet NSTextField *cgworkSizeLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *cgvectorSizeLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *cgintenseSizeLabel;
+@property (nonatomic, weak) IBOutlet NSButton *cgopenOptions;
+@property (nonatomic, weak) IBOutlet NSSlider *cgintenseSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *cgworkSlider;
+@property (nonatomic, weak) IBOutlet NSTextField *cgworkSizeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *cgvectorSizeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *cgintenseSizeLabel;
 
 @property (readwrite, assign) int cgsliderValue;
-@property (nonatomic, strong) IBOutlet NSSlider *cgvectorSlide;
+@property (nonatomic, weak) IBOutlet NSSlider *cgvectorSlide;
 
-@property (nonatomic, strong) IBOutlet NSButton *cgdynamicIntensity;
-@property (nonatomic, strong) IBOutlet NSButton *cgworkSizeOverride;
-@property (nonatomic, strong) IBOutlet NSButton *cgvectorOverride;
-@property (nonatomic, strong) IBOutlet NSButton *cgdisableGPU;
-@property (nonatomic, strong) IBOutlet NSButton *cguseScrypt;
-@property (nonatomic, strong) IBOutlet NSButton *cgdebugOutput;
-@property (nonatomic, strong) IBOutlet NSButton *cgquietOutput;
+@property (nonatomic, weak) IBOutlet NSButton *cgdynamicIntensity;
+@property (nonatomic, weak) IBOutlet NSButton *cgworkSizeOverride;
+@property (nonatomic, weak) IBOutlet NSButton *cgvectorOverride;
+@property (nonatomic, weak) IBOutlet NSButton *cgdisableGPU;
+@property (nonatomic, weak) IBOutlet NSButton *cguseScrypt;
+@property (nonatomic, weak) IBOutlet NSButton *cgdebugOutput;
+@property (nonatomic, weak) IBOutlet NSButton *cgquietOutput;
 
-@property (nonatomic, strong) IBOutlet NSTextField *cgThreadConc;
-@property (nonatomic, strong) IBOutlet NSTextField *cgShaders;
-@property (nonatomic, strong) IBOutlet NSTextField *cgLookupGap;
+@property (nonatomic, weak) IBOutlet NSTextField *cgThreadConc;
+@property (nonatomic, weak) IBOutlet NSTextField *cgShaders;
+@property (nonatomic, weak) IBOutlet NSTextField *cgLookupGap;
 
+@property (nonatomic, strong) IBOutlet NSView *cgdockReading;
+
+@property(strong) NSSpeechSynthesizer *speechSynth;
 
 
 - (IBAction)cgstart:(id)sender;

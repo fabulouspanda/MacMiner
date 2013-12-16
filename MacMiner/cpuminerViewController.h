@@ -10,52 +10,40 @@
 #import "TaskWrapper.h"
 
 
-@interface cpuminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate> {
-    NSWindow *cpuWindow;
-    NSView *cpuView;
-    
-    NSButton *startButton;
+@interface cpuminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate> {
 
     BOOL findRunning;
     TaskWrapper *cpuTask;
-    
-    NSButton *cpuRememberButton;
-    
-    NSPanel *cpuOptionsWindow;
-    NSTextField *cpuThreads;
-    NSButton *cpuDebugOutput;
-    NSButton *cpuQuietOutput;
-    NSButton *cpuScrypt;
-    
-        NSTextField *cpuManualOptions;
-    NSButton *cpuOptionsButton;
-    
-    NSTextField *tempsLabel;
-    
+        
 
 }
 
 @property (nonatomic, strong) IBOutlet NSWindow *cpuWindow;
-@property (nonatomic, strong) IBOutlet NSView *cpuView;
+@property (nonatomic, weak) IBOutlet NSView *cpuView;
 
 @property (nonatomic, strong) IBOutlet NSTextView *cpuOutputView;
-@property (nonatomic, strong) IBOutlet NSButton *cpuStartButton;
-@property (nonatomic, strong) IBOutlet NSTextField *cpuStatLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *cpuHashLabel;
+@property (nonatomic, weak) IBOutlet NSButton *cpuStartButton;
+@property (nonatomic, weak) IBOutlet NSTextField *cpuStatLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *cpuHashLabel;
 
-@property (nonatomic, strong) IBOutlet NSButton *cpuRememberButton;
+@property (nonatomic, weak) IBOutlet NSButton *cpuPopoverTriggerButton;
+@property (nonatomic, weak) IBOutlet NSPopover *cpuPopover;
+
+
 
 @property (nonatomic, strong) IBOutlet NSPanel *cpuOptionsWindow;
-@property (nonatomic, strong) IBOutlet NSTextField *cpuThreads;
-@property (nonatomic, strong) IBOutlet NSButton *cpuDebugOutput;
-@property (nonatomic, strong) IBOutlet NSButton *cpuQuietOutput;
-@property (nonatomic, strong) IBOutlet NSButton *cpuScrypt;
+@property (nonatomic, weak) IBOutlet NSTextField *cpuThreads;
+@property (nonatomic, weak) IBOutlet NSButton *cpuDebugOutput;
+@property (nonatomic, weak) IBOutlet NSButton *cpuQuietOutput;
+@property (nonatomic, weak) IBOutlet NSButton *cpuScrypt;
 
-@property (nonatomic, strong) IBOutlet NSTextField *cpuManualOptions;
+@property (nonatomic, weak) IBOutlet NSTextField *cpuManualOptions;
 
-@property (nonatomic, strong) IBOutlet NSButton *cpuOptionsButton;
+@property (nonatomic, weak) IBOutlet NSButton *cpuOptionsButton;
 
-@property (nonatomic, strong) IBOutlet NSTextField *tempsLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *tempsLabel;
+
+@property(strong) NSSpeechSynthesizer *speechSynth;
 
 
 - (IBAction)start:(id)sender;

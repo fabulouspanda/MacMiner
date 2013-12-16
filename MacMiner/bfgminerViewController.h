@@ -8,98 +8,90 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import "TaskWrapper.h"
-#import "TaskWrapperDelegate.h"
 
-@interface bfgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
-    NSWindow *bfgWindow;
-    NSView *bfgView;
 
-    NSTextField *bfgOptionsView;
-    
-    NSTextView *bfgOutputView;
-    NSButton *bfgStartButton;
+@interface bfgminerViewController : NSWindowController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
+
     BOOL findRunning;
 	BOOL searchTaskIsRunning;
     TaskWrapper *bfgTask;
-    NSTextField *bfgStatLabel;
+
     
-    NSButton *bfgRememberButton;
-    
-    NSTextField *speedRead;
-    NSTextField *acceptRead;
-    NSTextField *rejectRead;
-    NSTextField *hashRead;
-    
-    NSPanel *bfgOptionsWindow;
-    NSButton *openOptions;
-    NSSlider *intenseSlider;
-    NSSlider *workSlider;
-    NSTextField *workSizeLabel;
-        NSTextField *vectorSizeLabel;
-        NSTextField *intenseSizeLabel;
     NSArray *workValues;
         NSArray *vectorValues;
-    int sliderValue;
-    NSSlider *vectorSlide;
+
     
-    NSButton *dynamicIntensity;
-    NSButton *workSizeOverride;
-    NSButton *vectorOverride;
-    NSButton *disableGPU;
-    NSButton *useScrypt;
-    NSButton *debugOutput;
-    NSButton *quietOutput;
-    
-NSTextField *bfgThreadConc;
-NSTextField *bfgShaders;
-NSTextField *bfgLookupGap;
+
 
 }
 
-@property (nonatomic, strong) IBOutlet NSWindow *bfgWindow;
-@property (nonatomic, strong) IBOutlet NSView *bfgView;
 
-@property (nonatomic, strong) IBOutlet NSTextField *bfgOptionsView;
+@property (nonatomic, strong) IBOutlet NSWindow *bfgWindow;
+@property (nonatomic, weak) IBOutlet NSView *bfgView;
+
+@property (nonatomic, weak) IBOutlet NSTextField *bfgOptionsView;
 
 @property (nonatomic, strong) IBOutlet NSTextView *bfgOutputView;
-@property (nonatomic, strong) IBOutlet NSButton *bfgStartButton;
-@property (nonatomic, strong) IBOutlet NSTextField *bfgStatLabel;
+@property (nonatomic, weak) IBOutlet NSButton *bfgStartButton;
+@property (nonatomic, weak) IBOutlet NSTextField *bfgStatLabel;
 
-@property (nonatomic, strong) IBOutlet NSButton *bfgRememberButton;
-
-@property (nonatomic, strong) IBOutlet NSTextField *speedRead;
-@property (nonatomic, strong) IBOutlet NSTextField *acceptRead;
-@property (nonatomic, strong) IBOutlet NSTextField *rejectRead;
-@property (nonatomic, strong) IBOutlet NSTextField *hashRead;
+@property (nonatomic, weak) IBOutlet NSButton *bfgPopoverTriggerButton;
+@property (nonatomic, weak) IBOutlet NSPopover *bfgPopover;
 
 @property (nonatomic, strong) IBOutlet NSPanel *bfgOptionsWindow;
-@property (nonatomic, strong) IBOutlet NSButton *openOptions;
-@property (nonatomic, strong) IBOutlet NSSlider *intenseSlider;
-@property (nonatomic, strong) IBOutlet NSSlider *workSlider;
-@property (nonatomic, strong) IBOutlet NSTextField *workSizeLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *vectorSizeLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *intenseSizeLabel;
+@property (nonatomic, weak) IBOutlet NSButton *openOptions;
+@property (nonatomic, weak) IBOutlet NSSlider *intenseSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *workSlider;
+@property (nonatomic, weak) IBOutlet NSTextField *workSizeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *vectorSizeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *intenseSizeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *bfgCpuThreads;
 
 @property (readwrite, assign) int sliderValue;
-@property (nonatomic, strong) IBOutlet NSSlider *vectorSlide;
+@property (nonatomic, weak) IBOutlet NSSlider *vectorSlide;
 
-@property (nonatomic, strong) IBOutlet NSButton *dynamicIntensity;
-@property (nonatomic, strong) IBOutlet NSButton *workSizeOverride;
-@property (nonatomic, strong) IBOutlet NSButton *vectorOverride;
-@property (nonatomic, strong) IBOutlet NSButton *disableGPU;
-@property (nonatomic, strong) IBOutlet NSButton *useScrypt;
-@property (nonatomic, strong) IBOutlet NSButton *debugOutput;
-@property (nonatomic, strong) IBOutlet NSButton *quietOutput;
+@property (nonatomic, weak) IBOutlet NSTextField *speedRead;
+@property (nonatomic, weak) IBOutlet NSTextField *acceptRead;
+@property (nonatomic, weak) IBOutlet NSTextField *rejectRead;
+@property (nonatomic, weak) IBOutlet NSTextField *hashRead;
 
-@property (nonatomic, strong) IBOutlet NSTextField *bfgThreadConc;
-@property (nonatomic, strong) IBOutlet NSTextField *bfgShaders;
-@property (nonatomic, strong) IBOutlet NSTextField *bfgLookupGap;
+@property (nonatomic, weak) IBOutlet NSButton *dynamicIntensity;
+@property (nonatomic, weak) IBOutlet NSButton *workSizeOverride;
+@property (nonatomic, weak) IBOutlet NSButton *vectorOverride;
+@property (nonatomic, weak) IBOutlet NSButton *disableGPU;
+@property (nonatomic, weak) IBOutlet NSButton *useScrypt;
+@property (nonatomic, weak) IBOutlet NSButton *debugOutput;
+@property (nonatomic, weak) IBOutlet NSButton *quietOutput;
 
+@property (nonatomic, weak) IBOutlet NSTextField *bfgThreadConc;
+@property (nonatomic, weak) IBOutlet NSTextField *bfgShaders;
+@property (nonatomic, weak) IBOutlet NSTextField *bfgLookupGap;
+
+@property (nonatomic, weak) NSString *intensityValue;
+@property (nonatomic, weak) NSString *worksizeValue;
+@property (nonatomic, weak) NSString *vectorValue;
+@property (nonatomic, weak) NSString *noGPU;
+@property (nonatomic, weak) NSString *onScrypt;
+@property (nonatomic, weak) NSString *debugOutputOn;
+@property (nonatomic, weak) NSString *quietOutputOn;
+@property (nonatomic, weak) NSString *bonusOptions;
+@property (nonatomic, weak) NSString *threadConc;
+@property (nonatomic, weak) NSString *shaders;
+@property (nonatomic, weak) NSString *lookupGap;
+
+@property (nonatomic, weak) NSString *executableName;
+@property (nonatomic, weak) NSArray *paths;
+@property (nonatomic, weak) NSString *userpath;
+@property (nonatomic, weak) NSString *userpath2;    // The file will go in this directory
+@property (nonatomic, weak) NSString *saveBTCConfigFilePath;
+@property (nonatomic, weak) NSString *saveLTCConfigFilePath;
+
+@property(strong) NSSpeechSynthesizer *speechSynth;
 
 
 - (IBAction)start:(id)sender;
 
-- (IBAction)stopBFG:(id)sender;
+- (void)stopBFG;
 
 - (IBAction)bfgMinerToggle:(id)sender;
 
@@ -108,5 +100,7 @@ NSTextField *bfgLookupGap;
 - (IBAction)sliderChanged:(id)sender;
     
 - (IBAction)vectorChanged:(id)sender;
+
+- (IBAction)setRecommendedBFGValues:(id)sender;
 
 @end

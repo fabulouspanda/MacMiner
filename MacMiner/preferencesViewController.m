@@ -15,7 +15,7 @@
 
 @implementation preferencesViewController
 
-@synthesize prefWindow, charCount, scrollButton, dockButton;
+
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -24,7 +24,7 @@
     
     [prefs synchronize];
     
-    charCount.stringValue = [prefs objectForKey:@"logLength" ];
+    self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
     
     prefs = nil;
     return self;
@@ -34,19 +34,19 @@
 -(IBAction)preferenceToggle:(id)sender {
 
     
-    if ([prefWindow isVisible]) {
+    if ([self.prefWindow isVisible]) {
 
-        [prefWindow orderOut:sender];
+        [self.prefWindow orderOut:sender];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        [prefs setObject:charCount.stringValue forKey:@"logLength"];
+        [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
         
         [prefs synchronize];
         
         prefs = nil;
 
-        if (dockButton.state == NSOffState) {
+        if (self.dockButton.state == NSOffState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"hide" forKey:@"showDockReading"];
@@ -54,7 +54,7 @@
             [prefs synchronize];
             prefs = nil;
         }
-        if (dockButton.state == NSOnState) {
+        if (self.dockButton.state == NSOnState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@" " forKey:@"showDockReading"];
@@ -62,7 +62,7 @@
             [prefs synchronize];
             prefs = nil;
         }
-        if (scrollButton.state == NSOffState) {
+        if (self.scrollButton.state == NSOffState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"hide" forKey:@"scrollLog"];
@@ -70,7 +70,7 @@
             [prefs synchronize];
             prefs = nil;
         }
-        if (scrollButton.state == NSOnState) {
+        if (self.scrollButton.state == NSOnState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@" " forKey:@"scrollLog"];
@@ -96,18 +96,18 @@
             [prefs setObject:@"" forKey:@"showDockReading"];
         }
         
-        charCount.stringValue = [prefs objectForKey:@"logLength" ];
+        self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
         
         if ([[prefs objectForKey:@"scrollLog"] isEqual: @"hide"]) {
-                        scrollButton.state = NSOffState;
+                        self.scrollButton.state = NSOffState;
         }
         if ([[prefs objectForKey:@"showDockReading"] isEqual: @"hide"]) {
-            dockButton.state = NSOffState;
+            self.dockButton.state = NSOffState;
         }
 
         prefs = nil;
         
-        [prefWindow orderFront:sender];
+        [self.prefWindow orderFront:sender];
         
     }
 }
@@ -116,7 +116,7 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:charCount.stringValue forKey:@"logLength"];
+    [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
     
     [prefs synchronize];
     
@@ -124,14 +124,14 @@
 }
 
 - (IBAction)scrollLogOption:(id)sender {
-    if (scrollButton.state == NSOffState) {
+    if (self.scrollButton.state == NSOffState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs setObject:@"hide" forKey:@"scrollLog"];
         
         [prefs synchronize];
     }
-    if (scrollButton.state == NSOnState) {
+    if (self.scrollButton.state == NSOnState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs setObject:@" " forKey:@"scrollLog"];
@@ -140,6 +140,21 @@
     }
 }
 
-
+- (IBAction)dockReadingsOption:(id)sender {
+    if (self.dockButton.state == NSOffState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"hide" forKey:@"showDockReading"];
+        
+        [prefs synchronize];
+    }
+    if (self.dockButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@" " forKey:@"showDockReading"];
+        
+        [prefs synchronize];
+    }
+}
 
 @end

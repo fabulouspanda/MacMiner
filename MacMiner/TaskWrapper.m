@@ -100,7 +100,13 @@
 	// Make sure the task has actually stopped.
 	[_task terminate];
 	
-
+	// Drain any remaining output data the task generates.
+//	NSData *data;
+//	while ((data = [[[_task standardOutput] fileHandleForReading] availableData]) && [data length])
+//	{
+//		// Notify the delegate that there is data.
+//		[self _sendDataToDelegate:data];
+//	}
 	
 	// Notify the delegate that the task finished.
 	if ([(id)_taskDelegate respondsToSelector:@selector(taskWrapper:didFinishTaskWithStatus:)])

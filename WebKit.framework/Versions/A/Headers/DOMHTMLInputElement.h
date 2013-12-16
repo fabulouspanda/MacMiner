@@ -57,7 +57,7 @@
 @property int selectionEnd AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;
 @property(copy) NSString *align;
 @property(copy) NSString *useMap;
-@property(copy) NSString *accessKey AVAILABLE_WEBKIT_VERSION_1_3_AND_LATER_BUT_DEPRECATED_AFTER_WEBKIT_VERSION_5_1;
+@property(copy) NSString *accessKey;
 @property(readonly, copy) NSString *altDisplayString AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;
 @property(readonly, copy) NSURL *absoluteImageURL AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;
 

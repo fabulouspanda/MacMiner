@@ -8,27 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface bfgConfigFileViewController : NSViewController <NSWindowDelegate, NSTextFieldDelegate> {
-    
-    NSWindow *configEditWindow;
-    
-    NSButton *saveConfigFile;
-    NSButton *cancelConfig;
-    NSButton *revertConfig;
-    
-    NSSegmentedControl *btcLTCSegmentedControl;
-    
-    NSTextView *bfgConfigText;
-    
-}
+@interface bfgConfigFileViewController : NSViewController <NSWindowDelegate, NSTextFieldDelegate>
+
 
 @property (nonatomic, strong) IBOutlet NSWindow *configEditWindow;
 
-@property (nonatomic, strong) IBOutlet NSButton *saveConfigFile;
-@property (nonatomic, strong) IBOutlet NSButton *cancelConfig;
-@property (nonatomic, strong) IBOutlet NSButton *revertConfig;
+@property (nonatomic, weak) IBOutlet NSButton *saveConfigFile;
+@property (nonatomic, weak) IBOutlet NSButton *cancelConfig;
+@property (nonatomic, weak) IBOutlet NSButton *revertConfig;
 
-@property (nonatomic, strong) IBOutlet NSSegmentedControl *btcLTCSegmentedControl;
+@property (nonatomic, weak) IBOutlet NSSegmentedControl *btcLTCSegmentedControl;
 
 @property (nonatomic, strong) IBOutlet NSTextView *bfgConfigText;
 

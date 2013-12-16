@@ -12,7 +12,6 @@
 
 @implementation asicMiner
 
-@synthesize asicOutputView, asicStartButton, asicView, asicWindow, asicOptionsView, megaHashLabel, acceptLabel, rejecttLabel, tempsLabel, asicDebugButton, asicNoGpuButton, asicOptionsWindow, asicQuietButton, asicOptionsButton, asicHashField;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -42,12 +41,38 @@
  */
 
 
+
+-(void)stopAsicMiner
+{
+    // change the button's title back for the next search
+    [self.asicStartButton setTitle:@"Start"];
+    [self stopToggling];
+    // This stops the task and calls our callback (-processFinished)
+    [asicTask stopTask];
+    findRunning=NO;
+    
+    // Release the memory for this wrapper object
+    
+    asicTask=nil;
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    [appDelegate.asicReadBack setHidden:YES];
+    [appDelegate.asicReading setHidden:YES];
+    [[NSApp dockTile] display];
+    appDelegate = nil;
+    
+    return;
+}
+
+
 - (IBAction)start:(id)sender
 {
     if (findRunning)
     {
         // change the button's title back for the next search
-        [asicStartButton setTitle:@"Start"];
+        [self.asicStartButton setTitle:@"Start"];
+        self.asicStartButton.tag = 1;
         [self stopToggling];
         // This stops the task and calls our callback (-processFinished)
         [asicTask stopTask];
@@ -56,12 +81,25 @@
         // Release the memory for this wrapper object
         
         asicTask=nil;
+        
+                                    self.apiDataArray = nil;
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+
+        [appDelegate.asicReadBack setHidden:YES];
+        [appDelegate.asicReading setHidden:YES];
+        [[NSApp dockTile] display];
+        appDelegate = nil;
 
         return;
     }
     else
     {
-        [asicStartButton setTitle:@"Stop"];
+        [self.asicStartButton setTitle:@"Stop"];
+                self.asicStartButton.tag = 0;
+        
+                                    self.apiDataArray = [[NSMutableArray alloc] init];
+        
         // If the task is still sitting around from the last run, release it
         if (asicTask!=nil) {
             asicTask = nil;
@@ -69,18 +107,19 @@
 
 
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        self.prefs = [NSUserDefaults standardUserDefaults];
         
-        [prefs synchronize];
+        [self.prefs synchronize];
         
         //        NSString *mainPool = [prefs stringForKey:@"defaultPoolValue"];
         //        NSString *mainBTCUser = [prefs stringForKey:@"defaultBTCUser"];
         //        NSString *mainBTCPass = [prefs stringForKey:@"defaultBTCPass"];
 
-        NSString *noGPU = [prefs stringForKey:@"disableGPU"];
-        NSString *debugOutputOn = [prefs stringForKey:@"debugOutput"];
-        NSString *quietOutputOn = [prefs stringForKey:@"quietOutput"];
-        NSString *bonusOptions = [prefs stringForKey:@"asicOptionsValue"];
+        self.noGPU = [self.prefs stringForKey:@"disableASICGPU"];
+        self.debugOutputOn = [self.prefs stringForKey:@"debugASICOutput"];
+        self.quietOutputOn = [self.prefs stringForKey:@"quietASICOutput"];
+        self.bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
+        NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
 
         //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
         /*
@@ -102,23 +141,32 @@
          */
         
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
-        if ([bonusOptions isNotEqualTo:@""]) {
-            NSArray *deviceItems = [bonusOptions componentsSeparatedByString:@" "];
+        if ([self.bonusOptions isNotEqualTo:@""]) {
+            NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
             [launchArray addObjectsFromArray:deviceItems];
         }
         
-
-        if ([noGPU isNotEqualTo:nil]) {
-            [launchArray addObject:noGPU];
+        if ([cpuThreads isNotEqualTo:nil]) {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:cpuThreads];
+        }
+        else {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:@"0"];
         }
 
-        if ([debugOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:debugOutputOn];
-        }
-        if ([quietOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:quietOutputOn];
+        if ([self.noGPU isNotEqualTo:nil]) {
+            [launchArray addObject:@"-S"];
+                        [launchArray addObject:@"opencl:auto"];
         }
 
+        if ([self.debugOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.debugOutputOn];
+        }
+        if ([self.quietOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.quietOutputOn];
+        }
+            cpuThreads = nil;
         
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
@@ -131,26 +179,13 @@
         
 
 
+        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
         
-        
-//        if ([asicOptionsView.stringValue isEqual: @""]) {
-//            [asicOptionsView setStringValue:@"-S /dev/cu.usbserial-FTWILFLM"];
-//        }
-//        NSString *optionsString = asicOptionsView.stringValue;
+        NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
 
-
-        NSString *asicPath = @"/Applications/MacMiner.app/Contents/Resources/bfgminer/bin/bfgminer";
-        //        NSLog(poclbmPath);
         [self.asicOutputView setString:@""];
 
-        //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
-        //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-//                NSLog(optionsString);
-        
-        
-
-//        asicTask=[[TaskWrapper alloc] initWithController:self arguments:launchArray];
-       asicTask =[[TaskWrapper alloc] initWithCommandPath:asicPath
+       asicTask =[[TaskWrapper alloc] initWithCommandPath:bfgPath
                                         arguments:launchArray
                                       environment:nil
                                          delegate:self];
@@ -163,54 +198,7 @@
         
         
     }
-    
-/*
-[[NSFileManager defaultManager] removeItemAtPath: @"/Applications/MacMiner.app/Contents/Resources/startASICMining.sh" error: nil];
 
-    NSString *oString = @"-o ";
-    NSString *poolString = [oString stringByAppendingString:asicPoolView.stringValue];
-    NSString *uString = @"-u ";
-    NSString *userString = [uString stringByAppendingString:asicUserView.stringValue];
-    NSString *pString = @"-p ";
-    NSString *passString = [pString stringByAppendingString:asicPassView.stringValue];
-    
-    
-    NSString *optionsString = asicOptionsView.stringValue;
-    
-    
-NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passString, optionsString, nil];
-
-
-    NSString * result = [apiArray componentsJoinedByString:@" "];
-    NSString *startBFGCommand = @"/Applications/MacMiner.app/Contents/Resources/asicminer/bin/bfgminer ";
-    NSString *fullCommand = [startBFGCommand stringByAppendingString:result];
-    NSString *plusAPI = [fullCommand stringByAppendingString:@" --api-listen --api-allow W:0/0"];
-//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:result];
-//    NSString *path = [bundlePath stringByAppendingString:@"/startASICMining.sh"];
-//    [data writeToFile:path options:NSDataWritingAtomic error:nil];
-    [plusAPI writeToFile:@"/Applications/MacMiner.app/Contents/Resources/startASICMining.sh"
-                          atomically:YES
-                            encoding:NSASCIIStringEncoding
-                               error:nil];
-    
-//    NSString *scriptPath = [[NSBundle mainBundle] pathForResource: @"/Resources/startASICMining.sh" ofType: nil];
-
-    [NSTask launchedTaskWithLaunchPath:@"/bin/bash" arguments: [NSArray arrayWithObjects:@"/Applications/MacMiner.app/Contents/Resources/startASICMining.sh", nil]];
-
-    if (asicRememberButton.state == NSOnState) {
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-        // saving an NSString
-        [prefs setObject:asicUserView.stringValue forKey:@"asicUserValue"];
-        [prefs setObject:asicPassView.stringValue forKey:@"asicPassValue"];
-        [prefs setObject:asicPoolView.stringValue forKey:@"asicPoolValue"];
-        [prefs setObject:asicOptionsView.stringValue forKey:@"asicOptionsValue"];
-        
-        
-        [prefs synchronize];
-    }
-    */
     toggleTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(startToggling) userInfo:nil repeats:NO];
 //            [self startToggling];
     
@@ -218,215 +206,393 @@ NSArray *apiArray = [NSArray arrayWithObjects: poolString, userString, passStrin
 
 - (void)toggleTimerFired:(NSTimer*)timer
 {
-    /*
-            NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-    NSString *apiPath = [bundlePath stringByDeletingLastPathComponent];
     
-    apiPath = [apiPath stringByAppendingString:@"/Resources/apiaccess"];
-    //        NSLog(cpuPath);
-    [self.asicOutputView setString:@""];
-    //    NSString *startingText = @"Starting…";
-    //    self.asicStatLabel.stringValue = startingText;
-    //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
-    //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-//    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"devs", nil]];
-    NSTask *apiReadTask = [NSTask new];
-    [apiReadTask setLaunchPath:apiPath];
-    [apiReadTask setArguments:[NSArray arrayWithObjects:apiPath, @"devs", nil]];
-    NSFileManager *filemgr;
-    filemgr = [NSFileManager defaultManager];
-    NSFileHandle *apiHandle = [NSFileHandle fileHandleForWritingAtPath:@"/Applications/Macminer.app/Contents/Resources/apiscratch.txt"];
-    [apiReadTask setStandardOutput:apiHandle];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(readCompleted:) name:NSFileHandleReadToEndOfFileCompletionNotification object:[outputPipe fileHandleForReading]];
-//    [[outputPipe fileHandleForReading] readToEndOfFileInBackgroundAndNotify];
-    [apiReadTask launch];
-//    [apiReadTask launchedTaskWithLaunchPath:apiPath arguments: [NSArray arrayWithObjects:apiPath, @"devs", nil]];
+//    if (apiTask!=nil) {
+//        apiTask = nil;
+//    }
+    if ([self.megaHashLabel.stringValue isNotEqualTo:@"0"]) {
+        self.megaHashLabel.tag = 1;
+    }
+    if ([self.megaHashLabel.stringValue isEqual: @"0"] && self.megaHashLabel.tag == 1) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+         [self.speechSynth startSpeakingString:@"Mining Stopped"];
+    }
+    
+    if (findTwoRunning == YES) {
+        [apiTask stopTask];
+        findTwoRunning = NO;
+    }
+    
+    if (findTwoRunning == NO) {
+        
+    
+    NSMutableArray *apiArray = [NSMutableArray arrayWithObjects: @"devs", nil];
+
+    
+    
+    NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *userpath = [paths objectAtIndex:0];
+    userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+
+
+    NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
+    
+    NSString *apiPath = [bundlePath2 stringByAppendingString:@"/apiaccess"];
+
+    
+    apiTask =[[taskTwoWrapper alloc] initWithCommandPath:apiPath
+                                             arguments:apiArray
+                                           environment:nil
+                                              delegate:self];
     // kick off the process asynchronously
-    //        [cpuTask setLaunchPath: @"/sbin/ping"];
-//    [asicTask startProcess];
-    [apiReadTask waitUntilExit];
-    [self readAPI];
-    */
-    NSString *theReturnValue = nil;
-    NSTask *theTask = nil;
-    NSString *theTempFilePath = @"/Applications/Macminer.app/Contents/Resources/apiscratch.txt";
-    char theTP[[theTempFilePath cStringLength]+1];
-    [theTempFilePath getCString : theTP];
     
-    int theFD = mkstemp(theTP);
-    if (theFD != 0)
-    {
-        theTempFilePath = [NSString stringWithCString : theTP];
-        NSFileHandle *theTempFile = [[NSFileHandle alloc]
-                                     initWithFileDescriptor : theFD closeOnDealloc : YES];
-        
-        theTask = [[NSTask alloc] init];
-        [theTask setLaunchPath : @"/Applications/Macminer.app/Contents/Resources/apiaccess"];
-        [theTask setArguments:[NSArray arrayWithObjects:@"devs", nil]];
-        [theTask setStandardOutput : theTempFile];
-        [theTask launch];
-        [theTask waitUntilExit];
-
-        theReturnValue = [NSString stringWithContentsOfFile : theTempFilePath encoding:NSUTF8StringEncoding error:nil];
-        
-        NSString *apiOutput = @"[MHS av]";
-        if ([theReturnValue rangeOfString:apiOutput].location != NSNotFound) {
-            /*
-            NSString *numberString = [self getDataBetweenFromString:theReturnValue
-                                                         leftString:@"[MHS av] => " rightString:@"[" leftOffset:11];
-            megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
-            NSString *acceptString = [self getDataBetweenFromString:theReturnValue
-                                                         leftString:@"Accepted=" rightString:@"," leftOffset:0];
-            acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-            NSString *rejectString = [self getDataBetweenFromString:theReturnValue
-                                                         leftString:@"Rejected=" rightString:@"," leftOffset:0];
-            rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-            NSString *tempsString = [self getDataBetweenFromString:theReturnValue
-                                                        leftString:@"[Temperature] => " rightString:@"[" leftOffset:0];
-            tempsLabel.stringValue = [tempsString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-            */
-            
-            NSString *pgaZeroTemp = nil;
-            NSString *pgaOneTemp = nil;
-            NSString *pgaTwoTemp = nil;
-            NSString *pgaThreeTemp = nil;
-
-            if ([theReturnValue rangeOfString:@"PGA0"].location != NSNotFound) {
-            NSString *pgaZero = [self getDataBetweenFromString:theReturnValue leftString:@"PGA0" rightString:@")" leftOffset:0];
-                        pgaZeroTemp = [self getDataBetweenFromString:pgaZero leftString:@"[Temperature] => " rightString:@"." leftOffset:0];
-            pgaZeroTemp = [pgaZeroTemp stringByReplacingOccurrencesOfString:@"[Temperature] => " withString:@"Temperature: "];
-            }
-        if ([theReturnValue rangeOfString:@"PGA1"].location != NSNotFound) {
-            NSString *pgaOne = [self getDataBetweenFromString:theReturnValue leftString:@"PGA1" rightString:@")" leftOffset:0];
-                        pgaOneTemp = [self getDataBetweenFromString:pgaOne leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
-            pgaOne = nil;
-        }
-                    if ([theReturnValue rangeOfString:@"PGA2"].location != NSNotFound) {
-            NSString *pgaTwo = [self getDataBetweenFromString:theReturnValue leftString:@"PGA2" rightString:@")" leftOffset:0];
-                        pgaTwoTemp = [self getDataBetweenFromString:pgaTwo leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
-                        pgaTwo = nil;
-                    }
-                    if ([theReturnValue rangeOfString:@"PGA3"].location != NSNotFound) {
-            NSString *pgaThree = [self getDataBetweenFromString:theReturnValue leftString:@"PGA3" rightString:@")" leftOffset:0];
-                        pgaThreeTemp = [self getDataBetweenFromString:pgaThree leftString:@"[Temperature] => " rightString:@"." leftOffset:17];
-                        pgaThree = nil;
-                    }
-            
-            if ([pgaZeroTemp isNotEqualTo:@""] && [pgaOneTemp isNotEqualTo:@""]) {
-                pgaZeroTemp = [pgaZeroTemp stringByAppendingString:@", "];
-            }
-            if ([pgaTwoTemp isNotEqualTo:@""] && [pgaOneTemp isNotEqualTo:@""]) {
-                pgaOneTemp = [pgaOneTemp stringByAppendingString:@", "];
-            }
-            if ([pgaTwoTemp isNotEqualTo:@""] && [pgaThreeTemp isNotEqualTo:@""]) {
-                pgaTwoTemp = [pgaTwoTemp stringByAppendingString:@", "];
-            }
-            
-
-            
-            NSArray *pgaTempsArray = [NSArray arrayWithObjects:pgaZeroTemp, pgaOneTemp, pgaTwoTemp, pgaThreeTemp, nil];
-            
-            tempsLabel.stringValue = [pgaTempsArray componentsJoinedByString:@""];
-            
-pgaZeroTemp = nil;
-pgaOneTemp = nil;
-pgaTwoTemp = nil;
-pgaThreeTemp = nil;
-            theReturnValue = nil;
-
-
-        }
-    
-    // Delay execution of my block for 3s.
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-        [[NSFileManager defaultManager] removeFileAtPath : theTempFilePath
-                                                 handler : nil];
-    });
+    [apiTask startTask];
         
 
-    }
-
-}
-/*
-- (void)readAPI {
-//    NSData *data2 = [[bNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
-    // If the length of the data is zero, then the task is basically over - there is nothing
-    // more to get from the handle so we may as well shut down.
-    NSString *apiInfo = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource: @"apiscratch" ofType: @"txt"] usedEncoding:nil error:nil];
-    if ([apiInfo length])
-    {
-        // Send the data on to the controller; we can't just use +stringWithUTF8String: here
-        // because -[data bytes] is not necessarily a properly terminated string.
-        // -initWithData:encoding: on the other hand checks -[data length]
-        //        NSLog(@"controlappend");
-//        NSString *apiInfo = [[NSString alloc] initWithData:data2 encoding:NSUTF8StringEncoding];
+        apiArray = nil;
+        paths = nil;
+        userpath = nil;
+        executableName = nil;
+        bundlePath2 = nil;
+        apiPath = nil;
         
-        NSString *apiOutput = @"[MHS av]";
-        if ([apiInfo rangeOfString:apiOutput].location != NSNotFound) {
-            NSString *numberString = [self getDataBetweenFromString:apiInfo
-                                                         leftString:@"[MHS av] => " rightString:@"]" leftOffset:11];
-            megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
-            NSString *acceptString = [self getDataBetweenFromString:apiInfo
-                                                         leftString:@"Accepted=" rightString:@"," leftOffset:0];
-            acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-            NSString *rejectString = [self getDataBetweenFromString:apiInfo
-                                                         leftString:@"Rejected=" rightString:@"," leftOffset:0];
-            rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-            NSString *tempsString = [self getDataBetweenFromString:apiInfo
-                                                        leftString:@"Temperature=" rightString:@",M" leftOffset:0];
-            tempsLabel.stringValue = [tempsString stringByReplacingOccurrencesOfString:@"=" withString:@": "];
-            
-            NSLog(@"apioutput");
-        }
-        
-        //        NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-    } else {
-        // We're finished here
-//        [self stopProcess];
-//        NSLog(@"finished");
     }
     
-    // we need to schedule the file handle go read more data in the background again.
-//    [[bNotification object] readInBackgroundAndNotify];
-
+    if (findThreeRunning == YES) {
+        [apiNetworkTask stopTask];
+        findThreeRunning = NO;
+    }
     
+        if (findThreeRunning == NO) {
 
-    
-//    NSLog(@"Read data: %@", [[bNotification userInfo] objectForKey:NSFileHandleNotificationDataItem]);
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadToEndOfFileCompletionNotification object:[bNotification object]];
+            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+            NSString *userpath = [paths objectAtIndex:0];
+            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+            
+            
+            //    [apiArray addObject:@"-c"];
+            //    [apiArray addObject:saveBTCConfigFilePath];
+            
+            
+            NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
+            
+            NSString *apiPath = [bundlePath2 stringByAppendingString:@"/apiaccess"];
+
+            
+            self.prefs = [NSUserDefaults standardUserDefaults];
+            
+            [self.prefs synchronize];
+            
+            NSString *networkedMiners = [self.prefs stringForKey:@"ipAddress"];
+            NSString *portString = [self.prefs stringForKey:@"portNumber"];
+            if (networkedMiners.length >= 7) {
+                NSMutableArray *apiIPArray = [NSMutableArray arrayWithObjects: @"devs", networkedMiners, portString, nil];
+                
+                apiNetworkTask =[[taskThreeWrapper alloc] initWithCommandPath:apiPath
+                                                                    arguments:apiIPArray
+                                                                  environment:nil
+                                                                     delegate:self];
+                
+                [apiNetworkTask startTask];
+                networkedMiners = nil;
+                portString = nil;
+                
+                apiPath = nil;
+                apiIPArray = nil;
+                
+                paths = nil;
+                userpath = nil;
+                executableName = nil;
+                bundlePath2 = nil;
+
+                // Needs addition of wait for task to end and run again
+        }
+        }
 }
-*/
+
+- (void)taskThreeWrapper:(taskThreeWrapper *)taskThreeWrapper didProduceOutput:(NSString *)output
+{
+
+    if (output.length >= 1) {
+         self.networkMinerData.string = output;
+    }
+ 
+    output = nil;
+ 
+}
+
+- (void)taskThreeWrapperWillStartTask:(taskThreeWrapper *)taskThreeWrapper
+{
+    //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    findThreeRunning=YES;
+
+    // clear the results
+    //    [self.outputView setString:@""];
+    // change the "Start" button to say "Stop"
+    //    [asicStartButton setTitle:@"Stop"];
+}
+
+// A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
+// that is needed from the app side.  This method is implemented as a part of conforming
+// to the ProcessController protocol.
+- (void)taskThreeWrapper:(taskThreeWrapper *)taskThreeWrapper didFinishTaskWithStatus:(int)terminationStatus
+{
+    findThreeRunning=NO;
+    
+    
+    
+}
+
+- (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
+{
+    if (self.networkMinerData.string.length >= 7) {
+         output = [output stringByAppendingString:self.networkMinerData.string];
+    }
+    
+    if (self.asicAPIOutput.string.length >= 2) {
+    self.asicAPIOutput.string = output;
+    
+
+    
+    
+    NSString *tempsString = @"";
+    
+    NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
+    [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    
+    if ([output rangeOfString:@"GPU0"].location != NSNotFound) {
+        
+        
+        
+        int strCount = [output length] - [[output stringByReplacingOccurrencesOfString:@"GPU[0-9]+" withString:@""] length];
+        strCount /= [@"GPU[0-9]+" length];
+        
+        
+        strCount += 1;
+        for (int i = 0; i < strCount; i++) {
+            
+            
+            NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
+            NSString *pgaAPIData = [self getDataBetweenFromString:output leftString:pgaCount rightString:@")" leftOffset:0];
+            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
+            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
+            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
+            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
+            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
+            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
+            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
+            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
+            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
+            NSString *apiIntensity = [self getDataBetweenFromString:pgaAPIData leftString:@"sity] =>" rightString:@"[" leftOffset:8];
+            
+            
+            
+            [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
+            
+            
+            
+            //                    [self.apiTableView reloadData];
+            //                    [self.apiTableView setNeedsDisplay:YES];
+            
+        }
+
+        
+    }
+    
+    if ([output rangeOfString:@"PGA0"].location != NSNotFound) {
+        
+//        int strCount = [output length] - [[output stringByReplacingOccurrencesOfString:@"PGA[0-9]+" withString:@""] length];
+//        strCount /= [@"PGA[0-9]+" length];
+        
+        
+        
+//        strCount++;
+        for (int i = 0; i >= 0; i++) {
+            
+        
+            
+            NSString *pgaCount = [NSString stringWithFormat:@"PGA%d", i];
+            
+            if ([output rangeOfString:pgaCount].location == NSNotFound) {
+                break;
+            }
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:output leftString:pgaCount rightString:@")" leftOffset:0];
+            //                                NSLog(pgaCount);
+            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
+            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
+            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
+            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
+            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
+            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
+            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
+            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
+            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
+            
+            if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
+                NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
+                
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+
+                tempsString = [tempsString stringByAppendingString:apiTemp];
+                tempsString = [tempsString stringByAppendingString:@" "];
+//                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:[apiTemp stringByAppendingString:@"˚ C "]];
+                apiTemp = nil;
+//                self.tempsLabel.stringValue = [tempArray componentsJoinedByString:@", "];
+//                                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
+
+            }
+            else {
+                NSString *apiTemp = @" ";
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                apiTemp = nil;
+            }
+            
+            
+            
+            
+            
+            pgaCount = nil;
+            pgaAPIData = nil;
+            apiStatus = nil;
+            mhsAv = nil;
+            mhs5S = nil;
+            apiAccepted = nil;
+            apiRejected = nil;
+            apiHWError = nil;
+            apiUtility = nil;
+            apiDiff1 = nil;
+            apiDiffAcc = nil;
+            apiDiffRej = nil;
+            
+            
+            //                            [self.apiTableView reloadData];
+            //                            [self.apiTableView setNeedsDisplay:YES];
+            
+        }
+        
+                self.tempsLabel.stringValue = tempsString;
+                                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
+   
+    }
+    
+    if ([output rangeOfString:@"ASC0"].location != NSNotFound) {
+        
+        //        int strCount = [output length] - [[output stringByReplacingOccurrencesOfString:@"PGA[0-9]+" withString:@""] length];
+        //        strCount /= [@"PGA[0-9]+" length];
+        
+        
+        
+        //        strCount++;
+        for (int i = 0; i >= 0; i++) {
+            
+            
+            
+            NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
+            
+            if ([output rangeOfString:pgaCount].location == NSNotFound) {
+                break;
+            }
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:output leftString:pgaCount rightString:@")" leftOffset:0];
+            //                                NSLog(pgaCount);
+            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
+            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
+            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
+            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
+            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
+            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
+            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
+            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
+            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
+            
+            if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
+                NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
+                
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                
+                tempsString = [tempsString stringByAppendingString:apiTemp];
+                tempsString = [tempsString stringByAppendingString:@" "];
+                //                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:[apiTemp stringByAppendingString:@"˚ C "]];
+                apiTemp = nil;
+                //                self.tempsLabel.stringValue = [tempArray componentsJoinedByString:@", "];
+                //                                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
+                
+            }
+            else {
+                NSString *apiTemp = @" ";
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                apiTemp = nil;
+            }
+            
+            
+            
+            
+            
+            pgaCount = nil;
+            pgaAPIData = nil;
+            apiStatus = nil;
+            mhsAv = nil;
+            mhs5S = nil;
+            apiAccepted = nil;
+            apiRejected = nil;
+            apiHWError = nil;
+            apiUtility = nil;
+            apiDiff1 = nil;
+            apiDiffAcc = nil;
+            apiDiffRej = nil;
+            
+            
+            //                            [self.apiTableView reloadData];
+            //                            [self.apiTableView setNeedsDisplay:YES];
+            
+        }
+        
+        self.tempsLabel.stringValue = tempsString;
+        self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
+        
+    }
+    
+
+    tempsString = nil;
+        
+        }
+        output = nil;
+}
+
+- (void)taskTwoWrapperWillStartTask:(taskTwoWrapper *)taskTwoWrapper
+{
+    //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    findTwoRunning=YES;
+    // clear the results
+    //    [self.outputView setString:@""];
+    // change the "Start" button to say "Stop"
+    //    [asicStartButton setTitle:@"Stop"];
+}
+
+// A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
+// that is needed from the app side.  This method is implemented as a part of conforming
+// to the ProcessController protocol.
+- (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didFinishTaskWithStatus:(int)terminationStatus
+{
+    findTwoRunning=NO;
+
+
+    
+}
+
 - (void)stopToggling
 {
     [toggleTimer invalidate], toggleTimer = nil;  // you don't want dangling pointers...
     // perform any other needed house-keeping here
-                            [asicStartButton setTitle:@"Start"];
+                            [self.asicStartButton setTitle:@"Start"];
 }
 
-- (IBAction)stopToggling:(id)sender
-{
-    [toggleTimer invalidate], toggleTimer = nil;  // you don't want dangling pointers...
-    // perform any other needed house-keeping here
-//    [asicStartButton setTitle:@"Start"];
-    /*
-    [asicTask stopProcess];
-    
-    NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-    NSString *apiPath = [bundlePath stringByDeletingLastPathComponent];
-    
-    apiPath = [apiPath stringByAppendingString:@"/Resources/apiaccess"];
-    //        NSLog(cpuPath);
-    [self.asicOutputView setString:@""];
-    //    NSString *startingText = @"Starting…";
-    //    self.asicStatLabel.stringValue = startingText;
-    //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
-    //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"quit", nil]];
-    // kick off the process asynchronously
-    //        [cpuTask setLaunchPath: @"/sbin/ping"];
-    [asicTask startProcess];
-     */
-}
 
 - (void)startToggling
 {
@@ -441,166 +607,104 @@ pgaThreeTemp = nil;
 
 
 }
-/*
 
-- (IBAction)runProcessAsAdministrator:(NSString*)scriptPath
-                     withArguments:(NSArray *)arguments
-                            output:(NSString **)output
-                  errorDescription:(NSString **)errorDescription {
-    scriptPath = @"/Applications/MacMiner.app/Contents/Resources/asicminer/bin/bfgminer";
-    NSString *oString = @"-o";
-    NSString *poolString = [oString stringByAppendingString:asicPoolView.stringValue];
-    NSString *uString = @"-u";
-    NSString *userString = [uString stringByAppendingString:asicUserView.stringValue];
-    NSString *pString = @"-p";
-    NSString *passString = [pString stringByAppendingString:asicPassView.stringValue];
-    arguments = [NSArray arrayWithObjects:poolString, userString, passString, @"-S /dev/cu.usbserial-FTWILFLM", nil];
-    NSString * allArgs = [arguments componentsJoinedByString:@" "];
-    NSString * fullScript = [NSString stringWithFormat:@"%@ %@", scriptPath, allArgs];
-    
-    NSDictionary *errorInfo = [NSDictionary new];
-    NSString *script =  [NSString stringWithFormat:@"do shell script \"%@\" with administrator privileges", fullScript];
-    
-    NSAppleScript *appleScript = [[NSAppleScript new] initWithSource:script];
-    NSAppleEventDescriptor * eventResult = [appleScript executeAndReturnError:&errorInfo];
-    
-    // Check errorInfo
-    if (! eventResult)
-    {
-        // Describe common errors
-//        *errorDescription = nil;
-        if ([errorInfo valueForKey:NSAppleScriptErrorNumber])
-        {
-            NSNumber * errorNumber = (NSNumber *)[errorInfo valueForKey:NSAppleScriptErrorNumber];
-            if ([errorNumber intValue] == -128)
-                *errorDescription = @"The administrator password is required to do this.";
-        }
-        
-        // Set error message from provided message
-//        if (*errorDescription == nil)
-        else
-        {
-            if ([errorInfo valueForKey:NSAppleScriptErrorMessage])
-                *errorDescription =  (NSString *)[errorInfo valueForKey:NSAppleScriptErrorMessage];
-        }
-        
-//        return NO;
-    }
-    else
-    {
-        // Set output to the AppleScript's output
-        *output = [eventResult stringValue];
-        self.asicStatLabel.stringValue = [eventResult stringValue];
-        
-//        return YES;
-    }
-}
- */
 
 // This callback is implemented as part of conforming to the ProcessController protocol.
 // It will be called whenever there is output from the TaskWrapper.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
- 
-    NSString *unknownMessage = @"Unknown stratum msg";
-    NSString *apiOutput = @"5s:";
-    NSString *khOutput = @"kh";
-    NSString *mhOutput = @"Mh";
-    NSString *ghOutput = @"Gh";
-    if ([output rangeOfString:apiOutput].location != NSNotFound) {
-        NSString *numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
-        megaHashLabel.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
-        numberString = nil;
-        NSString *acceptString = [self getDataBetweenFromString:output
-                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
-        acceptLabel.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
-        acceptString = nil;
-        NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"R:" rightString:@"+" leftOffset:0];
-        rejecttLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
-        rejectString = nil;
-        
-        if ([output rangeOfString:khOutput].location != NSNotFound) {
-            asicHashField.stringValue = @"Kh";
-        }
-        if ([output rangeOfString:mhOutput].location != NSNotFound) {
-            asicHashField.stringValue = @"Mh";
-        }
-        if ([output rangeOfString:ghOutput].location != NSNotFound) {
-            asicHashField.stringValue = @"Gh";
-        }
-        
-        
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-        [prefs synchronize];
 
+    if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Authorisation Failed"];
+    }
+    
+    if ([output rangeOfString:@"5s:"].location != NSNotFound) {
+        self.numberString = [self getDataBetweenFromString:output
+                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
+        self.megaHashLabel.stringValue = [self.numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        self.numberString = nil;
+        self.acceptString = [self getDataBetweenFromString:output
+                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
+        self.acceptLabel.stringValue = [self.acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        self.acceptString = nil;
+        self.rejectString = [self getDataBetweenFromString:output
+                                                     leftString:@"R:" rightString:@"+" leftOffset:0];
+        self.rejecttLabel.stringValue = [self.rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
+        self.rejectString = nil;
         
-        apiOutput = nil;
-        numberString = nil;
-        acceptString = nil;
-        rejectString = nil;
+        if ([output rangeOfString:@"kh"].location != NSNotFound) {
+            self.asicHashField.stringValue = @"Kh";
+        }
+        if ([output rangeOfString:@"Mh"].location != NSNotFound) {
+            self.asicHashField.stringValue = @"Mh";
+        }
+        if ([output rangeOfString:@"Gh"].location != NSNotFound) {
+            self.asicHashField.stringValue = @"Gh";
+        }
+        
+        
+        self.prefs = [NSUserDefaults standardUserDefaults];
+        
+        [self.prefs synchronize];
+        
+        
+        if ([[self.prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            [appDelegate.bfgReadBack setHidden:YES];
+            [appDelegate.bfgReading setHidden:YES];
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+        else
+        {
+            
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.asicReading.stringValue = [self.megaHashLabel.stringValue stringByAppendingString:self.asicHashField.stringValue];
+            [appDelegate.asicReadBack setHidden:NO];
+            [appDelegate.asicReading setHidden:NO];
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+
+
+        self.numberString = nil;
+        self.acceptString = nil;
+        self.rejectString = nil;
         output = nil;
 
     }
   
-//    megaHashLabel.stringValue = [NSString stringWithFormat:@"%i",[newTextMH intValue]];
-    
-    
-/*
-    NSString *asicOutput = @"5s:";
-    if ([output rangeOfString:asicOutput].location != NSNotFound) {
-        
-        // Substring found...
-        self.asicStatLabel.stringValue = output;
+    if ([output rangeOfString:@"Unknown stratum msg"].location != NSNotFound) {
+        output = nil;
     }
     else {
         
-        NSString *poolString = @"MH/s)] [Rej:";
-        NSRange result = [output rangeOfString:poolString];
-        if (result.length >0){
-            output = [[output componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@" "];
-            NSMutableCharacterSet *_space = [NSMutableCharacterSet characterSetWithCharactersInString:@" "];
-            output = [output stringByTrimmingCharactersInSet:_space];
-            output = [output stringByReplacingOccurrencesOfString:asicPoolView.stringValue withString:@""];
-            self.asicStatLabel.stringValue = output;
-        }
-        else
- */
-            //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            // add the string (a chunk of the results from locate) to the NSTextView's
-            // backing store, in the form of an attributed string
+        NSString *newOutput = [self.asicOutputView.string stringByAppendingString:output];
+        self.asicOutputView.string = newOutput;
+        newOutput = nil;
+    
+    self.prefs = [NSUserDefaults standardUserDefaults];
+    
+    [self.prefs synchronize];
 
-    if ([output rangeOfString:unknownMessage].location != NSNotFound) {
-        output = nil;
-    }
-    else
-        self.asicOutputView.string = [self.asicOutputView.string stringByAppendingString:output];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    [prefs synchronize];
-    
-    NSString *logLength = [prefs objectForKey:@"logLength" ];
-    if (logLength.intValue <= 1) {
-        logLength = @"5000";
+    self.logLength = [self.prefs objectForKey:@"logLength" ];
+    if (self.logLength.intValue <= 1) {
+        self.logLength = @"5000";
     }
     
-    if (self.asicOutputView.string.length >= logLength.intValue) {
+    if (self.asicOutputView.string.length >= self.logLength.intValue) {
         [self.asicOutputView setEditable:true];
         [self.asicOutputView setSelectedRange:NSMakeRange(0,1000)];
         [self.asicOutputView delete:nil];
         [self.asicOutputView setEditable:false];
     }
-    
-    ghOutput = nil;
-    khOutput = nil;
-    mhOutput = nil;
-    unknownMessage = nil;
-    logLength = nil;
-    prefs = nil;
-    apiOutput = nil;
+        
+        self.logLength = nil;
+        self.prefs = nil;
+        
+    }
 
 
         /*    [[appDelegate.pingReport textStorage] appendAttributedString: [[NSAttributedString alloc]
@@ -612,6 +716,7 @@ pgaThreeTemp = nil;
         // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
         // of a text storage update to starve the app of events
         [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
+    output = nil;
     }
 
 
@@ -619,7 +724,7 @@ pgaThreeTemp = nil;
 {
             if ([leftData isNotEqualTo:nil]) {
     NSInteger left, right;
-    NSString *foundData;
+
     NSScanner *scanner=[NSScanner scannerWithString:data];
     [scanner scanUpToString:leftData intoString: nil];
     left = [scanner scanLocation];
@@ -627,11 +732,11 @@ pgaThreeTemp = nil;
     [scanner scanUpToString:rightData intoString: nil];
     right = [scanner scanLocation] + 1;
     left += leftPos;
-    foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
+    self.foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
 
-    return foundData;
+    return self.foundData;
                 
-                foundData = nil;
+                self.foundData = nil;
                 scanner = nil;
                 leftData = nil;
                 rightData = nil;
@@ -667,7 +772,33 @@ pgaThreeTemp = nil;
 {
     findRunning=NO;
     // change the button's title back for the next search
-    [asicStartButton setTitle:@"Start"];
+    [self.asicStartButton setTitle:@"Start"];
+    if (self.asicStartButton.tag == 0) {
+        
+        [self performSelector:@selector(start:) withObject:nil afterDelay:10.0];
+        
+        NSAlert *restartMessage = [[NSAlert alloc] init];
+        [restartMessage addButtonWithTitle:@"Umm… OK."];
+        
+        [restartMessage setMessageText:@"Settings changed"];
+        
+        NSDate * now = [NSDate date];
+        NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+        [outputFormatter setDateFormat:@"HH:mm:ss"];
+        NSString *newDateString = [outputFormatter stringFromDate:now];
+//        NSLog(@"newDateString %@", newDateString);
+        outputFormatter = nil;
+        NSString *restartMessageInfo = [NSString stringWithFormat:@"Your miner was resarted automatically after a sudden stop at %@.", newDateString];
+        [restartMessage setInformativeText:restartMessageInfo];
+        
+        restartMessage = nil;
+        
+        [restartMessage setAlertStyle:NSWarningAlertStyle];
+        //        returnCode: (NSInteger)returnCode
+        
+        [restartMessage beginSheetModalForWindow:self.asicWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+    }
+
 }
 
 // If the user closes the search window, let's just quit
@@ -701,13 +832,43 @@ pgaThreeTemp = nil;
 }
 
 // Display the release notes, as chosen from the menu item in the Help menu.
-- (IBAction)displayReleaseNotes:(id)sender
+- (IBAction)displayHelp:(id)sender
 {
-    // Grab the release notes from the Resources folder in the app bundle, and stuff
-    // them into the proper text field
-    //   [relNotesTextField readRTFDFromFile:[[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"rtf"]];
-    // [relNotesWin makeKeyAndOrderFront:self];
+[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
 }
+
+- (IBAction)addNetworkedMiner:(id)sender
+{
+        [self.addNetworkedMinerWindow orderFront:sender];
+}
+
+- (IBAction)addNetworkedMinerApply:(id)sender
+{
+self.prefs = [NSUserDefaults standardUserDefaults];
+    
+//                NSString *existingString = [self.prefs stringForKey:@"ipAddress"];
+    
+        [self.prefs setObject:self.ipAddress.stringValue forKey:@"ipAddress"];
+            [self.prefs setObject:self.portNumber.stringValue forKey:@"portNumber"];
+    [self.prefs synchronize];
+    
+    [self.addNetworkedMinerWindow orderOut:sender];
+}
+
+- (IBAction)clearNetworkedMinerApply:(id)sender
+{
+    self.prefs = [NSUserDefaults standardUserDefaults];
+    
+    //                NSString *existingString = [self.prefs stringForKey:@"ipAddress"];
+    
+    [self.prefs setObject:@"" forKey:@"ipAddress"];
+    [self.prefs setObject:@"" forKey:@"portNumber"];
+    [self.prefs synchronize];
+    
+
+}
+
+
 
 // when first launched, this routine is called when all objects are created
 // and initialized.  It's a chance for us to set things up before the user gets
@@ -715,6 +876,8 @@ pgaThreeTemp = nil;
 -(void)awakeFromNib
 {
     findRunning=NO;
+    findThreeRunning=NO;
+    findTwoRunning=NO;
     asicTask=nil;
     // Lets make sure that there is something valid in the locate database; otherwise,
     // all searches will come back empty.
@@ -729,72 +892,82 @@ pgaThreeTemp = nil;
      }*/
     
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    self.prefs = [NSUserDefaults standardUserDefaults];
     
     // getting an NSString
-    NSString *asicOptionsString = [prefs stringForKey:@"asicOptionsValue"];
+    NSString *asicOptionsString = [self.prefs stringForKey:@"asicOptionsValue"];
     
 
     if (asicOptionsString != nil) {
-        [asicOptionsView setStringValue:asicOptionsString];
+        [self.asicOptionsView setStringValue:asicOptionsString];
     }
+    self.prefs = nil;
 }
 
 - (IBAction)asicMinerToggle:(id)sender {
     
-    if ([asicWindow isVisible]) {
-        [asicWindow orderOut:sender];
+    if ([self.asicWindow isVisible]) {
+        [self.asicWindow orderOut:sender];
     }
     else
     {
-        [asicWindow orderFront:sender];
+        [self.asicWindow orderFront:sender];
     }
 }
     
 
 - (IBAction)optionsToggle:(id)sender {
         
-        if ([asicOptionsWindow isVisible]) {
-            [asicOptionsButton setState:NSOffState];
-            [asicOptionsWindow orderOut:sender];
+        if ([self.asicOptionsWindow isVisible]) {
+            [self.asicOptionsButton setState:NSOffState];
+            [self.asicOptionsWindow orderOut:sender];
         }
         else
         {
-            [asicOptionsButton setState:NSOnState];
-            [asicOptionsWindow orderFront:sender];
+            [self.asicOptionsButton setState:NSOnState];
+            [self.asicOptionsWindow orderFront:sender];
             
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            self.prefs = [NSUserDefaults standardUserDefaults];
             
-            [prefs synchronize];
+            [self.prefs synchronize];
             
             
-            NSString *noGPU = [prefs stringForKey:@"disableGPU"];
-            NSString *debugOutputOn = [prefs stringForKey:@"debugOutput"];
-            NSString *quietOutputOn = [prefs stringForKey:@"quietOutput"];
-            NSString *bonusOptions = [prefs stringForKey:@"asicOptionsValue"];
+            NSString *noGPU = [self.prefs stringForKey:@"disableASICGPU"];
+            NSString *debugOutputOn = [self.prefs stringForKey:@"debugASICOutput"];
+            NSString *quietOutputOn = [self.prefs stringForKey:@"quietASICOutput"];
+            NSString *bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
+            NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
 
             if ([noGPU isNotEqualTo:nil]) {
-                asicNoGpuButton.state = NSOnState;
+                self.asicNoGpuButton.state = NSOnState;
             }
 
             if ([debugOutputOn isNotEqualTo:nil]) {
-                asicDebugButton.state = NSOnState;
+                self.asicDebugButton.state = NSOnState;
+            }
+            else {
+                self.asicDebugButton.state = NSOffState;
             }
             if ([quietOutputOn isNotEqualTo:nil]) {
-                asicQuietButton.state = NSOnState;
+                self.asicQuietButton.state = NSOnState;
             }
             
             if ([bonusOptions isNotEqualTo:nil]) {
-                asicOptionsView.stringValue = bonusOptions;
+                self.asicOptionsView.stringValue = bonusOptions;
+            }
+            
+            if ([cpuThreads isNotEqualTo:nil]) {
+                self.asicThreadsField.stringValue = cpuThreads;
             }
 
             noGPU = nil;
             debugOutputOn = nil;
             quietOutputOn = nil;
             bonusOptions = nil;
+            cpuThreads = nil;
 
             
-            prefs = nil;
+            self.prefs = nil;
             
         }
         
@@ -805,39 +978,44 @@ pgaThreeTemp = nil;
     
 - (IBAction)optionsApply:(id)sender {
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        self.prefs = [NSUserDefaults standardUserDefaults];
 
         
-        if (asicNoGpuButton.state == NSOnState) {
-            [prefs setObject:@"-G" forKey:@"disableGPU"];
+        if (self.asicNoGpuButton.state == NSOffState) {
+            [self.prefs setObject:nil forKey:@"disableASICGPU"];
         }
         else {
-            [prefs setObject:nil forKey:@"disableGPU"];
+            [self.prefs setObject:@"-S opencl:auto" forKey:@"disableASICGPU"];
         }
 
-        if (asicDebugButton.state == NSOnState) {
-            [prefs setObject:@"-D" forKey:@"debugOutput"];
+        if (self.asicDebugButton.state == NSOnState) {
+            [self.prefs setObject:@"-D" forKey:@"debugASICOutput"];
         }
         else {
-            [prefs setObject:nil forKey:@"debugOutput"];
+            [self.prefs setObject:nil forKey:@"debugASICOutput"];
         }
-        if (asicQuietButton.state == NSOnState) {
-            [prefs setObject:@"-q" forKey:@"quietOutput"];
+        if (self.asicQuietButton.state == NSOnState) {
+            [self.prefs setObject:@"-q" forKey:@"quietASICOutput"];
         }
         else {
-            [prefs setObject:nil forKey:@"quietOutput"];
+            [self.prefs setObject:nil forKey:@"quietASICOutput"];
         }
 
         
         
-        [prefs setObject:asicOptionsView.stringValue forKey:@"asicOptionsValue"];
+        [self.prefs setObject:self.asicOptionsView.stringValue forKey:@"asicOptionsValue"];
+    
+    if (self.asicThreadsField.stringValue.length >= 1) {
+    [self.prefs setObject:self.asicThreadsField forKey:@"cpuASICThreads"];
+    }
+
+    
+        [self.prefs synchronize];
         
-        [prefs synchronize];
+        [self.asicOptionsButton setState:NSOffState];
+        [self.asicOptionsWindow orderOut:sender];
         
-        [asicOptionsButton setState:NSOffState];
-        [asicOptionsWindow orderOut:sender];
-        
-        prefs = nil;
+        self.prefs = nil;
         
     }
 

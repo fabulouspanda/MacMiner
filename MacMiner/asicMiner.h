@@ -9,62 +9,87 @@
 #import <Foundation/Foundation.h>
 #import "TaskWrapper.h"
 #import "TaskWrapperDelegate.h"
+#import "taskTwoWrapper.h"
+#import "taskTwoWrapperDelegate.h"
+#import "taskThreeWrapper.h"
+#import "taskThreeWrapperDelegate.h"
 
+@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate, NSTableViewDelegate>{
 
-@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
-    NSWindow *asicWindow;
-    NSView *asicView;
-
-    NSTextField *asicOptionsView;
     
-    NSTextView *asicOutputView;
-    NSButton *asicStartButton;
     BOOL findRunning;
+    BOOL findTwoRunning;
+    BOOL findThreeRunning;
     TaskWrapper *asicTask;
+    taskTwoWrapper *apiTask;
+    taskThreeWrapper *apiNetworkTask;
     
     NSTimer *toggleTimer;
-    
-    NSTextField *megaHashLabel;
-        NSTextField *acceptLabel;
-            NSTextField *rejectLabel;
-    NSTextField *tempsLabel;
-    
-    NSPanel *asicOptionsWindow;
-    NSButton *asicNoGpuButton;
-    NSButton *asicQuietButton;
-    NSButton *asicDebugButton;
-    NSButton *asicOptionsButton;
-    
-    NSTextField *asicHashField;
+ 
     
     
 }
 
 @property (nonatomic, strong) IBOutlet NSWindow *asicWindow;
-@property (nonatomic, strong) IBOutlet NSView *asicView;
+@property (nonatomic, weak) IBOutlet NSView *asicView;
 
-@property (nonatomic, strong) IBOutlet NSTextField *asicOptionsView;
+@property (nonatomic, strong) IBOutlet NSWindow *addNetworkedMinerWindow;
+
+@property (nonatomic, weak) IBOutlet NSTextField *ipAddress;
+@property (nonatomic, weak) IBOutlet NSTextField *portNumber;
+
+@property (nonatomic, weak) IBOutlet NSTextField *asicOptionsView;
 
 @property (nonatomic, strong) IBOutlet NSTextView *asicOutputView;
-@property (nonatomic, strong) IBOutlet NSButton *asicStartButton;
+@property (nonatomic, weak) IBOutlet NSButton *asicStartButton;
 
-@property (nonatomic, strong) IBOutlet NSTextField *megaHashLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *acceptLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *rejecttLabel;
-@property (nonatomic, strong) IBOutlet NSTextField *tempsLabel;
+
+@property (nonatomic, weak) IBOutlet NSTextField *megaHashLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *acceptLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *rejecttLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *tempsLabel;
+
 @property (nonatomic, strong) IBOutlet NSPanel *asicOptionsWindow;
-@property (nonatomic, strong) IBOutlet NSButton *asicNoGpuButton;
-@property (nonatomic, strong) IBOutlet NSButton *asicQuietButton;
-@property (nonatomic, strong) IBOutlet NSButton *asicDebugButton;
-@property (nonatomic, strong) IBOutlet NSButton *asicOptionsButton;
+@property (nonatomic, weak) IBOutlet NSButton *asicNoGpuButton;
+@property (nonatomic, weak) IBOutlet NSButton *asicQuietButton;
+@property (nonatomic, weak) IBOutlet NSButton *asicDebugButton;
+@property (nonatomic, weak) IBOutlet NSButton *asicOptionsButton;
 
-@property (nonatomic, strong) IBOutlet NSTextField *asicHashField;
+@property (nonatomic, weak) IBOutlet NSTextField *asicThreadsField;
+
+@property (nonatomic, weak) IBOutlet NSTextField *asicHashField;
+
+@property (nonatomic, strong) IBOutlet NSTextView *asicAPIOutput;
+
+@property (nonatomic, strong) IBOutlet NSTableView *apiTableView;
+@property (nonatomic, strong) IBOutlet NSMutableArray *apiDataArray;
+@property (nonatomic, strong) IBOutlet NSMutableArray *apiDataObjectArray;
+
+@property (nonatomic, strong) IBOutlet NSArrayController *apiTableViewController;
+
+@property (nonatomic, strong) IBOutlet NSTextView *networkMinerData;
+@property (nonatomic, strong) NSMutableArray *networkMinerArray;
+
+@property (nonatomic, strong) NSString *noGPU;
+@property (nonatomic, strong) NSString *debugOutputOn;
+@property (nonatomic, strong) NSString *quietOutputOn;
+@property (nonatomic, strong) NSString *bonusOptions;
+
+@property (nonatomic, strong) NSString *logLength;
+
+@property (nonatomic, strong) NSString *foundData;
+
+@property (nonatomic, strong) NSString *numberString;
+@property (nonatomic, strong) NSString *acceptString;
+@property (nonatomic, strong) NSString *rejectString;
+
+@property (nonatomic, strong) NSUserDefaults *prefs;
+
+@property(strong) NSSpeechSynthesizer *speechSynth;
 
 - (IBAction)start:(id)sender;
 
 - (IBAction)asicMinerToggle:(id)sender;
-
-- (IBAction)stopToggling:(id)sender;
 
 - (void)startToggling;
 
@@ -76,6 +101,8 @@
 
 - (void)toggleTimerFired:(NSTimer*)timer;
 
-//- (IBAction)runProcessAsAdministrator:(id)sender;
+-(void)stopAsicMiner;
+
+
 
 @end

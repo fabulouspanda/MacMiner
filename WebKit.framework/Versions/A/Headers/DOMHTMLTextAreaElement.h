@@ -45,7 +45,7 @@
 @property(readonly) BOOL willValidate AVAILABLE_IN_WEBKIT_VERSION_4_0;
 @property int selectionStart AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;
 @property int selectionEnd AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;
-@property(copy) NSString *accessKey AVAILABLE_WEBKIT_VERSION_1_3_AND_LATER_BUT_DEPRECATED_AFTER_WEBKIT_VERSION_5_1;
+@property(copy) NSString *accessKey;
 
 - (void)select;
 - (void)setSelectionRange:(int)start end:(int)end AVAILABLE_WEBKIT_VERSION_3_0_AND_LATER;

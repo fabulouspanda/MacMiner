@@ -11,20 +11,13 @@
 
 
 
-@interface preferencesViewController : NSViewController <NSWindowDelegate, NSTextFieldDelegate>{
-
-    NSWindow *prefWindow;
-    
-    NSTextField *charCount;
-    NSButton *scrollButton;
-    NSButton *dockButton;
-}
+@interface preferencesViewController : NSViewController <NSWindowDelegate, NSTextFieldDelegate>
 
 
 @property (nonatomic, strong) IBOutlet NSWindow *prefWindow;
-@property (nonatomic, strong) IBOutlet NSTextField *charCount;
-@property (nonatomic, strong) IBOutlet NSButton *scrollButton;
-@property (nonatomic, strong) IBOutlet NSButton *dockButton;
+@property (nonatomic, weak) IBOutlet NSTextField *charCount;
+@property (nonatomic, weak) IBOutlet NSButton *scrollButton;
+@property (nonatomic, weak) IBOutlet NSButton *dockButton;
 
 -(IBAction)preferenceToggle:(id)sender;
 

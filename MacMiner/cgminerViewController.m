@@ -11,7 +11,7 @@
 
 @implementation cgminerViewController
 
-@synthesize cgOutputView, cgRememberButton, cgStartButton, cgStatLabel, cgView, cgWindow, cgOptionsView, cgspeedRead, cgacceptRead, cgrejectRead, cgsliderValue, cgintenseSlider, cgOptionsWindow, cgopenOptions, cgworkSlider, cgworkSizeLabel, cgvectorOverride, cgvectorSlide, cgdebugOutput, cgdisableGPU, cgdynamicIntensity, cguseScrypt, cgquietOutput, cgworkSizeOverride, cgvectorSizeLabel, cgintenseSizeLabel, cghashRead, cgLookupGap, cgShaders, cgThreadConc;
+
 /*
  - (id)initWithCoder:(NSCoder *)aDecoder
  {
@@ -33,14 +33,14 @@
  */
 - (IBAction)cgsliderChanged:(id)sender {
     
-    int current = lroundf([cgworkSlider floatValue]);
-    [cgworkSizeLabel setStringValue:[cgworkValues objectAtIndex:current]];
+    int current = lroundf([self.cgworkSlider floatValue]);
+    [self.cgworkSizeLabel setStringValue:[cgworkValues objectAtIndex:current]];
     
 }
 - (IBAction)cgvectorChanged:(id)sender {
     
-    int current = lroundf([cgvectorSlide floatValue]);
-    [cgvectorSizeLabel setStringValue:[cgvectorValues objectAtIndex:current]];
+    int current = lroundf([self.cgvectorSlide floatValue]);
+    [self.cgvectorSizeLabel setStringValue:[cgvectorValues objectAtIndex:current]];
     
 }
 /*
@@ -60,7 +60,7 @@
     if (cgsearchTaskIsRunning)
     {
         // change the button's title back for the next search
-        [cgStartButton setTitle:@"Start"];
+        [self.cgStartButton setTitle:@"Start"];
         // This stops the task and calls our callback (-processFinished)
         [cgTask stopTask];
         cgsearchTaskIsRunning=NO;
@@ -68,43 +68,76 @@
         // Release the memory for this wrapper object
         
         cgTask=nil;
-        [cgrejectRead setStringValue:@""];
-
+        [self.cgrejectRead setStringValue:@""];
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cgReading.stringValue = @"";
+        [appDelegate.cgReadBack setHidden:YES];
+        [appDelegate.cgReading setHidden:YES];
+        
+        [[NSApp dockTile] display];
         
         return;
     }
     else
     {
-        [cgStartButton setTitle:@"Stop"];
+        [self.cgStartButton setTitle:@"Stop"];
         // If the task is still sitting around from the last run, release it
         if (cgTask!=nil) {
             cgTask = nil;
         }
         
-        
+        NSString *filePath = @"/System/Library/Extensions/IOUSBFamily.kext";
+        bool b=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
 
+        NSString *filePath2 = @"/System/Library/Extensions/SiLabsUSBDriver64.kext";
+        bool c=[[NSFileManager defaultManager] fileExistsAtPath:filePath2];
+
+        NSString *filePath3 = @"/System/Library/Extensions/FTDIUSBSerialDriver.kext";
+        bool d=[[NSFileManager defaultManager] fileExistsAtPath:filePath3];
         
-        // Let's allocate memory for and initialize a new TaskWrapper object, passing
-        // in ourselves as the controller for this TaskWrapper object, the path
-        // to the command-line tool, and the contents of the text field that
-        // displays what the user wants to search on
+        if (b == YES || c == YES || d == YES) {
+            NSAlert *driverAlert = [[NSAlert alloc] init];
+                        [driverAlert addButtonWithTitle:@"Show Instructions"];
+            [driverAlert addButtonWithTitle:@"Ignore problem drivers"];
+            
+            [driverAlert setMessageText:@"Driver problem detected"];
+            NSString *infoText = @"cgminer conflicts with the native Mac OS 10.9 and other USB Serial drivers. Please click below to see instructions for disabling the default driver.";
+
+            [driverAlert setInformativeText:infoText];
+            
+
+            [driverAlert setAlertStyle:NSWarningAlertStyle];
+            //        returnCode: (NSInteger)returnCode
+            int rCode = [driverAlert runModal];
+            if (rCode == NSAlertFirstButtonReturn) {
+                
+                if (b == YES) {
+                    NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
+                    NSString *urlPath = [bundlePath stringByAppendingString:@"/driverfiles/Instructions.rtf"];
+                    NSURL* url = [NSURL fileURLWithPath:urlPath isDirectory:YES];
+                    
+                    NSArray *fileURLs = [NSArray arrayWithObjects:url, nil];
+                    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURLs];
+                }
+                
+            }
+            else {
+//                NSLog(@"Ignore");
+            }
+            
+//            [driverAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+
+        }
         
-        //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        /*
-         NSString *oString = @"-o";
-         NSString *poolString = [oString stringByAppendingString:cgPoolView.stringValue];
-         NSString *uString = @"-u";
-         NSString *userString = [uString stringByAppendingString:cgUserView.stringValue];
-         NSString *pString = @"-p";
-         NSString *passString = [pString stringByAppendingString:cgPassView.stringValue];
-         */
-        /*
-         if ([cgOptionsView.stringValue isEqual: @""]) {
-         [cgOptionsView setStringValue:@"-q"];
-         }
-         NSString *optionsString = cgOptionsView.stringValue;
-         */
         
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cgReading.stringValue = @"";
+        [appDelegate.cgReadBack setHidden:NO];
+        [appDelegate.cgReading setHidden:NO];
+        
+        [[NSApp dockTile] display];
+
         NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
         
         NSString *cgPath = [bundlePath2 stringByAppendingString:@"/cgminer/bin/cgminer"];
@@ -117,16 +150,10 @@
         NSString *startingText = @"Starting…";
         self.cgStatLabel.stringValue = startingText;
         startingText = nil;
-        //            self.outputView.string = [self.outputView.string stringByAppendingString:poclbmPath];
-        //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
+
         
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
-        
-        /*      if ([cgOptionsView.stringValue isNotEqualTo:@""]) {
-         NSArray *deviceItems = [cgOptionsView.stringValue componentsSeparatedByString:@" "];
-         [launchArray addObjectsFromArray:deviceItems];
-         
-         } */
+
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -135,17 +162,11 @@
         //        NSString *mainPool = [prefs stringForKey:@"defaultPoolValue"];
         //        NSString *mainBTCUser = [prefs stringForKey:@"defaultBTCUser"];
         //        NSString *mainBTCPass = [prefs stringForKey:@"defaultBTCPass"];
-        NSString *intensityValue = [prefs stringForKey:@"cgintenseValue"];
-        NSString *worksizeValue = [prefs stringForKey:@"cgworksizeValue"];
-        NSString *vectorValue = [prefs stringForKey:@"cgvectorValue"];
-        NSString *noGPU = [prefs stringForKey:@"cgdisableGPU"];
-        NSString *onScrypt = [prefs stringForKey:@"cguseScrypt"];
-        NSString *cgdebugOutputOn = [prefs stringForKey:@"cgdebugOutput"];
-        NSString *cgquietOutputOn = [prefs stringForKey:@"cgquietOutput"];
+ 
+//        NSString *cgdebugOutputOn = [prefs stringForKey:@"cgdebugOutput"];
+//        NSString *cgquietOutputOn = [prefs stringForKey:@"cgquietOutput"];
         NSString *bonusOptions = [prefs stringForKey:@"cgOptionsValue"];
-        NSString *threadConc = [prefs stringForKey:@"cgThreadConc"];
-        NSString *shaders = [prefs stringForKey:@"cgShaders"];
-        NSString *lookupGap = [prefs stringForKey:@"cgLookupGap"];
+
         //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
         /*
          if ([mainBTCUser isNotEqualTo:nil]) {
@@ -167,57 +188,16 @@
         
         [launchArray addObject:@"-T"];
         
-        if ([intensityValue isNotEqualTo:nil]) {
-            [launchArray addObject:@"-I"];
-            [launchArray addObject:intensityValue];
-        }
-        if ([worksizeValue isNotEqualTo:nil]) {
-            [launchArray addObject:@"-w"];
-            [launchArray addObject:worksizeValue];
-        }
-        if ([vectorValue isNotEqualTo:nil]) {
-            [launchArray addObject:@"-v"];
-            [launchArray addObject:vectorValue];
-        }
-        if ([noGPU isNotEqualTo:nil]) {
-            [launchArray addObject:noGPU];
-        }
-        if ([onScrypt isNotEqualTo:nil]) {
-            [launchArray addObject:onScrypt];
-        }
-        if ([cgdebugOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:cgdebugOutputOn];
-        }
-        if ([cgquietOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:cgquietOutputOn];
-        }
-        if (threadConc.length >= 1) {
-            [launchArray addObject:@"--thread-concurrency"];
-            [launchArray addObject:threadConc];
-        }
-        if (shaders.length >= 1) {
-            [launchArray addObject:@"--shaders"];
-            [launchArray addObject:shaders];
-        }
-        if (lookupGap.length >= 1) {
-            [launchArray addObject:@"--lookup-gap"];
-            [launchArray addObject:lookupGap];
-        }
-        
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
         NSString *userpath = [paths objectAtIndex:0];
         userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
         NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+//        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
         
         [launchArray addObject:@"-c"];
         [launchArray addObject:saveBTCConfigFilePath];
-        
-        if ([onScrypt isEqualTo:@"--scrypt"]) {
-            [launchArray removeLastObject];
-            [launchArray addObject:saveLTCConfigFilePath];
-        }
+
         
         if ([bonusOptions isNotEqualTo:nil]) {
             NSArray *bonusStuff = [bonusOptions componentsSeparatedByString:@" "];
@@ -242,10 +222,8 @@
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveBTCConfigFilePath];
         if (fileExists) {
             NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             
             
-            if ([onScrypt length] <= 1) {
                 NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
                 NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -259,66 +237,49 @@
                 NSAlert *startAlert = [[NSAlert alloc] init];
                 [startAlert addButtonWithTitle:@"Indeed"];
                 
-                [startAlert setMessageText:@"bfgminer has started"];
+                [startAlert setMessageText:@"cgminer has started"];
                 NSString *infoText = @"The primary pool is set to ";
                 infoText = [infoText stringByAppendingString:bfgURLValue];
                 infoText = [infoText stringByAppendingString:@" and the user is set to "];
                 infoText = [infoText stringByAppendingString:bfgUserValue];
                 [startAlert setInformativeText:infoText];
                 
-
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
                 [startAlert setAlertStyle:NSWarningAlertStyle];
-
+                //        returnCode: (NSInteger)returnCode
                 
-                [startAlert beginSheetModalForWindow:cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-            }
+                [startAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+
             
+            //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
 
-            if ([onScrypt isEqualTo:@"--scrypt"]) {
-                NSString *numberString = [self getDataBetweenFromString:ltcConfig
-                                                             leftString:@"url" rightString:@"," leftOffset:8];
-                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                numberString = nil;
-                NSString *acceptString = [self getDataBetweenFromString:ltcConfig
-                                                             leftString:@"user" rightString:@"," leftOffset:9];
-                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                acceptString = nil;
-                
-                
-                NSAlert *startAlert = [[NSAlert alloc] init];
-                [startAlert addButtonWithTitle:@"Indeed"];
-                
-                [startAlert setMessageText:@"bfgminer has started"];
-                NSString *infoText = @"The primary pool is set to ";
-                infoText = [infoText stringByAppendingString:bfgURLValue];
-                infoText = [infoText stringByAppendingString:@" and the user is set to "];
-                infoText = [infoText stringByAppendingString:bfgUserValue];
-                [startAlert setInformativeText:infoText];
-
-                
-                [startAlert setAlertStyle:NSWarningAlertStyle];
-
-                
-                [startAlert beginSheetModalForWindow:cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-                
             }
             
             
-        }
+        
         
         launchArray = nil;
         
-        intensityValue = nil;
-        worksizeValue = nil;
-        vectorValue = nil;
-        noGPU = nil;
-        onScrypt = nil;
-        cgdebugOutputOn = nil;
-        cgquietOutputOn = nil;
-        bonusOptions = nil;
+          bonusOptions = nil;
         prefs = nil;
         cgPath = nil;
-
+        
+        /*
+         if (cgRememberButton.state == NSOnState) {
+         
+         //                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+         
+         // saving an NSString
+         [prefs setObject:cgUserView.stringValue forKey:@"cgUserValue"];
+         [prefs setObject:cgPassView.stringValue forKey:@"cgPassValue"];
+         [prefs setObject:cgPoolView.stringValue forKey:@"cgPoolValue"];
+         //                [prefs setObject:cgOptionsView.stringValue forKey:@"cgOptionsValue"];
+         
+         
+         [prefs synchronize];
+         }
+         */
         
     }
     
@@ -328,6 +289,19 @@
 // It will be called whenever there is output from the TaskWrapper.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
+    
+    if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Authorisation Failed"];
+    }
+    
+    if ([self.cgspeedRead.stringValue isNotEqualTo:@"0"]) {
+        self.cgspeedRead.tag = 1;
+    }
+    if ([self.cgspeedRead.stringValue isEqual: @"0"] && self.cgspeedRead.tag == 1) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Mining Stopped"];
+    }
     
     NSString *unknownMessage = @"Unknown stratum msg";
     NSString *apiOutput = @"5s):";
@@ -339,32 +313,52 @@
                                                      leftString:@"5s" rightString:@"(" leftOffset:4];
 
         NSCharacterSet *alpha = [NSMutableCharacterSet letterCharacterSet];
-        cgspeedRead.stringValue = [[numberString componentsSeparatedByCharactersInSet:alpha]
+        self.cgspeedRead.stringValue = [[numberString componentsSeparatedByCharactersInSet:alpha]
                                       componentsJoinedByString:@""];
 
         alpha = nil;
         numberString = nil;
         NSString *acceptString = [self getDataBetweenFromString:output
                                                      leftString:@"A:" rightString:@"R" leftOffset:0];
-        cgacceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        self.cgacceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         acceptString = nil;
         NSString *rejectString = [self getDataBetweenFromString:output
                                                      leftString:@"R:" rightString:@"H" leftOffset:0];
-        cgrejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
+        self.cgrejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         rejectString = nil;
         
         if ([output rangeOfString:khOutput].location != NSNotFound) {
-            cghashRead.stringValue = @"Kh";
+            self.cghashRead.stringValue = @"Kh";
         }
         if ([output rangeOfString:mhOutput].location != NSNotFound) {
-            cghashRead.stringValue = @"Mh";
+            self.cghashRead.stringValue = @"Mh";
         }
         if ([output rangeOfString:ghOutput].location != NSNotFound) {
-            cghashRead.stringValue = @"Gh";
+            self.cghashRead.stringValue = @"Gh";
         }
         
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+        
+        if ([[prefs objectForKey:@"showDockReading"] isNotEqualTo:@"hide"]) {
+            
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.cgReading.stringValue = [self.cgspeedRead.stringValue stringByAppendingString:self.cghashRead.stringValue];
+            [appDelegate.cgReading setHidden:NO];
+            [appDelegate.cgReading setHidden:NO];
 
+            [[NSApp dockTile] display];
+        }
+        if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            [appDelegate.cgReadBack setHidden:YES];
+            [appDelegate.cgReading setHidden:YES];
 
+            [[NSApp dockTile] display];
+        }
+        prefs = nil;
         
     }
 //    else
@@ -376,8 +370,11 @@
         if ([output rangeOfString:unknownMessage].location != NSNotFound) {
             output = nil;
         }
-        else
-            self.cgOutputView.string = [self.cgOutputView.string stringByAppendingString:output];
+        else {
+
+            NSString *newCGOutput = [self.cgOutputView.string stringByAppendingString:output];
+            self.cgOutputView.string = newCGOutput;
+            newCGOutput = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
@@ -406,12 +403,17 @@
     [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
                 
             }
+           
+            prefs = nil;
+            logLength = nil;
+            
+        }
+    
     apiOutput = nil;
     khOutput = nil;
     mhOutput = nil;
     ghOutput = nil;
-    prefs = nil;
-    logLength = nil;
+
     unknownMessage = nil;
     output = nil;
     
@@ -442,7 +444,7 @@
 // We now need to scroll the NSScrollView in which the NSTextView sits to the part
 // that we just added at the end
 - (void)scrollToVisible:(id)ignore {
-
+    //   AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     [self.cgOutputView scrollRangeToVisible:NSMakeRange([[self.cgOutputView string] length], 0)];
 }
 
@@ -451,12 +453,12 @@
 // to the ProcessController protocol.
 - (void)taskWrapperWillStartTask:(TaskWrapper *)taskWrapper
 {
-
+    //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     cgsearchTaskIsRunning=YES;
     // clear the results
     //    [self.outputView setString:@""];
     // change the "Start" button to say "Stop"
-    [cgStartButton setTitle:@"Stop"];
+    [self.cgStartButton setTitle:@"Stop"];
 }
 
 // A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
@@ -466,7 +468,7 @@
 {
     cgsearchTaskIsRunning=NO;
     // change the button's title back for the next search
-    [cgStartButton setTitle:@"Start"];
+    [self.cgStartButton setTitle:@"Start"];
 }
 
 // If the user closes the search window, let's just quit
@@ -476,7 +478,7 @@
     cgsearchTaskIsRunning = NO;
     cgTask = nil;
     //    [NSApp terminate:nil];
-    [cgStatLabel setStringValue:@""];
+    [self.cgStatLabel setStringValue:@""];
     return YES;
 }
 
@@ -493,28 +495,32 @@
     
     cgworkValues = [[NSArray alloc] initWithObjects:@"64",@"128",@"256",@"512",@"1024",nil];
     
-    [cgworkSlider setNumberOfTickMarks:[cgworkValues count]];
-    [cgworkSlider setMinValue:0];
-    [cgworkSlider setMaxValue:[cgworkValues count]-1];
-    [cgworkSlider setAllowsTickMarkValuesOnly:YES];
-    [cgworkSlider setEnabled:YES];
-    [cgworkSlider setContinuous:YES];
+    [self.cgworkSlider setNumberOfTickMarks:[cgworkValues count]];
+    [self.cgworkSlider setMinValue:0];
+    [self.cgworkSlider setMaxValue:[cgworkValues count]-1];
+    [self.cgworkSlider setAllowsTickMarkValuesOnly:YES];
+    [self.cgworkSlider setEnabled:YES];
+    [self.cgworkSlider setContinuous:YES];
     
-    [cgworkSizeLabel setStringValue:[cgworkValues objectAtIndex:0]];
-    [cgworkSlider setIntValue:0];
+    [self.cgworkSizeLabel setStringValue:[cgworkValues objectAtIndex:0]];
+    [self.cgworkSlider setIntValue:0];
     
     cgvectorValues = [[NSArray alloc] initWithObjects:@"1",@"2",@"4",nil];
     
-    [cgvectorSlide setNumberOfTickMarks:[cgvectorValues count]];
-    [cgvectorSlide setMinValue:0];
-    [cgvectorSlide setMaxValue:[cgvectorValues count]-1];
-    [cgvectorSlide setAllowsTickMarkValuesOnly:YES];
-    [cgvectorSlide setEnabled:YES];
-    [cgvectorSlide setContinuous:YES];
+    [self.cgvectorSlide setNumberOfTickMarks:[cgvectorValues count]];
+    [self.cgvectorSlide setMinValue:0];
+    [self.cgvectorSlide setMaxValue:[cgvectorValues count]-1];
+    [self.cgvectorSlide setAllowsTickMarkValuesOnly:YES];
+    [self.cgvectorSlide setEnabled:YES];
+    [self.cgvectorSlide setContinuous:YES];
     
-    [cgvectorSizeLabel setStringValue:[cgvectorValues objectAtIndex:0]];
-    [cgvectorSlide setIntValue:0];
+    [self.cgvectorSizeLabel setStringValue:[cgvectorValues objectAtIndex:0]];
+    [self.cgvectorSlide setIntValue:0];
     
+    
+    
+    //    [[NSApp dockTile] setContentView:cgdockReading];
+    //    [[NSApp dockTile] display];
     
     
     
@@ -522,36 +528,36 @@
 
 - (IBAction)cgMinerToggle:(id)sender {
     
-    if ([cgWindow isVisible]) {
-        [cgWindow orderOut:sender];
+    if ([self.cgWindow isVisible]) {
+        [self.cgWindow orderOut:sender];
     }
     else
     {
-        [cgWindow orderFront:sender];
+        [self.cgWindow orderFront:sender];
     }
 }
 
 - (void)cgMinerToggled:(id)sender {
     
-    if ([cgWindow isVisible]) {
-        [cgWindow orderOut:sender];
+    if ([self.cgWindow isVisible]) {
+        [self.cgWindow orderOut:sender];
     }
     else
     {
-        [cgWindow orderFront:sender];
+        [self.cgWindow orderFront:sender];
     }
 }
 
 - (IBAction)optionsToggle:(id)sender {
     
-    if ([cgOptionsWindow isVisible]) {
-        [cgopenOptions setState:NSOffState];
-        [cgOptionsWindow orderOut:sender];
+    if ([self.cgOptionsWindow isVisible]) {
+        [self.cgopenOptions setState:NSOffState];
+        [self.cgOptionsWindow orderOut:sender];
     }
     else
     {
-        [cgopenOptions setState:NSOnState];
-        [cgOptionsWindow orderFront:sender];
+        [self.cgopenOptions setState:NSOnState];
+        [self.cgOptionsWindow orderFront:sender];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -573,41 +579,41 @@
         
         
         if ([intensityValue isNotEqualTo:nil]) {
-            cgintenseSizeLabel.stringValue = intensityValue;
-            cgdynamicIntensity.state = NSOffState;
+            self.cgintenseSizeLabel.stringValue = intensityValue;
+            self.cgdynamicIntensity.state = NSOffState;
         }
         if ([worksizeValue isNotEqualTo:nil]) {
-            cgworkSizeLabel.stringValue = worksizeValue;
-            cgworkSizeOverride.state = NSOnState;
+            self.cgworkSizeLabel.stringValue = worksizeValue;
+            self.cgworkSizeOverride.state = NSOnState;
         }
         if ([vectorValue isNotEqualTo:nil]) {
-            cgvectorSizeLabel.stringValue = vectorValue;
-            cgvectorOverride.state = NSOnState;
+            self.cgvectorSizeLabel.stringValue = vectorValue;
+            self.cgvectorOverride.state = NSOnState;
         }
         if ([noGPU isNotEqualTo:nil]) {
-            cgdisableGPU.state = NSOnState;
+            self.cgdisableGPU.state = NSOnState;
         }
         if ([onScrypt isNotEqualTo:nil]) {
-            cguseScrypt.state = NSOnState;
+            self.cguseScrypt.state = NSOnState;
         }
         if ([cgdebugOutputOn isNotEqualTo:nil]) {
-            cgdebugOutput.state = NSOnState;
+            self.cgdebugOutput.state = NSOnState;
         }
         if ([cgquietOutputOn isNotEqualTo:nil]) {
-            cgquietOutput.state = NSOnState;
+            self.cgquietOutput.state = NSOnState;
         }
         
         if ([bonusOptions isNotEqualTo:nil]) {
-            cgOptionsView.stringValue = bonusOptions;
+            self.cgOptionsView.stringValue = bonusOptions;
         }
         if (threadConc.length >= 1) {
-            cgThreadConc.stringValue = threadConc;
+            self.cgThreadConc.stringValue = threadConc;
         }
         if (shaders.length >= 1) {
-            cgShaders.stringValue = shaders;
+            self.cgShaders.stringValue = shaders;
         }
         if (lookupGap.length >= 1) {
-            cgLookupGap.stringValue = lookupGap;
+            self.cgLookupGap.stringValue = lookupGap;
         }
         
         intensityValue = nil;
@@ -633,68 +639,82 @@
 - (IBAction)cgoptionsApply:(id)sender {
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (cgdynamicIntensity.state == NSOffState) {
-        [prefs setObject:cgintenseSizeLabel.stringValue forKey:@"cgintenseValue"];
+    if (self.cgdynamicIntensity.state == NSOffState) {
+        [prefs setObject:self.cgintenseSizeLabel.stringValue forKey:@"cgintenseValue"];
     }
     else {
         [prefs setObject:nil forKey:@"cgintenseValue"];
     }
-    if (cgworkSizeOverride.state == NSOnState) {
-        [prefs setObject:cgworkSizeLabel.stringValue forKey:@"cgworksizeValue"];
+    if (self.cgworkSizeOverride.state == NSOnState) {
+        [prefs setObject:self.cgworkSizeLabel.stringValue forKey:@"cgworksizeValue"];
     }
     else    {
         [prefs setObject:nil forKey:@"cgworksizeValue"];
     }
-    if (cgvectorOverride.state == NSOnState) {
-        [prefs setObject:cgvectorSizeLabel.stringValue forKey:@"cgvectorValue"];
+    if (self.cgvectorOverride.state == NSOnState) {
+        [prefs setObject:self.cgvectorSizeLabel.stringValue forKey:@"cgvectorValue"];
     }
     else {
         [prefs setObject:nil forKey:@"cgvectorValue"];
     }
-    if (cgdisableGPU.state == NSOnState) {
+    if (self.cgdisableGPU.state == NSOnState) {
         [prefs setObject:@"-G" forKey:@"cgdisableGPU"];
     }
     else {
         [prefs setObject:nil forKey:@"cgdisableGPU"];
     }
-    if (cguseScrypt.state == NSOnState) {
+    if (self.cguseScrypt.state == NSOnState) {
         [prefs setObject:@"--scrypt" forKey:@"cguseScrypt"];
     }
     else {
         [prefs setObject:nil forKey:@"cguseScrypt"];
     }
-    if (cgdebugOutput.state == NSOnState) {
+    if (self.cgdebugOutput.state == NSOnState) {
         [prefs setObject:@"-D" forKey:@"cgdebugOutput"];
     }
     else {
         [prefs setObject:nil forKey:@"cgdebugOutput"];
     }
-    if (cgquietOutput.state == NSOnState) {
+    if (self.cgquietOutput.state == NSOnState) {
         [prefs setObject:@"-q" forKey:@"cgquietOutput"];
     }
     else {
         [prefs setObject:nil forKey:@"cgquietOutput"];
     }
     
-    if (cgThreadConc.stringValue.length >= 1) {
-        [prefs setObject:cgThreadConc.stringValue forKey:@"cgThreadConc"];
+    if (self.cgThreadConc.stringValue.length >= 1) {
+        [prefs setObject:self.cgThreadConc.stringValue forKey:@"cgThreadConc"];
     }
-    if (cgShaders.stringValue.length >= 1) {
-        [prefs setObject:cgShaders.stringValue forKey:@"cgShaders"];
+    else {
+        [prefs setObject:nil forKey:@"cgThreadConc"];
     }
-    if (cgLookupGap.stringValue.length >= 1) {
-        [prefs setObject:cgLookupGap.stringValue forKey:@"cgLookupGap"];
+    if (self.cgShaders.stringValue.length >= 1) {
+        [prefs setObject:self.cgShaders.stringValue forKey:@"cgShaders"];
+    }
+    else {
+        [prefs setObject:nil forKey:@"cgShaders"];
+    }
+    if (self.cgLookupGap.stringValue.length >= 1) {
+        [prefs setObject:self.cgLookupGap.stringValue forKey:@"cgLookupGap"];
+    }
+    else {
+        [prefs setObject:nil forKey:@"cgLookupGap"];
     }
     
     
-    [prefs setObject:cgOptionsView.stringValue forKey:@"cgOptionsValue"];
+    [prefs setObject:self.cgOptionsView.stringValue forKey:@"cgOptionsValue"];
     
     [prefs synchronize];
     
-    [cgopenOptions setState:NSOffState];
-    [cgOptionsWindow orderOut:sender];
+    [self.cgopenOptions setState:NSOffState];
+    [self.cgOptionsWindow orderOut:sender];
  
     prefs = nil;
+}
+
+- (IBAction)cgDisplayHelp:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
 }
 
 
