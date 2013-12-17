@@ -18,6 +18,7 @@
 @property (nonatomic, weak) IBOutlet NSTextField *charCount;
 @property (nonatomic, weak) IBOutlet NSButton *scrollButton;
 @property (nonatomic, weak) IBOutlet NSButton *dockButton;
+@property (nonatomic, weak) IBOutlet NSButton *speechButton;
 
 -(IBAction)preferenceToggle:(id)sender;
 

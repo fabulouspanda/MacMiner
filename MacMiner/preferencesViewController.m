@@ -157,4 +157,21 @@
     }
 }
 
+- (IBAction)speechOption:(id)sender {
+    if (self.speechButton.state == NSOffState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"silence" forKey:@"enableSpeech"];
+        
+        [prefs synchronize];
+    }
+    if (self.speechButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@" " forKey:@"enableSpeech"];
+        
+        [prefs synchronize];
+    }
+}
+
 @end

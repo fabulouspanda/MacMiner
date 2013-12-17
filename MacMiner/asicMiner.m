@@ -207,16 +207,26 @@
 - (void)toggleTimerFired:(NSTimer*)timer
 {
     
-//    if (apiTask!=nil) {
-//        apiTask = nil;
-//    }
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
+    if ([speechSetting  isEqual: @"silence"]) {
+        
+    }
+    
+    else if ([self.megaHashLabel.stringValue isEqual: @"0"] && self.megaHashLabel.tag == 1) {
+        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
+        [self.speechSynth startSpeakingString:@"Mining Stopped"];
+    }
+    speechSetting = nil;
+    prefs = nil;
+    
     if ([self.megaHashLabel.stringValue isNotEqualTo:@"0"]) {
         self.megaHashLabel.tag = 1;
     }
-    if ([self.megaHashLabel.stringValue isEqual: @"0"] && self.megaHashLabel.tag == 1) {
-        _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
-         [self.speechSynth startSpeakingString:@"Mining Stopped"];
-    }
+
     
     if (findTwoRunning == YES) {
         [apiTask stopTask];
@@ -347,17 +357,19 @@
 
 - (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
 {
+    
+    if (output.length >= 1) {
+        
+    
+    
     if (self.networkMinerData.string.length >= 7) {
          output = [output stringByAppendingString:self.networkMinerData.string];
     }
     
-    if (self.asicAPIOutput.string.length >= 2) {
+
     self.asicAPIOutput.string = output;
     
 
-    
-    
-    NSString *tempsString = @"";
     
     NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
     [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
@@ -393,10 +405,6 @@
             [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
             
             
-            
-            //                    [self.apiTableView reloadData];
-            //                    [self.apiTableView setNeedsDisplay:YES];
-            
         }
 
         
@@ -404,12 +412,7 @@
     
     if ([output rangeOfString:@"PGA0"].location != NSNotFound) {
         
-//        int strCount = [output length] - [[output stringByReplacingOccurrencesOfString:@"PGA[0-9]+" withString:@""] length];
-//        strCount /= [@"PGA[0-9]+" length];
-        
-        
-        
-//        strCount++;
+
         for (int i = 0; i >= 0; i++) {
             
         
@@ -438,12 +441,8 @@
                 
                 [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
 
-                tempsString = [tempsString stringByAppendingString:apiTemp];
-                tempsString = [tempsString stringByAppendingString:@" "];
-//                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:[apiTemp stringByAppendingString:@"˚ C "]];
+
                 apiTemp = nil;
-//                self.tempsLabel.stringValue = [tempArray componentsJoinedByString:@", "];
-//                                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
 
             }
             else {
@@ -468,26 +467,17 @@
             apiDiff1 = nil;
             apiDiffAcc = nil;
             apiDiffRej = nil;
-            
-            
-            //                            [self.apiTableView reloadData];
-            //                            [self.apiTableView setNeedsDisplay:YES];
+
             
         }
         
-                self.tempsLabel.stringValue = tempsString;
-                                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
+    
    
     }
     
     if ([output rangeOfString:@"ASC0"].location != NSNotFound) {
         
-        //        int strCount = [output length] - [[output stringByReplacingOccurrencesOfString:@"PGA[0-9]+" withString:@""] length];
-        //        strCount /= [@"PGA[0-9]+" length];
-        
-        
-        
-        //        strCount++;
+
         for (int i = 0; i >= 0; i++) {
             
             
@@ -516,12 +506,9 @@
                 
                 [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
                 
-                tempsString = [tempsString stringByAppendingString:apiTemp];
-                tempsString = [tempsString stringByAppendingString:@" "];
-                //                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:[apiTemp stringByAppendingString:@"˚ C "]];
+
+
                 apiTemp = nil;
-                //                self.tempsLabel.stringValue = [tempArray componentsJoinedByString:@", "];
-                //                                self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
                 
             }
             else {
@@ -548,20 +535,20 @@
             apiDiffRej = nil;
             
             
-            //                            [self.apiTableView reloadData];
-            //                            [self.apiTableView setNeedsDisplay:YES];
+
             
         }
-        
-        self.tempsLabel.stringValue = tempsString;
-        self.tempsLabel.stringValue = [self.tempsLabel.stringValue stringByAppendingString:@"˚ C"];
+
         
     }
     
 
-    tempsString = nil;
+
         
-        }
+        
+                            [self.apiTableView reloadData];
+                            [self.apiTableView setNeedsDisplay:YES];
+    }
         output = nil;
 }
 
@@ -613,8 +600,17 @@
 // It will be called whenever there is output from the TaskWrapper.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
+    if ([speechSetting  isEqual: @"silence"]) {
+        
+    }
 
-    if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+    else if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
@@ -801,34 +797,14 @@
 
 }
 
-// If the user closes the search window, let's just quit
+
 -(BOOL)windowShouldClose:(id)sender
 {
-    [asicTask stopTask];
-    findRunning = NO;
-    asicTask = nil;
-    //    [NSApp terminate:nil];
+
+
 
     return YES;
     
-    NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-    NSString *apiPath = [bundlePath stringByDeletingLastPathComponent];
-    
-    apiPath = [apiPath stringByAppendingString:@"/Resources/apiaccess"];
-    //        NSLog(cpuPath);
-    [self.asicOutputView setString:@""];
-    //    NSString *startingText = @"Starting…";
-    //    self.asicStatLabel.stringValue = startingText;
-    //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
-    //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
-//    asicTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:apiPath, apiPath, @"quit", nil]];
-    NSArray *arrayForQuit = [NSArray arrayWithObject:@"quit"];
-   asicTask =[[TaskWrapper alloc] initWithCommandPath:apiPath
-                                    arguments:arrayForQuit
-                                  environment:nil
-                                     delegate:self];
-    
-    [asicTask startTask];
 }
 
 // Display the release notes, as chosen from the menu item in the Help menu.

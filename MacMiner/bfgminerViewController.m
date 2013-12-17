@@ -393,15 +393,33 @@
     if ([self.speedRead.stringValue isNotEqualTo:@"0"]) {
         self.speedRead.tag = 1;
     }
-    if ([self.speedRead.stringValue isEqual: @"0"] && self.speedRead.tag == 1) {
+    
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
+    if ([speechSetting  isEqual: @"silence"]) {
+        
+    }
+
+    
+    else if ([self.speedRead.stringValue isEqual: @"0"] && self.speedRead.tag == 1) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Mining Stopped"];
     }
     
-    if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+    if ([speechSetting  isEqual: @"silence"]) {
+        
+    }
+    else if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
+    
+    speechSetting = nil;
+    prefs = nil;
     
     if ([output rangeOfString:@"5s:"].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output

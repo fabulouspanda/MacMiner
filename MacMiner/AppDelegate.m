@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "bfgminerViewController.h"
 
 
 @implementation AppDelegate
@@ -185,20 +185,24 @@
 //    
 // 
 //    if (!_managedObjectContext) {
+//        [bfgMiner stopBFG];
 //        return NSTerminateNow;
 //    }
 //    
 //    if (![[self managedObjectContext] commitEditing]) {
+//        [bfgMiner stopBFG];
 //        NSLog(@"%@:%@ unable to commit editing to terminate", [self class], NSStringFromSelector(_cmd));
 //        return NSTerminateCancel;
 //    }
 //    
 //    if (![[self managedObjectContext] hasChanges]) {
+//        [bfgMiner stopBFG];
 //        return NSTerminateNow;
 //    }
 //    
 //    NSError *error = nil;
 //    if (![[self managedObjectContext] save:&error]) {
+//        [bfgMiner stopBFG];
 //
 //        // Customize this code block to include application-specific recovery steps.              
 //        BOOL result = [sender presentError:error];
@@ -229,6 +233,10 @@
         return NSTerminateNow;
 }
 
+- (IBAction)displaySite:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"]];
+}
 
 
 @end

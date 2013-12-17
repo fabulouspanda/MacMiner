@@ -36,7 +36,7 @@
 
 - (IBAction)saveAction:(id)sender;
 
-
+//- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile;
 
 
 

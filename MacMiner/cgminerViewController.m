@@ -290,7 +290,17 @@
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
     
-    if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
+    if ([speechSetting  isEqual: @"silence"]) {
+        
+    }
+
+    
+   else if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
@@ -298,10 +308,16 @@
     if ([self.cgspeedRead.stringValue isNotEqualTo:@"0"]) {
         self.cgspeedRead.tag = 1;
     }
-    if ([self.cgspeedRead.stringValue isEqual: @"0"] && self.cgspeedRead.tag == 1) {
+    if ([speechSetting  isEqual: @"silence"]) {
+        
+    }
+    else if ([self.cgspeedRead.stringValue isEqual: @"0"] && self.cgspeedRead.tag == 1) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Mining Stopped"];
     }
+    
+    speechSetting = nil;
+    prefs = nil;
     
     NSString *unknownMessage = @"Unknown stratum msg";
     NSString *apiOutput = @"5s):";
