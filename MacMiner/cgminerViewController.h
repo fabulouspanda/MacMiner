@@ -14,7 +14,7 @@
 #import "taskThreeWrapper.h"
 #import "taskThreeWrapperDelegate.h"
 
-@interface cgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate>{
+@interface cgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
 
     
     BOOL cgfindRunning;

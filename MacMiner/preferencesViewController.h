@@ -15,7 +15,12 @@
 
 
 @property (nonatomic, strong) IBOutlet NSWindow *prefWindow;
+@property (nonatomic, strong) IBOutlet NSView *prefView;
+@property (nonatomic, strong) IBOutlet NSView *prefView2;
+
 @property (nonatomic, weak) IBOutlet NSTextField *charCount;
+@property (nonatomic, weak) IBOutlet NSTextField *emailAddress;
+@property (nonatomic, weak) IBOutlet NSTextField *appID;
 @property (nonatomic, weak) IBOutlet NSButton *scrollButton;
 @property (nonatomic, weak) IBOutlet NSButton *dockButton;
 @property (nonatomic, weak) IBOutlet NSButton *speechButton;

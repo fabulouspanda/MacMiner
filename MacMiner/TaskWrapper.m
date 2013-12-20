@@ -79,6 +79,7 @@
 	
 	// Launch the task asynchronously.
 	[_task launch];
+
 }
 
 // Notifies the delegate that there is data.

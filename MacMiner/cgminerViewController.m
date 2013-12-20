@@ -167,26 +167,14 @@
 //        NSString *cgquietOutputOn = [prefs stringForKey:@"cgquietOutput"];
         NSString *bonusOptions = [prefs stringForKey:@"cgOptionsValue"];
 
-        //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
-        /*
-         if ([mainBTCUser isNotEqualTo:nil]) {
-         mainPool = [oString stringByAppendingString:mainPool];
-         mainBTCUser = [uString stringByAppendingString:mainBTCUser];
-         mainBTCPass = [pString stringByAppendingString:mainBTCPass];
-         [launchArray addObject:mainPool];
-         [launchArray addObject:mainBTCUser];
-         [launchArray addObject:mainBTCPass];
-         }
-         else if ([autoWasSetup isEqualTo:nil] && [mainBTCUser isEqualTo:nil]) {
-         
-         [launchArray addObject:poolString];
-         [launchArray addObject:userString];
-         [launchArray addObject:passString];
-         
-         }
-         */
         
         [launchArray addObject:@"-T"];
+        [launchArray addObject:@"--api-listen"];
+        [launchArray addObject:@"--api-allow"];
+        [launchArray addObject:@"W:0/0"];
+        [launchArray addObject:@"--api-port"];
+        [launchArray addObject:@"4048"];
+        
         
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
@@ -207,8 +195,6 @@
             }
         }
         
-//                NSString *testString = [launchArray componentsJoinedByString:@" "];
-//                NSLog(testString);
         
         cgTask=[[TaskWrapper alloc] initWithCommandPath:cgPath
                                                arguments:launchArray
@@ -264,22 +250,6 @@
           bonusOptions = nil;
         prefs = nil;
         cgPath = nil;
-        
-        /*
-         if (cgRememberButton.state == NSOnState) {
-         
-         //                NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-         
-         // saving an NSString
-         [prefs setObject:cgUserView.stringValue forKey:@"cgUserValue"];
-         [prefs setObject:cgPassView.stringValue forKey:@"cgPassValue"];
-         [prefs setObject:cgPoolView.stringValue forKey:@"cgPoolValue"];
-         //                [prefs setObject:cgOptionsView.stringValue forKey:@"cgOptionsValue"];
-         
-         
-         [prefs synchronize];
-         }
-         */
         
     }
     

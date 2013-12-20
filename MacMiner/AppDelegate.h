@@ -10,7 +10,7 @@
 #import "TaskWrapper.h"
 
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 
 //@property (assign) IBOutlet NSWindow *window;
@@ -33,11 +33,10 @@
 @property (strong, nonatomic) NSString *bfgSettingString;
 @property (strong, nonatomic) IBOutlet NSTextField *bfgSettingText;
 
-
-- (IBAction)saveAction:(id)sender;
-
-//- (NSArray *)feedParametersForUpdater:(SUUpdater *)updater sendingSystemProfile:(BOOL)sendingProfile;
+@property (nonatomic, strong) NSMutableArray *mobileMinerDataArray;
+@property (nonatomic, strong) IBOutlet NSArrayController *mobileMinerArrayController;
 
 
+- (void)mobilePost;
 
 @end

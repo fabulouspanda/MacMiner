@@ -36,7 +36,6 @@
     
     if ([self.prefWindow isVisible]) {
 
-        [self.prefWindow orderOut:sender];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -79,6 +78,23 @@
             prefs = nil;
         }
         
+        if (self.emailAddress.stringValue.length >= 5) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:self.emailAddress.stringValue forKey:@"emailAddress"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.appID.stringValue.length >= 5) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:self.appID.stringValue forKey:@"appID"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+                [self.prefWindow orderOut:sender];
     }
     else
     {
@@ -95,6 +111,13 @@
         if(![[NSUserDefaults standardUserDefaults] objectForKey:@"showDockReading"]) {
             [prefs setObject:@"" forKey:@"showDockReading"];
         }
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"emailAddress"]) {
+            [prefs setObject:@"" forKey:@"emailAddress"];
+        }
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"appID"]) {
+            [prefs setObject:@"" forKey:@"appID"];
+        }
+        
         
         self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
         
@@ -104,6 +127,9 @@
         if ([[prefs objectForKey:@"showDockReading"] isEqual: @"hide"]) {
             self.dockButton.state = NSOffState;
         }
+        
+        self.emailAddress.stringValue = [prefs objectForKey:@"emailAddress"];
+        self.appID.stringValue = [prefs objectForKey:@"appID"];
 
         prefs = nil;
         
@@ -117,6 +143,28 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
+    
+    [prefs synchronize];
+    
+    prefs = nil;
+}
+
+-(IBAction)textDidChangeEmail:(id)sender {
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs setObject:self.emailAddress.stringValue forKey:@"emailAddress"];
+    
+    [prefs synchronize];
+    
+    prefs = nil;
+}
+
+-(IBAction)textDidChangeAppKey:(id)sender {
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs setObject:self.appID.stringValue forKey:@"appID"];
     
     [prefs synchronize];
     
@@ -172,6 +220,16 @@
         
         [prefs synchronize];
     }
+}
+
+- (IBAction)mobileMiner:(id)sender {
+    [self.prefView setHidden:YES];
+        [self.prefView2 setHidden:NO];
+}
+
+- (IBAction)showGeneral:(id)sender {
+    [self.prefView setHidden:NO];
+    [self.prefView2 setHidden:YES];
 }
 
 @end

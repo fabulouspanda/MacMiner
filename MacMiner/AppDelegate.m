@@ -238,5 +238,65 @@
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"]];
 }
 
+- (void)mobilePost
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *email = [prefs objectForKey:@"emailAddress"];
+    NSString *appID = [prefs objectForKey:@"appID"];
+    
+    if (email.length >= 5) {
+        
+    
+
+    NSString *prepost = [NSString stringWithFormat:[self.mobileMinerDataArray componentsJoinedByString:@","]];
+    if (prepost.length >= 30) {
+        
+    
+    NSString *post1 = [prepost stringByAppendingString:@"]"];
+    NSString *post = [@"[" stringByAppendingString:post1];
+//    NSLog(post);
+    
+    
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    
+    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+NSString *machineName = [[NSHost currentHost] localizedName];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        NSString *urlString = [NSString stringWithFormat:@"https://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+//        NSLog(urlString);
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+
+    
+    NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+
+    }
+        prepost = nil;
+    }
+    email = nil;
+    appID = nil;
+    prefs = nil;
+
+}
+
+- (BOOL)theConnection:(NSURLConnection *)theConnection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
+    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+}
+
+- (void)theConnection:(NSURLConnection *)theConnection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+//        if (... user allows connection despite bad certificate ...)
+            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+    
+//    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
 
 @end

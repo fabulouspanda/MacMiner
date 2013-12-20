@@ -21,7 +21,13 @@
         //            NSLog(@"startup");
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
-  
+        self.acceptLabel.tag = 0;
+        
+                                            self.apiDataArray = [[NSMutableArray alloc] init];
+
+        loopTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(toggleLoopTimerFired:) userInfo:nil repeats:YES];
+        
+            toggleTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(startToggling) userInfo:nil repeats:NO];
         
     }
     
@@ -82,7 +88,7 @@
         
         asicTask=nil;
         
-                                    self.apiDataArray = nil;
+
         
         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
@@ -98,7 +104,7 @@
         [self.asicStartButton setTitle:@"Stop"];
                 self.asicStartButton.tag = 0;
         
-                                    self.apiDataArray = [[NSMutableArray alloc] init];
+
         
         // If the task is still sitting around from the last run, release it
         if (asicTask!=nil) {
@@ -199,9 +205,384 @@
         
     }
 
-    toggleTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(startToggling) userInfo:nil repeats:NO];
-//            [self startToggling];
+
+
     
+}
+
+- (void)toggleLoopTimerFired:(NSTimer*)timer
+{
+    
+    self.prefs = [NSUserDefaults standardUserDefaults];
+    
+    [self.prefs synchronize];
+    
+    NSString *networkedMiners = [self.prefs stringForKey:@"ipAddress"];
+    NSString *portString = [self.prefs stringForKey:@"portNumber"];
+    
+            if (networkedMiners.length >= 7) {
+    
+    if (findThreeRunning == YES) {
+        [apiNetworkTask stopTask];
+        findThreeRunning = NO;
+    }
+    
+    if (findThreeRunning == NO) {
+        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];
+        
+        
+        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
+        
+        NSString *apiPath = [bundlePath2 stringByAppendingString:@"/apiaccess"];
+        
+        
+
+
+            NSMutableArray *apiIPArray = [NSMutableArray arrayWithObjects: @"devs", networkedMiners, portString, nil];
+            
+            apiNetworkTask =[[taskThreeWrapper alloc] initWithCommandPath:apiPath
+                                                                arguments:apiIPArray
+                                                              environment:nil
+                                                                 delegate:self];
+            
+            [apiNetworkTask startTask];
+
+            
+            apiPath = nil;
+            apiIPArray = nil;
+            
+            paths = nil;
+            userpath = nil;
+            executableName = nil;
+            bundlePath2 = nil;
+            
+            // Needs addition of wait for task to end and run again
+            
+
+        }
+
+    }
+    
+    if (self.asicAPIOutput.string.length >= 10) {
+        
+
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    appDelegate.mobileMinerDataArray = nil;
+    appDelegate.mobileMinerDataArray = [[NSMutableArray alloc]init];
+    
+    
+    NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
+    [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+    
+    if ([self.asicAPIOutput.string rangeOfString:@"GPU0"].location != NSNotFound) {
+        
+        
+        
+        int strCount = [self.asicAPIOutput.string length] - [[self.asicAPIOutput.string stringByReplacingOccurrencesOfString:@"GPU[0-9]+" withString:@""] length];
+        strCount /= [@"GPU[0-9]+" length];
+        
+        
+        strCount += 1;
+        for (int i = 0; i < strCount; i++) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs synchronize];
+            
+            NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
+            NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
+            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
+            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
+            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
+            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
+            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
+            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
+            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
+            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
+            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
+            NSString *apiIntensity = [self getDataBetweenFromString:pgaAPIData leftString:@"sity] =>" rightString:@"[" leftOffset:8];
+            NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+            
+            [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
+            
+            NSInteger *u = [mhs5S integerValue];
+            NSString *apiHash5s = [NSString stringWithFormat:@"%d", u];
+            apiHash5s = [apiHash5s stringByAppendingString:@"000"];
+            
+            NSInteger *v = [mhsAv integerValue];
+            NSString *apiHashAv = [NSString stringWithFormat:@"%d", v];
+            apiHashAv = [apiHashAv stringByAppendingString:@"000"];
+            
+            
+            
+            NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+            
+            NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"GPU\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"%@\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, @"0", apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiIntensity, pgaCount, apiName, apiPoolString];
+            
+            
+            pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+            pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
+            pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+            pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            
+            [appDelegate.mobileMinerArrayController addObject:pgaStats];
+            
+            
+            apiPoolString = nil;
+            apiName = nil;
+            pgaStats = nil;
+            prefs = nil;
+            
+        }
+        
+        
+    }
+    
+    if ([self.asicAPIOutput.string rangeOfString:@"PGA0"].location != NSNotFound) {
+        
+        
+        for (int i = 0; i >= 0; i++) {
+            
+            
+            
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs synchronize];
+            
+            
+            
+            NSString *pgaCount = [NSString stringWithFormat:@"PGA%d", i];
+            
+            if ([self.asicAPIOutput.string rangeOfString:pgaCount].location == NSNotFound) {
+                break;
+            }
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
+            //                                NSLog(pgaCount);
+            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
+            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
+            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
+            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
+            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
+            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
+            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
+            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
+            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
+            NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+            
+            NSInteger *u = [mhs5S integerValue];
+            NSString *apiHash5s = [NSString stringWithFormat:@"%d", u];
+            apiHash5s = [apiHash5s stringByAppendingString:@"000"];
+            
+            NSInteger *v = [mhsAv integerValue];
+            NSString *apiHashAv = [NSString stringWithFormat:@"%d", v];
+            apiHashAv = [apiHashAv stringByAppendingString:@"000"];
+            
+            
+            if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
+                NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
+                
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                
+                
+                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"USB\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                
+                
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
+                [appDelegate.mobileMinerArrayController addObject:pgaStats];
+                
+                apiTemp = nil;
+                apiPoolString = nil;
+                apiName = nil;
+                pgaStats = nil;
+                
+            }
+            else {
+                NSString *apiTemp = @"0";
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                
+                
+                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"USB\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                
+                
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
+                [appDelegate.mobileMinerArrayController addObject:pgaStats];
+                
+                
+                apiTemp = nil;
+                apiPoolString = nil;
+                apiName = nil;
+                pgaStats = nil;
+                
+            }
+            
+            
+            pgaCount = nil;
+            pgaAPIData = nil;
+            apiStatus = nil;
+            mhsAv = nil;
+            mhs5S = nil;
+            apiAccepted = nil;
+            apiRejected = nil;
+            apiHWError = nil;
+            apiUtility = nil;
+            apiDiff1 = nil;
+            apiDiffAcc = nil;
+            apiDiffRej = nil;
+            
+            prefs = nil;
+            
+            
+        }
+        
+        
+        
+    }
+    
+    if ([self.asicAPIOutput.string rangeOfString:@"ASC0"].location != NSNotFound) {
+        
+        
+        for (int i = 0; i >= 0; i++) {
+            
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs synchronize];
+            
+            
+            NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
+            
+            if ([self.asicAPIOutput.string rangeOfString:pgaCount].location == NSNotFound) {
+                break;
+            }
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
+            //                                NSLog(pgaCount);
+            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
+            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
+            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
+            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
+            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
+            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
+            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
+            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
+            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
+            NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+            
+            NSInteger *u = [mhs5S integerValue];
+            NSString *apiHash5s = [NSString stringWithFormat:@"%d", u];
+            apiHash5s = [apiHash5s stringByAppendingString:@"000"];
+            
+            NSInteger *v = [mhsAv integerValue];
+            NSString *apiHashAv = [NSString stringWithFormat:@"%d", v];
+            apiHashAv = [apiHashAv stringByAppendingString:@"000"];
+            
+            
+            if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
+                
+                NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
+                
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                
+                
+                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"USB\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                
+                
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
+                [appDelegate.mobileMinerArrayController addObject:pgaStats];
+                
+                apiTemp = nil;
+                apiPoolString = nil;
+                apiName = nil;
+                pgaStats = nil;
+                
+            }
+            else {
+                
+                NSString *apiTemp = @"0";
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                
+                
+                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"USB\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                
+                
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                
+                [appDelegate.mobileMinerArrayController addObject:pgaStats];
+                
+                
+                apiTemp = nil;
+                apiPoolString = nil;
+                apiName = nil;
+                pgaStats = nil;
+            }
+            
+            
+            
+            
+            prefs = nil;
+            pgaCount = nil;
+            pgaAPIData = nil;
+            apiStatus = nil;
+            mhsAv = nil;
+            mhs5S = nil;
+            apiAccepted = nil;
+            apiRejected = nil;
+            apiHWError = nil;
+            apiUtility = nil;
+            apiDiff1 = nil;
+            apiDiffAcc = nil;
+            apiDiffRej = nil;
+            
+            
+            
+            
+        }
+        
+        
+    }
+    
+    
+    [self.apiTableView reloadData];
+    [self.apiTableView setNeedsDisplay:YES];
+    [appDelegate mobilePost];
+    
+    appDelegate = nil;
+
+    }
+    
+    networkedMiners = nil;
+    portString = nil;
+    self.prefs = nil;
 }
 
 - (void)toggleTimerFired:(NSTimer*)timer
@@ -234,17 +615,28 @@
     }
     
     if (findTwoRunning == NO) {
+
+        if (self.acceptLabel.tag == 0) {
+        self.acceptLabel.tag = 1;
+        }
+        else {
+        self.acceptLabel.tag = 0;
+        }
+
         
-    
     NSMutableArray *apiArray = [NSMutableArray arrayWithObjects: @"devs", nil];
 
+         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        if ([appDelegate.cgReadBack isHidden] == NO && self.acceptLabel.tag == 0) {
+            [apiArray addObject:@"127.0.0.1"];
+            [apiArray addObject:@"4048"];
+        }
     
     
     NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *userpath = [paths objectAtIndex:0];
-    userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-
+    userpath = [userpath stringByAppendingPathComponent:executableName];
 
     NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
     
@@ -269,57 +661,7 @@
         
     }
     
-    if (findThreeRunning == YES) {
-        [apiNetworkTask stopTask];
-        findThreeRunning = NO;
-    }
-    
-        if (findThreeRunning == NO) {
 
-            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-            NSString *userpath = [paths objectAtIndex:0];
-            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-            
-            
-            //    [apiArray addObject:@"-c"];
-            //    [apiArray addObject:saveBTCConfigFilePath];
-            
-            
-            NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-            
-            NSString *apiPath = [bundlePath2 stringByAppendingString:@"/apiaccess"];
-
-            
-            self.prefs = [NSUserDefaults standardUserDefaults];
-            
-            [self.prefs synchronize];
-            
-            NSString *networkedMiners = [self.prefs stringForKey:@"ipAddress"];
-            NSString *portString = [self.prefs stringForKey:@"portNumber"];
-            if (networkedMiners.length >= 7) {
-                NSMutableArray *apiIPArray = [NSMutableArray arrayWithObjects: @"devs", networkedMiners, portString, nil];
-                
-                apiNetworkTask =[[taskThreeWrapper alloc] initWithCommandPath:apiPath
-                                                                    arguments:apiIPArray
-                                                                  environment:nil
-                                                                     delegate:self];
-                
-                [apiNetworkTask startTask];
-                networkedMiners = nil;
-                portString = nil;
-                
-                apiPath = nil;
-                apiIPArray = nil;
-                
-                paths = nil;
-                userpath = nil;
-                executableName = nil;
-                bundlePath2 = nil;
-
-                // Needs addition of wait for task to end and run again
-        }
-        }
 }
 
 - (void)taskThreeWrapper:(taskThreeWrapper *)taskThreeWrapper didProduceOutput:(NSString *)output
@@ -327,7 +669,11 @@
 
     if (output.length >= 1) {
          self.networkMinerData.string = output;
+        if (self.asicAPIStorage.string.length <= 5) {
+            self.asicAPIOutput.string = output;
+        }
     }
+
  
     output = nil;
  
@@ -357,197 +703,44 @@
 
 - (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
 {
-    
+
     if (output.length >= 1) {
-        
-    
-    
-    if (self.networkMinerData.string.length >= 7) {
-         output = [output stringByAppendingString:self.networkMinerData.string];
-    }
-    
 
-    self.asicAPIOutput.string = output;
-    
-
-    
-    NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
-    [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
-    
-    if ([output rangeOfString:@"GPU0"].location != NSNotFound) {
-        
-        
-        
-        int strCount = [output length] - [[output stringByReplacingOccurrencesOfString:@"GPU[0-9]+" withString:@""] length];
-        strCount /= [@"GPU[0-9]+" length];
-        
-        
-        strCount += 1;
-        for (int i = 0; i < strCount; i++) {
-            
-            
-            NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
-            NSString *pgaAPIData = [self getDataBetweenFromString:output leftString:pgaCount rightString:@")" leftOffset:0];
-            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
-            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
-            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
-            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
-            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
-            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
-            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
-            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
-            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
-            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
-            NSString *apiIntensity = [self getDataBetweenFromString:pgaAPIData leftString:@"sity] =>" rightString:@"[" leftOffset:8];
-            
-            
-            
-            [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
-            
-            
-        }
-
-        
-    }
-    
-    if ([output rangeOfString:@"PGA0"].location != NSNotFound) {
-        
-
-        for (int i = 0; i >= 0; i++) {
-            
-        
-            
-            NSString *pgaCount = [NSString stringWithFormat:@"PGA%d", i];
-            
-            if ([output rangeOfString:pgaCount].location == NSNotFound) {
-                break;
-            }
-            
-            NSString *pgaAPIData = [self getDataBetweenFromString:output leftString:pgaCount rightString:@")" leftOffset:0];
-            //                                NSLog(pgaCount);
-            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
-            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
-            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
-            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
-            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
-            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
-            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
-            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
-            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
-            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
-            
-            if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
-                NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
-                
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
-
-
-                apiTemp = nil;
-
-            }
-            else {
-                NSString *apiTemp = @" ";
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
-                apiTemp = nil;
-            }
-            
-            
-            
-            
-            
-            pgaCount = nil;
-            pgaAPIData = nil;
-            apiStatus = nil;
-            mhsAv = nil;
-            mhs5S = nil;
-            apiAccepted = nil;
-            apiRejected = nil;
-            apiHWError = nil;
-            apiUtility = nil;
-            apiDiff1 = nil;
-            apiDiffAcc = nil;
-            apiDiffRej = nil;
-
-            
+        if (self.networkMinerData.string.length >= 7) {
+            output = [output stringByAppendingString:self.networkMinerData.string];
         }
         
-    
-   
-    }
-    
-    if ([output rangeOfString:@"ASC0"].location != NSNotFound) {
         
-
-        for (int i = 0; i >= 0; i++) {
-            
-            
-            
-            NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
-            
-            if ([output rangeOfString:pgaCount].location == NSNotFound) {
-                break;
-            }
-            
-            NSString *pgaAPIData = [self getDataBetweenFromString:output leftString:pgaCount rightString:@")" leftOffset:0];
-            //                                NSLog(pgaCount);
-            NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
-            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
-            NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
-            NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
-            NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
-            NSString *apiHWError = [self getDataBetweenFromString:pgaAPIData leftString:@"rors] =>" rightString:@"[" leftOffset:8];
-            NSString *apiUtility = [self getDataBetweenFromString:pgaAPIData leftString:@"[Utility] =>" rightString:@"[" leftOffset:12];
-            NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
-            NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
-            NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
-            
-            if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
-                NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
-                
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
-                
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
 
-                apiTemp = nil;
-                
-            }
-            else {
-                NSString *apiTemp = @" ";
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
-                apiTemp = nil;
-            }
-            
-            
-            
-            
-            
-            pgaCount = nil;
-            pgaAPIData = nil;
-            apiStatus = nil;
-            mhsAv = nil;
-            mhs5S = nil;
-            apiAccepted = nil;
-            apiRejected = nil;
-            apiHWError = nil;
-            apiUtility = nil;
-            apiDiff1 = nil;
-            apiDiffAcc = nil;
-            apiDiffRej = nil;
-            
-            
+        
+//        if ([appDelegate.bfgReadBack isHidden] == NO && self.acceptLabel.tag == 0) {
+        if (self.acceptLabel.tag == 0) {
+            self.asicAPIStorage.string = output;
 
+        }
+        else {
+            self.asicAPIStorage2.string = output;
+
+        }
+        
+        if (self.asicAPIStorage.string.length >= 5) {
+
+            if (self.asicAPIStorage2.string.length >= 5 && [self.asicAPIStorage.string isNotEqualTo:self.asicAPIStorage2.string]) {
+            self.asicAPIOutput.string = [self.asicAPIStorage.string stringByAppendingString:self.asicAPIStorage2.string];
+        }
+        else {
+            self.asicAPIOutput.string = self.asicAPIStorage.string;
+        }
             
         }
-
+        else {
+                    self.asicAPIOutput.string = output;
+        }
         
-    }
-    
-
-
+            appDelegate = nil;
         
-        
-                            [self.apiTableView reloadData];
-                            [self.apiTableView setNeedsDisplay:YES];
     }
         output = nil;
 }

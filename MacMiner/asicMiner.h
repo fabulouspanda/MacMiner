@@ -14,7 +14,7 @@
 #import "taskThreeWrapper.h"
 #import "taskThreeWrapperDelegate.h"
 
-@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate, NSTableViewDelegate>{
+@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate>{
 
     
     BOOL findRunning;
@@ -25,6 +25,8 @@
     taskThreeWrapper *apiNetworkTask;
     
     NSTimer *toggleTimer;
+    
+    NSTimer *loopTimer;
  
     
     
@@ -60,6 +62,8 @@
 @property (nonatomic, weak) IBOutlet NSTextField *asicHashField;
 
 @property (nonatomic, strong) IBOutlet NSTextView *asicAPIOutput;
+@property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage;
+@property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage2;
 
 @property (nonatomic, strong) IBOutlet NSTableView *apiTableView;
 @property (nonatomic, strong) IBOutlet NSMutableArray *apiDataArray;

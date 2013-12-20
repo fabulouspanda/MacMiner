@@ -264,13 +264,12 @@
 
         
         bfgFileText = [NSString stringWithContentsOfFile:bfgFilePath encoding:NSUTF8StringEncoding error:nil];
-        
-        bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user2" withString:self.userNameTextField.stringValue];
-        bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass2" withString:self.userNameTextField.stringValue];
 
         if ([self.poolBoox.stringValue isEqualToString:@"http://pool.fabulouspanda.co.uk:9332"]) {
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameTextField.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.userNameTextField.stringValue];
+            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user2" withString:self.userNameTextField.stringValue];
+            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass2" withString:self.userNameTextField.stringValue];
         }
         else {
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolBoox.stringValue];
@@ -282,7 +281,7 @@
         
     }
     else {
-        NSString *bfgFileText = [NSString stringWithContentsOfFile:noBackupFilePath encoding:NSUTF8StringEncoding error:nil];
+        bfgFileText = [NSString stringWithContentsOfFile:noBackupFilePath encoding:NSUTF8StringEncoding error:nil];
         
 
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolBoox.stringValue];
