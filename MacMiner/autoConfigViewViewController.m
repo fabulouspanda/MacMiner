@@ -52,9 +52,7 @@
         NSString *btcConfig = [NSString stringWithContentsOfFile : openBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
         NSString *ltcConfig = [NSString stringWithContentsOfFile : openLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
         
-        NSString *stringUser = @"user";
-        
-        if ([btcConfig rangeOfString:stringUser].location != NSNotFound) {
+        if ([btcConfig rangeOfString:@"user"].location != NSNotFound) {
             NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                          leftString:@"url" rightString:@"," leftOffset:8];
             NSString *setupURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -96,10 +94,77 @@
             setupPassValue = nil;
             
         }
+        else if ([btcConfig rangeOfString:@"quota"].location != NSNotFound) {
+            NSString *numberString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"quota" rightString:@"," leftOffset:8];
+            NSString *setupURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            numberString = nil;
+            NSString *acceptString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *setupUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            acceptString = nil;
+            NSString *rejectString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"pass" rightString:@"}" leftOffset:9];
+            NSString *passString = [self getDataBetweenFromString:btcConfig
+                                                       leftString:@"pass" rightString:@"," leftOffset:9];
+            if (rejectString.length >= passString.length) {
+                rejectString = passString;
+                
+            }
+            rejectString = [rejectString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            rejectString = [rejectString stringByReplacingOccurrencesOfString:@"\n	" withString:@""];
+            NSString *setupPassValue = [rejectString stringByReplacingOccurrencesOfString:@"	}" withString:@""];
+            rejectString = nil;
+            passString = nil;
+            
+            self.poolBoox.stringValue = setupURLValue;
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            [prefs synchronize];
+            
+            
+            NSString *defaultBitcoin = [prefs objectForKey:@"defaultBTC"];
+            
+            if (defaultBitcoin.length >=26) {
+                self.userNameTextField.stringValue = defaultBitcoin;
+            }
+            
+            self.btcuserNameTextField.stringValue = setupUserValue;
+            self.btcpassWordTextField.stringValue = setupPassValue;
+            
+            setupURLValue = nil;
+            setupUserValue = nil;
+            setupPassValue = nil;
+        }
         
-        if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
+        if ([ltcConfig rangeOfString:@"user"].location != NSNotFound) {
             NSString *ltcURLData = [self getDataBetweenFromString:ltcConfig
                                                        leftString:@"url" rightString:@"," leftOffset:8];
+            NSString *setupLTCURLValue = [ltcURLData stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            ltcURLData = nil;
+            NSString *ltcUserData = [self getDataBetweenFromString:ltcConfig
+                                                        leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *setupLTCUserValue = [ltcUserData stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            ltcUserData = nil;
+            NSString *ltcPassData = [self getDataBetweenFromString:ltcConfig
+                                                        leftString:@"pass" rightString:@"}" leftOffset:9];
+            ltcPassData = [ltcPassData stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            ltcPassData = [ltcPassData stringByReplacingOccurrencesOfString:@"\n	" withString:@""];
+            NSString *setupLTCPassValue = [ltcPassData stringByReplacingOccurrencesOfString:@"	}" withString:@""];
+            ltcPassData = nil;
+            
+            self.ltcpoolBoox.stringValue = setupLTCURLValue;
+            self.passWordTextField.stringValue = setupLTCUserValue;
+            self.ltcuserNameTextField.stringValue = setupLTCUserValue;
+            self.ltcpassWordTextField.stringValue = setupLTCPassValue;
+            
+            setupLTCURLValue = nil;
+            setupLTCUserValue = nil;
+            setupLTCPassValue = nil;
+            
+        }
+        else if ([ltcConfig rangeOfString:@"quota"].location != NSNotFound) {
+            NSString *ltcURLData = [self getDataBetweenFromString:ltcConfig
+                                                       leftString:@"quota" rightString:@"," leftOffset:8];
             NSString *setupLTCURLValue = [ltcURLData stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             ltcURLData = nil;
             NSString *ltcUserData = [self getDataBetweenFromString:ltcConfig
