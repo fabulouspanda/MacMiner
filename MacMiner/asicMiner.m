@@ -727,7 +727,7 @@
         
         if (self.asicAPIStorage.string.length >= 5) {
 
-            if (self.asicAPIStorage2.string.length >= 5 && [self.asicAPIStorage.string isNotEqualTo:self.asicAPIStorage2.string]) {
+            if (self.asicAPIStorage2.string.length >= 5 && self.asicAPIStorage.string.length != self.asicAPIStorage2.string.length) {
             self.asicAPIOutput.string = [self.asicAPIStorage.string stringByAppendingString:self.asicAPIStorage2.string];
         }
         else {
