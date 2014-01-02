@@ -290,7 +290,7 @@
     [prefs setObject:self.ltcuserNameTextField.stringValue forKey:@"defaultLTCUser"];
     [prefs setObject:self.ltcpassWordTextField.stringValue forKey:@"defaultLTCPass"];
     
-    if (self.ltcuserNameTextField.stringValue == nil || [self.ltcuserNameTextField isEqual: @""]) {
+    if (self.ltcuserNameTextField.stringValue == nil) {
         [prefs setObject:self.passWordTextField.stringValue forKey:@"defaultLTCUser"];
         [prefs setObject:self.passWordTextField.stringValue forKey:@"defaultLTCPass"];
     }

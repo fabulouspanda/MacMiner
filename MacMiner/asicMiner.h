@@ -11,10 +11,9 @@
 #import "TaskWrapperDelegate.h"
 #import "taskTwoWrapper.h"
 #import "taskTwoWrapperDelegate.h"
-#import "taskThreeWrapper.h"
-#import "taskThreeWrapperDelegate.h"
 
-@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate>{
+
+@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate>{
 
     
     BOOL findRunning;
@@ -22,7 +21,6 @@
     BOOL findThreeRunning;
     TaskWrapper *asicTask;
     taskTwoWrapper *apiTask;
-    taskThreeWrapper *apiNetworkTask;
     
     NSTimer *toggleTimer;
     
@@ -36,6 +34,7 @@
 @property (nonatomic, weak) IBOutlet NSView *asicView;
 
 @property (nonatomic, strong) IBOutlet NSWindow *addNetworkedMinerWindow;
+@property (nonatomic, strong) IBOutlet NSMutableArray *minerAddressesArray;
 
 @property (nonatomic, weak) IBOutlet NSTextField *ipAddress;
 @property (nonatomic, weak) IBOutlet NSTextField *portNumber;

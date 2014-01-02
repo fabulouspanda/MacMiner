@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1070" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
@@ -491,7 +491,6 @@
                 <outlet property="ipAddress" destination="Set-YB-0SC" id="618-0l-pp4"/>
                 <outlet property="megaHashLabel" destination="1873" id="6762"/>
                 <outlet property="networkMinerData" destination="okX-ah-Sy3" id="RAi-bZ-xTK"/>
-                <outlet property="portNumber" destination="zmv-Ab-1ih" id="bOq-ui-hhH"/>
                 <outlet property="rejecttLabel" destination="1952" id="6761"/>
                 <outlet property="view" destination="1703" id="1793"/>
             </connections>
@@ -606,6 +605,18 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cpN-vQ-gEc">
+                                <rect key="frame" x="10" y="82" width="450" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="6XD-Kd-Iet"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="MobileMiner will receive all data visible in API Output window" id="IQt-7f-1Ai">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JKV-Dl-dQ1">
                                 <rect key="frame" x="18" y="120" width="57" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -645,8 +656,10 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="Z3x-fI-S0s" firstAttribute="centerY" secondItem="k5w-uP-Dhh" secondAttribute="centerY" id="0LI-9E-KAw"/>
+                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="12" id="1rF-7W-XdI"/>
                             <constraint firstAttribute="trailing" secondItem="NcU-EI-qeu" secondAttribute="trailing" constant="20" symbolic="YES" id="5IT-Y7-OBj"/>
                             <constraint firstItem="d5u-3D-ELa" firstAttribute="baseline" secondItem="JKV-Dl-dQ1" secondAttribute="baseline" id="8am-Hk-1IS"/>
+                            <constraint firstAttribute="trailing" secondItem="cpN-vQ-gEc" secondAttribute="trailing" constant="22" id="9hp-ce-GRg"/>
                             <constraint firstItem="Z3x-fI-S0s" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="-44" id="Enj-e3-ABH"/>
                             <constraint firstItem="d5u-3D-ELa" firstAttribute="leading" secondItem="JKV-Dl-dQ1" secondAttribute="trailing" constant="14" id="GB0-Wk-blI"/>
                             <constraint firstItem="Z3x-fI-S0s" firstAttribute="centerX" secondItem="k5w-uP-Dhh" secondAttribute="centerX" id="JOc-3i-SQ4"/>
@@ -657,6 +670,7 @@
                             <constraint firstItem="ywl-tD-t6b" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="20" symbolic="YES" id="Xw1-yg-dKS"/>
                             <constraint firstItem="JKV-Dl-dQ1" firstAttribute="top" secondItem="ywl-tD-t6b" secondAttribute="bottom" constant="8" symbolic="YES" id="aj3-q0-w3u"/>
                             <constraint firstItem="JKV-Dl-dQ1" firstAttribute="leading" secondItem="ywl-tD-t6b" secondAttribute="leading" id="lSX-tx-aq1"/>
+                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="centerY" secondItem="Z3x-fI-S0s" secondAttribute="centerY" id="p7t-aF-xKY"/>
                             <constraint firstItem="d5u-3D-ELa" firstAttribute="top" secondItem="NcU-EI-qeu" secondAttribute="bottom" constant="7" id="wXy-4F-9cI"/>
                         </constraints>
                     </customView>
@@ -2740,7 +2754,7 @@ Gw
                         <constraints>
                             <constraint firstAttribute="width" constant="478" id="ajS-dL-eG4"/>
                         </constraints>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Usually &quot;-S all&quot; should be here, without quotes." bezelStyle="round" id="kJV-mR-gIC">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Usually &quot;-S all&quot; goes here, without quotes but for BFL use -S bfl:all" bezelStyle="round" id="kJV-mR-gIC">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3562,7 +3576,7 @@ Gw
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SdL-FG-GdA">
                         <rect key="frame" x="18" y="216" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="bfgminer is now version 3.8.1 with littlefury driver disabled" id="CW4-6L-Ig2">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="bfgminer is now version 3.9 - do not use -S all with BFL devices, use -S bfl:all" id="CW4-6L-Ig2">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -3586,10 +3600,21 @@ Gw
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
                         </textFieldCell>
                     </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="agy-T9-wWu">
+                        <rect key="frame" x="620" y="92" width="230" height="56"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="aDe-h0-5Bx">
+                            <font key="font" size="15" name="AvenirNext-Regular"/>
+                            <string key="title">Special thanks to Scott Holben
+for his help with this version</string>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
+                        </textFieldCell>
+                    </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n38-s2-Rsv">
                         <rect key="frame" x="18" y="185" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="cgminer is now version 3.8.5 and no longer supports CPU/GPU mining" id="L5p-t5-ZPU">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="cgminer is now version 3.9" id="L5p-t5-ZPU">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -3598,7 +3623,7 @@ Gw
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4DR-ia-bxb">
                         <rect key="frame" x="18" y="152" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="API Output now works separately from FPGA/ASIC window" id="Mqr-V6-JNI">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="API Output now supports multiple IP miners" id="Mqr-V6-JNI">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -3654,39 +3679,21 @@ Gw
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Set-YB-0SC">
-                        <rect key="frame" x="105" y="9" width="138" height="22"/>
+                        <rect key="frame" x="161" y="9" width="231" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="192.168.1.99" bezelStyle="round" id="tY9-xt-cVO">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="192.168.1.99:4028" bezelStyle="round" id="tY9-xt-cVO">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZDV-Tj-QPk">
-                        <rect key="frame" x="12" y="9" width="87" height="27"/>
+                        <rect key="frame" x="12" y="9" width="143" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IP Address:" id="iOp-Yl-FO2">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="IP Address + Port:" id="iOp-Yl-FO2">
                             <font key="font" size="16" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nMi-Ym-s82">
-                        <rect key="frame" x="265" y="9" width="38" height="27"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Port:" id="k8c-Fn-D3J">
-                            <font key="font" size="16" name="AvenirNext-Regular"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zmv-Ab-1ih">
-                        <rect key="frame" x="309" y="9" width="96" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="4028" bezelStyle="round" id="Lm4-9p-hXq">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mvF-iK-7eB">

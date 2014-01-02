@@ -2,9 +2,11 @@
 //  asicminerViewController.m
 //  MacMiner
 //
-//  Created by Administrator on 01/05/2013.
-//  Copyright (c) 2013 fabulouspanda. All rights reserved.
-//
+//  Created by John O'Mara on 01/05/2013.
+//  Copyright (c) 2013 John O'Mara. All rights reserved.
+//  the apiaccess binary is based on luke-jr's api-example.c in the bfgminer github repo
+//  Many thanks to Scott Holben for modifying the api-example.c to allow fetching of
+//  RPC data from multiple IPs
 
 #import "asicMiner.h"
 #import "AppDelegate.h"
@@ -21,13 +23,20 @@
         //            NSLog(@"startup");
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
-        self.acceptLabel.tag = 0;
+        self.acceptLabel.tag = 1;
         
                                             self.apiDataArray = [[NSMutableArray alloc] init];
 
         loopTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(toggleLoopTimerFired:) userInfo:nil repeats:YES];
         
             toggleTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(startToggling) userInfo:nil repeats:NO];
+        
+        self.prefs = [NSUserDefaults standardUserDefaults];
+        
+        [self.prefs synchronize];
+        
+        self.minerAddressesArray = [[NSMutableArray alloc] init];
+//        self.minerAddressesArray = [self.prefs objectForKey:@"ipAddress"];
         
     }
     
@@ -103,7 +112,7 @@
     {
         [self.asicStartButton setTitle:@"Stop"];
                 self.asicStartButton.tag = 0;
-        
+        self.asicAPIOutput.string = @"";
 
         
         // If the task is still sitting around from the last run, release it
@@ -117,9 +126,6 @@
         
         [self.prefs synchronize];
         
-        //        NSString *mainPool = [prefs stringForKey:@"defaultPoolValue"];
-        //        NSString *mainBTCUser = [prefs stringForKey:@"defaultBTCUser"];
-        //        NSString *mainBTCPass = [prefs stringForKey:@"defaultBTCPass"];
 
         self.noGPU = [self.prefs stringForKey:@"disableASICGPU"];
         self.debugOutputOn = [self.prefs stringForKey:@"debugASICOutput"];
@@ -127,24 +133,7 @@
         self.bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
         NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
 
-        //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
-        /*
-         if ([mainBTCUser isNotEqualTo:nil]) {
-         mainPool = [oString stringByAppendingString:mainPool];
-         mainBTCUser = [uString stringByAppendingString:mainBTCUser];
-         mainBTCPass = [pString stringByAppendingString:mainBTCPass];
-         [launchArray addObject:mainPool];
-         [launchArray addObject:mainBTCUser];
-         [launchArray addObject:mainBTCPass];
-         }
-         else if ([autoWasSetup isEqualTo:nil] && [mainBTCUser isEqualTo:nil]) {
-         
-         [launchArray addObject:poolString];
-         [launchArray addObject:userString];
-         [launchArray addObject:passString];
-         
-         }
-         */
+
         
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
         if ([self.bonusOptions isNotEqualTo:@""]) {
@@ -199,78 +188,21 @@
 
         [asicTask startTask];
 
-
-
-        
         
     }
-
-
-
     
 }
 
 - (void)toggleLoopTimerFired:(NSTimer*)timer
 {
     
+        if (self.asicAPIOutput.string.length >= 30) {
+    
     self.prefs = [NSUserDefaults standardUserDefaults];
     
     [self.prefs synchronize];
     
-    NSString *networkedMiners = [self.prefs stringForKey:@"ipAddress"];
-    NSString *portString = [self.prefs stringForKey:@"portNumber"];
-    
-            if (networkedMiners.length >= 7) {
-    
-    if (findThreeRunning == YES) {
-        [apiNetworkTask stopTask];
-        findThreeRunning = NO;
-    }
-    
-    if (findThreeRunning == NO) {
-        
-        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        NSString *userpath = [paths objectAtIndex:0];
-        userpath = [userpath stringByAppendingPathComponent:executableName];
-        
-        
-        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-        
-        NSString *apiPath = [bundlePath2 stringByAppendingString:@"/apiaccess"];
-        
-        
 
-
-            NSMutableArray *apiIPArray = [NSMutableArray arrayWithObjects: @"devs", networkedMiners, portString, nil];
-            
-            apiNetworkTask =[[taskThreeWrapper alloc] initWithCommandPath:apiPath
-                                                                arguments:apiIPArray
-                                                              environment:nil
-                                                                 delegate:self];
-            
-            [apiNetworkTask startTask];
-
-            
-            apiPath = nil;
-            apiIPArray = nil;
-            
-            paths = nil;
-            userpath = nil;
-            executableName = nil;
-            bundlePath2 = nil;
-            
-            // Needs addition of wait for task to end and run again
-            
-
-        }
-
-    }
-    
-    if (self.asicAPIOutput.string.length >= 10) {
-        
-
-    
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     appDelegate.mobileMinerDataArray = nil;
     appDelegate.mobileMinerDataArray = [[NSMutableArray alloc]init];
@@ -337,7 +269,7 @@
             apiName = nil;
             pgaStats = nil;
             prefs = nil;
-            
+        
         }
         
         
@@ -580,8 +512,6 @@
 
     }
     
-    networkedMiners = nil;
-    portString = nil;
     self.prefs = nil;
 }
 
@@ -625,13 +555,14 @@
 
         
     NSMutableArray *apiArray = [NSMutableArray arrayWithObjects: @"devs", nil];
-
+            [apiArray addObject:@"4028"];
          AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         if ([appDelegate.cgReadBack isHidden] == NO && self.acceptLabel.tag == 0) {
-            [apiArray addObject:@"127.0.0.1"];
-            [apiArray addObject:@"4048"];
+            [apiArray addObject:@"127.0.0.1:4048"];
         }
-    
+        
+        [apiArray addObjectsFromArray:self.minerAddressesArray];
+//        NSLog([self.minerAddressesArray componentsJoinedByString:@" "]);
     
     NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
@@ -664,82 +595,19 @@
 
 }
 
-- (void)taskThreeWrapper:(taskThreeWrapper *)taskThreeWrapper didProduceOutput:(NSString *)output
-{
-    
-    if ([output rangeOfString:@"Reply was"].location != NSNotFound) {
-         self.networkMinerData.string = output;
-        if (self.asicAPIStorage.string.length <= 5) {
-            self.asicAPIOutput.string = output;
-        }
-    }
-
- 
-    output = nil;
- 
-}
-
-- (void)taskThreeWrapperWillStartTask:(taskThreeWrapper *)taskThreeWrapper
-{
-    //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    findThreeRunning=YES;
-
-    // clear the results
-    //    [self.outputView setString:@""];
-    // change the "Start" button to say "Stop"
-    //    [asicStartButton setTitle:@"Stop"];
-}
-
-// A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
-// that is needed from the app side.  This method is implemented as a part of conforming
-// to the ProcessController protocol.
-- (void)taskThreeWrapper:(taskThreeWrapper *)taskThreeWrapper didFinishTaskWithStatus:(int)terminationStatus
-{
-    findThreeRunning=NO;
-    
-    
-    
-}
 
 - (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
 {
 
-    if (output.length >= 10) {
-
-            if ([self.networkMinerData.string rangeOfString:@"Reply was"].location != NSNotFound) {
-            output = [output stringByAppendingString:self.networkMinerData.string];
-        }
+    if ([output rangeOfString:@"Reply was"].location != NSNotFound) {
         
         
-        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
 
-        
-//        if ([appDelegate.bfgReadBack isHidden] == NO && self.acceptLabel.tag == 0) {
-        if (self.acceptLabel.tag == 0) {
-            self.asicAPIStorage.string = output;
 
-        }
-        else {
-            self.asicAPIStorage2.string = output;
-
-        }
-        
-        if (self.asicAPIStorage.string.length >= 5) {
-
-            if (self.asicAPIStorage2.string.length >= 5 && self.asicAPIStorage.string.length != self.asicAPIStorage2.string.length) {
-            self.asicAPIOutput.string = [self.asicAPIStorage.string stringByAppendingString:self.asicAPIStorage2.string];
-        }
-        else {
-            self.asicAPIOutput.string = self.asicAPIStorage.string;
-        }
-            
-        }
-        else {
                     self.asicAPIOutput.string = output;
-        }
+
         
-            appDelegate = nil;
         
     }
         output = nil;
@@ -959,6 +827,11 @@
 // to the ProcessController protocol.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+
+    [appDelegate.asicReadBack setHidden:YES];
+    [appDelegate.asicReading setHidden:YES];
+    
     findRunning=NO;
     // change the button's title back for the next search
     [self.asicStartButton setTitle:@"Start"];
@@ -987,6 +860,7 @@
         
         [restartMessage beginSheetModalForWindow:self.asicWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
     }
+    appDelegate = nil;
 
 }
 
@@ -1013,26 +887,22 @@
 
 - (IBAction)addNetworkedMinerApply:(id)sender
 {
-self.prefs = [NSUserDefaults standardUserDefaults];
+//self.prefs = [NSUserDefaults standardUserDefaults];
+        [self.minerAddressesArray addObject:@"devs"];
+    [self.minerAddressesArray addObject:self.ipAddress.stringValue];
     
-//                NSString *existingString = [self.prefs stringForKey:@"ipAddress"];
-    
-        [self.prefs setObject:self.ipAddress.stringValue forKey:@"ipAddress"];
-            [self.prefs setObject:self.portNumber.stringValue forKey:@"portNumber"];
-    [self.prefs synchronize];
+//        [self.prefs setObject:self.minerAddressesArray forKey:@"ipAddress"];
+
+//    [self.prefs synchronize];
     
     [self.addNetworkedMinerWindow orderOut:sender];
 }
 
 - (IBAction)clearNetworkedMinerApply:(id)sender
 {
-    self.prefs = [NSUserDefaults standardUserDefaults];
     
-    //                NSString *existingString = [self.prefs stringForKey:@"ipAddress"];
-    
-    [self.prefs setObject:@"" forKey:@"ipAddress"];
-    [self.prefs setObject:@"" forKey:@"portNumber"];
-    [self.prefs synchronize];
+
+    [self.minerAddressesArray removeAllObjects];
     
 
 }
@@ -1045,21 +915,10 @@ self.prefs = [NSUserDefaults standardUserDefaults];
 -(void)awakeFromNib
 {
     findRunning=NO;
-    findThreeRunning=NO;
+
     findTwoRunning=NO;
     asicTask=nil;
-    // Lets make sure that there is something valid in the locate database; otherwise,
-    // all searches will come back empty.
-    /*
-     if ([self ensureLocateDBExists]==NO)
-     {
-     // Explain to the user that they need to go update the database as root.
-     // That is, if they want locate to be able to really find *any* file
-     // on their hard drive (perhaps not great for security, but good for usability).
-     NSRunAlertPanel(@"Error",@"Sorry, Moriarity's 'locate' database is missing or empty.  In a terminal, as root run '/usr/libexec/locate.updatedb' and try Moriarity again.", @"OK",NULL,NULL);
-     [NSApp terminate:nil];
-     }*/
-    
+
     
     self.prefs = [NSUserDefaults standardUserDefaults];
     
@@ -1143,7 +1002,8 @@ self.prefs = [NSUserDefaults standardUserDefaults];
         
         
     }
-    
+
+
     
 - (IBAction)optionsApply:(id)sender {
         

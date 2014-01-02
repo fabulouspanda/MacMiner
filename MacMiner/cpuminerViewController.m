@@ -429,6 +429,11 @@
 // to the ProcessController protocol.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    [appDelegate.cpuReadBack setHidden:YES];
+    [appDelegate.cpuReading setHidden:YES];
+    
     findRunning=NO;
     self.cpuHashLabel.tag = 0;
     // change the button's title back for the next search

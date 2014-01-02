@@ -571,6 +571,11 @@
 // to the ProcessController protocol.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    [appDelegate.bfgReadBack setHidden:YES];
+    [appDelegate.bfgReading setHidden:YES];
+    
     searchTaskIsRunning=NO;
             self.speedRead.tag = 0;
 

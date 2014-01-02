@@ -36,6 +36,9 @@
 @property (nonatomic, strong) NSMutableArray *mobileMinerDataArray;
 @property (nonatomic, strong) IBOutlet NSArrayController *mobileMinerArrayController;
 
+@property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage;
+@property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage2;
+
 
 - (void)mobilePost;
 

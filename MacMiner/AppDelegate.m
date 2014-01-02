@@ -264,6 +264,9 @@
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
 NSString *machineName = [[NSHost currentHost] localizedName];
+        if (machineName.length <= 1) {
+            machineName = @"Mac";
+        }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
         NSString *urlString = [NSString stringWithFormat:@"https://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];

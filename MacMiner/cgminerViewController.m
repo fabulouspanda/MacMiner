@@ -43,16 +43,7 @@
     [self.cgvectorSizeLabel setStringValue:[cgvectorValues objectAtIndex:current]];
     
 }
-/*
- - (void)alertDidEnd:(NSAlert *)pipAlert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
- if (returnCode == NSAlertFirstButtonReturn) {
- NSLog(@"install pip");
- }
- if (returnCode == NSAlertSecondButtonReturn) {
- NSLog(@"quit");
- }
- }
- */
+
 
 
 - (IBAction)cgstart:(id)sender
@@ -452,6 +443,12 @@
 // to the ProcessController protocol.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    [appDelegate.cgReadBack setHidden:YES];
+    [appDelegate.cgReading setHidden:YES];
+    
     cgsearchTaskIsRunning=NO;
     // change the button's title back for the next search
     [self.cgStartButton setTitle:@"Start"];

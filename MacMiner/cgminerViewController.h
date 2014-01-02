@@ -9,21 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "TaskWrapper.h"
 #import "TaskWrapperDelegate.h"
-#import "taskTwoWrapper.h"
-#import "taskTwoWrapperDelegate.h"
-#import "taskThreeWrapper.h"
-#import "taskThreeWrapperDelegate.h"
 
-@interface cgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, taskThreeWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
+
+@interface cgminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate>{
 
     
     BOOL cgfindRunning;
 	BOOL cgsearchTaskIsRunning;
     TaskWrapper *cgTask;
-    BOOL findTwoRunning;
-    BOOL findThreeRunning;
-    taskTwoWrapper *apiTask;
-    taskThreeWrapper *apiNetworkTask;
 
     
     NSArray *cgworkValues;
