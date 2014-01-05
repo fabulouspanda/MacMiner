@@ -257,6 +257,7 @@
     
     NSString *post1 = [prepost stringByAppendingString:@"]"];
     NSString *post = [@"[" stringByAppendingString:post1];
+
 //    NSLog(post);
     
     
@@ -281,6 +282,16 @@ NSString *machineName = [[NSHost currentHost] localizedName];
     
     NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 
+        
+                post1 = nil;
+        post = nil;
+        postData = nil;
+        postLength = nil;
+        machineName = nil;
+        request = nil;
+        urlString = nil;
+        theConnection = nil;
+        
     }
         prepost = nil;
     }

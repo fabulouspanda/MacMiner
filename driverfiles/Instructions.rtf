@@ -13,21 +13,13 @@ cgminer uses non-standard communication with usb miner hardware. It cannot be us
 \
 Disabling the drivers will allow cgminer to run but prevent bfgminer from running.\
 \
-You can revert these changes by replacing kextunload in each command with kextload\
+You can revert these changes by replacing kextunload in each command with kextload or restarting the computer.\
 \
 To disable the default 10.9 USB Serial driver open the Terminal, type the following:\
 \pard\tx577\tx1155\tx1733\tx2311\tx2889\tx3467\tx4045\tx4623\tx5201\tx5779\tx6357\tx6935\tx7513\tx8091\tx8669\tx9247\tx9825\tx10403\tx10981\tx11559\tx12137\tx12715\tx13293\tx13871\tx14449\tx15027\tx15605\tx16183\tx16761\tx17339\tx17917\tx18495\tx19072\tx19650\tx20228\tx20806\tx21384\tx21962\tx22540\tx23118\tx23696\tx24274\tx24852\tx25430\tx26008\tx26586\tx27164\tx27742\tx28320\tx28898\tx29476\tx30054\tx30632\tx31210\tx31788\tx32366\tx32944\tx33522\tx34100\tx34678\tx35256\tx35834\tx36412\tx36990\tx37567\tx38145\tx38723\tx39301\tx39879\tx40457\tx41035\tx41613\tx42191\tx42769\tx43347\tx43925\tx44503\tx45081\tx45659\tx46237\tx46815\tx47393\tx47971\tx48549\tx49127\tx49705\tx50283\tx50861\tx51439\tx52017\tx52595\tx53173\tx53751\tx54329\tx54907\tx55485\tx56062\tx56640\tx57218\tx57796\li2356\fi-2357\pardirnatural
-\cf0 \CocoaLigature0 kextunload -b com.apple.driver.AppleUSBCDC\
-and press return\
+\cf0 \CocoaLigature0 \
+sudo kextunload -b com.apple.driver.AppleUSBCDC  && sudo kextunload -b com.apple.driver.AppleUSBCDCACMData && sudo kextunload -b com.apple.driver.AppleUSBCDCACMControl && sudo kextunload /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/AppleUSBFTDI.kext\
 \
-then type:\
- kextunload -b com.apple.driver.AppleUSBCDCACMData\
-and press return\
+then press return. It will ask for your password.\
 \
-then type:\
-kextunload -b com.apple.driver.AppleUSBCDCACMControl\
-and press return\
-\
-then type:\
-kextunload /System/Library/Extensions/IOUSBFamily.kext/Contents/PlugIns/AppleUSBFTDI.kext\
-and press return}
+To use cgminer long term, you may want to move the referenced files to backup to stop them from being loaded every restart.}

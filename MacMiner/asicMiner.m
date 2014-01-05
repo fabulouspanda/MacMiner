@@ -138,6 +138,7 @@
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
         if ([self.bonusOptions isNotEqualTo:@""]) {
             NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
+
             [launchArray addObjectsFromArray:deviceItems];
         }
         
@@ -242,13 +243,15 @@
             
             [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
             
-            int u = [mhs5S integerValue];
-            NSString *apiHash5s = [NSString stringWithFormat:@"%d", u];
+            NSInteger u = [mhs5S integerValue];
+            NSString *apiHash5s = [NSString stringWithFormat:@"%ld", (long)u];
             apiHash5s = [apiHash5s stringByAppendingString:@"000"];
+
             
-            int v = [mhsAv integerValue];
-            NSString *apiHashAv = [NSString stringWithFormat:@"%d", v];
+            NSInteger v = [mhsAv integerValue];
+            NSString *apiHashAv = [NSString stringWithFormat:@"%ld", (long)v];
             apiHashAv = [apiHashAv stringByAppendingString:@"000"];
+
             
             
             
@@ -308,13 +311,15 @@
             NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
             NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
             
-            int u = [mhs5S integerValue];
-            NSString *apiHash5s = [NSString stringWithFormat:@"%d", u];
+            NSInteger u = [mhs5S integerValue];
+            NSString *apiHash5s = [NSString stringWithFormat:@"%ld", (long)u];
             apiHash5s = [apiHash5s stringByAppendingString:@"000"];
+
             
-            int v = [mhsAv integerValue];
-            NSString *apiHashAv = [NSString stringWithFormat:@"%d", v];
+            NSInteger v = [mhsAv integerValue];
+            NSString *apiHashAv = [NSString stringWithFormat:@"%ld", (long)v];
             apiHashAv = [apiHashAv stringByAppendingString:@"000"];
+
             
             
             if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
@@ -419,13 +424,15 @@
             NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
             NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
             
-            NSInteger *u = [mhs5S integerValue];
-            NSString *apiHash5s = [NSString stringWithFormat:@"%d", u];
+            NSInteger u = [mhs5S integerValue];
+            NSString *apiHash5s = [NSString stringWithFormat:@"%ld", (long)u];
             apiHash5s = [apiHash5s stringByAppendingString:@"000"];
+
             
-            NSInteger *v = [mhsAv integerValue];
-            NSString *apiHashAv = [NSString stringWithFormat:@"%d", v];
+            NSInteger v = [mhsAv integerValue];
+            NSString *apiHashAv = [NSString stringWithFormat:@"%ld", (long)v];
             apiHashAv = [apiHashAv stringByAppendingString:@"000"];
+
             
             
             if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
@@ -506,8 +513,13 @@
     
     [self.apiTableView reloadData];
     [self.apiTableView setNeedsDisplay:YES];
+            
+            NSString *email = [self.prefs objectForKey:@"emailAddress"];
+            
+            if (email.length >= 5) {
     [appDelegate mobilePost];
-    
+            }
+            
     appDelegate = nil;
 
     }
