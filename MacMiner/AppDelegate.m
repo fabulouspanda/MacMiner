@@ -270,7 +270,7 @@ NSString *machineName = [[NSHost currentHost] localizedName];
         }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-        NSString *urlString = [NSString stringWithFormat:@"https://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+        NSString *urlString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
 //        NSLog(urlString);
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
@@ -306,11 +306,11 @@ NSString *machineName = [[NSHost currentHost] localizedName];
 }
 
 - (void)theConnection:(NSURLConnection *)theConnection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
+//    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust])
 //        if (... user allows connection despite bad certificate ...)
-            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
+//            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
     
-//    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+    [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
 }
 
 @end

@@ -61,7 +61,7 @@
 {
     // change the button's title back for the next search
     [self.asicStartButton setTitle:@"Start"];
-    [self stopToggling];
+//    [self stopToggling];
     // This stops the task and calls our callback (-processFinished)
     [asicTask stopTask];
     findRunning=NO;
@@ -88,7 +88,7 @@
         // change the button's title back for the next search
         [self.asicStartButton setTitle:@"Start"];
         self.asicStartButton.tag = 1;
-        [self stopToggling];
+//        [self stopToggling];
         // This stops the task and calls our callback (-processFinished)
         [asicTask stopTask];
         findRunning=NO;
@@ -122,7 +122,7 @@
 
 
         
-        self.prefs = [NSUserDefaults standardUserDefaults];
+
         
         [self.prefs synchronize];
         
@@ -199,7 +199,6 @@
     
         if (self.asicAPIOutput.string.length >= 30) {
     
-    self.prefs = [NSUserDefaults standardUserDefaults];
     
     [self.prefs synchronize];
     
@@ -222,9 +221,7 @@
         
         strCount += 1;
         for (int i = 0; i < strCount; i++) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
-            [prefs synchronize];
+
             
             NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
             NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
@@ -255,7 +252,7 @@
             
             
             
-            NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+            NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
             
             NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"GPU\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"%@\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, @"0", apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiIntensity, pgaCount, apiName, apiPoolString];
             
@@ -271,7 +268,6 @@
             apiPoolString = nil;
             apiName = nil;
             pgaStats = nil;
-            prefs = nil;
         
         }
         
@@ -283,11 +279,6 @@
         
         for (int i = 0; i >= 0; i++) {
             
-            
-            
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
-            [prefs synchronize];
             
             
             
@@ -328,7 +319,7 @@
                 [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
                 
                 
-                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 
                 NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
                 
@@ -351,7 +342,7 @@
                 [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
                 
                 
-                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 
                 NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
                 
@@ -385,7 +376,6 @@
             apiDiffAcc = nil;
             apiDiffRej = nil;
             
-            prefs = nil;
             
             
         }
@@ -399,9 +389,6 @@
         
         for (int i = 0; i >= 0; i++) {
             
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
-            [prefs synchronize];
             
             
             NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
@@ -442,7 +429,7 @@
                 [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
                 
                 
-                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 
                 NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
                 
@@ -466,7 +453,7 @@
                 [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
                 
                 
-                NSString *apiPoolString = [prefs stringForKey:@"defaultPoolValue"];
+                NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 
                 NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
                 
@@ -486,9 +473,6 @@
             }
             
             
-            
-            
-            prefs = nil;
             pgaCount = nil;
             pgaAPIData = nil;
             apiStatus = nil;
@@ -524,17 +508,17 @@
 
     }
     
-    self.prefs = nil;
+
 }
 
 - (void)toggleTimerFired:(NSTimer*)timer
 {
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
     
-    [prefs synchronize];
+    [self.prefs synchronize];
     
-    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
+    NSString *speechSetting = [self.prefs objectForKey:@"enableSpeech"];
     if ([speechSetting  isEqual: @"silence"]) {
         
     }
@@ -544,7 +528,7 @@
         [self.speechSynth startSpeakingString:@"Mining Stopped"];
     }
     speechSetting = nil;
-    prefs = nil;
+
     
     if ([self.megaHashLabel.stringValue isNotEqualTo:@"0"]) {
         self.megaHashLabel.tag = 1;
@@ -611,15 +595,17 @@
 - (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
 {
 
+    output = [output substringToIndex:[output length]-1];
+    
     if ([output rangeOfString:@"Reply was"].location != NSNotFound) {
         
         
-
+        if([output hasPrefix:@"R"] && [output hasSuffix:@")"]) {
 
 
                     self.asicAPIOutput.string = output;
 
-        
+        }
         
     }
         output = nil;
@@ -674,11 +660,10 @@
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs synchronize];
+    [self.prefs synchronize];
     
-    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
+    NSString *speechSetting = [self.prefs objectForKey:@"enableSpeech"];
     if ([speechSetting  isEqual: @"silence"]) {
         
     }
@@ -712,10 +697,6 @@
             self.asicHashField.stringValue = @"Gh";
         }
         
-        
-        self.prefs = [NSUserDefaults standardUserDefaults];
-        
-        [self.prefs synchronize];
         
         
         if ([[self.prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
@@ -754,7 +735,6 @@
         self.asicOutputView.string = newOutput;
         newOutput = nil;
     
-    self.prefs = [NSUserDefaults standardUserDefaults];
     
     [self.prefs synchronize];
 
@@ -771,7 +751,6 @@
     }
         
         self.logLength = nil;
-        self.prefs = nil;
         
     }
 
@@ -905,7 +884,7 @@
     
 //        [self.prefs setObject:self.minerAddressesArray forKey:@"ipAddress"];
 
-//    [self.prefs synchronize];
+    [self.prefs synchronize];
     
     [self.addNetworkedMinerWindow orderOut:sender];
 }
@@ -932,7 +911,7 @@
     asicTask=nil;
 
     
-    self.prefs = [NSUserDefaults standardUserDefaults];
+
     
     // getting an NSString
     NSString *asicOptionsString = [self.prefs stringForKey:@"asicOptionsValue"];
@@ -941,7 +920,7 @@
     if (asicOptionsString != nil) {
         [self.asicOptionsView setStringValue:asicOptionsString];
     }
-    self.prefs = nil;
+
 }
 
 - (IBAction)asicMinerToggle:(id)sender {
@@ -967,7 +946,6 @@
             [self.asicOptionsButton setState:NSOnState];
             [self.asicOptionsWindow orderFront:sender];
             
-            self.prefs = [NSUserDefaults standardUserDefaults];
             
             [self.prefs synchronize];
             
@@ -1007,8 +985,6 @@
             cpuThreads = nil;
 
             
-            self.prefs = nil;
-            
         }
         
         
@@ -1018,8 +994,7 @@
 
     
 - (IBAction)optionsApply:(id)sender {
-        
-        self.prefs = [NSUserDefaults standardUserDefaults];
+    
 
         
         if (self.asicNoGpuButton.state == NSOffState) {
@@ -1055,8 +1030,7 @@
         
         [self.asicOptionsButton setState:NSOffState];
         [self.asicOptionsWindow orderOut:sender];
-        
-        self.prefs = nil;
+    
         
     }
 
