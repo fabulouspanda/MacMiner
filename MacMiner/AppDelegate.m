@@ -29,6 +29,18 @@
         [[NSApp dockTile] display];
     
 
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
+    
+    if ([hideVersion isEqualToString:@"157"]) {
+        [self.releaseNotes orderOut:nil];
+    }
+    
+    prefs = nil;
+    
 
     
 }
@@ -243,7 +255,7 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
-    
+//    self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"      trying to send data to MoMi     "];
     NSString *email = [prefs objectForKey:@"emailAddress"];
     NSString *appID = [prefs objectForKey:@"appID"];
     
@@ -254,23 +266,40 @@
     NSString *prepost = [NSString stringWithFormat:[self.mobileMinerDataArray componentsJoinedByString:@","]];
     if (prepost.length >= 30) {
         
+        
     
     NSString *post1 = [prepost stringByAppendingString:@"]"];
     NSString *post = [@"[" stringByAppendingString:post1];
 
 //    NSLog(post);
-    
+//            self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"    POST formed:    "];
+//        self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:post];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     
-    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
 NSString *machineName = [[NSHost currentHost] localizedName];
         if (machineName.length <= 1) {
             machineName = @"Mac";
         }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-        NSString *urlString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+        
+        NSString *urlString = @"";
+        
+        if (self.disableHttpsButton.state == NSOffState) {
+            urlString = nil;
+        urlString = [NSString stringWithFormat:@"https://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+        }
+
+                if (self.disableHttpsButton.state == NSOnState) {
+                    urlString = nil;
+                    urlString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+                }
+        
+        
+//            self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"    POST TO URL:     "];
+//            self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:urlString];
 //        NSLog(urlString);
     [request setURL:[NSURL URLWithString:urlString]];
     [request setHTTPMethod:@"POST"];
@@ -282,7 +311,7 @@ NSString *machineName = [[NSHost currentHost] localizedName];
     
     NSURLConnection *theConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 
-        
+//            self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"    DATA SENT     "];
                 post1 = nil;
         post = nil;
         postData = nil;
@@ -311,6 +340,23 @@ NSString *machineName = [[NSHost currentHost] localizedName];
 //            [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
     
     [challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
+
+- (IBAction)hideVersionStuff:(id)sender
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs setObject:@"157" forKey:@"hideVersion"];
+    
+    [prefs synchronize];
+    
+            [self.releaseNotes orderOut:sender];
+    
+    prefs = nil;
+    
+    
+    
 }
 
 @end

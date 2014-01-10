@@ -39,6 +39,12 @@
 @property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage;
 @property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage2;
 
+@property (nonatomic, strong) IBOutlet NSButton *disableHttpsButton;
+
+@property (nonatomic, strong) IBOutlet NSButton *hideVersionStuff;
+
+@property (nonatomic, strong) IBOutlet NSWindow *releaseNotes;
+
 
 - (void)mobilePost;
 

@@ -56,6 +56,12 @@
 @property (nonatomic, weak) IBOutlet NSButton *asicDebugButton;
 @property (nonatomic, weak) IBOutlet NSButton *asicOptionsButton;
 
+@property (nonatomic, weak) IBOutlet NSButton *bflEnable;
+@property (nonatomic, weak) IBOutlet NSButton *erupterEnable;
+@property (nonatomic, weak) IBOutlet NSButton *bigpicEnable;
+@property (nonatomic, weak) IBOutlet NSButton *antminerEnable;
+@property (nonatomic, weak) IBOutlet NSButton *bitfuryEnable;
+
 @property (nonatomic, weak) IBOutlet NSTextField *asicThreadsField;
 
 @property (nonatomic, weak) IBOutlet NSTextField *asicHashField;

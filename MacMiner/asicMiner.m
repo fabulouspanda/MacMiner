@@ -151,17 +151,41 @@
             [launchArray addObject:@"0"];
         }
 
-        if ([self.noGPU isNotEqualTo:nil]) {
-            [launchArray addObject:@"-S"];
-                        [launchArray addObject:@"opencl:auto"];
-        }
-
         if ([self.debugOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.debugOutputOn];
         }
         if ([self.quietOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.quietOutputOn];
         }
+        
+        if (self.bigpicEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"bigpic:all"];
+        }
+        if (self.antminerEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"antminer:all"];
+        }
+        if (self.bflEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"bfl:all"];
+        }
+        if (self.bitfuryEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"bifury:all"];
+        }
+        if (self.erupterEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"erupter:all"];
+        }
+
+        
+        
+        if ([self.noGPU isNotEqualTo:nil]) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
+        }
+        
             cpuThreads = nil;
         
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
@@ -549,11 +573,16 @@
         self.acceptLabel.tag = 0;
         }
 
+                 AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         
-    NSMutableArray *apiArray = [NSMutableArray arrayWithObjects: @"devs", nil];
-            [apiArray addObject:@"4028"];
-         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        if ([appDelegate.cgReadBack isHidden] == NO && self.acceptLabel.tag == 0) {
+    NSMutableArray *apiArray = [NSMutableArray arrayWithObjects: nil];
+        if ([appDelegate.asicReadBack isHidden] == NO) {
+            [apiArray addObject:@"devs"];
+                       [apiArray addObject:@"4028"];
+        }
+
+        if ([appDelegate.cgReadBack isHidden] == NO) {
+                        [apiArray addObject:@"devs"];
             [apiArray addObject:@"127.0.0.1:4048"];
         }
         
@@ -575,8 +604,12 @@
                                            environment:nil
                                               delegate:self];
     // kick off the process asynchronously
-    
+//        NSString *logger = [apiArray componentsJoinedByString:@" "];
+//        NSLog(logger);
+        if ([apiArray containsObject:@"devs"] || [appDelegate.asicReadBack isHidden] == NO || [appDelegate.cgReadBack isHidden] == NO) {
     [apiTask startTask];
+        }
+
         
 
         apiArray = nil;
@@ -955,7 +988,29 @@
             NSString *quietOutputOn = [self.prefs stringForKey:@"quietASICOutput"];
             NSString *bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
             NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
+            
+            NSString *bflEnable = [self.prefs stringForKey:@"bflEnable"];
+            NSString *bigpicEnable = [self.prefs stringForKey:@"bigpicEnable"];
+            NSString *bitfuryEnable = [self.prefs stringForKey:@"bitfuryEnable"];
+            NSString *erupterEnable = [self.prefs stringForKey:@"erupterEnable"];
+            NSString *antminerEnable = [self.prefs stringForKey:@"antminerEnable"];
 
+            if ([bflEnable isNotEqualTo:nil]) {
+                self.bflEnable.state = NSOffState;
+            }
+            if ([bigpicEnable isNotEqualTo:nil]) {
+                self.bigpicEnable.state = NSOffState;
+            }
+            if ([bitfuryEnable isNotEqualTo:nil]) {
+                self.bitfuryEnable.state = NSOffState;
+            }
+            if ([erupterEnable isNotEqualTo:nil]) {
+                self.erupterEnable.state = NSOffState;
+            }
+            if ([antminerEnable isNotEqualTo:nil]) {
+                self.antminerEnable.state = NSOffState;
+            }
+            
             if ([noGPU isNotEqualTo:nil]) {
                 self.asicNoGpuButton.state = NSOnState;
             }
@@ -983,6 +1038,12 @@
             quietOutputOn = nil;
             bonusOptions = nil;
             cpuThreads = nil;
+            
+            bflEnable = nil;
+            bigpicEnable = nil;
+            bitfuryEnable = nil;
+            erupterEnable = nil;
+            antminerEnable = nil;
 
             
         }
@@ -1016,9 +1077,41 @@
         else {
             [self.prefs setObject:nil forKey:@"quietASICOutput"];
         }
+    
+    
+    if (self.bflEnable.state == NSOnState) {
+        [self.prefs setObject:nil forKey:@"bflEnable"];
+    }
+    else {
+        [self.prefs setObject:@"disable" forKey:@"bflEnable"];
+    }
+    if (self.bigpicEnable.state == NSOnState) {
+        [self.prefs setObject:nil forKey:@"bigpicEnable"];
+    }
+    else {
+        [self.prefs setObject:@"disable" forKey:@"bigpicEnable"];
+    }
+    if (self.bitfuryEnable.state == NSOnState) {
+        [self.prefs setObject:nil forKey:@"bitfuryEnable"];
+    }
+    else {
+        [self.prefs setObject:@"disable" forKey:@"bitfuryEnable"];
+    }
+    if (self.erupterEnable.state == NSOnState) {
+        [self.prefs setObject:nil forKey:@"erupterEnable"];
+    }
+    else {
+        [self.prefs setObject:@"disable" forKey:@"erupterEnable"];
+    }
+    if (self.antminerEnable.state == NSOnState) {
+        [self.prefs setObject:nil forKey:@"antminerEnable"];
+    }
+    else {
+        [self.prefs setObject:@"disable" forKey:@"antminerEnable"];
+    }
 
-        
-        
+    
+    
         [self.prefs setObject:self.asicOptionsView.stringValue forKey:@"asicOptionsValue"];
     
     if (self.asicThreadsField.stringValue.length >= 1) {
