@@ -10,7 +10,7 @@
 #import "TaskWrapper.h"
 
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate>
 
 
 //@property (assign) IBOutlet NSWindow *window;
@@ -41,11 +41,18 @@
 
 @property (nonatomic, strong) IBOutlet NSButton *disableHttpsButton;
 
+@property (nonatomic, strong) IBOutlet NSButton *allowMobileMinerControl;
+
 @property (nonatomic, strong) IBOutlet NSButton *hideVersionStuff;
 
 @property (nonatomic, strong) IBOutlet NSWindow *releaseNotes;
 
+@property (nonatomic, strong) NSString *foundData;
+
+@property (nonatomic, strong) NSString *mobileMinerStatus;
 
 - (void)mobilePost;
+
+- (void)mobileCommands;
 
 @end

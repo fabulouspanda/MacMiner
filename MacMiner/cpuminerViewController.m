@@ -9,9 +9,6 @@
 #import "cpuminerViewController.h"
 #import "AppDelegate.h"
 
-#import "smcWrapper.h"
-#import "MachineDefaults.h"
-
 @implementation cpuminerViewController
 
 //io_connect_t conn;

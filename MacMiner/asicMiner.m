@@ -72,6 +72,8 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     
+    appDelegate.mobileMinerStatus = @"NONE";
+    
     [appDelegate.asicReadBack setHidden:YES];
     [appDelegate.asicReading setHidden:YES];
     [[NSApp dockTile] display];
@@ -79,7 +81,6 @@
     
     return;
 }
-
 
 - (IBAction)start:(id)sender
 {
@@ -100,6 +101,8 @@
 
         
         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        
+        appDelegate.mobileMinerStatus = @"NONE";
 
         [appDelegate.asicReadBack setHidden:YES];
         [appDelegate.asicReading setHidden:YES];
@@ -220,26 +223,45 @@
 
 - (void)toggleLoopTimerFired:(NSTimer*)timer
 {
+//    NSLog(@"Loop1");
     
-        if (self.asicAPIOutput.string.length >= 30) {
+    NSString *apiOutputString = self.asicAPIOutput.string;
+    
+       AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    if([apiOutputString hasPrefix:@"R"] && [apiOutputString hasSuffix:@")"]) {
+        
+    
     
     
     [self.prefs synchronize];
     
 
-    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+ 
     appDelegate.mobileMinerDataArray = nil;
     appDelegate.mobileMinerDataArray = [[NSMutableArray alloc]init];
-    
+        
+        if ([appDelegate.mobileMinerStatus isEqualToString:@"START"]) {
+            [self start:nil];
+            appDelegate.mobileMinerStatus = @"NONE";
+        }
+        if ([appDelegate.mobileMinerStatus isEqualToString:@"RESTART"]) {
+            [self start:nil];
+            appDelegate.mobileMinerStatus = @"NONE";
+        }
+        if ([appDelegate.mobileMinerStatus isEqualToString:@"STOP"]) {
+            [self stopAsicMiner];
+                appDelegate.mobileMinerStatus = @"NONE";
+        }
     
     NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
     [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     
-    if ([self.asicAPIOutput.string rangeOfString:@"GPU0"].location != NSNotFound) {
+    if ([apiOutputString rangeOfString:@"GPU0"].location != NSNotFound) {
         
         
         
-        int strCount = [self.asicAPIOutput.string length] - [[self.asicAPIOutput.string stringByReplacingOccurrencesOfString:@"GPU[0-9]+" withString:@""] length];
+        int strCount = [apiOutputString length] - [[apiOutputString stringByReplacingOccurrencesOfString:@"GPU[0-9]+" withString:@""] length];
         strCount /= [@"GPU[0-9]+" length];
         
         
@@ -248,7 +270,7 @@
 
             
             NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
-            NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
+            NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
             NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
             NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
@@ -298,7 +320,7 @@
         
     }
     
-    if ([self.asicAPIOutput.string rangeOfString:@"PGA0"].location != NSNotFound) {
+    if ([apiOutputString rangeOfString:@"PGA0"].location != NSNotFound) {
         
         
         for (int i = 0; i >= 0; i++) {
@@ -308,11 +330,11 @@
             
             NSString *pgaCount = [NSString stringWithFormat:@"PGA%d", i];
             
-            if ([self.asicAPIOutput.string rangeOfString:pgaCount].location == NSNotFound) {
+            if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
                 break;
             }
             
-            NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
+            NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             //                                NSLog(pgaCount);
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
             NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
@@ -408,7 +430,7 @@
         
     }
     
-    if ([self.asicAPIOutput.string rangeOfString:@"ASC0"].location != NSNotFound) {
+    if ([apiOutputString rangeOfString:@"ASC0"].location != NSNotFound) {
         
         
         for (int i = 0; i >= 0; i++) {
@@ -417,11 +439,11 @@
             
             NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
             
-            if ([self.asicAPIOutput.string rangeOfString:pgaCount].location == NSNotFound) {
+            if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
                 break;
             }
             
-            NSString *pgaAPIData = [self getDataBetweenFromString:self.asicAPIOutput.string leftString:pgaCount rightString:@")" leftOffset:0];
+            NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             //                                NSLog(pgaCount);
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
             NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
@@ -522,22 +544,31 @@
     [self.apiTableView reloadData];
     [self.apiTableView setNeedsDisplay:YES];
             
-            NSString *email = [self.prefs objectForKey:@"emailAddress"];
-            
-            if (email.length >= 5) {
-    [appDelegate mobilePost];
-            }
-            
-    appDelegate = nil;
+        NSString *email = [self.prefs objectForKey:@"emailAddress"];
+        
+        
+        if (email.length >= 5) {
+            [appDelegate mobilePost];
+        }
+        
+        email = nil;
 
     }
+    NSString *email = [self.prefs objectForKey:@"emailAddress"];
+
     
+    if (email.length >= 5) {
+        [appDelegate mobileCommands];
+    }
+    
+    email = nil;
+    appDelegate = nil;
 
 }
 
 - (void)toggleTimerFired:(NSTimer*)timer
 {
-    
+//        NSLog(@"Loop2");
 
     
     [self.prefs synchronize];
@@ -1125,7 +1156,7 @@
         [self.asicOptionsWindow orderOut:sender];
     
         
-    }
+}
 
 
 

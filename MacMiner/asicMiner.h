@@ -13,7 +13,7 @@
 #import "taskTwoWrapperDelegate.h"
 
 
-@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate>{
+@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate, NSURLConnectionDelegate>{
 
     
     BOOL findRunning;
@@ -95,6 +95,8 @@
 @property (nonatomic, strong) NSUserDefaults *prefs;
 
 @property(strong) NSSpeechSynthesizer *speechSynth;
+
+@property (nonatomic, strong) NSString *mobileMinerStatus;
 
 - (IBAction)start:(id)sender;
 
