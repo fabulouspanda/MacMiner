@@ -512,9 +512,13 @@
         <viewController id="1289" customClass="preferencesViewController">
             <connections>
                 <outlet property="appID" destination="d5u-3D-ELa" id="CYU-F4-rrA"/>
+                <outlet property="bfgButton" destination="Ebk-Z0-zG2" id="mdY-QM-TTF"/>
+                <outlet property="cgButton" destination="e8J-ik-Pp2" id="61h-Wp-xje"/>
                 <outlet property="charCount" destination="6349" id="6387"/>
+                <outlet property="cpuButton" destination="Y57-eR-Ckd" id="Muj-e5-LZL"/>
                 <outlet property="dockButton" destination="6532" id="6543"/>
                 <outlet property="emailAddress" destination="NcU-EI-qeu" id="iMD-La-q2e"/>
+                <outlet property="fpgaAsicButton" destination="Dd6-B5-tYx" id="VVn-WF-BEZ"/>
                 <outlet property="prefView" destination="9rM-FR-L8h" id="9Sv-yY-nRS"/>
                 <outlet property="prefView2" destination="k5w-uP-Dhh" id="rr0-2g-4nP"/>
                 <outlet property="prefWindow" destination="1282" id="1294"/>
@@ -582,7 +586,7 @@
                 <outlet property="view" destination="1299" id="1303"/>
             </connections>
         </viewController>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="1282">
+        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="preferences" animationBehavior="default" id="1282">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="300" y="861" width="480" height="186"/>
@@ -602,9 +606,12 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="setupbackground" id="T2i-oC-Mg0"/>
                             </imageView>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W8C-Ca-zbt">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="W8C-Ca-zbt">
                                 <rect key="frame" x="20" y="50" width="200" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="196" id="l66-8F-wNl"/>
+                                </constraints>
                                 <buttonCell key="cell" type="check" title="Disable https and use http" bezelStyle="regularSquare" imagePosition="left" inset="2" id="lRP-by-UW4">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -614,7 +621,7 @@
                                 <rect key="frame" x="18" y="145" width="43" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="eo7-Os-3in"/>
+                                    <constraint firstAttribute="width" constant="39" id="cLH-BB-ZRn"/>
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="email:" id="tTx-ol-bQ4">
                                     <font key="font" metaFont="system"/>
@@ -625,9 +632,6 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cpN-vQ-gEc">
                                 <rect key="frame" x="10" y="82" width="450" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="6XD-Kd-Iet"/>
-                                </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="MobileMiner will receive all data visible in API Output window" id="IQt-7f-1Ai">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -643,9 +647,12 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SKZ-kY-PTb">
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="SKZ-kY-PTb">
                                 <rect key="frame" x="20" y="25" width="350" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="346" id="KOD-zw-5pw"/>
+                                </constraints>
                                 <buttonCell key="cell" type="check" title="Allow MobileMiner to control FPGA/ASIC Window" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dNG-0X-oB9">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -666,9 +673,6 @@
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d5u-3D-ELa">
                                 <rect key="frame" x="87" y="117" width="373" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="373" id="eE3-wd-f8N"/>
-                                </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" bezelStyle="round" id="pqG-5m-R6F">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -680,23 +684,32 @@
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="centerY" secondItem="k5w-uP-Dhh" secondAttribute="centerY" id="0LI-9E-KAw"/>
-                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="12" id="1rF-7W-XdI"/>
-                            <constraint firstAttribute="trailing" secondItem="NcU-EI-qeu" secondAttribute="trailing" constant="20" symbolic="YES" id="5IT-Y7-OBj"/>
-                            <constraint firstItem="d5u-3D-ELa" firstAttribute="baseline" secondItem="JKV-Dl-dQ1" secondAttribute="baseline" id="8am-Hk-1IS"/>
-                            <constraint firstAttribute="trailing" secondItem="cpN-vQ-gEc" secondAttribute="trailing" constant="22" id="9hp-ce-GRg"/>
-                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="-44" id="Enj-e3-ABH"/>
-                            <constraint firstItem="d5u-3D-ELa" firstAttribute="leading" secondItem="JKV-Dl-dQ1" secondAttribute="trailing" constant="14" id="GB0-Wk-blI"/>
-                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="centerX" secondItem="k5w-uP-Dhh" secondAttribute="centerX" id="JOc-3i-SQ4"/>
-                            <constraint firstItem="d5u-3D-ELa" firstAttribute="leading" secondItem="NcU-EI-qeu" secondAttribute="leading" id="LE3-Fu-rjH"/>
-                            <constraint firstItem="ywl-tD-t6b" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="20" symbolic="YES" id="R8F-pN-sYe"/>
-                            <constraint firstItem="d5u-3D-ELa" firstAttribute="trailing" secondItem="NcU-EI-qeu" secondAttribute="trailing" id="SJB-1S-nFb"/>
-                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="-3" id="TzL-Z4-AOw"/>
-                            <constraint firstItem="ywl-tD-t6b" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="20" symbolic="YES" id="Xw1-yg-dKS"/>
-                            <constraint firstItem="JKV-Dl-dQ1" firstAttribute="top" secondItem="ywl-tD-t6b" secondAttribute="bottom" constant="8" symbolic="YES" id="aj3-q0-w3u"/>
-                            <constraint firstItem="JKV-Dl-dQ1" firstAttribute="leading" secondItem="ywl-tD-t6b" secondAttribute="leading" id="lSX-tx-aq1"/>
-                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="centerY" secondItem="Z3x-fI-S0s" secondAttribute="centerY" id="p7t-aF-xKY"/>
-                            <constraint firstItem="d5u-3D-ELa" firstAttribute="top" secondItem="NcU-EI-qeu" secondAttribute="bottom" constant="7" id="wXy-4F-9cI"/>
+                            <constraint firstItem="W8C-Ca-zbt" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="22" id="1BV-MO-BqL"/>
+                            <constraint firstItem="ywl-tD-t6b" firstAttribute="leading" secondItem="JKV-Dl-dQ1" secondAttribute="leading" id="25N-lk-1tR"/>
+                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="-44" id="4Bw-Bm-Cjc"/>
+                            <constraint firstItem="SKZ-kY-PTb" firstAttribute="leading" secondItem="W8C-Ca-zbt" secondAttribute="leading" id="4ch-Fh-mnF"/>
+                            <constraint firstItem="d5u-3D-ELa" firstAttribute="centerY" secondItem="JKV-Dl-dQ1" secondAttribute="centerY" id="4hE-Tl-W4b"/>
+                            <constraint firstAttribute="bottom" secondItem="SKZ-kY-PTb" secondAttribute="bottom" constant="27" id="4xf-fs-cVo"/>
+                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="12" id="65O-dT-7V7"/>
+                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="centerX" secondItem="k5w-uP-Dhh" secondAttribute="centerX" id="7iF-x1-Pbw"/>
+                            <constraint firstItem="Z3x-fI-S0s" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="-3" id="8K5-ha-f5W"/>
+                            <constraint firstItem="d5u-3D-ELa" firstAttribute="baseline" secondItem="JKV-Dl-dQ1" secondAttribute="baseline" id="8mk-w0-ZP7"/>
+                            <constraint firstAttribute="trailing" secondItem="cpN-vQ-gEc" secondAttribute="trailing" constant="22" id="Er4-WW-Z8I"/>
+                            <constraint firstItem="ywl-tD-t6b" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="20" symbolic="YES" id="OEn-tx-YlJ"/>
+                            <constraint firstItem="NcU-EI-qeu" firstAttribute="leading" secondItem="ywl-tD-t6b" secondAttribute="trailing" constant="28" id="Pse-84-5xG"/>
+                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="top" secondItem="d5u-3D-ELa" secondAttribute="bottom" constant="13" id="UcN-l7-KKK"/>
+                            <constraint firstItem="d5u-3D-ELa" firstAttribute="top" secondItem="NcU-EI-qeu" secondAttribute="bottom" constant="7" id="Wzi-Xq-Pcp"/>
+                            <constraint firstItem="ywl-tD-t6b" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" constant="20" symbolic="YES" id="YKz-DM-m6F"/>
+                            <constraint firstAttribute="trailing" secondItem="NcU-EI-qeu" secondAttribute="trailing" constant="20" symbolic="YES" id="bts-n7-cuP"/>
+                            <constraint firstItem="d5u-3D-ELa" firstAttribute="leading" secondItem="JKV-Dl-dQ1" secondAttribute="trailing" constant="14" id="iYI-kE-GCt"/>
+                            <constraint firstItem="SKZ-kY-PTb" firstAttribute="top" secondItem="W8C-Ca-zbt" secondAttribute="bottom" constant="11" id="jmb-Jg-z4F"/>
+                            <constraint firstItem="d5u-3D-ELa" firstAttribute="leading" secondItem="NcU-EI-qeu" secondAttribute="leading" id="mMV-29-jCP"/>
+                            <constraint firstItem="JKV-Dl-dQ1" firstAttribute="top" secondItem="ywl-tD-t6b" secondAttribute="bottom" constant="8" symbolic="YES" id="ntV-bM-Poh"/>
+                            <constraint firstItem="W8C-Ca-zbt" firstAttribute="top" secondItem="cpN-vQ-gEc" secondAttribute="bottom" constant="16" id="sL4-j4-C2I"/>
+                            <constraint firstItem="NcU-EI-qeu" firstAttribute="top" secondItem="k5w-uP-Dhh" secondAttribute="top" constant="19" id="wgy-2k-9Wj"/>
+                            <constraint firstItem="d5u-3D-ELa" firstAttribute="trailing" secondItem="NcU-EI-qeu" secondAttribute="trailing" id="xFj-Y8-yTY"/>
+                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="centerY" secondItem="Z3x-fI-S0s" secondAttribute="centerY" id="y4R-dk-u3T"/>
+                            <constraint firstItem="cpN-vQ-gEc" firstAttribute="centerY" secondItem="k5w-uP-Dhh" secondAttribute="centerY" id="z0c-d1-7Xw"/>
                         </constraints>
                     </customView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="9rM-FR-L8h">
@@ -708,25 +721,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="setupbackground" id="2732"/>
                             </imageView>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="6362">
-                                <rect key="frame" x="97" y="100" width="339" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="16" id="bev-1d-Lvm"/>
-                                </constraints>
-                                <buttonCell key="cell" type="check" title="Auto-scroll to the end of the log" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6363">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" size="14" name="GillSans"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="scrollLogOption:" target="1289" id="6541"/>
-                                </connections>
-                            </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="6532">
                                 <rect key="frame" x="97" y="127" width="339" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="16" id="tVY-ld-JAS"/>
+                                    <constraint firstAttribute="height" constant="16" id="XW9-Wt-yiw"/>
                                 </constraints>
                                 <buttonCell key="cell" type="check" title="Show hash rates on the dock icon" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6533">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -737,10 +736,10 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4212">
-                                <rect key="frame" x="179" y="28" width="122" height="19"/>
+                                <rect key="frame" x="179" y="10" width="122" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="122" id="YrY-kY-gHS"/>
+                                    <constraint firstAttribute="width" constant="122" id="gN9-XW-UPd"/>
                                 </constraints>
                                 <buttonCell key="cell" type="roundRect" title="Run pool config" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4213">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -753,10 +752,19 @@
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6345">
                                 <rect key="frame" x="97" y="73" width="199" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="195" id="tcW-k8-aFm"/>
-                                </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Set max log length in characters" id="6346">
+                                    <font key="font" size="15" name="GillSans"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fVg-5y-xA9">
+                                <rect key="frame" x="25" y="50" width="199" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="195" id="zIf-tG-KZO"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="When MacMiner opens, start:" id="LNr-uh-kos">
                                     <font key="font" size="15" name="GillSans"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -765,9 +773,6 @@
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6349">
                                 <rect key="frame" x="316" y="72" width="96" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="96" id="4VA-w0-PTL"/>
-                                </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" placeholderString="5000" usesSingleLineMode="YES" bezelStyle="round" id="6350">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -778,11 +783,44 @@
                                     <outlet property="delegate" destination="1289" id="6386"/>
                                 </connections>
                             </textField>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="e8J-ik-Pp2">
+                                <rect key="frame" x="210" y="31" width="100" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="14" id="EYy-7h-yAz"/>
+                                </constraints>
+                                <buttonCell key="cell" type="check" title="CG Miner" bezelStyle="regularSquare" imagePosition="left" inset="2" id="U5V-bj-Pdg">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Y57-eR-Ckd">
+                                <rect key="frame" x="300" y="30" width="100" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="CPU Miner" bezelStyle="regularSquare" imagePosition="left" inset="2" id="aKK-Cy-tzl">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="6362">
+                                <rect key="frame" x="97" y="100" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="16" id="dci-eb-0VD"/>
+                                </constraints>
+                                <buttonCell key="cell" type="check" title="Auto-scroll to the end of the log" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="6363">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" size="14" name="GillSans"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="scrollLogOption:" target="1289" id="6541"/>
+                                </connections>
+                            </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="UpD-8o-vmp">
                                 <rect key="frame" x="97" y="159" width="174" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="14" id="ruo-qF-QDR"/>
+                                    <constraint firstAttribute="height" constant="14" id="YWc-pA-lJc"/>
                                 </constraints>
                                 <buttonCell key="cell" type="check" title="Enable spoken warnings" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bxS-as-83u">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -792,39 +830,85 @@
                                     <action selector="speechOption:" target="1289" id="ZlU-G8-cyL"/>
                                 </connections>
                             </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Dd6-B5-tYx">
+                                <rect key="frame" x="210" y="50" width="100" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="sBd-yw-uap"/>
+                                </constraints>
+                                <buttonCell key="cell" type="check" title="FPGA/ASIC" bezelStyle="regularSquare" imagePosition="left" inset="2" id="gMw-lX-vrf">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Ebk-Z0-zG2">
+                                <rect key="frame" x="300" y="50" width="100" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="8qY-Qq-Ecz"/>
+                                </constraints>
+                                <buttonCell key="cell" type="check" title="BFG Miner" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5qX-Rr-VEK">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fF7-VK-7pS">
+                                <rect key="frame" x="397" y="1" width="82" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cte-iC-GqG">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="preferenceToggle:" target="1289" id="KYA-kO-U8b"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="6532" firstAttribute="top" secondItem="UpD-8o-vmp" secondAttribute="bottom" constant="16" id="0vS-Uu-leV"/>
-                            <constraint firstItem="6362" firstAttribute="top" secondItem="6532" secondAttribute="bottom" constant="11" id="1jW-N4-7wo"/>
-                            <constraint firstItem="UpD-8o-vmp" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" constant="99" id="2se-Vh-vML"/>
-                            <constraint firstAttribute="bottom" secondItem="6349" secondAttribute="bottom" constant="72" id="3Da-G4-O89"/>
-                            <constraint firstItem="2731" firstAttribute="centerY" secondItem="9rM-FR-L8h" secondAttribute="centerY" id="FSx-Wj-Lm3"/>
-                            <constraint firstItem="6345" firstAttribute="top" secondItem="6362" secondAttribute="bottom" constant="8" symbolic="YES" id="GfY-BM-hB3"/>
-                            <constraint firstItem="6532" firstAttribute="leading" secondItem="UpD-8o-vmp" secondAttribute="leading" id="HIZ-Wb-Khg"/>
-                            <constraint firstItem="2731" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" constant="-3" id="MJl-Uh-Qm6"/>
-                            <constraint firstAttribute="trailing" secondItem="6532" secondAttribute="trailing" constant="46" id="NI7-gG-0ar"/>
-                            <constraint firstItem="2731" firstAttribute="top" secondItem="9rM-FR-L8h" secondAttribute="top" constant="-44" id="Oza-SU-ir4"/>
-                            <constraint firstItem="4212" firstAttribute="centerX" secondItem="9rM-FR-L8h" secondAttribute="centerX" id="Ro6-xg-E4D"/>
-                            <constraint firstItem="6349" firstAttribute="leading" secondItem="6345" secondAttribute="trailing" constant="22" id="brV-YV-EAT"/>
-                            <constraint firstItem="4212" firstAttribute="top" secondItem="6345" secondAttribute="bottom" constant="26" id="iup-Rr-D2s"/>
-                            <constraint firstItem="2731" firstAttribute="centerX" secondItem="4212" secondAttribute="centerX" id="m17-wP-EDH"/>
-                            <constraint firstItem="6345" firstAttribute="leading" secondItem="6362" secondAttribute="leading" id="nYP-fs-siq"/>
-                            <constraint firstItem="UpD-8o-vmp" firstAttribute="top" secondItem="9rM-FR-L8h" secondAttribute="top" constant="13" id="py1-GF-280"/>
-                            <constraint firstItem="6345" firstAttribute="centerY" secondItem="6349" secondAttribute="centerY" id="r3y-ru-Xix"/>
-                            <constraint firstItem="6362" firstAttribute="leading" secondItem="6532" secondAttribute="leading" id="rte-fz-UgG"/>
-                            <constraint firstAttribute="trailing" secondItem="6349" secondAttribute="trailing" constant="68" id="tJ9-Bt-yq1"/>
-                            <constraint firstItem="6532" firstAttribute="trailing" secondItem="6362" secondAttribute="trailing" id="ths-Do-1Tv"/>
+                            <constraint firstItem="2731" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" constant="-3" id="8d4-TR-JcM"/>
+                            <constraint firstItem="4212" firstAttribute="top" secondItem="e8J-ik-Pp2" secondAttribute="bottom" constant="4" id="9nO-iY-vnb"/>
+                            <constraint firstItem="2731" firstAttribute="top" secondItem="9rM-FR-L8h" secondAttribute="top" constant="-44" id="CHO-u5-IYm"/>
+                            <constraint firstItem="fVg-5y-xA9" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" constant="27" id="CmZ-JN-hQc"/>
+                            <constraint firstAttribute="trailing" secondItem="6349" secondAttribute="trailing" constant="68" id="DAG-So-QeM"/>
+                            <constraint firstAttribute="trailing" secondItem="Ebk-Z0-zG2" secondAttribute="trailing" constant="82" id="Dcg-GF-ttt"/>
+                            <constraint firstItem="Dd6-B5-tYx" firstAttribute="trailing" secondItem="e8J-ik-Pp2" secondAttribute="trailing" id="DhC-SA-q4r"/>
+                            <constraint firstItem="6362" firstAttribute="leading" secondItem="6345" secondAttribute="leading" id="G30-IR-qcc"/>
+                            <constraint firstItem="2731" firstAttribute="centerX" secondItem="4212" secondAttribute="centerX" id="GQg-3M-DcW"/>
+                            <constraint firstItem="6532" firstAttribute="leading" secondItem="6362" secondAttribute="leading" id="Off-gG-S97"/>
+                            <constraint firstAttribute="trailing" secondItem="6532" secondAttribute="trailing" constant="46" id="RUT-qX-Cgt"/>
+                            <constraint firstItem="6362" firstAttribute="trailing" secondItem="6532" secondAttribute="trailing" id="X8W-4d-Nwm"/>
+                            <constraint firstItem="e8J-ik-Pp2" firstAttribute="top" secondItem="Ebk-Z0-zG2" secondAttribute="bottom" constant="5" id="YtA-oO-gYY"/>
+                            <constraint firstItem="e8J-ik-Pp2" firstAttribute="leading" secondItem="Dd6-B5-tYx" secondAttribute="leading" id="a84-4g-Aga"/>
+                            <constraint firstItem="e8J-ik-Pp2" firstAttribute="top" secondItem="fVg-5y-xA9" secondAttribute="bottom" constant="3" id="aJA-Gz-E7b"/>
+                            <constraint firstItem="Dd6-B5-tYx" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" constant="212" id="aJb-mf-WYW"/>
+                            <constraint firstItem="Y57-eR-Ckd" firstAttribute="top" secondItem="Ebk-Z0-zG2" secondAttribute="bottom" constant="6" symbolic="YES" id="bxN-Wo-uqN"/>
+                            <constraint firstItem="Dd6-B5-tYx" firstAttribute="baseline" secondItem="Ebk-Z0-zG2" secondAttribute="baseline" id="ckf-XO-21Y"/>
+                            <constraint firstItem="4212" firstAttribute="centerX" secondItem="9rM-FR-L8h" secondAttribute="centerX" id="d75-eE-mM1"/>
+                            <constraint firstItem="2731" firstAttribute="centerY" secondItem="9rM-FR-L8h" secondAttribute="centerY" id="dMf-51-IOd"/>
+                            <constraint firstItem="Ebk-Z0-zG2" firstAttribute="leading" secondItem="Y57-eR-Ckd" secondAttribute="leading" id="f0u-iE-Xh8"/>
+                            <constraint firstItem="Y57-eR-Ckd" firstAttribute="trailing" secondItem="Ebk-Z0-zG2" secondAttribute="trailing" id="g9o-Qa-lxA"/>
+                            <constraint firstItem="Ebk-Z0-zG2" firstAttribute="leading" secondItem="fVg-5y-xA9" secondAttribute="trailing" constant="80" id="hRj-yu-TAh"/>
+                            <constraint firstItem="6345" firstAttribute="top" secondItem="6362" secondAttribute="bottom" constant="8" symbolic="YES" id="hgz-81-Lt0"/>
+                            <constraint firstAttribute="bottom" secondItem="4212" secondAttribute="bottom" constant="11" id="l6X-tX-Msj"/>
+                            <constraint firstItem="6349" firstAttribute="top" secondItem="6362" secondAttribute="bottom" constant="8" symbolic="YES" id="oxS-ga-6vT"/>
+                            <constraint firstItem="UpD-8o-vmp" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" constant="99" id="pqi-4o-fzO"/>
+                            <constraint firstItem="6362" firstAttribute="top" secondItem="6532" secondAttribute="bottom" constant="11" id="pu9-jy-BII"/>
+                            <constraint firstItem="6349" firstAttribute="leading" secondItem="6345" secondAttribute="trailing" constant="22" id="qhy-IK-EKG"/>
+                            <constraint firstItem="6532" firstAttribute="top" secondItem="UpD-8o-vmp" secondAttribute="bottom" constant="16" id="rIU-iK-IZw"/>
+                            <constraint firstItem="UpD-8o-vmp" firstAttribute="top" secondItem="9rM-FR-L8h" secondAttribute="top" constant="13" id="vJL-dA-KnB"/>
+                            <constraint firstItem="6532" firstAttribute="leading" secondItem="UpD-8o-vmp" secondAttribute="leading" id="wUK-Lv-Q3f"/>
+                            <constraint firstItem="fVg-5y-xA9" firstAttribute="top" secondItem="6345" secondAttribute="bottom" constant="2" id="xDE-OA-ydj"/>
                         </constraints>
                     </customView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="k5w-uP-Dhh" firstAttribute="top" secondItem="1283" secondAttribute="top" id="4FD-Fi-V4K"/>
-                    <constraint firstItem="9rM-FR-L8h" firstAttribute="centerY" secondItem="1283" secondAttribute="centerY" id="HSJ-oc-TuI"/>
-                    <constraint firstItem="k5w-uP-Dhh" firstAttribute="leading" secondItem="9rM-FR-L8h" secondAttribute="leading" id="IZJ-d9-PMk"/>
-                    <constraint firstItem="k5w-uP-Dhh" firstAttribute="leading" secondItem="1283" secondAttribute="leading" id="gzv-AY-Ykn"/>
-                    <constraint firstItem="9rM-FR-L8h" firstAttribute="trailing" secondItem="k5w-uP-Dhh" secondAttribute="trailing" id="jDt-S4-dHd"/>
-                    <constraint firstItem="9rM-FR-L8h" firstAttribute="bottom" secondItem="k5w-uP-Dhh" secondAttribute="bottom" id="jjP-9d-Xst"/>
-                    <constraint firstItem="9rM-FR-L8h" firstAttribute="top" secondItem="1283" secondAttribute="top" constant="-1" id="vHM-93-yhk"/>
+                    <constraint firstItem="9rM-FR-L8h" firstAttribute="leading" secondItem="k5w-uP-Dhh" secondAttribute="leading" id="0O6-bX-vrh"/>
+                    <constraint firstItem="k5w-uP-Dhh" firstAttribute="leading" secondItem="1283" secondAttribute="leading" id="0Og-ju-hNm"/>
+                    <constraint firstItem="k5w-uP-Dhh" firstAttribute="top" secondItem="1283" secondAttribute="top" id="B1f-c8-Ibh"/>
+                    <constraint firstItem="9rM-FR-L8h" firstAttribute="centerY" secondItem="1283" secondAttribute="centerY" id="KPX-pe-Ntd"/>
+                    <constraint firstItem="9rM-FR-L8h" firstAttribute="bottom" secondItem="k5w-uP-Dhh" secondAttribute="bottom" id="Sms-bk-6BX"/>
+                    <constraint firstItem="9rM-FR-L8h" firstAttribute="trailing" secondItem="k5w-uP-Dhh" secondAttribute="trailing" id="j6L-aC-dtE"/>
+                    <constraint firstItem="9rM-FR-L8h" firstAttribute="top" secondItem="1283" secondAttribute="top" constant="-1" id="kz3-Gf-HAU"/>
                 </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="1172536E-FEF4-4163-A719-ECD26F719F14" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="jmY-xK-rfM">
@@ -852,7 +936,7 @@
                 <outlet property="delegate" destination="1289" id="1293"/>
             </connections>
         </window>
-        <window title="BFG Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="1296">
+        <window title="BFG Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" frameAutosaveName="bfgminer" animationBehavior="default" id="1296">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="983" y="484" width="531" height="300"/>
@@ -1008,7 +1092,7 @@
                 <outlet property="delegate" destination="1300" id="1305"/>
             </connections>
         </window>
-        <window title="CPUMiner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="1298">
+        <window title="CPUMiner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="cpuminer" animationBehavior="default" id="1298">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -1165,7 +1249,7 @@
             </connections>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="1674"/>
-        <window title="FPGA/ASIC Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="1702">
+        <window title="FPGA/ASIC Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="faminer" animationBehavior="default" id="1702">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -1183,7 +1267,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textView importsGraphics="NO" horizontallyResizable="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" spellingCorrection="YES" smartInsertDelete="YES" id="1770">
-                                    <rect key="frame" x="0.0" y="0.0" width="489" height="257"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="504" height="257"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <size key="minSize" width="504" height="257"/>
@@ -2611,7 +2695,7 @@ Gw
                 <outlet property="delegate" destination="1301" id="5017"/>
             </connections>
         </window>
-        <window title="FPGA/ASIC Miner Options" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="5317" customClass="NSPanel">
+        <window title="FPGA/ASIC Miner Options" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="faoptions" animationBehavior="default" id="5317" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" HUD="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="964" y="807" width="659" height="127"/>
@@ -2973,7 +3057,7 @@ Gw
                 <outlet property="delegate" destination="1300" id="5476"/>
             </connections>
         </window>
-        <window title="CG Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="5611">
+        <window title="CG Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="cgminer" animationBehavior="default" id="5611">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="983" y="484" width="511" height="300"/>
@@ -3379,7 +3463,7 @@ Gw
                 <constraint firstItem="7583" firstAttribute="centerX" secondItem="6402" secondAttribute="centerX" id="7589"/>
             </constraints>
         </customView>
-        <window title="API Output" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="7609">
+        <window title="API Output" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="apioutput" animationBehavior="default" id="7609">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" unifiedTitleAndToolbar="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -3389,7 +3473,7 @@ Gw
                 <rect key="frame" x="0.0" y="0.0" width="512" height="579"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <splitView dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="X0h-El-gRW">
+                    <splitView autosaveName="apiSplit" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="X0h-El-gRW">
                         <rect key="frame" x="0.0" y="0.0" width="512" height="579"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
@@ -3712,7 +3796,7 @@ Gw
                 <outlet property="delegate" destination="1778" id="x1P-f4-jIT"/>
             </connections>
         </window>
-        <window title="Release Notes" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" animationBehavior="default" id="dsb-6a-Awg" customClass="NSPanel">
+        <window title="Release Notes" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="rnotes" animationBehavior="default" id="dsb-6a-Awg" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="0.0" y="1109" width="889" height="309"/>
@@ -3768,7 +3852,7 @@ Gw
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="aDe-h0-5Bx">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <string key="title">Special thanks to Scott Holben
-for his help with this version</string>
+for his help with C/C++ code</string>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
                         </textFieldCell>
@@ -3776,7 +3860,7 @@ for his help with this version</string>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n38-s2-Rsv">
                         <rect key="frame" x="18" y="185" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="cgminer is now version 3.10 and bfgminer the latest dirty 3.9 from github" id="L5p-t5-ZPU">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="The included bfgminer and cgminer at both at version 3.10" id="L5p-t5-ZPU">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -3785,7 +3869,7 @@ for his help with this version</string>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4DR-ia-bxb">
                         <rect key="frame" x="18" y="152" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="API Output now supports monitoring multiple IP miners" id="Mqr-V6-JNI">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="New auto-start buttons in Preferences" id="Mqr-V6-JNI">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -3794,7 +3878,7 @@ for his help with this version</string>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P25-Nh-rmV">
                         <rect key="frame" x="18" y="122" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Updates are no longer automatic - please check manually" id="B4g-B5-TYT">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Updates are no longer automatic - please check macminer.net" id="B4g-B5-TYT">
                             <font key="font" size="18" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -3842,7 +3926,7 @@ for his help with this version</string>
                 </subviews>
             </view>
         </window>
-        <window title="Add a Networked Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="GUm-SE-J6v">
+        <window title="Add a Networked Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="addminer" animationBehavior="default" id="GUm-SE-J6v">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="516" height="44"/>

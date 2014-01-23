@@ -19,12 +19,14 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
-
+    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
     
     self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
+
+    
     
     prefs = nil;
     return self;
@@ -39,12 +41,78 @@
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
+        
         [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
         
         [prefs synchronize];
         
         prefs = nil;
 
+        if (self.fpgaAsicButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startAsic"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.fpgaAsicButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startAsic"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.bfgButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startBfg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.bfgButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startBfg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cgButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startCg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cgButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startCg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cpuButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startCpu"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cpuButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startCpu"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        
         if (self.dockButton.state == NSOffState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
@@ -127,6 +195,33 @@
         if ([[prefs objectForKey:@"showDockReading"] isEqual: @"hide"]) {
             self.dockButton.state = NSOffState;
         }
+        
+        
+        if ([[prefs objectForKey:@"startAsic"] isEqualToString:@"start"]) {
+            self.fpgaAsicButton.state = NSOnState;
+        }
+        else {
+            self.fpgaAsicButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
+            self.bfgButton.state = NSOnState;
+        }
+        else {
+            self.bfgButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"startCg"] isEqualToString:@"start"]) {
+            self.cgButton.state = NSOnState;
+        }
+        else {
+            self.cgButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
+            self.cpuButton.state = NSOnState;
+        }
+        else {
+            self.cpuButton.state = NSOffState;
+        }
+        
         
         self.emailAddress.stringValue = [prefs objectForKey:@"emailAddress"];
         self.appID.stringValue = [prefs objectForKey:@"appID"];
@@ -231,5 +326,6 @@
     [self.prefView setHidden:NO];
     [self.prefView2 setHidden:YES];
 }
+
 
 @end

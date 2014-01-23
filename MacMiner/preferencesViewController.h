@@ -24,6 +24,12 @@
 @property (nonatomic, weak) IBOutlet NSButton *scrollButton;
 @property (nonatomic, weak) IBOutlet NSButton *dockButton;
 @property (nonatomic, weak) IBOutlet NSButton *speechButton;
+@property (nonatomic, weak) IBOutlet NSButton *fpgaAsicButton;
+@property (nonatomic, weak) IBOutlet NSButton *bfgButton;
+@property (nonatomic, weak) IBOutlet NSButton *cgButton;
+@property (nonatomic, weak) IBOutlet NSButton *cpuButton;
+@property (nonatomic, weak) IBOutlet NSButton *commandButton;
+@property (nonatomic, weak) IBOutlet NSButton *httpButton;
 
 -(IBAction)preferenceToggle:(id)sender;
 

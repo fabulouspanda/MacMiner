@@ -35,7 +35,7 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"158"]) {
+    if ([hideVersion isEqualToString:@"1510"]) {
         [self.releaseNotes orderOut:nil];
     }
     
@@ -264,6 +264,8 @@
     NSString *appID = [prefs objectForKey:@"appID"];
     
     NSString *machineName = [[NSHost currentHost] localizedName];
+    machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
     if (machineName.length <= 1) {
         machineName = @"Mac";
     }
@@ -353,6 +355,8 @@
     NSString *appID = [prefs objectForKey:@"appID"];
     
     NSString *machineName = [[NSHost currentHost] localizedName];
+    machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
     if (machineName.length <= 1) {
         machineName = @"Mac";
     }
@@ -439,6 +443,8 @@
     NSString *appID = [prefs objectForKey:@"appID"];
     
     NSString *machineName = [[NSHost currentHost] localizedName];
+    machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
     if (machineName.length <= 1) {
         machineName = @"Mac";
     }
@@ -538,7 +544,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"158" forKey:@"hideVersion"];
+    [prefs setObject:@"1510" forKey:@"hideVersion"];
     
     [prefs synchronize];
     

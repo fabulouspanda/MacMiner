@@ -25,6 +25,8 @@
     NSTimer *toggleTimer;
     
     NSTimer *loopTimer;
+    
+        NSTimer *timerTimer;
  
     
     
