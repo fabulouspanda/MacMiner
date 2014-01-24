@@ -445,6 +445,9 @@
     NSString *machineName = [[NSHost currentHost] localizedName];
     machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+        machineName = [machineName stringByReplacingOccurrencesOfString:@"'" withString:@"_"];
+        machineName = [machineName stringByReplacingOccurrencesOfString:@"\"" withString:@"_"];
+        machineName = [machineName stringByReplacingOccurrencesOfString:@"’" withString:@"_"];
     if (machineName.length <= 1) {
         machineName = @"Mac";
     }

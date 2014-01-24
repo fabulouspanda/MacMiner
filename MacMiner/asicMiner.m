@@ -43,7 +43,9 @@
             
             [self.asicStartButton setTitle:@"Stop"];
             self.asicStartButton.tag = 0;
-            self.asicAPIOutput.string = @"";
+//            self.asicAPIOutput.string = @"";
+//            [self.asicAPIOutput delete:nil];
+            
             
             
             // If the task is still sitting around from the last run, release it
@@ -224,7 +226,10 @@ self.megaHashLabel.stringValue = @"0";
     {
         [self.asicStartButton setTitle:@"Stop"];
                 self.asicStartButton.tag = 0;
-        self.asicAPIOutput.string = @"";
+
+    //            self.asicAPIOutput.string = @"";
+        [self.asicAPIOutput delete:nil];
+
 
         
         // If the task is still sitting around from the last run, release it
@@ -334,6 +339,7 @@ self.megaHashLabel.stringValue = @"0";
 {
 //    NSLog(@"Loop1");
     
+
     NSString *apiOutputString = self.asicAPIOutput.string;
     
        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
@@ -370,7 +376,9 @@ self.megaHashLabel.stringValue = @"0";
             appDelegate.mobileMinerStatus = @"NONE";
             [self.asicStartButton setTitle:@"Stop"];
             self.asicStartButton.tag = 0;
-            self.asicAPIOutput.string = @"";
+
+//            self.asicAPIOutput.string = @"";
+            [self.asicAPIOutput delete:nil];
             
             
             // If the task is still sitting around from the last run, release it
@@ -913,8 +921,11 @@ self.megaHashLabel.stringValue = @"0";
         
         if([output hasPrefix:@"R"] && [output hasSuffix:@")"]) {
 
-
-                    self.asicAPIOutput.string = output;
+//            self.asicAPIOutput.string = @"";
+            
+            [self.asicAPIOutput delete:nil];
+            
+            self.asicAPIOutput.string = output;
 
         }
         
