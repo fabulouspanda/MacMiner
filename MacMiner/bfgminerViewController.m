@@ -627,262 +627,6 @@
         self.bfgStatLabel.tag = 0;
             self.speedRead.tag = 0;
     bfgTask=nil;
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    [prefs synchronize];
-    
-    if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
-        [self.bfgStartButton setTitle:@"Stop"];
-        // If the task is still sitting around from the last run, release it
-        if (bfgTask!=nil) {
-            bfgTask = nil;
-        }
-        
-        
-        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        appDelegate.bfgReading.stringValue = @"";
-        [appDelegate.bfgReadBack setHidden:NO];
-        [appDelegate.bfgReading setHidden:NO];
-        
-        
-        [[NSApp dockTile] display];
-        
-        
-        // Let's allocate memory for and initialize a new TaskWrapper object, passing
-        // in ourselves as the controller for this TaskWrapper object, the path
-        // to the command-line tool, and the contents of the text field that
-        // displays what the user wants to search on
-        
-        //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        
-        
-        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-        
-        NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
-        
-        
-        
-        [self.bfgOutputView setString:@""];
-        NSString *startingText = @"Starting…";
-        self.bfgStatLabel.stringValue = startingText;
-        startingText = nil;
-        
-        
-        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
-        
-
-        
-        self.intensityValue = [prefs stringForKey:@"intenseValue"];
-        self.worksizeValue = [prefs stringForKey:@"worksizeValue"];
-        self.vectorValue = [prefs stringForKey:@"vectorValue"];
-        self.noGPU = [prefs stringForKey:@"disableGPU"];
-        self.onScrypt = [prefs stringForKey:@"useScrypt"];
-        self.debugOutputOn = [prefs stringForKey:@"debugOutput"];
-        self.quietOutputOn = [prefs stringForKey:@"quietOutput"];
-        self.bonusOptions = [prefs stringForKey:@"bfgOptionsValue"];
-        self.threadConc = [prefs stringForKey:@"bfgThreadConc"];
-        self.shaders = [prefs stringForKey:@"bfgShaders"];
-        self.lookupGap = [prefs stringForKey:@"bfgLookupGap"];
-        NSString *cpuThreads = [prefs stringForKey:@"bfgCpuThreads"];
-        
-        
-        [launchArray addObject:@"-T"];
-        
-        if ([self.intensityValue isNotEqualTo:nil]) {
-            [launchArray addObject:@"-I"];
-            [launchArray addObject:self.intensityValue];
-        }
-        if ([self.worksizeValue isNotEqualTo:nil]) {
-            [launchArray addObject:@"-w"];
-            [launchArray addObject:self.worksizeValue];
-        }
-        if ([self.vectorValue isNotEqualTo:nil]) {
-            [launchArray addObject:@"-v"];
-            [launchArray addObject:self.vectorValue];
-        }
-        if (self.noGPU.length >= 1) {
-            [launchArray addObject:@"-S"];
-            [launchArray addObject:@"opencl:auto"];
-        }
-        if ([self.onScrypt isNotEqualTo:nil]) {
-            [launchArray addObject:self.onScrypt];
-        }
-        if ([self.debugOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:self.debugOutputOn];
-        }
-        if ([self.quietOutputOn isNotEqualTo:nil]) {
-            [launchArray addObject:self.quietOutputOn];
-        }
-        if (self.threadConc.length >= 1) {
-            [launchArray addObject:@"--thread-concurrency"];
-            [launchArray addObject:self.threadConc];
-        }
-        if (self.shaders.length >= 1) {
-            [launchArray addObject:@"--shaders"];
-            [launchArray addObject:self.shaders];
-        }
-        if (self.lookupGap.length >= 1) {
-            [launchArray addObject:@"--lookup-gap"];
-            [launchArray addObject:self.lookupGap];
-        }
-        if (cpuThreads.length >= 1) {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:cpuThreads];
-        }
-        else {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:@"0"];
-        }
-        
-        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        self.userpath = [self.paths objectAtIndex:0];
-        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
-        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
-        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
-        self.userpath = nil;
-        self.userpath2 = nil;
-        self.paths = nil;
-        self.executableName = nil;
-        
-        [launchArray addObject:@"-c"];
-        [launchArray addObject:self.saveBTCConfigFilePath];
-        
-        if ([self.onScrypt isEqualTo:@"--scrypt"]) {
-            [launchArray removeLastObject];
-            [launchArray addObject:self.saveLTCConfigFilePath];
-        }
-        
-        if ([self.bonusOptions isNotEqualTo:nil]) {
-            NSArray *bonusStuff = [self.bonusOptions componentsSeparatedByString:@" "];
-            if (bonusStuff.count >= 2) {
-                [launchArray addObjectsFromArray:bonusStuff];
-                bonusStuff = nil;
-            }
-        }
-        
-        //        NSString *testString = [launchArray componentsJoinedByString:@" "];
-        //        NSLog(testString);
-        
-        bfgTask=[[TaskWrapper alloc] initWithCommandPath:bfgPath
-                                               arguments:launchArray
-                                             environment:nil
-                                                delegate:self];
-        
-        // kick off the process asynchronously
-        [bfgTask startTask];
-        
-        NSString *logItString = [launchArray componentsJoinedByString:@"_"];
-        appDelegate.bfgSettingText.stringValue = logItString;
-        appDelegate = nil;
-        
-        self.lookupGap = nil;
-        self.shaders = nil;
-        self.threadConc = nil;
-        
-        
-        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveBTCConfigFilePath];
-        if (fileExists) {
-            NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            
-            
-            if ([self.onScrypt length] <= 1) {
-                NSString *numberString = [self getDataBetweenFromString:btcConfig
-                                                             leftString:@"url" rightString:@"," leftOffset:8];
-                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                numberString = nil;
-                NSString *acceptString = [self getDataBetweenFromString:btcConfig
-                                                             leftString:@"user" rightString:@"," leftOffset:9];
-                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                acceptString = nil;
-                
-                
-                NSAlert *startAlert = [[NSAlert alloc] init];
-                [startAlert addButtonWithTitle:@"Indeed"];
-                
-                [startAlert setMessageText:@"bfgminer has started"];
-                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
-                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
-                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
-                [startAlert setInformativeText:infoText3];
-                
-                infoText3 = nil;
-                infoText2 = nil;
-                infoText = nil;
-                
-                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
-                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
-                [startAlert setAlertStyle:NSWarningAlertStyle];
-                //        returnCode: (NSInteger)returnCode
-                
-                [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-            }
-            
-            //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
-            if ([self.onScrypt isEqualTo:@"--scrypt"]) {
-                NSString *numberString = [self getDataBetweenFromString:ltcConfig
-                                                             leftString:@"url" rightString:@"," leftOffset:8];
-                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                numberString = nil;
-                NSString *acceptString = [self getDataBetweenFromString:ltcConfig
-                                                             leftString:@"user" rightString:@"," leftOffset:9];
-                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                acceptString = nil;
-                
-                
-                NSAlert *startAlert = [[NSAlert alloc] init];
-                [startAlert addButtonWithTitle:@"Indeed"];
-                
-                [startAlert setMessageText:@"bfgminer has started"];
-                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
-                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
-                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
-                [startAlert setInformativeText:infoText3];
-                
-                infoText3 = nil;
-                infoText2 = nil;
-                infoText = nil;
-                ltcConfig = nil;
-                btcConfig = nil;
-                bfgURLValue = nil;
-                bfgUserValue = nil;
-                
-                
-                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
-                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
-                [startAlert setAlertStyle:NSWarningAlertStyle];
-                //        returnCode: (NSInteger)returnCode
-                
-                [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-                
-            }
-            
-            
-        }
-        
-        
-        
-        
-        
-        
-        launchArray = nil;
-        
-        self.intensityValue = nil;
-        self.worksizeValue = nil;
-        self.vectorValue = nil;
-        self.noGPU = nil;
-        self.onScrypt = nil;
-        self.debugOutputOn = nil;
-        self.quietOutputOn = nil;
-        self.bonusOptions = nil;
-
-        bfgPath = nil;
-        self.saveBTCConfigFilePath = nil;
-        self.saveLTCConfigFilePath = nil;
-    }
-    prefs = nil;
 }
 
 - (IBAction)bfgMinerToggle:(id)sender {
@@ -1182,6 +926,273 @@
     
     [configAlert beginSheetModalForWindow:self.bfgOptionsWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
     }
+    
+}
+
+-(void)awakeFromNib
+{
+    
+
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
+        
+                    [self.bfgWindow orderFront:nil];
+        
+        [self.bfgStartButton setTitle:@"Stop"];
+        // If the task is still sitting around from the last run, release it
+        if (bfgTask!=nil) {
+            bfgTask = nil;
+        }
+        
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.bfgReading.stringValue = @"";
+        [appDelegate.bfgReadBack setHidden:NO];
+        [appDelegate.bfgReading setHidden:NO];
+        
+        
+        [[NSApp dockTile] display];
+        
+        
+        // Let's allocate memory for and initialize a new TaskWrapper object, passing
+        // in ourselves as the controller for this TaskWrapper object, the path
+        // to the command-line tool, and the contents of the text field that
+        // displays what the user wants to search on
+        
+        //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        
+        
+        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
+        
+        NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        
+        
+        
+        [self.bfgOutputView setString:@""];
+        NSString *startingText = @"Starting…";
+        self.bfgStatLabel.stringValue = startingText;
+        startingText = nil;
+        
+        
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
+        
+        
+        
+        self.intensityValue = [prefs stringForKey:@"intenseValue"];
+        self.worksizeValue = [prefs stringForKey:@"worksizeValue"];
+        self.vectorValue = [prefs stringForKey:@"vectorValue"];
+        self.noGPU = [prefs stringForKey:@"disableGPU"];
+        self.onScrypt = [prefs stringForKey:@"useScrypt"];
+        self.debugOutputOn = [prefs stringForKey:@"debugOutput"];
+        self.quietOutputOn = [prefs stringForKey:@"quietOutput"];
+        self.bonusOptions = [prefs stringForKey:@"bfgOptionsValue"];
+        self.threadConc = [prefs stringForKey:@"bfgThreadConc"];
+        self.shaders = [prefs stringForKey:@"bfgShaders"];
+        self.lookupGap = [prefs stringForKey:@"bfgLookupGap"];
+        NSString *cpuThreads = [prefs stringForKey:@"bfgCpuThreads"];
+        
+        
+        [launchArray addObject:@"-T"];
+        
+        if ([self.intensityValue isNotEqualTo:nil]) {
+            [launchArray addObject:@"-I"];
+            [launchArray addObject:self.intensityValue];
+        }
+        if ([self.worksizeValue isNotEqualTo:nil]) {
+            [launchArray addObject:@"-w"];
+            [launchArray addObject:self.worksizeValue];
+        }
+        if ([self.vectorValue isNotEqualTo:nil]) {
+            [launchArray addObject:@"-v"];
+            [launchArray addObject:self.vectorValue];
+        }
+        if (self.noGPU.length >= 1) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
+        }
+        if ([self.onScrypt isNotEqualTo:nil]) {
+            [launchArray addObject:self.onScrypt];
+        }
+        if ([self.debugOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.debugOutputOn];
+        }
+        if ([self.quietOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.quietOutputOn];
+        }
+        if (self.threadConc.length >= 1) {
+            [launchArray addObject:@"--thread-concurrency"];
+            [launchArray addObject:self.threadConc];
+        }
+        if (self.shaders.length >= 1) {
+            [launchArray addObject:@"--shaders"];
+            [launchArray addObject:self.shaders];
+        }
+        if (self.lookupGap.length >= 1) {
+            [launchArray addObject:@"--lookup-gap"];
+            [launchArray addObject:self.lookupGap];
+        }
+        if (cpuThreads.length >= 1) {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:cpuThreads];
+        }
+        else {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:@"0"];
+        }
+        
+        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        self.userpath = [self.paths objectAtIndex:0];
+        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
+        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
+        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
+        self.userpath = nil;
+        self.userpath2 = nil;
+        self.paths = nil;
+        self.executableName = nil;
+        
+        [launchArray addObject:@"-c"];
+        [launchArray addObject:self.saveBTCConfigFilePath];
+        
+        if ([self.onScrypt isEqualTo:@"--scrypt"]) {
+            [launchArray removeLastObject];
+            [launchArray addObject:self.saveLTCConfigFilePath];
+        }
+        
+        if ([self.bonusOptions isNotEqualTo:nil]) {
+            NSArray *bonusStuff = [self.bonusOptions componentsSeparatedByString:@" "];
+            if (bonusStuff.count >= 2) {
+                [launchArray addObjectsFromArray:bonusStuff];
+                bonusStuff = nil;
+            }
+        }
+        
+        //        NSString *testString = [launchArray componentsJoinedByString:@" "];
+        //        NSLog(testString);
+        
+        bfgTask=[[TaskWrapper alloc] initWithCommandPath:bfgPath
+                                               arguments:launchArray
+                                             environment:nil
+                                                delegate:self];
+        
+        // kick off the process asynchronously
+        [bfgTask startTask];
+        
+        NSString *logItString = [launchArray componentsJoinedByString:@"_"];
+        appDelegate.bfgSettingText.stringValue = logItString;
+        appDelegate = nil;
+        
+        self.lookupGap = nil;
+        self.shaders = nil;
+        self.threadConc = nil;
+        
+        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveBTCConfigFilePath];
+        if (fileExists) {
+            NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            
+            if ([self.onScrypt length] <= 1) {
+                NSString *numberString = [self getDataBetweenFromString:btcConfig
+                                                             leftString:@"url" rightString:@"," leftOffset:8];
+                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                numberString = nil;
+                NSString *acceptString = [self getDataBetweenFromString:btcConfig
+                                                             leftString:@"user" rightString:@"," leftOffset:9];
+                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                acceptString = nil;
+                
+                
+                NSAlert *startAlert = [[NSAlert alloc] init];
+                [startAlert addButtonWithTitle:@"Indeed"];
+                
+                [startAlert setMessageText:@"bfgminer has started"];
+                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                [startAlert setInformativeText:infoText3];
+                
+                infoText3 = nil;
+                infoText2 = nil;
+                infoText = nil;
+                
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
+                [startAlert setAlertStyle:NSWarningAlertStyle];
+                //        returnCode: (NSInteger)returnCode
+                
+                [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            }
+            
+            //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
+            if ([self.onScrypt isEqualTo:@"--scrypt"]) {
+                NSString *numberString = [self getDataBetweenFromString:ltcConfig
+                                                             leftString:@"url" rightString:@"," leftOffset:8];
+                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                numberString = nil;
+                NSString *acceptString = [self getDataBetweenFromString:ltcConfig
+                                                             leftString:@"user" rightString:@"," leftOffset:9];
+                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                acceptString = nil;
+                
+                
+                NSAlert *startAlert = [[NSAlert alloc] init];
+                [startAlert addButtonWithTitle:@"Indeed"];
+                
+                [startAlert setMessageText:@"bfgminer has started"];
+                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                [startAlert setInformativeText:infoText3];
+                
+                infoText3 = nil;
+                infoText2 = nil;
+                infoText = nil;
+                ltcConfig = nil;
+                btcConfig = nil;
+                bfgURLValue = nil;
+                bfgUserValue = nil;
+                
+                
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
+                [startAlert setAlertStyle:NSWarningAlertStyle];
+                //        returnCode: (NSInteger)returnCode
+                
+                [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+                
+            }
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        launchArray = nil;
+        
+        self.intensityValue = nil;
+        self.worksizeValue = nil;
+        self.vectorValue = nil;
+        self.noGPU = nil;
+        self.onScrypt = nil;
+        self.debugOutputOn = nil;
+        self.quietOutputOn = nil;
+        self.bonusOptions = nil;
+        
+        bfgPath = nil;
+        self.saveBTCConfigFilePath = nil;
+        self.saveLTCConfigFilePath = nil;
+    }
+    prefs = nil;
+
     
 }
 

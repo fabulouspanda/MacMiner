@@ -29,166 +29,9 @@
         self.cpuStatLabel.delegate = self;
 
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
-        [prefs synchronize];
-        
-        if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
-            [self.cpuStartButton setTitle:@"Stop"];
-            // If the task is still sitting around from the last run, release it
-            if (cpuTask!=nil) {
-                cpuTask = nil;
-            }
-            
-            
-            
-            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            appDelegate.cpuReading.stringValue = @"";
-            [appDelegate.cpuReadBack setHidden:NO];
-            [appDelegate.cpuReading setHidden:NO];
-            
-            [[NSApp dockTile] display];
 
-            
-            
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
-            [prefs synchronize];
-            
-            
-            NSString *mainLTCPool = [prefs stringForKey:@"defaultLTCPoolValue"];
-            NSString *mainLTCUser = [prefs stringForKey:@"defaultLTCUser"];
-            NSString *mainLTCPass = [prefs stringForKey:@"defaultLTCPass"];
-            
-            
-            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-            NSString *userpath = [paths objectAtIndex:0];
-            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-            NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
-            
-            
-            NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *userFind = @"user";
-            if ([stringUser rangeOfString:userFind].location != NSNotFound) {
-                NSString *foundURLString = [self getDataBetweenFromString:stringUser
-                                                               leftString:@"url" rightString:@"," leftOffset:8];
-                NSString *URLClean = foundURLString;
-                mainLTCPool = [URLClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                NSString *foundUserString = [self getDataBetweenFromString:stringUser
-                                                                leftString:@"user" rightString:@"," leftOffset:8];
-                NSString *stepClean = foundUserString;
-                mainLTCUser = [stepClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                
-                NSString *foundPassString = [self getDataBetweenFromString:stringUser
-                                                                leftString:@"pass" rightString:@"\"" leftOffset:9];
-                NSString *passClean = foundPassString;
-                mainLTCPass = [passClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            }
-            
-            
-            
-            NSString *cpuThreadsV = [prefs stringForKey:@"cpuThreadsValue"];
-            //        NSString *cpuScryptV = [prefs stringForKey:@"cpuUseScryptValue"];
-            NSString *cpuQuietV = [prefs stringForKey:@"cpuQuietOutput"];
-            NSString *cpuDebugV = [prefs stringForKey:@"cpuDebugOutput"];
-            NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
-    
-            
-            NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
-            
-            if ([cpuThreadsV isNotEqualTo:@""]) {
-                [cpuLaunchArray addObject:@"-t"];
-                [cpuLaunchArray addObject:cpuThreadsV];
-            }
-            
-            [cpuLaunchArray addObject:@"-o"];
-            [cpuLaunchArray addObject:mainLTCPool];
-            [cpuLaunchArray addObject:@"-u"];
-            [cpuLaunchArray addObject:mainLTCUser];
-            [cpuLaunchArray addObject:@"-p"];
-            [cpuLaunchArray addObject:mainLTCPass];
-            
-            if ([cpuQuietV isNotEqualTo:nil]) {
-                [cpuLaunchArray addObject:@"-q"];
-            }
-            if ([cpuDebugV isNotEqualTo:nil]) {
-                [cpuLaunchArray addObject:@"-D"];
-            }
-            
-            
-            if ([cpuOptionsV isNotEqualTo:nil]) {
-                NSArray *cpuBonusStuff = [cpuOptionsV componentsSeparatedByString:@" "];
-                if (cpuBonusStuff.count >= 2) {
-                    [cpuLaunchArray addObjectsFromArray:cpuBonusStuff];
-                    cpuBonusStuff = nil;
-                }
-            }
-
-            
-            NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-            NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
-            
-            NSString *cpuPath2 = [cpuPath stringByAppendingString:@"/Resources/minerd"];
-            //        NSLog(cpuPath);
-            [self.cpuOutputView setString:@""];
-            NSString *startingText = @"Starting…";
-            self.cpuStatLabel.stringValue = startingText;
-
-            
-            cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath2
-                                                     arguments:cpuLaunchArray
-                                                   environment:nil
-                                                      delegate:self];
-
-            [cpuTask startTask];
-            
-            BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
-            if (fileExists) {
-                
-                NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-                
-                
-                
-                
-                NSString *numberString = [self getDataBetweenFromString:ltcConfig
-                                                             leftString:@"url" rightString:@"," leftOffset:8];
-                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                numberString = nil;
-                NSString *acceptString = [self getDataBetweenFromString:ltcConfig
-                                                             leftString:@"user" rightString:@"," leftOffset:9];
-                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                acceptString = nil;
-                
-                
-                NSAlert *startAlert = [[NSAlert alloc] init];
-                [startAlert addButtonWithTitle:@"Indeed"];
-                
-                [startAlert setMessageText:@"cpuminer has started"];
-                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
-                
-                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
-                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
-                [startAlert setInformativeText:infoText3];
-                infoText = nil;
-                infoText2 = nil;
-                infoText3 = nil;
-
-                
-                [startAlert setAlertStyle:NSWarningAlertStyle];
-                //        returnCode: (NSInteger)returnCode
-                
-                [startAlert beginSheetModalForWindow:self.cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-                
-            }
-            
-            
-            
-
-        }
-        
     }
-    
+
     
     
     return self;
@@ -619,6 +462,9 @@
 // control of the UI.
 -(void)awakeFromNib
 {
+    
+
+    
     findRunning=NO;
     cpuTask=nil;
     
@@ -627,7 +473,166 @@
     //    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     //    m = [[[XRGModule alloc] initWithName:@"Temperature" andReference:self] retain];
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
+    [prefs synchronize];
+    
+    if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
+        
+                        [self.cpuWindow orderFront:nil];
+        
+        [self.cpuStartButton setTitle:@"Stop"];
+        // If the task is still sitting around from the last run, release it
+        if (cpuTask!=nil) {
+            cpuTask = nil;
+        }
+        
+        
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = @"";
+        [appDelegate.cpuReadBack setHidden:NO];
+        [appDelegate.cpuReading setHidden:NO];
+        
+        [[NSApp dockTile] display];
+        
+        
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+        
+        
+        NSString *mainLTCPool = [prefs stringForKey:@"defaultLTCPoolValue"];
+        NSString *mainLTCUser = [prefs stringForKey:@"defaultLTCUser"];
+        NSString *mainLTCPass = [prefs stringForKey:@"defaultLTCPass"];
+        
+        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        
+        
+        NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+        NSString *userFind = @"user";
+        if ([stringUser rangeOfString:userFind].location != NSNotFound) {
+            NSString *foundURLString = [self getDataBetweenFromString:stringUser
+                                                           leftString:@"url" rightString:@"," leftOffset:8];
+            NSString *URLClean = foundURLString;
+            mainLTCPool = [URLClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            NSString *foundUserString = [self getDataBetweenFromString:stringUser
+                                                            leftString:@"user" rightString:@"," leftOffset:8];
+            NSString *stepClean = foundUserString;
+            mainLTCUser = [stepClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            
+            NSString *foundPassString = [self getDataBetweenFromString:stringUser
+                                                            leftString:@"pass" rightString:@"\"" leftOffset:9];
+            NSString *passClean = foundPassString;
+            mainLTCPass = [passClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        }
+        
+        
+        
+        NSString *cpuThreadsV = [prefs stringForKey:@"cpuThreadsValue"];
+        //        NSString *cpuScryptV = [prefs stringForKey:@"cpuUseScryptValue"];
+        NSString *cpuQuietV = [prefs stringForKey:@"cpuQuietOutput"];
+        NSString *cpuDebugV = [prefs stringForKey:@"cpuDebugOutput"];
+        NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
+        
+        
+        NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
+        
+        if ([cpuThreadsV isNotEqualTo:@""]) {
+            [cpuLaunchArray addObject:@"-t"];
+            [cpuLaunchArray addObject:cpuThreadsV];
+        }
+        
+        [cpuLaunchArray addObject:@"-o"];
+        [cpuLaunchArray addObject:mainLTCPool];
+        [cpuLaunchArray addObject:@"-u"];
+        [cpuLaunchArray addObject:mainLTCUser];
+        [cpuLaunchArray addObject:@"-p"];
+        [cpuLaunchArray addObject:mainLTCPass];
+        
+        if ([cpuQuietV isNotEqualTo:nil]) {
+            [cpuLaunchArray addObject:@"-q"];
+        }
+        if ([cpuDebugV isNotEqualTo:nil]) {
+            [cpuLaunchArray addObject:@"-D"];
+        }
+        
+        
+        if ([cpuOptionsV isNotEqualTo:nil]) {
+            NSArray *cpuBonusStuff = [cpuOptionsV componentsSeparatedByString:@" "];
+            if (cpuBonusStuff.count >= 2) {
+                [cpuLaunchArray addObjectsFromArray:cpuBonusStuff];
+                cpuBonusStuff = nil;
+            }
+        }
+        
+        
+        NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
+        NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
+        
+        NSString *cpuPath2 = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+        //        NSLog(cpuPath);
+        [self.cpuOutputView setString:@""];
+        NSString *startingText = @"Starting…";
+        self.cpuStatLabel.stringValue = startingText;
+        
+        
+        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath2
+                                                 arguments:cpuLaunchArray
+                                               environment:nil
+                                                  delegate:self];
+        
+        [cpuTask startTask];
+        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
+        if (fileExists) {
+            
+            NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            
+            
+            
+            NSString *numberString = [self getDataBetweenFromString:ltcConfig
+                                                         leftString:@"url" rightString:@"," leftOffset:8];
+            NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            numberString = nil;
+            NSString *acceptString = [self getDataBetweenFromString:ltcConfig
+                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            acceptString = nil;
+            
+            
+            NSAlert *startAlert = [[NSAlert alloc] init];
+            [startAlert addButtonWithTitle:@"Indeed"];
+            
+            [startAlert setMessageText:@"cpuminer has started"];
+            NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+            
+            NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+            NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+            [startAlert setInformativeText:infoText3];
+            infoText = nil;
+            infoText2 = nil;
+            infoText3 = nil;
+            
+            
+            [startAlert setAlertStyle:NSWarningAlertStyle];
+            //        returnCode: (NSInteger)returnCode
+            
+            [startAlert beginSheetModalForWindow:self.cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            
+        }
+        
+        
+        
+    }
+    prefs = nil;
 }
 
 - (IBAction)cpuMinerToggle:(id)sender {

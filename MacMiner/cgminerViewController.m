@@ -162,7 +162,7 @@
         [launchArray addObject:@"-T"];
         [launchArray addObject:@"--api-listen"];
         [launchArray addObject:@"--api-allow"];
-        [launchArray addObject:@"W:0/0"];
+        [launchArray addObject:@"R:0/0"];
         [launchArray addObject:@"--api-port"];
         [launchArray addObject:@"4048"];
         
@@ -504,173 +504,6 @@
     
     //    [[NSApp dockTile] setContentView:cgdockReading];
     //    [[NSApp dockTile] display];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    [prefs synchronize];
-    
-            if ([[prefs objectForKey:@"startCg"] isEqualToString:@"start"]) {
-                [self.cgStartButton setTitle:@"Stop"];
-                // If the task is still sitting around from the last run, release it
-                if (cgTask!=nil) {
-                    cgTask = nil;
-                }
-                
-                NSString *filePath = @"/System/Library/Extensions/IOUSBFamily.kext";
-                bool b=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
-                
-                NSString *filePath2 = @"/System/Library/Extensions/SiLabsUSBDriver64.kext";
-                bool c=[[NSFileManager defaultManager] fileExistsAtPath:filePath2];
-                
-                NSString *filePath3 = @"/System/Library/Extensions/FTDIUSBSerialDriver.kext";
-                bool d=[[NSFileManager defaultManager] fileExistsAtPath:filePath3];
-                
-                if (b == YES || c == YES || d == YES) {
-                    NSAlert *driverAlert = [[NSAlert alloc] init];
-                    [driverAlert addButtonWithTitle:@"Show Instructions"];
-                    [driverAlert addButtonWithTitle:@"Ignore problem drivers"];
-                    
-                    [driverAlert setMessageText:@"Driver problem detected"];
-                    NSString *infoText = @"cgminer conflicts with the native Mac OS 10.9 and other USB Serial drivers. Please click below to see instructions for disabling the default driver.";
-                    
-                    [driverAlert setInformativeText:infoText];
-                    
-                    
-                    [driverAlert setAlertStyle:NSWarningAlertStyle];
-                    //        returnCode: (NSInteger)returnCode
-                    int rCode = [driverAlert runModal];
-                    if (rCode == NSAlertFirstButtonReturn) {
-                        
-                        if (b == YES) {
-                            NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-                            NSString *urlPath = [bundlePath stringByAppendingString:@"/driverfiles/Instructions.rtf"];
-                            NSURL* url = [NSURL fileURLWithPath:urlPath isDirectory:YES];
-                            
-                            NSArray *fileURLs = [NSArray arrayWithObjects:url, nil];
-                            [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURLs];
-                        }
-                        
-                    }
-                    else {
-                        //                NSLog(@"Ignore");
-                    }
-                    
-                    //            [driverAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-                    
-                }
-                
-                
-                AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                appDelegate.cgReading.stringValue = @"";
-                [appDelegate.cgReadBack setHidden:NO];
-                [appDelegate.cgReading setHidden:NO];
-                
-                [[NSApp dockTile] display];
-                
-                NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-                
-                NSString *cgPath = [bundlePath2 stringByAppendingString:@"/cgminer/bin/cgminer"];
-                
-                
-                //            NSString *cgPath = @"/Applications/MacMiner.app/Contents/Resources/cgminer/bin/cgminer";
-                
-                //        NSLog(poclbmPath);
-                [self.cgOutputView setString:@""];
-                NSString *startingText = @"Starting…";
-                self.cgStatLabel.stringValue = startingText;
-                startingText = nil;
-                
-                
-                NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
-                
-
-                NSString *bonusOptions = [prefs stringForKey:@"cgOptionsValue"];
-                
-                
-                [launchArray addObject:@"-T"];
-                [launchArray addObject:@"--api-listen"];
-                [launchArray addObject:@"--api-allow"];
-                [launchArray addObject:@"W:0/0"];
-                [launchArray addObject:@"--api-port"];
-                [launchArray addObject:@"4048"];
-                
-                
-                NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-                NSString *userpath = [paths objectAtIndex:0];
-                userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-                NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-                //        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
-                
-                [launchArray addObject:@"-c"];
-                [launchArray addObject:saveBTCConfigFilePath];
-                
-                
-                if ([bonusOptions isNotEqualTo:nil]) {
-                    NSArray *bonusStuff = [bonusOptions componentsSeparatedByString:@" "];
-                    if (bonusStuff.count >= 2) {
-                        [launchArray addObjectsFromArray:bonusStuff];
-                        bonusStuff = nil;
-                    }
-                }
-                
-                
-                cgTask=[[TaskWrapper alloc] initWithCommandPath:cgPath
-                                                      arguments:launchArray
-                                                    environment:nil
-                                                       delegate:self];
-                
-                // kick off the process asynchronously
-                [cgTask startTask];
-                
-                
-                BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveBTCConfigFilePath];
-                if (fileExists) {
-                    NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-                    
-                    
-                    NSString *numberString = [self getDataBetweenFromString:btcConfig
-                                                                 leftString:@"url" rightString:@"," leftOffset:8];
-                    NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    numberString = nil;
-                    NSString *acceptString = [self getDataBetweenFromString:btcConfig
-                                                                 leftString:@"user" rightString:@"," leftOffset:9];
-                    NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                    acceptString = nil;
-                    
-                    
-                    NSAlert *startAlert = [[NSAlert alloc] init];
-                    [startAlert addButtonWithTitle:@"Indeed"];
-                    
-                    [startAlert setMessageText:@"cgminer has started"];
-                    NSString *infoText = @"The primary pool is set to ";
-                    infoText = [infoText stringByAppendingString:bfgURLValue];
-                    infoText = [infoText stringByAppendingString:@" and the user is set to "];
-                    infoText = [infoText stringByAppendingString:bfgUserValue];
-                    [startAlert setInformativeText:infoText];
-                    
-                    //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
-                    //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
-                    [startAlert setAlertStyle:NSWarningAlertStyle];
-                    //        returnCode: (NSInteger)returnCode
-                    
-                    [startAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-                    
-                    
-                    //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
-                    
-                }
-                
-                
-                
-                
-                launchArray = nil;
-                
-                bonusOptions = nil;
-                cgPath = nil;
-
-            }
-    
-    prefs = nil;
     
 }
 
@@ -863,6 +696,183 @@
 - (IBAction)cgDisplayHelp:(id)sender
 {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
+}
+
+-(void)awakeFromNib
+{
+    
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    if ([[prefs objectForKey:@"startCg"] isEqualToString:@"start"]) {
+        
+                        [self.cgWindow orderFront:nil];
+        
+        [self.cgStartButton setTitle:@"Stop"];
+        // If the task is still sitting around from the last run, release it
+        if (cgTask!=nil) {
+            cgTask = nil;
+        }
+        
+        NSString *filePath = @"/System/Library/Extensions/IOUSBFamily.kext";
+        bool b=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
+        
+        NSString *filePath2 = @"/System/Library/Extensions/SiLabsUSBDriver64.kext";
+        bool c=[[NSFileManager defaultManager] fileExistsAtPath:filePath2];
+        
+        NSString *filePath3 = @"/System/Library/Extensions/FTDIUSBSerialDriver.kext";
+        bool d=[[NSFileManager defaultManager] fileExistsAtPath:filePath3];
+        
+        if (b == YES || c == YES || d == YES) {
+            NSAlert *driverAlert = [[NSAlert alloc] init];
+            [driverAlert addButtonWithTitle:@"Show Instructions"];
+            [driverAlert addButtonWithTitle:@"Ignore problem drivers"];
+            
+            [driverAlert setMessageText:@"Driver problem detected"];
+            NSString *infoText = @"cgminer conflicts with the native Mac OS 10.9 and other USB Serial drivers. Please click below to see instructions for disabling the default driver.";
+            
+            [driverAlert setInformativeText:infoText];
+            
+            
+            [driverAlert setAlertStyle:NSWarningAlertStyle];
+            //        returnCode: (NSInteger)returnCode
+            int rCode = [driverAlert runModal];
+            if (rCode == NSAlertFirstButtonReturn) {
+                
+                if (b == YES) {
+                    NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
+                    NSString *urlPath = [bundlePath stringByAppendingString:@"/driverfiles/Instructions.rtf"];
+                    NSURL* url = [NSURL fileURLWithPath:urlPath isDirectory:YES];
+                    
+                    NSArray *fileURLs = [NSArray arrayWithObjects:url, nil];
+                    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURLs];
+                }
+                
+            }
+            else {
+                //                NSLog(@"Ignore");
+            }
+            
+            //            [driverAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            
+        }
+        
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cgReading.stringValue = @"";
+        [appDelegate.cgReadBack setHidden:NO];
+        [appDelegate.cgReading setHidden:NO];
+        
+        [[NSApp dockTile] display];
+        
+        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
+        
+        NSString *cgPath = [bundlePath2 stringByAppendingString:@"/cgminer/bin/cgminer"];
+        
+        
+        //            NSString *cgPath = @"/Applications/MacMiner.app/Contents/Resources/cgminer/bin/cgminer";
+        
+        //        NSLog(poclbmPath);
+        [self.cgOutputView setString:@""];
+        NSString *startingText = @"Starting…";
+        self.cgStatLabel.stringValue = startingText;
+        startingText = nil;
+        
+        
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
+        
+        
+        NSString *bonusOptions = [prefs stringForKey:@"cgOptionsValue"];
+        
+        
+        [launchArray addObject:@"-T"];
+        [launchArray addObject:@"--api-listen"];
+        [launchArray addObject:@"--api-allow"];
+        [launchArray addObject:@"R:0/0"];
+        [launchArray addObject:@"--api-port"];
+        [launchArray addObject:@"4048"];
+        
+        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        //        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        
+        [launchArray addObject:@"-c"];
+        [launchArray addObject:saveBTCConfigFilePath];
+        
+        
+        if ([bonusOptions isNotEqualTo:nil]) {
+            NSArray *bonusStuff = [bonusOptions componentsSeparatedByString:@" "];
+            if (bonusStuff.count >= 2) {
+                [launchArray addObjectsFromArray:bonusStuff];
+                bonusStuff = nil;
+            }
+        }
+        
+        
+        cgTask=[[TaskWrapper alloc] initWithCommandPath:cgPath
+                                              arguments:launchArray
+                                            environment:nil
+                                               delegate:self];
+        
+        // kick off the process asynchronously
+        [cgTask startTask];
+        
+        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveBTCConfigFilePath];
+        if (fileExists) {
+            NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            
+            NSString *numberString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"url" rightString:@"," leftOffset:8];
+            NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            numberString = nil;
+            NSString *acceptString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            acceptString = nil;
+            
+            
+            NSAlert *startAlert = [[NSAlert alloc] init];
+            [startAlert addButtonWithTitle:@"Indeed"];
+            
+            [startAlert setMessageText:@"cgminer has started"];
+            NSString *infoText = @"The primary pool is set to ";
+            infoText = [infoText stringByAppendingString:bfgURLValue];
+            infoText = [infoText stringByAppendingString:@" and the user is set to "];
+            infoText = [infoText stringByAppendingString:bfgUserValue];
+            [startAlert setInformativeText:infoText];
+            
+            //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+            //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
+            [startAlert setAlertStyle:NSWarningAlertStyle];
+            //        returnCode: (NSInteger)returnCode
+            
+            [startAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            
+            
+            //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
+            
+        }
+        
+        
+        
+        
+        launchArray = nil;
+        
+        bonusOptions = nil;
+        cgPath = nil;
+        
+    }
+    
+    prefs = nil;
+
 }
 
 

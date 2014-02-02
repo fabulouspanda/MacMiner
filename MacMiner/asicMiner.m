@@ -23,9 +23,12 @@
         //            NSLog(@"startup");
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
+        self.asicAPIOutput.delegate = self;
+        
+        
         self.acceptLabel.tag = 1;
         
-                                            self.apiDataArray = [[NSMutableArray alloc] init];
+        self.apiDataArray = [[NSMutableArray alloc] init];
 
         [self startToggling];
         
@@ -38,115 +41,6 @@
         self.minerAddressesArray = [[NSMutableArray alloc] init];
 //        self.minerAddressesArray = [self.prefs objectForKey:@"ipAddress"];
         
-        if ([[self.prefs objectForKey:@"startAsic"] isEqualToString:@"start"]) {
-
-            
-            [self.asicStartButton setTitle:@"Stop"];
-            self.asicStartButton.tag = 0;
-//            self.asicAPIOutput.string = @"";
-//            [self.asicAPIOutput delete:nil];
-            
-            
-            
-            // If the task is still sitting around from the last run, release it
-            if (asicTask!=nil) {
-                asicTask = nil;
-            }
-            
-            
-            
-            
-            
-
-            
-            self.noGPU = [self.prefs stringForKey:@"disableASICGPU"];
-            self.debugOutputOn = [self.prefs stringForKey:@"debugASICOutput"];
-            self.quietOutputOn = [self.prefs stringForKey:@"quietASICOutput"];
-            self.bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
-            NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
-            
-            
-            
-            NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
-            if ([self.bonusOptions isNotEqualTo:@""]) {
-                NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
-                
-                [launchArray addObjectsFromArray:deviceItems];
-            }
-            
-            if ([cpuThreads isNotEqualTo:nil]) {
-                [launchArray addObject:@"-t"];
-                [launchArray addObject:cpuThreads];
-            }
-            else {
-                [launchArray addObject:@"-t"];
-                [launchArray addObject:@"0"];
-            }
-            
-            if ([self.debugOutputOn isNotEqualTo:nil]) {
-                [launchArray addObject:self.debugOutputOn];
-            }
-            if ([self.quietOutputOn isNotEqualTo:nil]) {
-                [launchArray addObject:self.quietOutputOn];
-            }
-            
-            if (self.bigpicEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"bigpic:all"];
-            }
-            if (self.antminerEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"antminer:all"];
-            }
-            if (self.bflEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"bfl:all"];
-            }
-            if (self.bitfuryEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"bifury:all"];
-            }
-            if (self.erupterEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"erupter:all"];
-            }
-            
-            
-            
-            if ([self.noGPU isNotEqualTo:nil]) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"opencl:auto"];
-            }
-            
-            cpuThreads = nil;
-            
-            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-            NSString *userpath = [paths objectAtIndex:0];
-            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-            NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-            
-            [launchArray addObject:@"-c"];
-            [launchArray addObject:saveBTCConfigFilePath];
-            
-            
-            
-            NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-            
-            NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
-            
-            [self.asicOutputView setString:@""];
-            
-            asicTask =[[TaskWrapper alloc] initWithCommandPath:bfgPath
-                                                     arguments:launchArray
-                                                   environment:nil
-                                                      delegate:self];
-            // kick off the process asynchronously
-            
-            [asicTask startTask];
-            
-
-        }
         
     }
     
@@ -154,16 +48,6 @@
     
     return self;
 }
-/*
- - (void)alertDidEnd:(NSAlert *)pipAlert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
- if (returnCode == NSAlertFirstButtonReturn) {
- NSLog(@"install pip");
- }
- if (returnCode == NSAlertSecondButtonReturn) {
- NSLog(@"quit");
- }
- }
- */
 
 
 
@@ -252,7 +136,7 @@ self.megaHashLabel.stringValue = @"0";
 
 
         
-        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"R:0/0", nil];
         if ([self.bonusOptions isNotEqualTo:@""]) {
             NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
 
@@ -401,7 +285,7 @@ self.megaHashLabel.stringValue = @"0";
             
             
             
-            NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"W:0/0", nil];
+            NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"R:0/0", nil];
             if ([self.bonusOptions isNotEqualTo:@""]) {
                 NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
                 
@@ -924,6 +808,7 @@ self.megaHashLabel.stringValue = @"0";
 //            self.asicAPIOutput.string = @"";
             
             [self.asicAPIOutput delete:nil];
+            [self.asicAPIOutput didChangeText];
             
             self.asicAPIOutput.string = output;
 
@@ -1232,6 +1117,9 @@ self.megaHashLabel.stringValue = @"0";
 // control of the UI.
 -(void)awakeFromNib
 {
+    
+    
+    
     findRunning=NO;
 
     findTwoRunning=NO;
@@ -1247,6 +1135,119 @@ self.megaHashLabel.stringValue = @"0";
     if (asicOptionsString != nil) {
         [self.asicOptionsView setStringValue:asicOptionsString];
     }
+    
+    if ([[self.prefs objectForKey:@"startAsic"] isEqualToString:@"start"]) {
+        
+                        [self.asicWindow orderFront:nil];
+        
+        
+        [self.asicStartButton setTitle:@"Stop"];
+        self.asicStartButton.tag = 0;
+        //            self.asicAPIOutput.string = @"";
+        //            [self.asicAPIOutput delete:nil];
+        
+        
+        
+        // If the task is still sitting around from the last run, release it
+        if (asicTask!=nil) {
+            asicTask = nil;
+        }
+        
+        
+        
+        
+        
+        
+        
+        self.noGPU = [self.prefs stringForKey:@"disableASICGPU"];
+        self.debugOutputOn = [self.prefs stringForKey:@"debugASICOutput"];
+        self.quietOutputOn = [self.prefs stringForKey:@"quietASICOutput"];
+        self.bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
+        NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
+        
+        
+        
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"R:0/0", nil];
+        if ([self.bonusOptions isNotEqualTo:@""]) {
+            NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
+            
+            [launchArray addObjectsFromArray:deviceItems];
+        }
+        
+        if ([cpuThreads isNotEqualTo:nil]) {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:cpuThreads];
+        }
+        else {
+            [launchArray addObject:@"-t"];
+            [launchArray addObject:@"0"];
+        }
+        
+        if ([self.debugOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.debugOutputOn];
+        }
+        if ([self.quietOutputOn isNotEqualTo:nil]) {
+            [launchArray addObject:self.quietOutputOn];
+        }
+        
+        if (self.bigpicEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"bigpic:all"];
+        }
+        if (self.antminerEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"antminer:all"];
+        }
+        if (self.bflEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"bfl:all"];
+        }
+        if (self.bitfuryEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"bifury:all"];
+        }
+        if (self.erupterEnable.state == NSOnState) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"erupter:all"];
+        }
+        
+        
+        
+        if ([self.noGPU isNotEqualTo:nil]) {
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
+        }
+        
+        cpuThreads = nil;
+        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        
+        [launchArray addObject:@"-c"];
+        [launchArray addObject:saveBTCConfigFilePath];
+        
+        
+        
+        NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
+        
+        NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        
+        [self.asicOutputView setString:@""];
+        
+        asicTask =[[TaskWrapper alloc] initWithCommandPath:bfgPath
+                                                 arguments:launchArray
+                                               environment:nil
+                                                  delegate:self];
+        // kick off the process asynchronously
+        
+        [asicTask startTask];
+        
+        
+    }
+
 
 }
 
@@ -1260,10 +1261,10 @@ self.megaHashLabel.stringValue = @"0";
         [self.asicWindow orderFront:sender];
     }
 }
-    
+
 
 - (IBAction)optionsToggle:(id)sender {
-        
+    
         if ([self.asicOptionsWindow isVisible]) {
             [self.asicOptionsButton setState:NSOffState];
             [self.asicOptionsWindow orderOut:sender];
