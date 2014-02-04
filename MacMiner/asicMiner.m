@@ -731,7 +731,7 @@ self.megaHashLabel.stringValue = @"0";
     
     if (findTwoRunning == YES) {
         [apiTask stopTask];
-        findTwoRunning = NO;
+        apiTask = nil;
     }
     
     if (findTwoRunning == NO) {

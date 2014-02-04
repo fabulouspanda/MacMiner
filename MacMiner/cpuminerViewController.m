@@ -477,7 +477,7 @@
     
     [prefs synchronize];
     
-    if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
+    if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
         
                         [self.cpuWindow orderFront:nil];
         
