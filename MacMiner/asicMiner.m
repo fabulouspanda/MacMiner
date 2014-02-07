@@ -19,10 +19,13 @@
 {
     self = [super initWithCoder:(NSCoder *)aDecoder];
     if (self) {
+        
         // Initialization code here.
         //            NSLog(@"startup");
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
+
+        
         self.asicAPIOutput.delegate = self;
         
         
@@ -42,6 +45,33 @@
 //        self.minerAddressesArray = [self.prefs objectForKey:@"ipAddress"];
         
         
+        BOOL notificationCenterIsAvailable = (NSClassFromString(@"NSUserNotificationCenter")!=nil);
+        
+        if (notificationCenterIsAvailable) {
+        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+
+        
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+//        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
+        NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+        NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
+        
+            if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
+
+                    
+                    
+                    NSUserNotification *note = [[NSUserNotification alloc] init];
+                    [note setTitle:@"Update Available"];
+                    [note setInformativeText:@"Please upgrade at http://macminer.net/"];
+
+                    
+                    NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
+                    [center scheduleNotification: note];
+                    
+                }
+                
+            }
+
     }
     
     
@@ -134,7 +164,10 @@ self.megaHashLabel.stringValue = @"0";
         self.bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
         NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
 
-
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
         
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"R:0/0", nil];
         if ([self.bonusOptions isNotEqualTo:@""]) {
@@ -180,7 +213,27 @@ self.megaHashLabel.stringValue = @"0";
             [launchArray addObject:@"erupter:all"];
         }
 
-        
+                NSString *saveLogFile = [self.prefs stringForKey:@"saveLogFile"];
+        if ([saveLogFile  isEqual: @"save"]) {
+            [launchArray addObject:@"--debuglog"];
+            [launchArray addObject:@"-L"];
+            
+            NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+            [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
+            
+                    NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+            NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            NSString *acceptString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            acceptString = nil;
+
+            
+            NSString *logFile = [userpath stringByAppendingString:[@"/" stringByAppendingString:[bfgUserValue stringByAppendingString:[dateString stringByAppendingString:@".txt"]]]];
+
+            [launchArray addObject:logFile];
+        }
         
         if ([self.noGPU isNotEqualTo:nil]) {
             [launchArray addObject:@"-S"];
@@ -189,10 +242,7 @@ self.megaHashLabel.stringValue = @"0";
         
             cpuThreads = nil;
         
-        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        NSString *userpath = [paths objectAtIndex:0];
-        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+
         NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
         
         [launchArray addObject:@"-c"];
@@ -284,6 +334,12 @@ self.megaHashLabel.stringValue = @"0";
             NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
             
             
+            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+            NSString *userpath = [paths objectAtIndex:0];
+            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+            NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+            
             
             NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"R:0/0", nil];
             if ([self.bonusOptions isNotEqualTo:@""]) {
@@ -329,6 +385,26 @@ self.megaHashLabel.stringValue = @"0";
                 [launchArray addObject:@"erupter:all"];
             }
             
+            NSString *saveLogFile = [self.prefs stringForKey:@"saveLogFile"];
+            if ([saveLogFile  isEqual: @"save"]) {
+                [launchArray addObject:@"--debuglog"];
+                [launchArray addObject:@"-L"];
+                NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+                [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+                NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
+                
+                NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+                NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+                NSString *acceptString = [self getDataBetweenFromString:btcConfig
+                                                             leftString:@"user" rightString:@"," leftOffset:9];
+                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                acceptString = nil;
+                
+                
+                NSString *logFile = [userpath stringByAppendingString:[@"/" stringByAppendingString:[bfgUserValue stringByAppendingString:[dateString stringByAppendingString:@".txt"]]]];
+                
+                [launchArray addObject:logFile];
+            }
             
             
             if ([self.noGPU isNotEqualTo:nil]) {
@@ -338,11 +414,7 @@ self.megaHashLabel.stringValue = @"0";
             
             cpuThreads = nil;
             
-            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-            NSString *userpath = [paths objectAtIndex:0];
-            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-            NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+
             
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveBTCConfigFilePath];
@@ -1154,7 +1226,10 @@ self.megaHashLabel.stringValue = @"0";
         }
         
         
-        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
         
         
         
@@ -1210,6 +1285,29 @@ self.megaHashLabel.stringValue = @"0";
             [launchArray addObject:@"-S"];
             [launchArray addObject:@"erupter:all"];
         }
+
+        NSString *saveLogFile = [self.prefs stringForKey:@"saveLogFile"];
+        if ([saveLogFile  isEqual: @"save"]) {
+            [launchArray addObject:@"--debuglog"];
+            [launchArray addObject:@"-L"];
+            
+            NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+            [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
+            
+            NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+            NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            NSString *acceptString = [self getDataBetweenFromString:btcConfig
+                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            acceptString = nil;
+            
+            
+            NSString *logFile = [userpath stringByAppendingString:[@"/" stringByAppendingString:[bfgUserValue stringByAppendingString:[dateString stringByAppendingString:@".txt"]]]];
+            
+            [launchArray addObject:logFile];
+
+        }
         
         
         
@@ -1220,10 +1318,7 @@ self.megaHashLabel.stringValue = @"0";
         
         cpuThreads = nil;
         
-        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        NSString *userpath = [paths objectAtIndex:0];
-        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+
         NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
         
         [launchArray addObject:@"-c"];
@@ -1290,6 +1385,12 @@ self.megaHashLabel.stringValue = @"0";
             NSString *erupterEnable = [self.prefs stringForKey:@"erupterEnable"];
             NSString *antminerEnable = [self.prefs stringForKey:@"antminerEnable"];
 
+            NSString *saveLogFile = [self.prefs stringForKey:@"saveLogFile"];
+
+            if ([saveLogFile isNotEqualTo:nil]) {
+                self.saveLogFile.state = NSOnState;
+            }
+            
             if ([bflEnable isNotEqualTo:nil]) {
                 self.bflEnable.state = NSOffState;
             }
@@ -1404,6 +1505,12 @@ self.megaHashLabel.stringValue = @"0";
     else {
         [self.prefs setObject:@"disable" forKey:@"antminerEnable"];
     }
+    if (self.saveLogFile.state == NSOnState) {
+        [self.prefs setObject:@"save" forKey:@"saveLogFile"];
+    }
+    else {
+        [self.prefs setObject:nil forKey:@"saveLogFile"];
+    }
 
     
     
@@ -1422,6 +1529,19 @@ self.megaHashLabel.stringValue = @"0";
         
 }
 
+- (IBAction)showLogFiles:(id)sender {
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = [paths firstObject];
+    applicationSupportDirectory = [applicationSupportDirectory stringByAppendingString:@"/MacMiner"];
+    
+NSURL* urlToDirectory = [NSURL fileURLWithPath:applicationSupportDirectory isDirectory:YES];
+
+NSArray *fileURL = [NSArray arrayWithObjects:urlToDirectory, nil];
+[[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURL];
+    
+    
+}
 
 
 @end

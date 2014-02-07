@@ -64,6 +64,8 @@
 @property (nonatomic, weak) IBOutlet NSButton *antminerEnable;
 @property (nonatomic, weak) IBOutlet NSButton *bitfuryEnable;
 
+@property (nonatomic, weak) IBOutlet NSButton *saveLogFile;
+
 @property (nonatomic, weak) IBOutlet NSTextField *asicThreadsField;
 
 @property (nonatomic, weak) IBOutlet NSTextField *asicHashField;

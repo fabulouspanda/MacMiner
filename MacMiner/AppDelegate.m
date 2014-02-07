@@ -35,7 +35,7 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1511"]) {
+    if ([hideVersion isEqualToString:@"1512"]) {
         [self.releaseNotes orderOut:nil];
     }
     
@@ -266,6 +266,10 @@
     NSString *machineName = [[NSHost currentHost] localizedName];
     machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+    
+    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
+    machineName = [[machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
+    
     if (machineName.length <= 1) {
         machineName = @"Mac";
     }
@@ -357,6 +361,10 @@
     NSString *machineName = [[NSHost currentHost] localizedName];
     machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+    
+    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
+    machineName = [[machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
+    
     if (machineName.length <= 1) {
         machineName = @"Mac";
     }
@@ -448,8 +456,16 @@
         machineName = [machineName stringByReplacingOccurrencesOfString:@"'" withString:@"_"];
         machineName = [machineName stringByReplacingOccurrencesOfString:@"\"" withString:@"_"];
         machineName = [machineName stringByReplacingOccurrencesOfString:@"’" withString:@"_"];
+    
+    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
+    machineName = [[machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
+    
+    
     if (machineName.length <= 1) {
         machineName = @"Mac";
+        
+        
+        
     }
     
     
@@ -547,7 +563,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1511" forKey:@"hideVersion"];
+    [prefs setObject:@"1512" forKey:@"hideVersion"];
     
     [prefs synchronize];
     
