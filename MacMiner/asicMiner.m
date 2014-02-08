@@ -45,33 +45,7 @@
 //        self.minerAddressesArray = [self.prefs objectForKey:@"ipAddress"];
         
         
-        BOOL notificationCenterIsAvailable = (NSClassFromString(@"NSUserNotificationCenter")!=nil);
-        
-        if (notificationCenterIsAvailable) {
-        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
-
-        
-        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-//        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
-        NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
-        NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
-        
-            if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
-
-                    
-                    
-                    NSUserNotification *note = [[NSUserNotification alloc] init];
-                    [note setTitle:@"Update Available"];
-                    [note setInformativeText:@"Please upgrade at http://macminer.net/"];
-
-                    
-                    NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
-                    [center scheduleNotification: note];
-                    
-                }
-                
-            }
-
+ 
     }
     
     
@@ -804,10 +778,15 @@ self.megaHashLabel.stringValue = @"0";
     if (findTwoRunning == YES) {
         [apiTask stopTask];
         apiTask = nil;
+        findRunning = NO;
     }
-    
-    if (findTwoRunning == NO) {
+    else {
 
+        // If the task is still sitting around from the last run, release it
+        if (apiTask!=nil) {
+            apiTask = nil;
+        }
+        
         if (self.acceptLabel.tag == 0) {
         self.acceptLabel.tag = 1;
         }

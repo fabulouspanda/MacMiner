@@ -24,6 +24,38 @@
     // Insert code here to initialize your application
     
 
+        [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+    
+    BOOL notificationCenterIsAvailable = (NSClassFromString(@"NSUserNotificationCenter")!=nil);
+    
+    if (notificationCenterIsAvailable) {
+        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+        
+        
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+        //        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
+        NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+        NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
+        
+        if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
+            
+            
+            
+            NSUserNotification *notification = [[NSUserNotification alloc] init];
+            [notification setTitle:@"Update Available"];
+            NSString *messageText = [NSString stringWithFormat:@"You have version %@, %@ is available", checkString, stringVersion];
+            [notification setInformativeText:messageText];
+            [notification setSoundName:NSUserNotificationDefaultSoundName];
+            
+            
+            NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
+            [center scheduleNotification: notification];
+            
+        }
+        
+    }
+
+
     [[NSApp dockTile] setContentView:self.dockView];
 
         [[NSApp dockTile] display];
@@ -46,6 +78,18 @@
 }
 
 
+- (void) userNotificationCenter: (NSUserNotificationCenter *) center didActivateNotification: (NSUserNotification *) notification
+	{
+
+ if ([notification activationType] == NSUserNotificationActivationTypeContentsClicked)
+        	    {
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"]];
+        }
+    }
+
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification{
+    return YES;
+}
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "fabulouspanda.MacMiner" in the user's Application Support directory.
 - (NSURL *)applicationFilesDirectory
@@ -292,8 +336,10 @@
         NSData *oResponseData = [NSURLConnection sendSynchronousRequest:request2 returningResponse:&responseCode error:&error];
         
         if([responseCode statusCode] != 200){
+        if([responseCode statusCode] != 0){
             NSLog(@"Error getting %@, HTTP status code %li", getString, (long)[responseCode statusCode]);
             //            return nil;
+        }
         }
         
         NSString *responseString = [[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding];
@@ -329,8 +375,10 @@
             NSData *oResponseData3 = [NSURLConnection sendSynchronousRequest:request3 returningResponse:&responseCode3 error:&error3];
             
             if([responseCode3 statusCode] != 200){
+                            if([responseCode3 statusCode] != 0){
                 NSLog(@"Error getting %@, HTTP status code %li", getString, (long)[responseCode statusCode]);
                 //            return nil;
+                            }
             }
             else {
                 //        NSLog(@"DELETE SUCCESS");
@@ -598,5 +646,6 @@
     }
     else return nil;
 }
+
 
 @end

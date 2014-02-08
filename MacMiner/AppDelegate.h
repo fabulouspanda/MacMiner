@@ -10,7 +10,7 @@
 #import "TaskWrapper.h"
 
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate, NSUserNotificationCenterDelegate>
 
 
 //@property (assign) IBOutlet NSWindow *window;
