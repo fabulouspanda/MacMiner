@@ -67,7 +67,7 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1512"]) {
+    if ([hideVersion isEqualToString:@"1513"]) {
         [self.releaseNotes orderOut:nil];
     }
     
@@ -337,8 +337,10 @@
         
         if([responseCode statusCode] != 200){
         if([responseCode statusCode] != 0){
+        if([responseCode statusCode] != 503){
             NSLog(@"Error getting %@, HTTP status code %li", getString, (long)[responseCode statusCode]);
             //            return nil;
+        }
         }
         }
         
@@ -376,8 +378,10 @@
             
             if([responseCode3 statusCode] != 200){
                             if([responseCode3 statusCode] != 0){
+        if([responseCode statusCode] != 503){
                 NSLog(@"Error getting %@, HTTP status code %li", getString, (long)[responseCode statusCode]);
                 //            return nil;
+        }
                             }
             }
             else {
@@ -611,7 +615,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1512" forKey:@"hideVersion"];
+    [prefs setObject:@"1513" forKey:@"hideVersion"];
     
     [prefs synchronize];
     
