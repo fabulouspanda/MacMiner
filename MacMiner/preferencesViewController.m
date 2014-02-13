@@ -39,7 +39,10 @@
     
     [prefs synchronize];
     
-    self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
+    NSString *logLength = [prefs objectForKey:@"logLength" ];
+    if (logLength) {
+    self.charCount.stringValue = logLength;
+    }
     
     NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
     NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
@@ -390,9 +393,9 @@
         [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9327"];
         [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9327"];
         
-        NSString *bitcoinPool = [prefs objectForKey:@"litecoinPool"];
-        NSString *bitcoinPoolUser = [prefs objectForKey:@"litecoinPoolUser"];
-        NSString *bitcoinPoolPassword = [prefs objectForKey:@"litecoinPoolPassword"];
+        NSString *bitcoinPool = [prefs objectForKey:@"scryptPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"scryptPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"scryptPoolPassword"];
         
             if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
         self.poolComboBox.stringValue = bitcoinPool;

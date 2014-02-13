@@ -26,8 +26,11 @@
 
 
         NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+
+
+    if (stringVersion) {
         
-        
+    
         NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
         //        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
         NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
@@ -77,7 +80,9 @@
         
     }
 
-
+    }
+    
+    
     [[NSApp dockTile] setContentView:self.dockView];
 
         [[NSApp dockTile] display];
@@ -89,7 +94,7 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1513"]) {
+    if ([hideVersion isEqualToString:@"1514"]) {
         [self.releaseNotes orderOut:nil];
     }
     
@@ -637,7 +642,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1513" forKey:@"hideVersion"];
+    [prefs setObject:@"1514" forKey:@"hideVersion"];
     
     [prefs synchronize];
     
