@@ -13,7 +13,7 @@
 #import "taskTwoWrapperDelegate.h"
 
 
-@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate, NSURLConnectionDelegate>{
+@interface asicMiner : NSViewController <NSWindowDelegate, TaskWrapperDelegate, taskTwoWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSTableViewDelegate, NSAlertDelegate, NSURLConnectionDelegate>{
 
     
     BOOL findRunning;

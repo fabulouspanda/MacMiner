@@ -102,14 +102,6 @@
         // displays what the user wants to search on
         
         
-        
-        
-        /*      if ([bfgOptionsView.stringValue isNotEqualTo:@""]) {
-         NSArray *deviceItems = [bfgOptionsView.stringValue componentsSeparatedByString:@" "];
-         [cpuLaunchArray addObjectsFromArray:deviceItems];
-         
-         } */
-        
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs synchronize];
@@ -124,7 +116,21 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
         NSString *userpath = [paths objectAtIndex:0];
         userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        NSString *saveLTCConfigFilePath = @"";
+        
+        if (self.chooseAlgo.indexOfSelectedItem == 0) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 1) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"vtcurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 2) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"qrkurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 3) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        }
+
         
 
         NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
@@ -152,26 +158,10 @@
         NSString *cpuQuietV = [prefs stringForKey:@"cpuQuietOutput"];
         NSString *cpuDebugV = [prefs stringForKey:@"cpuDebugOutput"];
         NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
+
+
         
-        
-        //        NSString *autoWasSetup = [prefs stringForKey:@"defaultBTC"];
-        /*
-         if ([mainBTCUser isNotEqualTo:nil]) {
-         mainPool = [oString stringByAppendingString:mainPool];
-         mainBTCUser = [uString stringByAppendingString:mainBTCUser];
-         mainBTCPass = [pString stringByAppendingString:mainBTCPass];
-         [cpuLaunchArray addObject:mainPool];
-         [cpuLaunchArray addObject:mainBTCUser];
-         [cpuLaunchArray addObject:mainBTCPass];
-         }
-         else if ([autoWasSetup isEqualTo:nil] && [mainBTCUser isEqualTo:nil]) {
-         
-         [cpuLaunchArray addObject:poolString];
-         [cpuLaunchArray addObject:userString];
-         [cpuLaunchArray addObject:passString];
-         
-         }
-         */
+
         NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
         
         if ([cpuThreadsV isNotEqualTo:@""]) {
@@ -179,12 +169,46 @@
             [cpuLaunchArray addObject:cpuThreadsV];
         }
 
+        
+        if (self.chooseAlgo.indexOfSelectedItem == 0) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"scrypt"];
             [cpuLaunchArray addObject:@"-o"];
             [cpuLaunchArray addObject:mainLTCPool];
             [cpuLaunchArray addObject:@"-u"];
             [cpuLaunchArray addObject:mainLTCUser];
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 1) {
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 2) {
+            [cpuLaunchArray addObject:@"--algo=quark"];
+//            [cpuLaunchArray addObject:@"quark"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 3) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"sha256d"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+
 
         if ([cpuQuietV isNotEqualTo:nil]) {
             [cpuLaunchArray addObject:@"-q"];
@@ -207,7 +231,12 @@
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
-        NSString *cpuPath2 = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+                if (self.chooseAlgo.indexOfSelectedItem == 1) {
+        cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+                }
+                else {
+                            cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+                }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
@@ -215,7 +244,7 @@
         //            self.outputView.string = [self.outputView.string stringByAppendingString:cpuPath];
         //            self.outputView.string = [self.outputView.string stringByAppendingString:finalNecessities];
         //            cpuTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:cpuPath, cpuPath, poolplus, userpass, nil]];
-        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath2
+        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath
                                                  arguments:cpuLaunchArray
                                                environment:nil
                                                   delegate:self];
@@ -477,6 +506,19 @@
     
     [prefs synchronize];
     
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"0"]) {
+        [self.chooseAlgo selectItemAtIndex:0];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"1"]) {
+                [self.chooseAlgo selectItemAtIndex:1];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"2"]) {
+                [self.chooseAlgo selectItemAtIndex:2];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"3"]) {
+                [self.chooseAlgo selectItemAtIndex:3];
+    }
+
     if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
         
                         [self.cpuWindow orderFront:nil];
@@ -512,7 +554,21 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
         NSString *userpath = [paths objectAtIndex:0];
         userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        NSString *saveLTCConfigFilePath = @"";
+        
+        if (self.chooseAlgo.indexOfSelectedItem == 0) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 1) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"vtcurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 2) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"qrkurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 3) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        }
+        
         
         
         NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
@@ -542,6 +598,8 @@
         NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
         
         
+        
+        
         NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
         
         if ([cpuThreadsV isNotEqualTo:@""]) {
@@ -549,12 +607,46 @@
             [cpuLaunchArray addObject:cpuThreadsV];
         }
         
-        [cpuLaunchArray addObject:@"-o"];
-        [cpuLaunchArray addObject:mainLTCPool];
-        [cpuLaunchArray addObject:@"-u"];
-        [cpuLaunchArray addObject:mainLTCUser];
-        [cpuLaunchArray addObject:@"-p"];
-        [cpuLaunchArray addObject:mainLTCPass];
+        
+        if (self.chooseAlgo.indexOfSelectedItem == 0) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"scrypt"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 1) {
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 2) {
+            [cpuLaunchArray addObject:@"--algo=quark"];
+            //            [cpuLaunchArray addObject:@"quark"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 3) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"sha256d"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        
         
         if ([cpuQuietV isNotEqualTo:nil]) {
             [cpuLaunchArray addObject:@"-q"];
@@ -571,19 +663,25 @@
                 cpuBonusStuff = nil;
             }
         }
-        
+        //        NSString *logit = [cpuLaunchArray componentsJoinedByString:@" "];
+        //        NSLog(logit);
         
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
-        NSString *cpuPath2 = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+        if (self.chooseAlgo.indexOfSelectedItem == 1) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+        }
+        else {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+        }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
         self.cpuStatLabel.stringValue = startingText;
         
         
-        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath2
+        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath
                                                  arguments:cpuLaunchArray
                                                environment:nil
                                                   delegate:self];
@@ -669,12 +767,19 @@
     else {
         [prefs setObject:nil forKey:@"cpuThreadsValue"];
     }
-    if (self.cpuScrypt.state == NSOnState) {
-        [prefs setObject:@"--scrypt" forKey:@"cpuUseScryptValue"];
+    if (self.chooseAlgo.indexOfSelectedItem == 0) {
+        [prefs setObject:@"0" forKey:@"cpuAlgoChoice"];
     }
-    else    {
-        [prefs setObject:nil forKey:@"cpuUseScryptValue"];
+    if (self.chooseAlgo.indexOfSelectedItem == 1) {
+        [prefs setObject:@"1" forKey:@"cpuAlgoChoice"];
     }
+    if (self.chooseAlgo.indexOfSelectedItem == 2) {
+        [prefs setObject:@"2" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 3) {
+        [prefs setObject:@"3" forKey:@"cpuAlgoChoice"];
+    }
+
     if (self.cpuQuietOutput.state == NSOnState) {
         [prefs setObject:@"-q" forKey:@"cpuQuietOutput"];
     }

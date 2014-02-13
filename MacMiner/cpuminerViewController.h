@@ -26,22 +26,19 @@
 @property (nonatomic, weak) IBOutlet NSTextField *cpuStatLabel;
 @property (nonatomic, weak) IBOutlet NSTextField *cpuHashLabel;
 
-@property (nonatomic, weak) IBOutlet NSButton *cpuPopoverTriggerButton;
-@property (nonatomic, weak) IBOutlet NSPopover *cpuPopover;
-
-
 
 @property (nonatomic, strong) IBOutlet NSPanel *cpuOptionsWindow;
 @property (nonatomic, weak) IBOutlet NSTextField *cpuThreads;
 @property (nonatomic, weak) IBOutlet NSButton *cpuDebugOutput;
 @property (nonatomic, weak) IBOutlet NSButton *cpuQuietOutput;
-@property (nonatomic, weak) IBOutlet NSButton *cpuScrypt;
 
 @property (nonatomic, weak) IBOutlet NSTextField *cpuManualOptions;
 
 @property (nonatomic, weak) IBOutlet NSButton *cpuOptionsButton;
 
 @property (nonatomic, weak) IBOutlet NSTextField *tempsLabel;
+
+@property (nonatomic, weak) IBOutlet NSPopUpButton *chooseAlgo;
 
 @property(strong) NSSpeechSynthesizer *speechSynth;
 

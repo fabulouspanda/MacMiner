@@ -17,6 +17,7 @@
 @property (nonatomic, strong) IBOutlet NSWindow *prefWindow;
 @property (nonatomic, strong) IBOutlet NSView *prefView;
 @property (nonatomic, strong) IBOutlet NSView *prefView2;
+@property (nonatomic, strong) IBOutlet NSView *prefView3;
 
 @property (nonatomic, weak) IBOutlet NSTextField *charCount;
 @property (nonatomic, weak) IBOutlet NSTextField *emailAddress;
@@ -30,6 +31,12 @@
 @property (nonatomic, weak) IBOutlet NSButton *cpuButton;
 @property (nonatomic, weak) IBOutlet NSButton *commandButton;
 @property (nonatomic, weak) IBOutlet NSButton *httpButton;
+
+// Pool settings
+@property (nonatomic, weak) IBOutlet NSPopUpButton *popUpCoin;
+@property (nonatomic, weak) IBOutlet NSComboBox *poolComboBox;
+@property (nonatomic, weak) IBOutlet NSTextField *userNameField;
+@property (nonatomic, weak) IBOutlet NSTextField *passwordField;
 
 -(IBAction)preferenceToggle:(id)sender;
 

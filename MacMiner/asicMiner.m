@@ -806,9 +806,14 @@ self.megaHashLabel.stringValue = @"0";
                         [apiArray addObject:@"devs"];
             [apiArray addObject:@"127.0.0.1:4048"];
         }
+
+        if (self.minerAddressesArray.count >= 1) {
+            
         
         [apiArray addObjectsFromArray:self.minerAddressesArray];
+//        NSLog([NSString stringWithFormat:@"%lu", (unsigned long)self.minerAddressesArray.count]);
 //        NSLog([self.minerAddressesArray componentsJoinedByString:@" "]);
+        }
     
     NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
@@ -848,7 +853,7 @@ self.megaHashLabel.stringValue = @"0";
 
 - (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
 {
-
+    NSLog(@"output");
     output = [output substringToIndex:[output length]-1];
     
     if ([output rangeOfString:@"Reply was"].location != NSNotFound) {
@@ -1175,7 +1180,7 @@ self.megaHashLabel.stringValue = @"0";
 
     findTwoRunning=NO;
     asicTask=nil;
-
+    apiTask=nil;
     
 
     
