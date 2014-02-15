@@ -54,7 +54,7 @@
     self.passwordField.stringValue = bitcoinPoolPassword;
     }
     
-    if ([prefs objectForKey:@"bitcoinPool"] == nil && [prefs objectForKey:@"scryptPool"] == nil && [prefs objectForKey:@"vertcoinPool"] == nil && [prefs objectForKey:@"quarkcoinPool"] == nil) {
+    if ([prefs objectForKey:@"bitcoinPool"] == nil && [prefs objectForKey:@"scryptPool"] == nil && [prefs objectForKey:@"vertcoinPool"] == nil && [prefs objectForKey:@"quarkcoinPool"] == nil && [prefs objectForKey:@"maxcoinPool"] == nil) {
         [self.prefWindow orderFront:nil];
         [self.prefView setHidden:YES];
         [self.prefView2 setHidden:YES];
@@ -366,6 +366,7 @@
         [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9332"];
         [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9332"];
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.triplemining.com:3334"];
+        [self.poolComboBox addItemWithObjectValue:@"http://stratum.bitcoin.cz:3333"];
         
         NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
@@ -454,6 +455,32 @@
                 self.userNameField.stringValue = @"";
                 self.passwordField.stringValue = @"";
             }
+        
+        bitcoinPoolPassword = nil;
+        bitcoinPool = nil;
+        bitcoinPoolUser = nil;
+        
+    }
+    
+    //MaxCoin
+    if (self.popUpCoin.indexOfSelectedItem == 4) {
+        [self.poolComboBox removeAllItems];
+        [self.poolComboBox setStringValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
+        
+        NSString *bitcoinPool = [prefs objectForKey:@"maxcoinPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"maxcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"maxcoinPoolPassword"];
+        
+        if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+            self.poolComboBox.stringValue = bitcoinPool;
+            self.userNameField.stringValue = bitcoinPoolUser;
+            self.passwordField.stringValue = bitcoinPoolPassword;
+        }
+        else {
+            self.userNameField.stringValue = @"";
+            self.passwordField.stringValue = @"";
+        }
         
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
@@ -567,7 +594,7 @@
         [fileManager createFileAtPath:saveLTCFilePath contents:fileContents attributes:nil];
     }
     
-    //VertCoin
+    //VertCoin Scrypt Adaptive-N
     if (self.popUpCoin.indexOfSelectedItem == 2) {
         [prefs setObject:self.poolComboBox.stringValue forKey:@"vertcoinPool"];
         [prefs setObject:self.userNameField.stringValue forKey:@"vertcoinPoolUser"];
@@ -659,6 +686,52 @@
         
     }
     
+    //MaxCoin
+    if (self.popUpCoin.indexOfSelectedItem == 4) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"maxcoinPool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"maxcoinPoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"maxcoinPoolPassword"];
+        
+        //    Write QRK pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *maxFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveMAXFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveMAXFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [maxFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveMAXFilePath contents:fileContents attributes:nil];
+        
+    }
+    
     [prefs synchronize];
     
     prefs = nil;
@@ -681,6 +754,13 @@
     [self.prefView setHidden:NO];
     [self.prefView2 setHidden:YES];
     [self.prefView3 setHidden:YES];
+}
+
+- (IBAction)openPool:(id)sender {
+[self.prefWindow orderFront:nil];
+[self.prefView setHidden:YES];
+[self.prefView2 setHidden:YES];
+[self.prefView3 setHidden:NO];
 }
 
 

@@ -778,7 +778,7 @@ self.megaHashLabel.stringValue = @"0";
     if (findTwoRunning == YES) {
         [apiTask stopTask];
         apiTask = nil;
-        findRunning = NO;
+        findTwoRunning = NO;
     }
     else {
 
@@ -853,7 +853,7 @@ self.megaHashLabel.stringValue = @"0";
 
 - (void)taskTwoWrapper:(taskTwoWrapper *)taskTwoWrapper didProduceOutput:(NSString *)output
 {
-    NSLog(@"output");
+//    NSLog(@"output");
     output = [output substringToIndex:[output length]-1];
     
     if ([output rangeOfString:@"Reply was"].location != NSNotFound) {

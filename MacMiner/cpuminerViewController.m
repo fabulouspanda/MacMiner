@@ -130,6 +130,9 @@
         if (self.chooseAlgo.indexOfSelectedItem == 3) {
         saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 4) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
+        }
 
         
 
@@ -208,6 +211,15 @@
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 4) {
+            [cpuLaunchArray addObject:@"--algo=keccak"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
 
 
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -233,6 +245,9 @@
         
                 if (self.chooseAlgo.indexOfSelectedItem == 1) {
         cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+                }
+                else if (self.chooseAlgo.indexOfSelectedItem == 4) {
+                    cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
                 }
                 else {
                             cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
@@ -518,6 +533,9 @@
     if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"3"]) {
                 [self.chooseAlgo selectItemAtIndex:3];
     }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"4"]) {
+        [self.chooseAlgo selectItemAtIndex:4];
+    }
 
     if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
         
@@ -567,6 +585,9 @@
         }
         if (self.chooseAlgo.indexOfSelectedItem == 3) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 4) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
         }
         
         
@@ -646,6 +667,15 @@
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 4) {
+            [cpuLaunchArray addObject:@"--algo=keccak"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
         
         
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -671,6 +701,9 @@
         
         if (self.chooseAlgo.indexOfSelectedItem == 1) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+        }
+        else if (self.chooseAlgo.indexOfSelectedItem == 4) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
         }
         else {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
@@ -778,6 +811,9 @@
     }
     if (self.chooseAlgo.indexOfSelectedItem == 3) {
         [prefs setObject:@"3" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 4) {
+        [prefs setObject:@"4" forKey:@"cpuAlgoChoice"];
     }
 
     if (self.cpuQuietOutput.state == NSOnState) {
