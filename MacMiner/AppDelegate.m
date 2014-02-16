@@ -94,7 +94,7 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1515"]) {
+    if ([hideVersion isEqualToString:@"1516"]) {
         [self.releaseNotes orderOut:nil];
     }
     
@@ -642,7 +642,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1515" forKey:@"hideVersion"];
+    [prefs setObject:@"1516" forKey:@"hideVersion"];
     
     [prefs synchronize];
     

@@ -118,6 +118,8 @@
             bfgTask = nil;
         }
 
+NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        [prefs synchronize];
         
         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         appDelegate.bfgReading.stringValue = @"";
@@ -135,27 +137,51 @@
         
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
 
+        NSString *bfgPath = @"";
         
         NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-
-        NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         
         
-
-            [self.bfgOutputView setString:@""];
-            NSString *startingText = @"Starting…";
-            self.bfgStatLabel.stringValue = startingText;
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/vertcgminer/bin/vertminer"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/maxcgminer/bin/cgminer"];
+        }
+        
+        
+        
+        
+        [self.bfgOutputView setString:@""];
+        NSString *startingText = @"Starting…";
+        self.bfgStatLabel.stringValue = startingText;
         startingText = nil;
-
+        
         
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
-
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        [prefs synchronize];
         
-
+        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        self.userpath = [self.paths objectAtIndex:0];
+        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
+        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
+        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
+        NSString *saveLTCAdNConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vtcurls.conf"];
+        NSString *saveMaxConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"maxurls.conf"];
+        self.userpath = nil;
+        self.userpath2 = nil;
+        self.paths = nil;
+        self.executableName = nil;
+        
+        
         self.intensityValue = [prefs stringForKey:@"intenseValue"];
         self.worksizeValue = [prefs stringForKey:@"worksizeValue"];
         self.vectorValue = [prefs stringForKey:@"vectorValue"];
@@ -167,10 +193,12 @@
         self.threadConc = [prefs stringForKey:@"bfgThreadConc"];
         self.shaders = [prefs stringForKey:@"bfgShaders"];
         self.lookupGap = [prefs stringForKey:@"bfgLookupGap"];
-        NSString *cpuThreads = [prefs stringForKey:@"bfgCpuThreads"];
-
-                        
-            [launchArray addObject:@"-T"];
+        
+        
+        
+        [launchArray addObject:@"-T"];
+        
+        
         
         if ([self.intensityValue isNotEqualTo:nil]) {
             [launchArray addObject:@"-I"];
@@ -184,77 +212,76 @@
             [launchArray addObject:@"-v"];
             [launchArray addObject:self.vectorValue];
         }
-        if (self.noGPU.length >= 1) {
-            [launchArray addObject:@"-S"];
-            [launchArray addObject:@"opencl:auto"];
-        }
-        if ([self.onScrypt isNotEqualTo:nil]) {
-            [launchArray addObject:self.onScrypt];
-        }
+        
+
+        
         if ([self.debugOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.debugOutputOn];
         }
         if ([self.quietOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.quietOutputOn];
         }
-        if (self.threadConc.length >= 1) {
-            [launchArray addObject:@"--thread-concurrency"];
-            [launchArray addObject:self.threadConc];
-        }
-        if (self.shaders.length >= 1) {
-            [launchArray addObject:@"--shaders"];
-            [launchArray addObject:self.shaders];
-        }
-        if (self.lookupGap.length >= 1) {
-            [launchArray addObject:@"--lookup-gap"];
-            [launchArray addObject:self.lookupGap];
-        }
-        if (cpuThreads.length >= 1) {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:cpuThreads];
-        }
-        else {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:@"0"];
-        }
-
-        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        self.userpath = [self.paths objectAtIndex:0];
-        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
-        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
-        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
-        self.userpath = nil;
-        self.userpath2 = nil;
-        self.paths = nil;
-        self.executableName = nil;
         
-            [launchArray addObject:@"-c"];
-        [launchArray addObject:self.saveBTCConfigFilePath];
-
-        if ([self.onScrypt isEqualTo:@"--scrypt"]) {
-            [launchArray removeLastObject];
-            [launchArray addObject:self.saveLTCConfigFilePath];
+        
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0 || self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+            
+            if (self.threadConc.length >= 1) {
+                [launchArray addObject:@"--thread-concurrency"];
+                [launchArray addObject:self.threadConc];
+            }
+            if (self.shaders.length >= 1) {
+                [launchArray addObject:@"--shaders"];
+                [launchArray addObject:self.shaders];
+            }
+            if (self.lookupGap.length >= 1) {
+                [launchArray addObject:@"--lookup-gap"];
+                [launchArray addObject:self.lookupGap];
+            }
+            
         }
-
+        
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+            [launchArray addObject:@"--scrypt"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:self.saveLTCConfigFilePath];
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+            [launchArray addObject:@"--scrypt-vert"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLTCAdNConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:self.saveBTCConfigFilePath];
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+            [launchArray addObject:@"--keccak"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveMaxConfigFilePath];
+        }
+        
+        
+        
         if ([self.bonusOptions isNotEqualTo:nil]) {
             NSArray *bonusStuff = [self.bonusOptions componentsSeparatedByString:@" "];
             if (bonusStuff.count >= 2) {
-            [launchArray addObjectsFromArray:bonusStuff];
+                [launchArray addObjectsFromArray:bonusStuff];
                 bonusStuff = nil;
             }
         }
-  
-//        NSString *testString = [launchArray componentsJoinedByString:@" "];
-//        NSLog(testString);
         
-            bfgTask=[[TaskWrapper alloc] initWithCommandPath:bfgPath
-                                                   arguments:launchArray
-    environment:nil
-                     delegate:self];
-
-            // kick off the process asynchronously
-            [bfgTask startTask];
+        
+        bfgTask=[[TaskWrapper alloc] initWithCommandPath:bfgPath
+                                               arguments:launchArray
+                                             environment:nil
+                                                delegate:self];
+        
+        // kick off the process asynchronously
+        [bfgTask startTask];
         
         NSString *logItString = [launchArray componentsJoinedByString:@"_"];
         appDelegate.bfgSettingText.stringValue = logItString;
@@ -266,12 +293,13 @@
         
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveBTCConfigFilePath];
-        if (fileExists) {
+        BOOL fileExists2 = [[NSFileManager defaultManager] fileExistsAtPath:self.saveLTCConfigFilePath];
+        if (fileExists && fileExists2) {
             NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             
 
-            if ([self.onScrypt length] <= 1) {
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
                 NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
                 NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -285,7 +313,7 @@
                         NSAlert *startAlert = [[NSAlert alloc] init];
                         [startAlert addButtonWithTitle:@"Indeed"];
                 
-                [startAlert setMessageText:@"bfgminer has started"];
+                [startAlert setMessageText:@"GPU Miner has started"];
                 NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
                 NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
                 NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
@@ -304,7 +332,7 @@
             }
             
 //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
-                    if ([self.onScrypt isEqualTo:@"--scrypt"]) {
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
                         NSString *numberString = [self getDataBetweenFromString:ltcConfig
                                                                      leftString:@"url" rightString:@"," leftOffset:8];
                         NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -318,7 +346,7 @@
                         NSAlert *startAlert = [[NSAlert alloc] init];
                         [startAlert addButtonWithTitle:@"Indeed"];
                         
-                        [startAlert setMessageText:@"bfgminer has started"];
+                        [startAlert setMessageText:@"GPU Miner has started"];
                         NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
                         NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
                         NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
@@ -345,9 +373,7 @@
             
         }
 
-        
-        
-        
+
 
         
         launchArray = nil;
@@ -417,6 +443,15 @@
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
+    
+    if ([output rangeOfString:@"Invalid value passed to set intensity"].location != NSNotFound) {
+        NSString *newOutput = [self.bfgOutputView.string stringByAppendingString:@"Please set an Intensity of 8 or higher"];
+        
+        self.bfgOutputView.string = newOutput;
+        
+        newOutput = nil;
+    }
+    
     
     speechSetting = nil;
     prefs = nil;
@@ -722,6 +757,20 @@
             self.bfgLookupGap.stringValue = lookupGap;
         }
         
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:0];
+        }
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:1];
+        }
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:2];
+        }
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:3];
+        }
+
+        
         intensityValue = nil;
         worksizeValue = nil;
         vectorValue = nil;
@@ -733,9 +782,11 @@
         threadConc = nil;
         shaders = nil;
         lookupGap = nil;
-        cpuThreads = nil;
+
         
         prefs = nil;
+        
+        
         
         }
 
@@ -747,12 +798,7 @@
 - (IBAction)optionsApply:(id)sender {
     
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (self.bfgCpuThreads.stringValue.length >= 1) {
-        [prefs setObject:self.bfgCpuThreads.stringValue forKey:@"bfgCpuThreads"];
-    }
-    else {
-               [prefs setObject:@"0" forKey:@"bfgCpuThreads"];
-    }
+    
     if (self.dynamicIntensity.state == NSOffState) {
             [prefs setObject:self.intenseSizeLabel.stringValue forKey:@"intenseValue"];
     }
@@ -770,18 +816,6 @@
     }
     else {
         [prefs setObject:nil forKey:@"vectorValue"];
-    }
-    if (self.disableGPU.state == NSOnState) {
-        [prefs setObject:@"-G" forKey:@"disableGPU"];
-    }
-    else {
-        [prefs setObject:nil forKey:@"disableGPU"];
-    }
-    if (self.useScrypt.state == NSOnState) {
-        [prefs setObject:@"--scrypt" forKey:@"useScrypt"];
-    }
-    else {
-        [prefs setObject:nil forKey:@"useScrypt"];
     }
     if (self.debugOutput.state == NSOnState) {
         [prefs setObject:@"-D" forKey:@"debugOutput"];
@@ -821,6 +855,20 @@
         [self.openOptions setState:NSOffState];
         [self.bfgOptionsWindow orderOut:sender];
     
+    if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+        [prefs setObject:@"0" forKey:@"gpuAlgoChoice"];
+    }
+    if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+        [prefs setObject:@"1" forKey:@"gpuAlgoChoice"];
+    }
+    if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+        [prefs setObject:@"2" forKey:@"gpuAlgoChoice"];
+    }
+    if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+        [prefs setObject:@"3" forKey:@"gpuAlgoChoice"];
+    }
+
+    
     prefs = nil;
 
 }
@@ -851,7 +899,7 @@
 
                     if ([model_ns rangeOfString:@"MacBookPro8,2"].location != NSNotFound || [model_ns rangeOfString:@"MacBookPro8,3"].location != NSNotFound) {
                         self.dynamicIntensity.state = NSOffState;
-                        self.intenseSizeLabel.stringValue = @"2";
+                        self.intenseSizeLabel.stringValue = @"4";
                         self.workSizeOverride.state = NSOnState;
                         self.workSizeLabel.stringValue = @"128";
                         self.vectorOverride.state = NSOffState;
@@ -860,7 +908,7 @@
                     }
             else
             self.dynamicIntensity.state = NSOffState;
-            self.intenseSizeLabel.stringValue = @"2";
+            self.intenseSizeLabel.stringValue = @"4";
             self.workSizeOverride.state = NSOffState;
             self.vectorOverride.state = NSOffState;
             self.quietOutput.state = NSOnState;
@@ -868,7 +916,7 @@
         }
         if ([model_ns rangeOfString:@"Mini"].location != NSNotFound) {
             self.dynamicIntensity.state = NSOffState;
-            self.intenseSizeLabel.stringValue = @"2";
+            self.intenseSizeLabel.stringValue = @"4";
             self.workSizeOverride.state = NSOffState;
             self.vectorOverride.state = NSOffState;
             self.quietOutput.state = NSOnState;
@@ -878,7 +926,7 @@
             
             if ([model_ns rangeOfString:@"iMac12,1"].location != NSNotFound || [model_ns rangeOfString:@"iMac12,2"].location != NSNotFound) {
                 self.dynamicIntensity.state = NSOffState;
-                self.intenseSizeLabel.stringValue = @"2";
+                self.intenseSizeLabel.stringValue = @"4";
                 self.workSizeOverride.state = NSOnState;
                 self.workSizeLabel.stringValue = @"128";
                 self.vectorOverride.state = NSOffState;
@@ -887,7 +935,7 @@
             }
             else
             self.dynamicIntensity.state = NSOffState;
-            self.intenseSizeLabel.stringValue = @"2";
+            self.intenseSizeLabel.stringValue = @"4";
             self.workSizeOverride.state = NSOffState;
             self.vectorOverride.state = NSOffState;
             self.quietOutput.state = NSOnState;
@@ -899,7 +947,7 @@
         [configAlert addButtonWithTitle:@"I understand"];
         
         [configAlert setMessageText:@"Settings changed"];
-        NSString *configInfo = @"Your settings have been set to 'safe' recommended defaults that will allow you to use your computer while mining. Intensity is the key value that affects your mining speed, and needs to be higher for LTC mining. Click apply to save these settings.";
+        NSString *configInfo = @"Your settings have been set to 'safe' recommended defaults that will allow you to use your computer while mining. Intensity is the key value that affects your mining speed, and needs to be higher for Scrypt mining. Click apply to save these settings.";
         [configAlert setInformativeText:configInfo];
         
         configInfo = nil;
@@ -966,9 +1014,24 @@
         //        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         
         
+        NSString *bfgPath = @"";
+        
         NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
         
-        NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/vertcgminer/bin/vertminer"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/maxcgminer/bin/cgminer"];
+        }
+        
         
         
         
@@ -980,6 +1043,20 @@
         
         NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
         
+    
+        
+        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        self.userpath = [self.paths objectAtIndex:0];
+        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
+        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
+        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
+        NSString *saveLTCAdNConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vtcurls.conf"];
+        NSString *saveMaxConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"maxurls.conf"];
+        self.userpath = nil;
+        self.userpath2 = nil;
+        self.paths = nil;
+        self.executableName = nil;
         
         
         self.intensityValue = [prefs stringForKey:@"intenseValue"];
@@ -993,10 +1070,12 @@
         self.threadConc = [prefs stringForKey:@"bfgThreadConc"];
         self.shaders = [prefs stringForKey:@"bfgShaders"];
         self.lookupGap = [prefs stringForKey:@"bfgLookupGap"];
-        NSString *cpuThreads = [prefs stringForKey:@"bfgCpuThreads"];
+        
         
         
         [launchArray addObject:@"-T"];
+        
+        
         
         if ([self.intensityValue isNotEqualTo:nil]) {
             [launchArray addObject:@"-I"];
@@ -1010,58 +1089,58 @@
             [launchArray addObject:@"-v"];
             [launchArray addObject:self.vectorValue];
         }
-        if (self.noGPU.length >= 1) {
-            [launchArray addObject:@"-S"];
-            [launchArray addObject:@"opencl:auto"];
-        }
-        if ([self.onScrypt isNotEqualTo:nil]) {
-            [launchArray addObject:self.onScrypt];
-        }
+        
+        
         if ([self.debugOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.debugOutputOn];
         }
         if ([self.quietOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.quietOutputOn];
         }
-        if (self.threadConc.length >= 1) {
-            [launchArray addObject:@"--thread-concurrency"];
-            [launchArray addObject:self.threadConc];
-        }
-        if (self.shaders.length >= 1) {
-            [launchArray addObject:@"--shaders"];
-            [launchArray addObject:self.shaders];
-        }
-        if (self.lookupGap.length >= 1) {
-            [launchArray addObject:@"--lookup-gap"];
-            [launchArray addObject:self.lookupGap];
-        }
-        if (cpuThreads.length >= 1) {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:cpuThreads];
-        }
-        else {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:@"0"];
+        
+        
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0 || self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+
+            if (self.threadConc.length >= 1) {
+                [launchArray addObject:@"--thread-concurrency"];
+                [launchArray addObject:self.threadConc];
+            }
+            if (self.shaders.length >= 1) {
+                [launchArray addObject:@"--shaders"];
+                [launchArray addObject:self.shaders];
+            }
+            if (self.lookupGap.length >= 1) {
+                [launchArray addObject:@"--lookup-gap"];
+                [launchArray addObject:self.lookupGap];
+            }
+            
         }
         
-        self.executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-        self.paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-        self.userpath = [self.paths objectAtIndex:0];
-        self.userpath2 = [self.userpath stringByAppendingPathComponent:self.executableName];    // The file will go in this directory
-        self.saveBTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"bfgurls.conf"];
-        self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
-        self.userpath = nil;
-        self.userpath2 = nil;
-        self.paths = nil;
-        self.executableName = nil;
-        
-        [launchArray addObject:@"-c"];
-        [launchArray addObject:self.saveBTCConfigFilePath];
-        
-        if ([self.onScrypt isEqualTo:@"--scrypt"]) {
-            [launchArray removeLastObject];
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+            [launchArray addObject:@"--scrypt"];
+            [launchArray addObject:@"-c"];
             [launchArray addObject:self.saveLTCConfigFilePath];
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
         }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+            [launchArray addObject:@"--scrypt-vert"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLTCAdNConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:self.saveBTCConfigFilePath];
+            [launchArray addObject:@"-S"];
+            [launchArray addObject:@"opencl:auto"];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+            [launchArray addObject:@"--keccak"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveMaxConfigFilePath];
+        }
+        
+        
         
         if ([self.bonusOptions isNotEqualTo:nil]) {
             NSArray *bonusStuff = [self.bonusOptions componentsSeparatedByString:@" "];
@@ -1071,8 +1150,6 @@
             }
         }
         
-        //        NSString *testString = [launchArray componentsJoinedByString:@" "];
-        //        NSLog(testString);
         
         bfgTask=[[TaskWrapper alloc] initWithCommandPath:bfgPath
                                                arguments:launchArray
@@ -1097,7 +1174,7 @@
             NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             
             
-            if ([self.onScrypt length] <= 1) {
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
                 NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
                 NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -1130,7 +1207,7 @@
             }
             
             //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
-            if ([self.onScrypt isEqualTo:@"--scrypt"]) {
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
                 NSString *numberString = [self getDataBetweenFromString:ltcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
                 NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];

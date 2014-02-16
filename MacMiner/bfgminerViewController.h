@@ -88,6 +88,8 @@
 
 @property(strong) NSSpeechSynthesizer *speechSynth;
 
+@property (nonatomic, weak) IBOutlet NSPopUpButton *chooseGPUAlgo;
+
 
 - (IBAction)start:(id)sender;
 
