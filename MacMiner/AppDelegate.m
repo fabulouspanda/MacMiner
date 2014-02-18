@@ -105,9 +105,12 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isNotEqualTo:@"1517"]) {
-        [self.releaseNotes orderFront:nil];
+    if ([hideVersion isEqualToString:@"1517"]) {
+
     }
+        else {
+                 [self.releaseNotes orderFront:nil];
+        }
     
     stringVersion = nil;
 

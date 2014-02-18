@@ -7,7 +7,7 @@
 //
 
 #import "preferencesViewController.h"
-
+#import "AppDelegate.h"
 
 @interface preferencesViewController ()
 
@@ -38,6 +38,18 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
+    
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
+    
+    if ([hideVersion isEqualToString:@"1517"]) {
+        
+    }
+    else {
+        [appDelegate.releaseNotes orderFront:nil];
+    }
+
     
     if ([prefs objectForKey:@"checkUpdates"] != nil) {
         self.updateButton.state = NSOffState;
