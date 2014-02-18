@@ -118,6 +118,12 @@
 	
 	// Disconnect our weak reference to the delegate.
 	_taskDelegate = nil;
+	
+	_commandPath = nil;
+	_commandArguments = nil;
+	_environment = nil;
+    _task = nil;
+    
 }
 
 // Called asynchronously when data is available from the task's file handle.

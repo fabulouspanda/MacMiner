@@ -197,28 +197,7 @@
     userpath = nil;
     openBTCConfigFilePath = nil;
     openLTCConfigFilePath = nil;
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs synchronize];
-    
-    NSString *configString = [prefs stringForKey:@"autoConfig"];
-    if ([configString isEqualToString:@"skip"]) {
-        //            [self skipThis:(id)nil];
-        [self.introPanel orderOut:self];
-        //            [self.introPanel orderOut:self];
-        //            [self autoConfigToggled:(id)self];
 
-        [self closeWindow];
-    }
-    else {
-        //            [self skipThis:(id)nil];
-        [self.introPanel orderFrontRegardless];
-        //            [self.introPanel orderOut:self];
-        //            [self autoConfigToggled:(id)self];
-        
-        
-    }
-    prefs = nil;
 }
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
@@ -253,17 +232,12 @@
 
 
 - (IBAction)skipAutoSetup:(id)sender {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    // saving an NSString
-    [prefs setObject:@"skip" forKey:@"autoConfig"];
-    
-    [prefs synchronize];
+
     
     
     [self.introPanel orderOut:sender];
     
-    prefs = nil;
+
     
     
 }
@@ -312,6 +286,10 @@
 
 - (void)writeFile {
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+        [prefs synchronize];
+    
     //    Write BTC pools
     NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
     
@@ -335,12 +313,18 @@
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.userNameTextField.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user2" withString:self.userNameTextField.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass2" withString:self.userNameTextField.stringValue];
+            [prefs setObject:self.poolBoox.stringValue forKey:@"bitcoinPool"];
+            [prefs setObject:self.userNameTextField.stringValue forKey:@"bitcoinPoolUser"];
+            [prefs setObject:self.userNameTextField.stringValue forKey:@"bitcoinPoolPassword"];
         }
         else {
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolBoox.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.hostv.pl:9332" withString:@"http://pool.fabulouspanda.co.uk:9332"];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.btcuserNameTextField.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.btcpassWordTextField.stringValue];
+            [prefs setObject:self.poolBoox.stringValue forKey:@"bitcoinPool"];
+            [prefs setObject:self.btcuserNameTextField.stringValue forKey:@"bitcoinPoolUser"];
+            [prefs setObject:self.btcpassWordTextField.stringValue forKey:@"bitcoinPoolPassword"];
         }
 
         
@@ -352,7 +336,9 @@
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolBoox.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.btcuserNameTextField.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.btcpassWordTextField.stringValue];
-        
+        [prefs setObject:self.poolBoox.stringValue forKey:@"bitcoinPool"];
+        [prefs setObject:self.btcuserNameTextField.stringValue forKey:@"bitcoinPoolUser"];
+        [prefs setObject:self.btcpassWordTextField.stringValue forKey:@"bitcoinPoolPassword"];
 
     }
     
@@ -387,12 +373,18 @@
             if ([self.ltcpoolBoox.stringValue isEqualToString:@"http://pool.fabulouspanda.co.uk:9327"]) {
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.passWordTextField.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passWordTextField.stringValue];
+                [prefs setObject:self.ltcpoolBoox.stringValue forKey:@"scryptPool"];
+                [prefs setObject:self.passWordTextField.stringValue forKey:@"scryptPoolUser"];
+                [prefs setObject:self.passWordTextField.stringValue forKey:@"scryptPoolPassword"];
             }
             else {
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.ltcpoolBoox.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.hostv.pl:9327" withString:@"http://pool.fabulouspanda.co.uk:9327"];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.ltcuserNameTextField.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.ltcpassWordTextField.stringValue];
+                [prefs setObject:self.ltcpoolBoox.stringValue forKey:@"scryptPool"];
+                [prefs setObject:self.ltcuserNameTextField.stringValue forKey:@"scryptPoolUser"];
+                [prefs setObject:self.ltcpassWordTextField.stringValue forKey:@"scryptPoolPassword"];
             }
             ltcFilePath = nil;
         }
@@ -403,14 +395,22 @@
             if ([self.ltcpoolBoox.stringValue isEqualToString:@"http://pool.fabulouspanda.co.uk:9327"]) {
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.passWordTextField.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passWordTextField.stringValue];
+                [prefs setObject:self.ltcpoolBoox.stringValue forKey:@"scryptPool"];
+                [prefs setObject:self.passWordTextField.stringValue forKey:@"scryptPoolUser"];
+                [prefs setObject:self.passWordTextField.stringValue forKey:@"scryptPoolPassword"];
             }
             else {
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.ltcuserNameTextField.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.ltcpassWordTextField.stringValue];
+                [prefs setObject:self.ltcpoolBoox.stringValue forKey:@"scryptPool"];
+                [prefs setObject:self.ltcuserNameTextField.stringValue forKey:@"scryptPoolUser"];
+                [prefs setObject:self.ltcpassWordTextField.stringValue forKey:@"scryptPoolPassword"];
             }
 ltcFilePath = nil;
         }
             
+        [prefs synchronize];
+    
     
     NSString *ltcPath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
     
@@ -428,8 +428,8 @@ ltcFilePath = nil;
     bundleConfigPath = nil;
     
     NSAlert * myAlert=[[NSAlert alloc] init];
-    [myAlert setMessageText:@"You are now configured!"];
-    [myAlert addButtonWithTitle:@"Splendid"];
+    [myAlert setMessageText:@"Your configuration has been saved."];
+    [myAlert addButtonWithTitle:@"OK"];
     
     switch ([myAlert runModal]) {
         case NSAlertFirstButtonReturn:
@@ -449,6 +449,9 @@ ltcFilePath = nil;
     executableName = nil;
     paths = nil;
     fileManager = nil;
+    
+    
+    prefs = nil;
     
 }
 

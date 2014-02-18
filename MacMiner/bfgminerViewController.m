@@ -425,6 +425,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
     
+        if ([prefs objectForKey:@"enableSpeech"]) {
     NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
     if ([speechSetting  isEqual: @"silence"]) {
         
@@ -443,6 +444,9 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
+                speechSetting = nil;
+        }
+    
     
     if ([output rangeOfString:@"Invalid value passed to set intensity"].location != NSNotFound) {
         NSString *newOutput = [self.bfgOutputView.string stringByAppendingString:@"Please set an Intensity of 8 or higher"];
@@ -453,12 +457,15 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     }
     
     
-    speechSetting = nil;
+
     prefs = nil;
     
-    if ([output rangeOfString:@"5s:"].location != NSNotFound) {
+    if ([output rangeOfString:@"5s"].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
                                                      leftString:@"5s" rightString:@"a" leftOffset:3];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@":" withString:@""];
+            numberString = [numberString stringByReplacingOccurrencesOfString:@"K" withString:@""];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@"(" withString:@""];
         self.speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
         numberString = nil;
         NSString *acceptString = [self getDataBetweenFromString:output
@@ -466,13 +473,17 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         self.acceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         acceptString = nil;
         NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"R:" rightString:@"+" leftOffset:0];
+                                                     leftString:@"R:" rightString:@"H" leftOffset:0];
+        rejectString = [rejectString stringByReplacingOccurrencesOfString:@"+0(none)" withString:@""];
         self.rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         rejectString = nil;
         
             if ([output rangeOfString:@"kh"].location != NSNotFound) {
              self.hashRead.stringValue = @"Kh";
             }
+        if ([output rangeOfString:@"Kh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Kh";
+        }
         if ([output rangeOfString:@"Mh"].location != NSNotFound) {
             self.hashRead.stringValue = @"Mh";
         }
@@ -485,7 +496,8 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs synchronize];
 
-
+                if ([prefs objectForKey:@"showDockReading"]) {
+        
                 if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
                     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
                     [appDelegate.bfgReadBack setHidden:YES];
@@ -493,10 +505,19 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                     [[NSApp dockTile] display];
                     appDelegate = nil;
                 }
+                else
+                {
+                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                    appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
+                    [appDelegate.bfgReadBack setHidden:NO];
+                    [appDelegate.bfgReading setHidden:NO];
+                    [[NSApp dockTile] display];
+                    appDelegate = nil;
+                }
+
+                }
         else
         {
-            
-            
             AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
             [appDelegate.bfgReadBack setHidden:NO];
@@ -526,11 +547,13 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
     
-   NSString *logLength = [prefs objectForKey:@"logLength" ];
-    if (logLength.intValue <= 1) {
-        logLength = @"5000";
-    }
-    
+        NSString *logLength = @"1";
+        if ([prefs objectForKey:@"logLength"]) {
+            logLength = [prefs objectForKey:@"logLength" ];
+        }
+        if (logLength.intValue <= 1) {
+            logLength = @"5000";
+        }
     if (self.bfgOutputView.string.length >= logLength.intValue) {
         [self.bfgOutputView setEditable:true];
         [self.bfgOutputView setSelectedRange:NSMakeRange(0,1000)];
@@ -544,11 +567,19 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         // the view to the just pasted text.  We don't want to scroll right now,
         // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
         // of a text storage update to starve the app of events
-    
+
+                        if ([prefs objectForKey:@"scrollLog"]) {
+        
                 if ([[prefs objectForKey:@"scrollLog"] isNotEqualTo:@"hide"]) {
         [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
                 }
         prefs = nil;
+    }
+                        else {
+                                   [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
+                        }
+   
+        
     }
  
 
@@ -757,6 +788,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             self.bfgLookupGap.stringValue = lookupGap;
         }
         
+                                if ([prefs objectForKey:@"gpuAlgoChoice"]) {
         if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
             [self.chooseGPUAlgo selectItemAtIndex:0];
         }
@@ -769,7 +801,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
             [self.chooseGPUAlgo selectItemAtIndex:3];
         }
-
+                                }
         
         intensityValue = nil;
         worksizeValue = nil;
@@ -985,6 +1017,24 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
+    
+    if ([prefs objectForKey:@"gpuAlgoChoice"]) {
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:0];
+        }
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:1];
+        }
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:2];
+        }
+        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
+            [self.chooseGPUAlgo selectItemAtIndex:3];
+        }
+    }
+    
+    if ([prefs objectForKey:@"startBfg"]) {
+        
     
     if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
         
@@ -1247,11 +1297,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             
         }
-        
-        
-        
-        
-        
+
         
         launchArray = nil;
         
@@ -1268,9 +1314,11 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         self.saveBTCConfigFilePath = nil;
         self.saveLTCConfigFilePath = nil;
     }
-    prefs = nil;
-
+        
+    }
     
+    prefs = nil;
+ 
 }
 
 

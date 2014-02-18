@@ -10,7 +10,11 @@
 #import "TaskWrapper.h"
 
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate, NSUserNotificationCenterDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate, NSUserNotificationCenterDelegate> {
+
+    NSTimer *updateTimer;
+    
+}
 
 
 //@property (assign) IBOutlet NSWindow *window;
@@ -54,5 +58,9 @@
 - (void)mobilePost;
 
 - (void)mobileCommands;
+
+- (void)updateThread;
+
+- (void)checkforUpdates;
 
 @end

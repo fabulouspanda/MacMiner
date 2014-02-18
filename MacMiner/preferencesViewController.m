@@ -39,11 +39,19 @@
     
     [prefs synchronize];
     
+    if ([prefs objectForKey:@"checkUpdates"] != nil) {
+        self.updateButton.state = NSOffState;
+    }
+    
+    if ([prefs objectForKey:@"logLength"]) {
+        
+    
     NSString *logLength = [prefs objectForKey:@"logLength" ];
     if (logLength) {
     self.charCount.stringValue = logLength;
     }
-    
+    }
+                        if ([prefs objectForKey:@"bitcoinPool"]) {
     NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
     NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
     NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
@@ -53,6 +61,9 @@
     self.userNameField.stringValue = bitcoinPoolUser;
     self.passwordField.stringValue = bitcoinPoolPassword;
     }
+                            
+                        }
+    
     
     if ([prefs objectForKey:@"bitcoinPool"] == nil && [prefs objectForKey:@"scryptPool"] == nil && [prefs objectForKey:@"vertcoinPool"] == nil && [prefs objectForKey:@"quarkcoinPool"] == nil && [prefs objectForKey:@"maxcoinPool"] == nil) {
         [self.prefWindow orderFront:nil];
@@ -357,7 +368,7 @@
     
     //none selected?
     if (self.popUpCoin.indexOfSelectedItem == -1) {
-        NSLog(@"You're bugging me out, man! Apparently, no coin type was selected.");
+        NSLog(@"Apparently, no coin type was selected. That's not right.");
     }
     
     //SHA256
@@ -368,9 +379,11 @@
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.triplemining.com:3334"];
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.bitcoin.cz:3333"];
         
+                    if ([prefs objectForKey:@"bitcoinPool"]) {
         NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
         NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
+                    
         
             if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
         self.poolComboBox.stringValue = bitcoinPool;
@@ -385,6 +398,7 @@
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
+                    }
         
     }
     
@@ -393,6 +407,8 @@
         [self.poolComboBox removeAllItems];
         [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9327"];
         [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9327"];
+
+        if ([prefs objectForKey:@"scryptPool"]) {
         
         NSString *bitcoinPool = [prefs objectForKey:@"scryptPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"scryptPoolUser"];
@@ -411,13 +427,15 @@
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
-
+        }
     }
     
-    //VertCoin
+    //VertCoin Scrypt Adaptive-N
     if (self.popUpCoin.indexOfSelectedItem == 2) {
         [self.poolComboBox removeAllItems];
         
+                            if ([prefs objectForKey:@"vertcoinPool"]) {
+                                
         NSString *bitcoinPool = [prefs objectForKey:@"vertcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"vertcoinPoolUser"];
         NSString *bitcoinPoolPassword = [prefs objectForKey:@"vertcoinPoolPassword"];
@@ -435,13 +453,15 @@
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
-        
+                            }
     }
     
     //QuarkCoin
     if (self.popUpCoin.indexOfSelectedItem == 3) {
         [self.poolComboBox removeAllItems];
         
+                            if ([prefs objectForKey:@"quarkcoinPool"]) {
+                                
         NSString *bitcoinPool = [prefs objectForKey:@"quarkcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"quarkcoinPoolUser"];
         NSString *bitcoinPoolPassword = [prefs objectForKey:@"quarkcoinPoolPassword"];
@@ -459,7 +479,7 @@
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
-        
+                            }
     }
     
     //MaxCoin
@@ -467,6 +487,8 @@
         [self.poolComboBox removeAllItems];
         [self.poolComboBox setStringValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
         [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
+        
+                            if ([prefs objectForKey:@"maxcoinPool"]) {
         
         NSString *bitcoinPool = [prefs objectForKey:@"maxcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"maxcoinPoolUser"];
@@ -485,7 +507,7 @@
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
-        
+                            }
     }
     
     prefs = nil;
@@ -498,7 +520,7 @@
 
     //none selected?
     if (self.popUpCoin.indexOfSelectedItem == -1) {
-        NSLog(@"You're bugging me out, man! Apparently, no coin type was selected.");
+        NSLog(@"Apparently, no coin type was selected. That's not right.");
     }
 
     //SHA256
@@ -734,6 +756,21 @@
     
     [prefs synchronize];
     
+    NSAlert * myAlert=[[NSAlert alloc] init];
+    [myAlert setMessageText:@"Your pool has been saved."];
+    [myAlert addButtonWithTitle:@"OK"];
+    
+    switch ([myAlert runModal]) {
+        case NSAlertFirstButtonReturn:
+            //handle first button
+            
+            //            [self closeWindow];
+            
+            break;
+    }
+    myAlert = nil;
+
+    
     prefs = nil;
     
 }
@@ -761,6 +798,23 @@
 [self.prefView setHidden:YES];
 [self.prefView2 setHidden:YES];
 [self.prefView3 setHidden:NO];
+}
+
+- (IBAction)updateBox:(id)sender {
+    if (self.updateButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:nil forKey:@"checkUpdates"];
+        
+        [prefs synchronize];
+    }
+    else {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"nocheck" forKey:@"checkUpdates"];
+        
+        [prefs synchronize];
+    }
 }
 
 

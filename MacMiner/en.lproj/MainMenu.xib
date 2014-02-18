@@ -529,6 +529,7 @@
                 <outlet property="prefWindow" destination="1282" id="1294"/>
                 <outlet property="scrollButton" destination="6362" id="6389"/>
                 <outlet property="speechButton" destination="UpD-8o-vmp" id="iE0-xB-BDP"/>
+                <outlet property="updateButton" destination="1Nj-BG-hzX" id="veg-ib-YS6"/>
                 <outlet property="userNameField" destination="ISe-FV-FJ4" id="kLr-Wc-Ruv"/>
                 <outlet property="view" destination="2731" id="6388"/>
             </connections>
@@ -988,13 +989,24 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Nj-BG-hzX">
+                                <rect key="frame" x="98" y="20" width="250" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Check for updates automatically" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gJs-co-NwP">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="updateBox:" target="1289" id="OmM-zR-El9"/>
+                                </connections>
+                            </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="Ebk-Z0-zG2">
                                 <rect key="frame" x="135" y="47" width="100" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="96" id="dsF-zc-bgX"/>
                                 </constraints>
-                                <buttonCell key="cell" type="check" title="BFG Miner" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5qX-Rr-VEK">
+                                <buttonCell key="cell" type="check" title="GPU Miner" bezelStyle="regularSquare" imagePosition="left" inset="2" id="5qX-Rr-VEK">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1101,7 +1113,7 @@
                 <outlet property="delegate" destination="1289" id="1293"/>
             </connections>
         </window>
-        <window title="GPU Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" frameAutosaveName="bfgminer" animationBehavior="default" id="1296">
+        <window title="GPU Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="bfgminer" animationBehavior="default" id="1296">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="983" y="484" width="531" height="300"/>
@@ -1125,6 +1137,8 @@
                         <buttonCell key="cell" type="roundRect" title="Start" bezelStyle="roundedRect" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1524">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="cellTitle"/>
+                            <string key="keyEquivalent">s</string>
+                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
                         <connections>
                             <action selector="start:" target="1300" id="1662"/>
@@ -1347,6 +1361,8 @@
                         <buttonCell key="cell" type="roundRect" title="Start" bezelStyle="roundedRect" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1432">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="cellTitle"/>
+                            <string key="keyEquivalent">s</string>
+                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
                         <connections>
                             <action selector="start:" target="1301" id="1512"/>
@@ -1510,6 +1526,8 @@
                         <buttonCell key="cell" type="roundRect" title="Start" bezelStyle="roundedRect" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1765">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="cellTitle"/>
+                            <string key="keyEquivalent">s</string>
+                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
                         <connections>
                             <action selector="start:" target="1778" id="1803"/>
@@ -2539,10 +2557,10 @@ Gw
                                     <rect key="frame" x="0.0" y="0.0" width="369" height="457"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="399" height="457"/>
+                                    <size key="minSize" width="369" height="457"/>
                                     <size key="maxSize" width="463" height="10000000"/>
                                     <color key="insertionPointColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="399" height="457"/>
+                                    <size key="minSize" width="369" height="457"/>
                                     <size key="maxSize" width="463" height="10000000"/>
                                     <connections>
                                         <outlet property="delegate" destination="4450" id="4454"/>
@@ -3278,6 +3296,8 @@ Gw
                         <buttonCell key="cell" type="roundRect" title="Start" bezelStyle="roundedRect" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5652">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="cellTitle"/>
+                            <string key="keyEquivalent">s</string>
+                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                         </buttonCell>
                         <connections>
                             <action selector="cgstart:" target="5673" id="5860"/>
@@ -3993,7 +4013,7 @@ Gw
                 <outlet property="delegate" destination="1778" id="x1P-f4-jIT"/>
             </connections>
         </window>
-        <window title="Release Notes" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" frameAutosaveName="rnotes" animationBehavior="default" id="dsb-6a-Awg" customClass="NSPanel">
+        <window title="Release Notes" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="rnotes" animationBehavior="default" id="dsb-6a-Awg" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="0.0" y="1109" width="889" height="309"/>
@@ -4028,7 +4048,7 @@ Gw
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fiE-Ba-9uw">
                         <rect key="frame" x="18" y="247" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="There's a new Pool section in Preferences!" id="RxS-tN-XDy">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Prefer old pool setup? Reapply those settings and they'll show in new pool setup." id="RxS-tN-XDy">
                             <font key="font" size="15" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -4112,7 +4132,7 @@ for his help with C/C++ code</string>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QFh-AC-5Ph">
                         <rect key="frame" x="630" y="39" width="218" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Hide release notes for version" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OA9-Op-PZA">
+                        <buttonCell key="cell" type="push" title="Don't show again this version" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OA9-Op-PZA">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

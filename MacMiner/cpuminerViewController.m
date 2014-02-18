@@ -352,7 +352,7 @@
         [prefs synchronize];
         
 
-
+            if ([prefs objectForKey:@"showDockReading"]) {
         if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
             AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             [appDelegate.cpuReadBack setHidden:YES];
@@ -361,7 +361,19 @@
             [[NSApp dockTile] display];
             appDelegate = nil;
         }
-                if ([[prefs objectForKey:@"showDockReading"] isNotEqualTo:@"hide"]) {
+        else {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.cpuReading.stringValue = [self.cpuHashLabel.stringValue stringByAppendingString:@"Kh"];
+            [appDelegate.cpuReading setHidden:NO];
+            [appDelegate.cpuReadBack setHidden:NO];
+            
+            
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+                
+            }
+            else { 
         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         appDelegate.cpuReading.stringValue = [self.cpuHashLabel.stringValue stringByAppendingString:@"Kh"];
                     [appDelegate.cpuReading setHidden:NO];
@@ -391,7 +403,10 @@
     
     [prefs synchronize];
     
-    NSString *logLength = [prefs objectForKey:@"logLength" ];
+    NSString *logLength = @"1";
+            if ([prefs objectForKey:@"logLength"]) {
+        logLength = [prefs objectForKey:@"logLength" ];
+            }
     if (logLength.intValue <= 1) {
         logLength = @"5000";
     }
@@ -408,10 +423,15 @@
     // the view to the just pasted text.  We don't want to scroll right now,
     // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
     // of a text storage update to starve the app of events
+            if ([prefs objectForKey:@"scrollLog"]) {
                 if ([[prefs objectForKey:@"scrollLog"] isNotEqualTo:@"hide"]) {
     [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
                 }
-    
+            }
+            else {
+    [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
+            }
+        
         prefs = nil;
         logLength = nil;
         
@@ -521,6 +541,8 @@
     
     [prefs synchronize];
     
+    if ([prefs objectForKey:@"cpuAlgoChoice"]) {
+    
     if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"0"]) {
         [self.chooseAlgo selectItemAtIndex:0];
     }
@@ -536,7 +558,9 @@
     if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"4"]) {
         [self.chooseAlgo selectItemAtIndex:4];
     }
-
+    }
+    
+    if ([prefs objectForKey:@"startCpu"]) {
     if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
         
                         [self.cpuWindow orderFront:nil];
@@ -760,7 +784,7 @@
             
         }
         
-        
+    }
         
     }
     prefs = nil;

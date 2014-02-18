@@ -32,6 +32,8 @@
 @property (nonatomic, weak) IBOutlet NSButton *commandButton;
 @property (nonatomic, weak) IBOutlet NSButton *httpButton;
 
+@property (nonatomic, weak) IBOutlet NSButton *updateButton;
+
 // Pool settings
 @property (nonatomic, weak) IBOutlet NSPopUpButton *popUpCoin;
 @property (nonatomic, weak) IBOutlet NSComboBox *poolComboBox;

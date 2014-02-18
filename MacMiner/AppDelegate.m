@@ -23,6 +23,14 @@
 {
     // Insert code here to initialize your application
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    if ([prefs objectForKey:@"checkUpdates"]) {
+        
+    }
+    else {
 
 
         NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
@@ -79,7 +87,12 @@
                 }
         
     }
-
+        else {
+            [self performSelectorInBackground:@selector(updateThread) withObject:nil];
+        }
+        infoDict = nil;
+        buildNumber = nil;
+        checkString = nil;
     }
     
     
@@ -88,14 +101,16 @@
         [[NSApp dockTile] display];
     
 
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    [prefs synchronize];
+
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1516"]) {
-        [self.releaseNotes orderOut:nil];
+    if ([hideVersion isNotEqualTo:@"1517"]) {
+        [self.releaseNotes orderFront:nil];
+    }
+    
+    stringVersion = nil;
+
     }
     
     prefs = nil;
@@ -104,6 +119,67 @@
     
 }
 
+- (void)updateThread {
+      updateTimer = [NSTimer scheduledTimerWithTimeInterval:14400. target:self selector:@selector(startToggling) userInfo:nil repeats:YES];
+}
+
+- (void)checkforUpdates {
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+    
+    
+    if (stringVersion) {
+        
+        
+        NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+        //        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
+        NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+        NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
+        
+        if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
+            
+            BOOL notificationCenterIsAvailable = (NSClassFromString(@"NSUserNotificationCenter")!=nil);
+            
+            if (notificationCenterIsAvailable) {
+                
+                [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+                
+                NSUserNotification *notification = [[NSUserNotification alloc] init];
+                [notification setTitle:@"Update Available"];
+                NSString *messageText = [NSString stringWithFormat:@"You have version %@, %@ is available", checkString, stringVersion];
+                [notification setInformativeText:messageText];
+                [notification setSoundName:NSUserNotificationDefaultSoundName];
+                
+                
+                NSUserNotificationCenter *center = [NSUserNotificationCenter defaultUserNotificationCenter];
+                [center scheduleNotification: notification];
+                
+            }
+            else {
+                NSString *question = NSLocalizedString(@"An update is available", @"Quit without stop error question message");
+                NSString *info = NSLocalizedString(@"Get it now?", @"Quit without saves error question info");
+                NSString *updateButton = NSLocalizedString(@"Update", @"button title");
+                NSString *cancelButton = NSLocalizedString(@"Not now", @"button title");
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:question];
+                [alert setInformativeText:info];
+                [alert addButtonWithTitle:updateButton];
+                [alert addButtonWithTitle:cancelButton];
+                
+                NSInteger answer = [alert runModal];
+                
+                if (answer == NSAlertFirstButtonReturn) {
+                    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"]];
+                    return;
+                }
+                if (answer == NSAlertSecondButtonReturn) {
+                    return;
+                }
+                
+            }
+            
+        }
+    }
+}
 
 - (void) userNotificationCenter: (NSUserNotificationCenter *) center didActivateNotification: (NSUserNotification *) notification
 	{
@@ -245,7 +321,7 @@
 
         NSString *question = NSLocalizedString(@"Could not quit", @"Quit without stop error question message");
         NSString *info = NSLocalizedString(@"Please stop your miners before quitting", @"Quit without saves error question info");
-        NSString *cancelButton = NSLocalizedString(@"Okie Dokie", @"Cancel button title");
+        NSString *cancelButton = NSLocalizedString(@"OK", @"Cancel button title");
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:question];
         [alert setInformativeText:info];
@@ -642,7 +718,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1516" forKey:@"hideVersion"];
+    [prefs setObject:@"1517" forKey:@"hideVersion"];
     
     [prefs synchronize];
     
