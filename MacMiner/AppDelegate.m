@@ -23,6 +23,10 @@
 {
     // Insert code here to initialize your application
     
+    if ([[NSProcessInfo processInfo] respondsToSelector:@selector(beginActivityWithOptions:reason:)]) {
+        self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving API messages"];
+    }
+    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
@@ -105,15 +109,22 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1517"]) {
+        if (hideVersion) {
+            
+        
+    if ([hideVersion isEqualToString:@"1518"]) {
 
     }
         else {
                  [self.releaseNotes orderFront:nil];
         }
-    
+        
+        }
+        else {
+            [self.releaseNotes orderFront:nil];
+        }
     stringVersion = nil;
-
+        
     }
     
     prefs = nil;
@@ -123,7 +134,7 @@
 }
 
 - (void)updateThread {
-      updateTimer = [NSTimer scheduledTimerWithTimeInterval:14400. target:self selector:@selector(startToggling) userInfo:nil repeats:YES];
+      updateTimer = [NSTimer scheduledTimerWithTimeInterval:28800. target:self selector:@selector(startToggling) userInfo:nil repeats:YES];
 }
 
 - (void)checkforUpdates {
@@ -413,6 +424,10 @@
     NSString *email = [prefs objectForKey:@"emailAddress"];
     NSString *appID = [prefs objectForKey:@"appID"];
     
+    if (email) {
+        
+    
+    
     NSString *machineName = [[NSHost currentHost] localizedName];
     machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
     machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
@@ -498,12 +513,17 @@
             
         }
         //end control code
+        
+    }
+        
+    
+    
+
+    machineName = nil;
     }
     email = nil;
     appID = nil;
     prefs = nil;
-    machineName = nil;
-
 }
 
 - (void)mobilePost
@@ -515,6 +535,9 @@
     //    self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"      trying to send data to MoMi     "];
     NSString *email = [prefs objectForKey:@"emailAddress"];
     NSString *appID = [prefs objectForKey:@"appID"];
+    
+    if (email) {
+        
     
     NSString *machineName = [[NSHost currentHost] localizedName];
     machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
@@ -593,10 +616,12 @@
         }
         prepost = nil;
     }
+
+    machineName = nil;
+    }
     email = nil;
     appID = nil;
     prefs = nil;
-    machineName = nil;
     
 }
 
@@ -721,7 +746,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1517" forKey:@"hideVersion"];
+    [prefs setObject:@"1518" forKey:@"hideVersion"];
     
     [prefs synchronize];
     

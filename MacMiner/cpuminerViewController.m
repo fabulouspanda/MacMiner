@@ -243,15 +243,18 @@
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
-                if (self.chooseAlgo.indexOfSelectedItem == 1) {
-        cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
-                }
-                else if (self.chooseAlgo.indexOfSelectedItem == 4) {
-                    cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
-                }
-                else {
-                            cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
-                }
+        if (self.chooseAlgo.indexOfSelectedItem == 1) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+        }
+        else if (self.chooseAlgo.indexOfSelectedItem == 4) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
+        }
+        else if (self.chooseAlgo.indexOfSelectedItem == 3) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
+        else {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
@@ -587,9 +590,9 @@
         [prefs synchronize];
         
         
-        NSString *mainLTCPool = [prefs stringForKey:@"defaultLTCPoolValue"];
-        NSString *mainLTCUser = [prefs stringForKey:@"defaultLTCUser"];
-        NSString *mainLTCPass = [prefs stringForKey:@"defaultLTCPass"];
+        NSString *mainLTCPool = @"";
+        NSString *mainLTCUser = @"";
+        NSString *mainLTCPass = @"";
         
         
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
@@ -662,7 +665,7 @@
             [cpuLaunchArray addObject:mainLTCUser];
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
-        }
+        }//VertCoin:
         if (self.chooseAlgo.indexOfSelectedItem == 1) {
             [cpuLaunchArray addObject:@"-o"];
             [cpuLaunchArray addObject:mainLTCPool];
@@ -729,8 +732,11 @@
         else if (self.chooseAlgo.indexOfSelectedItem == 4) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
         }
+        else if (self.chooseAlgo.indexOfSelectedItem == 3) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
         else {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
         }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];

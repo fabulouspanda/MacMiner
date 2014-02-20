@@ -86,6 +86,8 @@
 @property (nonatomic, weak) NSString *saveBTCConfigFilePath;
 @property (nonatomic, weak) NSString *saveLTCConfigFilePath;
 
+@property (nonatomic, strong) NSAlert *restartMessage;
+
 @property(strong) NSSpeechSynthesizer *speechSynth;
 
 @property (nonatomic, weak) IBOutlet NSPopUpButton *chooseGPUAlgo;

@@ -77,6 +77,12 @@
         if (cgTask!=nil) {
             cgTask = nil;
         }
+
+        BOOL stackViewIsAvailable = (NSClassFromString(@"NSStackView")!=nil);
+        
+        if (stackViewIsAvailable) {
+//            NSLog(@"10.9");
+
         
         NSString *filePath = @"/System/Library/Extensions/IOUSBFamily.kext";
         bool b=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
@@ -119,6 +125,10 @@
             
 //            [driverAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 
+        }
+        }
+        else {
+//            NSLog(@"not 10.9");
         }
         
         
@@ -715,50 +725,7 @@
         if (cgTask!=nil) {
             cgTask = nil;
         }
-        
-//        NSString *filePath = @"/System/Library/Extensions/IOUSBFamily.kext";
-//        bool b=[[NSFileManager defaultManager] fileExistsAtPath:filePath];
-//        
-//        NSString *filePath2 = @"/System/Library/Extensions/SiLabsUSBDriver64.kext";
-//        bool c=[[NSFileManager defaultManager] fileExistsAtPath:filePath2];
-//        
-//        NSString *filePath3 = @"/System/Library/Extensions/FTDIUSBSerialDriver.kext";
-//        bool d=[[NSFileManager defaultManager] fileExistsAtPath:filePath3];
-//        
-//        if (b == YES || c == YES || d == YES) {
-//            NSAlert *driverAlert = [[NSAlert alloc] init];
-//            [driverAlert addButtonWithTitle:@"Show Instructions"];
-//            [driverAlert addButtonWithTitle:@"Ignore problem drivers"];
-//            
-//            [driverAlert setMessageText:@"Driver problem detected"];
-//            NSString *infoText = @"cgminer conflicts with the native Mac OS 10.9 and other USB Serial drivers. Please click below to see instructions for disabling the default driver.";
-//            
-//            [driverAlert setInformativeText:infoText];
-//            
-//            
-//            [driverAlert setAlertStyle:NSWarningAlertStyle];
-//            //        returnCode: (NSInteger)returnCode
-//            int rCode = [driverAlert runModal];
-//            if (rCode == NSAlertFirstButtonReturn) {
-//                
-//                if (b == YES) {
-//                    NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
-//                    NSString *urlPath = [bundlePath stringByAppendingString:@"/driverfiles/Instructions.rtf"];
-//                    NSURL* url = [NSURL fileURLWithPath:urlPath isDirectory:YES];
-//                    
-//                    NSArray *fileURLs = [NSArray arrayWithObjects:url, nil];
-//                    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURLs];
-//                }
-//                
-//            }
-//            else {
-//                //                NSLog(@"Ignore");
-//            }
-//            
-//            //            [driverAlert beginSheetModalForWindow:self.cgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-//            
-//        }
-        
+   
         
         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
         appDelegate.cgReading.stringValue = @"";

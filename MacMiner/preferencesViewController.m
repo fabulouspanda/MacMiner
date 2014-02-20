@@ -43,7 +43,7 @@
     
     NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
     
-    if ([hideVersion isEqualToString:@"1517"]) {
+    if ([hideVersion isEqualToString:@"1518"]) {
         
     }
     else {
@@ -395,6 +395,7 @@
         NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
         NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
+
                     
         
             if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
@@ -425,6 +426,7 @@
         NSString *bitcoinPool = [prefs objectForKey:@"scryptPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"scryptPoolUser"];
         NSString *bitcoinPoolPassword = [prefs objectForKey:@"scryptPoolPassword"];
+
         
             if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
         self.poolComboBox.stringValue = bitcoinPool;
@@ -451,6 +453,7 @@
         NSString *bitcoinPool = [prefs objectForKey:@"vertcoinPool"];
         NSString *bitcoinPoolUser = [prefs objectForKey:@"vertcoinPoolUser"];
         NSString *bitcoinPoolPassword = [prefs objectForKey:@"vertcoinPoolPassword"];
+
         
             if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
         self.poolComboBox.stringValue = bitcoinPool;
@@ -540,7 +543,7 @@
                 [prefs setObject:self.poolComboBox.stringValue forKey:@"bitcoinPool"];
                 [prefs setObject:self.userNameField.stringValue forKey:@"bitcoinPoolUser"];
                 [prefs setObject:self.passwordField.stringValue forKey:@"bitcoinPoolPassword"];
-        
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultPoolValue"];
 
         
         //    Write BTC pools to config file
@@ -588,6 +591,7 @@
         [prefs setObject:self.poolComboBox.stringValue forKey:@"scryptPool"];
         [prefs setObject:self.userNameField.stringValue forKey:@"scryptPoolUser"];
         [prefs setObject:self.passwordField.stringValue forKey:@"scryptPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultLTCPoolValue"];
         
         //    Write LTC pools to config file
         NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
@@ -633,6 +637,7 @@
         [prefs setObject:self.poolComboBox.stringValue forKey:@"vertcoinPool"];
         [prefs setObject:self.userNameField.stringValue forKey:@"vertcoinPoolUser"];
         [prefs setObject:self.passwordField.stringValue forKey:@"vertcoinPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultVTCPoolValue"];
         
         //    Write VTC pools to config file
         NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
@@ -679,6 +684,7 @@
         [prefs setObject:self.poolComboBox.stringValue forKey:@"quarkcoinPool"];
         [prefs setObject:self.userNameField.stringValue forKey:@"quarkcoinPoolUser"];
         [prefs setObject:self.passwordField.stringValue forKey:@"quarkcoinPoolPassword"];
+                                [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultQRKPoolValue"];
         
         //    Write QRK pools to config file
         NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
@@ -725,6 +731,7 @@
         [prefs setObject:self.poolComboBox.stringValue forKey:@"maxcoinPool"];
         [prefs setObject:self.userNameField.stringValue forKey:@"maxcoinPoolUser"];
         [prefs setObject:self.passwordField.stringValue forKey:@"maxcoinPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultMAXPoolValue"];
         
         //    Write QRK pools to config file
         NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];

@@ -467,7 +467,7 @@ self.megaHashLabel.stringValue = @"0";
             NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
             NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
             NSString *apiIntensity = [self getDataBetweenFromString:pgaAPIData leftString:@"sity] =>" rightString:@"[" leftOffset:8];
-            NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+            NSString *apiName = pgaCount;
             
             [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
             
@@ -480,12 +480,48 @@ self.megaHashLabel.stringValue = @"0";
             NSString *apiHashAv = [NSString stringWithFormat:@"%ld", (long)v];
             apiHashAv = [apiHashAv stringByAppendingString:@"000"];
 
+            NSString *apiPoolString = @"unknown";
+            
+            NSString *coinChoiceString = @"unknown";
+            
+            NSString *algorithmString = @"unknown";
+            
+            if ([self.prefs objectForKey:@"gpuAlgoChoice"]) {
+                if ([[self.prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
+coinChoiceString = @"Scrypt";
+algorithmString = @"Scrypt";
+                    if ([self.prefs stringForKey:@"defaultLTCPoolValue"]) {
+                    apiPoolString = [self.prefs stringForKey:@"defaultLTCPoolValue"];
+                    }
+                }
+                if ([[self.prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
+                    coinChoiceString = @"ScryptN";
+                    algorithmString = @"ScryptN";
+                    if ([self.prefs stringForKey:@"defaultVTCPoolValue"]) {
+                        apiPoolString = [self.prefs stringForKey:@"defaultVTCPoolValue"];
+                    }
+                }
+                if ([[self.prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
+                    coinChoiceString = @"Bitcoin";
+                    algorithmString = @"SHA256d";
+                    if ([self.prefs stringForKey:@"defaultPoolValue"]) {
+                      apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
+                    }
+
+                }
+                if ([[self.prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
+                    coinChoiceString = @"MaxCoin";
+                    algorithmString = @"Keccak";
+                    if ([self.prefs stringForKey:@"defaultMAXPoolValue"]) {
+                        apiPoolString = [self.prefs stringForKey:@"defaultMAXPoolValue"];
+                    }
+                }
+            }
+
             
             
             
-            NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
-            
-            NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"GPU\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"%@\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", apiStatus, @"0", apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiIntensity, pgaCount, apiName, apiPoolString];
+            NSString *pgaStats = [NSString stringWithFormat:@"{\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"%@\",\"Algorithm\":\"%@\",\"Kind\":\"GPU\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"%@\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", coinChoiceString, algorithmString, apiStatus, @"0", apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiIntensity, pgaCount, apiName, apiPoolString];
             
             
             pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
@@ -806,6 +842,10 @@ self.megaHashLabel.stringValue = @"0";
                         [apiArray addObject:@"devs"];
             [apiArray addObject:@"127.0.0.1:4048"];
         }
+        if ([appDelegate.bfgReadBack isHidden] == NO) {
+            [apiArray addObject:@"devs"];
+            [apiArray addObject:@"127.0.0.1:4052"];
+        }
 
         if (self.minerAddressesArray.count >= 1) {
             
@@ -832,7 +872,7 @@ self.megaHashLabel.stringValue = @"0";
     // kick off the process asynchronously
 //        NSString *logger = [apiArray componentsJoinedByString:@" "];
 //        NSLog(logger);
-        if ([apiArray containsObject:@"devs"] || [appDelegate.asicReadBack isHidden] == NO || [appDelegate.cgReadBack isHidden] == NO) {
+        if ([apiArray containsObject:@"devs"] || [appDelegate.asicReadBack isHidden] == NO || [appDelegate.cgReadBack isHidden] == NO || [appDelegate.bfgReadBack isHidden] == NO) {
     [apiTask startTask];
         }
 

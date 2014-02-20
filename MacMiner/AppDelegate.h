@@ -55,6 +55,8 @@
 
 @property (nonatomic, strong) NSString *mobileMinerStatus;
 
+@property (strong) id activity;
+
 - (void)mobilePost;
 
 - (void)mobileCommands;

@@ -112,12 +112,15 @@
     }
     else
     {
+        self.bfgStartButton.tag = 0;
         [self.bfgStartButton setTitle:@"Stop"];
         // If the task is still sitting around from the last run, release it
         if (bfgTask!=nil) {
             bfgTask = nil;
         }
 
+        
+        
 NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [prefs synchronize];
         
@@ -152,7 +155,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         }
         if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
-            bfgPath = [bundlePath2 stringByAppendingString:@"/maxcgminer/bin/cgminer"];
+            bfgPath = [bundlePath2 stringByAppendingString:@"/maxminer/bin/cgminer"];
         }
         
         
@@ -164,7 +167,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         startingText = nil;
         
         
-        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"--api-listen", @"--api-allow", @"R:0/0", @"--api-port", @"4052", nil];
         
         
         
@@ -466,6 +469,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         numberString = [numberString stringByReplacingOccurrencesOfString:@":" withString:@""];
             numberString = [numberString stringByReplacingOccurrencesOfString:@"K" withString:@""];
         numberString = [numberString stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@"M" withString:@""];
         self.speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
         numberString = nil;
         NSString *acceptString = [self getDataBetweenFromString:output
@@ -652,10 +656,10 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [self performSelector:@selector(start:) withObject:nil afterDelay:10.0];
     
-    NSAlert *restartMessage = [[NSAlert alloc] init];
-    [restartMessage addButtonWithTitle:@"Umm… OK."];
+    self.restartMessage = [[NSAlert alloc] init];
+    [self.restartMessage addButtonWithTitle:@"Umm… OK."];
     
-    [restartMessage setMessageText:@"Settings changed"];
+    [self.restartMessage setMessageText:@"Settings changed"];
     
     NSDate * now = [NSDate date];
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -663,14 +667,14 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     NSString *newDateString = [outputFormatter stringFromDate:now];
     NSLog(@"newDateString %@", newDateString);
     outputFormatter = nil;
-    NSString *restartMessageInfo = [NSString stringWithFormat:@"Your miner was resarted automatically after a sudden stop at %@.", newDateString];
-    [restartMessage setInformativeText:restartMessageInfo];
+    NSString *restartMessageInfo = [NSString stringWithFormat:@"Your miner was restarted automatically after a sudden stop at %@.", newDateString];
+    [self.restartMessage setInformativeText:restartMessageInfo];
     
-    [restartMessage setAlertStyle:NSWarningAlertStyle];
+    [self.restartMessage setAlertStyle:NSWarningAlertStyle];
     //        returnCode: (NSInteger)returnCode
     
-    [restartMessage beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-            restartMessage = nil;
+    [self.restartMessage beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            self.restartMessage = nil;
     }
 
 }
@@ -1012,11 +1016,11 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 -(void)awakeFromNib
 {
     
-
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
+    
     
     if ([prefs objectForKey:@"gpuAlgoChoice"]) {
         if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
@@ -1032,6 +1036,11 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [self.chooseGPUAlgo selectItemAtIndex:3];
         }
     }
+    
+    if ([prefs objectForKey:@"startBfg"] == nil && [prefs objectForKey:@"startAsic"] == nil && [prefs objectForKey:@"startCg"] == nil && [prefs objectForKey:@"startCpu"] == nil) {
+                            [self.bfgWindow orderFront:nil];
+    }
+    
     
     if ([prefs objectForKey:@"startBfg"]) {
         
@@ -1079,7 +1088,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         }
         if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
-            bfgPath = [bundlePath2 stringByAppendingString:@"/maxcgminer/bin/cgminer"];
+            bfgPath = [bundlePath2 stringByAppendingString:@"/maxminer/bin/cgminer"];
         }
         
         
@@ -1091,7 +1100,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         startingText = nil;
         
         
-        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: nil];
+        NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"--api-listen", @"--api-allow", @"R:0/0", @"--api-port", @"4052", nil];
         
     
         
