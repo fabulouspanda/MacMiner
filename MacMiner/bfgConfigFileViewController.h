@@ -10,17 +10,18 @@
 
 @interface bfgConfigFileViewController : NSViewController <NSWindowDelegate, NSTextFieldDelegate> {
     
-    NSWindow *configEditWindow;
+NSWindow *configEditWindow;
     
-    NSButton *saveConfigFile;
-    NSButton *cancelConfig;
-    NSButton *revertConfig;
+NSButton *saveConfigFile;
+NSButton *cancelConfig;
+NSButton *revertConfig;
     
-    NSSegmentedControl *btcLTCSegmentedControl;
+NSSegmentedControl *btcLTCSegmentedControl;
     
-    NSTextView *bfgConfigText;
+NSTextView *bfgConfigText;
     
 }
+
 
 @property (nonatomic, strong) IBOutlet NSWindow *configEditWindow;
 

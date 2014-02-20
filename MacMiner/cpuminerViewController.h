@@ -10,28 +10,34 @@
 #import "TaskWrapper.h"
 
 
-@interface cpuminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate> {
-    NSWindow *cpuWindow;
-    NSView *cpuView;
-    
-    NSButton *startButton;
+@interface cpuminerViewController : NSViewController <NSWindowDelegate, TaskWrapperDelegate, NSTextViewDelegate, NSTextFieldDelegate, NSPopoverDelegate> {
 
     BOOL findRunning;
     TaskWrapper *cpuTask;
     
-    NSButton *cpuRememberButton;
+NSWindow *cpuWindow;
+NSView *cpuView;
     
-    NSPanel *cpuOptionsWindow;
-    NSTextField *cpuThreads;
-    NSButton *cpuDebugOutput;
-    NSButton *cpuQuietOutput;
-    NSButton *cpuScrypt;
+NSTextView *cpuOutputView;
+NSButton *cpuStartButton;
+NSTextField *cpuStatLabel;
+NSTextField *cpuHashLabel;
     
-        NSTextField *cpuManualOptions;
-    NSButton *cpuOptionsButton;
     
-    NSTextField *tempsLabel;
+NSPanel *cpuOptionsWindow;
+NSTextField *cpuThreads;
+NSButton *cpuDebugOutput;
+NSButton *cpuQuietOutput;
     
+NSTextField *cpuManualOptions;
+    
+NSButton *cpuOptionsButton;
+    
+NSTextField *tempsLabel;
+    
+NSPopUpButton *chooseAlgo;
+    
+
 
 }
 
@@ -43,19 +49,21 @@
 @property (nonatomic, strong) IBOutlet NSTextField *cpuStatLabel;
 @property (nonatomic, strong) IBOutlet NSTextField *cpuHashLabel;
 
-@property (nonatomic, strong) IBOutlet NSButton *cpuRememberButton;
 
 @property (nonatomic, strong) IBOutlet NSPanel *cpuOptionsWindow;
 @property (nonatomic, strong) IBOutlet NSTextField *cpuThreads;
 @property (nonatomic, strong) IBOutlet NSButton *cpuDebugOutput;
 @property (nonatomic, strong) IBOutlet NSButton *cpuQuietOutput;
-@property (nonatomic, strong) IBOutlet NSButton *cpuScrypt;
 
 @property (nonatomic, strong) IBOutlet NSTextField *cpuManualOptions;
 
 @property (nonatomic, strong) IBOutlet NSButton *cpuOptionsButton;
 
 @property (nonatomic, strong) IBOutlet NSTextField *tempsLabel;
+
+@property (nonatomic, strong) IBOutlet NSPopUpButton *chooseAlgo;
+
+
 
 
 - (IBAction)start:(id)sender;

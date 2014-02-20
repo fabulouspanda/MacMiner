@@ -38,15 +38,6 @@ MORE INFORMATION ON EACH.
 
 EXECUTIVE SUMMARY ON USAGE:
 
-After saving configuration from the menu, you do not need to give BFGMiner any
-arguments and it will load your configuration.
-
-Any configuration file may also contain a single
-	"include" : "filename"
-to recursively include another configuration file.
-Writing the configuration will save all settings from all files in the output.
-
-
 Single pool:
 
 bfgminer -o http://pool:port -u username -p password
@@ -55,11 +46,11 @@ Multiple pools:
 
 bfgminer -o http://pool1:port -u pool1username -p pool1password -o http://pool2:port -u pool2usernmae -p pool2password
 
-Single pool with a standard http proxy, regular desktop:
+Single pool with a standard http proxy:
 
 bfgminer -o http://pool:port -x http://proxy:port -u username -p password
 
-Single pool with a socks5 proxy, regular desktop:
+Single pool with a socks5 proxy:
 
 bfgminer -o http://pool:port -x socks5://proxy:port -u username -p password
 
@@ -75,8 +66,24 @@ Proxy support requires cURL version 7.21.7 or newer.
 If you specify the --socks-proxy option to BFGMiner, it will only be applied to
 all pools that don't specify their own proxy setting like above
 
+
+After saving configuration from the menu ([S],[W]) you do not need to give
+BFGMiner any arguments, it will load your configuration instead.
+
+Any configuration file may also contain a single
+	"include" : "filename"
+to recursively include another configuration file.
+Writing the configuration will save all settings from all files to the output
+configuration file.
+
+
 ---
 BUILDING BFGMINER
+
+Everything you probably want, condensed:
+	build-essential autoconf automake libtool pkg-config libcurl4-gnutls-dev
+	libjansson-dev uthash-dev libncursesw5-dev libudev-dev libusb-1.0-0-dev
+	libevent-dev libmicrohttpd-dev hidapi
 
 Dependencies:
 	autoconf             http://www.gnu.org/software/autoconf/
@@ -89,7 +96,7 @@ Dependencies:
 
 	libjansson-dev 2.0+  http://www.digip.org/jansson/
 	
-	uthash-dev 1.9.2+    http://troydhanson.github.io/uthash/
+	uthash-dev 1.9.4+    http://troydhanson.github.io/uthash/
 
 Optional Dependencies:
 	Text-User-Interface (TUI): curses dev library; any one of:
@@ -98,13 +105,28 @@ Optional Dependencies:
 	  libpdcurses        http://pdcurses.sourceforge.net/ (Linux/Mac/Windows)
 
 	Multiple ASIC/FPGA autodetection: any one of:
-	  sysfs              (builtin to most Linux kernels, just mount on /sys)
+	  sysfs              (built-in to most Linux kernels, just mount on /sys)
 	  libudev-dev        http://www.freedesktop.org/software/systemd/libudev/
+	
+	HashBuster Nano & NanoFury USB devices:
+	  hidapi             https://github.com/signal11/hidapi
+	
+	getwork server for Block Erupter Blades:
+	  libmicrohttpd-dev 0.9.5+  http://www.gnu.org/software/libmicrohttpd/
+	
+	Stratum proxy:
+	  libevent 2.0.3+    http://libevent.org/
 
-	X6500 and ZTEX FPGA boards:
+	HashBuster Micro, Klondike, X6500 and ZTEX FPGA boards:
 	  libusb-1.0-0-dev   http://www.libusb.org/
 
-	ATi/AMD video card GPU mining:
+	Video card GPU mining (free):
+	  llvm 3.3+          http://llvm.org/
+	  clang 3.3+         http://clang.llvm.org/
+	  libclc             http://libclc.llvm.org/
+	  Mesa 9.2.0+        http://www.mesa3d.org/
+	
+	ATi/AMD video card GPU mining (non-free):
 	  AMD APP SDK        http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/
 
 	CPU mining optimized assembly algorithms:
@@ -114,15 +136,37 @@ Optional Dependencies:
 BFGMiner specific configuration options:
 	--disable-avalon        Compile support for Avalon (default enabled)
 	--enable-cpumining      Build with cpu mining support(default disabled)
-	--disable-opencl        Build without support for OpenCL (default enabled)
+	--enable-opencl         Compile support for OpenCL (default disabled)
 	--disable-adl           Build without ADL monitoring (default enabled)
+	--disable-bitfury       Compile support for Bitfury (default enabled)
+	--enable-bfsb           Compile support for BFSB (default disabled)
+	--disable-bigpic        Compile support for Big Picture Mining USB (default
+	                        enabled)
+	--disable-littlefury    Compile support for LittleFury (default enabled)
+	--disable-nanofury      Compile support for NanoFury (default enabled)
+	--disable-hashbuster    Compile support for HashBuster Nano (default
+	                        enabled)
+	--disable-hashbuster2   Compile support for HashBuster Micro (default if
+	                        libusb)
+	--enable-metabank       Compile support for Metabank (default disabled)
 	--disable-bitforce      Compile support for BitForce (default enabled)
 	--disable-icarus        Compile support for Icarus (default enabled)
+	--disable-klondike      Compile support for Klondike (default enabled)
+	--enable-knc            Compile support for KnC (default disabled)
 	--disable-modminer      Compile support for ModMiner (default enabled)
 	--disable-x6500         Compile support for X6500 (default enabled)
 	--disable-ztex          Compile support for ZTEX (default if libusb)
 	--enable-scrypt         Compile support for scrypt mining (default disabled)
+	--with-system-libblkmaker  Use system libblkmaker rather than bundled one
+	                           (default disabled)
+	--with-udevrulesdir=DIR Install udev rules into this directory
+	--without-sensors       Build with libsensors monitoring (default enabled)
 	--without-curses        Compile support for curses TUI (default enabled)
+	--without-libmicrohttpd Compile support for libmicrohttpd getwork server
+	                        (default enabled)
+	--without-libevent      Compile support for libevent stratum server (default
+	                        enabled)
+	--without-libusb        Compile using libusb (default enabled)
 	--without-libudev       Autodetect FPGAs using libudev (default enabled)
 
 Basic *nix build instructions:
@@ -144,12 +188,15 @@ Native WIN32 build instructions: see windows-build.txt
 If you build BFGMiner from source, it is recommended that you run it from the
 build directory. On *nix, you will usually need to prepend your command with a
 path like this (if you are in the bfgminer directory already): ./bfgminer
+To install system wide run 'sudo make install' or 'make install' as root. You
+can then run from any terminal.
 
 ---
 
 Usage instructions:  Run "bfgminer --help" to see options:
 
-Usage: . [-atDdGCgIKklmpPQqrRsTouvwOchnV] 
+Usage: bfgminer [-DdElmpPQqUsTouOchnV]
+
 Options for both config file and command line:
 --api-allow         Allow API access (if enabled) only to the given list of [W:]IP[/Prefix] address[/subnets]
                     This overrides --api-network and you must specify 127.0.0.1 if it is required
@@ -160,26 +207,37 @@ Options for both config file and command line:
 --api-listen        Listen for API requests (default: disabled)
                     By default any command that does not just display data returns access denied
                     See --api-allow to overcome this
+--api-mcast         Enable API Multicast listener, default: disabled
+--api-mcast-addr <arg> API Multicast listen address (default: "224.0.0.75")
+--api-mcast-code <arg> Code expected in the API Multicast message, don't use '-' (default: "FTW")
+--api-mcast-port <arg> API Multicast listen port (default: 4028)
 --api-network       Allow API (if enabled) to listen on/for any address (default: only 127.0.0.1)
 --api-port          Port number of miner API (default: 4028)
 --balance           Change multipool strategy from failover to even share balance
 --benchmark         Run BFGMiner in benchmark mode - produces no shares
+--chroot-dir <arg>  Chroot to a directory right after startup
+--cmd-idle <arg>    Execute a command when a device is allowed to be idle (rest or wait)
+--cmd-sick <arg>    Execute a command when a device is declared sick
+--cmd-dead <arg>    Execute a command when a device is declared dead
 --coinbase-addr <arg> Set coinbase payout address for solo mining
 --coinbase-sig <arg> Set coinbase signature when possible
 --compact           Use compact display without per device statistics
 --debug|-D          Enable debug output
 --debuglog          Enable debug logging
---device|-d <arg>   Select device to use, one value, range and/or comma separated (e.g. 0-2,4) default: all
+--device|-d <arg>   Enable only devices matching pattern (default: all)
 --disable-rejecting Automatically disable pools that continually reject shares
+--http-port <arg>   Port number to listen on for HTTP getwork miners (-1 means disabled) (default: -1)
 --expiry|-E <arg>   Upper bound on how many seconds after getting work we consider a share from it stale (w/o longpoll active) (default: 120)
 --expiry-lp <arg>   Upper bound on how many seconds after getting work we consider a share from it stale (with longpoll active) (default: 3600)
 --failover-only     Don't leak work to backup pools when primary pool is lagging
 --force-dev-init    Always initialize devices when possible (such as bitstream uploads to some FPGAs)
 --kernel-path|-K <arg> Specify a path to where bitstream and kernel files are (default: "/usr/local/bin")
---load-balance      Change multipool strategy from failover to efficiency based balance
+--load-balance      Change multipool strategy from failover to quota based balance
 --log|-l <arg>      Interval in seconds between log output (default: 5)
+--log-file|-L <arg> Append log file for output messages
+--log-microseconds  Include microseconds in log output
 --monitor|-m <arg>  Use custom pipe cmd for output messages
---net-delay         Impose small delays in networking to not overload slow routers
+--net-delay         Impose small delays in networking to avoid overloading slow routers
 --no-gbt            Disable getblocktemplate support
 --no-getwork        Disable getwork support
 --no-longpoll       Disable X-Long-Polling support
@@ -187,6 +245,8 @@ Options for both config file and command line:
 --no-stratum        Disable Stratum detection
 --no-submit-stale   Don't submit shares if they are detected as stale
 --no-opencl-binaries Don't attempt to use or save OpenCL kernel binaries
+--no-unicode        Don't use Unicode characters in TUI
+--noncelog <arg>    Create log of all nonces found
 --pass|-p <arg>     Password for bitcoin JSON-RPC server
 --per-device-stats  Force verbose mode and output per-device statistics
 --pool-proxy|-x     Proxy URI to use for connecting to just the previous-defined pool
@@ -199,24 +259,30 @@ Options for both config file and command line:
 --retries <arg>     Number of times to retry failed submissions before giving up (-1 means never) (default: -1)
 --rotate <arg>      Change multipool strategy from failover to regularly rotate at N minutes (default: 0)
 --round-robin       Change multipool strategy from failover to round robin on failure
+--scan|-S <arg>     Configure how to scan for mining devices
 --scan-time|-s <arg> Upper bound on time spent scanning current work, in seconds (default: 60)
 --sched-start <arg> Set a time of day in HH:MM to start mining (a once off without a stop time)
 --sched-stop <arg>  Set a time of day in HH:MM to stop mining (will quit without a start time)
 --scrypt            Use the scrypt algorithm for mining (non-bitcoin)
+--set-device <arg>  Set default parameters on devices; eg, NFY:osc6_bits=50
+--setuid <arg>      Username of an unprivileged user to run as
 --sharelog <arg>    Append share log to file
 --shares <arg>      Quit after mining N shares (default: unlimited)
 --show-processors   Show per processor statistics in summary
 --skip-security-checks <arg> Skip security checks sometimes to save bandwidth; only check 1/<arg>th of the time (default: never skip)
---socks-proxy <arg> Set socks4 proxy (host:port) for all pools without a proxy specified
+--socks-proxy <arg> Set socks proxy (host:port) for all pools without a proxy specified
+--stratum-port <arg> Port number to listen on for stratum miners (-1 means disabled) (default: -1)
 --submit-threads    Minimum number of concurrent share submissions (default: 64)
 --syslog            Use system log for output messages (default: standard error)
---temp-cutoff <arg> Temperature where a device will be automatically disabled, one value or comma separated list (default: 95)
+--temp-cutoff <arg> Maximum temperature devices will be allowed to reach before being disabled, one value or comma separated list
 --temp-hysteresis <arg> Set how much the temperature can fluctuate outside limits when automanaging speeds (default: 3)
 --temp-target <arg> Target temperature when automatically managing fan and clock speeds
 --text-only|-T      Disable ncurses formatted screen output
+--unicode           Use Unicode characters in TUI
 --url|-o <arg>      URL for bitcoin JSON-RPC server
 --user|-u <arg>     Username for bitcoin JSON-RPC server
 --verbose           Log verbose output to stderr as well as status output
+--weighed-stats     Display statistics weighed to difficulty 1
 --userpass|-O <arg> Username:Password pair for bitcoin JSON-RPC server
 Options for command line only:
 --config|-c <arg>   Load a JSON-format configuration file
@@ -229,7 +295,6 @@ GPU only options:
 
 --auto-fan          Automatically adjust all GPU fan speeds to maintain a target temperature
 --auto-gpu          Automatically adjust all GPU engine clock speeds to maintain a target temperature
---disable-gpu|-G    Disable GPU mining even if suitable devices exist
 --gpu-threads|-g <arg> Number of threads per GPU (1 - 10) (default: 2)
 --gpu-dyninterval <arg> Set the refresh interval in ms for GPUs using dynamic intensity (default: 7)
 --gpu-engine <arg>  GPU engine (over)clock range in MHz - one value, range and/or comma separated list (e.g. 850-900,900,750-850)
@@ -243,11 +308,13 @@ GPU only options:
 --gpu-vddc <arg>    Set the GPU voltage in Volts - one value for all or separate by commas for per card.
 --intensity|-I <arg> Intensity of GPU scanning (d or -10 -> 10, default: d to maintain desktop interactivity)
 --kernel|-k <arg>   Override kernel to use (diablo, poclbm, phatk or diakgcn) - one value or comma separated
---ndevs|-n          Enumerate number of detected GPUs and exit
 --no-adl            Disable the ATI display library used for monitoring and setting GPU parameters
 --temp-overheat <arg> Overheat temperature when automatically managing fan and GPU speeds (default: 85)
 --vectors|-v <arg>  Override detected optimal vector (1, 2 or 4) - one value or comma separated list
 --worksize|-w <arg> Override detected optimal worksize - one value or comma separated list
+
+GPU mining is disabled by default for SHA256d if you have any dedicated mining
+devices, but can be enabled explicitly specifying the -S opencl:auto option.
 
 See README.GPU for more information regarding GPU mining.
 
@@ -259,25 +326,17 @@ scrypt only options:
 
 See README.scrypt for more information regarding (non-bitcoin) scrypt mining.
 
-ASIC/FPGA mining boards (BitForce, Icarus, ModMiner, X6500, ZTEX) only options:
-
---scan-serial|-S <arg> Serial port to probe for mining devices
 
 To use ASICs or FPGAs, you will need to be sure the user BFGMiner is running as
 has appropriate permissions. This varies by operating system.
-On Gentoo: sudo usermod <username> -a -G uucp
-On Ubuntu: sudo usermod <username> -a -G dialout
+On Linux, with BFGMiner's udev rules: sudo usermod <username> -a -G video
 Note that on GNU/Linux systems, you will usually need to login again before
 group changes take effect.
 
-By default, BFGMiner will scan for autodetected devices unless at least one -S
-is specified for that driver. If you specify -S and still want BFGMiner to scan,
-you must also use "-S auto". If you want to prevent BFGMiner from scanning
-without specifying a device, you can use "-S noauto". Note that presently,
-autodetection only works on Linux, and might only detect one device depending
-on the version of udev being used. If you want to scan all serial ports, you
-can use "-S all"; note that this may write data to non-mining devices which may
-then behave in unexpected ways!
+By default, BFGMiner will scan for autodetected devices. If you want to prevent
+BFGMiner from doing this, you can use "-S noauto". If you want to probe all
+serial ports, you can use "-S all"; note that this may write data to non-mining
+devices which may then behave in unexpected ways!
 
 On Linux, <arg> is usually of the format /dev/ttyUSBn
 On Mac OS X, <arg> is usually of the format /dev/cu.usb*
@@ -286,34 +345,18 @@ On Windows, <arg> is usually of the format \\.\COMn
 
 The official supplied binaries are compiled with support for all ASICs/FPGAs.
 To force the code to only attempt detection with a specific driver,
-prepend the argument with the driver name followed by a colon.
-For example, "icarus:/dev/ttyUSB0" or "bitforce:\\.\COM5"
-or using the short name: "ica:/dev/ttyUSB0" or "bfl:\\.\COM5"
+prepend the argument with the driver name followed by an "at" symbol.
+For example, "icarus@/dev/ttyUSB0" or "bitforce@\\.\COM5"
+or using the short name: "ica@/dev/ttyUSB0" or "bfl@\\.\COM5"
 
 Some FPGAs do not have non-volatile storage for their bitstreams and must be
 programmed every power cycle, including first use. To use these devices, you
-must download the BFGMiner source archive (bfgminer-x.y.z.zip) and copy the
+must download the proper bitstream from the vendor's website and copy it to the
 "bitstreams" directory into your BFGMiner application directory.
 
 See README.ASIC and README.FPGA for more information regarding these.
 
-CPU only options (not included in binaries):
-
---algo|-a <arg>     Specify sha256 implementation for CPU mining:
-        fastauto*       Quick benchmark at startup to pick a working algorithm
-        auto            Benchmark at startup and pick fastest algorithm
-        c               Linux kernel sha256, implemented in C
-        4way            tcatm's 4-way SSE2 implementation
-        via             VIA padlock implementation
-        cryptopp        Crypto++ C/C++ implementation
-        cryptopp_asm32  Crypto++ 32-bit assembler implementation
-        sse2_32         SSE2 32 bit implementation for i386 machines
-        sse2_64         SSE2 64 bit implementation for x86_64 machines
-        sse4_64         SSE4.1 64 bit implementation for x86_64 machines
-        altivec_4way    Altivec implementation for PowerPC G4 and G5 machines
---cpu-threads|-t <arg> Number of miner CPU threads (default: 4)
---enable-cpu|-C     Enable CPU mining with other mining (default: no CPU mining if other devices exist)
-
+See README.CPU for information regarding CPU mining.
 
 ---
 
@@ -321,7 +364,18 @@ WHILE RUNNING:
 
 The following options are available while running with a single keypress:
 
-[P]ool management [G]PU management [S]ettings [D]isplay options [Q]uit
+[M]anage devices [P]ool management [S]ettings [D]isplay options  [H]elp [Q]uit
+
+M gives you something like:
+
+Select processor to manage using up/down arrow keys
+ BFL 0a: 78.0C |  3.64/ 3.70/ 2.91Gh/s | A:46 R:0+0(none) HW:  2/none
+  BitFORCE SHA256 SC from Butterfly Labs
+Serial: FTWN6T67
+
+[D]isable
+Or press Enter when done
+
 
 P gives you:
 
@@ -358,25 +412,7 @@ co[M]pact: off
 Q quits the application.
 
 
-G gives you something like:
-
-GPU 0: [124.2 / 191.3 Mh/s] [A:77  R:33+0( 42%)  HW:0]
-Temp: 67.0 C
-Fan Speed: 35% (2500 RPM)
-Engine Clock: 960 MHz
-Memory Clock: 480 MHz
-Vddc: 1.200 V
-Activity: 93%
-Powertune: 0%
-Last initialised: [2011-09-06 12:03:56]
-Thread 0: 62.4 Mh/s Enabled ALIVE
-Thread 1: 60.2 Mh/s Enabled ALIVE
-
-[E]nable [D]isable [R]estart GPU [C]hange settings
-Or press any other key to continue
-
-
-The running log shows output like this:
+The running log shows output similar to that below:
 
  [2013-02-13 00:26:30] Accepted 1758e8df BFL 0  pool 0 Diff 10/1
  [2013-02-13 00:26:32] Accepted 1d9a2199 MMQ 0a pool 0 Diff 8/1
@@ -393,50 +429,46 @@ dedicated to this program,
 	https://bitcointalk.org/?topic=78192
 	https://bitcointalk.org/?topic=168174
 
-The output line shows the following:
- 5s:1713.6 avg:1707.8 u:1710.2 Mh/s | A:729 R:8+0(.01%) HW:0
-
-Each column is as follows:
-5s:  A 5 second exponentially decaying average hash rate
-avg: An all time average hash rate
-u:   An all time average hash rate based on actual accepted shares
-A:   The number of Accepted shares
-R:   The number of Rejected shares, stale shares discarded (never submitted),
-     and the percentage these are of total found.
-HW:  The number of HardWare errors
-
- GPU 1: 73.5C 2551RPM | 427.3/443.0/442.1Mh/s | A:8 R:0+0(none) HW:0 U:4.39/m
-
-Each column is as follows:
-Temperature (if supported)
-Fanspeed (if supported)
-A 5 second exponentially decaying average hash rate
-An all time average hash rate
-An all time average hash rate based on actual accepted shares
-The number of accepted shares
-The number of rejected shares (and percentage of total submitted)
-The number of hardware erorrs
-The utility defines as the number of shares / minute
-
-The BFGMiner status line shows:
- ST: 1  GF: 1  NB: 1  AS: 0  RF: 1  E: 2.42  U:22.53/m  BS:2.71k
-
-ST is STaged work items (ready to use).
-GF is Getwork Fail Occasions (server slow to provide work)
-NB is New Blocks detected on the network
-AS is Active Submissions (shares in the process of submitting)
-RF is Remote Fail occasions (server slow to accept work)
-E  is Efficiency defined as number of shares accepted (multiplied by their
-          difficulty) per 2 KB of bandwidth
-U  is Utility defined as the number of shares / minute
-BS is the all time Best Share difficulty you've found
-
 The block display shows:
 Block: ...1b89f8d3 #217364  Diff:7.67M (54.93Th/s)  Started: [17:17:22]
 
 This shows a short stretch of the current block, the next block's height and
 difficulty (including the network hashrate that difficulty represents), and when
 the search for the new block started.
+
+The BFGMiner status line shows:
+ ST:1  F:0  NB:1  AS:0  BW:[ 75/241 B/s]  E:2.42  I:12.99mBTC/hr  BS:2.71k
+
+ST is STaged work items (ready to use).
+F  is network Failure occasions (server down or slow to provide work)
+NB is New Blocks detected on the network
+AS is Active Submissions (shares in the process of submitting)
+BW is BandWidth usage on the network (received/sent)
+E  is Efficiency defined as number of shares accepted (multiplied by their
+          difficulty) per 2 KB of bandwidth
+I  is expected Income, calculated by actual shares submitted in 100% PPS value
+          (assumes Bitcoin, does not account for altcoin conversions!)
+BS is the all time Best Share difficulty you've found
+
+The totals line shows the following:
+ 6/32   75.0C | 171.3/170.8/171.2Gh/s | A:729 R:8+0(.01%) HW:0/.81%
+
+Each column is as follows:
+  The number of devices and processors currently mining
+  Hottest temperature reported by any processor
+  5 second exponentially decaying average hash rate
+  An all time average hash rate
+  An all time average hash rate based on actual nonces found, adjusted for pool
+      reject and stale rate
+  The number of Accepted shares
+  The number of Rejected shares and stale shares discarded (never submitted),
+      and the percentage these are of total found.
+  The number of HardWare errors, and percentage invalid of nonces returned
+
+Each device shows:
+ BFL 2: 74.0C | 51.97/58.90/57.17Gh/s | A:847 R:15+0(.54%) HW:496/.91%
+
+Columns are the same as in the totals line.
 
 
 ---
@@ -462,13 +494,24 @@ This strategy moves at user-defined intervals from one active pool to the next,
 skipping pools that are idle.
 
 LOAD BALANCE:
-This strategy sends work to all the pools to maintain optimum load. The most
-efficient pools will tend to get a lot more shares. If any pool falls idle, the
-rest will tend to take up the slack keeping the miner busy.
+This strategy sends work to all the pools on a quota basis. By default, all
+pools are allocated equal quotas unless specified with --quota. This
+apportioning of work is based on work handed out, not shares returned so is
+independent of difficulty targets or rejected shares. While a pool is disabled
+or dead, its quota is dropped until it is re-enabled. Quotas are forward
+looking, so if the quota is changed on the fly, it only affects future work.
+If all pools are set to zero quota or all pools with quota are dead, it will
+fall back to a failover mode. See quota below for more information.
+
+The failover-only flag has special meaning in combination with load-balance
+mode and it will distribute quota back to priority pool 0 from any pools that
+are unable to provide work for any reason so as to maintain quota ratios
+between the rest of the pools.
 
 BALANCE:
 This strategy monitors the amount of difficulty 1 shares solved for each pool
-and uses it to try to end up doing the same amount of work for all pools.
+and uses it as a basis for trying to doing the same amount of work for each
+pool.
 
 
 ---
@@ -483,15 +526,57 @@ other software) per payout address, you must also specify data using the
 --coinbase-sig option to ensure each miner is working on unique work. Note
 that this data will be publicly seen if your miner finds a block using any
 GBT-enabled pool, even when not solo mining (such as failover). If your
-bitcoin node does not support longpolling (for example, bitcoind 0.7.x), you
+bitcoin node does not support longpolling (for example, bitcoind 0.8.x), you
 should consider setting up a failover pool to provide you with block
-notifications.
+notifications. Note that solo mining does not use shares, so BFGMiner's adjusted
+hashrate (third column) may suddenly drop to zero if a block you submit is
+rejected; this does not indicate that it has stopped mining.
 
 Example solo mining usage:
 
 bfgminer -o http://localhost:8332 -u username -p password \
     --coinbase-addr 1QATWksNFGeUJCWBrN4g6hGM178Lovm7Wh \
     --coinbase-sig "rig1: This is Joe's block!"
+
+
+---
+QUOTAS
+
+The load-balance multipool strategy works off a quota based scheduler. The
+quotas handed out by default are equal, but the user is allowed to specify any
+arbitrary ratio of quotas. For example, if all the quota values add up to 100,
+each quota value will be a percentage, but if 2 pools are specified and pool0
+is given a quota of 1 and pool1 is given a quota of 9, pool0 will get 10% of
+the work and pool1 will get 90%. Quotas can be changed on the fly with RPC,
+and do not act retrospectively. Setting a quota to zero will effectively
+disable that pool unless all other pools are disabled or dead. In that
+scenario, load-balance falls back to regular failover priority-based strategy.
+While a pool is dead, it loses its quota and no attempt is made to catch up
+when it comes back to life.
+
+To specify quotas on the command line, pools should be specified with a
+semicolon separated --quota(or -U) entry instead of --url. Pools specified with
+--url are given a nominal quota value of 1 and entries can be mixed.
+
+For example:
+--url poolA:portA -u usernameA -p passA --quota "2;poolB:portB" -u usernameB -p passB
+Will give poolA 1/3 of the work and poolB 2/3 of the work.
+
+Writing configuration files with quotas is likewise supported. To use the above
+quotas in a configuration file they would be specified thus:
+
+"pools" : [
+        {
+                "url" : "poolA:portA",
+                "user" : "usernameA",
+                "pass" : "passA"
+        },
+        {
+                "quota" : "2;poolB:portB",
+                "user" : "usernameB",
+                "pass" : "passB"
+        }
+]
 
 
 ---
@@ -567,9 +652,9 @@ FAQ
 
 Q: Why can't BFGMiner find lib<something> even after I installed it from source
 code?
-A: On UNIX-like operating systems, you often need to run some command to reload
-its library caches such as "ldconfig" or similar. A couple of systems (such as
-Fedora) ship with /usr/local/lib missing from their library search path. In
+A: On UNIX-like operating systems, you often need to run one or more commands to
+reload library caches, such as "ldconfig" or similar. A couple of systems (such
+as Fedora) ship with /usr/local/lib missing from their library search path. In
 this case, you can usually add it like this:
     echo /usr/local/lib >/etc/ld.so.conf.d/local.conf
 Please note that if your libraries installed into lib64 instead of lib, you
@@ -587,11 +672,11 @@ make it invalidate the work from each other.
 
 Q: Can I configure BFGMiner to mine with different login credentials or pools
 for each separate device?
-A: No.
+A: No such feature has been implemented to support this.
 
 Q: Can I put multiple pools in the config file?
 A: Yes, check the example.conf file. Alternatively, set up everything either on
-the command line or via the menu after startup and choose settings->write
+the command line or via the menu after startup and choose [S]ettings->[W]rite
 config file and the file will be loaded one each startup.
 
 Q: The build fails with gcc is unable to build a binary.
@@ -606,22 +691,23 @@ Q: Work keeps going to my backup pool even though my primary pool hasn't
 failed?
 A: BFGMiner checks for conditions where the primary pool is lagging and will
 pass some work to the backup servers under those conditions. The reason for
-doing this is to try its absolute best to keep the GPUs working on something
+doing this is to try its absolute best to keep the devices working on something
 useful and not risk idle periods. You can disable this behaviour with the
 option --failover-only.
 
 Q: Is this a virus?
-A: BFGMiner is being packaged with other trojan scripts and some antivirus
-software is falsely accusing bfgminer.exe as being the actual virus, rather
-than whatever it is being packaged with. If you installed BFGMiner yourself,
-then you do not have a virus on your computer. Complain to your antivirus
-software company. They seem to be flagging even source code now from BFGMiner
-as viruses, even though text source files can't do anything by themself.
+A: As BFGMiner is being packaged with other trojan scripts, some antivirus
+software is falsely accusing bfgminer.exe as being the actual virus, rather than
+whatever it is being packaged with. If you installed BFGMiner yourself from a
+reputable source then you do not have a virus on your computer. Complain to your
+antivirus software company. They seem to be flagging even source code from
+BFGMiner as malicious now, even though text source files can't do anything by
+themselves.
 
 Q: Can you modify the display to include more of one thing in the output and
 less of another, or can you change the quiet mode or can you add yet another
 output mode?
-A: Everyone will always have their own view of what's important to monitor.
+A: Everyone will always have their own view of what is important to monitor.
 The defaults are very sane and I have very little interest in changing this
 any further.
 
@@ -629,38 +715,34 @@ Q: Why is my efficiency above/below 1.00?
 A: Efficiency simply means how many shares you return for the amount of
 bandwidth used. It does not correlate with efficient use of your hardware, and
 is a measure of a combination of hardware speed, block luck, pool design and
-other factors.
+many other factors.
 
 Q: What are the best parameters to pass for X pool/hardware/device.
 A: Virtually always, the DEFAULT parameters give the best results. Most user
-defined settings lead to worse performance. The ONLY thing most users should
-need to set is the Intensity for GPUs.
+defined settings lead to worse performance.
 
 Q: What happened to CPU mining?
-A: Being increasingly irrelevant for most users, and a maintenance issue, it is
-no longer under active development and will not be supported unless someone
-steps up to help maintain it. No binary builds supporting CPU mining will be
-released but CPU mining can be built into BFGMiner when it is compiled.
+A: See README.CPU for more information.
 
-Q: GUI version?
-A: No. The RPC interface makes it possible for someone else to write one
-though.
+Q: Is there a GUI version?
+A: Yes, Nate Woolls maintains a GUI interface for BFGMiner called MultiMiner,
+available at http://multiminerapp.com
 
 Q: I'm having an issue. What debugging information should I provide?
 A: Start BFGMiner with your regular commands and add -D -T --verbose and provide
-the full startup output and a summary of your hardware, operating system, ATI
-driver version and ATI stream version.
+the full startup output and a summary of your hardware, operating system, and if
+applicable, ATI driver version and ATI stream version.
 
 Q: Can I mine with BFGMiner on a Mac?
 A: BFGMiner will compile on OS X, but the performance of GPU mining is
 compromised due to the OpenCL implementation on OS X, there is no temperature or
-fanspeed monitoring, and the cooling design of most Macs, despite having
+fanspeed monitoring and the cooling design of most Macs, despite having
 powerful GPUs, will usually not cope with constant usage leading to a high risk
-of thermal damage. It is highly recommended not to mine on a Mac unless it is to
-a USB device.
+of thermal damage. It is highly recommended not to mine on a Mac unless it is
+with an external USB device.
 
 Q: My network gets slower and slower and then dies for a minute?
-A; Try the --net-delay option.
+A; Try the --net-delay option if you are on a getwork or GBT server.
 
 Q: How do I tune for P2Pool?
 A: P2Pool has very rapid expiration of work and new blocks, it is suggested you
@@ -676,7 +758,7 @@ will not work.
 Q: I run PHP on windows to access the API with the example miner.php. Why does
 it fail when php is installed properly but I only get errors about Sockets not
 working in the logs?
-A: http://us.php.net/manual/en/sockets.installation.php
+A: Please check http://us.php.net/manual/en/sockets.installation.php
 
 Q: What is a PGA?
 A: At the moment, BFGMiner supports 5 FPGAs: BitForce, Icarus, ModMiner, X6500,
@@ -687,35 +769,55 @@ been skipped. "PGA" is also used for devices built with Application-Specific
 Integrated Circuits (ASICs).
 
 Q: What is an ASIC?
-A: BFGMiner currently supports 2 ASICs: Avalon and BitForce SC devices. They are
-Application Specify Integrated Circuit devices and provide the highest
-performance per unit power due to being dedicated to only one purpose.
+A: They are Application Specific Integrated Circuit devices and provide the
+highest performance per unit power due to being dedicated to only one purpose.
 
 Q: How do I get my BFL/Icarus/Lancelot/Cairnsmore device to auto-recognise?
 A: On Linux, if the /dev/ttyUSB* devices don't automatically appear, the only
 thing that needs to be done is to load the driver for them:
-BFL: sudo modprobe ftdi_sio vendor=0x0403 product=0x6014
-Icarus: sudo modprobe pl2303 vendor=0x067b product=0x230
-Lancelot: sudo modprobe ftdi_sio vendor=0x0403 product=0x6001
-Cairnsmore: sudo modprobe ftdi_sio product=0x8350 vendor=0x0403
-On windows you must install the pl2303 or ftdi driver required for the device
-pl2303: http://prolificusa.com/pl-2303hx-drivers/
-ftdi: http://www.ftdichip.com/Drivers/VCP.htm
+  BitForce:   sudo modprobe ftdi_sio vendor=0x0403 product=0x6014
+  Erupter:    sudo modprobe cp210x   vendor=0x10c4 product=0xea60
+  Icarus:     sudo modprobe pl2303   vendor=0x067b product=0x0230
+  Lancelot:   sudo modprobe ftdi_sio vendor=0x0403 product=0x6001
+  Cairnsmore: sudo modprobe ftdi_sio vendor=0x0403 product=0x8350
+On some systems you must manally install the driver required for the device.
+OpenWrt drivers (install with opkg):
+  FTDI:       kmod-usb-serial-ftdi
+  Erupter:    kmod-usb-serial-cp210x
+  Icarus:     kmod-usb-serial-pl2303
+Windows drivers:
+  FTDI:       http://www.ftdichip.com/Drivers/VCP.htm
+  Erupter:    http://www.silabs.com/products/mcu/pages/usbtouartbridgevcpdrivers.aspx
+  Icarus:     http://prolificusa.com/pl-2303hx-drivers/
 
-Q: On Linux I can see the /dev/ttyUSB* devices for my ICA/BFL/MMQ FPGA, but
-BFGMiner can't mine on them
-A: Make sure you have the required priviledges to access the /dev/ttyUSB*
+Q: I ran cgminer, and now BFGMiner doesn't work!
+A: cgminer has its own non-standard implementations of the drivers for most USB
+devices, and requires you to replace the official drivers with WinUSB on Windows
+(usually using Zadig). Before you can use BFGMiner, you will need to restore the
+original driver. Uninstalling the device (and WinUSB driver) from Device Manager
+and re-plugging it will usually trigger driver re-installation to the default
+drivers.
+
+Q: On Linux I can see the /dev/ttyUSB* devices, but BFGMiner can't mine on them?
+A: Make sure you have the required privileges to access the /dev/ttyUSB*
 devices:
  sudo ls -las /dev/ttyUSB*
 will give output like:
- 0 crw-rw---- 1 root dialout 188, 0 2012-09-11 13:49 /dev/ttyUSB0
-This means your account must have the group 'dialout' or root priviledges
-To permanently give your account the 'dialout' group:
- sudo usermod -G dialout -a `whoami`
-Then logout and back in again
+ 0 crw-rw---- 1 root video   188, 0 2012-09-11 13:49 /dev/ttyUSB0
+This means your account must have the group 'video' or root privileges.
+To permanently give your account the 'video' group:
+ sudo usermod -G video -a `whoami`
+Then logout and back in again.
 
 Q: Can I mine scrypt with FPGAs or ASICs?
-A: No.
+A: Currently no. Bitcoin ASICs are only useful for SHA256d systems and FPGAs
+generally aren't designed to handle scrypt efficiently.
+
+Q: Why does BFGMiner show difficulty 0 when mining scrypt?
+A: BFGMiner consistently uses pdiff measurement for difficulty everywhere,
+rather than other measurements that may exist. For scrypt, pdiff 1 is very
+difficult, and higher get exponentially harder. It is unlikely you will want to
+use pdiff 1+ with scrypt until you have FPGAs and/or ASICs for it.
 
 Q: What is stratum and how do I use it?
 A: Stratum is a protocol designed to reduce resources for mining pools at the
@@ -736,8 +838,9 @@ A: As an example, if you look at 'Difficulty Accepted' in the RPC API, the numbe
 of difficulty shares accepted does not usually exactly equal the amount of work
 done to find them. If you are mining at 8 difficulty, then you would expect on
 average to find one 8 difficulty share, per 8 single difficulty shares found.
-However, the number is actually random and converges over time, it is an average,
-not an exact value, thus you may find more or less than the expected average.
+However, the number is actually random and converges over time as it is an
+average, not an exact value, thus you may find more or less than the expected
+average.
 
 ---
 

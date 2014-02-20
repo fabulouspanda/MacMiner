@@ -9,12 +9,11 @@
 #import "cpuminerViewController.h"
 #import "AppDelegate.h"
 
-
 @implementation cpuminerViewController
 
 //io_connect_t conn;
+@synthesize chooseAlgo, cpuDebugOutput, cpuHashLabel, cpuManualOptions, cpuOptionsButton, cpuOptionsWindow, cpuOutputView, cpuQuietOutput, cpuStartButton, cpuStatLabel, cpuThreads, cpuView, cpuWindow, tempsLabel;
 
-@synthesize cpuOutputView, cpuRememberButton, cpuStartButton, cpuStatLabel, cpuView, cpuWindow, cpuHashLabel, cpuDebugOutput, cpuOptionsWindow, cpuQuietOutput, cpuScrypt, cpuThreads, cpuManualOptions, cpuOptionsButton, tempsLabel;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -28,10 +27,11 @@
         
         cpuOutputView.delegate = self;
         cpuStatLabel.delegate = self;
+
         
-        
+
     }
-    
+
     
     
     return self;
@@ -47,6 +47,10 @@
  }
  */
 
+- (IBAction)cpuDisplayHelp:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
+}
 
 
 - (IBAction)start:(id)sender
@@ -58,12 +62,18 @@
         // This stops the task and calls our callback (-processFinished)
         [cpuTask stopTask];
         findRunning=NO;
+        cpuHashLabel.tag = 0;
         [cpuHashLabel setStringValue:@"0"];
         // Release the memory for this wrapper object
         
         cpuTask=nil;
         
-
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = @"";
+        [appDelegate.cpuReadBack setHidden:YES];
+        [appDelegate.cpuReading setHidden:YES];
+        
+        [[NSApp dockTile] display];
         
         return;
     }
@@ -77,7 +87,12 @@
         
         
         
-
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = @"";
+        [appDelegate.cpuReadBack setHidden:NO];
+        [appDelegate.cpuReading setHidden:NO];
+        
+        [[NSApp dockTile] display];
         
         
         
@@ -85,7 +100,6 @@
         // in ourselves as the controller for this TaskWrapper object, the path
         // to the command-line tool, and the contents of the text field that
         // displays what the user wants to search on
-        
         
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -102,7 +116,24 @@
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
         NSString *userpath = [paths objectAtIndex:0];
         userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-        NSString *saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        NSString *saveLTCConfigFilePath = @"";
+        
+        if (chooseAlgo.indexOfSelectedItem == 0) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 1) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"vtcurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 2) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"qrkurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 3) {
+        saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 4) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
+        }
+
         
 
         NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
@@ -126,11 +157,12 @@
 
         
         NSString *cpuThreadsV = [prefs stringForKey:@"cpuThreadsValue"];
-
+//        NSString *cpuScryptV = [prefs stringForKey:@"cpuUseScryptValue"];
         NSString *cpuQuietV = [prefs stringForKey:@"cpuQuietOutput"];
         NSString *cpuDebugV = [prefs stringForKey:@"cpuDebugOutput"];
         NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
-        
+
+
         
 
         NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
@@ -140,12 +172,55 @@
             [cpuLaunchArray addObject:cpuThreadsV];
         }
 
+        
+        if (chooseAlgo.indexOfSelectedItem == 0) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"scrypt"];
             [cpuLaunchArray addObject:@"-o"];
             [cpuLaunchArray addObject:mainLTCPool];
             [cpuLaunchArray addObject:@"-u"];
             [cpuLaunchArray addObject:mainLTCUser];
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 1) {
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 2) {
+            [cpuLaunchArray addObject:@"--algo=quark"];
+//            [cpuLaunchArray addObject:@"quark"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 3) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"sha256d"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 4) {
+            [cpuLaunchArray addObject:@"--algo=keccak"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+
 
         if ([cpuQuietV isNotEqualTo:nil]) {
             [cpuLaunchArray addObject:@"-q"];
@@ -162,23 +237,37 @@
                 cpuBonusStuff = nil;
             }
         }
-
+        //        NSString *logit = [cpuLaunchArray componentsJoinedByString:@" "];
+        //        NSLog(logit);
         
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
-        cpuPath = [cpuPath stringByAppendingString:@"/Resources/minerd"];
+        if (chooseAlgo.indexOfSelectedItem == 1) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+        }
+        else if (chooseAlgo.indexOfSelectedItem == 4) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
+        }
+        else if (chooseAlgo.indexOfSelectedItem == 3) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
+        else {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
         //        NSLog(cpuPath);
-        [self.cpuOutputView setString:@""];
+        [cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
-        self.cpuStatLabel.stringValue = startingText;
-
+        cpuStatLabel.stringValue = startingText;
+        //            outputView.string = [outputView.string stringByAppendingString:cpuPath];
+        //            outputView.string = [outputView.string stringByAppendingString:finalNecessities];
+        //            cpuTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:cpuPath, cpuPath, poolplus, userpass, nil]];
         cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath
                                                  arguments:cpuLaunchArray
                                                environment:nil
                                                   delegate:self];
         // kick off the process asynchronously
-
+        //        [cpuTask setLaunchPath: @"/sbin/ping"];
         [cpuTask startTask];
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
@@ -202,15 +291,19 @@
                 NSAlert *startAlert = [[NSAlert alloc] init];
                 [startAlert addButtonWithTitle:@"Indeed"];
                 
-                [startAlert setMessageText:@"bfgminer has started"];
-                NSString *infoText = @"The primary pool is set to ";
-                infoText = [infoText stringByAppendingString:bfgURLValue];
-                infoText = [infoText stringByAppendingString:@" and the user is set to "];
-                infoText = [infoText stringByAppendingString:bfgUserValue];
-                [startAlert setInformativeText:infoText];
+                [startAlert setMessageText:@"cpuminer has started"];
+                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
 
+                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                [startAlert setInformativeText:infoText3];
+            infoText = nil;
+            infoText2 = nil;
+            infoText3 = nil;
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
                 [startAlert setAlertStyle:NSWarningAlertStyle];
-
+                //        returnCode: (NSInteger)returnCode
                 
                 [startAlert beginSheetModalForWindow:cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
                 
@@ -229,6 +322,10 @@
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
     
+    if ([cpuHashLabel.stringValue isNotEqualTo:@"0"]) {
+        cpuHashLabel.tag = 1;
+    }
+    
     NSString *apiOutput = @"accepted:";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
         
@@ -241,49 +338,107 @@
                                                      leftString:@"," rightString:@"k" leftOffset:1];
         cpuHashLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@" " withString:@""];
         
-        //        [self getTemps:(id)nil];
+
         
         apiOutput = nil;
         numberString = nil;
         step2 = nil;
         rejectString = nil;
 
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+        
 
+            if ([prefs objectForKey:@"showDockReading"]) {
+        if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            [appDelegate.cpuReadBack setHidden:YES];
+            [appDelegate.cpuReading setHidden:YES];
+
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+        else {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.cpuReading.stringValue = [cpuHashLabel.stringValue stringByAppendingString:@"Kh"];
+            [appDelegate.cpuReading setHidden:NO];
+            [appDelegate.cpuReadBack setHidden:NO];
+            
+            
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+                
+            }
+            else { 
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = [cpuHashLabel.stringValue stringByAppendingString:@"Kh"];
+                    [appDelegate.cpuReading setHidden:NO];
+                    [appDelegate.cpuReadBack setHidden:NO];
+
+
+        [[NSApp dockTile] display];
+                    appDelegate = nil;
+                }
+        prefs = nil;
     }
     
-    else
+    else {
         
         // add the string (a chunk of the results from locate) to the NSTextView's
         // backing store, in the form of an attributed string
-        self.cpuOutputView.string = [self.cpuOutputView.string stringByAppendingString:output];
+        
+        
+        
+        NSString *newCPUOutput = [cpuOutputView.string stringByAppendingString:output];
+        
+    cpuOutputView.string = newCPUOutput;
+        
+        newCPUOutput = nil;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
     
-    NSString *logLength = [prefs objectForKey:@"logLength" ];
+    NSString *logLength = @"1";
+            if ([prefs objectForKey:@"logLength"]) {
+        logLength = [prefs objectForKey:@"logLength" ];
+            }
     if (logLength.intValue <= 1) {
         logLength = @"5000";
     }
     
     //limit log length
-    if (self.cpuOutputView.string.length >= logLength.intValue) {
-        [self.cpuOutputView setEditable:true];
-        [self.cpuOutputView setSelectedRange:NSMakeRange(0,1000)];
-        [self.cpuOutputView delete:nil];
-        [self.cpuOutputView setEditable:false];
+    if (cpuOutputView.string.length >= logLength.intValue) {
+        [cpuOutputView setEditable:true];
+        [cpuOutputView setSelectedRange:NSMakeRange(0,1000)];
+        [cpuOutputView delete:nil];
+        [cpuOutputView setEditable:false];
     }
     
     // setup a selector to be called the next time through the event loop to scroll
     // the view to the just pasted text.  We don't want to scroll right now,
     // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
     // of a text storage update to starve the app of events
+            if ([prefs objectForKey:@"scrollLog"]) {
                 if ([[prefs objectForKey:@"scrollLog"] isNotEqualTo:@"hide"]) {
     [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
                 }
+            }
+            else {
+    [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
+            }
+        
+        prefs = nil;
+        logLength = nil;
+        
+    }
+    
     output = nil;
-    prefs = nil;
-    logLength = nil;
+    
+ 
     
 }
 
@@ -314,7 +469,7 @@
 // that we just added at the end
 - (void)scrollToVisible:(id)ignore {
     //   AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    [self.cpuOutputView scrollRangeToVisible:NSMakeRange([[self.cpuOutputView string] length], 0)];
+    [cpuOutputView scrollRangeToVisible:NSMakeRange([[cpuOutputView string] length], 0)];
 }
 
 // A callback that gets called when a TaskWrapper is launched, allowing us to do any setup
@@ -325,7 +480,7 @@
     //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     findRunning=YES;
     // clear the results
-    //    [self.outputView setString:@""];
+    //    [outputView setString:@""];
     // change the "Start" button to say "Stop"
     [cpuStartButton setTitle:@"Stop"];
 }
@@ -335,7 +490,13 @@
 // to the ProcessController protocol.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    [appDelegate.cpuReadBack setHidden:YES];
+    [appDelegate.cpuReading setHidden:YES];
+    
     findRunning=NO;
+    cpuHashLabel.tag = 0;
     // change the button's title back for the next search
     [cpuStartButton setTitle:@"Start"];
 }
@@ -364,6 +525,9 @@
 // control of the UI.
 -(void)awakeFromNib
 {
+    
+
+    
     findRunning=NO;
     cpuTask=nil;
     
@@ -372,7 +536,260 @@
     //    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     //    m = [[[XRGModule alloc] initWithName:@"Temperature" andReference:self] retain];
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
+    [prefs synchronize];
+    
+    if ([prefs objectForKey:@"cpuAlgoChoice"]) {
+    
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"0"]) {
+        [chooseAlgo selectItemAtIndex:0];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"1"]) {
+                [chooseAlgo selectItemAtIndex:1];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"2"]) {
+                [chooseAlgo selectItemAtIndex:2];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"3"]) {
+                [chooseAlgo selectItemAtIndex:3];
+    }
+    if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"4"]) {
+        [chooseAlgo selectItemAtIndex:4];
+    }
+    }
+    
+    if ([prefs objectForKey:@"startCpu"]) {
+    if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
+        
+                        [cpuWindow orderFront:nil];
+        
+        [cpuStartButton setTitle:@"Stop"];
+        // If the task is still sitting around from the last run, release it
+        if (cpuTask!=nil) {
+            cpuTask = nil;
+        }
+        
+        
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+        appDelegate.cpuReading.stringValue = @"";
+        [appDelegate.cpuReadBack setHidden:NO];
+        [appDelegate.cpuReading setHidden:NO];
+        
+        [[NSApp dockTile] display];
+        
+        
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+        
+        
+        NSString *mainLTCPool = @"";
+        NSString *mainLTCUser = @"";
+        NSString *mainLTCPass = @"";
+        
+        
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        NSString *saveLTCConfigFilePath = @"";
+        
+        if (chooseAlgo.indexOfSelectedItem == 0) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 1) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"vtcurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 2) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"qrkurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 3) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 4) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
+        }
+        
+        
+        
+        NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+        NSString *userFind = @"user";
+        if ([stringUser rangeOfString:userFind].location != NSNotFound) {
+            NSString *foundURLString = [self getDataBetweenFromString:stringUser
+                                                           leftString:@"url" rightString:@"," leftOffset:8];
+            NSString *URLClean = foundURLString;
+            mainLTCPool = [URLClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            NSString *foundUserString = [self getDataBetweenFromString:stringUser
+                                                            leftString:@"user" rightString:@"," leftOffset:8];
+            NSString *stepClean = foundUserString;
+            mainLTCUser = [stepClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            
+            NSString *foundPassString = [self getDataBetweenFromString:stringUser
+                                                            leftString:@"pass" rightString:@"\"" leftOffset:9];
+            NSString *passClean = foundPassString;
+            mainLTCPass = [passClean stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        }
+        
+        
+        
+        NSString *cpuThreadsV = [prefs stringForKey:@"cpuThreadsValue"];
+        //        NSString *cpuScryptV = [prefs stringForKey:@"cpuUseScryptValue"];
+        NSString *cpuQuietV = [prefs stringForKey:@"cpuQuietOutput"];
+        NSString *cpuDebugV = [prefs stringForKey:@"cpuDebugOutput"];
+        NSString *cpuOptionsV = [prefs stringForKey:@"cpuOptionsValue"];
+        
+        
+        
+        
+        NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
+        
+        if ([cpuThreadsV isNotEqualTo:@""]) {
+            [cpuLaunchArray addObject:@"-t"];
+            [cpuLaunchArray addObject:cpuThreadsV];
+        }
+        
+        
+        if (chooseAlgo.indexOfSelectedItem == 0) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"scrypt"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }//VertCoin:
+        if (chooseAlgo.indexOfSelectedItem == 1) {
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 2) {
+            [cpuLaunchArray addObject:@"--algo=quark"];
+            //            [cpuLaunchArray addObject:@"quark"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 3) {
+            [cpuLaunchArray addObject:@"-a"];
+            [cpuLaunchArray addObject:@"sha256d"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        if (chooseAlgo.indexOfSelectedItem == 4) {
+            [cpuLaunchArray addObject:@"--algo=keccak"];
+            [cpuLaunchArray addObject:@"-o"];
+            [cpuLaunchArray addObject:mainLTCPool];
+            [cpuLaunchArray addObject:@"-u"];
+            [cpuLaunchArray addObject:mainLTCUser];
+            [cpuLaunchArray addObject:@"-p"];
+            [cpuLaunchArray addObject:mainLTCPass];
+        }
+        
+        
+        if ([cpuQuietV isNotEqualTo:nil]) {
+            [cpuLaunchArray addObject:@"-q"];
+        }
+        if ([cpuDebugV isNotEqualTo:nil]) {
+            [cpuLaunchArray addObject:@"-D"];
+        }
+        
+        
+        if ([cpuOptionsV isNotEqualTo:nil]) {
+            NSArray *cpuBonusStuff = [cpuOptionsV componentsSeparatedByString:@" "];
+            if (cpuBonusStuff.count >= 2) {
+                [cpuLaunchArray addObjectsFromArray:cpuBonusStuff];
+                cpuBonusStuff = nil;
+            }
+        }
+        //        NSString *logit = [cpuLaunchArray componentsJoinedByString:@" "];
+        //        NSLog(logit);
+        
+        NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
+        NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
+        
+        if (chooseAlgo.indexOfSelectedItem == 1) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+        }
+        else if (chooseAlgo.indexOfSelectedItem == 4) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
+        }
+        else if (chooseAlgo.indexOfSelectedItem == 3) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
+        else {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        }
+        //        NSLog(cpuPath);
+        [cpuOutputView setString:@""];
+        NSString *startingText = @"Starting…";
+        cpuStatLabel.stringValue = startingText;
+        
+        
+        cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath
+                                                 arguments:cpuLaunchArray
+                                               environment:nil
+                                                  delegate:self];
+        
+        [cpuTask startTask];
+        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
+        if (fileExists) {
+            
+            NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            
+            
+            
+            NSString *numberString = [self getDataBetweenFromString:ltcConfig
+                                                         leftString:@"url" rightString:@"," leftOffset:8];
+            NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            numberString = nil;
+            NSString *acceptString = [self getDataBetweenFromString:ltcConfig
+                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            acceptString = nil;
+            
+            
+            NSAlert *startAlert = [[NSAlert alloc] init];
+            [startAlert addButtonWithTitle:@"Indeed"];
+            
+            [startAlert setMessageText:@"cpuminer has started"];
+            NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+            
+            NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+            NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+            [startAlert setInformativeText:infoText3];
+            infoText = nil;
+            infoText2 = nil;
+            infoText3 = nil;
+            
+            
+            [startAlert setAlertStyle:NSWarningAlertStyle];
+            //        returnCode: (NSInteger)returnCode
+            
+            [startAlert beginSheetModalForWindow:cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            
+        }
+        
+    }
+        
+    }
+    prefs = nil;
 }
 
 - (IBAction)cpuMinerToggle:(id)sender {
@@ -409,12 +826,22 @@
     else {
         [prefs setObject:nil forKey:@"cpuThreadsValue"];
     }
-    if (cpuScrypt.state == NSOnState) {
-        [prefs setObject:@"--scrypt" forKey:@"cpuUseScryptValue"];
+    if (chooseAlgo.indexOfSelectedItem == 0) {
+        [prefs setObject:@"0" forKey:@"cpuAlgoChoice"];
     }
-    else    {
-        [prefs setObject:nil forKey:@"cpuUseScryptValue"];
+    if (chooseAlgo.indexOfSelectedItem == 1) {
+        [prefs setObject:@"1" forKey:@"cpuAlgoChoice"];
     }
+    if (chooseAlgo.indexOfSelectedItem == 2) {
+        [prefs setObject:@"2" forKey:@"cpuAlgoChoice"];
+    }
+    if (chooseAlgo.indexOfSelectedItem == 3) {
+        [prefs setObject:@"3" forKey:@"cpuAlgoChoice"];
+    }
+    if (chooseAlgo.indexOfSelectedItem == 4) {
+        [prefs setObject:@"4" forKey:@"cpuAlgoChoice"];
+    }
+
     if (cpuQuietOutput.state == NSOnState) {
         [prefs setObject:@"-q" forKey:@"cpuQuietOutput"];
     }

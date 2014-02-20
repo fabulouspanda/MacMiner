@@ -9,27 +9,28 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 
-@interface autoConfigViewViewController : NSViewController <NSTextFieldDelegate, NSWindowDelegate, NSTextViewDelegate, NSComboBoxDelegate> {
-
-
-    NSPanel *introPanel;
+@interface autoConfigViewViewController : NSViewController <NSTextFieldDelegate, NSWindowDelegate, NSTextViewDelegate, NSPopoverDelegate, NSComboBoxDelegate> {
     
-    NSComboBox *poolBoox;
-    NSComboBox *ltcpoolBoox;
-    NSTextField *userNameTextField;
-    NSTextField *passWordTextField;
-    NSTextField *btcuserNameTextField;
-    NSTextField *btcpassWordTextField;
-    NSTextField *ltcuserNameTextField;
-    NSTextField *ltcpassWordTextField;
+NSPanel *introPanel;
     
-    NSTextField *enterPool;
+ NSComboBox *poolBoox;
+ NSComboBox *ltcpoolBoox;
+NSTextField *userNameTextField;
+NSTextField *passWordTextField;
+NSTextField *btcuserNameTextField;
+NSTextField *btcpassWordTextField;
+NSTextField *ltcuserNameTextField;
+NSTextField *ltcpassWordTextField;
     
-    NSButton *skipSetupButton;
-    NSButton *saveAndStartButton;
-    NSButton *helpInfoButton;
+   NSTextField *enterPool;
     
-
+NSButton *skipSetupButton;
+NSButton *saveAndStartButton;
+   NSButton *helpInfoButton;
+    
+NSButton *setupPopoverTriggerButton;
+NSPopover *setupPopover;
+    
 }
 
 
@@ -50,7 +51,8 @@
 @property (nonatomic, strong) IBOutlet NSButton *saveAndStartButton;
 @property (nonatomic, strong) IBOutlet    NSButton *helpInfoButton;
 
-
+@property (nonatomic, strong) IBOutlet NSButton *setupPopoverTriggerButton;
+@property (nonatomic, strong) IBOutlet NSPopover *setupPopover;
 
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;

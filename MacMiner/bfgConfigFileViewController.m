@@ -14,7 +14,7 @@
 
 @implementation bfgConfigFileViewController
 
-@synthesize configEditWindow, bfgConfigText, cancelConfig, revertConfig, saveConfigFile, btcLTCSegmentedControl;
+@synthesize bfgConfigText, btcLTCSegmentedControl, cancelConfig, configEditWindow, revertConfig, saveConfigFile;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

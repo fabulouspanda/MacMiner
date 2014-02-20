@@ -7,7 +7,7 @@
 //
 
 #import "preferencesViewController.h"
-
+#import "AppDelegate.h"
 
 @interface preferencesViewController ()
 
@@ -15,38 +15,160 @@
 
 @implementation preferencesViewController
 
-@synthesize prefWindow, charCount, scrollButton, dockButton;
+@synthesize poolComboBox, updateButton, appID, bfgButton, cgButton, charCount, commandButton, cpuButton, dockButton, emailAddress, fpgaAsicButton, httpButton, passwordField, popUpCoin, prefView, prefView2, prefView3, prefWindow, scrollButton, speechButton, userNameField;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
+    
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    
+//    [prefs synchronize];
+//    
+//    self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
+//
+//    if ([prefs objectForKey:@"bitcoinPool"] != nil && [prefs objectForKey:@"scryptPool"] != nil && [prefs objectForKey:@"vertcoinPool"] != nil && [prefs objectForKey:@"quarkcoinPool"] != nil) {
+//        [self.prefWindow orderFront:nil];
+//    }
+//    
+//    prefs = nil;
+    return self;
+}
 
+-(void)awakeFromNib {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
     
-    charCount.stringValue = [prefs objectForKey:@"logLength" ];
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+    NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
+    
+    if ([hideVersion isEqualToString:@"1518"]) {
+        
+    }
+    else {
+        [appDelegate.releaseNotes orderFront:nil];
+    }
+
+    
+    if ([prefs objectForKey:@"checkUpdates"] != nil) {
+        self.updateButton.state = NSOffState;
+    }
+    
+    if ([prefs objectForKey:@"logLength"]) {
+        
+    
+    NSString *logLength = [prefs objectForKey:@"logLength" ];
+    if (logLength) {
+    self.charCount.stringValue = logLength;
+    }
+    }
+                        if ([prefs objectForKey:@"bitcoinPool"]) {
+    NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
+    NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
+    NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
+    
+    if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+    self.poolComboBox.stringValue = bitcoinPool;
+    self.userNameField.stringValue = bitcoinPoolUser;
+    self.passwordField.stringValue = bitcoinPoolPassword;
+    }
+                            
+                        }
+    
+    
+    if ([prefs objectForKey:@"bitcoinPool"] == nil && [prefs objectForKey:@"scryptPool"] == nil && [prefs objectForKey:@"vertcoinPool"] == nil && [prefs objectForKey:@"quarkcoinPool"] == nil && [prefs objectForKey:@"maxcoinPool"] == nil) {
+        [self.prefWindow orderFront:nil];
+        [self.prefView setHidden:YES];
+        [self.prefView2 setHidden:YES];
+        [self.prefView3 setHidden:NO];
+    }
     
     prefs = nil;
-    return self;
 }
 
 
 -(IBAction)preferenceToggle:(id)sender {
 
     
-    if ([prefWindow isVisible]) {
+    if ([self.prefWindow isVisible]) {
 
-        [prefWindow orderOut:sender];
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        [prefs setObject:charCount.stringValue forKey:@"logLength"];
+        
+        [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
         
         [prefs synchronize];
         
         prefs = nil;
 
-        if (dockButton.state == NSOffState) {
+        if (self.fpgaAsicButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startAsic"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.fpgaAsicButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startAsic"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.bfgButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startBfg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.bfgButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startBfg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cgButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startCg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cgButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startCg"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cpuButton.state == NSOnState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:@"start" forKey:@"startCpu"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.cpuButton.state == NSOffState) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:nil forKey:@"startCpu"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        
+        if (self.dockButton.state == NSOffState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"hide" forKey:@"showDockReading"];
@@ -54,7 +176,7 @@
             [prefs synchronize];
             prefs = nil;
         }
-        if (dockButton.state == NSOnState) {
+        if (self.dockButton.state == NSOnState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@" " forKey:@"showDockReading"];
@@ -62,7 +184,7 @@
             [prefs synchronize];
             prefs = nil;
         }
-        if (scrollButton.state == NSOffState) {
+        if (self.scrollButton.state == NSOffState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"hide" forKey:@"scrollLog"];
@@ -70,7 +192,7 @@
             [prefs synchronize];
             prefs = nil;
         }
-        if (scrollButton.state == NSOnState) {
+        if (self.scrollButton.state == NSOnState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@" " forKey:@"scrollLog"];
@@ -79,6 +201,23 @@
             prefs = nil;
         }
         
+        if (self.emailAddress.stringValue.length >= 5) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:self.emailAddress.stringValue forKey:@"emailAddress"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+        if (self.appID.stringValue.length >= 5) {
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            
+            [prefs setObject:self.appID.stringValue forKey:@"appID"];
+            
+            [prefs synchronize];
+            prefs = nil;
+        }
+                [self.prefWindow orderOut:sender];
     }
     else
     {
@@ -95,19 +234,56 @@
         if(![[NSUserDefaults standardUserDefaults] objectForKey:@"showDockReading"]) {
             [prefs setObject:@"" forKey:@"showDockReading"];
         }
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"emailAddress"]) {
+            [prefs setObject:@"" forKey:@"emailAddress"];
+        }
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"appID"]) {
+            [prefs setObject:@"" forKey:@"appID"];
+        }
         
-        charCount.stringValue = [prefs objectForKey:@"logLength" ];
+        
+        self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
         
         if ([[prefs objectForKey:@"scrollLog"] isEqual: @"hide"]) {
-                        scrollButton.state = NSOffState;
+                        self.scrollButton.state = NSOffState;
         }
         if ([[prefs objectForKey:@"showDockReading"] isEqual: @"hide"]) {
-            dockButton.state = NSOffState;
+            self.dockButton.state = NSOffState;
         }
+        
+        
+        if ([[prefs objectForKey:@"startAsic"] isEqualToString:@"start"]) {
+            self.fpgaAsicButton.state = NSOnState;
+        }
+        else {
+            self.fpgaAsicButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
+            self.bfgButton.state = NSOnState;
+        }
+        else {
+            self.bfgButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"startCg"] isEqualToString:@"start"]) {
+            self.cgButton.state = NSOnState;
+        }
+        else {
+            self.cgButton.state = NSOffState;
+        }
+        if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
+            self.cpuButton.state = NSOnState;
+        }
+        else {
+            self.cpuButton.state = NSOffState;
+        }
+        
+        
+        self.emailAddress.stringValue = [prefs objectForKey:@"emailAddress"];
+        self.appID.stringValue = [prefs objectForKey:@"appID"];
 
         prefs = nil;
         
-        [prefWindow orderFront:sender];
+        [self.prefWindow orderFront:sender];
         
     }
 }
@@ -116,7 +292,29 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:charCount.stringValue forKey:@"logLength"];
+    [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
+    
+    [prefs synchronize];
+    
+    prefs = nil;
+}
+
+-(IBAction)textDidChangeEmail:(id)sender {
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs setObject:self.emailAddress.stringValue forKey:@"emailAddress"];
+    
+    [prefs synchronize];
+    
+    prefs = nil;
+}
+
+-(IBAction)textDidChangeAppKey:(id)sender {
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs setObject:self.appID.stringValue forKey:@"appID"];
     
     [prefs synchronize];
     
@@ -124,14 +322,14 @@
 }
 
 - (IBAction)scrollLogOption:(id)sender {
-    if (scrollButton.state == NSOffState) {
+    if (self.scrollButton.state == NSOffState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs setObject:@"hide" forKey:@"scrollLog"];
         
         [prefs synchronize];
     }
-    if (scrollButton.state == NSOnState) {
+    if (self.scrollButton.state == NSOnState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs setObject:@" " forKey:@"scrollLog"];
@@ -140,6 +338,503 @@
     }
 }
 
+- (IBAction)dockReadingsOption:(id)sender {
+    if (self.dockButton.state == NSOffState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"hide" forKey:@"showDockReading"];
+        
+        [prefs synchronize];
+    }
+    if (self.dockButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@" " forKey:@"showDockReading"];
+        
+        [prefs synchronize];
+    }
+}
+
+- (IBAction)speechOption:(id)sender {
+    if (self.speechButton.state == NSOffState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"silence" forKey:@"enableSpeech"];
+        
+        [prefs synchronize];
+    }
+    if (self.speechButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@" " forKey:@"enableSpeech"];
+        
+        [prefs synchronize];
+    }
+}
+
+- (IBAction)popUpButtonChanged:(id)sender {
+
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
+    
+    //none selected?
+    if (self.popUpCoin.indexOfSelectedItem == -1) {
+        NSLog(@"Apparently, no coin type was selected. That's not right.");
+    }
+    
+    //SHA256
+    if (self.popUpCoin.indexOfSelectedItem == 0) {
+        [self.poolComboBox removeAllItems];
+        [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9332"];
+        [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9332"];
+        [self.poolComboBox addItemWithObjectValue:@"http://stratum.triplemining.com:3334"];
+        [self.poolComboBox addItemWithObjectValue:@"http://stratum.bitcoin.cz:3333"];
+        
+                    if ([prefs objectForKey:@"bitcoinPool"]) {
+        NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
+
+                    
+        
+            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+        self.poolComboBox.stringValue = bitcoinPool;
+        self.userNameField.stringValue = bitcoinPoolUser;
+        self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            else {
+                self.userNameField.stringValue = @"";
+                self.passwordField.stringValue = @"";
+            }
+        
+        bitcoinPoolPassword = nil;
+        bitcoinPool = nil;
+        bitcoinPoolUser = nil;
+                    }
+        
+    }
+    
+    //Scrypt
+    if (self.popUpCoin.indexOfSelectedItem == 1) {
+        [self.poolComboBox removeAllItems];
+        [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9327"];
+        [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9327"];
+
+        if ([prefs objectForKey:@"scryptPool"]) {
+        
+        NSString *bitcoinPool = [prefs objectForKey:@"scryptPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"scryptPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"scryptPoolPassword"];
+
+        
+            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+        self.poolComboBox.stringValue = bitcoinPool;
+        self.userNameField.stringValue = bitcoinPoolUser;
+        self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            else {
+                self.userNameField.stringValue = @"";
+                self.passwordField.stringValue = @"";
+            }
+        
+        bitcoinPoolPassword = nil;
+        bitcoinPool = nil;
+        bitcoinPoolUser = nil;
+        }
+    }
+    
+    //VertCoin Scrypt Adaptive-N
+    if (self.popUpCoin.indexOfSelectedItem == 2) {
+        [self.poolComboBox removeAllItems];
+        
+                            if ([prefs objectForKey:@"vertcoinPool"]) {
+                                
+        NSString *bitcoinPool = [prefs objectForKey:@"vertcoinPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"vertcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"vertcoinPoolPassword"];
+
+        
+            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+        self.poolComboBox.stringValue = bitcoinPool;
+        self.userNameField.stringValue = bitcoinPoolUser;
+        self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            else {
+                self.userNameField.stringValue = @"";
+                self.passwordField.stringValue = @"";
+            }
+        
+        bitcoinPoolPassword = nil;
+        bitcoinPool = nil;
+        bitcoinPoolUser = nil;
+                            }
+    }
+    
+    //QuarkCoin
+    if (self.popUpCoin.indexOfSelectedItem == 3) {
+        [self.poolComboBox removeAllItems];
+        
+                            if ([prefs objectForKey:@"quarkcoinPool"]) {
+                                
+        NSString *bitcoinPool = [prefs objectForKey:@"quarkcoinPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"quarkcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"quarkcoinPoolPassword"];
+        
+            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+        self.poolComboBox.stringValue = bitcoinPool;
+        self.userNameField.stringValue = bitcoinPoolUser;
+        self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            else {
+                self.userNameField.stringValue = @"";
+                self.passwordField.stringValue = @"";
+            }
+        
+        bitcoinPoolPassword = nil;
+        bitcoinPool = nil;
+        bitcoinPoolUser = nil;
+                            }
+    }
+    
+    //MaxCoin
+    if (self.popUpCoin.indexOfSelectedItem == 4) {
+        [self.poolComboBox removeAllItems];
+        [self.poolComboBox setStringValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
+        
+                            if ([prefs objectForKey:@"maxcoinPool"]) {
+        
+        NSString *bitcoinPool = [prefs objectForKey:@"maxcoinPool"];
+        NSString *bitcoinPoolUser = [prefs objectForKey:@"maxcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs objectForKey:@"maxcoinPoolPassword"];
+        
+        if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+            self.poolComboBox.stringValue = bitcoinPool;
+            self.userNameField.stringValue = bitcoinPoolUser;
+            self.passwordField.stringValue = bitcoinPoolPassword;
+        }
+        else {
+            self.userNameField.stringValue = @"";
+            self.passwordField.stringValue = @"";
+        }
+        
+        bitcoinPoolPassword = nil;
+        bitcoinPool = nil;
+        bitcoinPoolUser = nil;
+                            }
+    }
+    
+    prefs = nil;
+    
+}
+
+- (IBAction)savePool:(id)sender {
+    
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    //none selected?
+    if (self.popUpCoin.indexOfSelectedItem == -1) {
+        NSLog(@"Apparently, no coin type was selected. That's not right.");
+    }
+
+    //SHA256
+    if (self.popUpCoin.indexOfSelectedItem == 0) {
+                [prefs setObject:self.poolComboBox.stringValue forKey:@"bitcoinPool"];
+                [prefs setObject:self.userNameField.stringValue forKey:@"bitcoinPoolUser"];
+                [prefs setObject:self.passwordField.stringValue forKey:@"bitcoinPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultPoolValue"];
+
+        
+        //    Write BTC pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *configFilePath = [bundleConfigPath stringByAppendingPathComponent:@"nobackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *bfgFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            bfgFileText = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolComboBox.stringValue];
+                bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+                bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+
+        }
+        
+        
+        NSString *saveBTCFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:configFilePath toPath:saveBTCFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [bfgFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveBTCFilePath contents:fileContents attributes:nil];
+
+    }
+    
+    //Scrypt
+    if (self.popUpCoin.indexOfSelectedItem == 1) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"scryptPool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"scryptPoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"scryptPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultLTCPoolValue"];
+        
+        //    Write LTC pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *ltcFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            ltcFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveLTCFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveLTCFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [ltcFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveLTCFilePath contents:fileContents attributes:nil];
+    }
+    
+    //VertCoin Scrypt Adaptive-N
+    if (self.popUpCoin.indexOfSelectedItem == 2) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"vertcoinPool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"vertcoinPoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"vertcoinPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultVTCPoolValue"];
+        
+        //    Write VTC pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *vtcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *vtcFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            vtcFileText = [NSString stringWithContentsOfFile:vtcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveVTCFilePath = [userpath stringByAppendingPathComponent:@"vtcurls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:vtcFilePath toPath:saveVTCFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [vtcFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveVTCFilePath contents:fileContents attributes:nil];
+        
+    }
+    
+    //QuarkCoin
+    if (self.popUpCoin.indexOfSelectedItem == 3) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"quarkcoinPool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"quarkcoinPoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"quarkcoinPoolPassword"];
+                                [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultQRKPoolValue"];
+        
+        //    Write QRK pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *qrkFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            qrkFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveQRKFilePath = [userpath stringByAppendingPathComponent:@"qrkurls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveQRKFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [qrkFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveQRKFilePath contents:fileContents attributes:nil];
+        
+    }
+    
+    //MaxCoin
+    if (self.popUpCoin.indexOfSelectedItem == 4) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"maxcoinPool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"maxcoinPoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"maxcoinPoolPassword"];
+                        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultMAXPoolValue"];
+        
+        //    Write QRK pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *maxFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveMAXFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveMAXFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [maxFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveMAXFilePath contents:fileContents attributes:nil];
+        
+    }
+    
+    [prefs synchronize];
+    
+    NSAlert * myAlert=[[NSAlert alloc] init];
+    [myAlert setMessageText:@"Your pool has been saved."];
+    [myAlert addButtonWithTitle:@"OK"];
+    
+    switch ([myAlert runModal]) {
+        case NSAlertFirstButtonReturn:
+            //handle first button
+            
+            //            [self closeWindow];
+            
+            break;
+    }
+    myAlert = nil;
+
+    
+    prefs = nil;
+    
+}
+
+- (IBAction)showPool:(id)sender {
+    [self.prefView setHidden:YES];
+    [self.prefView2 setHidden:YES];
+    [self.prefView3 setHidden:NO];
+}
+
+- (IBAction)mobileMiner:(id)sender {
+    [self.prefView setHidden:YES];
+    [self.prefView3 setHidden:YES];
+        [self.prefView2 setHidden:NO];
+}
+
+- (IBAction)showGeneral:(id)sender {
+    [self.prefView setHidden:NO];
+    [self.prefView2 setHidden:YES];
+    [self.prefView3 setHidden:YES];
+}
+
+- (IBAction)openPool:(id)sender {
+[self.prefWindow orderFront:nil];
+[self.prefView setHidden:YES];
+[self.prefView2 setHidden:YES];
+[self.prefView3 setHidden:NO];
+}
+
+- (IBAction)updateBox:(id)sender {
+    if (self.updateButton.state == NSOnState) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:nil forKey:@"checkUpdates"];
+        
+        [prefs synchronize];
+    }
+    else {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs setObject:@"nocheck" forKey:@"checkUpdates"];
+        
+        [prefs synchronize];
+    }
+}
 
 
 @end
