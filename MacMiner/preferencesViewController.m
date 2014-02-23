@@ -24,9 +24,9 @@
 //    
 //    [prefs synchronize];
 //    
-//    self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
+//    self.charCount.stringValue = [prefs stringForKey:@"logLength" ];
 //
-//    if ([prefs objectForKey:@"bitcoinPool"] != nil && [prefs objectForKey:@"scryptPool"] != nil && [prefs objectForKey:@"vertcoinPool"] != nil && [prefs objectForKey:@"quarkcoinPool"] != nil) {
+//    if ([prefs stringForKey:@"bitcoinPool"] != nil && [prefs stringForKey:@"scryptPool"] != nil && [prefs stringForKey:@"vertcoinPool"] != nil && [prefs stringForKey:@"quarkcoinPool"] != nil) {
 //        [self.prefWindow orderFront:nil];
 //    }
 //    
@@ -41,32 +41,40 @@
     
             AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     
-    NSString *hideVersion = [prefs objectForKey:@"hideVersion"];
-    
+    NSString *hideVersion = @"";
+    if ([prefs stringForKey:@"hideVersion"] != nil) {
+        
+            hideVersion = [prefs stringForKey:@"hideVersion"];
+
     if ([hideVersion isEqualToString:@"1518"]) {
         
     }
     else {
         [appDelegate.releaseNotes orderFront:nil];
     }
-
+        
+    }
+    else {
+        [appDelegate.releaseNotes orderFront:nil];
+    }
     
-    if ([prefs objectForKey:@"checkUpdates"] != nil) {
+    
+    if ([prefs stringForKey:@"checkUpdates"] != nil) {
         self.updateButton.state = NSOffState;
     }
     
-    if ([prefs objectForKey:@"logLength"]) {
+    if ([prefs stringForKey:@"logLength"] != nil) {
         
     
-    NSString *logLength = [prefs objectForKey:@"logLength" ];
+    NSString *logLength = [prefs stringForKey:@"logLength" ];
     if (logLength) {
     self.charCount.stringValue = logLength;
     }
     }
-                        if ([prefs objectForKey:@"bitcoinPool"]) {
-    NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
-    NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
-    NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
+                        if ([prefs stringForKey:@"bitcoinPool"] != nil) {
+    NSString *bitcoinPool = [prefs stringForKey:@"bitcoinPool"];
+    NSString *bitcoinPoolUser = [prefs stringForKey:@"bitcoinPoolUser"];
+    NSString *bitcoinPoolPassword = [prefs stringForKey:@"bitcoinPoolPassword"];
     
     if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
     self.poolComboBox.stringValue = bitcoinPool;
@@ -77,7 +85,7 @@
                         }
     
     
-    if ([prefs objectForKey:@"bitcoinPool"] == nil && [prefs objectForKey:@"scryptPool"] == nil && [prefs objectForKey:@"vertcoinPool"] == nil && [prefs objectForKey:@"quarkcoinPool"] == nil && [prefs objectForKey:@"maxcoinPool"] == nil) {
+    if ([prefs stringForKey:@"bitcoinPool"] == nil && [prefs stringForKey:@"scryptPool"] == nil && [prefs stringForKey:@"vertcoinPool"] == nil && [prefs stringForKey:@"quarkcoinPool"] == nil && [prefs stringForKey:@"maxcoinPool"] == nil) {
         [self.prefWindow orderFront:nil];
         [self.prefView setHidden:YES];
         [self.prefView2 setHidden:YES];
@@ -89,203 +97,147 @@
 
 
 -(IBAction)preferenceToggle:(id)sender {
-
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    [prefs synchronize];
     
     if ([self.prefWindow isVisible]) {
 
         
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
         
         [prefs setObject:self.charCount.stringValue forKey:@"logLength"];
-        
-        [prefs synchronize];
-        
-        prefs = nil;
+
 
         if (self.fpgaAsicButton.state == NSOnState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            
+
             [prefs setObject:@"start" forKey:@"startAsic"];
             
-            [prefs synchronize];
-            prefs = nil;
+
         }
         if (self.fpgaAsicButton.state == NSOffState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:nil forKey:@"startAsic"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.bfgButton.state == NSOnState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"start" forKey:@"startBfg"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.bfgButton.state == NSOffState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:nil forKey:@"startBfg"];
-            
-            [prefs synchronize];
-            prefs = nil;
+
         }
         if (self.cgButton.state == NSOnState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"start" forKey:@"startCg"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.cgButton.state == NSOffState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:nil forKey:@"startCg"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.cpuButton.state == NSOnState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"start" forKey:@"startCpu"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.cpuButton.state == NSOffState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:nil forKey:@"startCpu"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         
         if (self.dockButton.state == NSOffState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"hide" forKey:@"showDockReading"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.dockButton.state == NSOnState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@" " forKey:@"showDockReading"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.scrollButton.state == NSOffState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@"hide" forKey:@"scrollLog"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.scrollButton.state == NSOnState) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:@" " forKey:@"scrollLog"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         
         if (self.emailAddress.stringValue.length >= 5) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:self.emailAddress.stringValue forKey:@"emailAddress"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
         if (self.appID.stringValue.length >= 5) {
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             
             [prefs setObject:self.appID.stringValue forKey:@"appID"];
             
-            [prefs synchronize];
-            prefs = nil;
         }
                 [self.prefWindow orderOut:sender];
     }
     else
     {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
         
-        [prefs synchronize];
-        
-        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"logLength"]) {
-                        [prefs setObject:@"" forKey:@"logLength"];
-        }
-        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"scrollLog"]) {
-            [prefs setObject:@"" forKey:@"scrollLog"];
-        }
-        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"showDockReading"]) {
-            [prefs setObject:@"" forKey:@"showDockReading"];
-        }
-        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"emailAddress"]) {
-            [prefs setObject:@"" forKey:@"emailAddress"];
-        }
-        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"appID"]) {
-            [prefs setObject:@"" forKey:@"appID"];
+        if ([prefs stringForKey:@"logLength"] != nil) {
+        self.charCount.stringValue = [prefs stringForKey:@"logLength" ];
         }
         
-        
-        self.charCount.stringValue = [prefs objectForKey:@"logLength" ];
-        
-        if ([[prefs objectForKey:@"scrollLog"] isEqual: @"hide"]) {
+        if ([prefs stringForKey:@"scrollLog"] != nil) {
                         self.scrollButton.state = NSOffState;
         }
-        if ([[prefs objectForKey:@"showDockReading"] isEqual: @"hide"]) {
+        if ([prefs stringForKey:@"showDockReading"] != nil) {
             self.dockButton.state = NSOffState;
         }
         
         
-        if ([[prefs objectForKey:@"startAsic"] isEqualToString:@"start"]) {
+        if ([prefs stringForKey:@"startAsic"] != nil) {
             self.fpgaAsicButton.state = NSOnState;
         }
         else {
             self.fpgaAsicButton.state = NSOffState;
         }
-        if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
+        if ([prefs stringForKey:@"startBfg"] != nil) {
             self.bfgButton.state = NSOnState;
         }
         else {
             self.bfgButton.state = NSOffState;
         }
-        if ([[prefs objectForKey:@"startCg"] isEqualToString:@"start"]) {
+        if ([prefs stringForKey:@"startCg"] != nil) {
             self.cgButton.state = NSOnState;
         }
         else {
             self.cgButton.state = NSOffState;
         }
-        if ([[prefs objectForKey:@"startCpu"] isEqualToString:@"start"]) {
+        if ([prefs stringForKey:@"startCpu"] != nil) {
             self.cpuButton.state = NSOnState;
         }
         else {
             self.cpuButton.state = NSOffState;
         }
         
-        
-        self.emailAddress.stringValue = [prefs objectForKey:@"emailAddress"];
-        self.appID.stringValue = [prefs objectForKey:@"appID"];
-
-        prefs = nil;
+        if ([prefs stringForKey:@"emailAddress"] != nil) {
+        self.emailAddress.stringValue = [prefs stringForKey:@"emailAddress"];
+        }
+                if ([prefs stringForKey:@"appID"] != nil) {
+        self.appID.stringValue = [prefs stringForKey:@"appID"];
+                }
         
         [self.prefWindow orderFront:sender];
         
     }
+                [prefs synchronize];
+    
+            prefs = nil;
 }
 
 -(IBAction)textDidChange:(id)sender {
@@ -349,7 +301,7 @@
     if (self.dockButton.state == NSOnState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        [prefs setObject:@" " forKey:@"showDockReading"];
+        [prefs setObject:nil forKey:@"showDockReading"];
         
         [prefs synchronize];
     }
@@ -366,7 +318,7 @@
     if (self.speechButton.state == NSOnState) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        [prefs setObject:@" " forKey:@"enableSpeech"];
+        [prefs setObject:nil forKey:@"enableSpeech"];
         
         [prefs synchronize];
     }
@@ -391,26 +343,27 @@
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.triplemining.com:3334"];
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.bitcoin.cz:3333"];
         
-                    if ([prefs objectForKey:@"bitcoinPool"]) {
-        NSString *bitcoinPool = [prefs objectForKey:@"bitcoinPool"];
-        NSString *bitcoinPoolUser = [prefs objectForKey:@"bitcoinPoolUser"];
-        NSString *bitcoinPoolPassword = [prefs objectForKey:@"bitcoinPoolPassword"];
+                    if ([prefs stringForKey:@"bitcoinPool"] != nil) {
+        NSString *bitcoinPool = [prefs stringForKey:@"bitcoinPool"];
+        NSString *bitcoinPoolUser = [prefs stringForKey:@"bitcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs stringForKey:@"bitcoinPoolPassword"];
 
                     
         
-            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+                        if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
         self.poolComboBox.stringValue = bitcoinPool;
         self.userNameField.stringValue = bitcoinPoolUser;
         self.passwordField.stringValue = bitcoinPoolPassword;
             }
-            else {
-                self.userNameField.stringValue = @"";
-                self.passwordField.stringValue = @"";
-            }
+
         
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
+                    }
+                    else {
+                        self.userNameField.stringValue = @"";
+                        self.passwordField.stringValue = @"";
                     }
         
     }
@@ -418,83 +371,103 @@
     //Scrypt
     if (self.popUpCoin.indexOfSelectedItem == 1) {
         [self.poolComboBox removeAllItems];
-        [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9327"];
+        [self.poolComboBox setStringValue:@"http://buf.snicter.com:9327"];
         [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9327"];
-
-        if ([prefs objectForKey:@"scryptPool"]) {
+        [self.poolComboBox addItemWithObjectValue:@"http://buf.snicter.com:9327"];
+        [self.poolComboBox addItemWithObjectValue:@"spare.ozco.in:9333"];
+        [self.poolComboBox addItemWithObjectValue:@"mine.pool-x.eu:9000"];
+        [self.poolComboBox addItemWithObjectValue:@"www.ltcbox.net:3333"];
+    
+        if ([prefs stringForKey:@"scryptPool"] != nil) {
         
-        NSString *bitcoinPool = [prefs objectForKey:@"scryptPool"];
-        NSString *bitcoinPoolUser = [prefs objectForKey:@"scryptPoolUser"];
-        NSString *bitcoinPoolPassword = [prefs objectForKey:@"scryptPoolPassword"];
+        NSString *bitcoinPool = [prefs stringForKey:@"scryptPool"];
+        NSString *bitcoinPoolUser = [prefs stringForKey:@"scryptPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs stringForKey:@"scryptPoolPassword"];
 
         
-            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+                        if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
         self.poolComboBox.stringValue = bitcoinPool;
         self.userNameField.stringValue = bitcoinPoolUser;
         self.passwordField.stringValue = bitcoinPoolPassword;
             }
-            else {
-                self.userNameField.stringValue = @"";
-                self.passwordField.stringValue = @"";
-            }
+
         
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
+        }
+        else {
+            self.userNameField.stringValue = @"";
+            self.passwordField.stringValue = @"";
         }
     }
     
     //VertCoin Scrypt Adaptive-N
     if (self.popUpCoin.indexOfSelectedItem == 2) {
         [self.poolComboBox removeAllItems];
+        [self.poolComboBox setStringValue:@"stratum+tcp://pool.verters.com"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://pool.verters.com"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://stratum.kilovolt.co.uk:3333"];
+        [self.poolComboBox addItemWithObjectValue:@"http://buf.snicter.com:9327"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://stratum.vertco.in:8080"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://vert.bitcrush.info:3444"];
+        [self.poolComboBox addItemWithObjectValue:@"37.153.96.115:9171"];
         
-                            if ([prefs objectForKey:@"vertcoinPool"]) {
+                            if ([prefs stringForKey:@"vertcoinPool"] != nil) {
                                 
-        NSString *bitcoinPool = [prefs objectForKey:@"vertcoinPool"];
-        NSString *bitcoinPoolUser = [prefs objectForKey:@"vertcoinPoolUser"];
-        NSString *bitcoinPoolPassword = [prefs objectForKey:@"vertcoinPoolPassword"];
+        NSString *bitcoinPool = [prefs stringForKey:@"vertcoinPool"];
+        NSString *bitcoinPoolUser = [prefs stringForKey:@"vertcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs stringForKey:@"vertcoinPoolPassword"];
 
         
-            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+                        if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
         self.poolComboBox.stringValue = bitcoinPool;
         self.userNameField.stringValue = bitcoinPoolUser;
         self.passwordField.stringValue = bitcoinPoolPassword;
             }
-            else {
-                self.userNameField.stringValue = @"";
-                self.passwordField.stringValue = @"";
-            }
+
         
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
+                            }
+                            else {
+                                self.userNameField.stringValue = @"";
+                                self.passwordField.stringValue = @"";
                             }
     }
     
     //QuarkCoin
     if (self.popUpCoin.indexOfSelectedItem == 3) {
         [self.poolComboBox removeAllItems];
+        [self.poolComboBox setStringValue:@"stratum+tcp://qrk.suprnova.cc"];
+        [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://qrk.suprnova.cc"];
+        [self.poolComboBox addItemWithObjectValue:@"http://p2pool.org:8372"];
+
         
-                            if ([prefs objectForKey:@"quarkcoinPool"]) {
+                            if ([prefs stringForKey:@"quarkcoinPool"] != nil) {
                                 
-        NSString *bitcoinPool = [prefs objectForKey:@"quarkcoinPool"];
-        NSString *bitcoinPoolUser = [prefs objectForKey:@"quarkcoinPoolUser"];
-        NSString *bitcoinPoolPassword = [prefs objectForKey:@"quarkcoinPoolPassword"];
+        NSString *bitcoinPool = [prefs stringForKey:@"quarkcoinPool"];
+        NSString *bitcoinPoolUser = [prefs stringForKey:@"quarkcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs stringForKey:@"quarkcoinPoolPassword"];
         
-            if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+                        if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
         self.poolComboBox.stringValue = bitcoinPool;
         self.userNameField.stringValue = bitcoinPoolUser;
         self.passwordField.stringValue = bitcoinPoolPassword;
             }
-            else {
-                self.userNameField.stringValue = @"";
-                self.passwordField.stringValue = @"";
-            }
+
         
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
                             }
+        
+                            else {
+                                self.userNameField.stringValue = @"";
+                                self.passwordField.stringValue = @"";
+                            }
+        
     }
     
     //MaxCoin
@@ -503,29 +476,32 @@
         [self.poolComboBox setStringValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
         [self.poolComboBox addItemWithObjectValue:@"stratum+tcp://stratum01.max-coin.net:3333"];
         
-                            if ([prefs objectForKey:@"maxcoinPool"]) {
+                            if ([prefs stringForKey:@"maxcoinPool"] != nil) {
         
-        NSString *bitcoinPool = [prefs objectForKey:@"maxcoinPool"];
-        NSString *bitcoinPoolUser = [prefs objectForKey:@"maxcoinPoolUser"];
-        NSString *bitcoinPoolPassword = [prefs objectForKey:@"maxcoinPoolPassword"];
+        NSString *bitcoinPool = [prefs stringForKey:@"maxcoinPool"];
+        NSString *bitcoinPoolUser = [prefs stringForKey:@"maxcoinPoolUser"];
+        NSString *bitcoinPoolPassword = [prefs stringForKey:@"maxcoinPoolPassword"];
         
-        if (bitcoinPoolUser && bitcoinPoolPassword && bitcoinPool) {
+                        if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
             self.poolComboBox.stringValue = bitcoinPool;
             self.userNameField.stringValue = bitcoinPoolUser;
             self.passwordField.stringValue = bitcoinPoolPassword;
         }
-        else {
-            self.userNameField.stringValue = @"";
-            self.passwordField.stringValue = @"";
-        }
+
         
         bitcoinPoolPassword = nil;
         bitcoinPool = nil;
         bitcoinPoolUser = nil;
                             }
+                            else {
+                                self.userNameField.stringValue = @"";
+                                self.passwordField.stringValue = @"";
+                            }
     }
     
     prefs = nil;
+    
+    
     
 }
 

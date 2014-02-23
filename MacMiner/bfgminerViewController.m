@@ -296,13 +296,13 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveBTCConfigFilePath];
-        BOOL fileExists2 = [[NSFileManager defaultManager] fileExistsAtPath:self.saveLTCConfigFilePath];
-        if (fileExists && fileExists2) {
-            NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            
-
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+        BOOL ltcFileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveLTCConfigFilePath];
+        
+        NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+        NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+        
+        if (fileExists) {
+            if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
                 NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
                 NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
@@ -311,12 +311,12 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                                                              leftString:@"user" rightString:@"," leftOffset:9];
                 NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                 acceptString = nil;
-
-
-                        NSAlert *startAlert = [[NSAlert alloc] init];
-                        [startAlert addButtonWithTitle:@"Indeed"];
                 
-                [startAlert setMessageText:@"GPU Miner has started"];
+                
+                NSAlert *startAlert = [[NSAlert alloc] init];
+                [startAlert addButtonWithTitle:@"Indeed"];
+                
+                [startAlert setMessageText:@"bfgminer has started"];
                 NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
                 NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
                 NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
@@ -326,50 +326,52 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                 infoText2 = nil;
                 infoText = nil;
                 
-                        //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
-                        //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
-                        [startAlert setAlertStyle:NSWarningAlertStyle];
-                        //        returnCode: (NSInteger)returnCode
-                        
-                        [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
+                [startAlert setAlertStyle:NSWarningAlertStyle];
+                //        returnCode: (NSInteger)returnCode
+                
+                [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
             }
+        }
+        if (ltcFileExists) {
             
-//            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
-                        NSString *numberString = [self getDataBetweenFromString:ltcConfig
-                                                                     leftString:@"url" rightString:@"," leftOffset:8];
-                        NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                        numberString = nil;
-                        NSString *acceptString = [self getDataBetweenFromString:ltcConfig
-                                                                     leftString:@"user" rightString:@"," leftOffset:9];
-                        NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                        acceptString = nil;
-                        
-                        
-                        NSAlert *startAlert = [[NSAlert alloc] init];
-                        [startAlert addButtonWithTitle:@"Indeed"];
-                        
-                        [startAlert setMessageText:@"GPU Miner has started"];
-                        NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
-                        NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
-                        NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
-                        [startAlert setInformativeText:infoText3];
-                        
-                        infoText3 = nil;
-                        infoText2 = nil;
-                        infoText = nil;
-                        ltcConfig = nil;
-                        btcConfig = nil;
-                        bfgURLValue = nil;
-                        bfgUserValue = nil;
-                    
-                        
-                        //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
-                        //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
-                        [startAlert setAlertStyle:NSWarningAlertStyle];
-                        //        returnCode: (NSInteger)returnCode
-                        
-                        [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+            //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
+            if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+                NSString *numberString = [self getDataBetweenFromString:ltcConfig
+                                                             leftString:@"url" rightString:@"," leftOffset:8];
+                NSString *bfgURLValue = [numberString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                numberString = nil;
+                NSString *acceptString = [self getDataBetweenFromString:ltcConfig
+                                                             leftString:@"user" rightString:@"," leftOffset:9];
+                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                acceptString = nil;
+                
+                
+                NSAlert *startAlert = [[NSAlert alloc] init];
+                [startAlert addButtonWithTitle:@"Indeed"];
+                
+                [startAlert setMessageText:@"bfgminer has started"];
+                NSString *infoText = [@"The primary pool is set to " stringByAppendingString:bfgURLValue];
+                NSString *infoText2 = [infoText stringByAppendingString:@" and the user is set to "];
+                NSString *infoText3 = [infoText2 stringByAppendingString:bfgUserValue];
+                [startAlert setInformativeText:infoText3];
+                
+                infoText3 = nil;
+                infoText2 = nil;
+                infoText = nil;
+                ltcConfig = nil;
+                btcConfig = nil;
+                bfgURLValue = nil;
+                bfgUserValue = nil;
+                
+                
+                //            [[NSAlert init] alertWithMessageText:@"This app requires python pip. Click 'Install' and you will be asked your password so it can be installed, or click 'Quit' and install pip yourself before relaunching this app." defaultButton:@"Install" alternateButton:@"Quit" otherButton:nil informativeTextWithFormat:nil];
+                //            NSAlertDefaultReturn = [self performSelector:@selector(installPip:)];
+                [startAlert setAlertStyle:NSWarningAlertStyle];
+                //        returnCode: (NSInteger)returnCode
+                
+                [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
                 
             }
             
@@ -428,27 +430,23 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     [prefs synchronize];
     
-        if ([prefs objectForKey:@"enableSpeech"]) {
-    NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
-    if ([speechSetting  isEqual: @"silence"]) {
-        
-    }
+        if ([prefs objectForKey:@"enableSpeech"] == nil) {
+
 
     
-    else if ([self.speedRead.stringValue isEqual: @"0"] && self.speedRead.tag == 1) {
+     if ([self.speedRead.stringValue isEqual: @"0"] && self.speedRead.tag == 1) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Mining Stopped"];
     }
     
-    if ([speechSetting  isEqual: @"silence"]) {
-        
-    }
-    else if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
+    
+     if ([output rangeOfString:@"auth failed"].location != NSNotFound) {
         _speechSynth = [[NSSpeechSynthesizer alloc] initWithVoice:nil];
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
-                speechSetting = nil;
+
         }
+        
     
     
     if ([output rangeOfString:@"Invalid value passed to set intensity"].location != NSNotFound) {
@@ -500,7 +498,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs synchronize];
 
-                if ([prefs objectForKey:@"showDockReading"]) {
+                if ([prefs objectForKey:@"showDockReading"] != nil) {
         
                 if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
                     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
@@ -552,7 +550,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs synchronize];
     
         NSString *logLength = @"1";
-        if ([prefs objectForKey:@"logLength"]) {
+        if ([prefs objectForKey:@"logLength"] != nil) {
             logLength = [prefs objectForKey:@"logLength" ];
         }
         if (logLength.intValue <= 1) {
@@ -572,7 +570,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         // because of a bug in Mac OS X version 10.1 that causes scrolling in the context
         // of a text storage update to starve the app of events
 
-                        if ([prefs objectForKey:@"scrollLog"]) {
+                        if ([prefs objectForKey:@"scrollLog"] != nil) {
         
                 if ([[prefs objectForKey:@"scrollLog"] isNotEqualTo:@"hide"]) {
         [self performSelector:@selector(scrollToVisible:) withObject:nil afterDelay:0.0];
@@ -792,7 +790,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             self.bfgLookupGap.stringValue = lookupGap;
         }
         
-                                if ([prefs objectForKey:@"gpuAlgoChoice"]) {
+                                if ([prefs objectForKey:@"gpuAlgoChoice"] != nil) {
         if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
             [self.chooseGPUAlgo selectItemAtIndex:0];
         }
@@ -1022,7 +1020,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs synchronize];
     
     
-    if ([prefs objectForKey:@"gpuAlgoChoice"]) {
+    if ([prefs objectForKey:@"gpuAlgoChoice"] != nil) {
         if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
             [self.chooseGPUAlgo selectItemAtIndex:0];
         }
@@ -1042,7 +1040,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     }
     
     
-    if ([prefs objectForKey:@"startBfg"]) {
+    if ([prefs objectForKey:@"startBfg"] != nil) {
         
     
     if ([[prefs objectForKey:@"startBfg"] isEqualToString:@"start"]) {
@@ -1228,11 +1226,12 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveBTCConfigFilePath];
-        if (fileExists) {
+                BOOL ltcFileExists = [[NSFileManager defaultManager] fileExistsAtPath:self.saveLTCConfigFilePath];
+
             NSString *btcConfig = [NSString stringWithContentsOfFile : self.saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             NSString *ltcConfig = [NSString stringWithContentsOfFile : self.saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            
+          if (fileExists) {
         if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
                 NSString *numberString = [self getDataBetweenFromString:btcConfig
                                                              leftString:@"url" rightString:@"," leftOffset:8];
@@ -1264,7 +1263,9 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                 
                 [startAlert beginSheetModalForWindow:self.bfgWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
             }
-            
+          }
+                if (ltcFileExists) {
+        
             //            if ([ltcConfig rangeOfString:stringUser].location != NSNotFound) {
         if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
                 NSString *numberString = [self getDataBetweenFromString:ltcConfig

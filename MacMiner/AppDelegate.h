@@ -10,7 +10,7 @@
 #import "TaskWrapper.h"
 
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate, NSUserNotificationCenterDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSURLAuthenticationChallengeSender, NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSURLConnectionDownloadDelegate, NSUserNotificationCenterDelegate, NSWindowDelegate> {
 
     NSTimer *updateTimer;
     
@@ -64,5 +64,8 @@
 - (void)updateThread;
 
 - (void)checkforUpdates;
+
+- (void)flagsChanged:(NSEvent *)theEvent;
+
 
 @end

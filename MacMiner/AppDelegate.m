@@ -21,7 +21,31 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
+    
+    NSUInteger flags = ([NSEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask);
+    
+    BOOL isOptionPressed = (flags == NSAlternateKeyMask);
+    
+    if (isOptionPressed) {
+        NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+        [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+                NSLog(@"defaults unset");
+    }
+//    
+//    // Insert code here to initialize your application
+//    if (NSAlternateKeyMask) {
+//        // Do something based on the alt/option key being pressed
+//        NSLog(@"alt");
+//    } else if (NSCommandKeyMask){
+//        // Do something based on the command key being pressed
+//        NSLog(@"command");
+//    }
+//    else {
+//        NSLog(@"no");
+//    }
+//
+    
+
     
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(beginActivityWithOptions:reason:)]) {
         self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving API messages"];
@@ -134,10 +158,10 @@
 }
 
 - (void)updateThread {
-      updateTimer = [NSTimer scheduledTimerWithTimeInterval:28800. target:self selector:@selector(startToggling) userInfo:nil repeats:YES];
+      updateTimer = [NSTimer scheduledTimerWithTimeInterval:86400. target:self selector:@selector(timedcheckforUpdates) userInfo:nil repeats:YES];
 }
 
-- (void)checkforUpdates {
+- (void)timedcheckforUpdates {
     NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
@@ -424,7 +448,7 @@
     NSString *email = [prefs objectForKey:@"emailAddress"];
     NSString *appID = [prefs objectForKey:@"appID"];
     
-    if (email) {
+    if (email != nil) {
         
     
     
@@ -536,7 +560,7 @@
     NSString *email = [prefs objectForKey:@"emailAddress"];
     NSString *appID = [prefs objectForKey:@"appID"];
     
-    if (email) {
+    if (email != nil) {
         
     
     NSString *machineName = [[NSHost currentHost] localizedName];
@@ -853,5 +877,6 @@
     }
 
 }
+
 
 @end

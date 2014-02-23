@@ -101,12 +101,12 @@
 	[_task terminate];
 	
 	// Drain any remaining output data the task generates.
-    //	NSData *data;
-    //	while ((data = [[[_task standardOutput] fileHandleForReading] availableData]) && [data length])
-    //	{
-    //		// Notify the delegate that there is data.
-    //		[self _sendDataToDelegate:data];
-    //	}
+    	NSData *data;
+    	while ((data = [[[_task standardOutput] fileHandleForReading] availableData]) && [data length])
+    	{
+    		// Notify the delegate that there is data.
+    		[self _sendDataToDelegate:data];
+    	}
 	
 	// Notify the delegate that the task finished.
 	if ([(id)_taskDelegate respondsToSelector:@selector(taskWrapper:didFinishTaskWithStatus:)])
@@ -114,6 +114,7 @@
 		NSInteger taskStatus = ([_task isRunning] ? -9999 : [_task terminationStatus]);
 		
 		[_taskDelegate taskTwoWrapper:self didFinishTaskWithStatus:taskStatus];
+        
 	};
 	
 	// Disconnect our weak reference to the delegate.
@@ -123,6 +124,7 @@
 	_commandArguments = nil;
 	_environment = nil;
     _task = nil;
+
     
 }
 
@@ -139,7 +141,7 @@
 		
 		// [agl] Moved this readInBackgroundAndNotify up here from a few lines down.
 		// Schedule the file handle to read more data.
-		[[aNotification object] readInBackgroundAndNotify];
+//		[[aNotification object] readInBackgroundAndNotify];
 	}
 	else
 	{
@@ -150,7 +152,7 @@
 	
     // [agl] Seems to me this should be in the if-block above -- am I wrong?
     //	// Schedule the file handle to read more data.
-    //	[[aNotification object] readInBackgroundAndNotify];
+    	[[aNotification object] readInBackgroundAndNotify];
 }
 
 - (NSString *)expandedCommand

@@ -15,6 +15,7 @@
 @implementation asicMiner
 
 
+
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:(NSCoder *)aDecoder];
@@ -954,8 +955,8 @@ algorithmString = @"Scrypt";
 //            [asicStartButton setTitle:@"Stop"];
 //    [self stopToggling:self];
     
-    loopTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(toggleLoopTimerFired:) userInfo:nil repeats:YES];
-        timerTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(toggleTimerFired:) userInfo:nil repeats:YES];
+    loopTimer = [NSTimer scheduledTimerWithTimeInterval:6. target:self selector:@selector(toggleLoopTimerFired:) userInfo:nil repeats:YES];
+        timerTimer = [NSTimer scheduledTimerWithTimeInterval:6. target:self selector:@selector(toggleTimerFired:) userInfo:nil repeats:YES];
     
 //    }
 
@@ -1566,6 +1567,7 @@ NSArray *fileURL = [NSArray arrayWithObjects:urlToDirectory, nil];
     
     
 }
+
 
 
 @end
