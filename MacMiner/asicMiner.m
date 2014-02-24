@@ -4,13 +4,145 @@
 //
 //  Created by John O'Mara on 01/05/2013.
 //  Copyright (c) 2013 John O'Mara. All rights reserved.
-//  the apiaccess binary is based on luke-jr's api-example.c in the bfgminer github repo
-//  Many thanks to Scott Holben for modifying the api-example.c to allow fetching of
-//  RPC data from multiple IPs
+
 
 #import "asicMiner.h"
 #import "AppDelegate.h"
 
+#include "config.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <sys/types.h>
+
+#include "compat.h"
+
+#ifndef WIN32
+#include <errno.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
+#define SOCKETTYPE int
+#define SOCKETFAIL(a) ((a) < 0)
+#define INVSOCK -1
+#define CLOSESOCKET close
+
+#define SOCKETINIT do{}while(0)
+
+#define SOCKERRMSG strerror(errno)
+#else
+#include <winsock2.h>
+
+#define SOCKETTYPE SOCKET
+#define SOCKETFAIL(a) ((a) == SOCKET_ERROR)
+#define INVSOCK INVALID_SOCKET
+#define CLOSESOCKET closesocket
+
+static char WSAbuf[1024];
+
+struct WSAERRORS {
+    int id;
+    char *code;
+} WSAErrors[] = {
+    { 0,			"No error" },
+    { WSAEINTR,		"Interrupted system call" },
+    { WSAEBADF,		"Bad file number" },
+    { WSAEACCES,		"Permission denied" },
+    { WSAEFAULT,		"Bad address" },
+    { WSAEINVAL,		"Invalid argument" },
+    { WSAEMFILE,		"Too many open sockets" },
+    { WSAEWOULDBLOCK,	"Operation would block" },
+    { WSAEINPROGRESS,	"Operation now in progress" },
+    { WSAEALREADY,		"Operation already in progress" },
+    { WSAENOTSOCK,		"Socket operation on non-socket" },
+    { WSAEDESTADDRREQ,	"Destination address required" },
+    { WSAEMSGSIZE,		"Message too long" },
+    { WSAEPROTOTYPE,	"Protocol wrong type for socket" },
+    { WSAENOPROTOOPT,	"Bad protocol option" },
+    { WSAEPROTONOSUPPORT,	"Protocol not supported" },
+    { WSAESOCKTNOSUPPORT,	"Socket type not supported" },
+    { WSAEOPNOTSUPP,	"Operation not supported on socket" },
+    { WSAEPFNOSUPPORT,	"Protocol family not supported" },
+    { WSAEAFNOSUPPORT,	"Address family not supported" },
+    { WSAEADDRINUSE,	"Address already in use" },
+    { WSAEADDRNOTAVAIL,	"Can't assign requested address" },
+    { WSAENETDOWN,		"Network is down" },
+    { WSAENETUNREACH,	"Network is unreachable" },
+    { WSAENETRESET,		"Net connection reset" },
+    { WSAECONNABORTED,	"Software caused connection abort" },
+    { WSAECONNRESET,	"Connection reset by peer" },
+    { WSAENOBUFS,		"No buffer space available" },
+    { WSAEISCONN,		"Socket is already connected" },
+    { WSAENOTCONN,		"Socket is not connected" },
+    { WSAESHUTDOWN,		"Can't send after socket shutdown" },
+    { WSAETOOMANYREFS,	"Too many references, can't splice" },
+    { WSAETIMEDOUT,		"Connection timed out" },
+    { WSAECONNREFUSED,	"Connection refused" },
+    { WSAELOOP,		"Too many levels of symbolic links" },
+    { WSAENAMETOOLONG,	"File name too long" },
+    { WSAEHOSTDOWN,		"Host is down" },
+    { WSAEHOSTUNREACH,	"No route to host" },
+    { WSAENOTEMPTY,		"Directory not empty" },
+    { WSAEPROCLIM,		"Too many processes" },
+    { WSAEUSERS,		"Too many users" },
+    { WSAEDQUOT,		"Disc quota exceeded" },
+    { WSAESTALE,		"Stale NFS file handle" },
+    { WSAEREMOTE,		"Too many levels of remote in path" },
+    { WSASYSNOTREADY,	"Network system is unavailable" },
+    { WSAVERNOTSUPPORTED,	"Winsock version out of range" },
+    { WSANOTINITIALISED,	"WSAStartup not yet called" },
+    { WSAEDISCON,		"Graceful shutdown in progress" },
+    { WSAHOST_NOT_FOUND,	"Host not found" },
+    { WSANO_DATA,		"No host data of that type was found" },
+    { -1,			"Unknown error code" }
+};
+
+static char *WSAErrorMsg()
+{
+    int i;
+    int id = WSAGetLastError();
+    
+    /* Assume none of them are actually -1 */
+    for (i = 0; WSAErrors[i].id != -1; i++)
+        if (WSAErrors[i].id == id)
+            break;
+    
+    sprintf(WSAbuf, "Socket Error: (%d) %s", id, WSAErrors[i].code);
+    
+    return &(WSAbuf[0]);
+}
+
+#define SOCKERRMSG WSAErrorMsg()
+
+static WSADATA WSA_Data;
+
+#define SOCKETINIT	do {  \
+int wsa; \
+if ( (wsa = WSAStartup(0x0202, &WSA_Data)) ) { \
+printf("Socket startup failed: %d\n", wsa); \
+return 1; \
+}  \
+} while (0)
+
+#ifndef SHUT_RDWR
+#define SHUT_RDWR SD_BOTH
+#endif
+#endif
+
+#define RECVSIZE 65500
+
+static const char SEPARATOR = '|';
+static const char COMMA = ',';
+static const char EQ = '=';
+static int ONLY;
+//endAPIStuff
 
 @implementation asicMiner
 
@@ -271,7 +403,7 @@ self.megaHashLabel.stringValue = @"0";
     
     
     
-    if([apiOutputString hasPrefix:@"R"] && [apiOutputString hasSuffix:@")"]) {
+    if(apiOutputString.length >= 10) {
         
     
     [self.prefs synchronize];
@@ -443,19 +575,31 @@ self.megaHashLabel.stringValue = @"0";
     NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
     [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
     
+        NSString *apiOutputStringRemoval = [self getDataBetweenFromString:apiOutputString leftString:@"[STATUS]" rightString:@")" leftOffset:0];
+
+        apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:apiOutputStringRemoval withString:@""];
+        
     if ([apiOutputString rangeOfString:@"GPU0"].location != NSNotFound) {
         
-        
-        
-        int strCount = [apiOutputString length] - [[apiOutputString stringByReplacingOccurrencesOfString:@"GPU[0-9]+" withString:@""] length];
-        strCount /= [@"GPU[0-9]+" length];
-        
-        
-        strCount += 1;
-        for (int i = 0; i < strCount; i++) {
+
+
+        for (int i = 0; i >= 0; i++) {
 
             
             NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
+            
+            if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
+                if ([apiOutputString rangeOfString:@"GPU"].location == NSNotFound) {
+                    break;
+                }
+                else {
+                    i = 0;
+                    pgaCount = [NSString stringWithFormat:@"GPU%d", i];
+
+                }
+            }
+                        if ([apiOutputString rangeOfString:pgaCount].location != NSNotFound) {
+            
             NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
             NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
@@ -468,6 +612,7 @@ self.megaHashLabel.stringValue = @"0";
             NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
             NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
             NSString *apiIntensity = [self getDataBetweenFromString:pgaAPIData leftString:@"sity] =>" rightString:@"[" leftOffset:8];
+
             NSString *apiName = pgaCount;
             
             [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
@@ -537,8 +682,13 @@ algorithmString = @"Scrypt";
             apiName = nil;
             pgaStats = nil;
         
+                    apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
+            
         }
-        
+                        else {
+                            break;
+                        }
+        }
         
     }
     
@@ -549,12 +699,21 @@ algorithmString = @"Scrypt";
             
             
             
-            
             NSString *pgaCount = [NSString stringWithFormat:@"PGA%d", i];
             
             if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
+            if ([apiOutputString rangeOfString:@"PGA"].location == NSNotFound) {
                 break;
             }
+            else {
+                i = 0;
+                                        pgaCount = [NSString stringWithFormat:@"PGA%d", i];
+            }
+            }
+            
+
+            
+            if ([apiOutputString rangeOfString:pgaCount].location != NSNotFound) {
             
             NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             //                                NSLog(pgaCount);
@@ -604,6 +763,7 @@ algorithmString = @"Scrypt";
                 apiName = nil;
                 pgaStats = nil;
                 
+                
             }
             else {
                 NSString *apiTemp = @"0";
@@ -630,6 +790,7 @@ algorithmString = @"Scrypt";
                 
             }
             
+                                         apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
             
             pgaCount = nil;
             pgaAPIData = nil;
@@ -644,8 +805,11 @@ algorithmString = @"Scrypt";
             apiDiffAcc = nil;
             apiDiffRej = nil;
             
-            
-            
+            }
+            else {
+                break;
+            }
+
         }
         
         
@@ -662,8 +826,16 @@ algorithmString = @"Scrypt";
             NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
             
             if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
-                break;
+                if ([apiOutputString rangeOfString:@"ASC"].location == NSNotFound) {
+                    break;
+                }
+                else {
+                    i = 0;
+                                pgaCount = [NSString stringWithFormat:@"ASC%d", i];
+                }
             }
+            
+            if ([apiOutputString rangeOfString:pgaCount].location != NSNotFound) {
             
             NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             //                                NSLog(pgaCount);
@@ -740,6 +912,7 @@ algorithmString = @"Scrypt";
                 pgaStats = nil;
             }
             
+            apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
             
             pgaCount = nil;
             pgaAPIData = nil;
@@ -753,10 +926,13 @@ algorithmString = @"Scrypt";
             apiDiff1 = nil;
             apiDiffAcc = nil;
             apiDiffRej = nil;
+
             
             
-            
-            
+        }
+            else {
+                break;
+            }
         }
         
         
@@ -788,11 +964,103 @@ algorithmString = @"Scrypt";
 
 }
 
+-(void)apiAbstraction {
+                     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+    
+         [appDelegate.outputMathString setString:@""];
+    
+    
+    char *command = "devs";
+    const char *host = "127.0.0.1";
+    short int port = 4028;
+    if ([appDelegate.asicReadBack isHidden] == NO) {
+    command = "devs";
+    host = "127.0.0.1";
+    short int port = 4028;
+    
+    
+    callapi(command, host, port);
+    }
+    
+    if ([appDelegate.cgReadBack isHidden] == NO) {
+        command = "devs";
+        host = "127.0.0.1";
+        short int port = 4048;
+        
+        
+        callapi(command, host, port);
+    }
+    if ([appDelegate.bfgReadBack isHidden] == NO) {
+        command = "devs";
+        host = "127.0.0.1";
+        short int port = 4052;
+        
+        callapi(command, host, port);
+    }
+    
+    if (self.minerAddressesArray.count >= 1) {
+        int i;
+        int q;
+        q = self.minerAddressesArray.count-1;
+        
+        for (i = 0; i <= q; i++) {
+            
+            if ([self.minerAddressesArray objectAtIndex:i]) {
+                
+                NSString *itemString = [self.minerAddressesArray objectAtIndex:i];
+                NSString *ipString = @"";
+                NSString *portString = @"";
+                if ([itemString rangeOfString:@":"].location != NSNotFound) {
+                    
+                    NSURL *url = [NSURL URLWithString:itemString];
+                    
+                    ipString = [url host];
+                    portString = [url port];
+                    
+                    //                NSLog(@"host: %@", [url host]);
+                    //                NSLog(@"port: %@", [url port]);
+                    
+                    
+                    char *command = "devs";
+                    const char *host = "127.0.0.1";
+                    host = [ipString UTF8String];
+                    short int port = portString.intValue;
+                    
+                    callapi(command, host, port);
+                }
+                else {
+                    if (itemString.length <= 4) {
+                        command = "devs";
+                        host = "127.0.0.1";
+                        short int port = itemString.intValue;
+                        
+                        callapi(command, host, port);
+                    }
+                    command = "devs";
+                    
+                    host = [itemString UTF8String];
+                    short int port = 4028;
+                    
+                    callapi(command, host, port);
+                }
+                
+            }
+        }
+        
+    }
+
+ 
+
+    
+    appDelegate = nil;
+
+}
+
 - (void)toggleTimerFired:(NSTimer*)timer
 {
 //        NSLog(@"Loop2");
 
-    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     [self.prefs synchronize];
     
     NSString *speechSetting = [self.prefs objectForKey:@"enableSpeech"];
@@ -830,65 +1098,14 @@ algorithmString = @"Scrypt";
         else {
         self.acceptLabel.tag = 0;
         }
-
-                 AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        
-    NSMutableArray *apiArray = [NSMutableArray arrayWithObjects: nil];
-        if ([appDelegate.asicReadBack isHidden] == NO) {
-            [apiArray addObject:@"devs"];
-                       [apiArray addObject:@"4028"];
-        }
-
-        if ([appDelegate.cgReadBack isHidden] == NO) {
-                        [apiArray addObject:@"devs"];
-            [apiArray addObject:@"127.0.0.1:4048"];
-        }
-        if ([appDelegate.bfgReadBack isHidden] == NO) {
-            [apiArray addObject:@"devs"];
-            [apiArray addObject:@"127.0.0.1:4052"];
-        }
-
-        if (self.minerAddressesArray.count >= 1) {
-            
-        
-        [apiArray addObjectsFromArray:self.minerAddressesArray];
-//        NSLog([NSString stringWithFormat:@"%lu", (unsigned long)self.minerAddressesArray.count]);
-//        NSLog([self.minerAddressesArray componentsJoinedByString:@" "]);
-        }
-    
-    NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *userpath = [paths objectAtIndex:0];
-    userpath = [userpath stringByAppendingPathComponent:executableName];
-
-    NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-    
-    NSString *apiPath = [bundlePath2 stringByAppendingString:@"/apiaccess"];
-
-    
-    apiTask =[[taskTwoWrapper alloc] initWithCommandPath:apiPath
-                                             arguments:apiArray
-                                           environment:nil
-                                              delegate:self];
-    // kick off the process asynchronously
-//        NSString *logger = [apiArray componentsJoinedByString:@" "];
-//        NSLog(logger);
-        if ([apiArray containsObject:@"devs"] || [appDelegate.asicReadBack isHidden] == NO || [appDelegate.cgReadBack isHidden] == NO || [appDelegate.bfgReadBack isHidden] == NO) {
-    [apiTask startTask];
-        }
-
         
 
-        apiArray = nil;
-        paths = nil;
-        userpath = nil;
-        executableName = nil;
-        bundlePath2 = nil;
-        apiPath = nil;
-        
-    }
+}
     
+        self.asicAPIOutput.string = [NSString stringWithString:appDelegate.outputMathString];
+   [self performSelectorInBackground:@selector(apiAbstraction) withObject:nil];
 
+    appDelegate = nil;
 }
 
 
@@ -904,10 +1121,10 @@ algorithmString = @"Scrypt";
 
 //            self.asicAPIOutput.string = @"";
             
-            [self.asicAPIOutput delete:nil];
-            [self.asicAPIOutput didChangeText];
+//            [self.asicAPIOutput delete:nil];
+//            [self.asicAPIOutput didChangeText];
             
-            self.asicAPIOutput.string = output;
+//            self.asicAPIOutput.string = output;
 
         }
         
@@ -968,6 +1185,7 @@ algorithmString = @"Scrypt";
 // It will be called whenever there is output from the TaskWrapper.
 - (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
+    
     
     
     [self.prefs synchronize];
@@ -1188,7 +1406,7 @@ algorithmString = @"Scrypt";
 - (IBAction)addNetworkedMinerApply:(id)sender
 {
 //self.prefs = [NSUserDefaults standardUserDefaults];
-        [self.minerAddressesArray addObject:@"devs"];
+//        [self.minerAddressesArray addObject:@"devs"];
     [self.minerAddressesArray addObject:self.ipAddress.stringValue];
     
 //        [self.prefs setObject:self.minerAddressesArray forKey:@"ipAddress"];
@@ -1564,9 +1782,174 @@ NSURL* urlToDirectory = [NSURL fileURLWithPath:applicationSupportDirectory isDir
 
 NSArray *fileURL = [NSArray arrayWithObjects:urlToDirectory, nil];
 [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:fileURL];
-    
+
     
 }
+
+void display(char *buf)
+{
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+
+    
+
+	char *nextobj, *item, *nextitem, *eq;
+	int itemcount;
+    
+	while (buf != NULL) {
+		nextobj = strchr(buf, SEPARATOR);
+		if (nextobj != NULL)
+			*(nextobj++) = '\0';
+        
+		if (*buf) {
+			item = buf;
+			itemcount = 0;
+			while (item != NULL) {
+				nextitem = strchr(item, COMMA);
+				if (nextitem != NULL)
+					*(nextitem++) = '\0';
+                
+				if (*item) {
+					eq = strchr(item, EQ);
+					if (eq != NULL)
+						*(eq++) = '\0';
+                    
+					if (itemcount == 0) {
+//						printf("[%s%s] =>\n(\n", item, (eq != NULL && isdigit(*eq)) ? eq : "");
+//                        [appDelegate.outputMathString stringByAppendingString:[NSString stringWithFormat:@"[%s%s] =>\n(\n", item, (eq != NULL && isdigit(*eq)) ? eq : ""]];
+[appDelegate.outputMathString setString:[appDelegate.outputMathString stringByAppendingString:[NSString stringWithFormat:@"[%s%s] =>\n(\n", item, (eq != NULL && isdigit(*eq)) ? eq : ""]]];
+[appDelegate.outputMathString setString:[appDelegate.outputMathString stringByAppendingString:@"("]];
+                    }
+                    
+					if (eq != NULL)
+                    {
+//						printf("   [%s] => %s\n", item, eq);
+                        [appDelegate.outputMathString setString:[appDelegate.outputMathString stringByAppendingString:[NSString stringWithFormat:@"   [%s] => %s\n", item, eq]] ];
+					}
+                    else {
+//						printf("   [%d] => %s\n", itemcount, item);
+
+                        [appDelegate.outputMathString setString:[appDelegate.outputMathString stringByAppendingString:[NSString stringWithFormat:@"   [%d] => %s\n", itemcount, item]]];
+				}
+                    
+
+                    
+
+                    
+                }
+                
+				item = nextitem;
+				itemcount++;
+			}
+			if (itemcount > 0)
+//				puts(")");
+[appDelegate.outputMathString setString:[appDelegate.outputMathString stringByAppendingString:@")"]];
+		}
+
+		buf = nextobj;
+	}
+//    NSString *tempString = [NSString stringWithString:appDelegate.outputMathString];
+//                        NSLog(tempString);
+    
+    appDelegate = nil;
+
+}
+
+void callapi(char *command, const char *host, short int port)
+{
+	char buf[RECVSIZE+1];
+	struct hostent *ip;
+	struct sockaddr_in serv;
+	SOCKETTYPE sock;
+	int ret = 0;
+	int n, p;
+
+    
+	SOCKETINIT;
+    
+	ip = gethostbyname(host);
+    
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+    
+
+        
+
+    
+	if (sock == INVSOCK) {
+//		printf("Socket initialisation failed: %s\n", SOCKERRMSG);
+        
+	}
+    else {
+    
+	memset(&serv, 0, sizeof(serv));
+	serv.sin_family = AF_INET;
+	serv.sin_addr = *((struct in_addr *)ip->h_addr);
+	serv.sin_port = htons(port);
+    
+	if (SOCKETFAIL(connect(sock, (struct sockaddr *)&serv, sizeof(struct sockaddr)))) {
+//		printf("Socket connect failed: %s\n", SOCKERRMSG);
+        
+        return;
+
+	}
+    
+	n = send(sock, command, strlen(command), 0);
+	if (SOCKETFAIL(n)) {
+//		printf("Send failed: %s\n", SOCKERRMSG);
+        return;
+
+	}
+	else {
+		p = 0;
+		buf[0] = '\0';
+		while (p < RECVSIZE) {
+			n = recv(sock, &buf[p], RECVSIZE - p , 0);
+            
+			if (SOCKETFAIL(n)) {
+//				printf("Recv failed: %s\n", SOCKERRMSG);
+				ret = 1;
+				break;
+			}
+            
+			if (n == 0)
+				break;
+            
+			p += n;
+			buf[p] = '\0';
+		}
+        
+        
+		if (!ONLY)
+			display(buf);
+        
+        
+        	CLOSESOCKET(sock);
+	}
+        
+
+
+    }
+
+    
+
+}
+
+static char *trim(char *str)
+{
+	char *ptr;
+    
+	while (isspace(*str))
+		str++;
+    
+	ptr = strchr(str, '\0');
+	while (ptr-- > str) {
+		if (isspace(*ptr))
+			*ptr = '\0';
+	}
+    
+	return str;
+}
+
 
 
 

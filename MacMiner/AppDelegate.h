@@ -55,6 +55,8 @@
 
 @property (nonatomic, strong) NSString *mobileMinerStatus;
 
+@property (nonatomic, strong) NSMutableString *outputMathString;
+
 @property (strong) id activity;
 
 - (void)mobilePost;
@@ -66,6 +68,8 @@
 - (void)checkforUpdates;
 
 - (void)flagsChanged:(NSEvent *)theEvent;
+
+
 
 
 @end

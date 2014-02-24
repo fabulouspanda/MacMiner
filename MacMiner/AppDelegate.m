@@ -17,7 +17,9 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 
-
+-(void)applicationWillFinishLaunching:(NSNotification *)notification {
+    
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -29,6 +31,7 @@
     if (isOptionPressed) {
         NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
         [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+
                 NSLog(@"defaults unset");
     }
 //    
@@ -45,7 +48,8 @@
 //    }
 //
     
-
+    self.outputMathString = [[NSMutableString alloc] init];
+    [self.outputMathString setString:@""];
     
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(beginActivityWithOptions:reason:)]) {
         self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving API messages"];
@@ -61,7 +65,7 @@
     else {
 
 
-        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
 
 
     if (stringVersion) {
@@ -71,6 +75,7 @@
         //        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
         NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
         NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
+            if (checkString.length >= 2) {
         
         if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
         
@@ -122,6 +127,7 @@
         buildNumber = nil;
         checkString = nil;
     }
+    }
     
     
     [[NSApp dockTile] setContentView:self.dockView];
@@ -162,7 +168,7 @@
 }
 
 - (void)timedcheckforUpdates {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
     if (stringVersion) {
@@ -172,6 +178,8 @@
         //        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
         NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
         NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
+        
+            if (checkString.length >= 2) {
         
         if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
             
@@ -214,7 +222,7 @@
                 }
                 
             }
-            
+        }
         }
     }
 }
@@ -490,6 +498,8 @@
         }
         
         NSString *responseString = [[NSString alloc] initWithData:oResponseData encoding:NSUTF8StringEncoding];
+        if (responseString != nil) {
+            
         
         if ([responseString rangeOfString:@"STOP"].location != NSNotFound) {
             self.mobileMinerStatus = @"STOP";
@@ -536,6 +546,8 @@
             }
             
         }
+        
+    }
         //end control code
         
     }
@@ -807,13 +819,15 @@
 }
 
 - (IBAction)checkForUpdates:(id)sender {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     //        NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"]; // example: 1.0.0
     NSNumber *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
     NSString *checkString = [NSString stringWithFormat:@"%@", buildNumber];
+    if (checkString.length >= 2) {
+        
     
     if ([checkString rangeOfString:stringVersion].location == NSNotFound) {
         
@@ -876,6 +890,8 @@
 
     }
 
+    }
+    
 }
 
 

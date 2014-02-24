@@ -102,6 +102,10 @@
 
 @property (nonatomic, strong) NSString *mobileMinerStatus;
 
+@property (nonatomic, strong) NSMutableData *receivedData;
+
+
+
 - (IBAction)start:(id)sender;
 
 - (IBAction)asicMinerToggle:(id)sender;
@@ -117,6 +121,8 @@
 - (void)toggleTimerFired:(NSTimer*)timer;
 
 -(void)stopAsicMiner;
+
+
 
 
 

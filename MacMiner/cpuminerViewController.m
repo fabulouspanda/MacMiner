@@ -134,9 +134,13 @@
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
         }
 
-        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
+        if (fileExists) {
 
+            
         NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+        
+        
             NSString *userFind = @"user";
             if ([stringUser rangeOfString:userFind].location != NSNotFound) {
                 NSString *foundURLString = [self getDataBetweenFromString:stringUser
@@ -269,8 +273,8 @@
         // kick off the process asynchronously
         //        [cpuTask setLaunchPath: @"/sbin/ping"];
         [cpuTask startTask];
-        
-        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
+        }
+
         if (fileExists) {
 
             NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
@@ -618,8 +622,11 @@
         }
         
         
-        
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
+        if (fileExists) {
+            
         NSString *stringUser = [[NSString alloc] initWithContentsOfFile:saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+        
         NSString *userFind = @"user";
         if ([stringUser rangeOfString:userFind].location != NSNotFound) {
             NSString *foundURLString = [self getDataBetweenFromString:stringUser
@@ -751,7 +758,8 @@
         
         [cpuTask startTask];
         
-        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
+        }
+        
         if (fileExists) {
             
             NSString *ltcConfig = [NSString stringWithContentsOfFile : saveLTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
