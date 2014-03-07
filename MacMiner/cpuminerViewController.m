@@ -257,7 +257,7 @@
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
         }
         else {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
         }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
@@ -739,8 +739,8 @@
         else if (self.chooseAlgo.indexOfSelectedItem == 4) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
         }
-        else if (self.chooseAlgo.indexOfSelectedItem == 3) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+        else if (self.chooseAlgo.indexOfSelectedItem == 0) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
         }
         else {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];

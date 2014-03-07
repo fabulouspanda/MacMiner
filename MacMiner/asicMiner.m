@@ -329,13 +329,25 @@ self.megaHashLabel.stringValue = @"0";
             [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
             NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
             
-                    NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-            NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *acceptString = [self getDataBetweenFromString:btcConfig
-                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
+            
+            NSString *btcConfig = @"";
+            
+            NSFileManager *fileManager = [[NSFileManager alloc] init];
+            if ([fileManager fileExistsAtPath:userpath] == YES) {
+                btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            }
+            
+            NSString *acceptString = @"";
+            
+            if (btcConfig.length >= 20) {
+                acceptString = [self getDataBetweenFromString:btcConfig
+                                                   leftString:@"user" rightString:@"," leftOffset:9];
+            }
+            
             NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             acceptString = nil;
-
+            
             
             NSString *logFile = [userpath stringByAppendingString:[@"/" stringByAppendingString:[bfgUserValue stringByAppendingString:[dateString stringByAppendingString:@".txt"]]]];
 
@@ -384,24 +396,6 @@ self.megaHashLabel.stringValue = @"0";
     NSString *apiOutputString = self.asicAPIOutput.string;
     
        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-    
-    
-//  Just messing around here
-//    NSData *data = [self.asicAPIOutput.string dataUsingEncoding:NSUTF8StringEncoding];
-//    NSError *error;
-//    if ([NSJSONSerialization JSONObjectWithData:data
-//                                         options:kNilOptions
-//                                           error:&error] != nil) {
-//        NSLog(@"here");
-//            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-//        NSLog(@"%@",[json objectForKey:@"STATUS"]);
-//    }
-//
-    
-    
-    
-    
-    
     
     if(apiOutputString.length >= 10) {
         
@@ -501,12 +495,23 @@ self.megaHashLabel.stringValue = @"0";
                 NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
                 
                 NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-                NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-                NSString *acceptString = [self getDataBetweenFromString:btcConfig
-                                                             leftString:@"user" rightString:@"," leftOffset:9];
+                
+                NSString *btcConfig = @"";
+                
+                NSFileManager *fileManager = [[NSFileManager alloc] init];
+                if ([fileManager fileExistsAtPath:userpath] == YES) {
+                    btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+                }
+                
+                NSString *acceptString = @"";
+                
+                if (btcConfig.length >= 20) {
+                    acceptString = [self getDataBetweenFromString:btcConfig
+                                                       leftString:@"user" rightString:@"," leftOffset:9];
+                }
+                
                 NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
                 acceptString = nil;
-                
                 
                 NSString *logFile = [userpath stringByAppendingString:[@"/" stringByAppendingString:[bfgUserValue stringByAppendingString:[dateString stringByAppendingString:@".txt"]]]];
                 
@@ -574,35 +579,77 @@ self.megaHashLabel.stringValue = @"0";
     
     NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
     [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
-    
-        NSString *apiOutputStringRemoval = [self getDataBetweenFromString:apiOutputString leftString:@"[STATUS]" rightString:@")" leftOffset:0];
 
-        apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:apiOutputStringRemoval withString:@""];
+    if ([apiOutputString rangeOfString:@"GPU0"].location != NSNotFound || [apiOutputString rangeOfString:@"PGA0"].location != NSNotFound || [apiOutputString rangeOfString:@"ASC0"].location != NSNotFound) {
+
+        NSMutableArray *locationMapArray = [[NSMutableArray alloc] init];
         
-    if ([apiOutputString rangeOfString:@"GPU0"].location != NSNotFound) {
+        if (appDelegate.asicReadBack.isHidden == NO) {
+            [locationMapArray addObject:@"This Machine"];
+        }
+        else if (appDelegate.cgReadBack.isHidden == NO) {
+            [locationMapArray addObject:@"This Machine"];
+        }
+        else if (appDelegate.bfgReadBack.isHidden == NO) {
+            [locationMapArray addObject:@"This Machine"];
+        }
+        
+        if (self.minerAddressesArray.count >= 1) {
+            [locationMapArray addObjectsFromArray:self.minerAddressesArray];
+        }
+        
+//        NSString *logIt = [locationMapArray componentsJoinedByString:@", "];
+//        NSLog(logIt);
+
+        
+        NSArray *minerOutputArray = [apiOutputString componentsSeparatedByString:@"[Data for"];
+
+        int k = minerOutputArray.count;
+        
+        for (int j = 0; j < k; j++) {
+            
+            if (j > minerOutputArray.count || j > locationMapArray.count) {
+                break;
+            }
+
+            NSString *currentOutputString = [minerOutputArray objectAtIndex:j];
+        
+
+    if ([currentOutputString rangeOfString:@"GPU0"].location != NSNotFound) {
         
 
 
         for (int i = 0; i >= 0; i++) {
 
+
             
             NSString *pgaCount = [NSString stringWithFormat:@"GPU%d", i];
             
-            if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
-                if ([apiOutputString rangeOfString:@"GPU"].location == NSNotFound) {
-                    break;
-                }
-                else {
+            if ([currentOutputString rangeOfString:pgaCount].location == NSNotFound) {
+
                     i = 0;
                     pgaCount = [NSString stringWithFormat:@"GPU%d", i];
+                                if ([currentOutputString rangeOfString:pgaCount].location == NSNotFound) {
+                                    break; break;
+                                }
 
                 }
-            }
-                        if ([apiOutputString rangeOfString:pgaCount].location != NSNotFound) {
             
-            NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
+            
+
+            
+            
+                        if ([currentOutputString rangeOfString:pgaCount].location != NSNotFound) {
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:currentOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
-            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+            NSString *mhs5S = @"";
+                            if ([currentOutputString rangeOfString:@"20s"].location != NSNotFound) {
+            mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"20s] =>" rightString:@"[" leftOffset:8];
+                                                    }
+                            else {
+            mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+                            }
             NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
             NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
             NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
@@ -615,7 +662,7 @@ self.megaHashLabel.stringValue = @"0";
 
             NSString *apiName = pgaCount;
             
-            [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity",nil]];
+            [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",@" ",@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",apiIntensity,@"intensity", [locationMapArray objectAtIndex:j-1], @"location", nil]];
             
             NSInteger u = [mhs5S integerValue];
             NSString *apiHash5s = [NSString stringWithFormat:@"%ld", (long)u];
@@ -682,7 +729,7 @@ algorithmString = @"Scrypt";
             apiName = nil;
             pgaStats = nil;
         
-                    apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
+                    currentOutputString = [currentOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
             
         }
                         else {
@@ -692,33 +739,38 @@ algorithmString = @"Scrypt";
         
     }
     
-    if ([apiOutputString rangeOfString:@"PGA0"].location != NSNotFound) {
+    if ([currentOutputString rangeOfString:@"PGA0"].location != NSNotFound) {
         
         
         for (int i = 0; i >= 0; i++) {
             
-            
+
             
             NSString *pgaCount = [NSString stringWithFormat:@"PGA%d", i];
             
-            if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
-            if ([apiOutputString rangeOfString:@"PGA"].location == NSNotFound) {
-                break;
-            }
-            else {
+            if ([currentOutputString rangeOfString:pgaCount].location == NSNotFound) {
+
                 i = 0;
                                         pgaCount = [NSString stringWithFormat:@"PGA%d", i];
+                            if ([currentOutputString rangeOfString:pgaCount].location == NSNotFound) {
+                                break; break;
+                            }
             }
-            }
             
-
             
-            if ([apiOutputString rangeOfString:pgaCount].location != NSNotFound) {
             
-            NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
+            if ([currentOutputString rangeOfString:pgaCount].location != NSNotFound) {
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:currentOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             //                                NSLog(pgaCount);
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
-            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+                NSString *mhs5S = @"";
+                if ([currentOutputString rangeOfString:@"20s"].location != NSNotFound) {
+                    mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"20s] =>" rightString:@"[" leftOffset:8];
+                }
+                else {
+                    mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+                }
             NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
             NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
             NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
@@ -743,7 +795,7 @@ algorithmString = @"Scrypt";
             if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
                 NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
                 
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", [locationMapArray objectAtIndex:j-1], @"location", nil]];
                 
                 
                 NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
@@ -767,7 +819,7 @@ algorithmString = @"Scrypt";
             }
             else {
                 NSString *apiTemp = @"0";
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", [locationMapArray objectAtIndex:j-1], @"location", nil]];
                 
                 
                 NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
@@ -790,7 +842,7 @@ algorithmString = @"Scrypt";
                 
             }
             
-                                         apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
+                                         currentOutputString = [currentOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
             
             pgaCount = nil;
             pgaAPIData = nil;
@@ -810,37 +862,47 @@ algorithmString = @"Scrypt";
                 break;
             }
 
+            
+            
         }
         
         
         
     }
     
-    if ([apiOutputString rangeOfString:@"ASC0"].location != NSNotFound) {
+    if ([currentOutputString rangeOfString:@"ASC0"].location != NSNotFound) {
         
         
         for (int i = 0; i >= 0; i++) {
             
-            
+
+
             
             NSString *pgaCount = [NSString stringWithFormat:@"ASC%d", i];
             
-            if ([apiOutputString rangeOfString:pgaCount].location == NSNotFound) {
-                if ([apiOutputString rangeOfString:@"ASC"].location == NSNotFound) {
-                    break;
-                }
-                else {
+            if ([currentOutputString rangeOfString:pgaCount].location == NSNotFound) {
+
                     i = 0;
                                 pgaCount = [NSString stringWithFormat:@"ASC%d", i];
-                }
+                                if ([currentOutputString rangeOfString:pgaCount].location == NSNotFound) {
+                                    break; break;
+                                }
             }
             
-            if ([apiOutputString rangeOfString:pgaCount].location != NSNotFound) {
             
-            NSString *pgaAPIData = [self getDataBetweenFromString:apiOutputString leftString:pgaCount rightString:@")" leftOffset:0];
+            
+            if ([currentOutputString rangeOfString:pgaCount].location != NSNotFound) {
+            
+            NSString *pgaAPIData = [self getDataBetweenFromString:currentOutputString leftString:pgaCount rightString:@")" leftOffset:0];
             //                                NSLog(pgaCount);
             NSString *apiStatus = [self getDataBetweenFromString:pgaAPIData leftString:@"[Status] =>" rightString:@"[" leftOffset:11];
-            NSString *mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+                NSString *mhs5S = @"";
+                if ([currentOutputString rangeOfString:@"20s"].location != NSNotFound) {
+                    mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"20s] =>" rightString:@"[" leftOffset:8];
+                }
+                else {
+                    mhs5S = [self getDataBetweenFromString:pgaAPIData leftString:@"5s] =>" rightString:@"[" leftOffset:7];
+                }
             NSString *mhsAv = [self getDataBetweenFromString:pgaAPIData leftString:@"av] =>" rightString:@"[" leftOffset:7];
             NSString *apiAccepted = [self getDataBetweenFromString:pgaAPIData leftString:@"[Accepted] =>" rightString:@"[" leftOffset:13];
             NSString *apiRejected = [self getDataBetweenFromString:pgaAPIData leftString:@"[Rejected] =>" rightString:@"[" leftOffset:13];
@@ -866,7 +928,7 @@ algorithmString = @"Scrypt";
                 
                 NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
                 
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", [locationMapArray objectAtIndex:j-1], @"location", nil]];
                 
                 
                 NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
@@ -890,7 +952,7 @@ algorithmString = @"Scrypt";
             else {
                 
                 NSString *apiTemp = @"0";
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity",nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", [locationMapArray objectAtIndex:j-1], @"location", nil]];
                 
                 
                 NSString *apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
@@ -912,7 +974,7 @@ algorithmString = @"Scrypt";
                 pgaStats = nil;
             }
             
-            apiOutputString = [apiOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
+            currentOutputString = [currentOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
             
             pgaCount = nil;
             pgaAPIData = nil;
@@ -935,9 +997,9 @@ algorithmString = @"Scrypt";
             }
         }
         
-        
     }
-    
+    }
+    }
     
     [self.apiTableView reloadData];
     [self.apiTableView setNeedsDisplay:YES];
@@ -1200,20 +1262,25 @@ algorithmString = @"Scrypt";
         [self.speechSynth startSpeakingString:@"Authorisation Failed"];
     }
     
-    if ([output rangeOfString:@"5s:"].location != NSNotFound) {
+    if ([output rangeOfString:@"s:"].location != NSNotFound) {
         self.numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
+                                                     leftString:@"s" rightString:@"a" leftOffset:2];
         self.megaHashLabel.stringValue = [self.numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
         self.numberString = nil;
+    }
+        if ([output rangeOfString:@"A:"].location != NSNotFound) {
         self.acceptString = [self getDataBetweenFromString:output
                                                      leftString:@"A:" rightString:@"R" leftOffset:0];
         self.acceptLabel.stringValue = [self.acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
         self.acceptString = nil;
+        }
+        if ([output rangeOfString:@"R:"].location != NSNotFound) {
         self.rejectString = [self getDataBetweenFromString:output
                                                      leftString:@"R:" rightString:@"+" leftOffset:0];
         self.rejecttLabel.stringValue = [self.rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         self.rejectString = nil;
-        
+        }
+    
         if ([output rangeOfString:@"kh"].location != NSNotFound) {
             self.asicHashField.stringValue = @"Kh";
         }
@@ -1251,7 +1318,7 @@ algorithmString = @"Scrypt";
         self.rejectString = nil;
         output = nil;
 
-    }
+    
   
     if ([output rangeOfString:@"Unknown stratum msg"].location != NSNotFound) {
         output = nil;
@@ -1305,7 +1372,7 @@ algorithmString = @"Scrypt";
     left = [scanner scanLocation];
     [scanner setScanLocation:left + leftPos];
     [scanner scanUpToString:rightData intoString: nil];
-    right = [scanner scanLocation] + 1;
+    right = [scanner scanLocation];
     left += leftPos;
     self.foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
 
@@ -1407,7 +1474,13 @@ algorithmString = @"Scrypt";
 {
 //self.prefs = [NSUserDefaults standardUserDefaults];
 //        [self.minerAddressesArray addObject:@"devs"];
-    [self.minerAddressesArray addObject:self.ipAddress.stringValue];
+    
+    NSString *addAddress = self.ipAddress.stringValue;
+    if ([self.ipAddress.stringValue rangeOfString:@"http://"].location == NSNotFound) {
+        addAddress = [@"http://" stringByAppendingString:addAddress];
+    }
+    
+    [self.minerAddressesArray addObject:addAddress];
     
 //        [self.prefs setObject:self.minerAddressesArray forKey:@"ipAddress"];
 
@@ -1539,9 +1612,21 @@ algorithmString = @"Scrypt";
             NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
             
             NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-            NSString *btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-            NSString *acceptString = [self getDataBetweenFromString:btcConfig
-                                                         leftString:@"user" rightString:@"," leftOffset:9];
+            
+            NSString *btcConfig = @"";
+            
+            NSFileManager *fileManager = [[NSFileManager alloc] init];
+            if ([fileManager fileExistsAtPath:userpath] == YES) {
+                btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
+            }
+
+            NSString *acceptString = @"";
+            
+            if (btcConfig.length >= 20) {
+                acceptString = [self getDataBetweenFromString:btcConfig
+                                                             leftString:@"user" rightString:@"," leftOffset:9];
+            }
+
             NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
             acceptString = nil;
             
@@ -1919,9 +2004,16 @@ void callapi(char *command, const char *host, short int port)
 		}
         
         
-		if (!ONLY)
+		if (!ONLY) {
+            
+                AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            
+            NSString *whichMiner = [NSString stringWithFormat:@"[Data for %s]" , host];
+            
+            [appDelegate.outputMathString setString:[appDelegate.outputMathString stringByAppendingString:[whichMiner stringByAppendingString:@"\n"]]];
+            
 			display(buf);
-        
+        }
         
         	CLOSESOCKET(sock);
 	}

@@ -158,7 +158,7 @@
         }
         if (self.dockButton.state == NSOnState) {
             
-            [prefs setObject:@" " forKey:@"showDockReading"];
+            [prefs setObject:nil forKey:@"showDockReading"];
             
         }
         if (self.scrollButton.state == NSOffState) {
@@ -168,7 +168,7 @@
         }
         if (self.scrollButton.state == NSOnState) {
             
-            [prefs setObject:@" " forKey:@"scrollLog"];
+            [prefs setObject:nil forKey:@"scrollLog"];
             
         }
         

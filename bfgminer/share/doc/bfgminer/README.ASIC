@@ -9,7 +9,7 @@ KnCminer's Mercury, Jupiter and Saturn.
 AVALON
 ------
 
-Currently, Avalon boards are supported only by connecting them directly (or via
+Currently, Avalon boards are best supported by connecting them directly (or via
 a hub) to a regular PC running BFGMiner. It is also possible to install the
 OpenWrt packages of BFGMiner to the Avalon's embedded controller, but this is
 not a simple task due to its lack of available flash space.
@@ -19,31 +19,23 @@ First, add the -S option specifying the avalon driver specifically. For example,
 
 -S avalon:\\.\COM9
 
-Next, use the --avalon-options copying the command as used by the internal
-router used by the Avalon. eg:
+Next, use the --set-device option to provide the device configuration.
+If you are translating options from --avalon-options (cgminer and older versions
+of BFGMiner), note the values are baud:miner_count:asic_count:timeout:clock.
 
---avalon-options 115200:24:10:45:282
-
-The values are baud : miners : asic count : timeout : frequency.
-
-Baud:
-The device is essentially hard coded to emulate 115200 baud so you shouldn't
-change this.
-
-Miners:
-Most Avalons are 3 module devices, which come to 24 miners. 4 module devices
-would use 32 here.
-
-Asic count:
-Virtually all have 10, so don't change this.
-
-Timeout:
-This defines how long the device will work on a work item before accepting new
-work to replace it. It should be changed according to the frequency (last
-setting).
-It is possible to set this a little lower if you are trying to tune for short
-block mining (eg p2pool) but much lower and the device will start creating
-duplicate shares.
+    baud=N         The device is essentially hard coded to emulate 115200 baud,
+                   so you shouldn't change this.
+    miner_count=N  Most Avalons are 3 module devices, which come to 24 miners.
+                   4 module devices would use 32 here.
+    asic_count=N   Virtually all have 10, so don't change this.
+    timeout=N      This defines how long the device will work on a work item
+                   before accepting new work to replace it. It should be changed
+                   according to the frequency (last setting). It is possible to
+                   set this a little lower if you are trying to tune for short
+                   block mining (eg p2pool) but much lower and the device will
+                   start creating duplicate shares.
+    clock=N        This is the clock speed of the devices. Only specific values
+                   work: 256, 270, 282 (default), 300, 325, 350 and 375.
 
 Sample settings for valid different frequencies (last 2 values):
 34:375
@@ -53,19 +45,6 @@ Sample settings for valid different frequencies (last 2 values):
 45:282
 47:270
 50:256
-
-Frequency:
-This is the clock speed of the devices. Only specific values work, 256, 270,
-282 (default), 300, 325, 350 and 375.
-
-If you use the full curses based interface with Avalons you will get this
-information:
-AVA 0: 22/ 46C  60%/2400R
-
-The values are:
-ambient temp / highest device temp  set fan % / lowest detected fan RPM.
-
-Check the API for more detailed information.
 
 
 BFSB, MEGABIGPOWER, AND METABANK BITFURY BOARDS
@@ -129,7 +108,7 @@ one or more blades. First, start BFGMiner with the --http-port option. For
 example:
     bfgminer --http-port 8330
 Then configure your blade to connect to your BFGMiner instance on the same port,
-with a unique username per blade. It will then show up as a SGW device and
+with a unique username per blade. It will then show up as a PXY device and
 should work more or less like any other miner.
 
 
@@ -194,6 +173,40 @@ make AR=arm-angstrom-linux-gnueabi-ar
 ---------------END-------------
 
 BFGMiner has also been incorporated into an unofficial firmware by uski01 called Bertmod this can be found on the kncminer forum.
+
+
+MONARCH
+-------
+
+The Butterfly Labs Monarch devices can be used as either USB devices, or in a
+PCI-Express slot. As USB devices, they are essentially plug-and-play. If you
+wish to use them via PCI-Express, however, you must first load the proper
+driver. BFGMiner can work with either Linux uio (2.6.23+, requires root access)
+or Linux vfio (3.6+, requires IOMMU support).
+
+To enable uio on your cards, you may need to do:
+    sudo modprobe uio_pci_generic
+    echo 1cf9 0001 | sudo tee /sys/bus/pci/drivers/uio_pci_generic/new_id
+
+Enabling vfio is similar, but more complicated, but allows you to run BFGMiner
+without root privileges. First, load the kernel module and tell it to accept the
+Monarch:
+    sudo modprobe vfio-pci
+    echo 1cf9 0001 | sudo tee /sys/bus/pci/drivers/vfio-pci/new_id
+Next, identify what the device ids are for your card(s):
+    lspci -D | grep 1cf9  # the first number of each line is the device id
+From that, you can identify its IOMMU group, and list all devices sharing that
+group:
+    readlink /sys/bus/pci/devices/<device_id>/iommu_group
+    ls /sys/kernel/iommu_groups/<iommu_group>/devices/
+All of the devices listed (other than the Monarch), if any, will need to be
+disabled and unbound! To do that, use:
+    echo <device_id> | sudo tee /sys/bus/pci/devices/<device_id>/driver/unbind
+If you want to run BFGMiner as a normal user:
+    chown <username> /dev/vfio/<iommu_group>
+Depending on your system, you may also need to do:
+    echo 1 | sudo tee /sys/module/vfio_iommu_type1/parameters/allow_unsafe_interrupts
+
 
 ---
 

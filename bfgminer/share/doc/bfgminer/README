@@ -160,6 +160,10 @@ BFGMiner specific configuration options:
 	--with-system-libblkmaker  Use system libblkmaker rather than bundled one
 	                           (default disabled)
 	--with-udevrulesdir=DIR Install udev rules into this directory
+	--without-uio           Compile support for PCI devices via Linux UIO
+	                        interface (default enabled)
+	--without-vfio          Compile support for PCI devices via Linux VFIO
+	                        interface (default enabled)
 	--without-sensors       Build with libsensors monitoring (default enabled)
 	--without-curses        Compile support for curses TUI (default enabled)
 	--without-libmicrohttpd Compile support for libmicrohttpd getwork server
@@ -227,13 +231,13 @@ Options for both config file and command line:
 --device|-d <arg>   Enable only devices matching pattern (default: all)
 --disable-rejecting Automatically disable pools that continually reject shares
 --http-port <arg>   Port number to listen on for HTTP getwork miners (-1 means disabled) (default: -1)
---expiry|-E <arg>   Upper bound on how many seconds after getting work we consider a share from it stale (w/o longpoll active) (default: 120)
+--expiry <arg>      Upper bound on how many seconds after getting work we consider a share from it stale (w/o longpoll active) (default: 120)
 --expiry-lp <arg>   Upper bound on how many seconds after getting work we consider a share from it stale (with longpoll active) (default: 3600)
 --failover-only     Don't leak work to backup pools when primary pool is lagging
 --force-dev-init    Always initialize devices when possible (such as bitstream uploads to some FPGAs)
---kernel-path|-K <arg> Specify a path to where bitstream and kernel files are (default: "/usr/local/bin")
+--kernel-path <arg> Specify a path to where bitstream and kernel files are
 --load-balance      Change multipool strategy from failover to quota based balance
---log|-l <arg>      Interval in seconds between log output (default: 5)
+--log|-l <arg>      Interval in seconds between log output (default: 20)
 --log-file|-L <arg> Append log file for output messages
 --log-microseconds  Include microseconds in log output
 --monitor|-m <arg>  Use custom pipe cmd for output messages
@@ -253,6 +257,8 @@ Options for both config file and command line:
 --protocol-dump|-P  Verbose dump of protocol-level activities
 --queue|-Q <arg>    Minimum number of work items to have queued (0 - 10) (default: 1)
 --quiet|-q          Disable logging output, display status and errors
+--quit-summary <arg> Summary printed when you quit: none/devs/procs/detailed
+--quota|-U <arg>    quota;URL combination for server with load-balance strategy quotas
 --real-quiet        Disable all output
 --remove-disabled   Remove disabled devices entirely, as if they didn't exist
 --request-diff <arg> Request a specific difficulty from pools (default: 1.0)
@@ -260,11 +266,11 @@ Options for both config file and command line:
 --rotate <arg>      Change multipool strategy from failover to regularly rotate at N minutes (default: 0)
 --round-robin       Change multipool strategy from failover to round robin on failure
 --scan|-S <arg>     Configure how to scan for mining devices
---scan-time|-s <arg> Upper bound on time spent scanning current work, in seconds (default: 60)
+--scan-time <arg>   Upper bound on time spent scanning current work, in seconds (default: 60)
 --sched-start <arg> Set a time of day in HH:MM to start mining (a once off without a stop time)
 --sched-stop <arg>  Set a time of day in HH:MM to stop mining (will quit without a start time)
 --scrypt            Use the scrypt algorithm for mining (non-bitcoin)
---set-device <arg>  Set default parameters on devices; eg, NFY:osc6_bits=50
+--set-device|--set <arg> Set default parameters on devices; eg, NFY:osc6_bits=50
 --setuid <arg>      Username of an unprivileged user to run as
 --sharelog <arg>    Append share log to file
 --shares <arg>      Quit after mining N shares (default: unlimited)
@@ -274,9 +280,7 @@ Options for both config file and command line:
 --stratum-port <arg> Port number to listen on for stratum miners (-1 means disabled) (default: -1)
 --submit-threads    Minimum number of concurrent share submissions (default: 64)
 --syslog            Use system log for output messages (default: standard error)
---temp-cutoff <arg> Maximum temperature devices will be allowed to reach before being disabled, one value or comma separated list
 --temp-hysteresis <arg> Set how much the temperature can fluctuate outside limits when automanaging speeds (default: 3)
---temp-target <arg> Target temperature when automatically managing fan and clock speeds
 --text-only|-T      Disable ncurses formatted screen output
 --unicode           Use Unicode characters in TUI
 --url|-o <arg>      URL for bitcoin JSON-RPC server
@@ -293,37 +297,15 @@ See example.conf for an example configuration.
 
 GPU only options:
 
---auto-fan          Automatically adjust all GPU fan speeds to maintain a target temperature
---auto-gpu          Automatically adjust all GPU engine clock speeds to maintain a target temperature
---gpu-threads|-g <arg> Number of threads per GPU (1 - 10) (default: 2)
---gpu-dyninterval <arg> Set the refresh interval in ms for GPUs using dynamic intensity (default: 7)
---gpu-engine <arg>  GPU engine (over)clock range in MHz - one value, range and/or comma separated list (e.g. 850-900,900,750-850)
---gpu-fan <arg>     GPU fan percentage range - one value, range and/or comma separated list (e.g. 25-85,85,65)
 --gpu-map <arg>     Map OpenCL to ADL device order manually, paired CSV (e.g. 1:0,2:1 maps OpenCL 1 to ADL 0, 2 to 1)
---gpu-memclock <arg> Set the GPU memory (over)clock in MHz - one value for all or separate by commas for per card.
---gpu-memdiff <arg> Set a fixed difference in clock speed between the GPU and memory in auto-gpu mode
 --gpu-platform <arg> Select OpenCL platform ID to use for GPU mining
---gpu-powertune <arg> Set the GPU powertune percentage - one value for all or separate by commas for per card.
 --gpu-reorder       Attempt to reorder GPU devices according to PCI Bus ID
---gpu-vddc <arg>    Set the GPU voltage in Volts - one value for all or separate by commas for per card.
---intensity|-I <arg> Intensity of GPU scanning (d or -10 -> 10, default: d to maintain desktop interactivity)
---kernel|-k <arg>   Override kernel to use (diablo, poclbm, phatk or diakgcn) - one value or comma separated
 --no-adl            Disable the ATI display library used for monitoring and setting GPU parameters
---temp-overheat <arg> Overheat temperature when automatically managing fan and GPU speeds (default: 85)
---vectors|-v <arg>  Override detected optimal vector (1, 2 or 4) - one value or comma separated list
---worksize|-w <arg> Override detected optimal worksize - one value or comma separated list
 
 GPU mining is disabled by default for SHA256d if you have any dedicated mining
 devices, but can be enabled explicitly specifying the -S opencl:auto option.
 
 See README.GPU for more information regarding GPU mining.
-
-scrypt only options:
-
---lookup-gap <arg>  Set GPU lookup gap for scrypt mining, comma separated
---shaders <arg>     GPU shaders per card for tuning scrypt, comma separated
---thread-concurrency <arg> Set GPU thread concurrency for scrypt mining, comma separated
-
 See README.scrypt for more information regarding (non-bitcoin) scrypt mining.
 
 
@@ -456,7 +438,8 @@ The totals line shows the following:
 Each column is as follows:
   The number of devices and processors currently mining
   Hottest temperature reported by any processor
-  5 second exponentially decaying average hash rate
+  20 second exponentially decaying average hash rate (configurable with --log
+      option)
   An all time average hash rate
   An all time average hash rate based on actual nonces found, adjusted for pool
       reject and stale rate
@@ -747,9 +730,9 @@ A; Try the --net-delay option if you are on a getwork or GBT server.
 Q: How do I tune for P2Pool?
 A: P2Pool has very rapid expiration of work and new blocks, it is suggested you
 decrease intensity by 1 from your optimal value, and decrease GPU threads to 1
-with -g 1. It is also recommended to use --failover-only since the work is
-effectively like a different block chain. If mining with a Mini Rig, it is worth
-adding the --bfl-range option.
+with --set-device OCL:threads=1. It is also recommended to use --failover-only
+since the work is effectively like a different block chain. If mining with a
+Mini Rig, it is worth adding the --bfl-range option.
 
 Q: Are OpenCL kernels from other mining software useable in BFGMiner?
 A: No, the APIs are slightly different between the different software and they
