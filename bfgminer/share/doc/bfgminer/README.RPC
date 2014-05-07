@@ -146,7 +146,8 @@ The list of requests - a (*) means it requires privileged access - and replies:
 
  Request       Reply Section  Details
  -------       -------------  -------
- version       VERSION        CGMiner=BFGMiner version
+ version       VERSION        Miner="BFGMiner " BFGMiner version
+                              CGMiner=BFGMiner version
                               API=API version
 
  config        CONFIG         Some miner configuration information:
@@ -244,8 +245,8 @@ The list of requests - a (*) means it requires privileged access - and replies:
                               The filename is optional and will use the BFGMiner
                               default if not specified
 
- quit (*)      none           There is no status section but just a single "BYE"
-                              reply before BFGMiner quits
+ quit (*)      none           There is no reply section just the STATUS section
+                              before BFGMiner quits
 
  notify        NOTIFY         The last status and history count of each devices
                               problem
@@ -306,8 +307,8 @@ The list of requests - a (*) means it requires privileged access - and replies:
                               supported by the 'devs' command
                               e.g. DEVDETAILS=0,Name=BFL,ID=0,ProcID=0,Driver=bitforce,...|
 
- restart (*)   none           There is no status section but just a single
-                              "RESTART" reply before BFGMiner restarts
+ restart (*)   none           There is no reply section just the STATUS section
+                              before BFGMiner restarts
 
  stats         STATS          Each device or pool that has 1 or more getworks
                               with a list of stats regarding getwork times
@@ -435,6 +436,9 @@ api-example.py - a Python script to access the API.
  by default it sends a 'summary' request to the miner at 127.0.0.1:4028
  If you specify a command it will send that request instead.
 
+If you are using Node.js, you can also use the miner-rpc package and script:
+https://www.npmjs.org/package/miner-rpc
+
 ----------
 
 Feature Changelog for external applications using the API:
@@ -449,8 +453,12 @@ CPU and OpenCL devices are now included as "PGAs", to enable migration to a simp
 Added API commands:
  'pgarestart'
 
-Modified API command:
+Modified API commands:
  'devs' - remove 'GPU Count' and 'CPU Count'
+ 'quit' - expand reply to include a complete STATUS section
+ 'restart' - expand reply to include a complete STATUS section
+ 'summary' - add 'MHS rolling'
+ 'version' - add 'Miner'
 
 Deprecated API commands:
  'cpu'
@@ -1247,15 +1255,44 @@ However, if $readonly is true, it will not display them.
 ---------
 
 Default:
+ $rigport = 4028;
+
+Default port to use if any $rigs entries don't specify the port number
+
+---------
+
+Default:
  $rigs = array('127.0.0.1:4028');
 
-Set $rigs to an array of your BFGMiner rigs that are running format: 'IP:Port'
- or 'Host:Port' or 'Host:Port:Name'.
+Set $rigs to an array of your BFGMiner rigs that are running format: 'IP' or
+ 'Host' or 'IP:Port' or 'Host:Port' or 'Host:Port:Name'.
 If you only have one rig, it will just show the detail of that rig.
 If you have more than one rig it will show a summary of all the rigs with
  buttons to show the details of each rig - the button contents will be 'Name'
  rather than rig number, if you specify 'Name'.
+If Port is missing or blank, it will try $rigport
 e.g. $rigs = array('127.0.0.1:4028','myrig.com:4028:Sugoi');
+
+---------
+
+Default:
+ $rignames = false;
+
+Set $rignames to false to not affect the display.
+Set $rignames to one of 'ip' or 'ipx' to alter the name displayed
+if the rig doesn't have a 'name' in $rigs
+Currently:
+ 'ip' means use the 4th byte of the rig IP address as an integer
+ 'ipx' means use the 4th byte of the rig IP address as 2 hex bytes
+
+---------
+
+Default:
+ $rigbuttons = true;
+
+Set $rigbuttons to false to display a link rather than a button on
+the left of any summary table with rig buttons, in order to reduce
+the height of the table cells
 
 ---------
 

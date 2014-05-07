@@ -65,7 +65,7 @@
     else {
 
 
-        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
+        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
 
 
     if (stringVersion) {
@@ -168,7 +168,7 @@
 }
 
 - (void)timedcheckforUpdates {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
     if (stringVersion) {
@@ -458,25 +458,13 @@
     
     if (email != nil) {
         
-    
-    
-    NSString *machineName = [[NSHost currentHost] localizedName];
-    machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-    
-    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
-    machineName = [[machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
-    
-    if (machineName.length <= 1) {
-        machineName = @"Mac";
-    }
-
+  
     
     if (self.allowMobileMinerControl.state == NSOnState) {
         
         
         //GET Request
-        NSString *getString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/RemoteCommands?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+        NSString *getString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/RemoteCommands?emailAddress=%@&applicationKey=%@&apiKey=26efrOXrizmEF3", email, appID];
         
         
         NSMutableURLRequest *request2 = [[NSMutableURLRequest alloc] init];
@@ -519,7 +507,7 @@
                                                      leftString:@"Id" rightString:@"," leftOffset:4];
             
             
-            NSString *deleteString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/RemoteCommands?emailAddress=%@&applicationKey=%@&machineName=%@&commandId=%@&apiKey=26efrOXrizmEF3", email, appID, machineName, idString];
+            NSString *deleteString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/RemoteCommands?emailAddress=%@&applicationKey=%@&commandId=%@&apiKey=26efrOXrizmEF3", email, appID, idString];
             
             
             NSMutableURLRequest *request3 = [[NSMutableURLRequest alloc] init];
@@ -553,9 +541,6 @@
     }
         
     
-    
-
-    machineName = nil;
     }
     email = nil;
     appID = nil;
@@ -574,18 +559,7 @@
     
     if (email != nil) {
         
-    
-    NSString *machineName = [[NSHost currentHost] localizedName];
-    machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-    
-    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
-    machineName = [[machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
-    
-    if (machineName.length <= 1) {
-        machineName = @"Mac";
-    }
-    
+
     
     if (email.length >= 5) {
         
@@ -618,12 +592,12 @@
             
             if (self.disableHttpsButton.state == NSOffState) {
                 urlString = nil;
-                urlString = [NSString stringWithFormat:@"https://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+                urlString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&apiKey=26efrOXrizmEF3", email, appID];
             }
             
             if (self.disableHttpsButton.state == NSOnState) {
                 urlString = nil;
-                urlString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+                urlString = [NSString stringWithFormat:@"http://api.mobileminerapp.com/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&apiKey=26efrOXrizmEF3", email, appID];
             }
             
             
@@ -653,7 +627,7 @@
         prepost = nil;
     }
 
-    machineName = nil;
+
     }
     email = nil;
     appID = nil;
@@ -668,24 +642,7 @@
     //    self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"      trying to send data to MoMi     "];
     NSString *email = [prefs objectForKey:@"emailAddress"];
     NSString *appID = [prefs objectForKey:@"appID"];
-    
-    NSString *machineName = [[NSHost currentHost] localizedName];
-    machineName = [machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    machineName = [machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-        machineName = [machineName stringByReplacingOccurrencesOfString:@"'" withString:@"_"];
-        machineName = [machineName stringByReplacingOccurrencesOfString:@"\"" withString:@"_"];
-        machineName = [machineName stringByReplacingOccurrencesOfString:@"’" withString:@"_"];
-    
-    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
-    machineName = [[machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
-    
-    
-    if (machineName.length <= 1) {
-        machineName = @"Mac";
-        
-        
-        
-    }
+
     
     
     if (email.length >= 5) {
@@ -719,12 +676,12 @@
             
             if (self.disableHttpsButton.state == NSOffState) {
                 urlString = nil;
-                urlString = [NSString stringWithFormat:@"https://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+                urlString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&apiKey=26efrOXrizmEF3", email, appID];
             }
             
             if (self.disableHttpsButton.state == NSOnState) {
                 urlString = nil;
-                urlString = [NSString stringWithFormat:@"http://mobileminer.azurewebsites.net/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, machineName];
+                urlString = [NSString stringWithFormat:@"http://api.mobileminerapp.com/api/MiningStatisticsInput?emailAddress=%@&applicationKey=%@&apiKey=26efrOXrizmEF3", email, appID];
             }
             
             
@@ -756,9 +713,6 @@
     email = nil;
     appID = nil;
     prefs = nil;
-    machineName = nil;
-    
-    
 
     
 }
@@ -819,7 +773,7 @@
 }
 
 - (IBAction)checkForUpdates:(id)sender {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];

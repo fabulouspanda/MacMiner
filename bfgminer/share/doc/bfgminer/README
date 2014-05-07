@@ -133,50 +133,66 @@ Optional Dependencies:
 	  yasm 1.0.1+        http://yasm.tortall.net/
 
 
-BFGMiner specific configuration options:
+BFGMiner driver configuration options:
+	--disable-other-drivers Build without drivers by default unless explicitly
+	                        enabled
 	--disable-avalon        Compile support for Avalon (default enabled)
-	--enable-cpumining      Build with cpu mining support(default disabled)
-	--enable-opencl         Compile support for OpenCL (default disabled)
-	--disable-adl           Build without ADL monitoring (default enabled)
-	--disable-bitfury       Compile support for Bitfury (default enabled)
 	--enable-bfsb           Compile support for BFSB (default disabled)
+	--disable-bfx           Compile support for BFx2 (default if libusb)
+	--disable-bifury        Compile support for Bi*Fury (default enabled)
 	--disable-bigpic        Compile support for Big Picture Mining USB (default
 	                        enabled)
-	--disable-littlefury    Compile support for LittleFury (default enabled)
-	--disable-nanofury      Compile support for NanoFury (default enabled)
+	--disable-bitforce      Compile support for BitForce (default enabled)
+	--disable-bitfury       Compile support for Bitfury (default enabled)
+	--enable-cpumining      Build with CPU mining support (default disabled)
+	--disable-drillbit      Compile support for DrillBit (default enabled)
+	--disable-dualminer     Compile support for DualMiner (default enabled)
+	--disable-gridseed      Compile support for GridSeed (default enabled with
+	                        scrypt)
 	--disable-hashbuster    Compile support for HashBuster Nano (default
 	                        enabled)
-	--disable-hashbuster2   Compile support for HashBuster Micro (default if
+	--disable-hashbusterusb Compile support for HashBuster Micro (default if
 	                        libusb)
-	--enable-metabank       Compile support for Metabank (default disabled)
-	--disable-bitforce      Compile support for BitForce (default enabled)
+	--disable-hashfast      Compile support for HashFast (default enabled)
 	--disable-icarus        Compile support for Icarus (default enabled)
 	--disable-klondike      Compile support for Klondike (default enabled)
 	--enable-knc            Compile support for KnC (default disabled)
+	--disable-littlefury    Compile support for LittleFury (default enabled)
+	--enable-metabank       Compile support for Metabank (default disabled)
 	--disable-modminer      Compile support for ModMiner (default enabled)
-	--disable-x6500         Compile support for X6500 (default enabled)
+	--disable-nanofury      Compile support for NanoFury (default enabled)
+	--enable-opencl         Compile support for OpenCL (default disabled)
+	--disable-adl           Build without ADL monitoring (default enabled)
+	--disable-twinfury      Compile support for Twinfury USB miner (default
+	                        enabled)
+	--disable-x6500         Compile support for X6500 (default if libusb)
 	--disable-ztex          Compile support for ZTEX (default if libusb)
+
+BFGMiner algorithm configuration option:
 	--enable-scrypt         Compile support for scrypt mining (default disabled)
-	--with-system-libblkmaker  Use system libblkmaker rather than bundled one
-	                           (default disabled)
+
+BFGMiner dependency configuration options:
+	--without-curses        Compile support for curses TUI (default enabled)
+	--without-libevent      Compile support for libevent stratum server (default
+	                        enabled)
+	--without-libmicrohttpd Compile support for libmicrohttpd getwork server
+	                        (default enabled)
+	--without-libudev       Autodetect FPGAs using libudev (default enabled)
+	--without-libusb        Compile using libusb (default enabled)
+	--without-sensors       Build with libsensors monitoring (default enabled)
+	--with-system-libblkmaker
+	                        Use system libblkmaker rather than bundled one
+	                        (default disabled)
 	--with-udevrulesdir=DIR Install udev rules into this directory
 	--without-uio           Compile support for PCI devices via Linux UIO
 	                        interface (default enabled)
 	--without-vfio          Compile support for PCI devices via Linux VFIO
 	                        interface (default enabled)
-	--without-sensors       Build with libsensors monitoring (default enabled)
-	--without-curses        Compile support for curses TUI (default enabled)
-	--without-libmicrohttpd Compile support for libmicrohttpd getwork server
-	                        (default enabled)
-	--without-libevent      Compile support for libevent stratum server (default
-	                        enabled)
-	--without-libusb        Compile using libusb (default enabled)
-	--without-libudev       Autodetect FPGAs using libudev (default enabled)
 
 Basic *nix build instructions:
 
 ./autogen.sh    # only needed if building from git repo
-./configure
+./configure  # list configuration options here
 make
 
 No installation is necessary. You may run BFGMiner from the build directory
@@ -245,10 +261,10 @@ Options for both config file and command line:
 --no-gbt            Disable getblocktemplate support
 --no-getwork        Disable getwork support
 --no-longpoll       Disable X-Long-Polling support
+--no-pool-redirect  Ignore pool requests to redirect to another server
 --no-restart        Do not attempt to restart devices that hang
 --no-stratum        Disable Stratum detection
 --no-submit-stale   Don't submit shares if they are detected as stale
---no-opencl-binaries Don't attempt to use or save OpenCL kernel binaries
 --no-unicode        Don't use Unicode characters in TUI
 --noncelog <arg>    Create log of all nonces found
 --pass|-p <arg>     Password for bitcoin JSON-RPC server
@@ -273,7 +289,7 @@ Options for both config file and command line:
 --set-device|--set <arg> Set default parameters on devices; eg, NFY:osc6_bits=50
 --setuid <arg>      Username of an unprivileged user to run as
 --sharelog <arg>    Append share log to file
---shares <arg>      Quit after mining N shares (default: unlimited)
+--shares <arg>      Quit after mining 2^32 * N hashes worth of shares (default: unlimited)
 --show-processors   Show per processor statistics in summary
 --skip-security-checks <arg> Skip security checks sometimes to save bandwidth; only check 1/<arg>th of the time (default: never skip)
 --socks-proxy <arg> Set socks proxy (host:port) for all pools without a proxy specified
@@ -410,6 +426,22 @@ Also many issues and FAQs are covered in the forum threads
 dedicated to this program,
 	https://bitcointalk.org/?topic=78192
 	https://bitcointalk.org/?topic=168174
+
+If you are mining on a single pool, the pool display shows:
+ Pool 0: ...s.m.eligius.st   Diff:16  +Strtm  LU:[03:26:16]  User:1QATWksNFGeUJCWBrN4g6hGM178Lovm7Wh
+
+This tells you which pool you're using, as well as its current share difficulty,
+protocol, and last explicit work update. If BFGMiner has a working block
+notification source, the protocol will be prefixed by a plus sign. If not, a
+minus sign.
+
+If you are mining on multiple pools at once, the pool display instead shows:
+ Pools: 2 (0,1)              Diff:4-16  +  LU:[03:25:30]
+
+You get the total number of working pools, the pool numbers for each of those,
+the range of current share difficulties, whether block notification is working
+(plus/minus), and the oldest explicit work update currently being used for new
+work.
 
 The block display shows:
 Block: ...1b89f8d3 #217364  Diff:7.67M (54.93Th/s)  Started: [17:17:22]
@@ -647,6 +679,29 @@ Q: BFGMiner segfaults when I change my shell window size.
 A: Older versions of libncurses have a bug to do with refreshing a window
 after a size change. Upgrading to a new version of curses will fix it.
 
+Q: I have multiple USB stick devices but I can't get them all to work at once?
+A: Very few USB hubs deliver the promised power required to run as many devices
+as they fit if all of them draw power from USB. Devices may use up to 2.5 watts
+of power (or 4.5 watts for USB 3 devices), and mining USB sticks usually need it
+all. You can estimate how much power your USB hub can provide by multiplying its
+power supply's output amps by volts (so, if it says 12V 2.5A, you have 12*2.5=
+30 watts).
+
+Q: I've confirmed my USB miners are powered sufficiently, but BFGMiner still
+is having problems running more than a few at once?
+A: Some USB hosts cannot deal with polling as often as miners may need for quick
+delivery of shares. On Linux, you can request putting VCOM devices in "high
+latency" mode (or rather, disabling the default "low latency" mode) using the
+setserial command:
+    setserial /dev/ttyUSB0 '^low_latency'
+You can further tweak device latency by finding the latency_timer attribute in
+sysfs.
+
+Q: I've plugged my devices into my USB hub but nothing shows up?
+A: RPis and Windows have incomplete or non-standard USB3 support so they may
+never work. It may be possible to get a USB3 hub to work by plugging it into a
+USB2 hub.
+
 Q: Can I mine on servers from different networks (eg smartcoin and bitcoin) at
 the same time?
 A: No, BFGMiner keeps a database of the block it's working on to ensure it does
@@ -716,6 +771,15 @@ A: Start BFGMiner with your regular commands and add -D -T --verbose and provide
 the full startup output and a summary of your hardware, operating system, and if
 applicable, ATI driver version and ATI stream version.
 
+Q: Why isn't BFGMiner performing well or working on my Raspberry Pi?
+A: Raspberry Pis have hardware defect(s) which affect USB devices to varying
+degrees. Some devices will never be able to work on them, some work fine, and
+some require hacks to workaround the problem. One common workaround is to add
+the dwc_otg.speed=1 parameter to /boot/cmdline.txt. Note that this will slow
+down the USB bus to USB 1.1 speeds, which also affects network bandwidth since
+the Raspberry Pi uses a USB network interface. You may wish to consider
+upgrading to a BeagleBone or UDOO controller.
+
 Q: Can I mine with BFGMiner on a Mac?
 A: BFGMiner will compile on OS X, but the performance of GPU mining is
 compromised due to the OpenCL implementation on OS X, there is no temperature or
@@ -733,10 +797,6 @@ decrease intensity by 1 from your optimal value, and decrease GPU threads to 1
 with --set-device OCL:threads=1. It is also recommended to use --failover-only
 since the work is effectively like a different block chain. If mining with a
 Mini Rig, it is worth adding the --bfl-range option.
-
-Q: Are OpenCL kernels from other mining software useable in BFGMiner?
-A: No, the APIs are slightly different between the different software and they
-will not work.
 
 Q: I run PHP on windows to access the API with the example miner.php. Why does
 it fail when php is installed properly but I only get errors about Sockets not
@@ -793,14 +853,14 @@ To permanently give your account the 'video' group:
 Then logout and back in again.
 
 Q: Can I mine scrypt with FPGAs or ASICs?
-A: Currently no. Bitcoin ASICs are only useful for SHA256d systems and FPGAs
-generally aren't designed to handle scrypt efficiently.
+A: BFGMiner supports scrypt mining with GridSeed GC3355 ASICs, using either
+DualMiner USB sticks or the 5-chip orb.
 
-Q: Why does BFGMiner show difficulty 0 when mining scrypt?
+Q: Why does BFGMiner show a fractional difficulty when mining scrypt?
 A: BFGMiner consistently uses pdiff measurement for difficulty everywhere,
 rather than other measurements that may exist. For scrypt, pdiff 1 is very
 difficult, and higher get exponentially harder. It is unlikely you will want to
-use pdiff 1+ with scrypt until you have FPGAs and/or ASICs for it.
+use pdiff 1+ with scrypt any time soon.
 
 Q: What is stratum and how do I use it?
 A: Stratum is a protocol designed to reduce resources for mining pools at the

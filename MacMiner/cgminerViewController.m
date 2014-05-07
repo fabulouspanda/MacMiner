@@ -141,7 +141,7 @@
 
         NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
         
-        NSString *cgPath = [bundlePath2 stringByAppendingString:@"/dualcgminer-3.8.5/bin/cgminer"];
+        NSString *cgPath = [bundlePath2 stringByAppendingString:@"/cgminer/bin/cgminer"];
         
         
         //            NSString *cgPath = @"/Applications/MacMiner.app/Contents/Resources/cgminer/bin/cgminer";
@@ -266,7 +266,7 @@
     [prefs synchronize];
     
     NSString *speechSetting = [prefs objectForKey:@"enableSpeech"];
-    if ([speechSetting  isEqual: @"silence"]) {
+    if (speechSetting != nil) {
         
     }
 
@@ -279,7 +279,7 @@
     if ([self.cgspeedRead.stringValue isNotEqualTo:@"0"]) {
         self.cgspeedRead.tag = 1;
     }
-    if ([speechSetting  isEqual: @"silence"]) {
+    if (speechSetting != nil) {
         
     }
     else if ([self.cgspeedRead.stringValue isEqual: @"0"] && self.cgspeedRead.tag == 1) {
@@ -291,13 +291,13 @@
     prefs = nil;
     
     NSString *unknownMessage = @"Unknown stratum msg";
-    NSString *apiOutput = @"5s):";
+    NSString *apiOutput = @"20s):";
     NSString *khOutput = @"Kh";
     NSString *mhOutput = @"Mh";
     NSString *ghOutput = @"Gh";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"5s" rightString:@"(" leftOffset:4];
+                                                     leftString:@"20s" rightString:@"(" leftOffset:4];
 
         NSCharacterSet *alpha = [NSMutableCharacterSet letterCharacterSet];
         self.cgspeedRead.stringValue = [[numberString componentsSeparatedByCharactersInSet:alpha]
@@ -736,7 +736,7 @@
         
         NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
         
-        NSString *cgPath = [bundlePath2 stringByAppendingString:@"/dualcgminer-3.8.5/bin/cgminer"];
+        NSString *cgPath = [bundlePath2 stringByAppendingString:@"/cgminer/bin/cgminer"];
         
         
         //            NSString *cgPath = @"/Applications/MacMiner.app/Contents/Resources/cgminer/bin/cgminer";

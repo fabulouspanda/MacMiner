@@ -27,6 +27,8 @@
     NSTimer *loopTimer;
     
         NSTimer *timerTimer;
+    
+        NSTimer *mobileMinerTimer;
  
     
     
@@ -121,6 +123,8 @@
 - (void)toggleTimerFired:(NSTimer*)timer;
 
 -(void)stopAsicMiner;
+
+-(void)callToMobileMiner;
 
 
 
