@@ -48,6 +48,23 @@
 //    }
 //
     
+    self.machineName = [[NSHost currentHost] localizedName];
+    self.machineName = [self.machineName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    self.machineName = [self.machineName stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+    self.machineName = [self.machineName stringByReplacingOccurrencesOfString:@"'" withString:@"_"];
+    self.machineName = [self.machineName stringByReplacingOccurrencesOfString:@"\"" withString:@"_"];
+    self.machineName = [self.machineName stringByReplacingOccurrencesOfString:@"’" withString:@"_"];
+    
+    NSCharacterSet *notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"] invertedSet];
+    self.machineName = [[self.machineName componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
+    
+    
+    if (self.machineName.length <= 1) {
+        self.machineName = @"Mac";
+        
+        
+    }
+    
     self.outputMathString = [[NSMutableString alloc] init];
     [self.outputMathString setString:@""];
     
@@ -464,7 +481,7 @@
         
         
         //GET Request
-        NSString *getString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/RemoteCommands?emailAddress=%@&applicationKey=%@&apiKey=26efrOXrizmEF3", email, appID];
+        NSString *getString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/RemoteCommands?emailAddress=%@&applicationKey=%@&machineName=%@&apiKey=26efrOXrizmEF3", email, appID, self.machineName];
         
         
         NSMutableURLRequest *request2 = [[NSMutableURLRequest alloc] init];
@@ -507,7 +524,7 @@
                                                      leftString:@"Id" rightString:@"," leftOffset:4];
             
             
-            NSString *deleteString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/RemoteCommands?emailAddress=%@&applicationKey=%@&commandId=%@&apiKey=26efrOXrizmEF3", email, appID, idString];
+            NSString *deleteString = [NSString stringWithFormat:@"https://api.mobileminerapp.com/api/RemoteCommands?emailAddress=%@&applicationKey=%@&machineName=%@&commandId=%@&apiKey=26efrOXrizmEF3", email, appID, self.machineName, idString];
             
             
             NSMutableURLRequest *request3 = [[NSMutableURLRequest alloc] init];
@@ -566,10 +583,13 @@
         
         
         
-        
         NSString *prepost = @"";
         
-        prepost = [NSString stringWithFormat:[self.mobileMinerDataArray componentsJoinedByString:@","]];
+        if (self.mobileMinerDataArray.count >= 1) {
+                 prepost = [NSString stringWithFormat:[self.mobileMinerDataArray componentsJoinedByString:@","]];   
+        }
+        
+        
         if (prepost.length >= 30) {
             
             

@@ -133,6 +133,9 @@
         if (self.chooseAlgo.indexOfSelectedItem == 4) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 5) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
 
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
         if (fileExists) {
@@ -224,6 +227,16 @@
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
         }
+            if (self.chooseAlgo.indexOfSelectedItem == 5) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"scrypt"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+            }
 
 
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -247,18 +260,18 @@
         NSString *bundlePath = [[NSBundle mainBundle] resourcePath];
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
-        if (self.chooseAlgo.indexOfSelectedItem == 1) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
-        }
-        else if (self.chooseAlgo.indexOfSelectedItem == 4) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
-        }
-        else if (self.chooseAlgo.indexOfSelectedItem == 3) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
-        }
-        else {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
-        }
+            if (self.chooseAlgo.indexOfSelectedItem == 1) {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+            }
+            else if (self.chooseAlgo.indexOfSelectedItem == 4) {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
+            }
+            else if (self.chooseAlgo.indexOfSelectedItem == 5) {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
+            }
+            else {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+            }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
@@ -453,6 +466,10 @@
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
 {
+    if (data.length <=1) {
+    return @"string too short";
+    }
+    
     NSInteger left, right;
     NSString *foundData;
     NSScanner *scanner=[NSScanner scannerWithString:data];
@@ -565,6 +582,9 @@
     if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"4"]) {
         [self.chooseAlgo selectItemAtIndex:4];
     }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"5"]) {
+            [self.chooseAlgo selectItemAtIndex:5];
+        }
     }
     
     if ([prefs objectForKey:@"startCpu"]) {
@@ -620,7 +640,9 @@
         if (self.chooseAlgo.indexOfSelectedItem == 4) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"maxurls.conf"];
         }
-        
+        if (self.chooseAlgo.indexOfSelectedItem == 5) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
         if (fileExists) {
@@ -710,6 +732,17 @@
             [cpuLaunchArray addObject:@"-p"];
             [cpuLaunchArray addObject:mainLTCPass];
         }
+            //Gridseed
+            if (self.chooseAlgo.indexOfSelectedItem == 5) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"scrypt"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+            }
         
         
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -739,7 +772,7 @@
         else if (self.chooseAlgo.indexOfSelectedItem == 4) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
         }
-        else if (self.chooseAlgo.indexOfSelectedItem == 0) {
+        else if (self.chooseAlgo.indexOfSelectedItem == 5) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
         }
         else {
@@ -852,6 +885,9 @@
     }
     if (self.chooseAlgo.indexOfSelectedItem == 4) {
         [prefs setObject:@"4" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 5) {
+        [prefs setObject:@"5" forKey:@"cpuAlgoChoice"];
     }
 
     if (self.cpuQuietOutput.state == NSOnState) {

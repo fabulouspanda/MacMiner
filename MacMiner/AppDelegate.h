@@ -55,6 +55,8 @@
 
 @property (nonatomic, strong) NSString *mobileMinerStatus;
 
+@property (nonatomic, strong) NSString *machineName;
+
 @property (nonatomic, strong) NSMutableString *outputMathString;
 
 @property (strong) id activity;
