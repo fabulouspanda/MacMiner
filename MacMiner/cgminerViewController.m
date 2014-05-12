@@ -291,13 +291,13 @@
     prefs = nil;
     
     NSString *unknownMessage = @"Unknown stratum msg";
-    NSString *apiOutput = @"20s):";
+    NSString *apiOutput = @"5s):";
     NSString *khOutput = @"Kh";
     NSString *mhOutput = @"Mh";
     NSString *ghOutput = @"Gh";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"20s" rightString:@"(" leftOffset:4];
+                                                     leftString:@"5s" rightString:@"(" leftOffset:4];
 
         NSCharacterSet *alpha = [NSMutableCharacterSet letterCharacterSet];
         self.cgspeedRead.stringValue = [[numberString componentsSeparatedByCharactersInSet:alpha]
@@ -305,14 +305,14 @@
 
         alpha = nil;
         numberString = nil;
-        NSString *acceptString = [self getDataBetweenFromString:output
-                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
-        self.cgacceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
-        acceptString = nil;
-        NSString *rejectString = [self getDataBetweenFromString:output
-                                                     leftString:@"R:" rightString:@"H" leftOffset:0];
-        self.cgrejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
-        rejectString = nil;
+//        NSString *acceptString = [self getDataBetweenFromString:output
+//                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
+//        self.cgacceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+//        acceptString = nil;
+//        NSString *rejectString = [self getDataBetweenFromString:output
+//                                                     leftString:@"R:" rightString:@"H" leftOffset:0];
+//        self.cgrejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
+//        rejectString = nil;
         
         if ([output rangeOfString:khOutput].location != NSNotFound) {
             self.cghashRead.stringValue = @"Kh";
