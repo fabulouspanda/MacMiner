@@ -1030,7 +1030,7 @@ algorithmString = @"Scrypt";
 
 }
 
--(void)callToMobileMiner {
+-(void)callToMobileMiner:(NSTimer*)timer {
     
     self.prefs = [NSUserDefaults standardUserDefaults];
     [self.prefs synchronize];
@@ -1264,7 +1264,7 @@ appDelegate = nil;
     
     loopTimer = [NSTimer scheduledTimerWithTimeInterval:6. target:self selector:@selector(toggleLoopTimerFired:) userInfo:nil repeats:YES];
         timerTimer = [NSTimer scheduledTimerWithTimeInterval:6. target:self selector:@selector(toggleTimerFired:) userInfo:nil repeats:YES];
-            mobileMinerTimer = [NSTimer scheduledTimerWithTimeInterval:30. target:self selector:@selector(callToMobileMiner) userInfo:nil repeats:YES];
+    mobileMinerTimer = [NSTimer scheduledTimerWithTimeInterval:30. target:self selector:@selector(callToMobileMiner:) userInfo:nil repeats:YES];
     
 //    }
 
