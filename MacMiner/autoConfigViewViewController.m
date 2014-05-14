@@ -202,20 +202,30 @@
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
 {
-    NSInteger left, right;
-    NSString *foundData;
-    NSScanner *scanner=[NSScanner scannerWithString:data];
-    [scanner scanUpToString:leftData intoString: nil];
-    left = [scanner scanLocation];
-    [scanner setScanLocation:left + leftPos];
-    [scanner scanUpToString:rightData intoString: nil];
-    right = [scanner scanLocation] + 1;
-    left += leftPos;
-    foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];         return foundData;
-    foundData = nil;
-    scanner = nil;
-    leftData = nil;
-    rightData = nil;
+    if (data.length <=3) {
+        return @"string too short";
+    }
+    
+    else if ([leftData isNotEqualTo:nil]) {
+        NSInteger left, right;
+        
+        NSScanner *scanner=[NSScanner scannerWithString:data];
+        [scanner scanUpToString:leftData intoString: nil];
+        left = [scanner scanLocation];
+        [scanner setScanLocation:left + leftPos];
+        [scanner scanUpToString:rightData intoString: nil];
+        right = [scanner scanLocation];
+        left += leftPos;
+        NSString *foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
+        
+        return foundData;
+        
+        foundData = nil;
+        scanner = nil;
+        leftData = nil;
+        rightData = nil;
+    }
+    else return @"left string is nil";
 }
 
 - (void)skipThis:(id)sender {

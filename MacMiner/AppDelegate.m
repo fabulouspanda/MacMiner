@@ -770,7 +770,11 @@
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
 {
-    if ([leftData isNotEqualTo:nil]) {
+    if (data.length <=3) {
+        return @"string too short";
+    }
+    
+    else if ([leftData isNotEqualTo:nil]) {
         NSInteger left, right;
         
         NSScanner *scanner=[NSScanner scannerWithString:data];
@@ -778,18 +782,18 @@
         left = [scanner scanLocation];
         [scanner setScanLocation:left + leftPos];
         [scanner scanUpToString:rightData intoString: nil];
-        right = [scanner scanLocation] + 1;
+        right = [scanner scanLocation];
         left += leftPos;
-        self.foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
+        NSString *foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
         
-        return self.foundData;
+        return foundData;
         
-        self.foundData = nil;
+        foundData = nil;
         scanner = nil;
         leftData = nil;
         rightData = nil;
     }
-    else return nil;
+    else return @"left string is nil";
 }
 
 - (IBAction)checkForUpdates:(id)sender {

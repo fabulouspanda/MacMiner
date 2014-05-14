@@ -1391,11 +1391,11 @@ appDelegate = nil;
 
 - (NSString *)getDataBetweenFromString:(NSString *)data leftString:(NSString *)leftData rightString:(NSString *)rightData leftOffset:(NSInteger)leftPos;
 {
-    if (data.length <=1) {
+    if (data.length <=3) {
         return @"string too short";
     }
     
-            if ([leftData isNotEqualTo:nil]) {
+            else if ([leftData isNotEqualTo:nil]) {
     NSInteger left, right;
 
     NSScanner *scanner=[NSScanner scannerWithString:data];
