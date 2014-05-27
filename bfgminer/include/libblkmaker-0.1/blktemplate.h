@@ -23,6 +23,7 @@ typedef uint32_t blknonce_t;
 struct blktxn_t {
 	unsigned char *data;
 	size_t datasz;
+	// NOTE: The byte order of hash is backward; use hash_ instead
 	txnhash_t *hash;
 	
 	signed long dependcount;
@@ -31,6 +32,8 @@ struct blktxn_t {
 	uint64_t fee;
 	bool required;
 	int16_t sigops;
+	
+	txnhash_t *hash_;
 };
 
 // BIP 23: Long Polling
@@ -117,6 +120,8 @@ typedef struct {
 	blknonce_t maxnonce;
 	
 	// TEMPORARY HACK
+	libblkmaker_hash_t *_mrklbranch;
+	int _mrklbranchcount;
 	libblkmaker_hash_t _mrklroot;
 	unsigned int next_dataid;
 } blktemplate_t;

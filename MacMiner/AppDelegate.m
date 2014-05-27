@@ -82,7 +82,7 @@
     else {
 
 
-        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
 
 
     if (stringVersion) {
@@ -185,7 +185,7 @@
 }
 
 - (void)timedcheckforUpdates {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
     if (stringVersion) {
@@ -797,7 +797,7 @@
 }
 
 - (IBAction)checkForUpdates:(id)sender {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/version.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
     
     
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];

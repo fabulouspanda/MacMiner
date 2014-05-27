@@ -498,9 +498,9 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs synchronize];
 
-                if ([prefs objectForKey:@"showDockReading"] != nil) {
+
         
-                if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+                if ([prefs objectForKey:@"showDockReading"] != nil) {
                     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
                     [appDelegate.bfgReadBack setHidden:YES];
             [appDelegate.bfgReading setHidden:YES];
@@ -517,16 +517,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                     appDelegate = nil;
                 }
 
-                }
-        else
-        {
-            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
-            [appDelegate.bfgReadBack setHidden:NO];
-            [appDelegate.bfgReading setHidden:NO];
-            [[NSApp dockTile] display];
-            appDelegate = nil;
-        }
+    
     }
 //    else
             //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];

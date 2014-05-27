@@ -328,23 +328,26 @@
         
         [prefs synchronize];
         
-        if ([[prefs objectForKey:@"showDockReading"] isNotEqualTo:@"hide"]) {
-            
-            
-            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-            appDelegate.cgReading.stringValue = [self.cgspeedRead.stringValue stringByAppendingString:self.cghashRead.stringValue];
-            [appDelegate.cgReading setHidden:NO];
-            [appDelegate.cgReading setHidden:NO];
 
-            [[NSApp dockTile] display];
-        }
-        if ([[prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+        if ([prefs objectForKey:@"showDockReading"] != nil) {
             AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             [appDelegate.cgReadBack setHidden:YES];
             [appDelegate.cgReading setHidden:YES];
 
             [[NSApp dockTile] display];
         }
+        
+        else {
+            
+            
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.cgReading.stringValue = [self.cgspeedRead.stringValue stringByAppendingString:self.cghashRead.stringValue];
+            [appDelegate.cgReading setHidden:NO];
+            [appDelegate.cgReading setHidden:NO];
+            
+            [[NSApp dockTile] display];
+        }
+        
         prefs = nil;
         
     }

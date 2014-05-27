@@ -1061,7 +1061,7 @@ appDelegate = nil;
     
     char *command = "devs";
     const char *host = "127.0.0.1";
-    short int port = 4028;
+
     if ([appDelegate.asicReadBack isHidden] == NO) {
     command = "devs";
     host = "127.0.0.1";
@@ -1322,7 +1322,7 @@ appDelegate = nil;
         
         
         
-        if ([[self.prefs objectForKey:@"showDockReading"] isEqualTo:@"hide"]) {
+        if ([self.prefs objectForKey:@"showDockReading"] != nil) {
             AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             [appDelegate.bfgReadBack setHidden:YES];
             [appDelegate.bfgReading setHidden:YES];
