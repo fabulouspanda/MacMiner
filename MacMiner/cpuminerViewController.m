@@ -107,9 +107,9 @@
         [prefs synchronize];
         
         
-        NSString *mainLTCPool = [prefs stringForKey:@"defaultLTCPoolValue"];
-        NSString *mainLTCUser = [prefs stringForKey:@"defaultLTCUser"];
-        NSString *mainLTCPass = [prefs stringForKey:@"defaultLTCPass"];
+        NSString *mainLTCPool = @"";
+        NSString *mainLTCUser = @"";
+        NSString *mainLTCPass = @"";
         
         
         NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
@@ -241,8 +241,8 @@
                 [cpuLaunchArray addObject:mainLTCPass];
             }
             if (self.chooseAlgo.indexOfSelectedItem == 6) {
-                [cpuLaunchArray addObject:@"-a"];
-                [cpuLaunchArray addObject:@"x11"];
+                [cpuLaunchArray addObject:@"--algo=X11"];
+
                 [cpuLaunchArray addObject:@"-o"];
                 [cpuLaunchArray addObject:mainLTCPool];
                 [cpuLaunchArray addObject:@"-u"];
@@ -283,10 +283,10 @@
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
             }
             else if (self.chooseAlgo.indexOfSelectedItem == 6) {
-                cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
             }
             else {
-                cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
             }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
@@ -339,7 +339,8 @@
                 //        returnCode: (NSInteger)returnCode
                 
                 [startAlert beginSheetModalForWindow:self.cpuWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-                
+            
+            ltcConfig = nil;
             }
             
             
@@ -769,7 +770,7 @@
                 [cpuLaunchArray addObject:@"-p"];
                 [cpuLaunchArray addObject:mainLTCPass];
             }
-            if (self.chooseAlgo.indexOfSelectedItem == 5) {
+            if (self.chooseAlgo.indexOfSelectedItem == 6) {
                 [cpuLaunchArray addObject:@"-a"];
                 [cpuLaunchArray addObject:@"x11"];
                 [cpuLaunchArray addObject:@"-o"];
@@ -820,8 +821,8 @@
 
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
-        NSString *startingText = @"Starting…";
-        self.cpuStatLabel.stringValue = startingText;
+
+        self.cpuStatLabel.stringValue = @"Starting…";
         
         
         cpuTask = [[TaskWrapper alloc] initWithCommandPath:cpuPath

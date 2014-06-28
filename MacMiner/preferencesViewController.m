@@ -777,7 +777,7 @@
     }
     
     //x11
-    if (self.popUpCoin.indexOfSelectedItem == 4) {
+    if (self.popUpCoin.indexOfSelectedItem == 5) {
         [prefs setObject:self.poolComboBox.stringValue forKey:@"x11Pool"];
         [prefs setObject:self.userNameField.stringValue forKey:@"x11PoolUser"];
         [prefs setObject:self.passwordField.stringValue forKey:@"x11PoolPassword"];
