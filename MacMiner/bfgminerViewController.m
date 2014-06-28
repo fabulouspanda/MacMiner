@@ -519,6 +519,64 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
     
     }
+    if ([output rangeOfString:@"20s"].location != NSNotFound) {
+        NSString *numberString = [self getDataBetweenFromString:output
+                                                     leftString:@"20s" rightString:@"a" leftOffset:3];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@":" withString:@""];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@"K" withString:@""];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@"(" withString:@""];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@"M" withString:@""];
+        self.speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        numberString = nil;
+        NSString *acceptString = [self getDataBetweenFromString:output
+                                                     leftString:@"A:" rightString:@"R" leftOffset:0];
+        self.acceptRead.stringValue = [acceptString stringByReplacingOccurrencesOfString:@"A:" withString:@"Accepted: "];
+        acceptString = nil;
+        NSString *rejectString = [self getDataBetweenFromString:output
+                                                     leftString:@"R:" rightString:@"H" leftOffset:0];
+        rejectString = [rejectString stringByReplacingOccurrencesOfString:@"+0(none)" withString:@""];
+        self.rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
+        rejectString = nil;
+        
+        if ([output rangeOfString:@"kh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Kh";
+        }
+        if ([output rangeOfString:@"Kh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Kh";
+        }
+        if ([output rangeOfString:@"Mh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Mh";
+        }
+        if ([output rangeOfString:@"Gh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Gh";
+        }
+        
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        [prefs synchronize];
+        
+        
+        
+        if ([prefs objectForKey:@"showDockReading"] != nil) {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            [appDelegate.bfgReadBack setHidden:YES];
+            [appDelegate.bfgReading setHidden:YES];
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+        else
+        {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
+            [appDelegate.bfgReadBack setHidden:NO];
+            [appDelegate.bfgReading setHidden:NO];
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+        
+        
+    }
 //    else
             //    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
             // add the string (a chunk of the results from locate) to the NSTextView's

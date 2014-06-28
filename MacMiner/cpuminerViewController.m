@@ -136,6 +136,9 @@
         if (self.chooseAlgo.indexOfSelectedItem == 5) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 6) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"x11urls.conf"];
+        }
 
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
         if (fileExists) {
@@ -237,6 +240,16 @@
                 [cpuLaunchArray addObject:@"-p"];
                 [cpuLaunchArray addObject:mainLTCPass];
             }
+            if (self.chooseAlgo.indexOfSelectedItem == 6) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"x11"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+            }
 
 
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -269,8 +282,11 @@
             else if (self.chooseAlgo.indexOfSelectedItem == 5) {
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
             }
+            else if (self.chooseAlgo.indexOfSelectedItem == 6) {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
+            }
             else {
-                cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
             }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
@@ -589,6 +605,9 @@
         if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"5"]) {
             [self.chooseAlgo selectItemAtIndex:5];
         }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"6"]) {
+            [self.chooseAlgo selectItemAtIndex:6];
+        }
     }
     
     if ([prefs objectForKey:@"startCpu"]) {
@@ -646,6 +665,9 @@
         }
         if (self.chooseAlgo.indexOfSelectedItem == 5) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"ltcurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 6) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"x11urls.conf"];
         }
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
@@ -747,6 +769,16 @@
                 [cpuLaunchArray addObject:@"-p"];
                 [cpuLaunchArray addObject:mainLTCPass];
             }
+            if (self.chooseAlgo.indexOfSelectedItem == 5) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"x11"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+            }
         
         
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -779,9 +811,13 @@
         else if (self.chooseAlgo.indexOfSelectedItem == 5) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/gridseedcpu4/bin/minerd"];
         }
+        else if (self.chooseAlgo.indexOfSelectedItem == 6) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
+        }
         else {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
         }
+
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
         NSString *startingText = @"Starting…";
@@ -892,6 +928,9 @@
     }
     if (self.chooseAlgo.indexOfSelectedItem == 5) {
         [prefs setObject:@"5" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 6) {
+        [prefs setObject:@"6" forKey:@"cpuAlgoChoice"];
     }
 
     if (self.cpuQuietOutput.state == NSOnState) {

@@ -499,6 +499,33 @@
                             }
     }
     
+    //X11/Darkcoin
+    if (self.popUpCoin.indexOfSelectedItem == 5) {
+        [self.poolComboBox removeAllItems];
+        
+        if ([prefs stringForKey:@"x11Pool"] != nil) {
+            
+            NSString *bitcoinPool = [prefs stringForKey:@"x11Pool"];
+            NSString *bitcoinPoolUser = [prefs stringForKey:@"x11PoolUser"];
+            NSString *bitcoinPoolPassword = [prefs stringForKey:@"x11PoolPassword"];
+            
+            if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
+                self.poolComboBox.stringValue = bitcoinPool;
+                self.userNameField.stringValue = bitcoinPoolUser;
+                self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            
+            
+            bitcoinPoolPassword = nil;
+            bitcoinPool = nil;
+            bitcoinPoolUser = nil;
+        }
+        else {
+            self.userNameField.stringValue = @"";
+            self.passwordField.stringValue = @"";
+        }
+    }
+    
     prefs = nil;
     
     
@@ -748,6 +775,54 @@
         [fileManager createFileAtPath:saveMAXFilePath contents:fileContents attributes:nil];
         
     }
+    
+    //x11
+    if (self.popUpCoin.indexOfSelectedItem == 4) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"x11Pool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"x11PoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"x11PoolPassword"];
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultx11PoolValue"];
+        
+        //    Write QRK pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *maxFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveMAXFilePath = [userpath stringByAppendingPathComponent:@"x11urls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveMAXFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [maxFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveMAXFilePath contents:fileContents attributes:nil];
+        
+    }
+    
     
     [prefs synchronize];
     

@@ -717,7 +717,6 @@
             
             
             
-            
             //            self.asicAPIStorage2.string = [self.asicAPIStorage2.string stringByAppendingString:@"    DATA SENT     "];
             post1 = nil;
             post = nil;
