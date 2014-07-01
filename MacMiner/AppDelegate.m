@@ -755,7 +755,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1518" forKey:@"hideVersion"];
+    [prefs setObject:@"1522" forKey:@"hideVersion"];
     
     [prefs synchronize];
     

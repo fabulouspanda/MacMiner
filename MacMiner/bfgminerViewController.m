@@ -461,9 +461,9 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
     prefs = nil;
     
-    if ([output rangeOfString:@"5s"].location != NSNotFound) {
+    if ([output rangeOfString:@"20s"].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
+                                                     leftString:@"20s" rightString:@"a" leftOffset:3];
         numberString = [numberString stringByReplacingOccurrencesOfString:@":" withString:@""];
             numberString = [numberString stringByReplacingOccurrencesOfString:@"K" withString:@""];
         numberString = [numberString stringByReplacingOccurrencesOfString:@"(" withString:@""];

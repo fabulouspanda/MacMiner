@@ -274,7 +274,7 @@
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
             if (self.chooseAlgo.indexOfSelectedItem == 1) {
-                cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/vtccpu/bin/minerd"];
             }
             else if (self.chooseAlgo.indexOfSelectedItem == 4) {
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
@@ -286,7 +286,7 @@
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
             }
             else {
-                cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/poolercpu/bin/minerd"];
             }
         //        NSLog(cpuPath);
         [self.cpuOutputView setString:@""];
@@ -804,7 +804,7 @@
         NSString *cpuPath = [bundlePath stringByDeletingLastPathComponent];
         
         if (self.chooseAlgo.indexOfSelectedItem == 1) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/bin/minerd"];
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/vtccpu/bin/minerd"];
         }
         else if (self.chooseAlgo.indexOfSelectedItem == 4) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/maxcoincpu/bin/minerd"];
@@ -816,7 +816,7 @@
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
         }
         else {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/pooler-minerd"];
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/poolercpu/bin/minerd"];
         }
 
         //        NSLog(cpuPath);
