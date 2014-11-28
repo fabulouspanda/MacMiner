@@ -67,10 +67,6 @@
 
 - (void)updateThread;
 
-- (void)checkforUpdates;
-
-- (void)flagsChanged:(NSEvent *)theEvent;
-
 
 
 

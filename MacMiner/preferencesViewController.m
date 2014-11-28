@@ -17,22 +17,22 @@
 
 
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    
-//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//- (id)initWithCoder:(NSCoder *)aDecoder
+//{
 //    
-//    [prefs synchronize];
-//    
-//    self.charCount.stringValue = [prefs stringForKey:@"logLength" ];
-//
-//    if ([prefs stringForKey:@"bitcoinPool"] != nil && [prefs stringForKey:@"scryptPool"] != nil && [prefs stringForKey:@"vertcoinPool"] != nil && [prefs stringForKey:@"quarkcoinPool"] != nil) {
-//        [self.prefWindow orderFront:nil];
-//    }
-//    
-//    prefs = nil;
-    return self;
-}
+////    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+////    
+////    [prefs synchronize];
+////    
+////    self.charCount.stringValue = [prefs stringForKey:@"logLength" ];
+////
+////    if ([prefs stringForKey:@"bitcoinPool"] != nil && [prefs stringForKey:@"scryptPool"] != nil && [prefs stringForKey:@"vertcoinPool"] != nil && [prefs stringForKey:@"quarkcoinPool"] != nil) {
+////        [self.prefWindow orderFront:nil];
+////    }
+////    
+////    prefs = nil;
+//    return self;
+//}
 
 -(void)awakeFromNib {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -338,8 +338,8 @@
     //SHA256
     if (self.popUpCoin.indexOfSelectedItem == 0) {
         [self.poolComboBox removeAllItems];
-        [self.poolComboBox setStringValue:@"http://pool.fabulouspanda.co.uk:9332"];
-        [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9332"];
+        [self.poolComboBox setStringValue:@"http://stratum.mining.eligius.st:3334"];
+        [self.poolComboBox addItemWithObjectValue:@"http://stratum.mining.eligius.st:3334"];
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.triplemining.com:3334"];
         [self.poolComboBox addItemWithObjectValue:@"http://stratum.bitcoin.cz:3333"];
         
@@ -372,7 +372,6 @@
     if (self.popUpCoin.indexOfSelectedItem == 1) {
         [self.poolComboBox removeAllItems];
         [self.poolComboBox setStringValue:@"http://buf.snicter.com:9327"];
-        [self.poolComboBox addItemWithObjectValue:@"http://pool.fabulouspanda.co.uk:9327"];
         [self.poolComboBox addItemWithObjectValue:@"http://buf.snicter.com:9327"];
         [self.poolComboBox addItemWithObjectValue:@"spare.ozco.in:9333"];
         [self.poolComboBox addItemWithObjectValue:@"mine.pool-x.eu:9000"];

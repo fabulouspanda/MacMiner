@@ -124,7 +124,7 @@
 
 -(void)stopAsicMiner;
 
--(void)callToMobileMiner;
+//-(void)callToMobileMiner;
 
 
 

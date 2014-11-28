@@ -82,7 +82,7 @@
     else {
 
 
-        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
+        NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.txt"]encoding:NSUTF8StringEncoding error:nil];
 
 
     if (stringVersion) {
@@ -185,7 +185,7 @@
 }
 
 - (void)timedcheckforUpdates {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.txt"]encoding:NSUTF8StringEncoding error:nil];
     
     
     if (stringVersion) {
@@ -796,7 +796,7 @@
 }
 
 - (IBAction)checkForUpdates:(id)sender {
-    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.html"]encoding:NSUTF8StringEncoding error:nil];
+    NSString *stringVersion = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://downloads.fabulouspanda.co.uk/betav.txt"]encoding:NSUTF8StringEncoding error:nil];
     
     
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
@@ -869,6 +869,11 @@
 
     }
     
+}
+
+- (IBAction)goToKickstarter:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.kickstarter.com/projects/1020032761/macminer-development"]];
 }
 
 

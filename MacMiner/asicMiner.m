@@ -1104,7 +1104,7 @@ appDelegate = nil;
                     NSURL *url = [NSURL URLWithString:itemString];
                     
                     ipString = [url host];
-                    portString = [url port];
+                    portString = [[url port] stringValue];
                     
                     //                NSLog(@"host: %@", [url host]);
                     //                NSLog(@"port: %@", [url port]);
