@@ -8,6 +8,3 @@ This project can essentially be downloaded and built immediately in Xcode. You m
 Work in progress - if you know your way around Xcode any tips or commits would be much appreciated by me and the community!
 
 The code is not provided here for bfgminer or it's api-example.c which is used to compile apiaccess, neither are cgminer or minerd (pooler's cpuminer) - these are available on github with their respective authors. Binaries are included here for ease of compilation.
-
-modifications to this project are eligible for bounties - check it out here:
-http://forums.fabulouspanda.co.uk/discussion/380/bugfix-bounties/p1
