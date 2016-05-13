@@ -46,7 +46,7 @@
         
             hideVersion = [prefs stringForKey:@"hideVersion"];
 
-    if ([hideVersion isEqualToString:@"1518"]) {
+    if ([hideVersion isEqualToString:@"1525"]) {
         
     }
     else {

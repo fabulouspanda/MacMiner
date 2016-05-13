@@ -159,7 +159,7 @@
         if (hideVersion) {
             
         
-    if ([hideVersion isEqualToString:@"1518"]) {
+    if ([hideVersion isEqualToString:@"1530"]) {
 
     }
         else {
@@ -460,6 +460,11 @@
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"]];
 }
 
+- (IBAction)displaySketchFighter:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/sketch-fighter/id1038895870"]];
+}
+
 - (void)mobileCommands {
         [self performSelectorInBackground:@selector(mobileCommandsThread) withObject:nil];
 }
@@ -755,7 +760,7 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:@"1522" forKey:@"hideVersion"];
+    [prefs setObject:@"1530" forKey:@"hideVersion"];
     
     [prefs synchronize];
     

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Luke Dashjr
+ * Copyright 2012-2016 Luke Dashjr
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the standard MIT license.  See COPYING for more details.
@@ -23,6 +23,9 @@ typedef libblkmaker_hash_t txnhash_t;
 typedef uint32_t blktime_t;
 typedef int16_t blktime_diff_t;
 typedef uint32_t blknonce_t;
+
+#define libblkmaker_blkheader_size (80)
+#define libblkmaker_coinbase_size_limit (100)
 
 struct blktxn_t {
 	unsigned char *data;
@@ -134,6 +137,8 @@ typedef struct {
 	
 	unsigned aux_count;
 	struct blkaux_t *auxs;
+	
+	unsigned long txns_datasz;
 } blktemplate_t;
 
 extern blktemplate_t *blktmpl_create();

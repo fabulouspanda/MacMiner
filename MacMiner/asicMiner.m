@@ -286,14 +286,6 @@ self.megaHashLabel.stringValue = @"0";
             [launchArray addObjectsFromArray:deviceItems];
         }
         
-        if ([cpuThreads isNotEqualTo:nil]) {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:cpuThreads];
-        }
-        else {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:@"0"];
-        }
 
         if ([self.debugOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.debugOutputOn];
@@ -454,14 +446,7 @@ self.megaHashLabel.stringValue = @"0";
                 [launchArray addObjectsFromArray:deviceItems];
             }
             
-            if ([cpuThreads isNotEqualTo:nil]) {
-                [launchArray addObject:@"-t"];
-                [launchArray addObject:cpuThreads];
-            }
-            else {
-                [launchArray addObject:@"-t"];
-                [launchArray addObject:@"0"];
-            }
+
             
             if ([self.debugOutputOn isNotEqualTo:nil]) {
                 [launchArray addObject:self.debugOutputOn];
@@ -784,7 +769,9 @@ algorithmString = @"Scrypt";
             NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
             NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
             NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
-            NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+            NSString *apiNameOrigin = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+                int r = arc4random_uniform(74);
+                NSString *apiName = [NSString stringWithFormat:apiNameOrigin, "%d", r];
             
             NSInteger u = [mhs5S integerValue];
             NSString *apiHash5s = [NSString stringWithFormat:@"%ld", (long)u];
@@ -800,7 +787,7 @@ algorithmString = @"Scrypt";
             if ([pgaAPIData rangeOfString:@"Temperature"].location != NSNotFound) {
                 NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
                 
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:apiName,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
                 
                 
                 NSString *apiPoolString = @"unknown";
@@ -809,7 +796,7 @@ algorithmString = @"Scrypt";
                 }
                 
                 
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
                 
                 
                 pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
@@ -828,7 +815,7 @@ algorithmString = @"Scrypt";
             }
             else {
                 NSString *apiTemp = @"0";
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:apiName,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
                 
                 
                 NSString *apiPoolString = @"unknown";
@@ -836,7 +823,7 @@ algorithmString = @"Scrypt";
                     apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
                 
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
                 
                 
                 pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
@@ -923,7 +910,10 @@ algorithmString = @"Scrypt";
             NSString *apiDiff1 = [self getDataBetweenFromString:pgaAPIData leftString:@"1 Work] =>" rightString:@"[" leftOffset:10];
             NSString *apiDiffAcc = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Accepted] =>" rightString:@"[" leftOffset:25];
             NSString *apiDiffRej = [self getDataBetweenFromString:pgaAPIData leftString:@"[Difficulty Rejected] =>" rightString:@"[" leftOffset:25];
-            NSString *apiName = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+                NSString *apiNameOrigin = [self getDataBetweenFromString:pgaAPIData leftString:@"[Name] =>" rightString:@"[" leftOffset:10];
+                int r = arc4random_uniform(74);
+                NSString *apiName = [NSString stringWithFormat:apiNameOrigin, "%d", r];
+
             
             NSInteger u = [mhs5S integerValue];
             NSString *apiHash5s = [NSString stringWithFormat:@"%ld", (long)u];
@@ -940,7 +930,7 @@ algorithmString = @"Scrypt";
                 
                 NSString *apiTemp = [self getDataBetweenFromString:pgaAPIData leftString:@"[Temperature] => " rightString:@"[" leftOffset:16];
                 
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:apiName,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
                 
                 
                 NSString *apiPoolString = @"unknown";
@@ -948,7 +938,7 @@ algorithmString = @"Scrypt";
                     apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
                 
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
                 
                 
                 pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
@@ -967,7 +957,7 @@ algorithmString = @"Scrypt";
             else {
                 
                 NSString *apiTemp = @"0";
-                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:pgaCount,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
+                [self.apiTableViewController addObject:[NSDictionary dictionaryWithObjectsAndKeys:apiName,@"name",apiStatus,@"status",mhs5S,@"uid",mhsAv,@"average",apiAccepted,@"accepted",apiRejected,@"rejected",apiHWError,@"error",apiTemp,@"temp",apiUtility,@"utility",apiDiff1,@"diff1",apiDiffAcc,@"diffaccepted",apiDiffRej,@"diffrejected",@" ",@"intensity", @" ", @"location", nil]];
                 
                 
                 NSString *apiPoolString = @"unknown";
@@ -975,7 +965,7 @@ algorithmString = @"Scrypt";
                     apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
                 
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, pgaCount, apiName, apiPoolString];
+                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
                 
                 
                 pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
@@ -1370,7 +1360,7 @@ appDelegate = nil;
         [self.asicOutputView delete:nil];
         [self.asicOutputView setEditable:false];
     }
-        
+
         self.logLength = nil;
         
     }
@@ -1596,14 +1586,6 @@ appDelegate = nil;
             [launchArray addObjectsFromArray:deviceItems];
         }
         
-        if ([cpuThreads isNotEqualTo:nil]) {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:cpuThreads];
-        }
-        else {
-            [launchArray addObject:@"-t"];
-            [launchArray addObject:@"0"];
-        }
         
         if ([self.debugOutputOn isNotEqualTo:nil]) {
             [launchArray addObject:self.debugOutputOn];
