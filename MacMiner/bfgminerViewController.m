@@ -157,11 +157,13 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/maxminer/bin/cgminer"];
         }
+        if (self.chooseGPUAlgo.indexOfSelectedItem >= 4) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/sgminer/bin/sgminer"];
+        }
         
         
         
-        
-        [self.bfgOutputView setString:@""];
+        [self.bfgOutputView setString:@"Starting…"];
         NSString *startingText = @"Starting…";
         self.bfgStatLabel.stringValue = startingText;
         startingText = nil;
@@ -179,6 +181,33 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
         NSString *saveLTCAdNConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vtcurls.conf"];
         NSString *saveMaxConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"maxurls.conf"];
+        NSString *saveCreditsConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"creditsurls.conf"];
+        NSString *savePascalConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"pascalurls.conf"];
+        NSString *saveX11ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x11urls.conf"];
+        NSString *saveX13ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x13urls.conf"];
+        NSString *saveX14ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x14urls.conf"];
+        NSString *saveX15ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x15urls.conf"];
+        NSString *saveKeccakConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"keccakurls.conf"];
+        NSString *saveQuarkConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"qrkurls.conf"];
+        NSString *saveTweConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"tweurls.conf"];
+        NSString *saveFugueConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"fugueurls.conf"];
+        NSString *saveNistConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"nisturls.conf"];
+        NSString *saveFreshConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"freshurls.conf"];
+        NSString *saveWhirlConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"whirlurls.conf"];
+        NSString *saveNeoscryptConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"neoscrypturls.conf"];
+        NSString *saveWhirlxConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"whirlxurls.conf"];
+        NSString *saveLyra2reConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lyra2reurls.conf"];
+        NSString *saveLyra2rev2ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lyra2rev2urls.conf"];
+        NSString *savePluckConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"pluckurls.conf"];
+        NSString *saveYescryptConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"yescrypturls.conf"];
+        NSString *saveYescryptmultiConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"yescryptmultiurls.conf"];
+        NSString *saveBlakecoinConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"blakecoinurls.conf"];
+        NSString *saveBlakeConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"blakeurls.conf"];
+        NSString *saveSiaConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"siaurls.conf"];
+        NSString *saveDecredConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"decredurls.conf"];
+        NSString *saveVanillaConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vanillaurls.conf"];
+        NSString *saveLbryConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lbryurls.conf"];
+        NSString *saveSibConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"siburls.conf"];
         self.userpath = nil;
         self.userpath2 = nil;
         self.paths = nil;
@@ -265,6 +294,168 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [launchArray addObject:@"--keccak"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveMaxConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 4) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Credits"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveCreditsConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 5) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Pascal"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:savePascalConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 6) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X11"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX11ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 7) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X13"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX13ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 8) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X14"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX14ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 9) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X15"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX15ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 10) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Keccak"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveKeccakConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 11) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Quarkcoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveQuarkConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 12) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Twecoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveTweConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 13) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Fugue256"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveFugueConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 14) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"NIST"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveNistConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 15) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Fresh"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveFreshConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 16) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Whirlcoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveWhirlConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 17) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Neoscrypt"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveNeoscryptConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 18) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"WhirlpoolX"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveWhirlxConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 19) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Lyra2RE"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLyra2reConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 20) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Lyra2REV2"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLyra2rev2ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 21) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Pluck"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:savePluckConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 22) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Yescrypt"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveYescryptConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 23) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Yescrypt-multi"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveYescryptmultiConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 24) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Blakecoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveBlakecoinConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 25) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Blake"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveBlakeConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 26) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Sia"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveSiaConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 27) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Decred"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveDecredConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 28) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Vanilla"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveVanillaConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 29) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Lbry"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLbryConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 30) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Sibcoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveSibConfigFilePath];
         }
         
         
@@ -461,11 +652,11 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
 
     prefs = nil;
     
-    if ([output rangeOfString:@"20s"].location != NSNotFound) {
+    if ([output rangeOfString:@"5s"].location != NSNotFound) {
         NSString *numberString = [self getDataBetweenFromString:output
-                                                     leftString:@"20s" rightString:@"a" leftOffset:3];
+                                                     leftString:@"5s" rightString:@"a" leftOffset:3];
         numberString = [numberString stringByReplacingOccurrencesOfString:@":" withString:@""];
-            numberString = [numberString stringByReplacingOccurrencesOfString:@"K" withString:@""];
+        numberString = [numberString stringByReplacingOccurrencesOfString:@"K" withString:@""];
         numberString = [numberString stringByReplacingOccurrencesOfString:@"(" withString:@""];
         numberString = [numberString stringByReplacingOccurrencesOfString:@"M" withString:@""];
         self.speedRead.stringValue = [numberString stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -480,9 +671,9 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         self.rejectRead.stringValue = [rejectString stringByReplacingOccurrencesOfString:@"R:" withString:@"Rejected: "];
         rejectString = nil;
         
-            if ([output rangeOfString:@"kh"].location != NSNotFound) {
-             self.hashRead.stringValue = @"Kh";
-            }
+        if ([output rangeOfString:@"kh"].location != NSNotFound) {
+            self.hashRead.stringValue = @"Kh";
+        }
         if ([output rangeOfString:@"Kh"].location != NSNotFound) {
             self.hashRead.stringValue = @"Kh";
         }
@@ -492,30 +683,30 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if ([output rangeOfString:@"Gh"].location != NSNotFound) {
             self.hashRead.stringValue = @"Gh";
         }
-
+        
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
         [prefs synchronize];
-
-
         
-                if ([prefs objectForKey:@"showDockReading"] != nil) {
-                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                    [appDelegate.bfgReadBack setHidden:YES];
+        
+        
+        if ([prefs objectForKey:@"showDockReading"] != nil) {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            [appDelegate.bfgReadBack setHidden:YES];
             [appDelegate.bfgReading setHidden:YES];
-                    [[NSApp dockTile] display];
-                    appDelegate = nil;
-                }
-                else
-                {
-                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-                    appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
-                    [appDelegate.bfgReadBack setHidden:NO];
-                    [appDelegate.bfgReading setHidden:NO];
-                    [[NSApp dockTile] display];
-                    appDelegate = nil;
-                }
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
+        else
+        {
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            appDelegate.bfgReading.stringValue = [self.speedRead.stringValue stringByAppendingString:self.hashRead.stringValue];
+            [appDelegate.bfgReadBack setHidden:NO];
+            [appDelegate.bfgReading setHidden:NO];
+            [[NSApp dockTile] display];
+            appDelegate = nil;
+        }
 
     
     }
@@ -849,18 +1040,20 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         }
         
                                 if ([prefs objectForKey:@"gpuAlgoChoice"] != nil) {
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:0];
-        }
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:1];
-        }
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:2];
-        }
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:3];
-        }
+                                    NSString *algoChoice = [prefs objectForKey:@"gpuAlgoChoice"];
+                                    [self.chooseGPUAlgo selectItemAtIndex:algoChoice.intValue];
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:0];
+//        }
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:1];
+//        }
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:2];
+//        }
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:3];
+//        }
                                 }
         
         intensityValue = nil;
@@ -947,18 +1140,22 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         [self.openOptions setState:NSOffState];
         [self.bfgOptionsWindow orderOut:sender];
     
-    if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
-        [prefs setObject:@"0" forKey:@"gpuAlgoChoice"];
+    if (self.chooseGPUAlgo.indexOfSelectedItem >= 0) {
+        NSString *inStr = [@(self.chooseGPUAlgo.indexOfSelectedItem) stringValue];
+        [prefs setObject:inStr forKey:@"gpuAlgoChoice"];
     }
-    if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
-        [prefs setObject:@"1" forKey:@"gpuAlgoChoice"];
-    }
-    if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
-        [prefs setObject:@"2" forKey:@"gpuAlgoChoice"];
-    }
-    if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
-        [prefs setObject:@"3" forKey:@"gpuAlgoChoice"];
-    }
+//    if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
+//        [prefs setObject:@"0" forKey:@"gpuAlgoChoice"];
+//    }
+//    if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+//        [prefs setObject:@"1" forKey:@"gpuAlgoChoice"];
+//    }
+//    if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+//        [prefs setObject:@"2" forKey:@"gpuAlgoChoice"];
+//    }
+//    if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+//        [prefs setObject:@"3" forKey:@"gpuAlgoChoice"];
+//    }
 
     
     prefs = nil;
@@ -1079,18 +1276,20 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     
     if ([prefs objectForKey:@"gpuAlgoChoice"] != nil) {
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:0];
-        }
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:1];
-        }
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:2];
-        }
-        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
-            [self.chooseGPUAlgo selectItemAtIndex:3];
-        }
+        NSString *algoChoice = [prefs objectForKey:@"gpuAlgoChoice"];
+        [self.chooseGPUAlgo selectItemAtIndex:algoChoice.intValue];
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"0"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:0];
+//        }
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"1"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:1];
+//        }
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"2"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:2];
+//        }
+//        if ([[prefs objectForKey:@"gpuAlgoChoice"]  isEqual: @"3"]) {
+//            [self.chooseGPUAlgo selectItemAtIndex:3];
+//        }
     }
     
     if ([prefs objectForKey:@"startBfg"] == nil && [prefs objectForKey:@"startAsic"] == nil && [prefs objectForKey:@"startCg"] == nil && [prefs objectForKey:@"startCpu"] == nil) {
@@ -1146,11 +1345,14 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/maxminer/bin/cgminer"];
         }
+        if (self.chooseGPUAlgo.indexOfSelectedItem >= 4) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/sgminer/bin/sgminer"];
+        }
         
         
         
         
-        [self.bfgOutputView setString:@""];
+        [self.bfgOutputView setString:@"Starting…"];
         NSString *startingText = @"Starting…";
         self.bfgStatLabel.stringValue = startingText;
         startingText = nil;
@@ -1168,6 +1370,33 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         self.saveLTCConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ltcurls.conf"];
         NSString *saveLTCAdNConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vtcurls.conf"];
         NSString *saveMaxConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"maxurls.conf"];
+        NSString *saveCreditsConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"creditsurls.conf"];
+        NSString *savePascalConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"pascalurls.conf"];
+        NSString *saveX11ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x11urls.conf"];
+        NSString *saveX13ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x13urls.conf"];
+        NSString *saveX14ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x14urls.conf"];
+        NSString *saveX15ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"x15urls.conf"];
+        NSString *saveKeccakConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"keccakurls.conf"];
+        NSString *saveQuarkConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"qrkurls.conf"];
+        NSString *saveTweConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"tweurls.conf"];
+        NSString *saveFugueConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"fugueurls.conf"];
+        NSString *saveNistConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"nisturls.conf"];
+        NSString *saveFreshConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"freshurls.conf"];
+        NSString *saveWhirlConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"whirlurls.conf"];
+        NSString *saveNeoscryptConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"neoscrypturls.conf"];
+        NSString *saveWhirlxConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"whirlxurls.conf"];
+        NSString *saveLyra2reConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lyra2reurls.conf"];
+        NSString *saveLyra2rev2ConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lyra2rev2urls.conf"];
+        NSString *savePluckConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"pluckurls.conf"];
+        NSString *saveYescryptConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"yescrypturls.conf"];
+        NSString *saveYescryptmultiConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"yescryptmultiurls.conf"];
+        NSString *saveBlakecoinConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"blakecoinurls.conf"];
+        NSString *saveBlakeConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"blakeurls.conf"];
+        NSString *saveSiaConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"siaurls.conf"];
+        NSString *saveDecredConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"decredurls.conf"];
+        NSString *saveVanillaConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vanillaurls.conf"];
+        NSString *saveLbryConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lbryurls.conf"];
+        NSString *saveSibConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"siburls.conf"];
         self.userpath = nil;
         self.userpath2 = nil;
         self.paths = nil;
@@ -1254,7 +1483,168 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveMaxConfigFilePath];
         }
-        
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 4) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Credits"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveCreditsConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 5) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Pascal"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:savePascalConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 6) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X11"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX11ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 7) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X13"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX13ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 8) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X14"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX14ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 9) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"X15"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveX15ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 10) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Keccak"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveKeccakConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 11) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Quarkcoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveQuarkConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 12) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Twecoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveTweConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 13) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Fugue256"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveFugueConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 14) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"NIST"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveNistConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 15) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Fresh"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveFreshConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 16) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Whirlcoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveWhirlConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 17) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Neoscrypt"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveNeoscryptConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 18) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"WhirlpoolX"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveWhirlxConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 19) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Lyra2RE"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLyra2reConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 20) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Lyra2REV2"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLyra2rev2ConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 21) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Pluck"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:savePluckConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 22) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Yescrypt"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveYescryptConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 23) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Yescrypt-multi"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveYescryptmultiConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 24) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Blakecoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveBlakecoinConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 25) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Blake"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveBlakeConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 26) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Sia"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveSiaConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 27) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Decred"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveDecredConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 28) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Vanilla"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveVanillaConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 29) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Lbry"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveLbryConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 30) {
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"Sibcoin"];
+            [launchArray addObject:@"-c"];
+            [launchArray addObject:saveSibConfigFilePath];
+        }
         
         
         if ([self.bonusOptions isNotEqualTo:nil]) {

@@ -21,7 +21,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Initialization code here.
-
+self.bfgConfigText.automaticQuoteSubstitutionEnabled = NO;
+        self.bfgConfigText.automaticTextReplacementEnabled = NO;
+        self.bfgConfigText.enabledTextCheckingTypes = 0;
     }
     
     return self;
@@ -56,6 +58,9 @@
             NSString *string = [[NSString alloc] initWithContentsOfFile:saveLTCFilePath encoding:NSUTF8StringEncoding error:nil];
             [self.bfgConfigText setString:string];
         }
+        self.bfgConfigText.automaticQuoteSubstitutionEnabled = NO;
+        self.bfgConfigText.automaticTextReplacementEnabled = NO;
+        self.bfgConfigText.enabledTextCheckingTypes = 0;
         executableName = nil;
         paths = nil;
         userpath = nil;
@@ -81,7 +86,9 @@ if ([self.btcLTCSegmentedControl isSelectedForSegment:0]) {
         NSString *string = [[NSString alloc] initWithContentsOfFile:saveLTCFilePath encoding:NSUTF8StringEncoding error:nil];
         [self.bfgConfigText setString:string];
     }
-    
+    self.bfgConfigText.automaticQuoteSubstitutionEnabled = NO;
+    self.bfgConfigText.automaticTextReplacementEnabled = NO;
+    self.bfgConfigText.enabledTextCheckingTypes = 0;
 executableName = nil;
 paths = nil;
 userpath = nil;
@@ -140,6 +147,9 @@ saveLTCFilePath = nil;
     NSString *string = [[NSString alloc] initWithContentsOfFile:saveLTCFilePath encoding:NSUTF8StringEncoding error:nil];
     [self.bfgConfigText setString:string];
         }
+    self.bfgConfigText.automaticQuoteSubstitutionEnabled = NO;
+    self.bfgConfigText.automaticTextReplacementEnabled = NO;
+    self.bfgConfigText.enabledTextCheckingTypes = 0;
     executableName = nil;
     paths = nil;
     userpath = nil;

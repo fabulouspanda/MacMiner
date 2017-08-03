@@ -457,7 +457,12 @@
 
 - (IBAction)displaySite:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.com/macminer/"]];
+}
+
+- (IBAction)displayMeerkat:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/wheres-the-meerkat/id1100443945?mt=8&at=1000lnXM"]];
 }
 
 - (IBAction)displaySketchFighter:(id)sender
