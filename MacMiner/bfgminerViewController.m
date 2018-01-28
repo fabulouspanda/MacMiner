@@ -148,16 +148,19 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
-            bfgPath = [bundlePath2 stringByAppendingString:@"/vertcgminer/bin/vertminer"];
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/sgminergm/bin/sgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/maxminer/bin/cgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem >= 4) {
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 31) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/ethminer"];
+        }
+        else if (self.chooseGPUAlgo.indexOfSelectedItem >= 4) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/sgminer/bin/sgminer"];
         }
         
@@ -280,7 +283,8 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [launchArray addObject:@"opencl:auto"];
         }
         if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
-            [launchArray addObject:@"--scrypt-vert"];
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"scrypt-n"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveLTCAdNConfigFilePath];
         }
@@ -456,6 +460,12 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [launchArray addObject:@"Sibcoin"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveSibConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 31) {
+            [launchArray removeAllObjects];
+            [launchArray addObject:@"-G"];
+            
+            //            [launchArray addObject:saveEthConfigFilePath];
         }
         
         
@@ -1336,18 +1346,27 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if (self.chooseGPUAlgo.indexOfSelectedItem == 0) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
-            bfgPath = [bundlePath2 stringByAppendingString:@"/vertcgminer/bin/vertminer"];
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/sgminergm/bin/sgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 2) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 3) {
             bfgPath = [bundlePath2 stringByAppendingString:@"/maxminer/bin/cgminer"];
         }
-        if (self.chooseGPUAlgo.indexOfSelectedItem >= 4) {
-            bfgPath = [bundlePath2 stringByAppendingString:@"/sgminer/bin/sgminer"];
+        else if (self.chooseGPUAlgo.indexOfSelectedItem == 31) {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/ethminer"];
         }
+        else if (self.chooseGPUAlgo.indexOfSelectedItem >= 4) {
+            if (self.chooseGPUAlgo.indexOfSelectedItem == 22) {
+                bfgPath = [bundlePath2 stringByAppendingString:@"/sgminergm/bin/sgminer"];
+            }
+            else {
+            bfgPath = [bundlePath2 stringByAppendingString:@"/sgminer/bin/sgminer"];
+            }
+        }
+
         
         
         
@@ -1397,6 +1416,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *saveVanillaConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"vanillaurls.conf"];
         NSString *saveLbryConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"lbryurls.conf"];
         NSString *saveSibConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"siburls.conf"];
+        NSString *saveEthConfigFilePath = [self.userpath2 stringByAppendingPathComponent:@"ethurls.conf"];
         self.userpath = nil;
         self.userpath2 = nil;
         self.paths = nil;
@@ -1468,7 +1488,8 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [launchArray addObject:@"opencl:auto"];
         }
         if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
-            [launchArray addObject:@"--scrypt-vert"];
+            [launchArray addObject:@"-k"];
+            [launchArray addObject:@"scrypt-n"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveLTCAdNConfigFilePath];
         }
@@ -1644,6 +1665,12 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [launchArray addObject:@"Sibcoin"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveSibConfigFilePath];
+        }
+        if (self.chooseGPUAlgo.indexOfSelectedItem == 31) {
+            [launchArray removeAllObjects];
+            [launchArray addObject:@"-G"];
+
+//            [launchArray addObject:saveEthConfigFilePath];
         }
         
         

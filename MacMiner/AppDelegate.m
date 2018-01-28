@@ -467,7 +467,12 @@
 
 - (IBAction)displaySketchFighter:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/sketch-fighter/id1038895870"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/sketch-fighter/id1038895870?mt=8&at=1000lnXM"]];
+}
+
+- (IBAction)displayDeStijl:(id)sender
+{
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/de-stijl-art-factory/id1260640861?mt=8&at=1000lnXM"]];
 }
 
 - (void)mobileCommands {
