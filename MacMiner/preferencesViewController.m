@@ -1179,6 +1179,57 @@
             self.passwordField.stringValue = @"";
         }
     }
+    if (self.popUpCoin.indexOfSelectedItem == 32) {
+        [self.poolComboBox removeAllItems];
+        
+        if ([prefs stringForKey:@"x17Pool"] != nil) {
+            
+            NSString *bitcoinPool = [prefs stringForKey:@"x17Pool"];
+            NSString *bitcoinPoolUser = [prefs stringForKey:@"x17PoolUser"];
+            NSString *bitcoinPoolPassword = [prefs stringForKey:@"x17PoolPassword"];
+            
+            if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
+                self.poolComboBox.stringValue = bitcoinPool;
+                self.userNameField.stringValue = bitcoinPoolUser;
+                self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            
+            
+            bitcoinPoolPassword = nil;
+            bitcoinPool = nil;
+            bitcoinPoolUser = nil;
+        }
+        else {
+            self.userNameField.stringValue = @"";
+            self.passwordField.stringValue = @"";
+        }
+    }
+    
+    if (self.popUpCoin.indexOfSelectedItem == 33) {
+        [self.poolComboBox removeAllItems];
+        
+        if ([prefs stringForKey:@"xmrlightPool"] != nil) {
+            
+            NSString *bitcoinPool = [prefs stringForKey:@"xmrlightPool"];
+            NSString *bitcoinPoolUser = [prefs stringForKey:@"xmrlightPoolUser"];
+            NSString *bitcoinPoolPassword = [prefs stringForKey:@"xmrlightPoolPassword"];
+            
+            if (bitcoinPoolUser != nil && bitcoinPoolPassword != nil && bitcoinPool != nil) {
+                self.poolComboBox.stringValue = bitcoinPool;
+                self.userNameField.stringValue = bitcoinPoolUser;
+                self.passwordField.stringValue = bitcoinPoolPassword;
+            }
+            
+            
+            bitcoinPoolPassword = nil;
+            bitcoinPool = nil;
+            bitcoinPoolUser = nil;
+        }
+        else {
+            self.userNameField.stringValue = @"";
+            self.passwordField.stringValue = @"";
+        }
+    }
     
 
     
@@ -2687,6 +2738,100 @@
         
         
         NSString *saveFilePath = [userpath stringByAppendingPathComponent:@"siburls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [maxFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveFilePath contents:fileContents attributes:nil];
+        
+    }
+    
+    //X17
+    if (self.popUpCoin.indexOfSelectedItem == 32) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"x17Pool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"x17PoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"x17PoolPassword"];
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultx17PoolValue"];
+        
+        //    Write QRK pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *maxFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveFilePath = [userpath stringByAppendingPathComponent:@"x17urls.conf"];
+        
+        NSFileManager *fileManager = [[NSFileManager alloc] init];
+        if ([fileManager fileExistsAtPath:userpath] == NO) {
+            [fileManager createDirectoryAtPath:userpath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager copyItemAtPath:ltcFilePath toPath:saveFilePath error:NULL];
+        }
+        
+        
+        NSData *fileContents = [maxFileText dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+        
+        
+        [fileManager createFileAtPath:saveFilePath contents:fileContents attributes:nil];
+        
+    }
+    
+    //XMR-light
+    if (self.popUpCoin.indexOfSelectedItem == 33) {
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"xmrlightPool"];
+        [prefs setObject:self.userNameField.stringValue forKey:@"xmrlightPoolUser"];
+        [prefs setObject:self.passwordField.stringValue forKey:@"xmrlightPassword"];
+        [prefs setObject:self.poolComboBox.stringValue forKey:@"defaultxmrlightPoolValue"];
+        
+        //    Write QRK pools to config file
+        NSString *bundleConfigPath = [[NSBundle mainBundle] resourcePath];
+        
+        
+        NSString *ltcFilePath = [bundleConfigPath stringByAppendingPathComponent:@"litebackup.conf"];
+        NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+        NSString *userpath = [paths objectAtIndex:0];
+        userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
+        
+        NSString *maxFileText = nil;
+        
+        if (self.userNameField.stringValue.length >= 1) {
+            
+            
+            maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
+            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
+            
+        }
+        
+        
+        NSString *saveFilePath = [userpath stringByAppendingPathComponent:@"xmrlighturls.conf"];
         
         NSFileManager *fileManager = [[NSFileManager alloc] init];
         if ([fileManager fileExistsAtPath:userpath] == NO) {

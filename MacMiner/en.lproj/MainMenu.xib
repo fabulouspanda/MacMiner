@@ -657,6 +657,8 @@
                                             <menuItem title="Vanilla" id="BNk-X8-R7g"/>
                                             <menuItem title="Lbry" id="aMv-S4-u5Y"/>
                                             <menuItem title="Sibcoin" id="EX6-tL-rLM"/>
+                                            <menuItem title="X17" id="eqS-NQ-thL"/>
+                                            <menuItem title="Cryptonight-Light" id="6SF-fv-uwN"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
@@ -1089,11 +1091,6 @@
                             <action selector="showGeneral:" target="1289" id="iTK-qT-8bQ"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="4BC7DB1C-036F-47BC-834E-336584ECFAAD" label="Mobile Miner" paletteLabel="Mobile Miner" tag="-1" image="mobileminer" id="vtY-t5-7xq">
-                        <connections>
-                            <action selector="mobileMiner:" target="1289" id="cXk-E4-ZJM"/>
-                        </connections>
-                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="GT8-kb-32g"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="20a-of-iUf"/>
                     <toolbarItem implicitItemIdentifier="94AD950A-887C-4C12-97C1-0B7752758BBF" label="Pool" paletteLabel="Pool" tag="-1" image="pool" id="pcF-rW-u0b">
@@ -1104,7 +1101,6 @@
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="EKc-PG-ydv"/>
-                    <toolbarItem reference="vtY-t5-7xq"/>
                     <toolbarItem reference="pcF-rW-u0b"/>
                     <toolbarItem reference="20a-of-iUf"/>
                 </defaultToolbarItems>
@@ -1112,6 +1108,7 @@
             <connections>
                 <outlet property="delegate" destination="1289" id="1293"/>
             </connections>
+            <point key="canvasLocation" x="184" y="-860"/>
         </window>
         <window title="GPU Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="bfgminer" animationBehavior="default" id="1296">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
@@ -1939,6 +1936,7 @@ supports development, and two backup pools for BFG Miner and BFL Miner.</string>
             <connections>
                 <outlet property="delegate" destination="2657" id="4038"/>
             </connections>
+            <point key="canvasLocation" x="185" y="-1467"/>
         </window>
         <window title="GPU Miner Options" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="gpumineroptions" animationBehavior="default" id="2766" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" HUD="YES"/>
@@ -2318,7 +2316,7 @@ Gw
                             <menu key="menu" title="OtherViews" id="eFz-cn-H5X">
                                 <items>
                                     <menuItem title="Scrypt (LTC, Dogecoin etc.)" state="on" id="87J-Hr-MXj"/>
-                                    <menuItem title="VertCoin, Scrypt Adaptive-N" id="aG9-qo-rE4"/>
+                                    <menuItem title="Scrypt Adaptive-N" id="aG9-qo-rE4"/>
                                     <menuItem title="SHA-256 (Bitcoin etc.)" id="haZ-Hv-DuZ"/>
                                     <menuItem title="MaxCoin" id="MRK-C6-2Xv"/>
                                     <menuItem title="Credits" id="5Ks-nK-1l1"/>
@@ -2463,6 +2461,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="1300" id="5016"/>
             </connections>
+            <point key="canvasLocation" x="-568" y="-628"/>
         </window>
         <window title="config file" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="documentWindow" id="4422">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
@@ -2574,6 +2573,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="4450" id="4459"/>
             </connections>
+            <point key="canvasLocation" x="717" y="823"/>
         </window>
         <window title="CPU Miner Options" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="CPUoptions" animationBehavior="default" id="4609" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" HUD="YES"/>
@@ -2721,19 +2721,25 @@ Gw
                         <constraints>
                             <constraint firstAttribute="width" constant="199" id="BGK-kJ-3nr"/>
                         </constraints>
-                        <popUpButtonCell key="cell" type="push" title="MaxCoin" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Tlc-MM-6Mb" id="Ezb-eD-cTd">
+                        <popUpButtonCell key="cell" type="push" title="Scrypt (LTC, Dogecoin etc.)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="aQk-WK-KpQ" id="Ezb-eD-cTd">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="I7O-dx-2G6">
                                 <items>
                                     <menuItem title="Scrypt (LTC, Dogecoin etc.)" id="aQk-WK-KpQ"/>
-                                    <menuItem title="VertCoin, Scrypt Adaptive-N" id="EQs-xc-dMZ"/>
+                                    <menuItem title="Scrypt Adaptive-N" id="EQs-xc-dMZ"/>
                                     <menuItem title="QuarkCoin (QRK)" id="0jM-4B-rkx"/>
                                     <menuItem title="SHA-256 (Bitcoin etc.)" id="2hy-VJ-TGj"/>
                                     <menuItem title="MaxCoin" state="on" id="Tlc-MM-6Mb"/>
                                     <menuItem title="Gridseed (Scrypt)" id="i0C-8Q-4M2"/>
                                     <menuItem title="x11 (DarkCoin etc.)" id="HWq-gA-uk9"/>
                                     <menuItem title="Cryptonight/XMR" id="QZr-KB-QQJ"/>
+                                    <menuItem title="Cryptonight-light" id="GyV-b5-9Az"/>
+                                    <menuItem title="Decred" id="g1p-N0-pQL"/>
+                                    <menuItem title="Lyra2REv2" id="PFf-p4-GOX"/>
+                                    <menuItem title="neoscrypt" id="59e-Yn-hTl"/>
+                                    <menuItem title="yescrypt" id="xhG-WF-8uL"/>
+                                    <menuItem title="X17" id="SFk-N0-29C"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -2781,6 +2787,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="1301" id="5017"/>
             </connections>
+            <point key="canvasLocation" x="175" y="-612"/>
         </window>
         <window title="FPGA/ASIC Miner Options" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="faoptions" animationBehavior="default" id="5317" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" utility="YES" HUD="YES"/>
@@ -3898,6 +3905,7 @@ Gw
             <connections>
                 <outlet property="delegate" destination="1778" id="x1P-f4-jIT"/>
             </connections>
+            <point key="canvasLocation" x="771" y="109"/>
         </window>
         <window title="Release Notes" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="rnotes" animationBehavior="default" id="dsb-6a-Awg" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES"/>
@@ -3987,7 +3995,7 @@ for his help with C/C++ code</string>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P25-Nh-rmV">
                         <rect key="frame" x="18" y="180" width="576" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="MobileMiner has stopped it's service indefinitely" id="B4g-B5-TYT">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Pool won't connect? Include protocol e.g. stratum+tcp://" id="B4g-B5-TYT">
                             <font key="font" size="16" name="AvenirNext-Regular"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.39000000000000001" colorSpace="calibratedRGB"/>
@@ -4035,7 +4043,7 @@ for his help with C/C++ code</string>
                     </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="138.5" y="-77.5"/>
+            <point key="canvasLocation" x="-483" y="187"/>
         </window>
         <window title="Add a Networked Miner" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="addminer" animationBehavior="default" id="GUm-SE-J6v">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
@@ -4230,7 +4238,6 @@ for his help with C/C++ code</string>
         <image name="imine" width="512" height="512"/>
         <image name="meerkatad" width="700" height="140"/>
         <image name="menu2" width="330" height="137"/>
-        <image name="mobileminer" width="118" height="118"/>
         <image name="pool" width="256" height="256"/>
         <image name="setupbackground" width="1370" height="1052"/>
         <image name="sfad" width="379" height="174"/>

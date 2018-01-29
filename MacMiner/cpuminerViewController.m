@@ -142,6 +142,24 @@
         if (self.chooseAlgo.indexOfSelectedItem == 7) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"xmrurls.conf"];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 8) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"xmrlighturls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 9) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"decredurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 10) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"lyra2rev2urls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 11) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"neoscrypturls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 12) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"yescrypturls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 13) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"x17urls.conf"];
+        }
 
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
         if (fileExists) {
@@ -263,6 +281,72 @@
                 [cpuLaunchArray addObject:@"-p"];
                 [cpuLaunchArray addObject:mainLTCPass];
             }
+            if (self.chooseAlgo.indexOfSelectedItem == 8) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"cryptolight"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 9) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"decred"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 10) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"lyra2rev2"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 11) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"neoscrypt"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 12) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"yescrypt"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 13) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"x17"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
 
 
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -298,8 +382,8 @@
             else if (self.chooseAlgo.indexOfSelectedItem == 6) {
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
             }
-            else if (self.chooseAlgo.indexOfSelectedItem == 7) {
-                cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpumultiminer/bin/minerd"];
+            else if (self.chooseAlgo.indexOfSelectedItem >= 7) {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermulti/bin/cpuminer"];
             }
             else {
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/poolercpu/bin/minerd"];
@@ -382,7 +466,24 @@
     
     NSString *apiOutput = @"accepted:";
     if ([output rangeOfString:apiOutput].location != NSNotFound) {
-        
+        if (self.chooseAlgo.indexOfSelectedItem >= 7) {
+            NSString *numberString = [self getDataBetweenFromString:output
+                                                         leftString:@"accepted" rightString:@"(d" leftOffset:0];
+            NSString *step2 = [numberString stringByReplacingOccurrencesOfString:@"a" withString:@"A"];
+            self.cpuStatLabel.stringValue = [step2 stringByReplacingOccurrencesOfString:@"/" withString:@" of "];
+            
+            NSString *rejectString = [self getDataBetweenFromString:output
+                                                         leftString:@"," rightString:@"H/s" leftOffset:1];
+            self.cpuHashLabel.stringValue = [rejectString stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            
+            
+            apiOutput = nil;
+            numberString = nil;
+            step2 = nil;
+            rejectString = nil;
+        }
+        else {
         NSString *numberString = [self getDataBetweenFromString:output
                                                      leftString:@"accepted" rightString:@"," leftOffset:0];
         NSString *step2 = [numberString stringByReplacingOccurrencesOfString:@"a" withString:@"A"];
@@ -398,7 +499,7 @@
         numberString = nil;
         step2 = nil;
         rejectString = nil;
-
+        }
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
@@ -628,6 +729,24 @@
         if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"7"]) {
             [self.chooseAlgo selectItemAtIndex:7];
         }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"8"]) {
+            [self.chooseAlgo selectItemAtIndex:8];
+        }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"9"]) {
+            [self.chooseAlgo selectItemAtIndex:9];
+        }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"10"]) {
+            [self.chooseAlgo selectItemAtIndex:10];
+        }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"11"]) {
+            [self.chooseAlgo selectItemAtIndex:11];
+        }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"12"]) {
+            [self.chooseAlgo selectItemAtIndex:12];
+        }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"13"]) {
+            [self.chooseAlgo selectItemAtIndex:13];
+        }
     }
     
     if ([prefs objectForKey:@"startCpu"]) {
@@ -691,6 +810,24 @@
         }
         if (self.chooseAlgo.indexOfSelectedItem == 7) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"xmrurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 8) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"xmrlighturls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 9) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"decredurls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 10) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"lyra2rev2urls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 11) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"neoscrypturls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 12) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"yescrypturls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 13) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"x17urls.conf"];
         }
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
@@ -812,6 +949,72 @@
                 [cpuLaunchArray addObject:@"-p"];
                 [cpuLaunchArray addObject:mainLTCPass];
             }
+            if (self.chooseAlgo.indexOfSelectedItem == 8) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"cryptolight"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 9) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"decred"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 10) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"lyra2rev2"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 11) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"neoscrypt"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 12) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"yescrypt"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
+            if (self.chooseAlgo.indexOfSelectedItem == 13) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"x17"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
         
         
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -847,8 +1050,8 @@
         else if (self.chooseAlgo.indexOfSelectedItem == 6) {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
         }
-        else if (self.chooseAlgo.indexOfSelectedItem == 7) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpumultiminer/bin/minerd"];
+        else if (self.chooseAlgo.indexOfSelectedItem >= 7) {
+            cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermulti/bin/cpuminer"];
         }
         else {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/poolercpu/bin/minerd"];
@@ -970,6 +1173,24 @@
     }
     if (self.chooseAlgo.indexOfSelectedItem == 7) {
         [prefs setObject:@"7" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 8) {
+        [prefs setObject:@"8" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 9) {
+        [prefs setObject:@"9" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 10) {
+        [prefs setObject:@"10" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 11) {
+        [prefs setObject:@"11" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 12) {
+        [prefs setObject:@"12" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 13) {
+        [prefs setObject:@"13" forKey:@"cpuAlgoChoice"];
     }
 
     if (self.cpuQuietOutput.state == NSOnState) {
