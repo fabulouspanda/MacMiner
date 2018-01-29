@@ -9,7 +9,7 @@ Mac Bitcoin, Litecoin and alt coin miner GUI interface for mining and monitoring
 
 This project can essentially be downloaded and built immediately in Xcode. You may need to change code signing settings.
 
-Development is no longer active - if you know your way around Xcode any tips or commits would be much appreciated by me and the community! I would be very proud to see anyone fork MacMiner for a future project, and will merge minor commit requests if they're made.
+Development is less active than it has been in the past - if you know your way around Xcode any tips or commits would be much appreciated by me and the community! I would be very proud to see anyone fork MacMiner for a future project, and will merge minor commit requests if they're made.
 
 The code is not provided here for bfgminer or it's api-example.c which is used to compile apiaccess, neither are cgminer or minerd (pooler's cpuminer) - these are available on github with their respective authors. Binaries are included here for ease of compilation.
 
