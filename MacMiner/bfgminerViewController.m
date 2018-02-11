@@ -284,7 +284,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         }
         if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
             [launchArray addObject:@"-k"];
-            [launchArray addObject:@"scrypt-n"];
+            [launchArray addObject:@"nscrypt"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveLTCAdNConfigFilePath];
         }
@@ -1489,7 +1489,7 @@ NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         }
         if (self.chooseGPUAlgo.indexOfSelectedItem == 1) {
             [launchArray addObject:@"-k"];
-            [launchArray addObject:@"scrypt-n"];
+            [launchArray addObject:@"nscrypt"];
             [launchArray addObject:@"-c"];
             [launchArray addObject:saveLTCAdNConfigFilePath];
         }

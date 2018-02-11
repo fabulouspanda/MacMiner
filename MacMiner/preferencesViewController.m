@@ -1270,13 +1270,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             bfgFileText = [NSString stringWithContentsOfFile:configFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolComboBox.stringValue];
-                bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-                bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-
+            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1317,13 +1317,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             ltcFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+            ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1363,13 +1363,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             vtcFileText = [NSString stringWithContentsOfFile:vtcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                vtcFileText = [vtcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1410,15 +1410,14 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             qrkFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                qrkFileText = [qrkFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
-        
         
         NSString *saveQRKFilePath = [userpath stringByAppendingPathComponent:@"qrkurls.conf"];
         
@@ -1457,13 +1456,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1504,13 +1503,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1551,13 +1550,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1598,13 +1597,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1645,13 +1644,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1693,13 +1692,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1740,13 +1739,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1787,13 +1786,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1834,13 +1833,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1881,13 +1880,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1928,13 +1927,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -1975,13 +1974,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2022,13 +2021,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2069,13 +2068,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2116,13 +2115,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2163,13 +2162,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2210,13 +2209,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2257,13 +2256,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2304,13 +2303,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2351,13 +2350,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2398,13 +2397,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2445,13 +2444,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2492,13 +2491,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2539,13 +2538,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2586,13 +2585,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2633,13 +2632,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2680,13 +2679,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2727,13 +2726,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2774,13 +2773,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
@@ -2821,13 +2820,13 @@
         
         if (self.userNameField.stringValue.length >= 1) {
             
-            
             maxFileText = [NSString stringWithContentsOfFile:ltcFilePath encoding:NSUTF8StringEncoding error:nil];
             
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.poolComboBox.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.userNameField.stringValue];
-            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.passwordField.stringValue];
-            
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:[self.poolComboBox.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"user1" withString:[self.userNameField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            if (self.passwordField.stringValue.length >= 1) {
+                maxFileText = [maxFileText stringByReplacingOccurrencesOfString:@"pass1" withString:[self.passwordField.stringValue stringByReplacingOccurrencesOfString:@" " withString:@""]];
+            }
         }
         
         
