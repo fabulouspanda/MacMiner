@@ -37,15 +37,10 @@
 @property (strong, nonatomic) NSString *bfgSettingString;
 @property (strong, nonatomic) IBOutlet NSTextField *bfgSettingText;
 
-@property (nonatomic, strong) NSMutableArray *mobileMinerDataArray;
-@property (nonatomic, strong) IBOutlet NSArrayController *mobileMinerArrayController;
-
 @property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage;
 @property (nonatomic, strong) IBOutlet NSTextView *asicAPIStorage2;
 
 @property (nonatomic, strong) IBOutlet NSButton *disableHttpsButton;
-
-@property (nonatomic, strong) IBOutlet NSButton *allowMobileMinerControl;
 
 @property (nonatomic, strong) IBOutlet NSButton *hideVersionStuff;
 
@@ -53,17 +48,11 @@
 
 @property (nonatomic, strong) NSString *foundData;
 
-@property (nonatomic, strong) NSString *mobileMinerStatus;
-
 @property (nonatomic, strong) NSString *machineName;
 
 @property (nonatomic, strong) NSMutableString *outputMathString;
 
 @property (strong) id activity;
-
-- (void)mobilePost;
-
-- (void)mobileCommands;
 
 - (void)updateThread;
 

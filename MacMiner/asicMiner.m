@@ -161,10 +161,6 @@ static int ONLY;
         
         self.asicAPIOutput.delegate = self;
         
-        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        appDelegate.mobileMinerStatus = @"NONE";
-        appDelegate = nil;
-        
         
         self.acceptLabel.tag = 1;
         
@@ -206,8 +202,6 @@ static int ONLY;
     
     AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     
-    appDelegate.mobileMinerStatus = @"NONE";
-    
     [appDelegate.asicReadBack setHidden:YES];
     [appDelegate.asicReading setHidden:YES];
     [[NSApp dockTile] display];
@@ -236,8 +230,6 @@ self.megaHashLabel.stringValue = @"0";
         self.megaHashLabel.tag = 0;
         
         AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-        
-        appDelegate.mobileMinerStatus = @"NONE";
 
         [appDelegate.asicReadBack setHidden:YES];
         [appDelegate.asicReading setHidden:YES];
@@ -395,177 +387,9 @@ self.megaHashLabel.stringValue = @"0";
     
        AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
     
-    
     if(apiOutputString.length >= 10) {
         
-    
     [self.prefs synchronize];
-
- 
-    appDelegate.mobileMinerDataArray = nil;
-    appDelegate.mobileMinerDataArray = [[NSMutableArray alloc]init];
-        
-        if ([appDelegate.mobileMinerStatus isEqualToString:@"START"]) {
-//            [self start:nil];
-            appDelegate.mobileMinerStatus = @"NONE";
-            [self.asicStartButton setTitle:@"Stop"];
-            self.asicStartButton.tag = 0;
-
-//            self.asicAPIOutput.string = @"";
-            [self.asicAPIOutput delete:nil];
-            
-            
-            // If the task is still sitting around from the last run, release it
-            if (asicTask!=nil) {
-                asicTask = nil;
-            }
-
-            
-            
-            [self.prefs synchronize];
-            
-            
-            self.noGPU = [self.prefs stringForKey:@"disableASICGPU"];
-            self.debugOutputOn = [self.prefs stringForKey:@"debugASICOutput"];
-            self.quietOutputOn = [self.prefs stringForKey:@"quietASICOutput"];
-            self.bonusOptions = [self.prefs stringForKey:@"asicOptionsValue"];
-            NSString *cpuThreads = [self.prefs stringForKey:@"cpuASICThreads"];
-            
-            
-            NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
-            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-            NSString *userpath = [paths objectAtIndex:0];
-            userpath = [userpath stringByAppendingPathComponent:executableName];    // The file will go in this directory
-            NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-            
-            
-            NSMutableArray *launchArray = [NSMutableArray arrayWithObjects: @"-T", @"--api-listen", @"--api-allow", @"R:0/0", nil];
-            if ([self.bonusOptions isNotEqualTo:@""]) {
-                NSArray *deviceItems = [self.bonusOptions componentsSeparatedByString:@" "];
-                
-                [launchArray addObjectsFromArray:deviceItems];
-            }
-            
-
-            
-            if ([self.debugOutputOn isNotEqualTo:nil]) {
-                [launchArray addObject:self.debugOutputOn];
-            }
-            if ([self.quietOutputOn isNotEqualTo:nil]) {
-                [launchArray addObject:self.quietOutputOn];
-            }
-            
-            if (self.bigpicEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"bigpic:all"];
-            }
-            if (self.antminerEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"antminer:all"];
-            }
-            if (self.bflEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"bfl:all"];
-            }
-            if (self.bitfuryEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"bifury:all"];
-            }
-            if (self.erupterEnable.state == NSOnState) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"erupter:all"];
-            }
-            
-            NSString *saveLogFile = [self.prefs stringForKey:@"saveLogFile"];
-            if ([saveLogFile isNotEqualTo:nil]) {
-                [launchArray addObject:@"--debuglog"];
-                [launchArray addObject:@"-L"];
-                NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
-                [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-                NSString *dateString = [NSString stringWithFormat:@"%@",[DateFormatter stringFromDate:[NSDate date]]];
-                
-                NSString *saveBTCConfigFilePath = [userpath stringByAppendingPathComponent:@"bfgurls.conf"];
-                
-                NSString *btcConfig = @"";
-                
-                NSFileManager *fileManager = [[NSFileManager alloc] init];
-                if ([fileManager fileExistsAtPath:userpath] == YES) {
-                    btcConfig = [NSString stringWithContentsOfFile : saveBTCConfigFilePath encoding:NSUTF8StringEncoding error:nil];
-                }
-                
-                NSString *acceptString = @"";
-                
-                if (btcConfig.length >= 20) {
-                    acceptString = [self getDataBetweenFromString:btcConfig
-                                                       leftString:@"user" rightString:@"," leftOffset:9];
-                }
-                
-                NSString *bfgUserValue = [acceptString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                acceptString = nil;
-                
-                NSString *logFile = [userpath stringByAppendingString:[@"/" stringByAppendingString:[bfgUserValue stringByAppendingString:[dateString stringByAppendingString:@".txt"]]]];
-                
-                [launchArray addObject:logFile];
-            }
-            
-            
-            if ([self.noGPU isNotEqualTo:nil]) {
-                [launchArray addObject:@"-S"];
-                [launchArray addObject:@"opencl:auto"];
-            }
-            
-            cpuThreads = nil;
-            
-
-            
-            [launchArray addObject:@"-c"];
-            [launchArray addObject:saveBTCConfigFilePath];
-            
-            
-            
-            NSString *bundlePath2 = [[NSBundle mainBundle] resourcePath];
-            
-            NSString *bfgPath = [bundlePath2 stringByAppendingString:@"/bfgminer/bin/bfgminer"];
-            
-            [self.asicOutputView setString:@""];
-            
-            asicTask =[[TaskWrapper alloc] initWithCommandPath:bfgPath
-                                                     arguments:launchArray
-                                                   environment:nil
-                                                      delegate:self];
-            // kick off the process asynchronously
-            
-            [asicTask startTask];
-            
-
-        }
-        if ([appDelegate.mobileMinerStatus isEqualToString:@"RESTART"]) {
-            [self start:nil];
-            appDelegate.mobileMinerStatus = @"NONE";
-        }
-        if ([appDelegate.mobileMinerStatus isEqualToString:@"STOP"]) {
-//            [self stopAsicMiner];
-                appDelegate.mobileMinerStatus = @"NONE";
-            
-            [self.asicStartButton setTitle:@"Start"];
-            self.asicStartButton.tag = 1;
-            //        [self stopToggling];
-            // This stops the task and calls our callback (-processFinished)
-            [asicTask stopTask];
-            findRunning=NO;
-            
-            // Release the memory for this wrapper object
-            
-            asicTask=nil;
-            
-            
-            appDelegate.mobileMinerStatus = @"NONE";
-            
-            [appDelegate.asicReadBack setHidden:YES];
-            [appDelegate.asicReading setHidden:YES];
-            [[NSApp dockTile] display];
-
-        }
     
     NSRange range = NSMakeRange(0, [[self.apiTableViewController arrangedObjects] count]);
     [self.apiTableViewController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
@@ -700,24 +524,10 @@ algorithmString = @"Scrypt";
                     }
                 }
             }
-
-            
-            
-            
-            NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"%@\",\"Algorithm\":\"%@\",\"Kind\":\"GPU\",\"Index\":0,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"%@\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName ,coinChoiceString, algorithmString, apiStatus, @"0", apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiIntensity, pgaCount, apiName, apiPoolString];
-            
-            
-            pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-            pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
-            pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-            pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            
-            [appDelegate.mobileMinerArrayController addObject:pgaStats];
             
             
             apiPoolString = nil;
             apiName = nil;
-            pgaStats = nil;
         
                     currentOutputString = [currentOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
             
@@ -795,22 +605,9 @@ algorithmString = @"Scrypt";
                 apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
                 
-                
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
-                
-                
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                
-                [appDelegate.mobileMinerArrayController addObject:pgaStats];
-                
                 apiTemp = nil;
                 apiPoolString = nil;
                 apiName = nil;
-                pgaStats = nil;
-                
                 
             }
             else {
@@ -823,21 +620,10 @@ algorithmString = @"Scrypt";
                     apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
                 
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"PGA\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
-                
-                
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                
-                [appDelegate.mobileMinerArrayController addObject:pgaStats];
-                
                 
                 apiTemp = nil;
                 apiPoolString = nil;
                 apiName = nil;
-                pgaStats = nil;
                 
             }
             
@@ -937,21 +723,11 @@ algorithmString = @"Scrypt";
                 if ([self.prefs stringForKey:@"defaultPoolValue"] != nil) {
                     apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
-                
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
-                
-                
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                
-                [appDelegate.mobileMinerArrayController addObject:pgaStats];
+
                 
                 apiTemp = nil;
                 apiPoolString = nil;
                 apiName = nil;
-                pgaStats = nil;
                 
             }
             else {
@@ -965,21 +741,11 @@ algorithmString = @"Scrypt";
                     apiPoolString = [self.prefs stringForKey:@"defaultPoolValue"];
                 }
                 
-                NSString *pgaStats = [NSString stringWithFormat:@"{\"MachineName\":\"%@\",\"MinerName\":\"MacMiner\",\"CoinSymbol\":\"BTC\",\"CoinName\":\"Bitcoin\",\"Algorithm\":\"SHA-256\",\"Kind\":\"ASC\",\"Index\":%d,\"Enabled\":true,\"Status\":\"%@\",\"Temperature\":%@,\"FanSpeed\":0,\"FanPercent\":0,\"GpuClock\":0,\"MemoryClock\":0,\"GpuVoltage\":0,\"GpuActivity\":0,\"PowerTune\":0,\"AverageHashrate\":%@,\"CurrentHashrate\":%@,\"AcceptedShares\":%@,\"RejectedShares\":%@,\"HardwareErrors\":%@,\"Utility\":%@,\"Intensity\":\"0\",\"Name\":\"%@\",\"DeviceID\":0,\"PoolIndex\":0,\"RejectedSharesPercent\":0,\"HardwareErrorsPercent\":0,\"FullName\":\"%@\",\"PoolName\":\"%@\"}", appDelegate.machineName, i, apiStatus, apiTemp, apiHash5s, apiHashAv, apiAccepted, apiRejected, apiHWError, apiUtility, apiName, apiName, apiPoolString];
-                
-                
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                pgaStats = [pgaStats stringByReplacingOccurrencesOfString:@" " withString:@""];
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-                pgaStats = [pgaStats stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                
-                [appDelegate.mobileMinerArrayController addObject:pgaStats];
-                
                 
                 apiTemp = nil;
                 apiPoolString = nil;
                 apiName = nil;
-                pgaStats = nil;
+
             }
             
             currentOutputString = [currentOutputString stringByReplacingOccurrencesOfString:pgaAPIData withString:@""];
@@ -1017,29 +783,6 @@ algorithmString = @"Scrypt";
     }
 
     appDelegate = nil;
-
-}
-
--(void)callToMobileMiner:(NSTimer*)timer {
-    
-    self.prefs = [NSUserDefaults standardUserDefaults];
-    [self.prefs synchronize];
-    
-    if ([self.prefs objectForKey:@"emailAddress"] != nil) {
-                                 AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
-
-    
-    NSString *email = [self.prefs objectForKey:@"emailAddress"];
-    
-
-if (email.length >= 5) {
-    [appDelegate mobileCommands];
-       [appDelegate mobilePost];
-}
-
-email = nil;
-appDelegate = nil;
-    }
 
 }
 
@@ -1234,7 +977,8 @@ appDelegate = nil;
 
 - (void)stopToggling
 {
-    [loopTimer invalidate], loopTimer = nil;  // you don't want dangling pointers...
+    [loopTimer invalidate];
+    loopTimer = nil;  // you don't want dangling pointers...
     
     // perform any other needed house-keeping here
                             [self.asicStartButton setTitle:@"Start"];
@@ -1243,9 +987,11 @@ appDelegate = nil;
 
 - (void)startToggling
 {
-    [timerTimer invalidate], timerTimer = nil;
-    [loopTimer invalidate], loopTimer = nil;  // you don't want dangling pointers...
-    [mobileMinerTimer invalidate], mobileMinerTimer = nil;
+    [timerTimer invalidate];
+    timerTimer = nil;
+    [loopTimer invalidate];
+    loopTimer = nil;  // you don't want dangling pointers...
+    
 //    if ([asicStartButton.title isEqual: @"Start"]) {
 
 
@@ -1254,7 +1000,6 @@ appDelegate = nil;
     
     loopTimer = [NSTimer scheduledTimerWithTimeInterval:6. target:self selector:@selector(toggleLoopTimerFired:) userInfo:nil repeats:YES];
         timerTimer = [NSTimer scheduledTimerWithTimeInterval:6. target:self selector:@selector(toggleTimerFired:) userInfo:nil repeats:YES];
-    mobileMinerTimer = [NSTimer scheduledTimerWithTimeInterval:30. target:self selector:@selector(callToMobileMiner:) userInfo:nil repeats:YES];
     
 //    }
 
@@ -1397,12 +1142,12 @@ appDelegate = nil;
     left += leftPos;
     self.foundData = [data substringWithRange: NSMakeRange(left, (right - left) - 1)];
 
-    return self.foundData;
-                
-                self.foundData = nil;
                 scanner = nil;
                 leftData = nil;
                 rightData = nil;
+                
+    return self.foundData;
+
     }
     else return @"left string is nil";
 }

@@ -329,7 +329,7 @@
         }
         else {
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9332" withString:self.poolBoox.stringValue];
-            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.hostv.pl:9332" withString:@"http://pool.fabulouspanda.co.uk:9332"];
+            bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"http://pool.hostv.pl:9332" withString:self.poolBoox.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.btcuserNameTextField.stringValue];
             bfgFileText = [bfgFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.btcpassWordTextField.stringValue];
             [prefs setObject:self.poolBoox.stringValue forKey:@"bitcoinPool"];
@@ -389,7 +389,7 @@
             }
             else {
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.fabulouspanda.co.uk:9327" withString:self.ltcpoolBoox.stringValue];
-                ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.hostv.pl:9327" withString:@"http://pool.fabulouspanda.co.uk:9327"];
+                ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"http://pool.hostv.pl:9327" withString:self.ltcpoolBoox.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"user1" withString:self.ltcuserNameTextField.stringValue];
                 ltcFileText = [ltcFileText stringByReplacingOccurrencesOfString:@"pass1" withString:self.ltcpassWordTextField.stringValue];
                 [prefs setObject:self.ltcpoolBoox.stringValue forKey:@"scryptPool"];

@@ -196,7 +196,7 @@
 
         
 
-        NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
+        NSMutableArray *cpuLaunchArray = [NSMutableArray new];
         
         if ([cpuThreadsV isNotEqualTo:@""]) {
             [cpuLaunchArray addObject:@"-t"];
@@ -863,7 +863,7 @@
         
         
         
-        NSMutableArray *cpuLaunchArray = [NSMutableArray arrayWithObjects: nil];
+        NSMutableArray *cpuLaunchArray = [NSMutableArray new];
         
         if ([cpuThreadsV isNotEqualTo:@""]) {
             [cpuLaunchArray addObject:@"-t"];

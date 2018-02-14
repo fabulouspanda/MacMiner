@@ -2875,12 +2875,6 @@
     [self.prefView3 setHidden:NO];
 }
 
-- (IBAction)mobileMiner:(id)sender {
-    [self.prefView setHidden:YES];
-    [self.prefView3 setHidden:YES];
-        [self.prefView2 setHidden:NO];
-}
-
 - (IBAction)showGeneral:(id)sender {
     [self.prefView setHidden:NO];
     [self.prefView2 setHidden:YES];
