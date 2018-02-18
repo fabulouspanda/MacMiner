@@ -1,0 +1,72 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "IDN2" "1" "July 2017" "" ""
+.
+.SH "NAME"
+\fBidn2\fR \- Libidn2 Internationalized Domain Names conversion tool
+.
+.SH "SYNOPSIS"
+\fBidn2\fR [OPTION]\.\.\. [STRINGS]\.\.\.
+.
+.SH "DESCRIPTION"
+idn2 tool converts DNS domains from UTF\-8 to ASCII compatibile encoding (ACE) form, as used in the DNS protocol\. The encoding format is the Internationalized Domain Name (IDNA2008/TR46) format\.
+.
+.P
+All input strings are expected to be encoded in the locale charset\.
+.
+.P
+To process a string that starts with \fB\-\fR, for example \fB\-foo\fR, use \fB\-\-\fR to signal the end of parameters, as in \fBidn2 \-\-quiet \-\- \-foo\fR\.
+.
+.P
+Mandatory arguments to long options are mandatory for short options too\.
+.
+.TP
+\fB\-h, \-\-help\fR
+Prints help and exits\.
+.
+.TP
+\fB\-V, \-\-version\fR
+Prints version and exits\.
+.
+.TP
+\fB\-d, \-\-decode\fR
+Decode an ACE name according to IDNA2008\.
+.
+.TP
+\fB\-l, \-\-lookup\fR
+Encode to ACE according to IDNA2008 (the default)\.
+.
+.TP
+\fB\-r, \-\-register\fR
+Registers a label\.
+.
+.TP
+\fB\-T, \-\-tr46t\fR
+Enable TR#46 transitional processing\.
+.
+.TP
+\fB\-N, \-\-tr46nt\fR
+Enable TR#46 non\-transitional processing (default)\.
+.
+.TP
+\fB\-\-no\-tr46\fR
+Disable TR#46 processing\.
+.
+.TP
+\fB\-\-usestd3asciirules\fR
+Enable STD3 ASCII rules\.
+.
+.TP
+\fB\-\-debug\fR
+Prints debugging information\.
+.
+.TP
+\fB\-\-quiet\fR
+Silent operation\.
+.
+.SH "Author"
+Written by Simon Josefsson\.
+.
+.SH "Reporting bugs"
+Report bugs to the gitlab issue tracker of the project \fIhttps://gitlab\.com/libidn/libidn2/issues\fR\.

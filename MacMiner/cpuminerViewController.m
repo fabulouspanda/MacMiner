@@ -160,6 +160,9 @@
         if (self.chooseAlgo.indexOfSelectedItem == 13) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"x17urls.conf"];
         }
+        if (self.chooseAlgo.indexOfSelectedItem == 14) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"glcurls.conf"];
+        }
 
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
         if (fileExists) {
@@ -347,6 +350,17 @@
                 [cpuLaunchArray addObject:mainLTCPass];
                 [cpuLaunchArray addObject:@"--no-color"];
             }
+            if (self.chooseAlgo.indexOfSelectedItem == 14) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"allium"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
 
 
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -383,7 +397,12 @@
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
             }
             else if (self.chooseAlgo.indexOfSelectedItem >= 7) {
+                if (self.chooseAlgo.indexOfSelectedItem >= 14) {
+                    cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermultiallium/bin/cpuminer"];
+                }
+                else {
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermulti/bin/cpuminer"];
+                }
             }
             else {
                 cpuPath = [cpuPath stringByAppendingString:@"/Resources/poolercpu/bin/minerd"];
@@ -747,6 +766,9 @@
         if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"13"]) {
             [self.chooseAlgo selectItemAtIndex:13];
         }
+        if ([[prefs objectForKey:@"cpuAlgoChoice"]  isEqual: @"14"]) {
+            [self.chooseAlgo selectItemAtIndex:14];
+        }
     }
     
     if ([prefs objectForKey:@"startCpu"]) {
@@ -828,6 +850,9 @@
         }
         if (self.chooseAlgo.indexOfSelectedItem == 13) {
             saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"x17urls.conf"];
+        }
+        if (self.chooseAlgo.indexOfSelectedItem == 14) {
+            saveLTCConfigFilePath = [userpath stringByAppendingPathComponent:@"glcurls.conf"];
         }
         
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:saveLTCConfigFilePath];
@@ -1015,6 +1040,17 @@
                 [cpuLaunchArray addObject:mainLTCPass];
                 [cpuLaunchArray addObject:@"--no-color"];
             }
+            if (self.chooseAlgo.indexOfSelectedItem == 14) {
+                [cpuLaunchArray addObject:@"-a"];
+                [cpuLaunchArray addObject:@"allium"];
+                [cpuLaunchArray addObject:@"-o"];
+                [cpuLaunchArray addObject:mainLTCPool];
+                [cpuLaunchArray addObject:@"-u"];
+                [cpuLaunchArray addObject:mainLTCUser];
+                [cpuLaunchArray addObject:@"-p"];
+                [cpuLaunchArray addObject:mainLTCPass];
+                [cpuLaunchArray addObject:@"--no-color"];
+            }
         
         
         if ([cpuQuietV isNotEqualTo:nil]) {
@@ -1051,7 +1087,12 @@
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/x11cpuminer/bin/minerd"];
         }
         else if (self.chooseAlgo.indexOfSelectedItem >= 7) {
-            cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermulti/bin/cpuminer"];
+            if (self.chooseAlgo.indexOfSelectedItem >= 14) {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermultiallium/bin/cpuminer"];
+            }
+            else {
+                cpuPath = [cpuPath stringByAppendingString:@"/Resources/cpuminermulti/bin/cpuminer"];
+            }
         }
         else {
             cpuPath = [cpuPath stringByAppendingString:@"/Resources/poolercpu/bin/minerd"];
@@ -1191,6 +1232,9 @@
     }
     if (self.chooseAlgo.indexOfSelectedItem == 13) {
         [prefs setObject:@"13" forKey:@"cpuAlgoChoice"];
+    }
+    if (self.chooseAlgo.indexOfSelectedItem == 14) {
+        [prefs setObject:@"14" forKey:@"cpuAlgoChoice"];
     }
 
     if (self.cpuQuietOutput.state == NSOnState) {

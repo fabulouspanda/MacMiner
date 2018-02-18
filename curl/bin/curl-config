@@ -6,7 +6,7 @@
 #                            | (__| |_| |  _ <| |___
 #                             \___|\___/|_| \_\_____|
 #
-# Copyright (C) 2001 - 2012, Daniel Stenberg, <daniel@haxx.se>, et al.
+# Copyright (C) 2001 - 2017, Daniel Stenberg, <daniel@haxx.se>, et al.
 #
 # This software is licensed as described in the file COPYING, which
 # you should have received as part of this distribution. The terms
@@ -44,6 +44,7 @@ Available values for OPTION include:
   --libs      library linking information
   --prefix    curl install prefix
   --protocols newline separated list of enabled protocols
+  --ssl-backends output the SSL backends libcurl was built to support
   --static-libs static libcurl library linking information
   --version   output version information
   --vernum    output the version information as a number (hexadecimal)
@@ -71,7 +72,7 @@ while test $# -gt 0; do
         ;;
 
     --ca)
-        echo 
+        echo "/etc/ssl/cert.pem"
         ;;
 
     --cc)
@@ -83,19 +84,19 @@ while test $# -gt 0; do
         ;;
 
     --feature|--features)
-        for feature in IPv6 UnixSockets libz ""; do
+        for feature in SSL IPv6 UnixSockets libz AsynchDNS IDN NTLM NTLM_WB TLS-SRP HTTPS-proxy ""; do
             test -n "$feature" && echo "$feature"
         done
         ;;
 
     --protocols)
-        for protocol in DICT FILE FTP GOPHER HTTP IMAP LDAP LDAPS POP3 RTSP SMTP TELNET TFTP; do
+        for protocol in DICT FILE FTP FTPS GOPHER HTTP HTTPS IMAP IMAPS LDAP LDAPS POP3 POP3S RTSP SMB SMBS SMTP SMTPS TELNET TFTP; do
             echo "$protocol"
         done
         ;;
 
     --version)
-        echo libcurl 7.50.0
+        echo libcurl 7.58.0
         exit 0
         ;;
 
@@ -107,20 +108,20 @@ while test $# -gt 0; do
         # dash as that's used for things like version 1.2.3-CVS
         cpatch=`echo $checkfor | cut -d. -f3 | cut -d- -f1`
         checknum=`echo "$cmajor*256*256 + $cminor*256 + ${cpatch:-0}" | bc`
-        numuppercase=`echo 073200 | tr 'a-f' 'A-F'`
+        numuppercase=`echo 073a00 | tr 'a-f' 'A-F'`
         nownum=`echo "obase=10; ibase=16; $numuppercase" | bc`
 
         if test "$nownum" -ge "$checknum"; then
           # silent success
           exit 0
         else
-          echo "requested version $checkfor is newer than existing 7.50.0"
+          echo "requested version $checkfor is newer than existing 7.58.0"
           exit 1
         fi
         ;;
 
     --vernum)
-        echo 073200
+        echo 073a00
         exit 0
         ;;
 
@@ -148,15 +149,18 @@ while test $# -gt 0; do
            CURLLIBDIR=""
         fi
         if test "Xyes" = "Xyes"; then
-          echo ${CURLLIBDIR}-lcurl -lldap -lz
+          echo ${CURLLIBDIR}-lcurl -lidn2 -lssl -lcrypto -lssl -lcrypto -lldap -lz
         else
           echo ${CURLLIBDIR}-lcurl
         fi
         ;;
+    --ssl-backends)
+        echo "OpenSSL"
+        ;;
 
     --static-libs)
         if test "Xyes" != "Xno" ; then
-          echo ${exec_prefix}/lib/libcurl.a  -lldap -lz
+          echo ${exec_prefix}/lib/libcurl.a -L/usr/local/Cellar/openssl/1.0.2n/lib -L/usr/local/Cellar/libidn2/2.0.4/lib -lidn2 -lssl -lcrypto -lssl -lcrypto -lldap -lz
         else
           echo "curl was built with static libraries disabled" >&2
           exit 1
