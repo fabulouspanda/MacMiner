@@ -462,7 +462,7 @@
 
 - (IBAction)displayMeerkat:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://itunes.apple.com/app/wheres-the-meerkat/id1100443945?mt=8&at=1000lnXM"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://geo.itunes.apple.com/app/uke-ukulele-tuner/id1382916607?mt=12&at=1000lnXM"]];
 }
 
 - (IBAction)displaySketchFighter:(id)sender

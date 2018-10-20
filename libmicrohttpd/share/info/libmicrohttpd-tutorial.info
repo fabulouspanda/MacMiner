@@ -1,24 +1,22 @@
-This is libmicrohttpd-tutorial.info, produced by makeinfo version 4.13
+This is libmicrohttpd-tutorial.info, produced by makeinfo version 6.3
 from libmicrohttpd-tutorial.texi.
 
-INFO-DIR-SECTION Software libraries
-START-INFO-DIR-ENTRY
-* libmicrohttpdtutorial: (libmicrohttpd).       A tutorial for GNU libmicrohttpd.
-END-INFO-DIR-ENTRY
+This tutorial documents GNU libmicrohttpd version 0.9.48, last updated 2
+April 2016.
 
-   This tutorial documents GNU libmicrohttpd version 0.9.22, last
-updated 17 July 2012.
+   Copyright (c) 2008 Sebastian Gerhardt.
 
-   Copyright (c)  2008  Sebastian Gerhardt.
-
-   Copyright (c)  2010, 2011, 2012  Christian Grothoff.
-
+   Copyright (c) 2010, 2011, 2012, 2013, 2016 Christian Grothoff.
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
      Foundation; with no Invariant Sections, no Front-Cover Texts, and
      no Back-Cover Texts.  A copy of the license is included in the
      section entitled "GNU Free Documentation License".
+INFO-DIR-SECTION Software libraries
+START-INFO-DIR-ENTRY
+* libmicrohttpdtutorial: (libmicrohttpd).       A tutorial for GNU libmicrohttpd.
+END-INFO-DIR-ENTRY
 
 
 File: libmicrohttpd-tutorial.info,  Node: Top,  Next: Introduction,  Up: (dir)
@@ -26,13 +24,12 @@ File: libmicrohttpd-tutorial.info,  Node: Top,  Next: Introduction,  Up: (dir)
 A Tutorial for GNU libmicrohttpd
 ********************************
 
-This tutorial documents GNU libmicrohttpd version 0.9.22, last updated
-17 July 2012.
+This tutorial documents GNU libmicrohttpd version 0.9.48, last updated 2
+April 2016.
 
-   Copyright (c)  2008  Sebastian Gerhardt.
+   Copyright (c) 2008 Sebastian Gerhardt.
 
-   Copyright (c)  2010, 2011, 2012  Christian Grothoff.
-
+   Copyright (c) 2010, 2011, 2012, 2013, 2016 Christian Grothoff.
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
      Version 1.3 or any later version published by the Free Software
@@ -63,9 +60,9 @@ File: libmicrohttpd-tutorial.info,  Node: Introduction,  Next: Hello browser exa
 
 This tutorial is for developers who want to learn how they can add HTTP
 serving capabilities to their applications with the _GNU libmicrohttpd_
-library, abbreviated _MHD_.  The reader will learn how to implement
-basic HTTP functions from simple executable sample programs that
-implement various features.
+library, abbreviated _MHD_. The reader will learn how to implement basic
+HTTP functions from simple executable sample programs that implement
+various features.
 
    The text is supposed to be a supplement to the API reference manual
 of _GNU libmicrohttpd_ and for that reason does not explain many of the
@@ -75,10 +72,10 @@ Furthermore, the reader is encouraged to study the relevant _RFCs_,
 which document the HTTP standard.
 
    _GNU libmicrohttpd_ is assumed to be already installed.  This
-tutorial is written for version 0.9.22.  At the time being, this
+tutorial is written for version 0.9.48.  At the time being, this
 tutorial has only been tested on _GNU/Linux_ machines even though
-efforts were made not to rely on anything that would prevent the
-samples from being built on similar systems.
+efforts were made not to rely on anything that would prevent the samples
+from being built on similar systems.
 
 1.1 History
 ===========
@@ -94,21 +91,21 @@ File: libmicrohttpd-tutorial.info,  Node: Hello browser example,  Next: Explorin
 ***********************
 
 The most basic task for a HTTP server is to deliver a static text
-message to any client connecting to it.  Given that this is also easy
-to implement, it is an excellent problem to start with.
+message to any client connecting to it.  Given that this is also easy to
+implement, it is an excellent problem to start with.
 
    For now, the particular URI the client asks for shall have no effect
-on the message that will be returned. In addition, the server shall end
+on the message that will be returned.  In addition, the server shall end
 the connection after the message has been sent so that the client will
 know there is nothing more to expect.
 
-   The C program `hellobrowser.c', which is to be found in the examples
+   The C program 'hellobrowser.c', which is to be found in the examples
 section, does just that.  If you are very eager, you can compile and
-start it right away but it is advisable to type the lines in by
-yourself as they will be discussed and explained in detail.
+start it right away but it is advisable to type the lines in by yourself
+as they will be discussed and explained in detail.
 
-   After the necessary includes and the definition of the port which
-our server should listen on
+   After the necessary includes and the definition of the port which our
+server should listen on
 #include <sys/types.h>
 #include <sys/select.h>
 #include <sys/socket.h>
@@ -116,25 +113,26 @@ our server should listen on
 
 #define PORT 8888
 
+
 the desired behaviour of our server when HTTP request arrive has to be
-implemented. We already have agreed that it should not care about the
-particular details of the request, such as who is requesting what. The
+implemented.  We already have agreed that it should not care about the
+particular details of the request, such as who is requesting what.  The
 server will respond merely with the same small HTML page to every
 request.
 
    The function we are going to write now will be called by _GNU
-libmicrohttpd_ every time an appropriate request comes in. While the
+libmicrohttpd_ every time an appropriate request comes in.  While the
 name of this callback function is arbitrary, its parameter list has to
-follow a certain layout. So please, ignore the lot of parameters for
-now, they will be explained at the point they are needed. We have to
-use only one of them, `struct MHD_Connection *connection', for the
+follow a certain layout.  So please, ignore the lot of parameters for
+now, they will be explained at the point they are needed.  We have to
+use only one of them, 'struct MHD_Connection *connection', for the
 minimalistic functionality we want to archive at the moment.
 
    This parameter is set by the _libmicrohttpd_ daemon and holds the
 necessary information to relate the call with a certain connection.
 Keep in mind that a server might have to satisfy hundreds of concurrent
 connections and we have to make sure that the correct data is sent to
-the destined client. Therefore, this variable is a means to refer to a
+the destined client.  Therefore, this variable is a means to refer to a
 particular connection if we ask the daemon to sent the reply.
 
    Talking about the reply, it is defined as a string right after the
@@ -147,17 +145,18 @@ int answer_to_connection (void *cls, struct MHD_Connection *connection,
 {
   const char *page  = "<html><body>Hello, browser!</body></html>";
 
-HTTP is a rather strict protocol and the client would certainly
-consider it "inappropriate" if we just sent the answer string "as is".
-Instead, it has to be wrapped with additional information stored in
-so-called headers and footers.  Most of the work in this area is done
-by the library for us--we just have to ask. Our reply string packed in
-the necessary layers will be called a "response".  To obtain such a
-response we hand our data (the reply-string) and its size over to the
-`MHD_create_response_from_buffer' function. The last two parameters
+
+HTTP is a rather strict protocol and the client would certainly consider
+it "inappropriate" if we just sent the answer string "as is".  Instead,
+it has to be wrapped with additional information stored in so-called
+headers and footers.  Most of the work in this area is done by the
+library for us--we just have to ask.  Our reply string packed in the
+necessary layers will be called a "response".  To obtain such a response
+we hand our data (the reply-string) and its size over to the
+'MHD_create_response_from_buffer' function.  The last two parameters
 basically tell _MHD_ that we do not want it to dispose the message data
-for us when it has been sent and there also needs no internal copy to
-be done because the _constant_ string won't change anyway.
+for us when it has been sent and there also needs no internal copy to be
+done because the _constant_ string won't change anyway.
 
   struct MHD_Response *response;
   int ret;
@@ -165,18 +164,19 @@ be done because the _constant_ string won't change anyway.
   response = MHD_create_response_from_buffer (strlen (page),
                                             (void*) page, MHD_RESPMEM_PERSISTENT);
 
+
 Now that the the response has been laced up, it is ready for delivery
 and can be queued for sending.  This is done by passing it to another
-_GNU libmicrohttpd_ function. As all our work was done in the scope of
+_GNU libmicrohttpd_ function.  As all our work was done in the scope of
 one function, the recipient is without doubt the one associated with the
-local variable `connection' and consequently this variable is given to
+local variable 'connection' and consequently this variable is given to
 the queue function.  Every HTTP response is accompanied by a status
 code, here "OK", so that the client knows this response is the intended
 result of his request and not due to some error or malfunction.
 
    Finally, the packet is destroyed and the return value from the queue
-returned, already being set at this point to either MHD_YES or MHD_NO
-in case of success or failure.
+returned, already being set at this point to either MHD_YES or MHD_NO in
+case of success or failure.
 
   ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
   MHD_destroy_response (response);
@@ -184,9 +184,10 @@ in case of success or failure.
   return ret;
 }
 
-With the primary task of our server implemented, we can start the
-actual server daemon which will listen on `PORT' for connections. This
-is done in the main function.
+
+With the primary task of our server implemented, we can start the actual
+server daemon which will listen on 'PORT' for connections.  This is done
+in the main function.
 int main ()
 {
   struct MHD_Daemon *daemon;
@@ -195,46 +196,48 @@ int main ()
                              &answer_to_connection, NULL, MHD_OPTION_END);
   if (NULL == daemon) return 1;
 
-The first parameter is one of three possible modes of operation. Here
+
+The first parameter is one of three possible modes of operation.  Here
 we want the daemon to run in a separate thread and to manage all
-incoming connections in the same thread. This means that while
-producing the response for one connection, the other connections will
-be put on hold. In this example, where the reply is already known and
+incoming connections in the same thread.  This means that while
+producing the response for one connection, the other connections will be
+put on hold.  In this example, where the reply is already known and
 therefore the request is served quickly, this poses no problem.
 
    We will allow all clients to connect regardless of their name or
-location, therefore we do not check them on connection and set the
-forth and fifth parameter to NULL.
+location, therefore we do not check them on connection and set the third
+and fourth parameter to NULL.
 
-   Parameter six is the address of the function we want to be called
-whenever a new connection has been established. Our
-`answer_to_connection' knows best what the client wants and needs no
-additional information (which could be passed via the next parameter)
-so the next parameter is NULL. Likewise, we do not need to pass extra
-options to the daemon so we just write the MHD_OPTION_END as the last
-parameter.
+   Parameter five is the address of the function we want to be called
+whenever a new connection has been established.  Our
+'answer_to_connection' knows best what the client wants and needs no
+additional information (which could be passed via the next parameter) so
+the next (sixth) parameter is NULL. Likewise, we do not need to pass
+extra options to the daemon so we just write the MHD_OPTION_END as the
+last parameter.
 
    As the server daemon runs in the background in its own thread, the
 execution flow in our main function will contine right after the call.
 Because of this, we must delay the execution flow in the main thread or
-else the program will terminate prematurely. We let it pause in a
+else the program will terminate prematurely.  We let it pause in a
 processing-time friendly manner by waiting for the enter key to be
-pressed. In the end, we stop the daemon so it can do its cleanup tasks.
+pressed.  In the end, we stop the daemon so it can do its cleanup tasks.
   getchar ();
 
   MHD_stop_daemon (daemon);
   return 0;
 }
 
+
 The first example is now complete.
 
    Compile it with
 cc hellobrowser.c -o hellobrowser -I$PATH_TO_LIBMHD_INCLUDES
   -L$PATH_TO_LIBMHD_LIBS -lmicrohttpd
- with the two paths set accordingly and run it.
+   with the two paths set accordingly and run it.
 
    Now open your favorite Internet browser and go to the address
-`http://localhost:8888/', provided that 8888 is the port you chose. If
+'http://localhost:8888/', provided that 8888 is the port you chose.  If
 everything works as expected, the browser will present the message of
 the static HTML page it got from our minimal server.
 
@@ -244,84 +247,86 @@ Remarks
 To keep this first example as small as possible, some drastic shortcuts
 were taken and are to be discussed now.
 
-   Firstly, there is no distinction made between the kinds of requests
-a client could send. We implied that the client sends a GET request,
-that means, that he actually asked for some data. Even when it is not
+   Firstly, there is no distinction made between the kinds of requests a
+client could send.  We implied that the client sends a GET request, that
+means, that he actually asked for some data.  Even when it is not
 intended to accept POST requests, a good server should at least
 recognize that this request does not constitute a legal request and
-answer with an error code. This can be easily implemented by checking
-if the parameter `method' equals the string "GET" and returning a
-`MHD_NO' if not so.
+answer with an error code.  This can be easily implemented by checking
+if the parameter 'method' equals the string "GET" and returning a
+'MHD_NO' if not so.
 
    Secondly, the above practice of queuing a response upon the first
 call of the callback function brings with it some limitations.  This is
 because the content of the message body will not be received if a
 response is queued in the first iteration.  Furthermore, the connection
-will be closed right after the response has been transferred then.
-This is typically not what you want as it disables HTTP pipelining.
-The correct approach is to simply not queue a message on the first
-callback unless there is an error.  The `void**' argument to the
-callback provides a location for storing information about the history
-of the connection; for the first call, the pointer will point to NULL.
-A simplistic way to differenciate the first call from others is to check
+will be closed right after the response has been transferred then.  This
+is typically not what you want as it disables HTTP pipelining.  The
+correct approach is to simply not queue a message on the first callback
+unless there is an error.  The 'void**' argument to the callback
+provides a location for storing information about the history of the
+connection; for the first call, the pointer will point to NULL. A
+simplistic way to differenciate the first call from others is to check
 if the pointer is NULL and set it to a non-NULL value during the first
 call.
 
    Both of these issues you will find addressed in the official
-`minimal_example.c' residing in the `src/examples' directory of the
+'minimal_example.c' residing in the 'src/examples' directory of the
 _MHD_ package.  The source code of this program should look very
 familiar to you by now and easy to understand.
 
-   For our example, the `must_copy' and `must_free' parameter at the
-response construction function could be set to `MHD_NO'. In the usual
-case, responses cannot be sent immediately after being queued. For
-example, there might be other data on the system that needs to be sent
-with a higher priority. Nevertheless, the queue function will return
-successfully--raising the problem that the data we have pointed to may
-be invalid by the time it is about being sent. This is not an issue
-here because we can expect the `page' string, which is a constant
-_string literal_ here, to be static. That means it will be present and
-unchanged for as long as the program runs.  For dynamic data, one could
-choose to either have _MHD_ free the memory `page' points to itself
-when it is not longer needed or, alternatively, have the library to
-make and manage its own copy of it.
+   For our example, we create the response from a static (persistent)
+buffer in memory and thus pass 'MHD_RESPMEM_PERSISTENT' to the response
+construction function.  In the usual case, responses are not transmitted
+immediately after being queued.  For example, there might be other data
+on the system that needs to be sent with a higher priority.
+Nevertheless, the queue function will return successfully--raising the
+problem that the data we have pointed to may be invalid by the time it
+is about being sent.  This is not an issue here because we can expect
+the 'page' string, which is a constant _string literal_ here, to be
+static.  That means it will be present and unchanged for as long as the
+program runs.  For dynamic data, one could choose to either have _MHD_
+free the memory 'page' points to itself when it is not longer needed (by
+passing 'MHD_RESPMEM_MUST_FREE') or, alternatively, have the library to
+make and manage its own copy of it (by passing 'MHD_RESPMEM_MUST_COPY').
+Naturally, this last option is the most expensive.
 
 Exercises
 =========
 
-   * While the server is running, use a program like `telnet' or
-     `netcat' to connect to it. Try to form a valid HTTP 1.1 request
-     yourself like GET /dontcare HTTP/1.1
+   * While the server is running, use a program like 'telnet' or
+     'netcat' to connect to it.  Try to form a valid HTTP 1.1 request
+     yourself like
+     GET /dontcare HTTP/1.1
      Host: itsme
      <enter>
-      and see what the server returns to you.
+     and see what the server returns to you.
 
    * Also, try other requests, like POST, and see how our server does
      not mind and why.  How far in malforming a request can you go
-     before the builtin functionality of _MHD_ intervenes and an
-     altered response is sent? Make sure you read about the status
-     codes in the _RFC_.
+     before the builtin functionality of _MHD_ intervenes and an altered
+     response is sent?  Make sure you read about the status codes in the
+     _RFC_.
 
-   * Add the option `MHD_USE_PEDANTIC_CHECKS' to the start function of
-     the daemon in `main'.  Mind the special format of the parameter
-     list here which is described in the manual. How indulgent is the
+   * Add the option 'MHD_USE_PEDANTIC_CHECKS' to the start function of
+     the daemon in 'main'.  Mind the special format of the parameter
+     list here which is described in the manual.  How indulgent is the
      server now to your input?
 
    * Let the main function take a string as the first command line
-     argument and pass `argv[1]' to the `MHD_start_daemon' function as
-     the sixth parameter. The address of this string will be passed to
-     the callback function via the `cls' variable. Decorate the text
+     argument and pass 'argv[1]' to the 'MHD_start_daemon' function as
+     the sixth parameter.  The address of this string will be passed to
+     the callback function via the 'cls' variable.  Decorate the text
      given at the command line when the server is started with proper
      HTML tags and send it as the response instead of the former static
      string.
 
    * _Demanding:_ Write a separate function returning a string
-     containing some useful information, for example, the time. Pass
+     containing some useful information, for example, the time.  Pass
      the function's address as the sixth parameter and evaluate this
-     function on every request anew in `answer_to_connection'. Remember
+     function on every request anew in 'answer_to_connection'.  Remember
      to free the memory of the string every time after satisfying the
      request.
-
 
 
 File: libmicrohttpd-tutorial.info,  Node: Exploring requests,  Next: Response headers,  Prev: Hello browser example,  Up: Top
@@ -330,8 +335,8 @@ File: libmicrohttpd-tutorial.info,  Node: Exploring requests,  Next: Response he
 ********************
 
 This chapter will deal with the information which the client sends to
-the server at every request. We are going to examine the most useful
-fields of such an request and print them out in a readable manner. This
+the server at every request.  We are going to examine the most useful
+fields of such an request and print them out in a readable manner.  This
 could be useful for logging facilities.
 
    The starting point is the _hellobrowser_ program with the former
@@ -339,7 +344,7 @@ response removed.
 
    This time, we just want to collect information in the callback
 function, thus we will just return MHD_NO after we have probed the
-request. This way, the connection is closed without much ado by the
+request.  This way, the connection is closed without much ado by the
 server.
 
 static int
@@ -352,22 +357,23 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
   ...
   return MHD_NO;
 }
- The ellipsis marks the position where the following instructions shall
+The ellipsis marks the position where the following instructions shall
 be inserted.
 
    We begin with the most obvious information available to the server,
-the request line. You should already have noted that a request consists
-of a command (or "HTTP method") and a URI (e.g. a filename).  It also
+the request line.  You should already have noted that a request consists
+of a command (or "HTTP method") and a URI (e.g.  a filename).  It also
 contains a string for the version of the protocol which can be found in
-`version'.  To call it a "new request" is justified because we return
-only `MHD_NO', thus ensuring the function will not be called again for
+'version'.  To call it a "new request" is justified because we return
+only 'MHD_NO', thus ensuring the function will not be called again for
 this connection.
 printf ("New %s request for %s using version %s\n", method, url, version);
- The rest of the information is a bit more hidden. Nevertheless, there
-is lot of it sent from common Internet browsers. It is stored in
+
+   The rest of the information is a bit more hidden.  Nevertheless,
+there is lot of it sent from common Internet browsers.  It is stored in
 "key-value" pairs and we want to list what we find in the header.  As
 there is no mandatory set of keys a client has to send, each key-value
-pair is printed out one by one until there are no more left. We do this
+pair is printed out one by one until there are no more left.  We do this
 by writing a separate function which will be called for each pair just
 like the above function is called for each HTTP request.  It can then
 print out the content of this pair.
@@ -377,20 +383,21 @@ int print_out_key (void *cls, enum MHD_ValueKind kind,
   printf ("%s: %s\n", key, value);
   return MHD_YES;
 }
- To start the iteration process that calls our new function for every
+
+   To start the iteration process that calls our new function for every
 key, the line
 MHD_get_connection_values (connection, MHD_HEADER_KIND, &print_out_key, NULL);
- needs to be inserted in the connection callback function too. The
+needs to be inserted in the connection callback function too.  The
 second parameter tells the function that we are only interested in keys
-from the general HTTP header of the request. Our iterating function
-`print_out_key' does not rely on any additional information to fulfill
+from the general HTTP header of the request.  Our iterating function
+'print_out_key' does not rely on any additional information to fulfill
 its duties so the last parameter can be NULL.
 
-   All in all, this constitutes the complete `logging.c' program for
-this chapter which can be found in the `examples' section.
+   All in all, this constitutes the complete 'logging.c' program for
+this chapter which can be found in the 'examples' section.
 
-   Connecting with any modern Internet browser should yield a handful
-of keys. You should try to interpret them with the aid of _RFC 2616_.
+   Connecting with any modern Internet browser should yield a handful of
+keys.  You should try to interpret them with the aid of _RFC 2616_.
 Especially worth mentioning is the "Host" key which is often used to
 serve several different websites hosted under one single IP address but
 reachable by different domain names (this is called virtual hosting).
@@ -400,8 +407,8 @@ Conclusion
 
 The introduced capabilities to itemize the content of a simple GET
 request--especially the URI--should already allow the server to satisfy
-clients' requests for small specific resources (e.g. files) or even
-induce alteration of server state. However, the latter is not
+clients' requests for small specific resources (e.g.  files) or even
+induce alteration of server state.  However, the latter is not
 recommended as the GET method (including its header data) is by
 convention considered a "safe" operation, which should not change the
 server's state in a significant way.  By convention, GET operations can
@@ -409,34 +416,33 @@ thus be performed by crawlers and other automatic software.  Naturally
 actions like searching for a passed string are fine.
 
    Of course, no transmission can occur while the return value is still
-set to `MHD_NO' in the callback function.
+set to 'MHD_NO' in the callback function.
 
 Exercises
 =========
 
-   * By parsing the `url' string and delivering responses accordingly,
-     implement a small server for "virtual" files. When asked for
-     `/index.htm{l}', let the response consist of a HTML page
-     containing a link to `/another.html' page which is also to be
-     created "on the fly" in case of being requested. If neither of
-     these two pages are requested, `MHD_HTTP_NOT_FOUND' shall be
-     returned accompanied by an informative message.
+   * By parsing the 'url' string and delivering responses accordingly,
+     implement a small server for "virtual" files.  When asked for
+     '/index.htm{l}', let the response consist of a HTML page containing
+     a link to '/another.html' page which is also to be created "on the
+     fly" in case of being requested.  If neither of these two pages are
+     requested, 'MHD_HTTP_NOT_FOUND' shall be returned accompanied by an
+     informative message.
 
    * A very interesting information has still been ignored by our
-     logger--the client's IP address.  Implement a callback function static int on_client_connect (void *cls,
+     logger--the client's IP address.  Implement a callback function
+     static int on_client_connect (void *cls,
                                    const struct sockaddr *addr,
      			      socklen_t addrlen)
-      that prints out the IP address in an appropriate format. You
-     might want to use the POSIX function `inet_ntoa' but bear in mind
-     that `addr' is actually just a structure containing other
-     substructures and is _not_ the variable this function expects.
-     Make sure to return `MHD_YES' so that the library knows the client
-     is allowed to connect (and to then process the request). If one
-     wanted to limit access basing on IP addresses, this would be the
-     place to do it. The address of your `on_client_connect' function
-     must be passed as the third parameter to the `MHD_start_daemon'
-     call.
-
+     that prints out the IP address in an appropriate format.  You might
+     want to use the POSIX function 'inet_ntoa' but bear in mind that
+     'addr' is actually just a structure containing other substructures
+     and is _not_ the variable this function expects.  Make sure to
+     return 'MHD_YES' so that the library knows the client is allowed to
+     connect (and to then process the request).  If one wanted to limit
+     access basing on IP addresses, this would be the place to do it.
+     The address of your 'on_client_connect' function must be passed as
+     the third parameter to the 'MHD_start_daemon' call.
 
 
 File: libmicrohttpd-tutorial.info,  Node: Response headers,  Next: Supporting basic authentication,  Prev: Exploring requests,  Up: Top
@@ -450,24 +456,23 @@ likewise.
 
    As you have learned in the _Hello, Browser_ chapter, some obligatory
 header fields are added and set automatically for simple responses by
-the library itself but if more advanced features are desired,
-additional fields have to be created.  One of the possible fields is
-the content type field and an example will be developed around it.
-This will lead to an application capable of correctly serving different
-types of files.
+the library itself but if more advanced features are desired, additional
+fields have to be created.  One of the possible fields is the content
+type field and an example will be developed around it.  This will lead
+to an application capable of correctly serving different types of files.
 
    When we responded with HTML page packed in the static string
 previously, the client had no choice but guessing about how to handle
 the response, because the server had not told him.  What if we had sent
 a picture or a sound file?  Would the message have been understood or
 merely been displayed as an endless stream of random characters in the
-browser?  This is what the mime content types are for. The header of
-the response is extended by certain information about how the data is
-to be interpreted.
+browser?  This is what the mime content types are for.  The header of
+the response is extended by certain information about how the data is to
+be interpreted.
 
    To introduce the concept, a picture of the format _PNG_ will be sent
-to the client and labeled accordingly with `image/png'.  Once again, we
-can base the new example on the `hellobrowser' program.
+to the client and labeled accordingly with 'image/png'.  Once again, we
+can base the new example on the 'hellobrowser' program.
 
 #define FILENAME "picture.png"
 #define MIMETYPE "image/png"
@@ -481,7 +486,8 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
 {
   unsigned char *buffer = NULL;
   struct MHD_Response *response;
- We want the program to open the file for reading and determine its
+
+   We want the program to open the file for reading and determine its
 size:
   int fd;
   int ret;
@@ -496,9 +502,10 @@ size:
       /* ... (see below) */
     }
  /* ... (see below) */
- When dealing with files, there is a lot that could go wrong on the
+
+   When dealing with files, there is a lot that could go wrong on the
 server side and if so, the client should be informed with
-`MHD_HTTP_INTERNAL_SERVER_ERROR'.
+'MHD_HTTP_INTERNAL_SERVER_ERROR'.
 
       /* error accessing file */
      if (fd != -1) close (fd);
@@ -541,7 +548,8 @@ server side and if so, the client should be informed with
         }
       else return MHD_NO;
     }
- Note that we nevertheless have to create a response object even for
+
+   Note that we nevertheless have to create a response object even for
 sending a simple error code.  Otherwise, the connection would just be
 closed without comment, leaving the client curious about what has
 happened.
@@ -558,14 +566,15 @@ from the file descriptor:
   MHD_add_response_header (response, "Content-Type", MIMETYPE);
   ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
   MHD_destroy_response (response);
- Note that the response object will take care of closing the file
+
+   Note that the response object will take care of closing the file
 desciptor for us.
 
-   Up to this point, there was little new. The actual novelty is that
-we enhance the header with the meta data about the content. Aware of
+   Up to this point, there was little new.  The actual novelty is that
+we enhance the header with the meta data about the content.  Aware of
 the field's name we want to add, it is as easy as that:
 MHD_add_response_header(response, "Content-Type", MIMETYPE);
- We do not have to append a colon expected by the protocol behind the
+We do not have to append a colon expected by the protocol behind the
 first field--_GNU libhttpdmicro_ will take care of this.
 
    The function finishes with the well-known lines
@@ -573,21 +582,22 @@ first field--_GNU libhttpdmicro_ will take care of this.
   MHD_destroy_response (response);
   return ret;
 }
- The complete program `responseheaders.c' is in the `examples' section
+
+   The complete program 'responseheaders.c' is in the 'examples' section
 as usual.  Find a _PNG_ file you like and save it to the directory the
-example is run from under the name `picture.png'. You should find the
+example is run from under the name 'picture.png'.  You should find the
 image displayed on your browser if everything worked well.
 
 Remarks
 =======
 
 The include file of the _MHD_ library comes with the header types
-mentioned in _RFC 2616_ already defined as macros. Thus, we could have
-written `MHD_HTTP_HEADER_CONTENT_TYPE' instead of `"Content-Type"' as
-well. However, one is not limited to these standard headers and could
-add custom response headers without violating the protocol. Whether,
+mentioned in _RFC 2616_ already defined as macros.  Thus, we could have
+written 'MHD_HTTP_HEADER_CONTENT_TYPE' instead of '"Content-Type"' as
+well.  However, one is not limited to these standard headers and could
+add custom response headers without violating the protocol.  Whether,
 and how, the client would react to these custom header is up to the
-receiver. Likewise, the client is allowed to send custom request
+receiver.  Likewise, the client is allowed to send custom request
 headers to the server as well, opening up yet more possibilities how
 client and server could communicate with each other.
 
@@ -600,11 +610,11 @@ Exercises
 
    * Remember that the original program was written under a few
      assumptions--a static response using a local file being one of
-     them. In order to simulate a very large or hard to reach file that
+     them.  In order to simulate a very large or hard to reach file that
      cannot be provided instantly, postpone the queuing in the callback
-     with the `sleep' function for 30 seconds _if_ the file `/big.png'
-     is requested (but deliver the same as above). A request for
-     `/picture.png' should provide just the same but without any
+     with the 'sleep' function for 30 seconds _if_ the file '/big.png'
+     is requested (but deliver the same as above).  A request for
+     '/picture.png' should provide just the same but without any
      artificial delays.
 
      Now start two instances of your browser (or even use two machines)
@@ -612,29 +622,28 @@ Exercises
      for his request on the slow file to be fulfilled.
 
      Finally, change the sourcecode to use
-     `MHD_USE_THREAD_PER_CONNECTION' when the daemon is started and try
+     'MHD_USE_THREAD_PER_CONNECTION' when the daemon is started and try
      again.
 
-   * Did you succeed in implementing the clock exercise yet? This time,
-     let the server save the program's start time `t' and implement a
-     response simulating a countdown that reaches 0 at `t+60'.
+   * Did you succeed in implementing the clock exercise yet?  This time,
+     let the server save the program's start time 't' and implement a
+     response simulating a countdown that reaches 0 at 't+60'.
      Returning a message saying on which point the countdown is, the
      response should ultimately be to reply "Done" if the program has
      been running long enough,
 
      An unofficial, but widely understood, response header line is
-     `Refresh: DELAY; url=URL' with the uppercase words substituted to
+     'Refresh: DELAY; url=URL' with the uppercase words substituted to
      tell the client it should request the given resource after the
-     given delay again. Improve your program in that the browser (any
+     given delay again.  Improve your program in that the browser (any
      modern browser should work) automatically reconnects and asks for
-     the status again every 5 seconds or so. The URL would have to be
+     the status again every 5 seconds or so.  The URL would have to be
      composed so that it begins with "http://", followed by the _URI_
      the server is reachable from the client's point of view.
 
      Maybe you want also to visualize the countdown as a status bar by
-     creating a `<table>' consisting of one row and `n' columns whose
+     creating a '<table>' consisting of one row and 'n' columns whose
      fields contain small images of either a red or a green light.
-
 
 
 File: libmicrohttpd-tutorial.info,  Node: Supporting basic authentication,  Next: Processing POST data,  Prev: Response headers,  Up: Top
@@ -649,19 +658,20 @@ limits.
 
    A very simple approach feasible with the means already discussed
 would be to expect the password in the _URI_ string before granting
-access to the secured areas. The password could be separated from the
-actual resource identifier by a certain character, thus the request
-line might look like
+access to the secured areas.  The password could be separated from the
+actual resource identifier by a certain character, thus the request line
+might look like
 GET /picture.png?mypassword
- In the rare situation where the client is customized enough and the
+
+   In the rare situation where the client is customized enough and the
 connection occurs through secured lines (e.g., a embedded device
-directly attached to another via wire) and where the ability to embedd
-a password in the URI or to pass on a URI with a password are desired,
+directly attached to another via wire) and where the ability to embedd a
+password in the URI or to pass on a URI with a password are desired,
 this can be a reasonable choice.
 
    But when it is assumed that the user connecting does so with an
 ordinary Internet browser, this implementation brings some problems
-about. For example, the URI including the password stays in the address
+about.  For example, the URI including the password stays in the address
 field or at least in the history of the browser for anybody near enough
 to see.  It will also be inconvenient to add the password manually to
 any new URI when the browser does not know how to compose this
@@ -669,28 +679,27 @@ automatically.
 
    At least the convenience issue can be addressed by employing the
 simplest built-in password facilities of HTTP compliant browsers, hence
-we want to start there. It will however turn out to have still severe
+we want to start there.  It will however turn out to have still severe
 weaknesses in terms of security which need consideration.
 
-   Before we will start implementing _Basic Authentication_ as
-described in _RFC 2617_, we should finally abandon the bad practice of
-responding every request the first time our callback is called for a
-given connection. This is becoming more important now because the
-client and the server will have to talk in a more bi-directional way
-than before to
+   Before we will start implementing _Basic Authentication_ as described
+in _RFC 2617_, we should finally abandon the bad practice of responding
+every request the first time our callback is called for a given
+connection.  This is becoming more important now because the client and
+the server will have to talk in a more bi-directional way than before to
 
    But how can we tell whether the callback has been called before for
 the particular connection?  Initially, the pointer this parameter
-references is set by _MHD_ in the callback. But it will also be
+references is set by _MHD_ in the callback.  But it will also be
 "remembered" on the next call (for the same connection).  Thus, we will
 generate no response until the parameter is non-null--implying the
-callback was called before at least once. We do not need to share
+callback was called before at least once.  We do not need to share
 information between different calls of the callback, so we can set the
-parameter to any adress that is assured to be not null. The pointer to
-the `connection' structure will be pointing to a legal address, so we
+parameter to any adress that is assured to be not null.  The pointer to
+the 'connection' structure will be pointing to a legal address, so we
 take this.
 
-   The first time `answer_to_connection' is called, we will not even
+   The first time 'answer_to_connection' is called, we will not even
 look at the headers.
 
 static int
@@ -706,8 +715,9 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
   /* else respond accordingly */
   ...
 }
- Note how we lop off the connection on the first condition (no "GET"
-request), but return asking for more on the other one with `MHD_YES'.
+
+   Note how we lop off the connection on the first condition (no "GET"
+request), but return asking for more on the other one with 'MHD_YES'.
 With this minor change, we can proceed to implement the actual
 authentication process.
 
@@ -719,11 +729,11 @@ the correct username/password, so every "GET" request will be
 challenged.  _RFC 2617_ describes how the server shall ask for
 authentication by adding a _WWW-Authenticate_ response header with the
 name of the _realm_ protected.  MHD can generate and queue such a
-failure response for you using the `MHD_queue_basic_auth_fail_response'
-API.  The only thing you need to do is construct a response with the
+failure response for you using the 'MHD_queue_basic_auth_fail_response'
+API. The only thing you need to do is construct a response with the
 error page to be shown to the user if he aborts basic authentication.
 But first, you should check if the proper credentials were already
-supplied using the `MHD_basic_auth_get_username_password' call.
+supplied using the 'MHD_basic_auth_get_username_password' call.
 
    Your code would then look like this:
 static int
@@ -773,43 +783,42 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
   return ret;
 }
 
-   See the `examples' directory for the complete example file.
+   See the 'examples' directory for the complete example file.
 
 Remarks
 =======
 
 For a proper server, the conditional statements leading to a return of
-`MHD_NO' should yield a response with a more precise status code
-instead of silently closing the connection. For example, failures of
-memory allocation are best reported as _internal server error_ and
-unexpected authentication methods as _400 bad request_.
+'MHD_NO' should yield a response with a more precise status code instead
+of silently closing the connection.  For example, failures of memory
+allocation are best reported as _internal server error_ and unexpected
+authentication methods as _400 bad request_.
 
 Exercises
 =========
 
    * Make the server respond to wrong credentials (but otherwise
      well-formed requests) with the recommended _401 unauthorized_
-     status code. If the client still does not authenticate correctly
+     status code.  If the client still does not authenticate correctly
      within the same connection, close it and store the client's IP
-     address for a certain time. (It is OK to check for expiration not
-     until the main thread wakes up again on the next connection.) If
-     the client fails authenticating three times during this period,
-     add it to another list for which the `AcceptPolicyCallback'
-     function denies connection (temporally).
+     address for a certain time.  (It is OK to check for expiration not
+     until the main thread wakes up again on the next connection.)  If
+     the client fails authenticating three times during this period, add
+     it to another list for which the 'AcceptPolicyCallback' function
+     denies connection (temporally).
 
-   * With the network utility `netcat' connect and log the response of
-     a "GET" request as you did in the exercise of the first example,
-     this time to a file. Now stop the server and let _netcat_ listen
-     on the same port the server used to listen on and have it fake
-     being the proper server by giving the file's content as the
-     response (e.g. `cat log | nc -l -p 8888'). Pretending to think
-     your were connecting to the actual server, browse to the
-     eavesdropper and give the correct credentials.
+   * With the network utility 'netcat' connect and log the response of a
+     "GET" request as you did in the exercise of the first example, this
+     time to a file.  Now stop the server and let _netcat_ listen on the
+     same port the server used to listen on and have it fake being the
+     proper server by giving the file's content as the response (e.g.
+     'cat log | nc -l -p 8888').  Pretending to think your were
+     connecting to the actual server, browse to the eavesdropper and
+     give the correct credentials.
 
-     Copy and paste the encoded string you see in `netcat''s output to
+     Copy and paste the encoded string you see in 'netcat''s output to
      some of the Base64 decode tools available online and see how both
      the user's name and password could be completely restored.
-
 
 
 File: libmicrohttpd-tutorial.info,  Node: Processing POST data,  Next: Improved processing of POST data,  Prev: Supporting basic authentication,  Up: Top
@@ -820,17 +829,16 @@ File: libmicrohttpd-tutorial.info,  Node: Processing POST data,  Next: Improved 
 The previous chapters already have demonstrated a variety of
 possibilities to send information to the HTTP server, but it is not
 recommended that the _GET_ method is used to alter the way the server
-operates. To induce changes on the server, the _POST_ method is
+operates.  To induce changes on the server, the _POST_ method is
 preferred over and is much more powerful than _GET_ and will be
 introduced in this chapter.
 
-   We are going to write an application that asks for the visitor's
-name and, after the user has posted it, composes an individual response
-text. Even though it was not mandatory to use the _POST_ method here,
-as there is no permanent change caused by the POST, it is an
-illustrative example on how to share data between different functions
-for the same connection. Furthermore, the reader should be able to
-extend it easily.
+   We are going to write an application that asks for the visitor's name
+and, after the user has posted it, composes an individual response text.
+Even though it was not mandatory to use the _POST_ method here, as there
+is no permanent change caused by the POST, it is an illustrative example
+on how to share data between different functions for the same
+connection.  Furthermore, the reader should be able to extend it easily.
 
 GET request
 ===========
@@ -844,8 +852,9 @@ const char* askpage = "<html><body>\
                        <input name=\"name\" type=\"text\"\
                        <input type=\"submit\" value=\" Send \"></form>\
                        </body></html>";
- The `action' entry is the _URI_ to be called by the browser when
-posting, and the `name' will be used later to be sure it is the
+
+   The 'action' entry is the _URI_ to be called by the browser when
+posting, and the 'name' will be used later to be sure it is the
 editbox's content that has been posted.
 
    We also prepare the answer page, where the name is to be filled in
@@ -855,7 +864,8 @@ and _POST_ requests:
 const char* greatingpage="<html><body><h1>Welcome, %s!</center></h1></body></html>";
 
 const char* errorpage="<html><body>This doesn't seem to be right.</body></html>";
- Whenever we need to send a page, we use an extra function `int
+
+   Whenever we need to send a page, we use an extra function 'int
 send_page(struct MHD_Connection *connection, const char* page)' for
 this, which does not contain anything new and whose implementation is
 therefore not discussed further in the tutorial.
@@ -863,22 +873,22 @@ therefore not discussed further in the tutorial.
 POST request
 ============
 
-Posted data can be of arbitrary and considerable size; for example, if
-a user uploads a big image to the server. Similar to the case of the
+Posted data can be of arbitrary and considerable size; for example, if a
+user uploads a big image to the server.  Similar to the case of the
 header fields, there may also be different streams of posted data, such
 as one containing the text of an editbox and another the state of a
-button.  Likewise, we will have to register an iterator function that
-is going to be called maybe several times not only if there are
-different POSTs but also if one POST has only been received partly yet
-and needs processing before another chunk can be received.
+button.  Likewise, we will have to register an iterator function that is
+going to be called maybe several times not only if there are different
+POSTs but also if one POST has only been received partly yet and needs
+processing before another chunk can be received.
 
    Such an iterator function is called by a _postprocessor_, which must
 be created upon arriving of the post request.  We want the iterator
-function to read the first post data which is tagged `name' and to
+function to read the first post data which is tagged 'name' and to
 create an individual greeting string based on the template and the name.
-But in order to pass this string to other functions and still be able
-to differentiate different connections, we must first define a
-structure to share the information, holding the most import entries.
+But in order to pass this string to other functions and still be able to
+differentiate different connections, we must first define a structure to
+share the information, holding the most import entries.
 
 struct connection_info_struct
 {
@@ -886,13 +896,14 @@ struct connection_info_struct
   char *answerstring;
   struct MHD_PostProcessor *postprocessor;
 };
- With these information available to the iterator function, it is able
+
+   With these information available to the iterator function, it is able
 to fulfill its task.  Once it has composed the greeting string, it
-returns `MHD_NO' to inform the post processor that it does not need to
-be called again. Note that this function does not handle processing of
-data for the same `key'. If we were to expect that the name will be
-posted in several chunks, we had to expand the namestring dynamically
-as additional parts of it with the same `key' came in. But in this
+returns 'MHD_NO' to inform the post processor that it does not need to
+be called again.  Note that this function does not handle processing of
+data for the same 'key'.  If we were to expect that the name will be
+posted in several chunks, we had to expand the namestring dynamically as
+additional parts of it with the same 'key' came in.  But in this
 example, the name is assumed to fit entirely inside one single packet.
 
 static int
@@ -921,11 +932,12 @@ iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 
   return MHD_YES;
 }
- Once a connection has been established, it can be terminated for many
-reasons. As these reasons include unexpected events, we have to
+
+   Once a connection has been established, it can be terminated for many
+reasons.  As these reasons include unexpected events, we have to
 register another function that cleans up any resources that might have
 been allocated for that connection by us, namely the post processor and
-the greetings string. This cleanup function must take into account that
+the greetings string.  This cleanup function must take into account that
 it will also be called for finished requests other than _POST_ requests.
 
 void request_completed (void *cls, struct MHD_Connection *connection,
@@ -944,7 +956,8 @@ void request_completed (void *cls, struct MHD_Connection *connection,
   free (con_info);
   *con_cls = NULL;
 }
- _GNU libmicrohttpd_ is informed that it shall call the above function
+
+   _GNU libmicrohttpd_ is informed that it shall call the above function
 when the daemon is started in the main function.
 
 ...
@@ -957,11 +970,11 @@ daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, NULL, NULL,
 Request handling
 ================
 
-With all other functions prepared, we can now discuss the actual
-request handling.
+With all other functions prepared, we can now discuss the actual request
+handling.
 
    On the first iteration for a new request, we start by allocating a
-new instance of a `struct connection_info_struct' structure, which will
+new instance of a 'struct connection_info_struct' structure, which will
 store all necessary information for later iterations and other
 functions.
 
@@ -979,8 +992,9 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
       con_info = malloc (sizeof (struct connection_info_struct));
       if (NULL == con_info) return MHD_NO;
       con_info->answerstring = NULL;
- If the new request is a _POST_, the postprocessor must be created now.
-In addition, the type of the request is stored for convenience.
+
+   If the new request is a _POST_, the postprocessor must be created
+now.  In addition, the type of the request is stored for convenience.
       if (0 == strcmp (method, "POST"))
         {
           con_info->postprocessor
@@ -995,21 +1009,24 @@ In addition, the type of the request is stored for convenience.
           con_info->connectiontype = POST;
         }
       else con_info->connectiontype = GET;
- The address of our structure will both serve as the indicator for
+
+   The address of our structure will both serve as the indicator for
 successive iterations and to remember the particular details about the
 connection.
       *con_cls = (void*) con_info;
       return MHD_YES;
     }
- The rest of the function will not be executed on the first iteration.
+
+   The rest of the function will not be executed on the first iteration.
 A _GET_ request is easily satisfied by sending the question form.
   if (0 == strcmp (method, "GET"))
     {
       return send_page (connection, askpage);
     }
- In case of _POST_, we invoke the post processor for as long as data
-keeps incoming, setting `*upload_data_size' to zero in order to
-indicate that we have processed--or at least have considered--all of it.
+
+   In case of _POST_, we invoke the post processor for as long as data
+keeps incoming, setting '*upload_data_size' to zero in order to indicate
+that we have processed--or at least have considered--all of it.
   if (0 == strcmp (method, "POST"))
     {
       struct connection_info_struct *con_info = *con_cls;
@@ -1025,11 +1042,13 @@ indicate that we have processed--or at least have considered--all of it.
       else if (NULL != con_info->answerstring)
         return send_page (connection, con_info->answerstring);
     }
- Finally, if they are neither _GET_ nor _POST_ requests, the error page
-is returned.
+
+   Finally, if they are neither _GET_ nor _POST_ requests, the error
+page is returned.
   return send_page(connection, errorpage);
 }
- These were the important parts of the program `simplepost.c'.
+
+   These were the important parts of the program 'simplepost.c'.
 
 
 File: libmicrohttpd-tutorial.info,  Node: Improved processing of POST data,  Next: Session management,  Prev: Processing POST data,  Up: Top
@@ -1039,28 +1058,30 @@ File: libmicrohttpd-tutorial.info,  Node: Improved processing of POST data,  Nex
 
 The previous chapter introduced a way to upload data to the server, but
 the developed example program has some shortcomings, such as not being
-able to handle larger chunks of data. In this chapter, we are going to
+able to handle larger chunks of data.  In this chapter, we are going to
 discuss a more advanced server program that allows clients to upload a
-file in order to have it stored on the server's filesystem. The server
-shall also watch and limit the number of clients concurrently
-uploading, responding with a proper busy message if necessary.
+file in order to have it stored on the server's filesystem.  The server
+shall also watch and limit the number of clients concurrently uploading,
+responding with a proper busy message if necessary.
 
 Prepared answers
 ================
 
-We choose to operate the server with the `SELECT_INTERNALLY' method.
+We choose to operate the server with the 'SELECT_INTERNALLY' method.
 This makes it easier to synchronize the global states at the cost of
 possible delays for other connections if the processing of a request is
-too slow. One of these variables that needs to be shared for all
+too slow.  One of these variables that needs to be shared for all
 connections is the total number of clients that are uploading.
 
 #define MAXCLIENTS      2
 static unsigned int    nr_of_uploading_clients = 0;
- If there are too many clients uploading, we want the server to respond
-to all requests with a busy message.
+
+   If there are too many clients uploading, we want the server to
+respond to all requests with a busy message.
 const char* busypage =
   "<html><body>This server is busy, please try again later.</body></html>";
- Otherwise, the server will send a _form_ that informs the user of the
+
+   Otherwise, the server will send a _form_ that informs the user of the
 current number of uploading clients, and ask her to pick a file on her
 local filesystem which is to be uploaded.
 const char* askpage = "<html><body>\n\
@@ -1071,18 +1092,21 @@ const char* askpage = "<html><body>\n\
                        <input name=\"file\" type=\"file\">\n\
                        <input type=\"submit\" value=\" Send \"></form>\n\
                        </body></html>";
- If the upload has succeeded, the server will respond with a message
+
+   If the upload has succeeded, the server will respond with a message
 saying so.
 const char* completepage = "<html><body>The upload has been completed.</body></html>";
- We want the server to report internal errors, such as memory shortage
+
+   We want the server to report internal errors, such as memory shortage
 or file access problems, adequately.
 const char* servererrorpage
   = "<html><body>An internal server error has occured.</body></html>";
 const char* fileexistspage
   = "<html><body>This file already exists.</body></html>";
- It would be tolerable to send all these responses undifferentiated
-with a `200 HTTP_OK' status code but in order to improve the `HTTP'
-conformance of our server a bit, we extend the `send_page' function so
+
+   It would be tolerable to send all these responses undifferentiated
+with a '200 HTTP_OK' status code but in order to improve the 'HTTP'
+conformance of our server a bit, we extend the 'send_page' function so
 that it accepts individual status codes.
 
 static int
@@ -1101,16 +1125,17 @@ send_page (struct MHD_Connection *connection,
 
   return ret;
 }
- Note how we ask _MHD_ to make its own copy of the message data. The
+
+   Note how we ask _MHD_ to make its own copy of the message data.  The
 reason behind this will become clear later.
 
 Connection cycle
 ================
 
 The decision whether the server is busy or not is made right at the
-beginning of the connection. To do that at this stage is especially
+beginning of the connection.  To do that at this stage is especially
 important for _POST_ requests because if no response is queued at this
-point, and `MHD_YES' returned, _MHD_ will not sent any queued messages
+point, and 'MHD_YES' returned, _MHD_ will not sent any queued messages
 until a postprocessor has been created and the post iterator is called
 at least once.
 
@@ -1127,7 +1152,8 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
 
       if (nr_of_uploading_clients >= MAXCLIENTS)
         return send_page(connection, busypage, MHD_HTTP_SERVICE_UNAVAILABLE);
- If the server is not busy, the `connection_info' structure is
+
+   If the server is not busy, the 'connection_info' structure is
 initialized as usual, with the addition of a filepointer for each
 connection.
 
@@ -1145,13 +1171,14 @@ connection.
 
       return MHD_YES;
     }
- For _POST_ requests, the postprocessor is created and we register a
-new uploading client. From this point on, there are many possible
+
+   For _POST_ requests, the postprocessor is created and we register a
+new uploading client.  From this point on, there are many possible
 places for errors to occur that make it necessary to interrupt the
-uploading process. We need a means of having the proper response
-message ready at all times.  Therefore, the `connection_info' structure
-is extended to hold the most current response message so that whenever
-a response is sent, the client will get the most informative message.
+uploading process.  We need a means of having the proper response
+message ready at all times.  Therefore, the 'connection_info' structure
+is extended to hold the most current response message so that whenever a
+response is sent, the client will get the most informative message.
 Here, the structure is initialized to "no error".
       if (0 == strcmp (method, "POST"))
         {
@@ -1172,10 +1199,11 @@ Here, the structure is initialized to "no error".
           con_info->answerstring = completepage;
         }
       else con_info->connectiontype = GET;
- If the connection handler is called for the second time, _GET_
-requests will be answered with the _form_. We can keep the buffer under
-function scope, because we asked _MHD_ to make its own copy of it for
-as long as it is needed.
+
+   If the connection handler is called for the second time, _GET_
+requests will be answered with the _form_.  We can keep the buffer under
+function scope, because we asked _MHD_ to make its own copy of it for as
+long as it is needed.
   if (0 == strcmp (method, "GET"))
     {
       int ret;
@@ -1184,9 +1212,10 @@ as long as it is needed.
       sprintf (buffer, askpage, nr_of_uploading_clients);
       return send_page (connection, buffer, MHD_HTTP_OK);
     }
- The rest of the `answer_to_connection' function is very similar to the
-`simplepost.c' example, except the more flexible content of the
-responses. The _POST_ data is processed until there is none left and
+
+   The rest of the 'answer_to_connection' function is very similar to
+the 'simplepost.c' example, except the more flexible content of the
+responses.  The _POST_ data is processed until there is none left and
 the execution falls through to return an error page if the connection
 constituted no expected request method.
   if (0 == strcmp (method, "POST"))
@@ -1212,11 +1241,11 @@ constituted no expected request method.
 Storing to data
 ===============
 
-Unlike the `simplepost.c' example, here it is to be expected that post
-iterator will be called several times now. This means that for any
+Unlike the 'simplepost.c' example, here it is to be expected that post
+iterator will be called several times now.  This means that for any
 given connection (there might be several concurrent of them) the posted
-data has to be written to the correct file. That is why we store a file
-handle in every `connection_info', so that the it is preserved between
+data has to be written to the correct file.  That is why we store a file
+handle in every 'connection_info', so that the it is preserved between
 successive iterations.
 static int
 iterate_post (void *coninfo_cls, enum MHD_ValueKind kind,
@@ -1226,19 +1255,22 @@ iterate_post (void *coninfo_cls, enum MHD_ValueKind kind,
 	      uint64_t off, size_t size)
 {
   struct connection_info_struct *con_info = coninfo_cls;
- Because the following actions depend heavily on correct file
-processing, which might be error prone, we default to reporting
-internal errors in case anything will go wrong.
+
+   Because the following actions depend heavily on correct file
+processing, which might be error prone, we default to reporting internal
+errors in case anything will go wrong.
 
 con_info->answerstring = servererrorpage;
 con_info->answercode = MHD_HTTP_INTERNAL_SERVER_ERROR;
- In the "askpage" _form_, we told the client to label its post data
-with the "file" key. Anything else would be an error.
+
+   In the "askpage" _form_, we told the client to label its post data
+with the "file" key.  Anything else would be an error.
 
   if (0 != strcmp (key, "file")) return MHD_NO;
- If the iterator is called for the first time, no file will have been
-opened yet. The `filename' string contains the name of the file
-(without any paths) the user selected on his system. We want to take
+
+   If the iterator is called for the first time, no file will have been
+opened yet.  The 'filename' string contains the name of the file
+(without any paths) the user selected on his system.  We want to take
 this as the name the file will be stored on the server and make sure no
 file of that name exists (or is being uploaded) before we create one
 (note that the code below technically contains a race between the two
@@ -1256,23 +1288,26 @@ file of that name exists (or is being uploaded) before we create one
       con_info->fp = fopen (filename, "ab");
       if (!con_info->fp) return MHD_NO;
     }
- Occasionally, the iterator function will be called even when there are
-0 new bytes to process. The server only needs to write data to the file
-if there is some.
+
+   Occasionally, the iterator function will be called even when there
+are 0 new bytes to process.  The server only needs to write data to the
+file if there is some.
 if (size > 0)
     {
       if (!fwrite (data, size, sizeof(char), con_info->fp))
         return MHD_NO;
     }
- If this point has been reached, everything worked well for this
-iteration and the response can be set to success again. If the upload
+
+   If this point has been reached, everything worked well for this
+iteration and the response can be set to success again.  If the upload
 has finished, this iterator function will not be called again.
   con_info->answerstring = completepage;
   con_info->answercode = MHD_HTTP_OK;
 
   return MHD_YES;
 }
- The new client was registered when the postprocessor was created.
+
+   The new client was registered when the postprocessor was created.
 Likewise, we unregister the client on destroying the postprocessor when
 the request is completed.
 void request_completed (void *cls, struct MHD_Connection *connection,
@@ -1297,13 +1332,14 @@ void request_completed (void *cls, struct MHD_Connection *connection,
   free (con_info);
   *con_cls = NULL;
 }
- This is essentially the whole example `largepost.c'.
+
+   This is essentially the whole example 'largepost.c'.
 
 Remarks
 =======
 
 Now that the clients are able to create files on the server, security
-aspects are becoming even more important than before. Aside from proper
+aspects are becoming even more important than before.  Aside from proper
 client authentication, the server should always make sure explicitly
 that no files will be created outside of a dedicated upload directory.
 In particular, filenames must be checked to not contain strings like
@@ -1324,8 +1360,8 @@ many users with many concurrent sessions at the same time.
 
    In order to track users, we use a simple session cookie.  A session
 cookie expires when the user closes the browser.  Changing from session
-cookies to persistent cookies only requires adding an expiration time
-to the cookie.  The server creates a fresh session cookie whenever a
+cookies to persistent cookies only requires adding an expiration time to
+the cookie.  The server creates a fresh session cookie whenever a
 request without a cookie is received, or if the supplied session cookie
 is not known to the server.
 
@@ -1335,24 +1371,41 @@ Looking up the cookie
 Since MHD parses the HTTP cookie header for us, looking up an existing
 cookie is straightforward:
 
-FIXME.
+const char *value;
 
-   Here, FIXME is the name we chose for our session cookie.
+value = MHD_lookup_connection_value (connection,
+                                     MHD_COOKIE_KIND,
+                                     "KEY");
+
+   Here, "KEY" is the name we chose for our session cookie.
 
 Setting the cookie header
 =========================
 
 MHD requires the user to provide the full cookie format string in order
 to set cookies.  In order to generate a unique cookie, our example
-creates a random 64-character text string to be used as the value of
-the cookie:
+creates a random 64-character text string to be used as the value of the
+cookie:
 
-FIXME.
+char value[128];
+char raw_value[65];
+
+for (unsigned int i=0;i<sizeof (raw_value);i++)
+  raw_value = 'A' + (rand () % 26); /* bad PRNG! */
+raw_value[64] = '\0';
+snprintf (value, sizeof (value),
+          "%s=%s",
+          "KEY",
+          raw_value);
 
    Given this cookie value, we can then set the cookie header in our
 HTTP response as follows:
 
-FIXME.
+assert (MHD_YES ==
+        MHD_set_connection_value (connection,
+                                  MHD_HEADER_KIND,
+                                  MHD_HTTP_HEADER_SET_COOKIE,
+                                  value));
 
 Remark: Session expiration
 ==========================
@@ -1371,7 +1424,7 @@ Example code
 
 A sample application implementing a website with multiple forms (which
 are dynamically created using values from previous POST requests from
-the same session) is available as the example `sessions.c'.
+the same session) is available as the example 'sessions.c'.
 
    Note that the example uses a simple, $O(n)$ linked list traversal to
 look up sessions and to expire old sessions.  Using a hash table and a
@@ -1407,30 +1460,32 @@ actual source code of the example.
 Preparation
 ===========
 
-First, a private key for the server will be generated. With this key,
+First, a private key for the server will be generated.  With this key,
 the server will later be able to authenticate itself to the
 client--preventing anyone else from stealing the password by faking its
-identity. The _OpenSSL_ suite, which is available on many operating
-systems, can generate such a key. For the scope of this tutorial, we
+identity.  The _OpenSSL_ suite, which is available on many operating
+systems, can generate such a key.  For the scope of this tutorial, we
 will be content with a 1024 bit key:
 > openssl genrsa -out server.key 1024
- In addition to the key, a certificate describing the server in human
-readable tokens is also needed. This certificate will be attested with
-our aforementioned key. In this way, we obtain a self-signed
+
+   In addition to the key, a certificate describing the server in human
+readable tokens is also needed.  This certificate will be attested with
+our aforementioned key.  In this way, we obtain a self-signed
 certificate, valid for one year.
 
 > openssl req -days 365 -out server.pem -new -x509 -key server.key
- To avoid unnecessary error messages in the browser, the certificate
-needs to have a name that matches the _URI_, for example, "localhost"
-or the domain.  If you plan to have a publicly reachable server, you
-will need to ask a trusted third party, called _Certificate Authority_,
-or _CA_, to attest the certificate for you. This way, any visitor can
-make sure the server's identity is real.
+
+   To avoid unnecessary error messages in the browser, the certificate
+needs to have a name that matches the _URI_, for example, "localhost" or
+the domain.  If you plan to have a publicly reachable server, you will
+need to ask a trusted third party, called _Certificate Authority_, or
+_CA_, to attest the certificate for you.  This way, any visitor can make
+sure the server's identity is real.
 
    Whether the server's certificate is signed by us or a third party,
 once it has been accepted by the client, both sides will be
-communicating over encrypted channels. From this point on, it is the
-client's turn to authenticate itself. But this has already been
+communicating over encrypted channels.  From this point on, it is the
+client's turn to authenticate itself.  But this has already been
 implemented in the basic authentication scheme.
 
 Changing the source code
@@ -1454,7 +1509,8 @@ main ()
     printf ("The key/certificate files could not be read.\n");
     return 1;
   }
- and then we point the _MHD_ daemon to it upon initalization.
+
+   and then we point the _MHD_ daemon to it upon initalization.
 
   daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_SSL,
   	   		     PORT, NULL, NULL,
@@ -1472,7 +1528,8 @@ main ()
 
       return 1;
     }
- The rest consists of little new besides some additional memory
+
+   The rest consists of little new besides some additional memory
 cleanups.
 
   getchar ();
@@ -1483,21 +1540,22 @@ cleanups.
 
   return 0;
 }
- The rather unexciting file loader can be found in the complete example
-`tlsauthentication.c'.
+
+   The rather unexciting file loader can be found in the complete
+example 'tlsauthentication.c'.
 
 Remarks
 =======
 
    * While the standard _HTTP_ port is 80, it is 443 for _HTTPS_. The
      common internet browsers assume standard _HTTP_ if they are asked
-     to access other ports than these. Therefore, you will have to type
-     `https://localhost:8888' explicitly when you test the example, or
+     to access other ports than these.  Therefore, you will have to type
+     'https://localhost:8888' explicitly when you test the example, or
      the browser will not know how to handle the answer properly.
 
    * The remaining weak point is the question how the server will be
-     trusted initially. Either a _CA_ signs the certificate or the
-     client obtains the key over secure means. Anyway, the clients have
+     trusted initially.  Either a _CA_ signs the certificate or the
+     client obtains the key over secure means.  Anyway, the clients have
      to be aware (or configured) that they should not accept
      certificates of unknown origin.
 
@@ -1506,9 +1564,8 @@ Remarks
      in embedded devices.
 
    * The cryptographic facilities consume memory space and computing
-     time. For this reason, websites usually consists both of
+     time.  For this reason, websites usually consists both of
      uncritically _HTTP_ parts and secured _HTTPS_.
-
 
 Client authentication
 =====================
@@ -1516,8 +1573,8 @@ Client authentication
 You can also use MHD to authenticate the client via SSL/TLS certificates
 (as an alternative to using the password-based Basic or Digest
 authentication).  To do this, you will need to link your application
-against _gnutls_.  Next, when you start the MHD daemon, you must
-specify the root CA that you're willing to trust:
+against _gnutls_.  Next, when you start the MHD daemon, you must specify
+the root CA that you're willing to trust:
   daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_SSL,
   	   		     PORT, NULL, NULL,
                              &answer_to_connection, NULL,
@@ -1529,7 +1586,7 @@ specify the root CA that you're willing to trust:
    With this, you can then obtain client certificates for each session.
 In order to obtain the identity of the client, you first need to obtain
 the raw GnuTLS session handle from _MHD_ using
-`MHD_get_connection_info'.
+'MHD_get_connection_info'.
 
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
@@ -1686,6 +1743,179 @@ certificate:
 
 gnutls_x509_crt_deinit (client_cert);
 
+Using TLS Server Name Indication (SNI)
+======================================
+
+SNI enables hosting multiple domains under one IP address with TLS. So
+SNI is the TLS-equivalent of virtual hosting.  To use SNI with MHD, you
+need at least GnuTLS 3.0.  The main change compared to the simple
+hosting of one domain is that you need to provide a callback instead of
+the key and certificate.  For example, when you start the MHD daemon,
+you could do this:
+  daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_SSL,
+  	   		     PORT, NULL, NULL,
+                             &answer_to_connection, NULL,
+                             MHD_OPTION_HTTPS_CERT_CALLBACK, &sni_callback,
+                             MHD_OPTION_END);
+   Here, 'sni_callback' is the name of a function that you will have to
+implement to retrieve the X.509 certificate for an incoming connection.
+The callback has type 'gnutls_certificate_retrieve_function2' and is
+documented in the GnuTLS API for the
+'gnutls_certificate_set_retrieve_function2' as follows:
+
+ -- Function Pointer: int *gnutls_certificate_retrieve_function2
+          (gnutls_session_t, const gnutls_datum_t* req_ca_dn, int nreqs,
+          const gnutls_pk_algorithm_t* pk_algos, int pk_algos_length,
+          gnutls_pcert_st** pcert, unsigned int *pcert_length,
+          gnutls_privkey_t * pkey)
+
+     REQ_CA_CERT
+          is only used in X.509 certificates.  Contains a list with the
+          CA names that the server considers trusted.  Normally we
+          should send a certificate that is signed by one of these CAs.
+          These names are DER encoded.  To get a more meaningful value
+          use the function 'gnutls_x509_rdn_get()'.
+
+     PK_ALGOS
+          contains a list with server’s acceptable signature algorithms.
+          The certificate returned should support the server’s given
+          algorithms.
+
+     PCERT
+          should contain a single certificate and public or a list of
+          them.
+
+     PCERT_LENGTH
+          is the size of the previous list.
+
+     PKEY
+          is the private key.
+
+   A possible implementation of this callback would look like this:
+
+struct Hosts
+{
+  struct Hosts *next;
+  const char *hostname;
+  gnutls_pcert_st pcrt;
+  gnutls_privkey_t key;
+};
+
+static struct Hosts *hosts;
+
+int
+sni_callback (gnutls_session_t session,
+              const gnutls_datum_t* req_ca_dn,
+              int nreqs,
+              const gnutls_pk_algorithm_t* pk_algos,
+              int pk_algos_length,
+              gnutls_pcert_st** pcert,
+              unsigned int *pcert_length,
+              gnutls_privkey_t * pkey)
+{
+  char name[256];
+  size_t name_len;
+  struct Hosts *host;
+  unsigned int type;
+
+  name_len = sizeof (name);
+  if (GNUTLS_E_SUCCESS !=
+      gnutls_server_name_get (session,
+                              name,
+                              &name_len,
+                              &type,
+                              0 /* index */))
+    return -1;
+  for (host = hosts; NULL != host; host = host->next)
+    if (0 == strncmp (name, host->hostname, name_len))
+      break;
+  if (NULL == host)
+    {
+      fprintf (stderr,
+               "Need certificate for %.*s\n",
+               (int) name_len,
+               name);
+      return -1;
+    }
+  fprintf (stderr,
+           "Returning certificate for %.*s\n",
+           (int) name_len,
+           name);
+  *pkey = host->key;
+  *pcert_length = 1;
+  *pcert = &host->pcrt;
+  return 0;
+}
+
+   Note that MHD cannot offer passing a closure or any other additional
+information to this callback, as the GnuTLS API unfortunately does not
+permit this at this point.
+
+   The 'hosts' list can be initialized by loading the private keys and
+X.509 certificats from disk as follows:
+
+static void
+load_keys(const char *hostname,
+          const char *CERT_FILE,
+          const char *KEY_FILE)
+{
+  int ret;
+  gnutls_datum_t data;
+  struct Hosts *host;
+
+  host = malloc (sizeof (struct Hosts));
+  host->hostname = hostname;
+  host->next = hosts;
+  hosts = host;
+
+  ret = gnutls_load_file (CERT_FILE, &data);
+  if (ret < 0)
+  {
+    fprintf (stderr,
+             "*** Error loading certificate file %s.\n",
+             CERT_FILE);
+    exit(1);
+  }
+  ret =
+    gnutls_pcert_import_x509_raw (&host->pcrt, &data, GNUTLS_X509_FMT_PEM,
+                                  0);
+  if (ret < 0)
+  {
+    fprintf(stderr,
+            "*** Error loading certificate file: %s\n",
+            gnutls_strerror (ret));
+    exit(1);
+  }
+  gnutls_free (data.data);
+
+  ret = gnutls_load_file (KEY_FILE, &data);
+  if (ret < 0)
+  {
+    fprintf (stderr,
+             "*** Error loading key file %s.\n",
+             KEY_FILE);
+    exit(1);
+  }
+
+  gnutls_privkey_init (&host->key);
+  ret =
+    gnutls_privkey_import_x509_raw (host->key,
+                                    &data, GNUTLS_X509_FMT_PEM,
+                                    NULL, 0);
+  if (ret < 0)
+  {
+    fprintf (stderr,
+             "*** Error loading key file: %s\n",
+             gnutls_strerror (ret));
+    exit(1);
+  }
+  gnutls_free (data.data);
+}
+
+   The code above was largely lifted from GnuTLS. You can find other
+methods for initializing certificates and keys in the GnuTLS manual and
+source code.
+
 
 File: libmicrohttpd-tutorial.info,  Node: Bibliography,  Next: License text,  Prev: Adding a layer of security,  Up: Top
 
@@ -1696,27 +1926,26 @@ API reference
 =============
 
    * The _GNU libmicrohttpd_ manual by Marco Maggi and Christian
-     Grothoff 2008 `http://gnunet.org/libmicrohttpd/microhttpd.html'
+     Grothoff 2008 <http://gnunet.org/libmicrohttpd/microhttpd.html>
 
    * All referenced RFCs can be found on the website of _The Internet
-     Engineering Task Force_ `http://www.ietf.org/'
+     Engineering Task Force_ <http://www.ietf.org/>
 
    * _RFC 2616_: Fielding, R., Gettys, J., Mogul, J., Frystyk, H., and
-     T. Berners-Lee, "Hypertext Transfer Protocol - HTTP/1.1", RFC
-     2016, January 1997.
+     T. Berners-Lee, "Hypertext Transfer Protocol - HTTP/1.1", RFC 2016,
+     January 1997.
 
    * _RFC 2617_: Franks, J., Hallam-Baker, P., Hostetler, J., Lawrence,
      S., Leach, P., Luotonen, A., and L. Stewart, "HTTP Authentication:
      Basic and Digest Access Authentication", RFC 2617, June 1999.
 
    * A well-structured _HTML_ reference can be found on
-     `http://www.echoecho.com/html.htm'
+     <http://www.echoecho.com/html.htm>
 
      For those readers understanding German or French, there is an
      excellent document both for learning _HTML_ and for reference,
      whose English version unfortunately has been discontinued.
-     `http://de.selfhtml.org/' and `http://fr.selfhtml.org/'
-
+     <http://de.selfhtml.org/> and <http://fr.selfhtml.org/>
 
 
 File: libmicrohttpd-tutorial.info,  Node: License text,  Next: Example programs,  Prev: Bibliography,  Up: Top
@@ -1727,7 +1956,7 @@ Appendix B GNU Free Documentation License
                      Version 1.3, 3 November 2008
 
      Copyright (C) 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc.
-     `http://fsf.org/'
+     <http://fsf.org/>
 
      Everyone is permitted to copy and distribute verbatim copies
      of this license document, but changing it is not allowed.
@@ -1752,21 +1981,21 @@ Appendix B GNU Free Documentation License
      free program should come with manuals providing the same freedoms
      that the software does.  But this License is not limited to
      software manuals; it can be used for any textual work, regardless
-     of subject matter or whether it is published as a printed book.
-     We recommend this License principally for works whose purpose is
+     of subject matter or whether it is published as a printed book.  We
+     recommend this License principally for works whose purpose is
      instruction or reference.
 
   1. APPLICABILITY AND DEFINITIONS
 
      This License applies to any manual or other work, in any medium,
-     that contains a notice placed by the copyright holder saying it
-     can be distributed under the terms of this License.  Such a notice
+     that contains a notice placed by the copyright holder saying it can
+     be distributed under the terms of this License.  Such a notice
      grants a world-wide, royalty-free license, unlimited in duration,
      to use that work under the conditions stated herein.  The
      "Document", below, refers to any such manual or work.  Any member
-     of the public is a licensee, and is addressed as "you".  You
-     accept the license if you copy, modify or distribute the work in a
-     way requiring permission under copyright law.
+     of the public is a licensee, and is addressed as "you".  You accept
+     the license if you copy, modify or distribute the work in a way
+     requiring permission under copyright law.
 
      A "Modified Version" of the Document means any work containing the
      Document or a portion of it, either copied verbatim, or with
@@ -1784,12 +2013,12 @@ Appendix B GNU Free Documentation License
      regarding them.
 
      The "Invariant Sections" are certain Secondary Sections whose
-     titles are designated, as being those of Invariant Sections, in
-     the notice that says that the Document is released under this
-     License.  If a section does not fit the above definition of
-     Secondary then it is not allowed to be designated as Invariant.
-     The Document may contain zero Invariant Sections.  If the Document
-     does not identify any Invariant Sections then there are none.
+     titles are designated, as being those of Invariant Sections, in the
+     notice that says that the Document is released under this License.
+     If a section does not fit the above definition of Secondary then it
+     is not allowed to be designated as Invariant.  The Document may
+     contain zero Invariant Sections.  If the Document does not identify
+     any Invariant Sections then there are none.
 
      The "Cover Texts" are certain short passages of text that are
      listed, as Front-Cover Texts or Back-Cover Texts, in the notice
@@ -1800,27 +2029,27 @@ Appendix B GNU Free Documentation License
      A "Transparent" copy of the Document means a machine-readable copy,
      represented in a format whose specification is available to the
      general public, that is suitable for revising the document
-     straightforwardly with generic text editors or (for images
-     composed of pixels) generic paint programs or (for drawings) some
-     widely available drawing editor, and that is suitable for input to
-     text formatters or for automatic translation to a variety of
-     formats suitable for input to text formatters.  A copy made in an
-     otherwise Transparent file format whose markup, or absence of
-     markup, has been arranged to thwart or discourage subsequent
-     modification by readers is not Transparent.  An image format is
-     not Transparent if used for any substantial amount of text.  A
-     copy that is not "Transparent" is called "Opaque".
+     straightforwardly with generic text editors or (for images composed
+     of pixels) generic paint programs or (for drawings) some widely
+     available drawing editor, and that is suitable for input to text
+     formatters or for automatic translation to a variety of formats
+     suitable for input to text formatters.  A copy made in an otherwise
+     Transparent file format whose markup, or absence of markup, has
+     been arranged to thwart or discourage subsequent modification by
+     readers is not Transparent.  An image format is not Transparent if
+     used for any substantial amount of text.  A copy that is not
+     "Transparent" is called "Opaque".
 
      Examples of suitable formats for Transparent copies include plain
      ASCII without markup, Texinfo input format, LaTeX input format,
-     SGML or XML using a publicly available DTD, and
-     standard-conforming simple HTML, PostScript or PDF designed for
-     human modification.  Examples of transparent image formats include
-     PNG, XCF and JPG.  Opaque formats include proprietary formats that
-     can be read and edited only by proprietary word processors, SGML or
-     XML for which the DTD and/or processing tools are not generally
-     available, and the machine-generated HTML, PostScript or PDF
-     produced by some word processors for output purposes only.
+     SGML or XML using a publicly available DTD, and standard-conforming
+     simple HTML, PostScript or PDF designed for human modification.
+     Examples of transparent image formats include PNG, XCF and JPG.
+     Opaque formats include proprietary formats that can be read and
+     edited only by proprietary word processors, SGML or XML for which
+     the DTD and/or processing tools are not generally available, and
+     the machine-generated HTML, PostScript or PDF produced by some word
+     processors for output purposes only.
 
      The "Title Page" means, for a printed book, the title page itself,
      plus such following pages as are needed to hold, legibly, the
@@ -1858,8 +2087,8 @@ Appendix B GNU Free Documentation License
      may not use technical measures to obstruct or control the reading
      or further copying of the copies you make or distribute.  However,
      you may accept compensation in exchange for copies.  If you
-     distribute a large enough number of copies you must also follow
-     the conditions in section 3.
+     distribute a large enough number of copies you must also follow the
+     conditions in section 3.
 
      You may also lend copies, under the same conditions stated above,
      and you may publicly display copies.
@@ -1873,12 +2102,11 @@ Appendix B GNU Free Documentation License
      these Cover Texts: Front-Cover Texts on the front cover, and
      Back-Cover Texts on the back cover.  Both covers must also clearly
      and legibly identify you as the publisher of these copies.  The
-     front cover must present the full title with all words of the
-     title equally prominent and visible.  You may add other material
-     on the covers in addition.  Copying with changes limited to the
-     covers, as long as they preserve the title of the Document and
-     satisfy these conditions, can be treated as verbatim copying in
-     other respects.
+     front cover must present the full title with all words of the title
+     equally prominent and visible.  You may add other material on the
+     covers in addition.  Copying with changes limited to the covers, as
+     long as they preserve the title of the Document and satisfy these
+     conditions, can be treated as verbatim copying in other respects.
 
      If the required texts for either cover are too voluminous to fit
      legibly, you should put the first ones listed (as many as fit
@@ -1886,40 +2114,39 @@ Appendix B GNU Free Documentation License
      adjacent pages.
 
      If you publish or distribute Opaque copies of the Document
-     numbering more than 100, you must either include a
-     machine-readable Transparent copy along with each Opaque copy, or
-     state in or with each Opaque copy a computer-network location from
-     which the general network-using public has access to download
-     using public-standard network protocols a complete Transparent
-     copy of the Document, free of added material.  If you use the
-     latter option, you must take reasonably prudent steps, when you
-     begin distribution of Opaque copies in quantity, to ensure that
-     this Transparent copy will remain thus accessible at the stated
-     location until at least one year after the last time you
-     distribute an Opaque copy (directly or through your agents or
-     retailers) of that edition to the public.
+     numbering more than 100, you must either include a machine-readable
+     Transparent copy along with each Opaque copy, or state in or with
+     each Opaque copy a computer-network location from which the general
+     network-using public has access to download using public-standard
+     network protocols a complete Transparent copy of the Document, free
+     of added material.  If you use the latter option, you must take
+     reasonably prudent steps, when you begin distribution of Opaque
+     copies in quantity, to ensure that this Transparent copy will
+     remain thus accessible at the stated location until at least one
+     year after the last time you distribute an Opaque copy (directly or
+     through your agents or retailers) of that edition to the public.
 
      It is requested, but not required, that you contact the authors of
-     the Document well before redistributing any large number of
-     copies, to give them a chance to provide you with an updated
-     version of the Document.
+     the Document well before redistributing any large number of copies,
+     to give them a chance to provide you with an updated version of the
+     Document.
 
   4. MODIFICATIONS
 
      You may copy and distribute a Modified Version of the Document
      under the conditions of sections 2 and 3 above, provided that you
-     release the Modified Version under precisely this License, with
-     the Modified Version filling the role of the Document, thus
-     licensing distribution and modification of the Modified Version to
-     whoever possesses a copy of it.  In addition, you must do these
-     things in the Modified Version:
+     release the Modified Version under precisely this License, with the
+     Modified Version filling the role of the Document, thus licensing
+     distribution and modification of the Modified Version to whoever
+     possesses a copy of it.  In addition, you must do these things in
+     the Modified Version:
 
        A. Use in the Title Page (and on the covers, if any) a title
-          distinct from that of the Document, and from those of
-          previous versions (which should, if there were any, be listed
-          in the History section of the Document).  You may use the
-          same title as a previous version if the original publisher of
-          that version gives permission.
+          distinct from that of the Document, and from those of previous
+          versions (which should, if there were any, be listed in the
+          History section of the Document).  You may use the same title
+          as a previous version if the original publisher of that
+          version gives permission.
 
        B. List on the Title Page, as authors, one or more persons or
           entities responsible for authorship of the modifications in
@@ -1949,31 +2176,30 @@ Appendix B GNU Free Documentation License
 
        I. Preserve the section Entitled "History", Preserve its Title,
           and add to it an item stating at least the title, year, new
-          authors, and publisher of the Modified Version as given on
-          the Title Page.  If there is no section Entitled "History" in
-          the Document, create one stating the title, year, authors,
-          and publisher of the Document as given on its Title Page,
-          then add an item describing the Modified Version as stated in
-          the previous sentence.
+          authors, and publisher of the Modified Version as given on the
+          Title Page.  If there is no section Entitled "History" in the
+          Document, create one stating the title, year, authors, and
+          publisher of the Document as given on its Title Page, then add
+          an item describing the Modified Version as stated in the
+          previous sentence.
 
        J. Preserve the network location, if any, given in the Document
           for public access to a Transparent copy of the Document, and
           likewise the network locations given in the Document for
-          previous versions it was based on.  These may be placed in
-          the "History" section.  You may omit a network location for a
-          work that was published at least four years before the
-          Document itself, or if the original publisher of the version
-          it refers to gives permission.
+          previous versions it was based on.  These may be placed in the
+          "History" section.  You may omit a network location for a work
+          that was published at least four years before the Document
+          itself, or if the original publisher of the version it refers
+          to gives permission.
 
        K. For any section Entitled "Acknowledgements" or "Dedications",
-          Preserve the Title of the section, and preserve in the
-          section all the substance and tone of each of the contributor
+          Preserve the Title of the section, and preserve in the section
+          all the substance and tone of each of the contributor
           acknowledgements and/or dedications given therein.
 
-       L. Preserve all the Invariant Sections of the Document,
-          unaltered in their text and in their titles.  Section numbers
-          or the equivalent are not considered part of the section
-          titles.
+       L. Preserve all the Invariant Sections of the Document, unaltered
+          in their text and in their titles.  Section numbers or the
+          equivalent are not considered part of the section titles.
 
        M. Delete any section Entitled "Endorsements".  Such a section
           may not be included in the Modified Version.
@@ -1986,11 +2212,11 @@ Appendix B GNU Free Documentation License
 
      If the Modified Version includes new front-matter sections or
      appendices that qualify as Secondary Sections and contain no
-     material copied from the Document, you may at your option
-     designate some or all of these sections as invariant.  To do this,
-     add their titles to the list of Invariant Sections in the Modified
-     Version's license notice.  These titles must be distinct from any
-     other section titles.
+     material copied from the Document, you may at your option designate
+     some or all of these sections as invariant.  To do this, add their
+     titles to the list of Invariant Sections in the Modified Version's
+     license notice.  These titles must be distinct from any other
+     section titles.
 
      You may add a section Entitled "Endorsements", provided it contains
      nothing but endorsements of your Modified Version by various
@@ -1999,15 +2225,15 @@ Appendix B GNU Free Documentation License
      definition of a standard.
 
      You may add a passage of up to five words as a Front-Cover Text,
-     and a passage of up to 25 words as a Back-Cover Text, to the end
-     of the list of Cover Texts in the Modified Version.  Only one
-     passage of Front-Cover Text and one of Back-Cover Text may be
-     added by (or through arrangements made by) any one entity.  If the
-     Document already includes a cover text for the same cover,
-     previously added by you or by arrangement made by the same entity
-     you are acting on behalf of, you may not add another; but you may
-     replace the old one, on explicit permission from the previous
-     publisher that added the old one.
+     and a passage of up to 25 words as a Back-Cover Text, to the end of
+     the list of Cover Texts in the Modified Version.  Only one passage
+     of Front-Cover Text and one of Back-Cover Text may be added by (or
+     through arrangements made by) any one entity.  If the Document
+     already includes a cover text for the same cover, previously added
+     by you or by arrangement made by the same entity you are acting on
+     behalf of, you may not add another; but you may replace the old
+     one, on explicit permission from the previous publisher that added
+     the old one.
 
      The author(s) and publisher(s) of the Document do not by this
      License give permission to use their names for publicity for or to
@@ -2017,8 +2243,8 @@ Appendix B GNU Free Documentation License
 
      You may combine the Document with other documents released under
      this License, under the terms defined in section 4 above for
-     modified versions, provided that you include in the combination
-     all of the Invariant Sections of all of the original documents,
+     modified versions, provided that you include in the combination all
+     of the Invariant Sections of all of the original documents,
      unmodified, and list them all as Invariant Sections of your
      combined work in its license notice, and that you preserve all
      their Warranty Disclaimers.
@@ -2045,20 +2271,20 @@ Appendix B GNU Free Documentation License
      documents released under this License, and replace the individual
      copies of this License in the various documents with a single copy
      that is included in the collection, provided that you follow the
-     rules of this License for verbatim copying of each of the
-     documents in all other respects.
+     rules of this License for verbatim copying of each of the documents
+     in all other respects.
 
      You may extract a single document from such a collection, and
      distribute it individually under this License, provided you insert
-     a copy of this License into the extracted document, and follow
-     this License in all other respects regarding verbatim copying of
-     that document.
+     a copy of this License into the extracted document, and follow this
+     License in all other respects regarding verbatim copying of that
+     document.
 
   7. AGGREGATION WITH INDEPENDENT WORKS
 
      A compilation of the Document or its derivatives with other
-     separate and independent documents or works, in or on a volume of
-     a storage or distribution medium, is called an "aggregate" if the
+     separate and independent documents or works, in or on a volume of a
+     storage or distribution medium, is called an "aggregate" if the
      copyright resulting from the compilation is not used to limit the
      legal rights of the compilation's users beyond what the individual
      works permit.  When the Document is included in an aggregate, this
@@ -2103,8 +2329,8 @@ Appendix B GNU Free Documentation License
 
      However, if you cease all violation of this License, then your
      license from a particular copyright holder is reinstated (a)
-     provisionally, unless and until the copyright holder explicitly
-     and finally terminates your license, and (b) permanently, if the
+     provisionally, unless and until the copyright holder explicitly and
+     finally terminates your license, and (b) permanently, if the
      copyright holder fails to notify you of the violation by some
      reasonable means prior to 60 days after the cessation.
 
@@ -2116,33 +2342,33 @@ Appendix B GNU Free Documentation License
      after your receipt of the notice.
 
      Termination of your rights under this section does not terminate
-     the licenses of parties who have received copies or rights from
-     you under this License.  If your rights have been terminated and
-     not permanently reinstated, receipt of a copy of some or all of
-     the same material does not give you any rights to use it.
+     the licenses of parties who have received copies or rights from you
+     under this License.  If your rights have been terminated and not
+     permanently reinstated, receipt of a copy of some or all of the
+     same material does not give you any rights to use it.
 
- 10. FUTURE REVISIONS OF THIS LICENSE
+  10. FUTURE REVISIONS OF THIS LICENSE
 
      The Free Software Foundation may publish new, revised versions of
      the GNU Free Documentation License from time to time.  Such new
      versions will be similar in spirit to the present version, but may
      differ in detail to address new problems or concerns.  See
-     `http://www.gnu.org/copyleft/'.
+     <http://www.gnu.org/copyleft/>.
 
      Each version of the License is given a distinguishing version
      number.  If the Document specifies that a particular numbered
      version of this License "or any later version" applies to it, you
      have the option of following the terms and conditions either of
      that specified version or of any later version that has been
-     published (not as a draft) by the Free Software Foundation.  If
-     the Document does not specify a version number of this License,
-     you may choose any version ever published (not as a draft) by the
-     Free Software Foundation.  If the Document specifies that a proxy
-     can decide which future versions of this License can be used, that
+     published (not as a draft) by the Free Software Foundation.  If the
+     Document does not specify a version number of this License, you may
+     choose any version ever published (not as a draft) by the Free
+     Software Foundation.  If the Document specifies that a proxy can
+     decide which future versions of this License can be used, that
      proxy's public statement of acceptance of a version permanently
      authorizes you to choose that version for the Document.
 
- 11. RELICENSING
+  11. RELICENSING
 
      "Massive Multiauthor Collaboration Site" (or "MMC Site") means any
      World Wide Web server that publishes copyrightable works and also
@@ -2172,7 +2398,6 @@ Appendix B GNU Free Documentation License
      site under CC-BY-SA on the same site at any time before August 1,
      2009, provided the MMC is eligible for relicensing.
 
-
 ADDENDUM: How to use this License for your documents
 ====================================================
 
@@ -2189,7 +2414,7 @@ notices just after the title page:
        Free Documentation License''.
 
    If you have Invariant Sections, Front-Cover Texts and Back-Cover
-Texts, replace the "with...Texts." line with this:
+Texts, replace the "with...Texts."  line with this:
 
          with the Invariant Sections being LIST THEIR TITLES, with
          the Front-Cover Texts being LIST, and with the Back-Cover Texts
@@ -2200,9 +2425,9 @@ combination of the three, merge those two alternatives to suit the
 situation.
 
    If your document contains nontrivial examples of program code, we
-recommend releasing these examples in parallel under your choice of
-free software license, such as the GNU General Public License, to
-permit their use in free software.
+recommend releasing these examples in parallel under your choice of free
+software license, such as the GNU General Public License, to permit
+their use in free software.
 
 
 File: libmicrohttpd-tutorial.info,  Node: Example programs,  Prev: License text,  Up: Top
@@ -2385,12 +2610,12 @@ C.3 responseheaders.c
        if ( (-1 == (fd = open (FILENAME, O_RDONLY))) ||
             (0 != fstat (fd, &sbuf)) )
          {
-           /* error accessing file */
-           if (fd != -1)
-     	(void) close (fd);
            const char *errorstr =
              "<html><body>An internal server error has occured!\
                                    </body></html>";
+           /* error accessing file */
+           if (fd != -1)
+     	(void) close (fd);
            response =
      	MHD_create_response_from_buffer (strlen (errorstr),
      					 (void *) errorstr,
@@ -2408,7 +2633,7 @@ C.3 responseheaders.c
              return MHD_NO;
          }
        response =
-         MHD_create_response_from_fd_at_offset (sbuf.st_size, fd, 0);
+         MHD_create_response_from_fd_at_offset64 (sbuf.st_size, fd, 0);
        MHD_add_response_header (response, "Content-Type", MIMETYPE);
        ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
        MHD_destroy_response (response);
@@ -2545,6 +2770,11 @@ C.5 simplepost.c
      #include <string.h>
      #include <stdlib.h>
 
+     #if defined(_MSC_VER) && _MSC_VER+0 <= 1800
+     /* Substitution is OK while return value is not used */
+     #define snprintf _snprintf
+     #endif
+
      #define PORT            8888
      #define POSTBUFFERSIZE  512
      #define MAXNAMESIZE     20
@@ -2563,7 +2793,7 @@ C.5 simplepost.c
      const char *askpage = "<html><body>\
                             What's your name, Sir?<br>\
                             <form action=\"/namepost\" method=\"post\">\
-                            <input name=\"name\" type=\"text\"\
+                            <input name=\"name\" type=\"text\">\
                             <input type=\"submit\" value=\" Send \"></form>\
                             </body></html>";
 
@@ -2745,18 +2975,32 @@ C.6 largepost.c
      #include <string.h>
      #include <microhttpd.h>
 
+     #ifdef _MSC_VER
+     #ifndef strcasecmp
+     #define strcasecmp(a,b) _stricmp((a),(b))
+     #endif /* !strcasecmp */
+     #endif /* _MSC_VER */
+
+     #if defined(_MSC_VER) && _MSC_VER+0 <= 1800
+     /* Substitution is OK while return value is not used */
+     #define snprintf _snprintf
+     #endif
+
      #define PORT            8888
      #define POSTBUFFERSIZE  512
      #define MAXCLIENTS      2
 
-     #define GET             0
-     #define POST            1
+     enum ConnectionType
+       {
+         GET = 0,
+         POST = 1
+       };
 
      static unsigned int nr_of_uploading_clients = 0;
 
      struct connection_info_struct
      {
-       int connectiontype;
+       enum ConnectionType connectiontype;
        struct MHD_PostProcessor *postprocessor;
        FILE *fp;
        const char *answerstring;
@@ -2783,22 +3027,30 @@ C.6 largepost.c
        "<html><body>An internal server error has occured.</body></html>";
      const char *fileexistspage =
        "<html><body>This file already exists.</body></html>";
+     const char* const postprocerror =
+       "<html><head><title>Error</title></head><body>Error processing POST data</body></html>";
 
 
      static int
-     send_page (struct MHD_Connection *connection, const char *page,
+     send_page (struct MHD_Connection *connection,
+                const char *page,
                 int status_code)
      {
        int ret;
        struct MHD_Response *response;
 
        response =
-         MHD_create_response_from_buffer (strlen (page), (void *) page,
+         MHD_create_response_from_buffer (strlen (page),
+                                          (void *) page,
      				     MHD_RESPMEM_MUST_COPY);
        if (!response)
          return MHD_NO;
-       MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE, "text/html");
-       ret = MHD_queue_response (connection, status_code, response);
+       MHD_add_response_header (response,
+                                MHD_HTTP_HEADER_CONTENT_TYPE,
+                                "text/html");
+       ret = MHD_queue_response (connection,
+                                 status_code,
+                                 response);
        MHD_destroy_response (response);
 
        return ret;
@@ -2806,9 +3058,14 @@ C.6 largepost.c
 
 
      static int
-     iterate_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
-                   const char *filename, const char *content_type,
-                   const char *transfer_encoding, const char *data, uint64_t off,
+     iterate_post (void *coninfo_cls,
+                   enum MHD_ValueKind kind,
+                   const char *key,
+                   const char *filename,
+                   const char *content_type,
+                   const char *transfer_encoding,
+                   const char *data,
+                   uint64_t off,
                    size_t size)
      {
        struct connection_info_struct *con_info = coninfo_cls;
@@ -2820,7 +3077,7 @@ C.6 largepost.c
        if (0 != strcmp (key, "file"))
          return MHD_NO;
 
-       if (!con_info->fp)
+       if (! con_info->fp)
          {
            if (NULL != (fp = fopen (filename, "rb")))
              {
@@ -2837,7 +3094,7 @@ C.6 largepost.c
 
        if (size > 0)
          {
-           if (!fwrite (data, size, sizeof (char), con_info->fp))
+           if (! fwrite (data, sizeof (char), size, con_info->fp))
              return MHD_NO;
          }
 
@@ -2849,8 +3106,10 @@ C.6 largepost.c
 
 
      static void
-     request_completed (void *cls, struct MHD_Connection *connection,
-                        void **con_cls, enum MHD_RequestTerminationCode toe)
+     request_completed (void *cls,
+                        struct MHD_Connection *connection,
+                        void **con_cls,
+                        enum MHD_RequestTerminationCode toe)
      {
        struct connection_info_struct *con_info = *con_cls;
 
@@ -2875,17 +3134,23 @@ C.6 largepost.c
 
 
      static int
-     answer_to_connection (void *cls, struct MHD_Connection *connection,
-                           const char *url, const char *method,
-                           const char *version, const char *upload_data,
-                           size_t *upload_data_size, void **con_cls)
+     answer_to_connection (void *cls,
+                           struct MHD_Connection *connection,
+                           const char *url,
+                           const char *method,
+                           const char *version,
+                           const char *upload_data,
+                           size_t *upload_data_size,
+                           void **con_cls)
      {
        if (NULL == *con_cls)
          {
            struct connection_info_struct *con_info;
 
            if (nr_of_uploading_clients >= MAXCLIENTS)
-             return send_page (connection, busypage, MHD_HTTP_SERVICE_UNAVAILABLE);
+             return send_page (connection,
+                               busypage,
+                               MHD_HTTP_SERVICE_UNAVAILABLE);
 
            con_info = malloc (sizeof (struct connection_info_struct));
            if (NULL == con_info)
@@ -2893,11 +3158,13 @@ C.6 largepost.c
 
            con_info->fp = NULL;
 
-           if (0 == strcmp (method, "POST"))
+           if (0 == strcasecmp (method, MHD_HTTP_METHOD_POST))
              {
                con_info->postprocessor =
-                 MHD_create_post_processor (connection, POSTBUFFERSIZE,
-                                            iterate_post, (void *) con_info);
+                 MHD_create_post_processor (connection,
+                                            POSTBUFFERSIZE,
+                                            &iterate_post,
+                                            (void *) con_info);
 
                if (NULL == con_info->postprocessor)
                  {
@@ -2919,22 +3186,33 @@ C.6 largepost.c
            return MHD_YES;
          }
 
-       if (0 == strcmp (method, "GET"))
+       if (0 == strcasecmp (method, MHD_HTTP_METHOD_GET))
          {
            char buffer[1024];
 
-           snprintf (buffer, sizeof (buffer), askpage, nr_of_uploading_clients);
-           return send_page (connection, buffer, MHD_HTTP_OK);
+           snprintf (buffer,
+                     sizeof (buffer),
+                     askpage,
+                     nr_of_uploading_clients);
+           return send_page (connection,
+                             buffer,
+                             MHD_HTTP_OK);
          }
 
-       if (0 == strcmp (method, "POST"))
+       if (0 == strcasecmp (method, MHD_HTTP_METHOD_POST))
          {
            struct connection_info_struct *con_info = *con_cls;
 
            if (0 != *upload_data_size)
              {
-               MHD_post_process (con_info->postprocessor, upload_data,
-                                 *upload_data_size);
+               if (MHD_post_process (con_info->postprocessor,
+                                     upload_data,
+                                     *upload_data_size) != MHD_YES)
+                 {
+                   return send_page (connection,
+                                     postprocerror,
+                                     MHD_HTTP_BAD_REQUEST);
+                 }
                *upload_data_size = 0;
 
                return MHD_YES;
@@ -2946,14 +3224,18 @@ C.6 largepost.c
      	    fclose (con_info->fp);
      	    con_info->fp = NULL;
      	  }
-     	  /* Now it is safe to open and inspect the file before calling send_page with a response */
-     	  return send_page (connection, con_info->answerstring,
+     	  /* Now it is safe to open and inspect the file before
+                  calling send_page with a response */
+     	  return send_page (connection,
+                                 con_info->answerstring,
      			    con_info->answercode);
      	}
 
          }
 
-       return send_page (connection, errorpage, MHD_HTTP_BAD_REQUEST);
+       return send_page (connection,
+                         errorpage,
+                         MHD_HTTP_BAD_REQUEST);
      }
 
 
@@ -2962,10 +3244,11 @@ C.6 largepost.c
      {
        struct MHD_Daemon *daemon;
 
-       daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, PORT, NULL, NULL,
+       daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY,
+                                  PORT, NULL, NULL,
                                   &answer_to_connection, NULL,
-                                  MHD_OPTION_NOTIFY_COMPLETED, request_completed,
-                                  NULL, MHD_OPTION_END);
+                                  MHD_OPTION_NOTIFY_COMPLETED, &request_completed, NULL,
+                                  MHD_OPTION_END);
        if (NULL == daemon)
          return 1;
        (void) getchar ();
@@ -3622,7 +3905,7 @@ C.7 sessions.c
      					      (void *) METHOD_ERROR,
      					      MHD_RESPMEM_PERSISTENT);
        ret = MHD_queue_response (connection,
-     			    MHD_HTTP_METHOD_NOT_ACCEPTABLE,
+     			    MHD_HTTP_NOT_ACCEPTABLE,
      			    response);
        MHD_destroy_response (response);
        return ret;
@@ -3703,7 +3986,7 @@ C.7 sessions.c
        fd_set rs;
        fd_set ws;
        fd_set es;
-       int max;
+       MHD_socket max;
        MHD_UNSIGNED_LONG_LONG mhd_timeout;
 
        if (argc != 2)
@@ -3844,6 +4127,7 @@ C.8 tlsauthentication.c
          return 0;
      }
 
+
      static char *
      load_file (const char *filename)
      {
@@ -3852,19 +4136,20 @@ C.8 tlsauthentication.c
        long size;
 
        size = get_file_size (filename);
-       if (size == 0)
+       if (0 == size)
          return NULL;
 
        fp = fopen (filename, "rb");
-       if (!fp)
+       if (! fp)
          return NULL;
 
-       buffer = malloc (size);
-       if (!buffer)
+       buffer = malloc (size + 1);
+       if (! buffer)
          {
            fclose (fp);
            return NULL;
          }
+       buffer[size] = '\0';
 
        if (size != fread (buffer, 1, size, fp))
          {
@@ -3875,6 +4160,7 @@ C.8 tlsauthentication.c
        fclose (fp);
        return buffer;
      }
+
 
      static int
      ask_for_authentication (struct MHD_Connection *connection, const char *realm)
@@ -4008,7 +4294,7 @@ C.8 tlsauthentication.c
          }
 
        daemon =
-         MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_SSL, PORT, NULL,
+         MHD_start_daemon (MHD_USE_SELECT_INTERNALLY | MHD_USE_TLS, PORT, NULL,
                            NULL, &answer_to_connection, NULL,
                            MHD_OPTION_HTTPS_MEM_KEY, key_pem,
                            MHD_OPTION_HTTPS_MEM_CERT, cert_pem, MHD_OPTION_END);
@@ -4034,26 +4320,26 @@ C.8 tlsauthentication.c
 
 
 Tag Table:
-Node: Top856
-Node: Introduction1897
-Node: Hello browser example3203
-Node: Exploring requests14227
-Node: Response headers19623
-Node: Supporting basic authentication27502
-Node: Processing POST data34893
-Node: Improved processing of POST data43514
-Node: Session management54157
-Node: Adding a layer of security57052
-Node: Bibliography66394
-Node: License text67589
-Node: Example programs92764
-Node: hellobrowser.c93077
-Node: logging.c94620
-Node: responseheaders.c96203
-Node: basicauthentication.c98827
-Node: simplepost.c101366
-Node: largepost.c107046
-Node: sessions.c114411
-Node: tlsauthentication.c136756
+Node: Top858
+Node: Introduction1906
+Node: Hello browser example3211
+Node: Exploring requests14460
+Node: Response headers19876
+Node: Supporting basic authentication27782
+Node: Processing POST data35190
+Node: Improved processing of POST data43853
+Node: Session management54564
+Node: Adding a layer of security58078
+Node: Bibliography72643
+Node: License text73837
+Node: Example programs98993
+Node: hellobrowser.c99306
+Node: logging.c100849
+Node: responseheaders.c102432
+Node: basicauthentication.c105058
+Node: simplepost.c107597
+Node: largepost.c113433
+Node: sessions.c122430
+Node: tlsauthentication.c144775
 
 End Tag Table
