@@ -473,7 +473,7 @@ ltcFilePath = nil;
 
 - (IBAction)setupDisplayHelp:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://fabulouspanda.co.uk/macminer/docs/"]];
+    [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://github.com/fabulouspanda/MacMiner/wiki"]];
 }
 
 - (IBAction)autoConfigToggled:(id)sender {
